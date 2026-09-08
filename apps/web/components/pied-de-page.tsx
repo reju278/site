@@ -28,20 +28,20 @@ export function PiedDePage() {
 
             <nav className="flex flex-col gap-2.5">
               <a
-                href={liens.funnelsClub}
+                href={liens.appel}
                 target="_blank"
                 rel="noreferrer"
                 className="text-sm text-muted-foreground hover:text-foreground"
               >
-                Funnels Club
+                Accompagnement Funnels Club
               </a>
               <a
-                href={liens.mastermind}
+                href={liens.consulting}
                 target="_blank"
                 rel="noreferrer"
                 className="text-sm text-muted-foreground hover:text-foreground"
               >
-                F.C. Mastermind
+                Consulting privé
               </a>
             </nav>
 

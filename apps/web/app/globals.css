@@ -6,7 +6,7 @@
 @source "../../../packages/ui/src";
 
 /* Les fontes sont chargées par `next/font` dans `layout.tsx`, qui expose
-   `--font-nunito` et `--font-fraunces`. C'est ici qu'elles deviennent `font-sans`
+   `--font-nunito` et `--font-titre`. C'est ici qu'elles deviennent `font-sans`
    et `font-serif`. Les piles de repli sont celles de Tailwind : si le réseau
    lâche, la page reste lisible. */
 @theme inline {
@@ -14,23 +14,22 @@
     var(--font-nunito), ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-serif:
-    var(--font-fraunces), ui-serif, Georgia, Cambria, "Times New Roman", Times,
+    var(--font-titre), ui-serif, Georgia, Cambria, "Times New Roman", Times,
     serif;
 }
 
 /* Le titre du site.
 
-   Un display serif à ce corps a besoin d'un interlignage plus serré que le
-   défaut et d'une chasse à peine ouverte, sinon les lignes se tassent et les
-   capitales se collent. Les trois valeurs vont ensemble : les séparer, c'est
-   les voir diverger d'un écran à l'autre. */
+   Instrument Serif n'a qu'une graisse, 400 : la demander en gras produirait un
+   faux gras baveux. Ce qui donne la présence ici, c'est le corps, pas
+   l'épaisseur. Un display à ce corps a besoin d'un interlignage plus serré que
+   le défaut, et d'une chasse à peine ouverte pour que les capitales ne se
+   collent pas. Les valeurs vont ensemble : les séparer, c'est les voir diverger
+   d'un écran à l'autre. */
 @utility titre {
   font-family: var(--font-serif);
-  font-weight: 500;
-  font-variation-settings:
-    "SOFT" 30,
-    "WONK" 0;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: 0.005em;
   text-wrap: balance;
 }

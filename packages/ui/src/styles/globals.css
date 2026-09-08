@@ -34,8 +34,11 @@
   --popover: #faf7f0;
   --popover-foreground: #2b2118;
 
-  --primary: #3b2e22;
-  --primary-foreground: #f7f3ea;
+  /* Le bleu de la marque, donné par Rémy : rgb(4, 94, 230). Il est identique
+     dans les deux thèmes, c'est la même couleur qu'on doit reconnaître. Le
+     blanc dessus tient le contraste (environ 5,9:1). */
+  --primary: #045ee6;
+  --primary-foreground: #ffffff;
 
   --secondary: #e7dfd2;
   --secondary-foreground: #3b2e22;
@@ -51,17 +54,17 @@
 
   --border: #dccfbc;
   --input: #dccfbc;
-  --ring: #b09a7e;
+  --ring: #045ee6;
 
   /* Le menu latéral. */
   --sidebar: #ede7dc;
   --sidebar-foreground: #2b2118;
-  --sidebar-primary: #3b2e22;
-  --sidebar-primary-foreground: #f7f3ea;
+  --sidebar-primary: #045ee6;
+  --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: #e0d6c6;
   --sidebar-accent-foreground: #2b2118;
   --sidebar-border: #dccfbc;
-  --sidebar-ring: #b09a7e;
+  --sidebar-ring: #045ee6;
 
   /* Les graphiques restent sourds exprès : des courbes qui ne se disputent
      pas l'attention. Pour colorer un statut, voir les jetons `--pastille-*`. */
@@ -99,8 +102,8 @@
   --popover: #17140f;
   --popover-foreground: #f0eae0;
 
-  --primary: #f0eae0;
-  --primary-foreground: #17140f;
+  --primary: #045ee6;
+  --primary-foreground: #ffffff;
 
   --secondary: #221d17;
   --secondary-foreground: #f0eae0;
@@ -116,16 +119,16 @@
 
   --border: #2a241c;
   --input: #2a241c;
-  --ring: #6e6152;
+  --ring: #045ee6;
 
   --sidebar: #131009;
   --sidebar-foreground: #f0eae0;
-  --sidebar-primary: #f0eae0;
-  --sidebar-primary-foreground: #17140f;
+  --sidebar-primary: #045ee6;
+  --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: #2b2419;
   --sidebar-accent-foreground: #f0eae0;
   --sidebar-border: #2a241c;
-  --sidebar-ring: #6e6152;
+  --sidebar-ring: #045ee6;
 
   --chart-1: #e4dbcc;
   --chart-2: #c0b3a0;

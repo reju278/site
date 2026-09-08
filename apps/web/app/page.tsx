@@ -1,7 +1,6 @@
 import { Emplacement, Section, TitreSection } from "@/components/section";
 import { identite, lettre, liens, offres, sections } from "@/contenu/site";
 import { formaterDate, lireArticles } from "@/lib/flux";
-import { pastille } from "@/lib/teintes";
 import { Button } from "@repo/ui/components/button";
 import { ArrowRight, ArrowUpRight, Play } from "lucide-react";
 import Link from "next/link";
@@ -14,51 +13,55 @@ export default async function Accueil() {
       {/* ---------------------------------------------------------------
           Le hero.
 
-          Titre, sous-titre, deux boutons, et un cadre vide dessous qui
-          attend la vidéo. Rien d'autre : pas de fond animé, pas de cartes
-          qui flottent. Ce qui doit retenir le regard ici, c'est la vidéo
-          quand elle arrivera, et un décor qui bouge lui volerait la place.
+          Titre, sous-titre, deux boutons, la vidéo. Rien d'autre : pas de
+          fond animé, pas de cartes qui flottent. Ce qui doit retenir le
+          regard ici, c'est la vidéo, et un décor qui bouge lui volerait la
+          place.
 
-          L'en-tête est flottant et fixe, d'où le `pt-32` : sans lui, le
-          titre passerait dessous.
+          L'en-tête est flottant et fixe : le `pt-40` le dégage et pose le
+          titre vers le milieu de l'image.
       --------------------------------------------------------------- */}
-      <section className="relative isolate overflow-hidden px-5 pt-32 pb-20 sm:pt-40 sm:pb-28">
+      <section className="relative isolate px-5 pt-40 sm:pt-52">
         {/* Le fond.
 
             Deux fichiers, un par largeur : 960 px pour le téléphone, 1920 px
             au-delà. Servir 1920 px à un écran de 375 fait payer six fois le
-            poids pour rien. `object-cover` et `-z-10` laissent le contenu
-            passer devant, et le voile assombri au-dessus garantit le contraste
-            du texte, quel que soit le thème : cette bande reste sombre dans les
-            deux, sinon le verre de l'en-tête n'aurait rien à mordre. */}
-        <picture className="absolute inset-0 -z-10">
-          <source
-            media="(min-width: 768px)"
-            srcSet="/fond-hero.jpg"
-          />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/fond-hero-mobile.jpg"
-            alt=""
-            className="size-full object-cover"
-          />
-        </picture>
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 bg-black/55"
-        />
+            poids pour rien.
+
+            L'image ne descend pas jusqu'au bas de la section : elle s'arrête à
+            mi-hauteur du cadre vidéo, dont la hauteur est fixée juste en
+            dessous. C'est ce décalage qui fait chevaucher la vidéo sur la
+            limite entre l'image et le beige, sans marge négative ni décalage
+            de transformation, donc sans que la section suivante ait à réserver
+            de la place.
+
+            Le voile assombri garantit le contraste du texte quel que soit le
+            thème : cette bande reste sombre dans les deux, sinon le verre de
+            l'en-tête n'aurait rien à mordre. */}
+        <div className="absolute inset-x-0 top-0 bottom-[104px] -z-10 overflow-hidden sm:bottom-36 lg:bottom-[180px]">
+          <picture>
+            <source media="(min-width: 768px)" srcSet="/fond-hero.jpg" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/fond-hero-mobile.jpg"
+              alt=""
+              className="size-full object-cover"
+            />
+          </picture>
+          <div aria-hidden className="absolute inset-0 bg-black/55" />
+        </div>
 
         <div className="mx-auto max-w-6xl">
           <div className="mx-auto max-w-3xl text-center">
-            <h1 className="titre text-5xl text-white sm:text-6xl lg:text-7xl">
+            <h1 className="titre text-4xl text-white sm:text-5xl lg:text-6xl">
               Vivez de votre expertise en ligne.
             </h1>
 
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-pretty text-white/80">
+            <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-pretty text-white/80">
               {identite.resume}
             </p>
 
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <a
                 href={liens.funnelsClub}
                 target="_blank"
@@ -78,11 +81,27 @@ export default async function Accueil() {
             </div>
           </div>
 
-          <div id="video" className="mt-16 scroll-mt-28">
-            <Emplacement
-              attendu="la vidéo de présentation. Format 16/9, à intégrer ici."
-              className="aspect-16/9 min-h-0 border-white/25 text-white [&_span]:text-white"
-            />
+          {/* La hauteur du cadre est fixée et non déduite d'un rapport : la
+              moitié de chacune de ces trois valeurs est reprise telle quelle
+              dans le `bottom` du fond ci-dessus. Les deux doivent bouger
+              ensemble, sinon la vidéo cesse d'être coupée en deux par la
+              limite. 208 / 288 / 360, donc 104 / 144 / 180. */}
+          <div
+            id="video"
+            className="mx-auto mt-14 max-w-3xl scroll-mt-24 sm:mt-20"
+          >
+            {/* Wistia, en `iframe` plutôt qu'avec leur `player.js` : le
+                lecteur est identique, et on évite de charger un script tiers
+                sur toutes les pages pour une seule vidéo. */}
+            <div className="h-52 overflow-hidden rounded-[12px] bg-black ring-1 ring-white/20 sm:h-72 lg:h-[360px]">
+              <iframe
+                src="https://fast.wistia.net/embed/iframe/di3bzcmi50?videoFoam=false"
+                title="Vidéo de présentation"
+                allow="autoplay; fullscreen"
+                allowFullScreen
+                className="size-full border-0"
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -97,14 +116,7 @@ export default async function Accueil() {
               key={offre.id}
               className="flex flex-col rounded-md border border-border bg-card p-8"
             >
-              <span
-                style={pastille(offre.teinte)}
-                className="inline-flex w-fit rounded-md px-2.5 py-1 text-sm font-semibold"
-              >
-                {offre.promesse}
-              </span>
-
-              <h2 className="titre mt-5 text-3xl text-card-foreground">
+              <h2 className="titre text-3xl text-card-foreground">
                 {offre.nom}
               </h2>
               <p className="mt-3 text-base leading-relaxed text-muted-foreground">

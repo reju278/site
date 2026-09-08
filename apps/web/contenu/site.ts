@@ -20,20 +20,18 @@ export const identite = {
   nom: "Rémy Jupille",
   societe: "Jupille Group Ltd",
 
-  // Repris de remy-jupille.com, au mot près.
-  promesse: "Vendre ses connaissances ou compétences en ligne",
+  // Repris de funnels.club, au mot près : c'est leur propre titre.
+  promesse: "Vivez de votre expertise en ligne.",
   resume:
-    "Nous aidons les formateurs, coachs et consultants à facilement convertir de nouveaux clients grâce au PARFAIT tunnel de vente, la publicité en ligne et la création d'une offre irrésistible.",
-
-  /** Le mot mis en italique dans le titre. Doit exister dans `promesse`. */
-  promesseAccent: "connaissances ou compétences",
+    "Rémy et son équipe vous accompagnent à travers toutes les étapes de votre business de formation, du lancement jusqu'à 6 ou 7 chiffres par an.",
 } as const;
 
 export const liens = {
   youtube: "https://www.youtube.com/channel/UCzGq4I0pXnDJizd0fitt10w",
   livre: "https://www.digital-selfmade.com",
   funnelsClub: "https://www.funnels.club/direct?el=site",
-  mastermind: "https://www.funnels.club/mastermind?el=site",
+  appel: "https://funnels.club/appel",
+  consulting: "https://calendly.com/funnels-club/appel-decouverte-clone-2",
   lettre: "https://lettre.funnels.club",
 } as const;
 
@@ -73,15 +71,15 @@ export const menus: readonly {
     libelle: "Programmes",
     entrees: [
       {
-        libelle: "Funnels Club",
-        href: liens.funnelsClub,
-        texte: "Grandir jusqu'à 6 chiffres par an",
+        libelle: "Accompagnement Funnels Club",
+        href: liens.appel,
+        texte: "Jusqu'à plus de 6 chiffres par an avec une offre digitale",
         externe: true,
       },
       {
-        libelle: "F.C. Mastermind",
-        href: liens.mastermind,
-        texte: "Scaler jusqu'à +7 chiffres par an",
+        libelle: "Consulting privé avec Rémy",
+        href: liens.consulting,
+        texte: "L'accompagnement le plus personnalisé que Rémy propose",
         externe: true,
       },
     ],
@@ -96,27 +94,32 @@ export const menus: readonly {
   },
 ];
 
-/** Repris de remy-jupille.com, au mot près. */
+/**
+ * Les deux offres, reprises de funnels.club au mot près.
+ *
+ * Le site en présente trois : Funnels Club, le Mentium Mastermind et le
+ * consulting privé. Seules deux sont montrées ici, sur décision de Rémy, et le
+ * mastermind n'y est pas.
+ *
+ * Une phrase par offre, choisie dans leur page et non résumée. Résumer, c'est
+ * réécrire, et réécrire une promesse commerciale n'appartient pas à l'agent.
+ */
 export const offres = [
   {
     id: "funnels-club",
-    nom: "Funnels Club",
-    promesse: "Grandir jusqu'à 6 chiffres par an",
+    nom: "Accompagnement Funnels Club",
     texte:
-      "Funnels Club est un programme de formation pour les coachs, consultants et créateurs de formations pour créer et vendre une formation en ligne à plusieurs milliers avec un funnel, de la publicité en ligne et du closing.",
-    action: "Découvrir Funnels Club",
-    href: liens.funnelsClub,
-    teinte: "bleu",
+      "Nous accompagnons exclusivement des business de formation, de coaching et de prestation de service à atteindre plus de 6 chiffres par an avec une offre digitale.",
+    action: "Réservez votre appel découverte",
+    href: liens.appel,
   },
   {
-    id: "mastermind",
-    nom: "F.C. Mastermind",
-    promesse: "Scaler jusqu'à +7 chiffres par an",
+    id: "consulting",
+    nom: "Consulting privé avec Rémy",
     texte:
-      "Le F.C. Mastermind est un groupe restreint de coachs, consultants et créateurs de formation qui souhaitent croître à +7 chiffres par an grâce à l'automatisation, la délégation et des stratégies évoluées de croissance.",
-    action: "Découvrir le Mastermind",
-    href: liens.mastermind,
-    teinte: "rouge",
+      "C'est l'accompagnement le plus personnalisé que Rémy propose, où vous avez accès à lui en direct dès que vous en avez besoin et où vous pouvez réserver des visioconférences en illimité du lundi au samedi.",
+    action: "Postuler pour le consulting privé",
+    href: liens.consulting,
   },
 ] as const;
 
