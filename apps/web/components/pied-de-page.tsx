@@ -61,12 +61,17 @@ export function PiedDePage() {
 
         <Separator className="my-10" />
 
+        {/* L'avertissement reste ferré à gauche : le fer à droite est réservé
+            aux colonnes de nombres, où il aligne les unités. Sur de la prose,
+            il produit un bord gauche en dents de scie que l'œil doit
+            rattraper à chaque ligne. Et pas de `whitespace-nowrap` sur le
+            copyright : sur un écran étroit, il ferait déborder la page. */}
         <div className="flex flex-col gap-4 text-xs text-muted-foreground sm:flex-row sm:items-start sm:justify-between">
-          <p className="whitespace-nowrap">
+          <p>
             © {annee} {identite.societe}
           </p>
           {/* Repris du pied de page de remy-jupille.com, au mot près. */}
-          <p className="max-w-2xl sm:text-right">{avertissement}</p>
+          <p className="max-w-2xl">{avertissement}</p>
         </div>
       </div>
     </footer>

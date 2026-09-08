@@ -121,6 +121,29 @@ projet, c'est une contrainte de chaque modification.
   dans l'autre thème. Si un jeton manque, l'ajouter pour `:root` **et** `.dark`.
 - Vérifier l'écran dans les deux thèmes avant de le considérer terminé.
 
+### Le contraste se mesure sur toutes les surfaces, pas sur le fond de page
+
+Un texte atténué reste du texte courant : il lui faut **4,5:1 sur chacune des
+surfaces où il peut se poser**, pas seulement sur `--background`. C'est ce que
+l'ancien `--muted-foreground` ratait, à 4,47:1 sur le fond et 3,62:1 sur
+`--accent`.
+
+- Un indicateur de focus et une bordure de contrôle demandent **3:1**.
+- Les composants de registre dessinent `focus-visible:ring-ring/50`. Fondu à
+  moitié, le bleu ne vaut que 2,14:1 en clair et 1,67:1 en sombre. On ne
+  corrige pas les fichiers de registre : `globals.css` pose par-dessus un
+  contour opaque de deux pixels, et c'est **lui** l'indicateur qui compte.
+- Un texte posé sur une photo se mesure **au pire cas**, c'est-à-dire en
+  supposant l'image entièrement blanche sous le texte. Le voile assombri est ce
+  qui garantit le seuil, pas le hasard du cadrage.
+
+### Le mouvement réduit est un contrat, pas une option
+
+`globals.css` neutralise transitions et animations sous
+`prefers-reduced-motion: reduce`. On neutralise, on n'accélère pas : quelqu'un
+qui demande moins de mouvement demande que rien ne bouge, pas que tout aille
+vite.
+
 ### Téléphone et ordinateur : toujours les deux
 
 Même règle, même exigence. Un écran n'est pas terminé parce qu'il est beau en
@@ -158,12 +181,24 @@ Ce qui passe **sous** une fenêtre se brouille ; la fenêtre elle-même reste op
 - Le rayon du flou s'écrit **en toutes lettres** : `blur(var(--x))` est
   silencieusement jeté par le compilateur CSS.
 
-**Une exception, et une seule : l'en-tête.** Les deux capsules flottantes de
-`apps/web/components/en-tete.tsx` sont reprises de passionfroot à l'identique,
-sur décision de Rémy : rayon de 12 px et non 5, dégradé blanc translucide,
-`backdrop-blur-md` et filet intérieur. Elles flottent au-dessus de l'image du
-hero, et c'est le flou qui les fait tenir. L'exception s'arrête là : partout
-ailleurs, rayon de 5 px et fonds pleins.
+**Une exception, et une seule : les deux capsules de l'en-tête.** Elles sont
+reprises de passionfroot à l'identique, sur décision de Rémy : rayon de 12 px
+et non 5, dégradé blanc translucide, `backdrop-blur-md` et filet intérieur.
+Elles flottent au-dessus de l'image du hero, et c'est le flou qui les fait
+tenir. L'exception ne couvre **que** les deux capsules : à l'intérieur, les
+entrées, le bouton et le panneau déroulant sont à 5 px comme partout.
+
+### L'habillage de l'en-tête suit la page, jamais le défilement
+
+L'en-tête s'habille en blanc translucide **seulement quand une bande sombre
+passe réellement dessous**. Le hero marque la sienne d'un `data-bande-sombre`,
+et l'en-tête observe cet élément ; une page qui n'en déclare pas démarre et
+reste en habillage de page.
+
+La première version comparait `scrollY` à 120 px. Ce seuil décrivait le hero de
+l'accueil et rien d'autre : en haut des cinq autres pages, qui n'ont pas de
+bande sombre, l'en-tête restait blanc sur beige, soit **1,17:1**. Un nombre nu
+qui décrit implicitement une page ne survit pas à la deuxième page.
 
 ### Pas de tiret cadratin
 

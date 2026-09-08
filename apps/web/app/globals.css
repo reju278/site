@@ -31,5 +31,13 @@
   font-weight: 400;
   line-height: 1.08;
   letter-spacing: 0.005em;
-  text-wrap: balance;
 }
+
+/* `text-balance` n'entre pas dans l'utilitaire `titre`.
+
+   Équilibrer les lignes n'a de sens que sur un titre centré, dont on veut les
+   lignes de longueur voisine autour d'un axe. Sur un titre ferré à gauche, le
+   bord gauche est déjà l'axe, et l'équilibrage ne fait que raccourcir la
+   première ligne sans raison. Cuit dans l'utilitaire, il s'appliquait aux
+   titres des cartes d'offre et du pied de page, qui sont ferrés à gauche.
+   Il se pose donc au cas par cas, avec la classe `text-balance`. */

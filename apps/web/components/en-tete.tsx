@@ -21,7 +21,8 @@ import {
 import { cn } from "@repo/ui/lib/utils";
 import { ArrowUpRight, Menu } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 /**
  * L'en-tête, repris de passionfroot.
@@ -61,9 +62,18 @@ const CAPSULE_SUR_IMAGE =
 const CAPSULE_SUR_PAGE =
   "bg-card/85 ring-border shadow-[0_2px_8px_rgba(0,0,0,0.06)]";
 
-/** Une entrée de navigation : 36 px de haut, rayon 8 px, comme chez eux. */
+/**
+ * La hauteur occupée par l'en-tête flottant, décalage du haut compris.
+ *
+ * Elle sert à deux choses qui doivent rester d'accord : la zone que l'on
+ * observe pour savoir si une bande sombre passe dessous, et le `scroll-mt` des
+ * ancres, pour qu'une cible ne finisse pas cachée derrière les capsules.
+ */
+export const HAUTEUR_ENTETE = 66;
+
+/** Une entrée de navigation : 36 px de haut, comme chez eux. */
 const ENTREE =
-  "flex h-9 items-center gap-1.5 px-3 rounded-[8px] transition-colors text-sm font-semibold bg-transparent";
+  "flex h-9 items-center gap-1.5 px-3 rounded-md transition-colors text-sm font-semibold bg-transparent";
 
 const ENTREE_SUR_IMAGE =
   "text-white/80 hover:bg-white/10 hover:text-white focus:bg-white/10 data-[state=open]:bg-white/10 data-[state=open]:text-white";
@@ -74,28 +84,48 @@ const ENTREE_SUR_PAGE =
 export function EnTete() {
   const [ouvert, setOuvert] = useState(false);
 
-  /**
-   * `true` dès qu'on a quitté la bande sombre du hero.
-   *
-   * Le seuil est volontairement plus court que le hero : la bascule doit être
-   * faite avant que la capsule ne surplombe le beige, pas au moment où elle le
-   * touche. `passive` parce qu'on ne bloque jamais le défilement.
-   */
-  const [depasse, setDepasse] = useState(false);
+  const chemin = usePathname();
 
-  useEffect(() => {
-    const surDefilement = () => setDepasse(window.scrollY > 120);
-    surDefilement();
-    window.addEventListener("scroll", surDefilement, { passive: true });
-    return () => window.removeEventListener("scroll", surDefilement);
-  }, []);
+  /**
+   * `true` seulement quand une bande sombre passe réellement sous l'en-tête.
+   *
+   * La première version comparait `scrollY` à 120 px. C'était faux : le seuil
+   * décrit le hero de l'accueil et rien d'autre, si bien qu'en haut des cinq
+   * autres pages, qui n'ont pas de bande sombre, l'en-tête restait blanc sur
+   * beige. Soit un rapport de contraste de 1,17:1, illisible.
+   *
+   * L'état est donc devenu une propriété de la page : le hero marque sa bande
+   * d'un `data-bande-sombre`, et on observe cet élément. Une page qui n'en
+   * déclare pas démarre et reste en habillage de page, ce qui est le défaut
+   * sûr. La marge négative en haut réduit la zone d'observation à ce qui passe
+   * sous l'en-tête : la bascule se fait quand la bande cesse de le recouvrir,
+   * pas quand elle sort de l'écran.
+   *
+   * `useLayoutEffect` et non `useEffect` : la mesure a lieu avant la peinture,
+   * donc sans un éclair d'habillage clair sur l'image au chargement.
+   */
+  const [surImage, setSurImage] = useState(false);
+
+  useLayoutEffect(() => {
+    const bande = document.querySelector("[data-bande-sombre]");
+    if (!bande) {
+      setSurImage(false);
+      return;
+    }
+
+    const observateur = new IntersectionObserver(
+      ([entree]) => setSurImage(entree?.isIntersecting ?? false),
+      { rootMargin: `-${HAUTEUR_ENTETE}px 0px 0px 0px`, threshold: 0 }
+    );
+    observateur.observe(bande);
+    return () => observateur.disconnect();
+  }, [chemin]);
 
   const capsule = cn(
     CAPSULE_BASE,
-    depasse ? CAPSULE_SUR_PAGE : CAPSULE_SUR_IMAGE
+    surImage ? CAPSULE_SUR_IMAGE : CAPSULE_SUR_PAGE
   );
-  const entree = cn(ENTREE, depasse ? ENTREE_SUR_PAGE : ENTREE_SUR_IMAGE);
-  const surImage = !depasse;
+  const entree = cn(ENTREE, surImage ? ENTREE_SUR_IMAGE : ENTREE_SUR_PAGE);
 
   return (
     <header className="pointer-events-none fixed inset-x-0 top-2 z-50 px-3 lg:top-5 lg:px-5">
@@ -140,7 +170,7 @@ export function EnTete() {
                   <NavigationMenuTrigger className={entree}>
                     {menu.libelle}
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent className="rounded-[12px] border border-border bg-popover p-2 shadow-[0_12px_40px_rgba(0,0,0,0.18)]">
+                  <NavigationMenuContent className="rounded-md border border-border bg-popover p-2 shadow-[0_12px_40px_rgba(0,0,0,0.18)]">
                     <ul className="w-[420px]">
                       {menu.entrees.map((entree) => (
                         <li key={entree.href}>
@@ -149,7 +179,7 @@ export function EnTete() {
                               href={entree.href}
                               target={entree.externe ? "_blank" : undefined}
                               rel={entree.externe ? "noreferrer" : undefined}
-                              className="flex flex-col gap-1 rounded-[8px] p-3 transition-colors hover:bg-accent"
+                              className="flex flex-col gap-1 rounded-md p-3 transition-colors hover:bg-accent"
                             >
                               <span className="flex items-center gap-1.5 text-sm font-semibold text-popover-foreground">
                                 {entree.libelle}
@@ -198,9 +228,11 @@ export function EnTete() {
             target="_blank"
             rel="noreferrer"
             className={cn(
-              "hidden h-[34px] items-center justify-center gap-2 rounded-[10px] px-3.5 text-sm font-semibold whitespace-nowrap transition-colors duration-300 sm:inline-flex",
+              "hidden h-[34px] items-center justify-center gap-2 rounded-md px-3.5 text-sm font-semibold whitespace-nowrap transition-colors duration-300 sm:inline-flex",
+              // Sur l'image, le fond passe de 8 % à 20 % : à 8 %, le bouton ne
+              // se distinguait pas de la capsule qui le porte.
               surImage
-                ? "bg-white/8 text-white hover:bg-white/15"
+                ? "bg-white/20 text-white ring-1 ring-white/45 ring-inset hover:bg-white/30"
                 : "bg-primary text-primary-foreground hover:bg-primary/90"
             )}
           >
@@ -213,7 +245,7 @@ export function EnTete() {
                 type="button"
                 aria-label="Ouvrir le menu"
                 className={cn(
-                  "flex size-9 items-center justify-center rounded-[8px] transition-colors duration-300 md:hidden",
+                  "flex size-9 items-center justify-center rounded-md transition-colors duration-300 md:hidden",
                   surImage
                     ? "text-white hover:bg-white/10"
                     : "text-foreground hover:bg-accent"

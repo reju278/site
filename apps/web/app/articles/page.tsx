@@ -17,7 +17,7 @@ export default async function Articles() {
     <>
       <section className="px-5 pt-32 pb-16 sm:pt-40 sm:pb-20">
         <div className="mx-auto max-w-6xl text-center">
-          <h1 className="titre text-5xl text-foreground sm:text-6xl">
+          <h1 className="titre text-5xl text-balance text-foreground sm:text-6xl">
             {lettre.nom}
           </h1>
           <p className="mt-5 text-lg text-muted-foreground">

@@ -50,7 +50,14 @@ export default async function Accueil() {
             Le voile assombri garantit le contraste du texte quel que soit le
             thème : cette bande reste sombre dans les deux, sinon le verre de
             l'en-tête n'aurait rien à mordre. */}
-        <div className="absolute inset-x-0 top-0 bottom-[calc(var(--video-h)/2)] -z-10 overflow-hidden">
+        <div
+          // Le repère que l'en-tête observe pour savoir s'il surplombe une
+          // bande sombre. Sans lui, il s'habille pour un fond de page, ce qui
+          // est le défaut sûr : c'est cette absence qui le rendait blanc sur
+          // beige en haut des pages sans hero.
+          data-bande-sombre
+          className="absolute inset-x-0 top-0 bottom-[calc(var(--video-h)/2)] -z-10 overflow-hidden"
+        >
           <picture>
             <source media="(min-width: 768px)" srcSet="/fond-hero.jpg" />
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -65,7 +72,7 @@ export default async function Accueil() {
 
         <div className="mx-auto max-w-6xl">
           <div className="mx-auto max-w-3xl text-center">
-            <h1 className="titre text-4xl text-white sm:text-5xl lg:text-6xl">
+            <h1 className="titre text-4xl text-balance text-white sm:text-5xl lg:text-6xl">
               Vivez de votre expertise en ligne.
             </h1>
 
@@ -78,14 +85,17 @@ export default async function Accueil() {
                 href={liens.funnelsClub}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex h-11 items-center justify-center rounded-[10px] bg-white px-5 text-sm font-semibold text-neutral-900 transition-colors hover:bg-white/90"
+                className="inline-flex h-11 items-center justify-center rounded-md bg-white px-5 text-sm font-semibold text-neutral-900 transition-colors hover:bg-white/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               >
                 Découvrir Funnels Club
               </a>
               {/* Libellé de travail, à renommer. */}
               <a
                 href="#video"
-                className="inline-flex h-11 items-center justify-center gap-2 rounded-[10px] bg-white/10 px-5 text-sm font-semibold text-white ring-1 ring-white/15 ring-inset backdrop-blur-md transition-colors hover:bg-white/20"
+                // Fond porté à 20 % et filet à 45 % : à 10 % et 15 %, le
+                // libellé tombait à 3,91:1 et le filet très en dessous du 3:1
+                // attendu d'une bordure de contrôle.
+                className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-white/20 px-5 text-sm font-semibold text-white ring-1 ring-white/45 ring-inset backdrop-blur-md transition-colors hover:bg-white/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               >
                 Voir la vidéo
                 <Play className="size-4" />
@@ -100,9 +110,9 @@ export default async function Accueil() {
               pages pour une seule vidéo. */}
           <div
             id="video"
-            className="mx-auto mt-14 max-w-3xl scroll-mt-24 sm:mt-20"
+            className="mx-auto mt-14 max-w-3xl scroll-mt-[66px] sm:mt-20"
           >
-            <div className="aspect-16/9 overflow-hidden rounded-[12px] bg-black shadow-[0_24px_60px_rgba(0,0,0,0.35)] ring-1 ring-white/15">
+            <div className="aspect-16/9 overflow-hidden rounded-md bg-black shadow-[0_24px_60px_rgba(0,0,0,0.35)] ring-1 ring-white/45">
               <iframe
                 src="https://fast.wistia.net/embed/iframe/di3bzcmi50?videoFoam=false"
                 title="Vidéo de présentation"

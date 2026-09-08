@@ -44,7 +44,12 @@
   --secondary-foreground: #3b2e22;
 
   --muted: #e7dfd2;
-  --muted-foreground: #7a6a58;
+  /* 4,50:1 sur `--accent`, la plus foncée des surfaces claires, et 5,55:1 sur
+     le fond de page. L'ancienne valeur, #7a6a58, tombait à 3,62:1 sur
+     `--accent` et 3,94:1 sur `--muted` : un texte atténué reste du texte
+     courant, il lui faut 4,5:1 sur TOUTES les surfaces où il peut se poser,
+     pas seulement sur le fond de page. */
+  --muted-foreground: #675c57;
 
   --accent: #e0d6c6;
   --accent-foreground: #2b2118;
@@ -72,7 +77,9 @@
   --chart-2: #6d5843;
   --chart-3: #90785e;
   --chart-4: #b39a7d;
-  --chart-5: #d3c0a5;
+  /* 3,30:1 sur le fond de page. L'ancienne valeur, #d3c0a5, était à 1,52:1 :
+     un tracé qu'on ne voit pas n'est pas sourd, il est absent. */
+  --chart-5: #9a7d59;
 
   /* Les pastilles de statut, elles, ont besoin du contraire. Ces teintes
      passent par `style` et non par des classes : Tailwind ne génère que les
@@ -99,7 +106,10 @@
   --card: #17140f;
   --card-foreground: #f0eae0;
 
-  --popover: #17140f;
+  /* Un cran plus clair que `--card`, et non identique comme avant : une bulle
+     posée sur une carte n'avait aucune séparation de clarté, et le seul
+     recours, `--border`, est à 1,27:1, donc invisible. */
+  --popover: #211c15;
   --popover-foreground: #f0eae0;
 
   --primary: #045ee6;
@@ -134,7 +144,8 @@
   --chart-2: #c0b3a0;
   --chart-3: #9c8d78;
   --chart-4: #786954;
-  --chart-5: #564a39;
+  /* 3,89:1 sur le fond sombre, contre 2,26:1 pour l'ancienne valeur. */
+  --chart-5: #7d6d53;
 
   --pastille-neutre: #2a241c;
   --pastille-neutre-texte: #c9bca9;
@@ -206,10 +217,43 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
+  }
+
+  /* L'anneau de focus, à pleine opacité et non à 50 %.
+     
+     Les composants de registre dessinent `focus-visible:ring-ring/50`. Fondu à
+     moitié, le bleu de la marque ne vaut que 2,14:1 sur le fond clair et
+     1,67:1 sur le sombre, très en dessous des 3:1 qu'exige un indicateur de
+     focus. À pleine opacité il donne 4,80:1 et 3,49:1.
+
+     On ne corrige pas les fichiers de registre à la main : on pose par-dessus
+     un contour opaque, qui devient l'indicateur qui compte. Deux pixels de
+     large, deux d'écart, pour qu'il reste visible sur une surface de la même
+     famille de couleur. */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
   }
 
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Le contrat de mouvement réduit.
+
+     Il ne suffit pas de raccourcir : une personne qui demande moins de
+     mouvement demande que rien ne bouge, pas que tout aille vite. On neutralise
+     donc les transitions et les animations plutôt que de les accélérer, et on
+     coupe le défilement fluide, qui est lui aussi du mouvement non demandé. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
