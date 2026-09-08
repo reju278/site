@@ -8,38 +8,55 @@
     <!--
       Banc d'essai du logo Funnels Club.
 
-      Ce fichier vit à la racine du dépôt et non dans `apps/web` : Next ne le
-      construit pas et ne le sert pas.
+      Hors de `apps/web` : Next ne le construit ni ne le sert.
 
-      La version 3, « relief », a été retenue. Deux questions restent ouvertes,
-      et cette page sert à les trancher à l'œil :
+      Le tracé est celui d'origine, angles vifs, sans arrondi. Trois effets s'y
+      ajoutent, tous réglables dans le bloc `:root` :
 
-        1. Combien de relief sur la lettre ? Trois doses, en haut de page.
-        2. Quelle lettre ? Le tracé d'origine, puis cinq fontes, en bas.
+        1. Le liseré tournant, repris des boutons principaux du site. Un cône
+           de lumière tourne sous la carte ; un fond opaque rentré d'un pixel
+           le masque partout sauf sur le bord. C'est cette bande d'un pixel qui
+           fait tout l'effet.
 
-      Le relief de la carte ne bouge plus : liseré clair sur le bord haut,
-      ombre sur le bord bas, dégradé vertical. C'est la recette des capsules de
-      l'en-tête du site, donc le logo parle la même langue que le reste.
+        2. L'inclinaison au survol. La carte pivote vers le curseur : souris en
+           haut à droite, ce coin s'éloigne et le coin opposé se rapproche.
+           C'est la perspective qui donne le volume, pas l'ombre.
+
+        3. La tache de lumière qui suit le curseur, pour que la surface se lise
+           comme une matière et non comme un aplat.
+
+      Tout est neutralisé sous `prefers-reduced-motion`.
     -->
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Anton&family=Syne:wght@800&family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Instrument+Serif&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
 
     <style>
-      /* Les deux thèmes du site, aux valeurs réelles de
-         `packages/ui/src/styles/globals.css`. */
       :root {
-        --taille: 168px;
-        --rayon: 8%;
+        /* La carte */
+        --taille: 260px;
+        --rayon: 22%;
+        --cut: 1px; /* épaisseur du liseré tournant */
+        --vitesse: 3s;
+        --lueur: #ffffff; /* couleur du cône tournant */
 
+        /* L'inclinaison */
+        --angle-max: 14deg;
+        --perspective: 700px;
+
+        /* La tache de lumière */
+        --tache-taille: 55%;
+        --tache-force: 0.16;
+
+        /* La page */
         --page: #f2ede4;
         --encre: #675c57;
         --encre-forte: #2b2118;
-        --ombre-page: 0 14px 40px rgb(43 33 24 / 0.28);
+        --ombre-page: 0 22px 45px rgb(43 33 24 / 0.3);
         color-scheme: light;
       }
 
@@ -47,27 +64,26 @@
         --page: #0e0e11;
         --encre: #90909d;
         --encre-forte: #f2f2f5;
-        --ombre-page: 0 14px 40px rgb(0 0 0 / 0.55);
+        --ombre-page: 0 22px 45px rgb(0 0 0 / 0.65);
         color-scheme: dark;
       }
 
       body {
         margin: 0;
         min-height: 100svh;
-        padding: 2.5rem 1.5rem 5rem;
+        display: grid;
+        place-content: center;
+        justify-items: center;
+        gap: 2.5rem;
+        padding: 3rem 1.5rem;
         background: var(--page);
-        font-family: ui-sans-serif, system-ui, sans-serif;
+        font-family: "Archivo", ui-sans-serif, system-ui, sans-serif;
         color: var(--encre);
         transition:
           background-color 0.3s,
           color 0.3s;
       }
 
-      .barre {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 2.5rem;
-      }
       .bascule {
         appearance: none;
         cursor: pointer;
@@ -88,57 +104,36 @@
         outline-offset: 2px;
       }
 
-      h2 {
-        margin: 3.5rem 0 0.5rem;
+      .aide {
+        max-width: 30rem;
         text-align: center;
-        font-size: 1rem;
-        font-weight: 700;
-        color: var(--encre-forte);
-      }
-      h2:first-of-type {
-        margin-top: 0;
-      }
-      .chapeau {
-        margin: 0 auto 2.25rem;
-        max-width: 46rem;
-        text-align: center;
-        font-size: 0.875rem;
+        font-size: 0.8125rem;
         line-height: 1.6;
       }
 
-      .grille {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: flex-start;
-        justify-content: center;
-        gap: 2.5rem 3rem;
-        max-width: 1100px;
-        margin: 0 auto;
-      }
-
-      figure {
-        margin: 0;
-        display: grid;
-        justify-items: center;
-        gap: 0.875rem;
-        max-width: 200px;
-      }
-      figcaption {
-        text-align: center;
-        font-size: 0.8125rem;
-        line-height: 1.5;
-      }
-      figcaption b {
-        display: block;
-        color: var(--encre-forte);
-        font-size: 0.875rem;
-        margin-bottom: 0.2rem;
-      }
-
       /* ---------------------------------------------------------------
-         La carte, version « relief », figée.
+         La scène.
+
+         La perspective se déclare sur le parent et non sur la carte : posée
+         sur la carte elle-même, chaque face serait projetée depuis son propre
+         point de fuite, et l'inclinaison paraîtrait plate.
       --------------------------------------------------------------- */
+      .scene {
+        perspective: var(--perspective);
+      }
+
+      /* La carte.
+
+         `--rx` et `--ry` sont écrits par le script au survol. Au repos ils
+         valent zéro, et la transition de 400 ms ramène la carte à plat sans
+         à-coup quand la souris sort. */
       .logo {
+        --rx: 0deg;
+        --ry: 0deg;
+        --tache-x: 50%;
+        --tache-y: 50%;
+        --tache-opacite: 0;
+
         position: relative;
         width: var(--taille);
         aspect-ratio: 1;
@@ -146,236 +141,204 @@
         display: grid;
         place-items: center;
         overflow: hidden;
+        isolation: isolate;
+
+        transform: rotateX(var(--rx)) rotateY(var(--ry));
+        transform-style: preserve-3d;
+        transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        box-shadow: var(--ombre-page);
+      }
+
+      /* 1. Le cône tournant, tout au fond.
+
+         `@container` sur la carte donne l'unité `cqw` au balayage : le cône
+         traverse exactement la largeur de la carte, quelle que soit sa
+         taille. */
+      .logo {
+        container-type: size;
+      }
+
+      .cone {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        overflow: visible;
+        filter: blur(2px);
+      }
+      .cone span {
+        position: absolute;
+        inset: 0;
+        aspect-ratio: 1;
+        height: 100cqh;
+        animation: balayage var(--vitesse) ease-in-out infinite alternate;
+      }
+      .cone span span {
+        position: absolute;
+        inset: -100%;
+        width: auto;
+        height: auto;
+        background: conic-gradient(
+          from calc(270deg - 45deg),
+          transparent 0,
+          var(--lueur) 90deg,
+          transparent 90deg
+        );
+        animation: rotation calc(var(--vitesse) * 2) linear infinite;
+      }
+
+      @keyframes balayage {
+        to {
+          transform: translate(calc(100cqw - 100%), 0);
+        }
+      }
+      @keyframes rotation {
+        0% {
+          transform: translateZ(0) rotate(0);
+        }
+        15%,
+        35% {
+          transform: translateZ(0) rotate(90deg);
+        }
+        65%,
+        85% {
+          transform: translateZ(0) rotate(270deg);
+        }
+        100% {
+          transform: translateZ(0) rotate(360deg);
+        }
+      }
+
+      /* Le fond opaque, rentré de `--cut`. Il masque le cône partout sauf sur
+         le liseré du bord : c'est lui qui transforme un disque lumineux en
+         trait de lumière qui court le long du cadre. */
+      .fond {
+        position: absolute;
+        inset: var(--cut);
+        z-index: 1;
+        border-radius: calc(var(--rayon) - 0.5px);
         background: linear-gradient(180deg, #17171a 0%, #08080a 100%);
         box-shadow:
-          inset 0 1px 0 rgb(255 255 255 / 0.14),
-          inset 0 -1px 0 rgb(0 0 0 / 0.9),
-          var(--ombre-page);
+          inset 0 1px 0 rgb(255 255 255 / 0.12),
+          inset 0 -1px 0 rgb(0 0 0 / 0.9);
       }
 
-      .logo svg,
-      .logo .lettre {
+      /* 3. La tache de lumière, au-dessus du fond mais sous la lettre. */
+      .tache {
+        position: absolute;
+        inset: var(--cut);
+        z-index: 2;
+        border-radius: calc(var(--rayon) - 0.5px);
+        pointer-events: none;
+        opacity: var(--tache-opacite);
+        transition: opacity 0.3s;
+        background: radial-gradient(
+          circle var(--tache-taille) at var(--tache-x) var(--tache-y),
+          rgb(255 255 255 / var(--tache-force)) 0%,
+          transparent 70%
+        );
+      }
+
+      .logo svg {
+        position: relative;
+        z-index: 3;
         width: 100%;
         height: 100%;
-        position: relative;
-        z-index: 1;
+        /* La lettre se soulève un peu au-dessus de la carte : c'est ce
+           décalage en profondeur qui la fait bouger légèrement plus vite que
+           le fond quand la carte pivote, et qui donne la sensation d'épaisseur. */
+        transform: translateZ(18px);
+        filter: drop-shadow(2px 4px 9px rgb(0 0 0 / 0.55));
       }
-
-      /* Le relief de la lettre, en trois doses.
-
-         Le principe est toujours le même et vient du monde physique : une
-         lumière vient d'en haut, donc le bord supérieur d'une forme en saillie
-         s'éclaire et son bord inférieur s'assombrit. Deux ombres portées d'un
-         pixel, l'une claire vers le haut, l'autre sombre vers le bas, suffisent
-         à donner cette lecture. Le dégradé de remplissage fait le reste : la
-         lettre est un peu plus lumineuse en haut qu'en bas. */
-      .dose-1 .remplissage {
-        fill: url(#degrade-doux);
-      }
-      .dose-1 svg,
-      .dose-1 .lettre {
-        filter: drop-shadow(0 1px 0 rgb(255 255 255 / 0.3))
-          drop-shadow(0 -1px 0 rgb(0 0 0 / 0.45))
-          drop-shadow(0 0 6px rgb(255 255 255 / 0.14));
-      }
-
-      .dose-2 .remplissage {
-        fill: url(#degrade-moyen);
-      }
-      .dose-2 svg,
-      .dose-2 .lettre {
-        filter: drop-shadow(0 2px 0 rgb(255 255 255 / 0.42))
-          drop-shadow(0 -1px 0 rgb(0 0 0 / 0.6))
-          drop-shadow(0 3px 5px rgb(0 0 0 / 0.55))
-          drop-shadow(0 0 7px rgb(255 255 255 / 0.16));
-      }
-
-      .dose-3 .remplissage {
-        fill: url(#degrade-fort);
-      }
-      .dose-3 svg,
-      .dose-3 .lettre {
-        filter: drop-shadow(0 3px 0 rgb(255 255 255 / 0.5))
-          drop-shadow(0 -1px 0 rgb(0 0 0 / 0.7))
-          drop-shadow(0 6px 9px rgb(0 0 0 / 0.7))
-          drop-shadow(0 0 9px rgb(255 255 255 / 0.18));
-      }
-
-      /* La lettre posée avec une fonte plutôt qu'avec le tracé. */
-      .lettre {
-        display: grid;
-        place-items: center;
-        color: #fff;
-        font-size: calc(var(--taille) * 0.66);
-        line-height: 1;
-        user-select: none;
-      }
-      .archivo {
-        font-family: "Archivo Black", sans-serif;
-      }
-      .anton {
-        font-family: "Anton", sans-serif;
-      }
-      .syne {
-        font-family: "Syne", sans-serif;
-        font-weight: 800;
-      }
-      .bricolage {
-        font-family: "Bricolage Grotesque", sans-serif;
-        font-weight: 800;
-      }
-      .serif {
-        font-family: "Instrument Serif", serif;
-        font-size: calc(var(--taille) * 0.78);
+      .logo svg path {
+        fill: url(#lumiere);
       }
 
       @media (prefers-reduced-motion: reduce) {
-        * {
-          animation: none !important;
-          transition: none !important;
+        .logo {
+          transition: none;
+          transform: none !important;
+        }
+        .cone span,
+        .cone span span {
+          animation: none;
+        }
+        .tache {
+          opacity: 0 !important;
         }
       }
     </style>
   </head>
 
   <body>
-    <!-- Les dégradés de remplissage, déclarés une fois pour toute la page. -->
     <svg width="0" height="0" aria-hidden="true" style="position: absolute">
       <defs>
-        <linearGradient id="degrade-doux" x1="0" y1="0" x2="0" y2="1">
+        <linearGradient id="lumiere" x1="0.15" y1="0" x2="0.85" y2="1">
           <stop offset="0%" stop-color="#ffffff" />
-          <stop offset="100%" stop-color="#e8e8ec" />
-        </linearGradient>
-        <linearGradient id="degrade-moyen" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#ffffff" />
-          <stop offset="100%" stop-color="#d2d2da" />
-        </linearGradient>
-        <linearGradient id="degrade-fort" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#ffffff" />
-          <stop offset="55%" stop-color="#e4e4ea" />
-          <stop offset="100%" stop-color="#b6b6c2" />
+          <stop offset="55%" stop-color="#f2f2f4" />
+          <stop offset="100%" stop-color="#c9c9d2" />
         </linearGradient>
       </defs>
     </svg>
 
-    <div class="barre">
-      <button type="button" class="bascule" id="bascule">
-        Passer au thème sombre
-      </button>
+    <button type="button" class="bascule" id="bascule">
+      Passer au thème sombre
+    </button>
+
+    <div class="scene">
+      <div class="logo" id="logo">
+        <div class="cone" aria-hidden="true"><span><span></span></span></div>
+        <div class="fond" aria-hidden="true"></div>
+        <div class="tache" aria-hidden="true"></div>
+
+        <svg viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Funnels Club">
+          <path d="M231 240 H779 V404 H424 V458 H731 V629 H424 V760 H231 Z" />
+        </svg>
+      </div>
     </div>
 
-    <h2>Combien de relief sur la lettre ?</h2>
-    <p class="chapeau">
-      Même tracé, même carte. Seules changent la profondeur de l'ombre portée et
-      la pente du dégradé de remplissage.
+    <p class="aide">
+      Passez la souris sur le logo. Tout se règle dans le bloc
+      <code>:root</code> en haut du fichier : <code>--angle-max</code> pour
+      l'inclinaison, <code>--vitesse</code> pour le liseré,
+      <code>--tache-force</code> pour la lumière.
     </p>
-
-    <div class="grille">
-      <figure>
-        <div class="logo dose-1">
-          <svg viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Funnels Club">
-            <path class="remplissage" d="M231 240 H779 V404 H424 V458 H731 V629 H424 V760 H231 Z" />
-          </svg>
-        </div>
-        <figcaption><b>Dose 1</b> À peine. Se devine de près.</figcaption>
-      </figure>
-
-      <figure>
-        <div class="logo dose-2">
-          <svg viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Funnels Club">
-            <path class="remplissage" d="M231 240 H779 V404 H424 V458 H731 V629 H424 V760 H231 Z" />
-          </svg>
-        </div>
-        <figcaption><b>Dose 2</b> La lettre décolle du fond.</figcaption>
-      </figure>
-
-      <figure>
-        <div class="logo dose-3">
-          <svg viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Funnels Club">
-            <path class="remplissage" d="M231 240 H779 V404 H424 V458 H731 V629 H424 V760 H231 Z" />
-          </svg>
-        </div>
-        <figcaption><b>Dose 3</b> Franchement en saillie.</figcaption>
-      </figure>
-    </div>
-
-    <h2>Quelle lettre ?</h2>
-    <p class="chapeau">
-      La première est votre tracé actuel, qui n'est celui d'aucune fonte : son
-      bras du milieu est plus court que celui du haut et part du bord droit du
-      fût. Les cinq suivantes sont des fontes libres, toutes en dose 2. Aucune
-      ne reproduira ce décalage, c'est le prix d'une fonte ; en échange, elles
-      donnent des lettres dessinées et alignées sur un vrai système.
-    </p>
-
-    <div class="grille">
-      <figure>
-        <div class="logo dose-2">
-          <svg viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Funnels Club">
-            <path class="remplissage" d="M231 240 H779 V404 H424 V458 H731 V629 H424 V760 H231 Z" />
-          </svg>
-        </div>
-        <figcaption>
-          <b>Le tracé actuel</b>
-          Unique, mais rigide. Aucune fonte ne le donne.
-        </figcaption>
-      </figure>
-
-      <figure>
-        <div class="logo dose-2">
-          <span class="lettre archivo">F</span>
-        </div>
-        <figcaption>
-          <b>Archivo Black</b>
-          Le plus proche de votre tracé. Grotesque très gras, terminaisons
-          droites.
-        </figcaption>
-      </figure>
-
-      <figure>
-        <div class="logo dose-2">
-          <span class="lettre anton">F</span>
-        </div>
-        <figcaption>
-          <b>Anton</b>
-          Condensée. Un F plus haut et plus étroit, qui remplit mieux un carré.
-        </figcaption>
-      </figure>
-
-      <figure>
-        <div class="logo dose-2">
-          <span class="lettre syne">F</span>
-        </div>
-        <figcaption>
-          <b>Syne 800</b>
-          Large et anguleuse. La plus typée des cinq.
-        </figcaption>
-      </figure>
-
-      <figure>
-        <div class="logo dose-2">
-          <span class="lettre bricolage">F</span>
-        </div>
-        <figcaption>
-          <b>Bricolage Grotesque 800</b>
-          Contemporaine, un peu chaude, proche de l'esprit passionfroot.
-        </figcaption>
-      </figure>
-
-      <figure>
-        <div class="logo dose-2">
-          <span class="lettre serif">F</span>
-        </div>
-        <figcaption>
-          <b>Instrument Serif</b>
-          La fonte des titres du site. Le logo parlerait la même langue que les
-          pages.
-        </figcaption>
-      </figure>
-    </div>
 
     <script>
-      // Le seul script du banc d'essai : la bascule de thème.
+      const logo = document.getElementById("logo");
+      const douceur = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+      // L'angle maximal est lu dans la feuille de style, pour qu'il n'y ait
+      // qu'un seul endroit à modifier.
+      const angleMax = () =>
+        parseFloat(
+          getComputedStyle(logo).getPropertyValue("--angle-max")
+        ) || 14;
+
+      logo.addEventListener("pointermove", (e) => {
+        if (douceur.matches) return;
+        const r = logo.getBoundingClientRect();
+
+        // Position du curseur ramenée à l'intervalle -0,5 à 0,5, l'origine au
+        // centre de la carte.
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+
+        // Le signe de `rotateX` est inversé : un curseur vers le bas doit
+        // faire basculer le haut vers l'arrière, pas vers l'avant.
+        logo.style.setProperty("--ry", `${x * angleMax() * 2}deg`);
+        logo.style.setProperty("--rx", `${-y * angleMax() * 2}deg`);
+
+        logo.style.setProperty("--tache-x", `${(x + 0.5) * 100}%`);
+        logo.style.setProperty("--tache-y", `${(y + 0.5) * 100}%`);
+        logo.style.setProperty("--tache-opacite", "1");
+      });
+
+      logo.addEventListener("pointerleave", () => {
+        logo.style.setProperty("--rx", "0deg");
+        logo.style.setProperty("--ry", "0deg");
+        logo.style.setProperty("--tache-opacite", "0");
+      });
+
       const bouton = document.getElementById("bascule");
       bouton.addEventListener("click", () => {
         const sombre = document.documentElement.classList.toggle("sombre");

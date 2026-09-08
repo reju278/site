@@ -16,6 +16,15 @@
 /** Un emplacement qui attend le texte de Rémy. */
 export type AEcrire = null;
 
+/**
+ * L'adresse du site, sans barre oblique finale.
+ *
+ * Elle sert au plan du site, au fichier robots et à `metadataBase`. Écrite une
+ * fois : trois copies finissent toujours par diverger, et une URL canonique
+ * fausse se paie en pages dédoublées dans l'index.
+ */
+export const SITE = "https://remy-jupille.com";
+
 export const identite = {
   nom: "Rémy Jupille",
   societe: "Jupille Group Ltd",
@@ -51,9 +60,21 @@ export const liens = {
   espaceMembre: avecTag("https://groupe.funnels.club"),
   livre: avecTag("https://www.digital-selfmade.com"),
 
-  // Sans balise : YouTube n'est pas une propriété qu'Hyros suit, et un
-  // paramètre inconnu dans une URL de chaîne n'apporte rien.
-  youtube: "https://www.youtube.com/channel/UCzGq4I0pXnDJizd0fitt10w",
+  // Sans balise : les plateformes tierces ne sont pas suivies par Hyros, et un
+  // paramètre inconnu dans une URL de profil n'apporte rien.
+  //
+  // Les deux chaînes YouTube sont distinctes et vérifiées par leur flux Atom.
+  // Attention : `@profitlibertenostress` n'est PAS une troisième chaîne, c'est
+  // le nom d'usage de la première, `UCzGq4I0pXnDJizd0fitt10w`. Les deux
+  // adresses mènent au même endroit.
+  youtube: "https://www.youtube.com/@profitlibertenostress",
+  youtubeFunnels: "https://www.youtube.com/@remyjupillefunnels",
+
+  instagram: "https://www.instagram.com/remy_jupille/",
+  tiktok: "https://www.tiktok.com/@remy_jupille",
+  linkedin: "https://www.linkedin.com/in/remy-jupille-934a20160",
+  facebook:
+    "https://www.facebook.com/p/Funnels-Club-R%C3%A9my-Jupille-61562047537087/",
 } as const;
 
 /**
@@ -74,6 +95,19 @@ export type EntreeNavigation = {
  * seule à côté de deux menus se lit comme un oubli.
  */
 export const navigation: readonly EntreeNavigation[] = [];
+
+/**
+ * Le second podcast, coanimé avec Nassim Sheikh Ali.
+ *
+ * Rémy l'appelle « Esprit Mavric » ; son titre exact, celui qu'affichent les
+ * plateformes, est « Esprits Maverick ». C'est ce titre-là qui est repris ici,
+ * parce que c'est celui que les gens verront s'ils le cherchent.
+ */
+export const podcastMaverick = {
+  nom: "Esprits Maverick",
+  flux: "https://feed.ausha.co/BqnN8S1MnvMr",
+  site: "https://podcast.ausha.co/maverick",
+} as const;
 
 /**
  * Les menus déroulants de l'en-tête.
@@ -109,6 +143,27 @@ export const menus: readonly {
     ],
   },
   {
+    libelle: "Réseaux",
+    entrees: [
+      {
+        libelle: "YouTube, Rémy Jupille",
+        href: liens.youtube,
+        texte: "La chaîne principale",
+        externe: true,
+      },
+      {
+        libelle: "YouTube, Funnels Club",
+        href: liens.youtubeFunnels,
+        texte: "La seconde chaîne",
+        externe: true,
+      },
+      { libelle: "Instagram", href: liens.instagram, externe: true },
+      { libelle: "TikTok", href: liens.tiktok, externe: true },
+      { libelle: "LinkedIn", href: liens.linkedin, externe: true },
+      { libelle: "Facebook", href: liens.facebook, externe: true },
+    ],
+  },
+  {
     libelle: "Ressources",
     entrees: [
       {
@@ -126,8 +181,18 @@ export const menus: readonly {
         href: "/podcast",
         texte: "Le podcast, tous les épisodes",
       },
-      { libelle: "YouTube", href: liens.youtube, externe: true },
-      { libelle: "Livre", href: liens.livre, externe: true },
+      {
+        libelle: "Esprits Maverick",
+        href: podcastMaverick.site,
+        texte: "Le podcast coanimé avec Nassim Sheikh Ali",
+        externe: true,
+      },
+      {
+        libelle: "Digital Selfmade",
+        href: liens.livre,
+        texte: "Le livre",
+        externe: true,
+      },
     ],
   },
 ];
@@ -196,8 +261,14 @@ export const podcast = {
   nom: "Profit, liberté, no stress",
   flux: "https://feed.ausha.co/ypjV8sr07j2B",
   plateformes: [
-    { nom: "Apple Podcasts", href: "https://podcasts.apple.com/fr/podcast/profit-libert%C3%A9-no-stress/id1479057423" },
-    { nom: "Spotify", href: "https://open.spotify.com/show/4tehcIhRigecka2QMPHKZO" },
+    {
+      nom: "Apple Podcasts",
+      href: "https://podcasts.apple.com/fr/podcast/profit-libert%C3%A9-no-stress/id1479057423",
+    },
+    {
+      nom: "Spotify",
+      href: "https://open.spotify.com/show/4tehcIhRigecka2QMPHKZO",
+    },
     { nom: "YouTube", href: "https://www.youtube.com/@profitlibertenostress" },
   ],
 } as const;

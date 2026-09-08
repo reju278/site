@@ -7,6 +7,7 @@ import { ArrowUpRight } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/articles" },
   title: lettre.nom,
   description: lettre.baseline,
 };

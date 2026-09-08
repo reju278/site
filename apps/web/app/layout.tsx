@@ -1,6 +1,6 @@
 import { EnTete } from "@/components/en-tete";
 import { PiedDePage } from "@/components/pied-de-page";
-import { identite } from "@/contenu/site";
+import { SITE, identite } from "@/contenu/site";
 import { Toaster } from "@repo/ui/components/sonner";
 import { ThemeProvider } from "@repo/ui/components/theme-provider";
 import type { Metadata } from "next";
@@ -30,7 +30,8 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://remy-jupille.com"),
+  metadataBase: new URL(SITE),
+  alternates: { canonical: "/" },
   title: {
     default: `${identite.nom} · ${identite.promesse}`,
     template: `%s · ${identite.nom}`,

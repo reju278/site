@@ -121,6 +121,91 @@ justifie en commentaire à côté du lien.
 
 ---
 
+## Le SEO n'est pas une passe de fin, c'est une contrainte d'écriture
+
+Un site vitrine sert à être trouvé. Ce qui suit n'est pas une liste de bonnes
+intentions à repasser avant la mise en ligne : ce sont des conditions pour
+qu'une page soit considérée comme terminée, au même titre que les deux thèmes
+et les deux tailles d'écran.
+
+### Chaque page déclare son identité
+
+- **Un `export const metadata`** par page, avec son `title` et sa
+  `description`. Le gabarit du titre est posé dans `layout.tsx` ; une page qui
+  n'exporte rien hérite du titre d'accueil et devient un doublon aux yeux de
+  Google.
+- **La description fait entre 120 et 160 caractères** et décrit la page, pas le
+  site. Au-delà, elle est tronquée dans les résultats.
+- **Une seule balise `h1` par page**, et c'est le titre visible. Les niveaux
+  suivants descendent sans sauter de marche : un `h3` sous un `h1` casse le
+  plan que les robots lisent.
+- **`alternates.canonical`** sur toute page atteignable par plusieurs adresses.
+- **`robots: { index: false }`** sur les pages légales : elles diluent le site
+  sans jamais amener personne.
+
+### Les images
+
+- **Tout `alt` est décidé, jamais oublié.** Une image qui porte du sens décrit
+  ce qu'elle montre, en une phrase courte et sans « image de » ni « photo de ».
+  Une image purement décorative prend `alt=""`, ce qui la retire explicitement
+  du plan de lecture. Un `alt` absent est un défaut ; un `alt=""` assumé n'en
+  est pas un.
+- **`width` et `height` toujours déclarés**, même quand la taille finale vient
+  du CSS. Sans eux, le navigateur ne réserve pas la place et la page saute au
+  chargement : c'est le décalage de mise en page, et il est mesuré.
+- **L'image du haut de page prend `fetchPriority="high"` et pas de
+  `loading="lazy"`.** C'est elle que Google chronomètre. Toutes les autres
+  prennent `loading="lazy"`.
+- **Deux fichiers par image de fond**, un par largeur, servis par `<picture>`.
+  Envoyer 1920 px à un écran de 375 fait payer six fois le poids pour rien.
+- **Compresser avant de committer.** Une image de plus de 300 Ko dans
+  `public/` doit être justifiée.
+
+### Les liens et les boutons
+
+- **Ce qui navigue est un lien, ce qui agit est un bouton.** Un `<button>` qui
+  change de page n'est pas suivi par les robots, perd le clic du milieu,
+  l'ouverture dans un onglet et l'aperçu de la destination.
+- **Le texte du lien dit où il mène.** Jamais « cliquez ici », « en savoir
+  plus » ni « lire la suite » seuls : c'est ce texte qui décrit la page
+  d'arrivée. Si la mise en page impose un libellé court, l'`aria-label` porte
+  la version complète.
+- **Les liens sortants prennent `rel="noreferrer"`** et leur balise de
+  provenance, voir la section Hyros.
+- **Une icône seule a toujours un `aria-label`.**
+
+### La vidéo
+
+- **Un `title` sur chaque `iframe`**, décrivant la vidéo et non le lecteur.
+- **Des données structurées `VideoObject`** quand la vidéo porte le message de
+  la page : sans elles, Google ne sait pas qu'il y a une vidéo et ne peut pas
+  l'afficher dans ses résultats. Il lui faut au minimum le nom, la description,
+  la vignette, la date de publication et la durée au format ISO 8601.
+- **Sous-titres ou transcription.** C'est de l'accessibilité, et c'est aussi le
+  seul texte qu'un robot peut lire dans une vidéo.
+- **Une affiche, pas un cadre noir.** Elle sert de vignette dans les partages.
+
+### Le socle du site
+
+- **`sitemap.ts` et `robots.ts`** dans `apps/web/app/`. Next les génère ; toute
+  page publique nouvelle doit apparaître dans le premier.
+- **`metadataBase`** est déclaré une fois dans `layout.tsx` pour que les URL
+  d'`openGraph` soient absolues. Sans lui, les aperçus de partage sont vides.
+- **Une image `openGraph`** de 1200 sur 630. C'est ce qui s'affiche quand
+  quelqu'un colle un lien du site dans une conversation.
+- **`lang="fr"`** sur `<html>`, déjà posé, à ne pas perdre.
+- **Des données structurées `Person`** sur l'accueil, reliant le nom aux
+  profils de réseaux sociaux. C'est ce qui permet à Google de rattacher le site
+  à la personne.
+
+### Ce qu'on ne fait pas
+
+Pas de texte caché, pas de mots-clés empilés, pas de page bâtie pour un moteur
+plutôt que pour un lecteur. Un site de formation qui triche se fait déclasser,
+et le mal est bien plus long à réparer que le gain.
+
+---
+
 ## Affichage
 
 ### Rayon des angles : 5 px, partout
