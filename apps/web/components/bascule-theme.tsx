@@ -25,6 +25,9 @@ export function BasculeTheme() {
     <Button
       variant="ghost"
       size="icon"
+      // 40 px au doigt, 36 px à la souris : la cible tactile prime sur le
+      // gabarit par défaut de shadcn tant qu'on est sur un écran étroit.
+      className="size-10 sm:size-9"
       aria-label={sombre ? "Passer au thème clair" : "Passer au thème sombre"}
       onClick={() =>
         setTheme(resolvedTheme === "dark" ? "light" : "dark")

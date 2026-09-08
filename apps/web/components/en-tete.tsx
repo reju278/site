@@ -72,7 +72,7 @@ export function EnTete() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="md:hidden"
+                className="size-10 md:hidden"
                 aria-label="Ouvrir le menu"
               >
                 <Menu className="size-4" />

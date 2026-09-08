@@ -121,6 +121,33 @@ projet, c'est une contrainte de chaque modification.
   dans l'autre thème. Si un jeton manque, l'ajouter pour `:root` **et** `.dark`.
 - Vérifier l'écran dans les deux thèmes avant de le considérer terminé.
 
+### Téléphone et ordinateur : toujours les deux
+
+Même règle, même exigence. Un écran n'est pas terminé parce qu'il est beau en
+1440 px de large : la moitié des gens qui arrivent sur ce site le lisent sur un
+téléphone tenu à la main.
+
+- **On écrit le téléphone d'abord.** Les classes nues valent pour l'écran
+  étroit, `sm:` et `lg:` élargissent ensuite. L'inverse oblige à défaire au
+  lieu d'ajouter.
+- **Le corps de page ne défile jamais horizontalement.** Ce qui est large par
+  nature, un tableau, un bloc de code, un schéma, défile dans son propre
+  conteneur en `overflow-x-auto`.
+- Une grille se déclare toujours avec son état étroit : `grid-cols-1` puis
+  `sm:grid-cols-2`. Une grille qui ne s'effondre pas produit des colonnes de
+  quarante pixels.
+- Pas de largeur en dur (`w-[720px]`), pas de `whitespace-nowrap` sur du texte
+  courant. Les titres prennent `text-balance`, les paragraphes `text-pretty`.
+- **Une cible carrée fait au moins 40 px de côté sur téléphone.** Les boutons
+  d'icône de shadcn valent 36 px : les repasser à `size-10` sur mobile
+  (`className="size-10 sm:size-9"`). Un bouton de texte garde la hauteur du
+  système, sa largeur porte déjà la cible.
+- Ce qui ne se déclenche qu'au survol doit exister autrement : sur un
+  téléphone, il n'y a pas de survol.
+- **Vérifier les deux avant de conclure**, à 375 px et en large, dans les deux
+  thèmes. Le panneau navigateur émule le téléphone avec `resize_window`, il n'y
+  a pas d'excuse à ne pas regarder.
+
 ### Le flou va derrière, jamais devant
 
 Ce qui passe **sous** une fenêtre se brouille ; la fenêtre elle-même reste opaque.
