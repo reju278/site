@@ -6,6 +6,11 @@
 /* ---------------------------------------------------------------------------
    Le thème du projet, en un seul fichier.
 
+   La palette est chaude dans les deux sens : le thème clair est un papier
+   beige et une encre brune, le thème sombre un brun presque noir. Ce ne sont
+   pas deux thèmes différents, c'est la même marque à deux luminosités. Aucun
+   gris neutre : un `#737373` posé au milieu de beiges se voit immédiatement.
+
    Deux règles tiennent tout le reste :
    - Aucun jeton ne vit dans un seul des deux blocs. Ce qui est défini pour
      `:root` l'est aussi pour `.dark`, sinon l'écran devient illisible dans
@@ -17,125 +22,129 @@
 :root {
   --radius: 5px;
 
-  --background: #f9f9f9;
-  --foreground: #333333;
+  /* Le papier et l'encre. */
+  --background: #f2ede4;
+  --foreground: #2b2118;
 
-  --card: #ffffff;
-  --card-foreground: #333333;
+  /* Les blocs sont à peine plus clairs que le fond : ce qui les détache,
+     c'est leur filet, pas leur remplissage. */
+  --card: #f7f3ea;
+  --card-foreground: #2b2118;
 
-  --popover: #ffffff;
-  --popover-foreground: #333333;
+  --popover: #faf7f0;
+  --popover-foreground: #2b2118;
 
-  --primary: #1a1a1a;
-  --primary-foreground: #fafafa;
+  --primary: #3b2e22;
+  --primary-foreground: #f7f3ea;
 
-  --secondary: #f0f0f0;
-  --secondary-foreground: #1a1a1a;
+  --secondary: #e7dfd2;
+  --secondary-foreground: #3b2e22;
 
-  --muted: #f0f0f0;
-  --muted-foreground: #737373;
+  --muted: #e7dfd2;
+  --muted-foreground: #7a6a58;
 
-  --accent: #ececec;
-  --accent-foreground: #1a1a1a;
+  --accent: #e0d6c6;
+  --accent-foreground: #2b2118;
 
-  --destructive: #d64545;
-  --destructive-foreground: #fafafa;
+  --destructive: #a4442f;
+  --destructive-foreground: #f7f3ea;
 
-  --border: #e4e4e4;
-  --input: #e4e4e4;
-  --ring: #a3a3a3;
+  --border: #dccfbc;
+  --input: #dccfbc;
+  --ring: #b09a7e;
 
   /* Le menu latéral. */
-  --sidebar: #f4f4f4;
-  --sidebar-foreground: #333333;
-  --sidebar-primary: #1a1a1a;
-  --sidebar-primary-foreground: #fafafa;
-  --sidebar-accent: #e8e8e8;
-  --sidebar-accent-foreground: #1a1a1a;
-  --sidebar-border: #e0e0e0;
-  --sidebar-ring: #a3a3a3;
+  --sidebar: #ede7dc;
+  --sidebar-foreground: #2b2118;
+  --sidebar-primary: #3b2e22;
+  --sidebar-primary-foreground: #f7f3ea;
+  --sidebar-accent: #e0d6c6;
+  --sidebar-accent-foreground: #2b2118;
+  --sidebar-border: #dccfbc;
+  --sidebar-ring: #b09a7e;
 
-  /* Les graphiques sont gris exprès : des courbes qui ne se disputent pas
-     l'attention. Pour colorer un statut, voir les jetons `--pastille-*`. */
-  --chart-1: #4a4a4a;
-  --chart-2: #6e6e6e;
-  --chart-3: #909090;
-  --chart-4: #b4b4b4;
-  --chart-5: #d4d4d4;
+  /* Les graphiques restent sourds exprès : des courbes qui ne se disputent
+     pas l'attention. Pour colorer un statut, voir les jetons `--pastille-*`. */
+  --chart-1: #4a3a2b;
+  --chart-2: #6d5843;
+  --chart-3: #90785e;
+  --chart-4: #b39a7d;
+  --chart-5: #d3c0a5;
 
   /* Les pastilles de statut, elles, ont besoin du contraire. Ces teintes
      passent par `style` et non par des classes : Tailwind ne génère que les
-     classes qu'il voit écrites. */
-  --pastille-neutre: #ececec;
-  --pastille-neutre-texte: #4a4a4a;
-  --pastille-bleu: #dbeafe;
-  --pastille-bleu-texte: #1e40af;
-  --pastille-vert: #dcfce7;
-  --pastille-vert-texte: #166534;
-  --pastille-ambre: #fef3c7;
-  --pastille-ambre-texte: #92400e;
-  --pastille-rouge: #fee2e2;
-  --pastille-rouge-texte: #991b1b;
-  --pastille-violet: #ede9fe;
-  --pastille-violet-texte: #5b21b6;
+     classes qu'il voit écrites. Elles sont désaturées vers le beige pour
+     rester dans la même famille que le reste. */
+  --pastille-neutre: #e7dfd2;
+  --pastille-neutre-texte: #4a3e31;
+  --pastille-bleu: #d8e3ec;
+  --pastille-bleu-texte: #27455e;
+  --pastille-vert: #dde6d3;
+  --pastille-vert-texte: #33502c;
+  --pastille-ambre: #f2e4c8;
+  --pastille-ambre-texte: #6b4a16;
+  --pastille-rouge: #f0dcd5;
+  --pastille-rouge-texte: #7a3524;
+  --pastille-violet: #e4dcea;
+  --pastille-violet-texte: #4c3663;
 }
 
 .dark {
-  --background: #171717;
-  --foreground: #ededed;
+  --background: #0e0c0a;
+  --foreground: #f0eae0;
 
-  --card: #1f1f1f;
-  --card-foreground: #ededed;
+  --card: #17140f;
+  --card-foreground: #f0eae0;
 
-  --popover: #1f1f1f;
-  --popover-foreground: #ededed;
+  --popover: #17140f;
+  --popover-foreground: #f0eae0;
 
-  --primary: #ededed;
-  --primary-foreground: #1a1a1a;
+  --primary: #f0eae0;
+  --primary-foreground: #17140f;
 
-  --secondary: #262626;
-  --secondary-foreground: #ededed;
+  --secondary: #221d17;
+  --secondary-foreground: #f0eae0;
 
-  --muted: #262626;
-  --muted-foreground: #a1a1a1;
+  --muted: #221d17;
+  --muted-foreground: #a29684;
 
-  --accent: #2e2e2e;
-  --accent-foreground: #ededed;
+  --accent: #2b2419;
+  --accent-foreground: #f0eae0;
 
-  --destructive: #e06c6c;
-  --destructive-foreground: #171717;
+  --destructive: #d4735c;
+  --destructive-foreground: #17140f;
 
-  --border: #2e2e2e;
-  --input: #2e2e2e;
-  --ring: #6b6b6b;
+  --border: #2a241c;
+  --input: #2a241c;
+  --ring: #6e6152;
 
-  --sidebar: #1c1c1c;
-  --sidebar-foreground: #ededed;
-  --sidebar-primary: #ededed;
-  --sidebar-primary-foreground: #1a1a1a;
-  --sidebar-accent: #2a2a2a;
-  --sidebar-accent-foreground: #ededed;
-  --sidebar-border: #2e2e2e;
-  --sidebar-ring: #6b6b6b;
+  --sidebar: #131009;
+  --sidebar-foreground: #f0eae0;
+  --sidebar-primary: #f0eae0;
+  --sidebar-primary-foreground: #17140f;
+  --sidebar-accent: #2b2419;
+  --sidebar-accent-foreground: #f0eae0;
+  --sidebar-border: #2a241c;
+  --sidebar-ring: #6e6152;
 
-  --chart-1: #e0e0e0;
-  --chart-2: #bcbcbc;
-  --chart-3: #999999;
-  --chart-4: #767676;
-  --chart-5: #565656;
+  --chart-1: #e4dbcc;
+  --chart-2: #c0b3a0;
+  --chart-3: #9c8d78;
+  --chart-4: #786954;
+  --chart-5: #564a39;
 
-  --pastille-neutre: #2e2e2e;
-  --pastille-neutre-texte: #c8c8c8;
-  --pastille-bleu: #1e3a5f;
-  --pastille-bleu-texte: #bfdbfe;
-  --pastille-vert: #14361f;
-  --pastille-vert-texte: #bbf7d0;
-  --pastille-ambre: #422a06;
-  --pastille-ambre-texte: #fde68a;
-  --pastille-rouge: #451a1a;
-  --pastille-rouge-texte: #fecaca;
-  --pastille-violet: #2e1e57;
-  --pastille-violet-texte: #ddd6fe;
+  --pastille-neutre: #2a241c;
+  --pastille-neutre-texte: #c9bca9;
+  --pastille-bleu: #1b2e3c;
+  --pastille-bleu-texte: #b9d4e8;
+  --pastille-vert: #1e3320;
+  --pastille-vert-texte: #bfdcb4;
+  --pastille-ambre: #3b2b10;
+  --pastille-ambre-texte: #ebce93;
+  --pastille-rouge: #3b1f17;
+  --pastille-rouge-texte: #e8b7a6;
+  --pastille-violet: #2c2140;
+  --pastille-violet-texte: #d0c0e6;
 }
 
 @theme inline {

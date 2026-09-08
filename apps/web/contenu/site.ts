@@ -5,21 +5,28 @@
  * mise à jour du site vit dans le dépôt. Modifier une phrase, c'est modifier ce
  * fichier, committer, pousser.
  *
- * Les entrées marquées `A_REMPLIR` sont des exemples de forme, pas du contenu.
- * Elles décrivent ce qu'il faut fournir. Le site ne part pas en production tant
- * qu'il en reste une : voir l'issue #1.
+ * **Règle du projet : le texte est écrit par Rémy, pas par l'agent.** Ce
+ * fichier ne contient que du texte repris mot pour mot de remy-jupille.com. Ce
+ * qui n'a pas encore de texte vaut `null` et s'affiche comme un emplacement
+ * vide, visiblement. Une page à trous se remplit ; une page remplie de texte
+ * inventé se corrige ligne à ligne, longtemps après que personne ne se
+ * souvienne de ce qui était vrai.
  */
 
-/** Marqueur des contenus qui attendent leur version réelle. */
-export const A_REMPLIR = true as const;
+/** Un emplacement qui attend le texte de Rémy. */
+export type AEcrire = null;
 
 export const identite = {
   nom: "Rémy Jupille",
   societe: "Jupille Group Ltd",
-  role: "Formateur et consultant en acquisition",
+
+  // Repris de remy-jupille.com, au mot près.
   promesse: "Vendre ses connaissances ou compétences en ligne",
   resume:
-    "J'aide les formateurs, coachs et consultants à convertir de nouveaux clients avec un tunnel de vente qui tient, de la publicité en ligne et une offre qu'on ne refuse pas.",
+    "Nous aidons les formateurs, coachs et consultants à facilement convertir de nouveaux clients grâce au PARFAIT tunnel de vente, la publicité en ligne et la création d'une offre irrésistible.",
+
+  /** Le mot mis en italique dans le titre. Doit exister dans `promesse`. */
+  promesseAccent: "connaissances ou compétences",
 } as const;
 
 export const liens = {
@@ -27,6 +34,7 @@ export const liens = {
   livre: "https://www.digital-selfmade.com",
   funnelsClub: "https://www.funnels.club/direct?el=site",
   mastermind: "https://www.funnels.club/mastermind?el=site",
+  lettre: "https://lettre.funnels.club",
 } as const;
 
 /**
@@ -40,50 +48,62 @@ export type EntreeNavigation = {
   externe?: boolean;
 };
 
+/** Les entrées plates de l'en-tête, sans menu déroulant. */
 export const navigation: readonly EntreeNavigation[] = [
   { libelle: "Résultats", href: "/resultats" },
-  { libelle: "À propos", href: "/a-propos" },
-  { libelle: "YouTube", href: liens.youtube, externe: true },
-  { libelle: "Livre", href: liens.livre, externe: true },
 ];
 
-/** À qui le site s'adresse. Sert de filtre autant que de promesse. */
-export const cibles = [
+/**
+ * Les menus déroulants de l'en-tête.
+ *
+ * Les descriptions sont reprises telles quelles du site actuel et du flux de la
+ * lettre. Aucune n'est écrite pour l'occasion : une entrée sans texte n'en
+ * affiche pas.
+ */
+export const menus: readonly {
+  libelle: string;
+  entrees: readonly {
+    libelle: string;
+    href: string;
+    texte?: string;
+    externe?: boolean;
+  }[];
+}[] = [
   {
-    titre: "Coachs",
-    texte:
-      "Vous vendez votre accompagnement en appel, un par un, et votre chiffre s'arrête quand votre agenda est plein.",
+    libelle: "Programmes",
+    entrees: [
+      {
+        libelle: "Funnels Club",
+        href: liens.funnelsClub,
+        texte: "Grandir jusqu'à 6 chiffres par an",
+        externe: true,
+      },
+      {
+        libelle: "F.C. Mastermind",
+        href: liens.mastermind,
+        texte: "Scaler jusqu'à +7 chiffres par an",
+        externe: true,
+      },
+    ],
   },
   {
-    titre: "Formateurs",
-    texte:
-      "Votre formation existe, elle est bonne, et pourtant elle ne se vend qu'au bouche-à-oreille.",
+    libelle: "Contenus",
+    entrees: [
+      { libelle: "Digital Selfmade", href: "/articles", texte: "Profit, liberté, no stress" },
+      { libelle: "YouTube", href: liens.youtube, externe: true },
+      { libelle: "Livre", href: liens.livre, externe: true },
+    ],
   },
-  {
-    titre: "Consultants",
-    texte:
-      "Vos missions viennent de votre réseau. Le jour où il se tarit, il n'y a rien derrière.",
-  },
-] as const;
+];
 
-/** Ce que le programme installe, dit en clair. */
-export const piliers = [
-  "Une offre assez précise pour qu'on comprenne en dix secondes à qui elle s'adresse",
-  "Un tunnel de vente qui tient sans vous, de la publicité jusqu'au paiement",
-  "De la publicité en ligne pilotée sur des chiffres, pas sur des impressions",
-  "Un appel de vente cadré, avec une trame qui se répète",
-  "Des relances écrites une fois, envoyées mille fois",
-  "Un tableau de bord qui dit où l'argent entre et où il fuit",
-] as const;
-
+/** Repris de remy-jupille.com, au mot près. */
 export const offres = [
   {
     id: "funnels-club",
     nom: "Funnels Club",
     promesse: "Grandir jusqu'à 6 chiffres par an",
     texte:
-      "Un programme de formation pour les coachs, consultants et créateurs de formation qui veulent créer et vendre une formation en ligne à plusieurs milliers d'euros, avec un tunnel, de la publicité et du closing.",
-    pour: "Vous avez une expertise et pas encore de machine pour la vendre.",
+      "Funnels Club est un programme de formation pour les coachs, consultants et créateurs de formations pour créer et vendre une formation en ligne à plusieurs milliers avec un funnel, de la publicité en ligne et du closing.",
     action: "Découvrir Funnels Club",
     href: liens.funnelsClub,
     teinte: "bleu",
@@ -93,141 +113,78 @@ export const offres = [
     nom: "F.C. Mastermind",
     promesse: "Scaler jusqu'à +7 chiffres par an",
     texte:
-      "Un groupe restreint de coachs, consultants et créateurs de formation qui visent le million grâce à l'automatisation, la délégation et des stratégies de croissance plus avancées.",
-    pour: "Votre offre se vend déjà. C'est vous qui êtes devenu le goulot.",
+      "Le F.C. Mastermind est un groupe restreint de coachs, consultants et créateurs de formation qui souhaitent croître à +7 chiffres par an grâce à l'automatisation, la délégation et des stratégies évoluées de croissance.",
     action: "Découvrir le Mastermind",
     href: liens.mastermind,
     teinte: "rouge",
   },
 ] as const;
 
+/** La lettre, telle que son propre flux se décrit. */
+export const lettre = {
+  nom: "Digital Selfmade",
+  baseline: "Profit, liberté, no stress",
+  flux: "https://lettre.funnels.club/feed",
+} as const;
+
 /**
- * Les chiffres du programme.
+ * Les sections dont Rémy n'a pas encore écrit le texte.
  *
- * A_REMPLIR : ce sont des exemples de format. Aucun chiffre ne part en ligne
- * sans être vrai et vérifiable.
+ * Chaque entrée décrit ce que la section attend. Tant que `titre` vaut `null`,
+ * la page affiche un emplacement au lieu d'une phrase. Remplacer `null` par le
+ * texte suffit à faire apparaître la section pour de bon.
  */
-export const chiffres = [
-  { valeur: "000", unite: "", libelle: "membres accompagnés depuis 2019" },
-  { valeur: "0", unite: "M€", libelle: "de chiffre d'affaires généré par les membres" },
-  { valeur: "00", unite: "%", libelle: "des membres lancent leur offre en 90 jours" },
-  { valeur: "0", unite: "ans", libelle: "à ne faire que ça" },
-] as const;
+export const sections = {
+  preuve: {
+    titre: null as string | null,
+    texte: null as string | null,
+    attendu: "la section qui montre les résultats des membres",
+  },
+  aPropos: {
+    titre: null as string | null,
+    texte: null as string | null,
+    attendu: "qui vous êtes et pourquoi vous faites ça",
+  },
+  appel: {
+    titre: null as string | null,
+    texte: null as string | null,
+    attendu: "la phrase qui clôt la page et l'appel à l'action",
+  },
+} as const;
+
+/**
+ * Les chiffres mis en avant.
+ *
+ * Vide tant que Rémy n'a pas donné les vrais. Un chiffre inventé sur un site
+ * de formation est une allégation commerciale, pas une maquette.
+ */
+export const chiffres: readonly {
+  valeur: string;
+  libelle: string;
+}[] = [];
 
 /**
  * Les résultats clients.
  *
- * A_REMPLIR : nom réel, chiffre réel, citation réelle, et l'accord de la
- * personne pour être citée. Deux formes qui alternent, dans l'esprit de la page
- * « customer stories » de Jasper : `chiffre` pour une tuile colorée avec un
- * nombre en très gros, `citation` pour une parole sur fond de carte. Seul le
- * chiffre porte une teinte.
+ * Vide, pour la même raison, et parce qu'un témoignage engage la personne
+ * citée. Il faut son nom, son chiffre, ses mots et son accord.
  */
-export const resultats = [
-  {
-    type: "chiffre",
-    valeur: "0 000 €",
-    libelle: "en trois mois, sans agence",
-    personne: "Prénom N.",
-    metier: "Coach",
-    teinte: "vert",
-  },
-  {
-    type: "citation",
-    texte:
-      "Remplacer par la phrase exacte de la personne, telle qu'elle l'a écrite. Ce qui convainc, c'est le détail concret qu'on ne peut pas inventer.",
-    personne: "Prénom N.",
-    metier: "Consultante",
-  },
-  {
-    type: "chiffre",
-    valeur: "×0",
-    libelle: "sur le taux de prise de rendez-vous",
-    personne: "Prénom N.",
-    metier: "Formateur",
-    teinte: "bleu",
-  },
-  {
-    type: "citation",
-    texte:
-      "Remplacer par une citation qui raconte l'avant et l'après, pas seulement la satisfaction.",
-    personne: "Prénom N.",
-    metier: "Coach sportif",
-  },
-  {
-    type: "chiffre",
-    valeur: "00 %",
-    libelle: "de marge sur la publicité",
-    personne: "Prénom N.",
-    metier: "Créatrice de formation",
-    teinte: "violet",
-  },
-  {
-    type: "citation",
-    texte:
-      "Remplacer par une citation. Trois lignes suffisent : ce qui bloquait, ce qui a changé, en combien de temps.",
-    personne: "Prénom N.",
-    metier: "Consultant",
-  },
-] as const;
-
-/**
- * Le parcours, pour la page « À propos ».
- *
- * A_REMPLIR : les dates et les étapes réelles.
- */
-export const parcours = [
-  {
-    annee: "Année",
-    titre: "Le point de départ",
-    texte:
-      "Remplacer par ce qui vous a amené là. Le métier d'avant, ce qui n'allait pas, la décision.",
-  },
-  {
-    annee: "Année",
-    titre: "La première offre",
-    texte:
-      "Remplacer par le premier produit vendu en ligne, ce qu'il a rapporté, ce qu'il a appris.",
-  },
-  {
-    annee: "Année",
-    titre: "Funnels Club",
-    texte:
-      "Remplacer par la naissance du programme et ce qui l'a rendu nécessaire.",
-  },
-  {
-    annee: "Aujourd'hui",
-    titre: "Le Mastermind",
-    texte:
-      "Remplacer par ce sur quoi vous travaillez maintenant, et pour qui.",
-  },
-] as const;
-
-export const questions = [
-  {
-    question: "À qui s'adresse Funnels Club ?",
-    reponse:
-      "Aux coachs, consultants et formateurs qui ont déjà une expertise et des premiers clients, mais pas encore de moyen répétable de les trouver. Si vous cherchez votre sujet, c'est trop tôt.",
-  },
-  {
-    question: "Combien de temps faut-il y consacrer ?",
-    reponse:
-      "A_REMPLIR : dire la vérité sur le rythme réel, en heures par semaine, plutôt qu'une promesse confortable.",
-  },
-  {
-    question: "Faut-il un budget publicitaire ?",
-    reponse:
-      "A_REMPLIR : donner le montant plancher en dessous duquel les campagnes n'apprennent rien, et dire ce qu'on fait avant de l'avoir.",
-  },
-  {
-    question: "Quelle différence entre Funnels Club et le Mastermind ?",
-    reponse:
-      "Funnels Club construit la machine. Le Mastermind s'adresse à ceux dont la machine tourne déjà et qui butent sur leur propre temps : automatisation, délégation, croissance.",
-  },
-] as const;
+export const resultats: readonly {
+  type: "chiffre" | "citation";
+  personne: string;
+  metier: string;
+  valeur?: string;
+  libelle?: string;
+  texte?: string;
+  teinte?: string;
+}[] = [];
 
 export const legales = [
   { libelle: "CGV", href: "/cgv" },
   { libelle: "Confidentialité", href: "/confidentialite" },
-  { libelle: "Mentions légales", href: "/mentions" },
+  { libelle: "Mentions", href: "/mentions" },
 ] as const;
+
+/** Repris du pied de page de remy-jupille.com, au mot près. */
+export const avertissement =
+  "Ce site ne fait pas partie du site Facebook ou de Facebook, Inc. Ce site n'est PAS approuvé par Facebook de quelque manière que ce soit. FACEBOOK est une marque déposée de FACEBOOK, Inc.";

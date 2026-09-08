@@ -158,6 +158,13 @@ Ce qui passe **sous** une fenêtre se brouille ; la fenêtre elle-même reste op
 - Le rayon du flou s'écrit **en toutes lettres** : `blur(var(--x))` est
   silencieusement jeté par le compilateur CSS.
 
+**Une exception, et une seule : l'en-tête.** Les deux capsules flottantes de
+`apps/web/components/en-tete.tsx` sont reprises de passionfroot à l'identique,
+sur décision de Rémy : rayon de 12 px et non 5, dégradé blanc translucide,
+`backdrop-blur-md` et filet intérieur. Elles flottent au-dessus de l'image du
+hero, et c'est le flou qui les fait tenir. L'exception s'arrête là : partout
+ailleurs, rayon de 5 px et fonds pleins.
+
 ### Pas de tiret cadratin
 
 Aucun `—` ni `–` dans un texte affiché à l'écran : libellés, messages, titres.
@@ -177,15 +184,33 @@ demande passe par une server action.
 
 ### Le contenu vit dans `apps/web/contenu/site.ts`
 
-Tout le texte du site tient dans ce fichier : identité, liens, navigation,
-offres, chiffres, résultats, parcours, questions. Les pages ne font que le
-mettre en forme. Corriger une phrase, c'est modifier ce fichier, rien d'autre.
+Tout le texte du site tient dans ce fichier. Les pages ne font que le mettre en
+forme. Corriger une phrase, c'est modifier ce fichier, rien d'autre.
 
-**Ce qui n'est pas encore vrai est marqué `A_REMPLIR`.** Un chiffre inventé, un
-faux témoignage ou une CGV approximative engagent la société qui les publie.
-Les emplacements affichent donc ce qu'on attend d'eux, visiblement, plutôt
-qu'un contenu vraisemblable. Il reste des `A_REMPLIR` : le site ne part pas en
-production tant qu'il en reste un.
+**Le texte est écrit par Rémy, jamais par l'agent.** C'est la règle la plus
+stricte du dépôt et elle n'a pas d'exception. Un titre, une accroche, un
+témoignage, un chiffre, un paragraphe de CGV : rien de tout cela ne s'invente,
+même « en attendant », même « pour voir le rendu ». Un texte inventé qui a l'air
+plausible se corrige ligne à ligne, des mois plus tard, quand plus personne ne
+sait ce qui était vrai. Et sur un site de formation, un chiffre inventé est une
+allégation commerciale.
+
+Ce que l'agent a le droit d'écrire : les libellés d'interface strictement
+nécessaires (« Ouvrir le menu »), signalés comme provisoires, et les
+descriptions d'emplacement. Rien d'autre.
+
+Une section sans texte n'affiche pas une phrase de remplissage : elle affiche un
+`<Emplacement>` qui dit ce qu'elle attend. Il en reste plusieurs, et le site ne
+part pas en production tant qu'il en reste un.
+
+### Le contenu extérieur arrive par flux RSS
+
+La lettre est lue dans le flux Substack de `lettre.funnels.club`, au build puis
+toutes les heures (`next: { revalidate }`). Les pages restent statiques et
+servies par le CDN ; un article publié apparaît sans redéploiement. Si le flux
+tombe, `lireArticles` renvoie une liste vide plutôt que de faire échouer le
+build. C'est la seule donnée extérieure du site, et elle ne justifie ni base ni
+serveur.
 - Le jour où il faut relire ce qu'on a écrit, ou qu'une personne modifie le
   contenu sans passer par le code, alors il faut Convex **et** l'auth qui va
   avec, pas l'un sans l'autre : une fonction Convex est publique par nature, qui
