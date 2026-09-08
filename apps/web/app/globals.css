@@ -4,3 +4,13 @@
    dossier en plus de l'app pour générer leurs classes. Sans cette ligne, la
    moitié des styles manquent, sans le moindre message d'erreur. */
 @source "../../../packages/ui/src";
+
+/* La fonte est chargée par `next/font` dans `layout.tsx`, qui expose la
+   variable `--font-inter`. C'est ici qu'elle devient la fonte sans-serif du
+   projet, donc celle que `font-sans` applique. La pile de repli est celle de
+   Tailwind : si le réseau lâche, la page reste lisible. */
+@theme inline {
+  --font-sans:
+    var(--font-inter), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}

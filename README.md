@@ -1,6 +1,21 @@
 # site
 
-Site vitrine, monté sur la stack de départ.
+Le site de Rémy Jupille. Vitrine, monté sur la stack de départ.
+
+## Les pages
+
+| Chemin | Ce qu'elle fait |
+| --- | --- |
+| `/` | La promesse, à qui elle s'adresse, les deux programmes, un extrait de preuve, la biographie courte, les questions. |
+| `/resultats` | La mosaïque des résultats clients, chiffres et citations. |
+| `/a-propos` | Le parcours. |
+| `/cgv`, `/confidentialite`, `/mentions` | Les pages légales. |
+
+Les six pages sont rendues au build et servies en statique.
+
+**Le texte du site vit dans `apps/web/contenu/site.ts`**, pas dans les pages.
+Ce qui attend encore sa version réelle y est marqué `A_REMPLIR` et s'affiche
+comme tel à l'écran. Voir l'issue #1 pour la liste de ce qui manque.
 
 **Ni base de données, ni authentification, ni envoi d'emails.** Convex, Better
 Auth et Resend font partie de la stack de départ mais ne sont pas installés

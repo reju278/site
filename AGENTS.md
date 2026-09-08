@@ -71,6 +71,17 @@ L'ordre compte :
 2. [reui.io](https://reui.io) : la couche au-dessus, les compositions qu'on écrirait sinon à la main.
 3. [bklit.com](https://bklit.com) : les graphiques, et eux seuls.
 
+**ReUI s'installe en variante `radix-nova`, jamais par l'URL courte.**
+`https://reui.io/r/<nom>.json` redirige vers une version bâtie sur Base UI, qui
+ferait doublon avec `radix-ui`, déjà là. L'adresse à utiliser est
+`https://reui.io/r/styles/radix-nova/<nom>.json`, qui s'appuie sur les briques
+du projet. Ces fichiers atterrissent dans
+`packages/ui/src/components/reui/`, à part, pour qu'on sache d'où ils viennent.
+
+Le build par style de ReUI laisse au passage des fragments de classes tronqués
+(`"(1)] (1)] (1.25)]"` dans `frame.tsx`). Ils sont inertes, Tailwind ne les
+reconnaît pas, et ils ne se corrigent pas : c'est du code de registre.
+
 On n'écrit à la main que ce qu'aucun des trois ne donne.
 
 - Les composants vivent dans `packages/ui/src/components/`, importés via
@@ -136,6 +147,18 @@ demande passe par une server action.
 
 - Un formulaire qui envoie un mail se fait en server action, sans base.
 - Du contenu qui ne change qu'à la mise à jour du site vit dans le dépôt.
+
+### Le contenu vit dans `apps/web/contenu/site.ts`
+
+Tout le texte du site tient dans ce fichier : identité, liens, navigation,
+offres, chiffres, résultats, parcours, questions. Les pages ne font que le
+mettre en forme. Corriger une phrase, c'est modifier ce fichier, rien d'autre.
+
+**Ce qui n'est pas encore vrai est marqué `A_REMPLIR`.** Un chiffre inventé, un
+faux témoignage ou une CGV approximative engagent la société qui les publie.
+Les emplacements affichent donc ce qu'on attend d'eux, visiblement, plutôt
+qu'un contenu vraisemblable. Il reste des `A_REMPLIR` : le site ne part pas en
+production tant qu'il en reste un.
 - Le jour où il faut relire ce qu'on a écrit, ou qu'une personne modifie le
   contenu sans passer par le code, alors il faut Convex **et** l'auth qui va
   avec, pas l'un sans l'autre : une fonction Convex est publique par nature, qui
