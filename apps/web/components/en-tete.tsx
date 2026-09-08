@@ -1,6 +1,7 @@
 "use client";
 
 import { BasculeTheme } from "@/components/bascule-theme";
+import { Reseaux } from "@/components/reseaux";
 import { identite, liens, menus, navigation } from "@/contenu/site";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -223,6 +224,15 @@ export function EnTete() {
                             </NavigationMenuLink>
                           </li>
                         ))}
+                        {/* Les réseaux, en pied de la seule liste des
+                            ressources : ce sont des lieux où l'on suit Rémy,
+                            pas des programmes. Le filet les sépare du reste
+                            comme la section « resources » du modèle. */}
+                        {menu.libelle === "Ressources" ? (
+                          <li className="mt-2 border-t border-border px-1 pt-2">
+                            <Reseaux />
+                          </li>
+                        ) : null}
                       </ul>
 
                       <div
@@ -339,6 +349,9 @@ export function EnTete() {
                         ) : null}
                       </a>
                     ))}
+                    {menu.libelle === "Ressources" ? (
+                      <Reseaux className="mt-2 border-t border-border px-1 pt-3" />
+                    ) : null}
                   </div>
                 ))}
 

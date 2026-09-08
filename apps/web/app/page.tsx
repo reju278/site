@@ -3,7 +3,7 @@ import { LecteurVideo } from "@/components/lecteur-video";
 import { KineticText } from "@repo/ui/components/kinetic-text";
 import { ParticulesHero } from "@/components/particules-hero";
 import { Emplacement, Section } from "@/components/section";
-import { SITE, identite, liens, offres, sections } from "@/contenu/site";
+import { SITE, identite, liens, offres, sections, video } from "@/contenu/site";
 import { Button } from "@repo/ui/components/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -178,7 +178,13 @@ export default function Accueil() {
             id="video"
             className="mx-auto mt-8 max-w-3xl scroll-mt-[66px] sm:mt-10"
           >
-            <LecteurVideo />
+            <LecteurVideo
+              id={video.id}
+              titre={video.titre}
+              secondes={video.secondes}
+              affiche="/affiche-video.jpg"
+              afficheMobile="/affiche-video-mobile.jpg"
+            />
           </div>
         </div>
       </section>

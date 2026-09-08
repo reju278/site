@@ -97,6 +97,27 @@ export type EntreeNavigation = {
 export const navigation: readonly EntreeNavigation[] = [];
 
 /**
+ * Les réseaux, affichés en pied du panneau « Ressources ».
+ *
+ * `glyphe` nomme l'icône de marque à employer. LinkedIn n'en a pas, et c'est
+ * délibéré : LinkedIn a demandé le retrait de sa marque des jeux d'icônes
+ * libres, et aller la chercher ailleurs reviendrait à passer outre. Cette
+ * entrée s'affiche donc avec son nom écrit, ce qui est la façon correcte de
+ * citer une marque quand on ne peut pas en montrer le signe.
+ */
+export const reseaux: readonly {
+  nom: string;
+  href: string;
+  glyphe: "youtube" | "instagram" | "tiktok" | "facebook" | null;
+}[] = [
+  { nom: "YouTube", href: liens.youtube, glyphe: "youtube" },
+  { nom: "Instagram", href: liens.instagram, glyphe: "instagram" },
+  { nom: "TikTok", href: liens.tiktok, glyphe: "tiktok" },
+  { nom: "Facebook", href: liens.facebook, glyphe: "facebook" },
+  { nom: "LinkedIn", href: liens.linkedin, glyphe: null },
+];
+
+/**
  * Le second podcast, coanimé avec Nassim Sheikh Ali.
  *
  * Rémy l'appelle « Esprit Mavric » ; son titre exact, celui qu'affichent les
@@ -140,27 +161,6 @@ export const menus: readonly {
         texte: "L'accompagnement le plus personnalisé que Rémy propose",
         externe: true,
       },
-    ],
-  },
-  {
-    libelle: "Réseaux",
-    entrees: [
-      {
-        libelle: "YouTube, Rémy Jupille",
-        href: liens.youtube,
-        texte: "La chaîne principale",
-        externe: true,
-      },
-      {
-        libelle: "YouTube, Funnels Club",
-        href: liens.youtubeFunnels,
-        texte: "La seconde chaîne",
-        externe: true,
-      },
-      { libelle: "Instagram", href: liens.instagram, externe: true },
-      { libelle: "TikTok", href: liens.tiktok, externe: true },
-      { libelle: "LinkedIn", href: liens.linkedin, externe: true },
-      { libelle: "Facebook", href: liens.facebook, externe: true },
     ],
   },
   {
@@ -331,6 +331,45 @@ export const resultats: readonly {
   texte?: string;
   teinte?: string;
 }[] = [];
+
+/**
+ * Les témoignages vidéo, hébergés chez Wistia.
+ *
+ * Les seize identifiants viennent de la page `/avis-funnels-club` du site
+ * actuel, et les durées du média lui-même. Les affiches sont téléchargées puis
+ * servies par nous, dans `public/temoignages/` : rien ne part chez Wistia tant
+ * qu'une vidéo n'est pas lancée.
+ *
+ * **Les noms sont normalisés, pas inventés.** Les titres enregistrés côté
+ * Wistia sont des étiquettes de travail (« interview jeremy v2 »,
+ * « Interview-Joel ») : on en a tiré le nom de la personne, et le résultat
+ * quand le titre le portait déjà. Rien n'a été ajouté. À relire par Rémy, qui
+ * seul sait quels prénoms peuvent être affichés et quels chiffres sont encore
+ * exacts.
+ */
+export const temoignages: readonly {
+  id: string;
+  nom: string;
+  resultat?: string;
+  secondes: number;
+}[] = [
+  { id: "j0vbkt570k", nom: "Christian Joyce", resultat: "De 0 € à 160 K€ en 5 mois", secondes: 988 },
+  { id: "rgio4y4o8f", nom: "Roland Buffet", resultat: "De 0 € à 109 778 € en 6 mois", secondes: 715 },
+  { id: "2vtsinplyx", nom: "Augustin Passy", resultat: "Trois fois son chiffre d'affaires", secondes: 485 },
+  { id: "h24icz3l8d", nom: "Rayan Arifa", secondes: 759 },
+  { id: "2xege6bt0u", nom: "Yannick et Sylvie", secondes: 1514 },
+  { id: "vtfaka0m80", nom: "Olga", secondes: 1365 },
+  { id: "fbtr4dqoji", nom: "Sandrine", secondes: 1321 },
+  { id: "s3npr5izhy", nom: "Tatiana", secondes: 1248 },
+  { id: "tvy3jbhml9", nom: "Charlotte", secondes: 1229 },
+  { id: "b5taio9plc", nom: "François", secondes: 1192 },
+  { id: "rtil6qeznq", nom: "Jeremy", secondes: 852 },
+  { id: "ive07co9xm", nom: "Cédric", secondes: 781 },
+  { id: "iy3jgcijgu", nom: "Corentin", secondes: 728 },
+  { id: "abj3v8v8ek", nom: "Matthieu", secondes: 718 },
+  { id: "4lkp9f6lm4", nom: "Valérie", secondes: 687 },
+  { id: "brvvtbkmfo", nom: "Joël", secondes: 527 },
+];
 
 export const legales = [
   { libelle: "CGV", href: "/cgv" },
