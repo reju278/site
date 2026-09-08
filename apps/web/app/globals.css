@@ -1,0 +1,6 @@
+@import "@repo/ui/globals.css";
+
+/* Les composants shadcn vivent dans `@repo/ui` : Tailwind doit scanner ce
+   dossier en plus de l'app pour générer leurs classes. Sans cette ligne, la
+   moitié des styles manquent, sans le moindre message d'erreur. */
+@source "../../../packages/ui/src";

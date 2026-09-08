@@ -1,0 +1,203 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ---------------------------------------------------------------------------
+   Le thème du projet, en un seul fichier.
+
+   Deux règles tiennent tout le reste :
+   - Aucun jeton ne vit dans un seul des deux blocs. Ce qui est défini pour
+     `:root` l'est aussi pour `.dark`, sinon l'écran devient illisible dans
+     l'autre thème.
+   - Toute l'échelle de rayon vaut 5 px. `rounded-md` et `rounded-lg` donnent le
+     même résultat, et personne n'a à choisir.
+--------------------------------------------------------------------------- */
+
+:root {
+  --radius: 5px;
+
+  --background: #f9f9f9;
+  --foreground: #333333;
+
+  --card: #ffffff;
+  --card-foreground: #333333;
+
+  --popover: #ffffff;
+  --popover-foreground: #333333;
+
+  --primary: #1a1a1a;
+  --primary-foreground: #fafafa;
+
+  --secondary: #f0f0f0;
+  --secondary-foreground: #1a1a1a;
+
+  --muted: #f0f0f0;
+  --muted-foreground: #737373;
+
+  --accent: #ececec;
+  --accent-foreground: #1a1a1a;
+
+  --destructive: #d64545;
+  --destructive-foreground: #fafafa;
+
+  --border: #e4e4e4;
+  --input: #e4e4e4;
+  --ring: #a3a3a3;
+
+  /* Le menu latéral. */
+  --sidebar: #f4f4f4;
+  --sidebar-foreground: #333333;
+  --sidebar-primary: #1a1a1a;
+  --sidebar-primary-foreground: #fafafa;
+  --sidebar-accent: #e8e8e8;
+  --sidebar-accent-foreground: #1a1a1a;
+  --sidebar-border: #e0e0e0;
+  --sidebar-ring: #a3a3a3;
+
+  /* Les graphiques sont gris exprès : des courbes qui ne se disputent pas
+     l'attention. Pour colorer un statut, voir les jetons `--pastille-*`. */
+  --chart-1: #4a4a4a;
+  --chart-2: #6e6e6e;
+  --chart-3: #909090;
+  --chart-4: #b4b4b4;
+  --chart-5: #d4d4d4;
+
+  /* Les pastilles de statut, elles, ont besoin du contraire. Ces teintes
+     passent par `style` et non par des classes : Tailwind ne génère que les
+     classes qu'il voit écrites. */
+  --pastille-neutre: #ececec;
+  --pastille-neutre-texte: #4a4a4a;
+  --pastille-bleu: #dbeafe;
+  --pastille-bleu-texte: #1e40af;
+  --pastille-vert: #dcfce7;
+  --pastille-vert-texte: #166534;
+  --pastille-ambre: #fef3c7;
+  --pastille-ambre-texte: #92400e;
+  --pastille-rouge: #fee2e2;
+  --pastille-rouge-texte: #991b1b;
+  --pastille-violet: #ede9fe;
+  --pastille-violet-texte: #5b21b6;
+}
+
+.dark {
+  --background: #171717;
+  --foreground: #ededed;
+
+  --card: #1f1f1f;
+  --card-foreground: #ededed;
+
+  --popover: #1f1f1f;
+  --popover-foreground: #ededed;
+
+  --primary: #ededed;
+  --primary-foreground: #1a1a1a;
+
+  --secondary: #262626;
+  --secondary-foreground: #ededed;
+
+  --muted: #262626;
+  --muted-foreground: #a1a1a1;
+
+  --accent: #2e2e2e;
+  --accent-foreground: #ededed;
+
+  --destructive: #e06c6c;
+  --destructive-foreground: #171717;
+
+  --border: #2e2e2e;
+  --input: #2e2e2e;
+  --ring: #6b6b6b;
+
+  --sidebar: #1c1c1c;
+  --sidebar-foreground: #ededed;
+  --sidebar-primary: #ededed;
+  --sidebar-primary-foreground: #1a1a1a;
+  --sidebar-accent: #2a2a2a;
+  --sidebar-accent-foreground: #ededed;
+  --sidebar-border: #2e2e2e;
+  --sidebar-ring: #6b6b6b;
+
+  --chart-1: #e0e0e0;
+  --chart-2: #bcbcbc;
+  --chart-3: #999999;
+  --chart-4: #767676;
+  --chart-5: #565656;
+
+  --pastille-neutre: #2e2e2e;
+  --pastille-neutre-texte: #c8c8c8;
+  --pastille-bleu: #1e3a5f;
+  --pastille-bleu-texte: #bfdbfe;
+  --pastille-vert: #14361f;
+  --pastille-vert-texte: #bbf7d0;
+  --pastille-ambre: #422a06;
+  --pastille-ambre-texte: #fde68a;
+  --pastille-rouge: #451a1a;
+  --pastille-rouge-texte: #fecaca;
+  --pastille-violet: #2e1e57;
+  --pastille-violet-texte: #ddd6fe;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Rayon 5 px partout : toute l'échelle vaut la même chose. */
+  --radius-xs: 5px;
+  --radius-sm: 5px;
+  --radius-md: 5px;
+  --radius-lg: 5px;
+  --radius-xl: 5px;
+  --radius-2xl: 5px;
+  --radius-3xl: 5px;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}

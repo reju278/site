@@ -1,0 +1,12 @@
+import { nextJsConfig } from "@repo/eslint-config/next-js";
+import globals from "globals";
+
+/** @type {import("eslint").Linter.Config} */
+export default [
+  ...nextJsConfig,
+  {
+    // Les fichiers de configuration tournent dans Node, pas dans le navigateur.
+    files: ["*.js", "*.mjs"],
+    languageOptions: { globals: { ...globals.node } },
+  },
+];

@@ -1,0 +1,182 @@
+# Conventions du projet
+
+Instructions permanentes pour toute contribution à ce dépôt, humaine ou
+automatique. Ce fichier s'appelle `AGENTS.md` et non `CLAUDE.md` parce qu'il
+vaut pour **tous** les agents ; le `CLAUDE.md` de la racine ne contient qu'une
+ligne, `@AGENTS.md`, pour que la règle ne s'écrive qu'une fois.
+
+> **Ce fichier se met à jour dans le même commit que le changement qu'il
+> décrit.** C'est la seule mémoire qui traverse les sessions. Un `AGENTS.md`
+> périmé est pire que pas de fichier : l'agent raisonne avec assurance sur un
+> projet qui n'existe plus.
+
+---
+
+## Avant d'écrire une ligne
+
+1. **Relire le `README.md`.** Il dit ce qu'est le logiciel et comment on le lance.
+2. **Relire l'issue GitHub concernée**, commentaires compris. C'est là que vit
+   l'intention, ce qui a déjà été essayé et ce qui a été écarté.
+   `gh issue view <numéro> --comments`
+3. **Ne rien réinjecter d'inutile.** Le README et l'issue suffisent à démarrer.
+   Le reste du dépôt se lit à la demande, fichier par fichier, pas en bloc.
+4. **Consigner dans l'issue**, pas dans la discussion : les décisions et les
+   impasses doivent survivre à la fermeture de la fenêtre.
+
+Toute fonctionnalité a son issue **avant** d'avoir son code. Une issue dit ce
+qu'on veut et pourquoi, pas comment.
+
+---
+
+## La pile ne change pas
+
+Turborepo + pnpm, Next.js (App Router, React 19), Convex, Tailwind v4,
+shadcn/ui, Vercel.
+
+**Ce projet est un site vitrine : il n'a ni authentification, ni envoi d'emails.**
+Better Auth et Resend, qui font partie de la stack de départ, ne sont pas
+installés ici. Le jour où une partie privée arrive, on les remonte depuis
+`MONTER-LA-STACK.md` plutôt que d'improviser autre chose.
+
+**Ne jamais introduire une brique concurrente** parce qu'elle paraît plus
+pratique sur le moment : pas d'autre ORM, pas d'autre bibliothèque de
+graphiques, pas d'autre système de styles, pas de `.module.css`. Si une brique
+manque vraiment, en discuter dans l'issue avant de l'installer.
+
+---
+
+## Git
+
+**Ne jamais `git push` sans validation explicite.** Committer est libre ;
+pousser demande le feu vert, parce que chaque push sur `main` déclenche un
+déploiement de production sur Vercel.
+
+---
+
+## Un écran neuf commence par une visite aux registres
+
+**Avant de dessiner quoi que ce soit, aller voir si le composant existe.** Ce
+n'est pas une préférence, c'est une étape obligatoire. Tout module d'interface
+demandé, un choix de date, un sélecteur, une fenêtre, commence par une commande
+`shadcn add`, pas par un fichier vierge. **Si l'on n'a rien installé, c'est
+qu'on n'a pas cherché.**
+
+L'ordre compte :
+
+1. [ui.shadcn.com](https://ui.shadcn.com) : le socle. Bouton, champ, fenêtre, menu, tableau.
+2. [reui.io](https://reui.io) : la couche au-dessus, les compositions qu'on écrirait sinon à la main.
+3. [bklit.com](https://bklit.com) : les graphiques, et eux seuls.
+
+On n'écrit à la main que ce qu'aucun des trois ne donne.
+
+- Les composants vivent dans `packages/ui/src/components/`, importés via
+  `@repo/ui/components/<nom>`.
+- Pour ajouter : `cd packages/ui && pnpm dlx shadcn@latest add <nom>`.
+- Le code repris d'un registre reste **tel quel**, pour rester alignable sur
+  leurs mises à jour. Il n'est pas passé au linter et ne se corrige pas à la main.
+- **Après chaque `add`, lire `git diff`.** Un ajout réécrit sans prévenir
+  `dialog.tsx`, `command.tsx`, `dropdown-menu.tsx` et `select.tsx`, et y remet
+  un `cursor-default` qui casse la règle de curseur du projet. Rendre ce qui
+  est à nous.
+- **Vérifier les imports de `cn` après un `add`.** Dans un monorepo, shadcn
+  n'arrive pas à résoudre l'alias depuis `packages/ui` lui-même et écrit
+  `import { cn } from "cn"`, qui installe un paquet npm sans rapport. La bonne
+  ligne est `import { cn } from "@repo/ui/lib/utils"`, et le paquet `cn` n'a
+  rien à faire dans les dépendances.
+
+---
+
+## Affichage
+
+### Rayon des angles : 5 px, partout
+
+Toute l'échelle (`rounded-sm`, `rounded-md`, `rounded-lg`) vaut 5 px, défini
+dans `packages/ui/src/styles/globals.css`. Jamais de rayon en dur
+(`rounded-[8px]`, `rounded-xl`). Seule exception : `rounded-full` pour les
+photos de profil.
+
+### Thème clair et sombre : toujours les deux
+
+Chaque écran doit fonctionner dans les deux. Ce n'est pas une finition de fin de
+projet, c'est une contrainte de chaque modification.
+
+- Uniquement des jetons sémantiques : `bg-background`, `text-foreground`,
+  `bg-card`, `text-muted-foreground`, `border-border`, `bg-primary`.
+- **Jamais de couleur en dur** (`bg-white`, `#111`, `text-gray-500`) : illisible
+  dans l'autre thème. Si un jeton manque, l'ajouter pour `:root` **et** `.dark`.
+- Vérifier l'écran dans les deux thèmes avant de le considérer terminé.
+
+### Le flou va derrière, jamais devant
+
+Ce qui passe **sous** une fenêtre se brouille ; la fenêtre elle-même reste opaque.
+
+- `backdrop-blur` de six pixels sur le **voile** de `dialog`, `alert-dialog` et `sheet`.
+- Fonds pleins partout ailleurs : `bg-popover` pour les menus, bulles et listes,
+  `bg-background` pour les fenêtres et panneaux.
+- Le rayon du flou s'écrit **en toutes lettres** : `blur(var(--x))` est
+  silencieusement jeté par le compilateur CSS.
+
+### Pas de tiret cadratin
+
+Aucun `—` ni `–` dans un texte affiché à l'écran : libellés, messages, titres.
+Une incise devient une virgule ou des parenthèses, une rupture un deux-points ou
+deux phrases, un séparateur `Nom — Titre` un point médian `Nom · Titre`.
+
+---
+
+## Backend Convex : rien de sensible tant qu'il n'y a pas d'auth
+
+Une fonction Convex est publique par nature : qui connaît l'URL du déploiement
+peut l'appeler. Ce site n'a pas d'authentification, donc **il n'existe aucun
+moyen de fermer une fonction ici**. La conséquence est simple et elle n'est pas
+négociable : rien de sensible ne descend dans Convex tant qu'il n'y a pas d'auth.
+
+- Passer par `publicQuery` / `publicMutation` de
+  `packages/backend/convex/functions.ts`, jamais par les constructeurs bruts.
+  Une règle ESLint le vérifie. Le jour où l'auth arrive, le verrou se pose dans
+  ce fichier et nulle part ailleurs.
+- Le backend vit dans `packages/backend`, **pas** dans `apps/web` : toutes les
+  apps du dépôt tapent dans la même base.
+
+### Pas de registre des droits, et c'est un choix
+
+La stack de départ impose qu'aucune page ne se crée sans son droit, avec un
+registre `PAGES` et un script qui refuse de construire sans. **Un site vitrine
+n'a aucun écran à protéger**, donc ni registre ni script ici. Ce n'est pas un
+oubli : c'est à remonter en même temps que l'authentification, le jour où une
+première page cesse d'être publique.
+
+---
+
+## Tout ce qui se crée doit pouvoir se retrouver
+
+Une nouvelle table d'objets consultables entre dans l'index de recherche **le
+jour où on l'écrit**. Une nature, un constructeur d'entrée qui fixe le titre, le
+sous-titre et la destination, un `indexer()` à chaque point d'écriture, un
+`desindexer()` à la suppression. Jamais une passe qui relit la table entière.
+
+- La botte de foin porte **toutes** les écritures d'une même chose : l'index
+  compare des mots par leur début, jamais leur milieu.
+- **Ce qu'on n'a pas le droit de voir ne doit pas être cherchable.**
+
+---
+
+## Performance : ne lire que le nécessaire
+
+Convex facture la lecture des documents, pas les champs renvoyés.
+
+- Jamais de `collect()` sur une table pour n'en afficher qu'une partie : un
+  index et une plage (`withIndex(...).order("desc").take(n)`).
+- Les champs lourds et rarement lus vivent dans leur propre table.
+- Une requête de tableau projette ses champs explicitement.
+- Déduire plutôt que stocker ce qui se reconstruit.
+- Mesurer avant d'affirmer : `DB I/O Bandwidth` n'est pas `Return Size`.
+
+---
+
+## Vérifications avant de conclure
+
+```sh
+pnpm turbo run lint check-types
+pnpm turbo run build
+```
