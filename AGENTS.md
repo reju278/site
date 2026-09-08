@@ -101,6 +101,26 @@ On n'écrit à la main que ce qu'aucun des trois ne donne.
 
 ---
 
+## Tout lien sortant porte sa balise de provenance
+
+Rémy suit ses ventes avec Hyros. Un lien qui quitte ce site vers une de ses
+propriétés doit porter **`?el=site`**, sinon la vente est attribuée ailleurs.
+
+La balise ne s'écrit **jamais à la main** : `apps/web/contenu/site.ts` expose
+`avecTag()`, et tous les liens passent par elle. C'est une fonction et non une
+consigne parce qu'une balise oubliée ne se voit pas. Le lien marche, la page
+s'affiche, rien n'échoue : on s'en aperçoit des semaines plus tard, en lisant
+des chiffres devenus faux.
+
+`avecTag()` choisit `?` ou `&` selon que l'URL a déjà une requête, et ne double
+pas la balise si elle est déjà là.
+
+Exception : les plateformes tierces qu'Hyros ne suit pas, YouTube par exemple.
+Un paramètre inconnu dans une URL de chaîne n'apporte rien. L'exception se
+justifie en commentaire à côté du lien.
+
+---
+
 ## Affichage
 
 ### Rayon des angles : 5 px, partout
@@ -170,6 +190,24 @@ téléphone tenu à la main.
 - **Vérifier les deux avant de conclure**, à 375 px et en large, dans les deux
   thèmes. Le panneau navigateur émule le téléphone avec `resize_window`, il n'y
   a pas d'excuse à ne pas regarder.
+
+### Dans une grille, les actions s'alignent entre elles
+
+Deux cartes côte à côte n'ont jamais des textes de même longueur. Si le bouton
+suit son paragraphe, il se retrouve dix pixels plus haut dans une carte que
+dans l'autre, et l'œil le voit immédiatement.
+
+La recette tient en deux classes, et elle vaut pour toute grille de cartes,
+d'offres ou de tarifs :
+
+- **`h-full` sur la carte**, pour qu'elle occupe toute la hauteur de sa cellule
+  au lieu de s'arrêter à son contenu.
+- **`mt-auto` sur le bloc d'action**, pour qu'il soit poussé au bas de cette
+  hauteur. L'espace au-dessus se règle avec un `pt-*` sur ce bloc, pas avec un
+  `mt-*`, qui entrerait en conflit avec le `mt-auto`.
+
+Même principe pour les autres éléments répétés d'une carte à l'autre : un titre
+sur deux lignes ne doit pas décaler ce qui le suit dans la carte voisine.
 
 ### Le flou va derrière, jamais devant
 

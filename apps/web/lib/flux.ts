@@ -1,4 +1,4 @@
-import { chaine, lettre } from "@/contenu/site";
+import { chaine, lettre, podcast } from "@/contenu/site";
 
 /**
  * Les articles de la lettre, lus dans son flux RSS.
@@ -34,8 +34,12 @@ const FRAICHEUR = 3600;
  * ligne.
  */
 function balise(bloc: string, nom: string): string | null {
+  // `(?:\s[^>]*)?` et non `[^>]*` : sans la frontière, demander
+  // `itunes:episode` attrape aussi `<itunes:episodeType>`, et demander `title`
+  // attraperait un hypothétique `<titleImage>`. Le bogue est silencieux, il
+  // rend juste une valeur d'à côté.
   const trouve = bloc.match(
-    new RegExp(`<${nom}[^>]*>([\\s\\S]*?)</${nom}>`, "i")
+    new RegExp(`<${nom}(?:\\s[^>]*)?>([\\s\\S]*?)</${nom}>`, "i")
   );
   if (!trouve?.[1]) return null;
   return trouve[1].replace(/^<!\[CDATA\[([\s\S]*?)\]\]>$/, "$1").trim();
@@ -163,4 +167,60 @@ export async function lireVideos(combien = 3): Promise<Video[]> {
   }
 
   return videos;
+}
+
+/* ---------------------------------------------------------------------------
+   Les épisodes du podcast.
+
+   Le flux est celui d'Ausha, l'hébergeur : c'est lui qui alimente Apple
+   Podcasts, Spotify et les autres. On lit donc la source et non l'une des
+   vitrines, ce qui évite d'avoir à interroger trois plateformes qui disent la
+   même chose avec trois formats différents.
+
+   Le flux fait trois mégaoctets et porte plus de cinq cents épisodes. On
+   s'arrête au nombre demandé au lieu de tout analyser : le reste se consulte
+   sur les plateformes.
+--------------------------------------------------------------------------- */
+
+export type Episode = {
+  titre: string;
+  chapeau: string;
+  lien: string;
+  date: string;
+  /** « 08:24 » tel que le flux le donne, ou chaîne vide. */
+  duree: string;
+  numero: string | null;
+};
+
+export async function lireEpisodes(combien = 12): Promise<Episode[]> {
+  let xml: string;
+
+  try {
+    const reponse = await fetch(podcast.flux, { next: { revalidate: FRAICHEUR } });
+    if (!reponse.ok) return [];
+    xml = await reponse.text();
+  } catch {
+    return [];
+  }
+
+  const episodes: Episode[] = [];
+
+  for (const bloc of xml.split("<item>").slice(1)) {
+    const titre = balise(bloc, "title");
+    const lien = balise(bloc, "link");
+    if (!titre || !lien) continue;
+
+    episodes.push({
+      titre: texteNu(titre),
+      chapeau: texteNu(balise(bloc, "description") ?? ""),
+      lien,
+      date: balise(bloc, "pubDate") ?? "",
+      duree: balise(bloc, "itunes:duration") ?? "",
+      numero: balise(bloc, "itunes:episode"),
+    });
+
+    if (episodes.length === combien) break;
+  }
+
+  return episodes;
 }

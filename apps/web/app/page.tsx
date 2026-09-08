@@ -1,13 +1,14 @@
-import { Emplacement, Section, TitreSection } from "@/components/section";
-import { identite, lettre, liens, offres, sections } from "@/contenu/site";
-import { formaterDate, lireArticles } from "@/lib/flux";
+import { BoutonScintillant } from "@/components/bouton-scintillant";
+import { LecteurVideo } from "@/components/lecteur-video";
+import { KineticText } from "@repo/ui/components/kinetic-text";
+import { ParticulesHero } from "@/components/particules-hero";
+import { Emplacement, Section } from "@/components/section";
+import { identite, liens, offres, sections } from "@/contenu/site";
 import { Button } from "@repo/ui/components/button";
-import { ArrowRight, ArrowUpRight, Play } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
-export default async function Accueil() {
-  const articles = await lireArticles(3);
-
+export default function Accueil() {
   return (
     <>
       {/* ---------------------------------------------------------------
@@ -68,59 +69,72 @@ export default async function Accueil() {
             />
           </picture>
           <div aria-hidden className="absolute inset-0 bg-black/55" />
+
+          {/* Les particules passent après le voile, donc au-dessus de lui, mais
+              restent dans la bande en `-z-10` : elles dérivent derrière le
+              titre sans jamais le recouvrir. */}
+          <ParticulesHero />
+
+          {/* Le raccord entre l'image et la page.
+
+              Sans lui, l'image s'arrête net sur une ligne horizontale. Le
+              dégradé va du transparent vers `--background`, donc vers le beige
+              en thème clair et vers le brun sombre en thème sombre : un seul
+              élément couvre les deux, sans qu'aucune couleur ne soit écrite. */}
+          <div
+            aria-hidden
+            className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-background sm:h-56"
+          />
         </div>
 
         <div className="mx-auto max-w-6xl">
           <div className="mx-auto max-w-3xl text-center">
             <h1 className="titre text-4xl text-balance text-white sm:text-5xl lg:text-6xl">
-              Vivez de votre expertise en ligne.
+              Vivez de votre{" "}
+              {/* `as="span"` et `inline-flex` : le composant pose un
+                  conteneur flex, qui serait de niveau bloc et casserait la
+                  ligne s'il gardait son affichage par défaut. */}
+              <KineticText
+                as="span"
+                text="expertise"
+                // Deux corrections au composant, passées par ses propres
+                // variables plutôt qu'en retouchant le fichier de registre.
+                //
+                // `--hover-padding` valait `1em/12`, soit près de cinq pixels
+                // par lettre à ce corps : le mot s'étirait visiblement au
+                // survol. Divisé par quarante, l'épaississement se voit encore
+                // mais le mot ne bouge plus.
+                //
+                // `tracking-tight` rattrape le crénage : le composant place
+                // chaque lettre dans un élément flex, ce qui supprime les
+                // paires crénées de la fonte et fait respirer les lettres plus
+                // que dans le reste du titre.
+                style={
+                  { "--hover-padding": "calc(1em / 40)" } as React.CSSProperties
+                }
+                className="titre-fort inline-flex tracking-tight"
+              />{" "}
+              en ligne.
             </h1>
 
-            <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-pretty text-white/80">
+            <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-pretty text-white/85 sm:text-xl">
               {identite.resume}
             </p>
 
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-              <a
-                href={liens.funnelsClub}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex h-11 items-center justify-center rounded-md bg-white px-5 text-sm font-semibold text-neutral-900 transition-colors hover:bg-white/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-              >
+              <BoutonScintillant href={liens.funnelsClub}>
                 Découvrir Funnels Club
-              </a>
-              {/* Libellé de travail, à renommer. */}
-              <a
-                href="#video"
-                // Fond porté à 20 % et filet à 45 % : à 10 % et 15 %, le
-                // libellé tombait à 3,91:1 et le filet très en dessous du 3:1
-                // attendu d'une bordure de contrôle.
-                className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-white/20 px-5 text-sm font-semibold text-white ring-1 ring-white/45 ring-inset backdrop-blur-md transition-colors hover:bg-white/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-              >
-                Voir la vidéo
-                <Play className="size-4" />
-              </a>
+              </BoutonScintillant>
             </div>
           </div>
 
-          {/* Le cadre est en 16/9, comme la vidéo : c'est ce qui la fait
-              remplir exactement, sans bande noire. Wistia est intégré en
-              `iframe` plutôt qu'avec leur `player.js` : le lecteur est le
-              même, et on évite de charger un script tiers sur toutes les
-              pages pour une seule vidéo. */}
+          {/* Le rapport 16/9 est porté par `LecteurVideo` : c'est lui qui fait
+              remplir le cadre exactement, sans bande noire. */}
           <div
             id="video"
-            className="mx-auto mt-14 max-w-3xl scroll-mt-[66px] sm:mt-20"
+            className="mx-auto mt-8 max-w-3xl scroll-mt-[66px] sm:mt-10"
           >
-            <div className="aspect-16/9 overflow-hidden rounded-md bg-black shadow-[0_24px_60px_rgba(0,0,0,0.35)] ring-1 ring-white/45">
-              <iframe
-                src="https://fast.wistia.net/embed/iframe/di3bzcmi50?videoFoam=false"
-                title="Vidéo de présentation"
-                allow="autoplay; fullscreen"
-                allowFullScreen
-                className="size-full border-0"
-              />
-            </div>
+            <LecteurVideo />
           </div>
         </div>
       </section>
@@ -131,9 +145,13 @@ export default async function Accueil() {
       <Section>
         <div className="grid gap-4 lg:grid-cols-2">
           {offres.map((offre) => (
+            // `h-full` sur la carte et `mt-auto` sur l'action : c'est ce
+            // couple qui aligne les boutons entre eux. Sans lui, chaque bouton
+            // suit son propre texte, et deux descriptions de longueur
+            // différente produisent deux boutons décalés.
             <article
               key={offre.id}
-              className="flex flex-col rounded-md border border-border bg-card p-8"
+              className="flex h-full flex-col rounded-md border border-border bg-card p-8"
             >
               <h2 className="titre text-3xl text-card-foreground">
                 {offre.nom}
@@ -142,74 +160,16 @@ export default async function Accueil() {
                 {offre.texte}
               </p>
 
-              <Button asChild className="mt-8 h-11 w-fit font-semibold">
-                <a href={offre.href} target="_blank" rel="noreferrer">
+              <div className="mt-auto pt-8">
+                <BoutonScintillant href={offre.href}>
                   {offre.action}
                   <ArrowRight className="size-4" />
-                </a>
-              </Button>
+                </BoutonScintillant>
+              </div>
             </article>
           ))}
         </div>
       </Section>
-
-      {/* ---------------------------------------------------------------
-          La lettre. Seul contenu du site qui vienne de l'extérieur : il est
-          lu dans le flux RSS de Substack, au build puis toutes les heures.
-      --------------------------------------------------------------- */}
-      {articles.length > 0 ? (
-        <Section>
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <TitreSection
-              etiquette={lettre.baseline}
-              titre={lettre.nom}
-              className="max-w-xl"
-            />
-            <Button asChild variant="outline" className="h-11 font-semibold">
-              <a href={liens.lettre} target="_blank" rel="noreferrer">
-                Tous les articles
-                <ArrowUpRight className="size-4" />
-              </a>
-            </Button>
-          </div>
-
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {articles.map((article) => (
-              <a
-                key={article.lien}
-                href={article.lien}
-                target="_blank"
-                rel="noreferrer"
-                className="group flex flex-col overflow-hidden rounded-md border border-border bg-card transition-colors hover:border-ring"
-              >
-                {article.image ? (
-                  // Une image de Substack, servie par leur CDN et de taille
-                  // inconnue au build : `next/image` n'y gagnerait rien et
-                  // exigerait de déclarer leur domaine.
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={article.image}
-                    alt=""
-                    loading="lazy"
-                    className="aspect-16/9 w-full object-cover"
-                  />
-                ) : null}
-                <div className="flex flex-1 flex-col p-6">
-                  <p className="text-sm text-muted-foreground">
-                    {formaterDate(article.date)}
-                  </p>
-                  <h3 className="mt-2 text-lg leading-snug font-semibold text-balance text-card-foreground">
-                    {article.titre}
-                  </h3>
-                  <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-muted-foreground">
-                    {article.chapeau}
-                  </p>
-                </div>
-              </a>
-            ))}
-          </div>
-        </Section>
-      ) : null}
 
       {/* ---------------------------------------------------------------
           Ce qui attend votre texte.

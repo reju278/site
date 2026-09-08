@@ -100,65 +100,78 @@
 }
 
 .dark {
-  --background: #0e0c0a;
-  --foreground: #f0eae0;
+  /* Le thème sombre est **neutre**, pas brun.
 
-  --card: #17140f;
-  --card-foreground: #f0eae0;
+     La première version reprenait les bruns du thème clair en les assombrissant.
+     Un brun désaturé et sombre ne se lit pas comme du brun : il se lit comme un
+     gris sale, tirant sur l'olive, et il ternit le bleu de la marque posé
+     dessus. La chaleur reste donc au thème clair, où le papier beige la porte ;
+     le sombre est une échelle de gris quasi neutre, à peine tiédie, sur
+     laquelle le bleu ressort. */
 
-  /* Un cran plus clair que `--card`, et non identique comme avant : une bulle
-     posée sur une carte n'avait aucune séparation de clarté, et le seul
-     recours, `--border`, est à 1,27:1, donc invisible. */
-  --popover: #211c15;
-  --popover-foreground: #f0eae0;
+  --background: #0e0e11;
+  --foreground: #f2f2f5;
+
+  /* La clarté monte avec l'élévation : fond, carte, bulle. Chaque cran se
+     distingue du précédent sans dépendre d'une bordure, dont le contraste sur
+     un fond sombre reste faible quoi qu'on fasse. */
+  --card: #16161a;
+  --card-foreground: #f2f2f5;
+
+  --popover: #1c1c21;
+  --popover-foreground: #f2f2f5;
 
   --primary: #045ee6;
   --primary-foreground: #ffffff;
 
-  --secondary: #221d17;
-  --secondary-foreground: #f0eae0;
+  --secondary: #212127;
+  --secondary-foreground: #f2f2f5;
 
-  --muted: #221d17;
-  --muted-foreground: #a29684;
+  /* 4,52:1 sur `--accent`, la plus claire des surfaces, donc le pire cas. Une
+     valeur plus claire passerait aussi mais crierait presque aussi fort que le
+     texte principal, à 17:1, et la hiérarchie disparaîtrait. */
+  --muted: #212127;
+  --muted-foreground: #90909d;
 
-  --accent: #2b2419;
-  --accent-foreground: #f0eae0;
+  --accent: #2a2a31;
+  --accent-foreground: #f2f2f5;
 
-  --destructive: #d4735c;
-  --destructive-foreground: #17140f;
+  --destructive: #ef6a5a;
+  --destructive-foreground: #16161a;
 
-  --border: #2a241c;
-  --input: #2a241c;
+  --border: #31313a;
+  --input: #31313a;
   --ring: #045ee6;
 
-  --sidebar: #131009;
-  --sidebar-foreground: #f0eae0;
+  --sidebar: #121216;
+  --sidebar-foreground: #f2f2f5;
   --sidebar-primary: #045ee6;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #2b2419;
-  --sidebar-accent-foreground: #f0eae0;
-  --sidebar-border: #2a241c;
+  --sidebar-accent: #2a2a31;
+  --sidebar-accent-foreground: #f2f2f5;
+  --sidebar-border: #31313a;
   --sidebar-ring: #045ee6;
 
-  --chart-1: #e4dbcc;
-  --chart-2: #c0b3a0;
-  --chart-3: #9c8d78;
-  --chart-4: #786954;
-  /* 3,89:1 sur le fond sombre, contre 2,26:1 pour l'ancienne valeur. */
-  --chart-5: #7d6d53;
+  --chart-1: #e7e7ea;
+  --chart-2: #bdbdc6;
+  --chart-3: #9494a0;
+  --chart-4: #8a8a97;
+  --chart-5: #6d6d79;
 
-  --pastille-neutre: #2a241c;
-  --pastille-neutre-texte: #c9bca9;
-  --pastille-bleu: #1b2e3c;
-  --pastille-bleu-texte: #b9d4e8;
-  --pastille-vert: #1e3320;
-  --pastille-vert-texte: #bfdcb4;
-  --pastille-ambre: #3b2b10;
-  --pastille-ambre-texte: #ebce93;
-  --pastille-rouge: #3b1f17;
-  --pastille-rouge-texte: #e8b7a6;
-  --pastille-violet: #2c2140;
-  --pastille-violet-texte: #d0c0e6;
+  /* La pastille neutre suit l'échelle de gris ; les cinq autres gardent leur
+     teinte, c'est tout leur objet. */
+  --pastille-neutre: #2a2a31;
+  --pastille-neutre-texte: #c7c7cd;
+  --pastille-bleu: #16304a;
+  --pastille-bleu-texte: #bcd8f5;
+  --pastille-vert: #16351f;
+  --pastille-vert-texte: #bfe0b8;
+  --pastille-ambre: #3a2a0e;
+  --pastille-ambre-texte: #eccf93;
+  --pastille-rouge: #3c1e1a;
+  --pastille-rouge-texte: #efb8ac;
+  --pastille-violet: #2a1f42;
+  --pastille-violet-texte: #d2c2ea;
 }
 
 @theme inline {
@@ -213,6 +226,27 @@
   --radius-xl: 5px;
   --radius-2xl: 5px;
   --radius-3xl: 5px;
+  --animate-shimmer-slide: shimmer-slide var(--speed) ease-in-out infinite alternate;
+  --animate-spin-around: spin-around calc(var(--speed) * 2) infinite linear;
+  @keyframes shimmer-slide {
+  to {
+    transform: translate(calc(100cqw - 100%), 0);
+    }
+  }
+  @keyframes spin-around {
+  0% {
+    transform: translateZ(0) rotate(0);
+    }
+  15%, 35% {
+    transform: translateZ(0) rotate(90deg);
+    }
+  65%, 85% {
+    transform: translateZ(0) rotate(270deg);
+    }
+  100% {
+    transform: translateZ(0) rotate(360deg);
+    }
+  }
 }
 
 @layer base {
@@ -221,7 +255,7 @@
   }
 
   /* L'anneau de focus, à pleine opacité et non à 50 %.
-     
+
      Les composants de registre dessinent `focus-visible:ring-ring/50`. Fondu à
      moitié, le bleu de la marque ne vaut que 2,14:1 sur le fond clair et
      1,67:1 sur le sombre, très en dessous des 3:1 qu'exige un indicateur de
@@ -254,6 +288,19 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
+    }
+
+    /* La bascule de thème animée s'appuie sur l'API View Transitions, qui ne
+       passe ni par `animation` ni par `transition` sur des éléments ordinaires :
+       il faut la neutraliser nommément.
+
+       `shadcn add` avait posé cette règle hors du bloc de mouvement réduit, ce
+       qui l'aurait annulée pour tout le monde et aurait vidé de son sens le
+       composant qu'elle accompagne. */
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation: none;
+      mix-blend-mode: normal;
     }
   }
 }

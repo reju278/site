@@ -23,16 +23,37 @@ export const identite = {
   // Repris de funnels.club, au mot près : c'est leur propre titre.
   promesse: "Vivez de votre expertise en ligne.",
   resume:
-    "Rémy et son équipe vous accompagnent à travers toutes les étapes de votre business de formation, du lancement jusqu'à 6 ou 7 chiffres par an.",
+    "Nous vous accompagnons à travers toutes les étapes de votre business de formation, du lancement jusqu'à 6 ou 7 chiffres par an.",
 } as const;
 
+/**
+ * La balise de provenance, lue par Hyros.
+ *
+ * Tout lien qui quitte ce site vers une propriété de Rémy la porte : c'est ce
+ * qui permet de savoir qu'une vente vient d'ici et non d'un email ou d'une
+ * publicité. Elle s'ajoute par cette fonction et jamais à la main, parce qu'une
+ * balise oubliée ne se voit pas : le lien marche, la vente est attribuée
+ * ailleurs, et personne ne s'en aperçoit avant de lire les chiffres.
+ */
+export function avecTag(url: string): string {
+  const separateur = url.includes("?") ? "&" : "?";
+  return url.includes("el=site") ? url : `${url}${separateur}el=site`;
+}
+
 export const liens = {
+  decouvrir: avecTag("https://funnels.club"),
+  funnelsClub: avecTag("https://www.funnels.club/direct"),
+  appel: avecTag("https://funnels.club/appel"),
+  consulting: avecTag(
+    "https://calendly.com/funnels-club/appel-decouverte-clone-2"
+  ),
+  lettre: avecTag("https://lettre.funnels.club"),
+  espaceMembre: avecTag("https://groupe.funnels.club"),
+  livre: avecTag("https://www.digital-selfmade.com"),
+
+  // Sans balise : YouTube n'est pas une propriété qu'Hyros suit, et un
+  // paramètre inconnu dans une URL de chaîne n'apporte rien.
   youtube: "https://www.youtube.com/channel/UCzGq4I0pXnDJizd0fitt10w",
-  livre: "https://www.digital-selfmade.com",
-  funnelsClub: "https://www.funnels.club/direct?el=site",
-  appel: "https://funnels.club/appel",
-  consulting: "https://calendly.com/funnels-club/appel-decouverte-clone-2",
-  lettre: "https://lettre.funnels.club",
 } as const;
 
 /**
@@ -46,10 +67,13 @@ export type EntreeNavigation = {
   externe?: boolean;
 };
 
-/** Les entrées plates de l'en-tête, sans menu déroulant. */
-export const navigation: readonly EntreeNavigation[] = [
-  { libelle: "Résultats", href: "/resultats" },
-];
+/**
+ * Les entrées plates de l'en-tête, sans menu déroulant.
+ *
+ * Vide : tout est passé sous « Programmes » et « Ressources ». Une entrée
+ * seule à côté de deux menus se lit comme un oubli.
+ */
+export const navigation: readonly EntreeNavigation[] = [];
 
 /**
  * Les menus déroulants de l'en-tête.
@@ -85,9 +109,23 @@ export const menus: readonly {
     ],
   },
   {
-    libelle: "Contenus",
+    libelle: "Ressources",
     entrees: [
-      { libelle: "Digital Selfmade", href: "/articles", texte: "Profit, liberté, no stress" },
+      {
+        libelle: "Résultats",
+        href: "/resultats",
+        texte: "Ce que les membres ont obtenu",
+      },
+      {
+        libelle: "Digital Selfmade",
+        href: "/articles",
+        texte: "La lettre, tous les articles",
+      },
+      {
+        libelle: "Profit, liberté, no stress",
+        href: "/podcast",
+        texte: "Le podcast, tous les épisodes",
+      },
       { libelle: "YouTube", href: liens.youtube, externe: true },
       { libelle: "Livre", href: liens.livre, externe: true },
     ],
@@ -132,6 +170,36 @@ export const offres = [
 export const chaine = {
   nom: "Rémy Jupille",
   flux: "https://www.youtube.com/feeds/videos.xml?channel_id=UCzGq4I0pXnDJizd0fitt10w",
+} as const;
+
+/**
+ * La vidéo de présentation, hébergée chez Wistia.
+ *
+ * `secondes` et `titre` viennent du média lui-même
+ * (`fast.wistia.net/embed/medias/<id>.json`). L'affiche est téléchargée depuis
+ * Wistia puis servie par nous : voir `LecteurVideo` pour la raison.
+ */
+export const video = {
+  id: "di3bzcmi50",
+  titre: "Vidéo de présentation",
+  secondes: 981,
+} as const;
+
+/**
+ * Le podcast.
+ *
+ * Le flux lu est celui d'Ausha, l'hébergeur : c'est lui qui alimente Apple
+ * Podcasts, Spotify et les autres. Lire la source plutôt qu'une vitrine évite
+ * d'interroger trois plateformes qui disent la même chose autrement.
+ */
+export const podcast = {
+  nom: "Profit, liberté, no stress",
+  flux: "https://feed.ausha.co/ypjV8sr07j2B",
+  plateformes: [
+    { nom: "Apple Podcasts", href: "https://podcasts.apple.com/fr/podcast/profit-libert%C3%A9-no-stress/id1479057423" },
+    { nom: "Spotify", href: "https://open.spotify.com/show/4tehcIhRigecka2QMPHKZO" },
+    { nom: "YouTube", href: "https://www.youtube.com/@profitlibertenostress" },
+  ],
 } as const;
 
 /** La lettre, telle que son propre flux se décrit. */

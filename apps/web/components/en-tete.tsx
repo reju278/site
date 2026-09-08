@@ -72,14 +72,23 @@ const CAPSULE_SUR_PAGE =
 export const HAUTEUR_ENTETE = 66;
 
 /** Une entrée de navigation : 36 px de haut, comme chez eux. */
-const ENTREE =
+const CLASSES_ENTREE =
   "flex h-9 items-center gap-1.5 px-3 rounded-md transition-colors text-sm font-semibold bg-transparent";
 
-const ENTREE_SUR_IMAGE =
-  "text-white/80 hover:bg-white/10 hover:text-white focus:bg-white/10 data-[state=open]:bg-white/10 data-[state=open]:text-white";
+/*
+ * À l'ouverture, le déclencheur prend les couleurs du panneau qui tombe de lui,
+ * dans les deux habillages. C'est d'abord une question de lisibilité : sur
+ * l'image, l'état ouvert valait `bg-white/10` avec du texte blanc, soit du
+ * blanc sur un blanc à peine posé. C'est aussi ce qui rattache visuellement le
+ * bouton au panneau, au lieu de les laisser flotter séparément.
+ */
+const OUVERT = "data-[state=open]:bg-popover data-[state=open]:text-popover-foreground";
 
-const ENTREE_SUR_PAGE =
-  "text-muted-foreground hover:bg-accent hover:text-foreground focus:bg-accent data-[state=open]:bg-accent data-[state=open]:text-foreground";
+const CLASSES_ENTREE_SUR_IMAGE =
+  `text-white/80 hover:bg-white/15 hover:text-white focus:bg-white/15 ${OUVERT}`;
+
+const CLASSES_ENTREE_SUR_PAGE =
+  `text-muted-foreground hover:bg-accent hover:text-foreground focus:bg-accent ${OUVERT}`;
 
 export function EnTete() {
   const [ouvert, setOuvert] = useState(false);
@@ -125,7 +134,15 @@ export function EnTete() {
     CAPSULE_BASE,
     surImage ? CAPSULE_SUR_IMAGE : CAPSULE_SUR_PAGE
   );
-  const entree = cn(ENTREE, surImage ? ENTREE_SUR_IMAGE : ENTREE_SUR_PAGE);
+  // Ce nom ne doit surtout pas être `entree` : c'est celui des variables de
+  // boucle plus bas, et l'avoir réutilisé ici faisait passer l'objet de
+  // navigation à `cn`, qui en tirait des classes `libelle` et `href`. Le lien
+  // ne recevait alors aucun style et retombait sur ceux du composant de
+  // registre, en encre sombre sur l'image.
+  const classesEntree = cn(
+    CLASSES_ENTREE,
+    surImage ? CLASSES_ENTREE_SUR_IMAGE : CLASSES_ENTREE_SUR_PAGE
+  );
 
   return (
     <header className="pointer-events-none fixed inset-x-0 top-2 z-50 px-3 lg:top-5 lg:px-5">
@@ -135,8 +152,12 @@ export function EnTete() {
           <div className="flex h-9 items-center justify-center px-2">
             <Link
               href="/"
+              // Le logo quitte le serif pour la sans en gras. Instrument
+              // Serif n'existe qu'en 400 : un gras y serait fabriqué par le
+              // navigateur, uniformément, ce qui écraserait le contraste entre
+              // pleins et déliés. Nunito Sans a un vrai 700.
               className={cn(
-                "titre text-lg whitespace-nowrap transition-colors duration-300",
+                "text-base font-bold tracking-tight whitespace-nowrap transition-colors duration-300",
                 surImage ? "text-white" : "text-foreground"
               )}
             >
@@ -167,36 +188,55 @@ export function EnTete() {
             <NavigationMenuList className="gap-1">
               {menus.map((menu) => (
                 <NavigationMenuItem key={menu.libelle}>
-                  <NavigationMenuTrigger className={entree}>
+                  <NavigationMenuTrigger className={classesEntree}>
                     {menu.libelle}
                   </NavigationMenuTrigger>
+                  {/* Le panneau en deux colonnes : la liste à gauche, une
+                      illustration à droite, comme chez le modèle. La colonne
+                      de droite est un cadre vide pour l'instant ; c'est elle
+                      qui donne au panneau sa largeur et son assise, et la
+                      retirer ferait retomber le menu sur une simple liste. */}
                   <NavigationMenuContent className="rounded-md border border-border bg-popover p-2 shadow-[0_12px_40px_rgba(0,0,0,0.18)]">
-                    <ul className="w-[420px]">
-                      {menu.entrees.map((entree) => (
-                        <li key={entree.href}>
-                          <NavigationMenuLink asChild>
-                            <a
-                              href={entree.href}
-                              target={entree.externe ? "_blank" : undefined}
-                              rel={entree.externe ? "noreferrer" : undefined}
-                              className="flex flex-col gap-1 rounded-md p-3 transition-colors hover:bg-accent"
-                            >
-                              <span className="flex items-center gap-1.5 text-sm font-semibold text-popover-foreground">
-                                {entree.libelle}
-                                {entree.externe ? (
-                                  <ArrowUpRight className="size-3.5 opacity-50" />
-                                ) : null}
-                              </span>
-                              {entree.texte ? (
-                                <span className="text-sm leading-snug text-muted-foreground">
-                                  {entree.texte}
+                    <div className="flex gap-2">
+                      <ul className="w-[380px] shrink-0">
+                        {menu.entrees.map((entree) => (
+                          <li key={entree.href}>
+                            <NavigationMenuLink asChild>
+                              <a
+                                href={entree.href}
+                                target={entree.externe ? "_blank" : undefined}
+                                rel={entree.externe ? "noreferrer" : undefined}
+                                className="flex flex-col gap-1 rounded-md p-3 transition-colors hover:bg-accent"
+                              >
+                                <span className="flex items-center gap-1.5 text-sm font-semibold text-popover-foreground">
+                                  {entree.libelle}
+                                  {entree.externe ? (
+                                    <ArrowUpRight className="size-3.5 opacity-50" />
+                                  ) : null}
                                 </span>
-                              ) : null}
-                            </a>
-                          </NavigationMenuLink>
-                        </li>
-                      ))}
-                    </ul>
+                                {entree.texte ? (
+                                  <span className="text-sm leading-snug text-muted-foreground">
+                                    {entree.texte}
+                                  </span>
+                                ) : null}
+                              </a>
+                            </NavigationMenuLink>
+                          </li>
+                        ))}
+                      </ul>
+
+                      <div
+                        aria-hidden
+                        className="flex w-[300px] shrink-0 items-center justify-center rounded-md border border-dashed border-border bg-muted/40 p-6 text-center"
+                      >
+                        <span className="text-sm text-muted-foreground">
+                          <span className="font-semibold text-foreground">
+                            Emplacement :{" "}
+                          </span>
+                          l&apos;illustration de ce menu
+                        </span>
+                      </div>
+                    </div>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
               ))}
@@ -208,7 +248,7 @@ export function EnTete() {
                       href={entree.href}
                       target={entree.externe ? "_blank" : undefined}
                       rel={entree.externe ? "noreferrer" : undefined}
-                      className={cn(entree, "whitespace-nowrap")}
+                      className={cn(classesEntree, "whitespace-nowrap")}
                     >
                       {entree.libelle}
                     </Link>
@@ -223,8 +263,26 @@ export function EnTete() {
         <div className={capsule}>
           <BasculeTheme surImage={surImage} />
 
+          {/* L'accès à l'espace membre, à côté de la bascule de thème. Il est
+              discret par rapport à l'appel principal : celui qui a déjà un
+              compte sait le chercher, celui qui n'en a pas ne doit pas le
+              confondre avec l'inscription. */}
           <a
-            href={liens.funnelsClub}
+            href={liens.espaceMembre}
+            target="_blank"
+            rel="noreferrer"
+            className={cn(
+              "hidden h-9 items-center rounded-md px-3 text-sm font-semibold whitespace-nowrap transition-colors duration-300 sm:inline-flex",
+              surImage
+                ? "text-white/80 hover:bg-white/10 hover:text-white"
+                : "text-muted-foreground hover:bg-accent hover:text-foreground"
+            )}
+          >
+            Connexion
+          </a>
+
+          <a
+            href={liens.decouvrir}
             target="_blank"
             rel="noreferrer"
             className={cn(
@@ -236,7 +294,7 @@ export function EnTete() {
                 : "bg-primary text-primary-foreground hover:bg-primary/90"
             )}
           >
-            Funnels Club
+            Découvrir
           </a>
 
           <Sheet open={ouvert} onOpenChange={setOuvert}>
@@ -296,8 +354,8 @@ export function EnTete() {
                 ))}
 
                 <Button asChild className="mt-3 h-10 font-semibold">
-                  <a href={liens.funnelsClub} target="_blank" rel="noreferrer">
-                    Funnels Club
+                  <a href={liens.decouvrir} target="_blank" rel="noreferrer">
+                    Découvrir
                   </a>
                 </Button>
               </nav>

@@ -1,3 +1,4 @@
+import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { Section } from "@/components/section";
 import { lettre, liens } from "@/contenu/site";
 import { formaterDate, lireArticles } from "@/lib/flux";
@@ -24,12 +25,10 @@ export default async function Articles() {
             {lettre.baseline}
           </p>
           <div className="mt-8 flex justify-center">
-            <Button asChild size="lg" className="h-11 font-semibold">
-              <a href={liens.lettre} target="_blank" rel="noreferrer">
-                S'abonner à la lettre
-                <ArrowUpRight className="size-4" />
-              </a>
-            </Button>
+            <BoutonScintillant href={liens.lettre}>
+              S&apos;abonner à la lettre
+              <ArrowUpRight className="size-4" />
+            </BoutonScintillant>
           </div>
         </div>
       </section>

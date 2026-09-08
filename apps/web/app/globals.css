@@ -41,3 +41,19 @@
    première ligne sans raison. Cuit dans l'utilitaire, il s'appliquait aux
    titres des cartes d'offre et du pied de page, qui sont ferrés à gauche.
    Il se pose donc au cas par cas, avec la classe `text-balance`. */
+
+/* Le mot accentué dans un titre.
+
+   Instrument Serif n'existe qu'en une seule graisse, 400. Demander un gras
+   produirait un faux gras : le navigateur épaissit le tracé lui-même,
+   uniformément, ce qui écrase justement le contraste entre pleins et déliés qui
+   fait le caractère de cette fonte. À grande taille, cela se voit.
+
+   L'accent passe donc par l'italique, qui est un dessin réel livré avec la
+   fonte, et non une déformation. `font-synthesis: none` interdit explicitement
+   au navigateur de fabriquer ce qu'il n'a pas. */
+@utility titre-fort {
+  font-weight: 400;
+  font-style: italic;
+  font-synthesis: none;
+}

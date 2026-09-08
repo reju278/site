@@ -1,3 +1,4 @@
+import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { Emplacement, Section } from "@/components/section";
 import { chiffres, liens, resultats, sections } from "@/contenu/site";
 import { Button } from "@repo/ui/components/button";
@@ -33,12 +34,10 @@ export default function Resultats() {
 
         <div className="mt-10 flex justify-center">
           {/* Repris de remy-jupille.com, au mot près. */}
-          <Button asChild size="lg" className="h-11 font-semibold">
-            <a href={liens.funnelsClub} target="_blank" rel="noreferrer">
-              Appel découverte gratuit
-              <ArrowRight className="size-4" />
-            </a>
-          </Button>
+          <BoutonScintillant href={liens.funnelsClub}>
+            Appel découverte gratuit
+            <ArrowRight className="size-4" />
+          </BoutonScintillant>
         </div>
       </Section>
     </>
