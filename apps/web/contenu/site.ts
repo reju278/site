@@ -123,6 +123,17 @@ export const offres = [
   },
 ] as const;
 
+/**
+ * La chaîne YouTube.
+ *
+ * L'identifiant est celui de l'URL de la chaîne. Le flux Atom de YouTube est
+ * public et sans quota, contrairement à l'API Data v3 qui demande une clé.
+ */
+export const chaine = {
+  nom: "Rémy Jupille",
+  flux: "https://www.youtube.com/feeds/videos.xml?channel_id=UCzGq4I0pXnDJizd0fitt10w",
+} as const;
+
 /** La lettre, telle que son propre flux se décrit. */
 export const lettre = {
   nom: "Digital Selfmade",
