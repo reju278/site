@@ -25,6 +25,9 @@
         3. La tache de lumière qui suit le curseur, pour que la surface se lise
            comme une matière et non comme un aplat.
 
+      L'anneau et la tache s'allument en 280 ms et s'éteignent en 450 : une
+      lumière qui monte vite et redescend doucement paraît naturelle.
+
       Tout est neutralisé sous `prefers-reduced-motion`.
     -->
 
@@ -36,6 +39,20 @@
     />
 
     <style>
+      /* Une variable CSS ordinaire n'a pas de type : le navigateur ne sait pas
+         ce qu'il y a entre « 0 » et « 1 », donc il saute de l'un à l'autre.
+         `@property` lui donne ce type, et la valeur devient interpolable comme
+         n'importe quelle longueur ou couleur.
+
+         C'est la seule façon d'obtenir une apparition progressive ici : le halo
+         vit dans une couche de `background`, et une couche de fond ne peut pas
+         porter d'opacité propre. */
+      @property --halo-force {
+        syntax: "<number>";
+        inherits: true;
+        initial-value: 0;
+      }
+
       :root {
         /* La carte */
         --taille: 260px;
@@ -165,10 +182,18 @@
               rgb(255 255 255 / calc(var(--halo-force) * 0.08)) 100%
             )
             border-box;
-        /* Seule la remise à plat est animée. L'anneau, lui, suit la souris
-           image par image : une transition dessus le ferait traîner derrière
-           le curseur. */
-        transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        /* Trois durées, trois rôles.
+
+           La position de l'anneau n'est pas animée : elle suit la souris image
+           par image, et une transition la ferait traîner derrière le curseur.
+           C'est bien son **intensité** qui s'anime, et elle seule.
+
+           L'extinction est plus lente que l'allumage, 450 contre 280 ms : une
+           lumière qui s'allume vite et s'éteint doucement paraît naturelle,
+           l'inverse paraît nerveux. */
+        transition:
+          transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+          --halo-force 0.45s ease-out;
 
         transform: rotateX(var(--rx)) rotateY(var(--ry));
         transform-style: preserve-3d;
@@ -185,12 +210,22 @@
         border-radius: inherit;
         pointer-events: none;
         opacity: var(--tache-opacite);
-        transition: opacity 0.3s;
+        transition: opacity 0.45s ease-out;
         background: radial-gradient(
           circle var(--tache-taille) at var(--tache-x) var(--tache-y),
           rgb(255 255 255 / var(--tache-force)) 0%,
           transparent 70%
         );
+      }
+
+      .logo:hover {
+        transition:
+          transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+          --halo-force 0.28s ease-out;
+      }
+
+      .logo:hover .tache {
+        transition: opacity 0.28s ease-out;
       }
 
       .logo svg {
