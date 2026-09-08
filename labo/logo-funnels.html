@@ -13,10 +13,10 @@
       Le tracé est celui d'origine, angles vifs, sans arrondi. Trois effets s'y
       ajoutent, tous réglables dans le bloc `:root` :
 
-        1. Le liseré tournant, repris des boutons principaux du site. Un cône
-           de lumière tourne sous la carte ; un fond opaque rentré d'un pixel
-           le masque partout sauf sur le bord. C'est cette bande d'un pixel qui
-           fait tout l'effet.
+        1. L'anneau lumineux qui suit la souris, repris de `magic-card`. Un
+           halo radial est peint dans le `border-box`, la surface de la carte
+           dans le `padding-box` : le halo n'apparaît donc que sur l'anneau
+           d'un pixel et demi, et il court le long du cadre sous le curseur.
 
         2. L'inclinaison au survol. La carte pivote vers le curseur : souris en
            haut à droite, ce coin s'éloigne et le coin opposé se rapproche.
@@ -40,9 +40,10 @@
         /* La carte */
         --taille: 260px;
         --rayon: 22%;
-        --cut: 1px; /* épaisseur du liseré tournant */
-        --vitesse: 3s;
-        --lueur: #ffffff; /* couleur du cône tournant */
+        --filet: 1.5px; /* épaisseur de l'anneau lumineux */
+        --halo-taille: 190px; /* rayon du halo qui suit la souris */
+        --halo: 4 94 230; /* le bleu de la marque */
+        --halo-force: 0; /* monté à 1 au survol par le script */
 
         /* L'inclinaison */
         --angle-max: 14deg;
@@ -140,94 +141,48 @@
         border-radius: var(--rayon);
         display: grid;
         place-items: center;
-        overflow: hidden;
         isolation: isolate;
+
+        /* L'anneau lumineux, repris de `magic-card`.
+
+           Deux couches de fond superposées. Celle du dessus est la surface de
+           la carte, limitée au `padding-box`, donc elle s'arrête au bord
+           intérieur de la bordure. Celle du dessous est un halo radial centré
+           sur la souris, étendu au `border-box`. Le halo n'est donc visible
+           que là où la surface ne le couvre pas : sur l'anneau d'un pixel et
+           demi. C'est ce qui fait courir la lumière le long du cadre au lieu
+           de l'étaler sur toute la carte.
+
+           La bordure est transparente : sa seule fonction est de réserver
+           l'épaisseur de l'anneau. */
+        border: var(--filet) solid transparent;
+        background:
+          linear-gradient(180deg, #17171a 0%, #08080a 100%) padding-box,
+          radial-gradient(
+              var(--halo-taille) circle at var(--tache-x) var(--tache-y),
+              rgb(var(--halo) / var(--halo-force)) 0%,
+              rgb(var(--halo) / calc(var(--halo-force) * 0.35)) 45%,
+              rgb(255 255 255 / calc(var(--halo-force) * 0.08)) 100%
+            )
+            border-box;
+        /* Seule la remise à plat est animée. L'anneau, lui, suit la souris
+           image par image : une transition dessus le ferait traîner derrière
+           le curseur. */
+        transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 
         transform: rotateX(var(--rx)) rotateY(var(--ry));
         transform-style: preserve-3d;
-        transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
         box-shadow: var(--ombre-page);
       }
 
-      /* 1. Le cône tournant, tout au fond.
-
-         `@container` sur la carte donne l'unité `cqw` au balayage : le cône
-         traverse exactement la largeur de la carte, quelle que soit sa
-         taille. */
-      .logo {
-        container-type: size;
-      }
-
-      .cone {
-        position: absolute;
-        inset: 0;
-        z-index: 0;
-        overflow: visible;
-        filter: blur(2px);
-      }
-      .cone span {
-        position: absolute;
-        inset: 0;
-        aspect-ratio: 1;
-        height: 100cqh;
-        animation: balayage var(--vitesse) ease-in-out infinite alternate;
-      }
-      .cone span span {
-        position: absolute;
-        inset: -100%;
-        width: auto;
-        height: auto;
-        background: conic-gradient(
-          from calc(270deg - 45deg),
-          transparent 0,
-          var(--lueur) 90deg,
-          transparent 90deg
-        );
-        animation: rotation calc(var(--vitesse) * 2) linear infinite;
-      }
-
-      @keyframes balayage {
-        to {
-          transform: translate(calc(100cqw - 100%), 0);
-        }
-      }
-      @keyframes rotation {
-        0% {
-          transform: translateZ(0) rotate(0);
-        }
-        15%,
-        35% {
-          transform: translateZ(0) rotate(90deg);
-        }
-        65%,
-        85% {
-          transform: translateZ(0) rotate(270deg);
-        }
-        100% {
-          transform: translateZ(0) rotate(360deg);
-        }
-      }
-
-      /* Le fond opaque, rentré de `--cut`. Il masque le cône partout sauf sur
-         le liseré du bord : c'est lui qui transforme un disque lumineux en
-         trait de lumière qui court le long du cadre. */
-      .fond {
-        position: absolute;
-        inset: var(--cut);
-        z-index: 1;
-        border-radius: calc(var(--rayon) - 0.5px);
-        background: linear-gradient(180deg, #17171a 0%, #08080a 100%);
-        box-shadow:
-          inset 0 1px 0 rgb(255 255 255 / 0.12),
-          inset 0 -1px 0 rgb(0 0 0 / 0.9);
-      }
-
-      /* 3. La tache de lumière, au-dessus du fond mais sous la lettre. */
+      /* La tache de lumière sur la surface, au-dessus du fond mais sous la
+         lettre. Elle partage `--tache-x` et `--tache-y` avec l'anneau : une
+         seule position de souris, deux effets qui en découlent. */
       .tache {
         position: absolute;
-        inset: var(--cut);
+        inset: 0;
         z-index: 2;
-        border-radius: calc(var(--rayon) - 0.5px);
+        border-radius: inherit;
         pointer-events: none;
         opacity: var(--tache-opacite);
         transition: opacity 0.3s;
@@ -257,10 +212,7 @@
         .logo {
           transition: none;
           transform: none !important;
-        }
-        .cone span,
-        .cone span span {
-          animation: none;
+          --halo-force: 0 !important;
         }
         .tache {
           opacity: 0 !important;
@@ -286,8 +238,6 @@
 
     <div class="scene">
       <div class="logo" id="logo">
-        <div class="cone" aria-hidden="true"><span><span></span></span></div>
-        <div class="fond" aria-hidden="true"></div>
         <div class="tache" aria-hidden="true"></div>
 
         <svg viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Funnels Club">
@@ -299,8 +249,8 @@
     <p class="aide">
       Passez la souris sur le logo. Tout se règle dans le bloc
       <code>:root</code> en haut du fichier : <code>--angle-max</code> pour
-      l'inclinaison, <code>--vitesse</code> pour le liseré,
-      <code>--tache-force</code> pour la lumière.
+      l'inclinaison, <code>--halo-taille</code> et <code>--filet</code> pour
+      l'anneau, <code>--tache-force</code> pour la lumière de surface.
     </p>
 
     <script>
@@ -331,12 +281,14 @@
         logo.style.setProperty("--tache-x", `${(x + 0.5) * 100}%`);
         logo.style.setProperty("--tache-y", `${(y + 0.5) * 100}%`);
         logo.style.setProperty("--tache-opacite", "1");
+        logo.style.setProperty("--halo-force", "1");
       });
 
       logo.addEventListener("pointerleave", () => {
         logo.style.setProperty("--rx", "0deg");
         logo.style.setProperty("--ry", "0deg");
         logo.style.setProperty("--tache-opacite", "0");
+        logo.style.setProperty("--halo-force", "0");
       });
 
       const bouton = document.getElementById("bascule");
