@@ -35,29 +35,6 @@ export const config = [
     },
   },
   {
-    files: ["convex/**/*.ts"],
-    ignores: [
-      "convex/_generated/**",
-      "convex/functions.ts",
-      "convex/http.ts",
-    ],
-    rules: {
-      "no-restricted-imports": [
-        "error",
-        {
-          paths: [
-            {
-              name: "./_generated/server",
-              importNames: ["query", "mutation", "action"],
-              message:
-                "Passer par les enveloppes de functions.ts, jamais par les constructeurs bruts.",
-            },
-          ],
-        },
-      ],
-    },
-  },
-  {
     ignores: ["dist/**"],
   },
 ];

@@ -30,13 +30,17 @@ qu'on veut et pourquoi, pas comment.
 
 ## La pile ne change pas
 
-Turborepo + pnpm, Next.js (App Router, React 19), Convex, Tailwind v4,
-shadcn/ui, Vercel.
+Turborepo + pnpm, Next.js (App Router, React 19), Tailwind v4, shadcn/ui,
+Vercel.
 
-**Ce projet est un site vitrine : il n'a ni authentification, ni envoi d'emails.**
-Better Auth et Resend, qui font partie de la stack de départ, ne sont pas
-installés ici. Le jour où une partie privée arrive, on les remonte depuis
+**Ce projet est un site vitrine : il n'a ni base de données, ni
+authentification, ni envoi d'emails.** Convex, Better Auth et Resend font partie
+de la stack de départ mais ne sont pas installés ici. Le jour où le site a
+vraiment quelque chose à lire ou à écrire, on les remonte depuis
 `MONTER-LA-STACK.md` plutôt que d'improviser autre chose.
+
+Vercel sert les pages, et c'était déjà vrai quand Convex était là : Convex ne
+servait pas le site, il gardait des données. Un vitrine n'en a pas.
 
 **Ne jamais introduire une brique concurrente** parce qu'elle paraît plus
 pratique sur le moment : pas d'autre ORM, pas d'autre bibliothèque de
@@ -124,53 +128,26 @@ deux phrases, un séparateur `Nom — Titre` un point médian `Nom · Titre`.
 
 ---
 
-## Backend Convex : rien de sensible tant qu'il n'y a pas d'auth
+## Pas de backend, et c'est un choix
 
-Une fonction Convex est publique par nature : qui connaît l'URL du déploiement
-peut l'appeler. Ce site n'a pas d'authentification, donc **il n'existe aucun
-moyen de fermer une fonction ici**. La conséquence est simple et elle n'est pas
-négociable : rien de sensible ne descend dans Convex tant qu'il n'y a pas d'auth.
+Il n'y a **aucune base de données** dans ce dépôt. Les pages sont rendues au
+build et servies en statique par le CDN de Vercel ; ce qui doit s'exécuter à la
+demande passe par une server action.
 
-- Passer par `publicQuery` / `publicMutation` de
-  `packages/backend/convex/functions.ts`, jamais par les constructeurs bruts.
-  Une règle ESLint le vérifie. Le jour où l'auth arrive, le verrou se pose dans
-  ce fichier et nulle part ailleurs.
-- Le backend vit dans `packages/backend`, **pas** dans `apps/web` : toutes les
-  apps du dépôt tapent dans la même base.
+- Un formulaire qui envoie un mail se fait en server action, sans base.
+- Du contenu qui ne change qu'à la mise à jour du site vit dans le dépôt.
+- Le jour où il faut relire ce qu'on a écrit, ou qu'une personne modifie le
+  contenu sans passer par le code, alors il faut Convex **et** l'auth qui va
+  avec, pas l'un sans l'autre : une fonction Convex est publique par nature, qui
+  connaît l'URL du déploiement peut l'appeler.
 
-### Pas de registre des droits, et c'est un choix
+### Pas de registre des droits non plus
 
 La stack de départ impose qu'aucune page ne se crée sans son droit, avec un
 registre `PAGES` et un script qui refuse de construire sans. **Un site vitrine
 n'a aucun écran à protéger**, donc ni registre ni script ici. Ce n'est pas un
 oubli : c'est à remonter en même temps que l'authentification, le jour où une
 première page cesse d'être publique.
-
----
-
-## Tout ce qui se crée doit pouvoir se retrouver
-
-Une nouvelle table d'objets consultables entre dans l'index de recherche **le
-jour où on l'écrit**. Une nature, un constructeur d'entrée qui fixe le titre, le
-sous-titre et la destination, un `indexer()` à chaque point d'écriture, un
-`desindexer()` à la suppression. Jamais une passe qui relit la table entière.
-
-- La botte de foin porte **toutes** les écritures d'une même chose : l'index
-  compare des mots par leur début, jamais leur milieu.
-- **Ce qu'on n'a pas le droit de voir ne doit pas être cherchable.**
-
----
-
-## Performance : ne lire que le nécessaire
-
-Convex facture la lecture des documents, pas les champs renvoyés.
-
-- Jamais de `collect()` sur une table pour n'en afficher qu'une partie : un
-  index et une plage (`withIndex(...).order("desc").take(n)`).
-- Les champs lourds et rarement lus vivent dans leur propre table.
-- Une requête de tableau projette ses champs explicitement.
-- Déduire plutôt que stocker ce qui se reconstruit.
-- Mesurer avant d'affirmer : `DB I/O Bandwidth` n'est pas `Return Size`.
 
 ---
 
