@@ -21,7 +21,20 @@ export default async function Accueil() {
           L'en-tête est flottant et fixe : le `pt-40` le dégage et pose le
           titre vers le milieu de l'image.
       --------------------------------------------------------------- */}
-      <section className="relative isolate px-5 pt-40 sm:pt-52">
+      <section
+        className="relative isolate px-5 pt-40 sm:pt-52"
+        // La hauteur exacte du cadre vidéo, en 16/9 : la largeur disponible
+        // (l'écran moins les marges, plafonnée à la largeur du cadre) multipliée
+        // par 9/16. Le fond s'arrête à la moitié de cette valeur, ce qui coupe
+        // la vidéo en deux quelle que soit la taille de l'écran. Une hauteur
+        // écrite en dur produisait un cadre qui n'était plus en 16/9, et Wistia
+        // y ajoutait des bandes noires sur les côtés.
+        style={
+          {
+            "--video-h": "calc(min(100vw - 2.5rem, 48rem) * 9 / 16)",
+          } as React.CSSProperties
+        }
+      >
         {/* Le fond.
 
             Deux fichiers, un par largeur : 960 px pour le téléphone, 1920 px
@@ -29,16 +42,15 @@ export default async function Accueil() {
             poids pour rien.
 
             L'image ne descend pas jusqu'au bas de la section : elle s'arrête à
-            mi-hauteur du cadre vidéo, dont la hauteur est fixée juste en
-            dessous. C'est ce décalage qui fait chevaucher la vidéo sur la
-            limite entre l'image et le beige, sans marge négative ni décalage
-            de transformation, donc sans que la section suivante ait à réserver
-            de la place.
+            la moitié de `--video-h`, déclarée sur la section. C'est ce décalage
+            qui fait chevaucher la vidéo sur la limite entre l'image et la page,
+            sans marge négative ni décalage de transformation, donc sans que la
+            section suivante ait à réserver de la place.
 
             Le voile assombri garantit le contraste du texte quel que soit le
             thème : cette bande reste sombre dans les deux, sinon le verre de
             l'en-tête n'aurait rien à mordre. */}
-        <div className="absolute inset-x-0 top-0 bottom-[104px] -z-10 overflow-hidden sm:bottom-36 lg:bottom-[180px]">
+        <div className="absolute inset-x-0 top-0 bottom-[calc(var(--video-h)/2)] -z-10 overflow-hidden">
           <picture>
             <source media="(min-width: 768px)" srcSet="/fond-hero.jpg" />
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -81,19 +93,16 @@ export default async function Accueil() {
             </div>
           </div>
 
-          {/* La hauteur du cadre est fixée et non déduite d'un rapport : la
-              moitié de chacune de ces trois valeurs est reprise telle quelle
-              dans le `bottom` du fond ci-dessus. Les deux doivent bouger
-              ensemble, sinon la vidéo cesse d'être coupée en deux par la
-              limite. 208 / 288 / 360, donc 104 / 144 / 180. */}
+          {/* Le cadre est en 16/9, comme la vidéo : c'est ce qui la fait
+              remplir exactement, sans bande noire. Wistia est intégré en
+              `iframe` plutôt qu'avec leur `player.js` : le lecteur est le
+              même, et on évite de charger un script tiers sur toutes les
+              pages pour une seule vidéo. */}
           <div
             id="video"
             className="mx-auto mt-14 max-w-3xl scroll-mt-24 sm:mt-20"
           >
-            {/* Wistia, en `iframe` plutôt qu'avec leur `player.js` : le
-                lecteur est identique, et on évite de charger un script tiers
-                sur toutes les pages pour une seule vidéo. */}
-            <div className="h-52 overflow-hidden rounded-[12px] bg-black ring-1 ring-white/20 sm:h-72 lg:h-[360px]">
+            <div className="aspect-16/9 overflow-hidden rounded-[12px] bg-black shadow-[0_24px_60px_rgba(0,0,0,0.35)] ring-1 ring-white/15">
               <iframe
                 src="https://fast.wistia.net/embed/iframe/di3bzcmi50?videoFoam=false"
                 title="Vidéo de présentation"
