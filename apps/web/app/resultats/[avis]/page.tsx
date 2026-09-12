@@ -265,6 +265,44 @@ export default async function PageAvis({
 
 
       <Section className="[&>div]:pt-14 sm:[&>div]:pt-20">
+        {/* **Le bandeau vers l'autre entretien de la même personne.**
+
+            Trois membres ont témoigné deux fois, à un an d'écart. Leurs deux
+            pages ne racontent pas la même chose, donc elles existent
+            séparément ; mais quelqu'un qui arrive sur l'une doit voir l'autre
+            sans la chercher, sur demande de Rémy. Les paragraphes se citent
+            déjà l'un l'autre, ce qui vaut pour un moteur mais se rate à la
+            lecture.
+
+            Il est **en haut de l'article et non en bas** : à cet endroit, le
+            lecteur vient de voir la vidéo et sait de qui il s'agit, c'est le
+            moment où « il y en a une deuxième » a du sens. En bas, il aurait
+            déjà choisi.
+
+            C'est un vrai lien et pas une carte cliquable à moitié : le libellé
+            décrit la page d'arrivée, donc il dit ce qu'on va y lire. */}
+        {article.autreEntretien ? (
+          <div className="mx-auto mb-12 max-w-3xl">
+            <Link
+              href={`/resultats/${article.autreEntretien.slug}`}
+              className="relief-verre group/roule flex items-center gap-4 rounded-md border border-border bg-card p-5 transition-colors hover:border-ring focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            >
+              <span className="min-w-0 flex-1">
+                <span className="block text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                  L&apos;autre entretien
+                </span>
+                <span className="mt-1 block text-base text-pretty text-card-foreground">
+                  {article.autreEntretien.libelle}
+                </span>
+              </span>
+              <ArrowRight
+                aria-hidden
+                className="size-5 shrink-0 text-primary transition-transform group-hover/roule:translate-x-0.5"
+              />
+            </Link>
+          </div>
+        ) : null}
+
         {/* L'article.
 
             `max-w-3xl` et non la mesure des blocs : une ligne de texte courant

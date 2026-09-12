@@ -119,6 +119,27 @@ export type Avis = {
    * robot, peut lire dans une vidéo.
    */
   transcription: readonly TourDeParole[];
+  /**
+   * L'autre entretien de la même personne, quand il y en a deux.
+   *
+   * **Trois membres ont témoigné deux fois**, à un an d'écart : Roland,
+   * François et Corentin. Leurs deux pages ne racontent pas la même chose, donc
+   * elles existent séparément ; mais quelqu'un qui arrive sur l'une doit voir
+   * l'autre sans avoir à la chercher, sur demande de Rémy.
+   *
+   * Le lien est donc **structurel et non pas seulement écrit dans une phrase**.
+   * Les paragraphes se citent déjà l'un l'autre, ce qui est bien pour un moteur
+   * mais se rate à la lecture ; ce champ ajoute un bandeau que personne ne peut
+   * manquer, en haut de l'article, dans les deux sens.
+   *
+   * `libelle` dit **ce qu'on va lire**, pas « lire aussi » : un lien dont le
+   * texte ne décrit pas la page d'arrivée ne dit rien, ni à un lecteur ni à un
+   * robot. Voir la règle des liens dans `AGENTS.md`.
+   */
+  autreEntretien?: {
+    slug: string;
+    libelle: string;
+  };
 };
 
 export const avis: readonly Avis[] = [
@@ -595,6 +616,11 @@ export const avis: readonly Avis[] = [
         texte: "Avec plaisir, merci à toi Rémy pour ta confiance.",
       },
     ],
+    autreEntretien: {
+      slug: "roland-buffet-mastermind",
+      libelle:
+        "Un an et demi plus tard, Roland raconte la suite : de 10 000 € à 50 000-70 000 € par mois",
+    },
   },
   /* L'entretien d'Augustin n'est pas mené par Rémy : le client s'adresse
      nommément à Geoffrey (« il y a aussi toi, Geoffrey, qui répond à toutes
@@ -2416,6 +2442,11 @@ export const avis: readonly Avis[] = [
         texte: "Avec plaisir, à très bientôt.",
       },
     ],
+    autreEntretien: {
+      slug: "francois-mastermind",
+      libelle:
+        "Neuf mois plus tard, François raconte la suite : 17 000 € par mois avec dix fois moins de clients",
+    },
   },
   /* L'intervieweur est Geoffrey : Jérémy le nomme trois fois.
 
@@ -3046,6 +3077,11 @@ export const avis: readonly Avis[] = [
         texte: "Top, super, merci beaucoup. À bientôt.",
       },
     ],
+    autreEntretien: {
+      slug: "corentin-mastermind",
+      libelle:
+        "Un an et demi plus tard, Corentin raconte la suite : de 10 000 € à 30 000 € par mois",
+    },
   },
   /* L'intervieweur est Geoffrey : Mathieu le nomme au tout dernier segment.
 
@@ -4064,6 +4100,11 @@ export const avis: readonly Avis[] = [
         texte: "Avec grand plaisir, à bientôt. Merci à toi.",
       },
     ],
+    autreEntretien: {
+      slug: "corentin",
+      libelle:
+        "Le premier entretien de Corentin : son premier client dès le premier mois, à 4 500 €",
+    },
   },
   /* **Ce n'est pas un entretien, c'est un extrait de coaching de groupe**, et
      la page le dit dès le chapô. Sébastien prend le micro pendant une séance,
@@ -4268,6 +4309,1160 @@ export const avis: readonly Avis[] = [
           "Merci. Et puis, pour tout le monde, franchement : lâchez pas l'affaire. Si vous faites les choses bien, ça le fait, ça vient.",
       },
     ],
+  },
+  /* L'intervieweur est Geoffrey : Patrick le nomme au milieu de l'entretien.
+
+     **Le chiffre est signé et non encaissé**, et Patrick le précise lui-même
+     dans la même phrase. L'article garde la précision partout où il donne le
+     montant : c'est une nuance que le lecteur ne peut pas reconstituer seul. */
+  {
+    id: "f2ie1v99b8",
+    slug: "patrick-pinot",
+    titre:
+      "Avis Funnels Club : Patrick Pinot, 24 000 € signés en un mois, après deux lancements ratés",
+    titrePage: "Avis Funnels Club : Patrick Pinot, 24 000 € en un mois",
+    description:
+      "Patrick Pinot a monté une franchise de cent vingt points de vente. Il raconte ses deux vidéos de vente ratées, et ce que la troisième a produit en un mois.",
+    afficheAlt:
+      "Patrick Pinot en entretien vidéo avec Geoffrey, de Funnels Club, chacun depuis son bureau",
+    chapo:
+      "Patrick Pinot a passé dix ans à bâtir une franchise de studios de sport, jusqu'à cent vingt points de vente. Il raconte ce que le passage au digital lui a coûté d'essais, et pourquoi il a failli arrêter avant le troisième.",
+    sections: [
+      {
+        titre:
+          "Dix ans d'entrepreneuriat, une franchise de 120 points de vente, et un métier qu'il ne connaissait pas",
+        paragraphes: [
+          "Patrick est entrepreneur depuis une dizaine d'années. Il a monté des studios de sport, puis une franchise, qui a compté ==plus de cent vingt points de vente en cinq ans==. Après avoir cédé des parts, il a voulu accompagner d'autres réseaux de franchise, naissants ou établis, sur leur structuration.",
+          "L'envie était là, la méthode non. Et le digital, il ne le connaissait pas du tout. Sa première décision a donc été inhabituelle : il est allé travailler pour un infopreneur, simplement pour voir de l'intérieur quels outils et quelles stratégies existaient.",
+        ],
+        citation: {
+          texte:
+            "J'ai toujours eu cette envie d'accompagner, mais aucune méthodologie.",
+          qui: "Patrick",
+        },
+      },
+      {
+        titre: "Pourquoi un autodidacte a décidé de se faire accompagner",
+        paragraphes: [
+          "Patrick avait tout construit seul jusque-là, et un premier accompagnement payé pendant le Covid l'avait conforté dans l'idée qu'il pouvait continuer ainsi : il dit en être ressorti avec un « vous avez bien fait les choses » très cher payé.",
+          "Ce qui l'a fait changer d'avis est une question qu'il se pose honnêtement : aurait-il tenu jusqu'au bout tout seul ? Sa réponse est non, ==il aurait probablement abandonné avant==. Il compare la formation à la franchise qu'il vendait lui-même : on la signe pour avoir une ligne directrice. C'est le même raisonnement que fait [Corentin, qui se fait accompagner dès qu'il monte une boîte](/resultats/corentin).",
+        ],
+        citation: {
+          texte:
+            "Est-ce que j'aurais réussi ? Je ne pense pas. J'aurais peut-être abandonné avant d'aller jusqu'au bout.",
+          qui: "Patrick",
+        },
+      },
+      {
+        titre: "Ce qui l'a décidé : voir passer les 30 000 € dans la poche d'un autre",
+        paragraphes: [
+          "Le déclic est raconté sans détour, et il est concret. Chez l'infopreneur pour qui il travaillait, Patrick servait d'argument de vente : on le montrait aux prospects comme le coach aux cent vingt points de vente, dans des programmes vendus près de trente mille euros.",
+          "Il a fini par tirer la conclusion qui s'imposait, et c'est elle qui l'a mis en mouvement. Si vous en êtes à regarder de loin comme lui, [la formation gratuite est le point d'entrée](https://www.funnels.club/course-2025?el=site).",
+        ],
+        citation: {
+          texte:
+            "Je me suis dit : j'aimerais bien que ces trente mille euros soient dans ma poche plutôt que dans les siennes.",
+          qui: "Patrick",
+        },
+      },
+      {
+        titre: "Deux vidéos de vente ratées, et le moment où il a douté",
+        paragraphes: [
+          "C'est la partie du témoignage qu'on lit rarement ailleurs, et Patrick la raconte en entier. Sa première vidéo de vente : ==coup d'épée dans l'eau.== Il en retourne une seconde, en maîtrisant mieux les outils. Coup d'épée dans l'eau également.",
+          "Il reconnaît qu'à ce moment-là, il s'est demandé si c'était vraiment fait pour lui, ce qui n'est pas rien venu de quelqu'un qui a bâti une franchise. Ce qu'il en retient n'est pas de la motivation, c'est une mécanique : à chaque tentative, il devenait meilleur au montage, meilleur aux scripts, et il savait mieux ce qui ne marchait pas. [Jérémy a vécu exactement ça](/resultats/jeremy) sur son premier lancement.",
+        ],
+        citation: {
+          texte:
+            "Tu travailles, tu travailles, toujours pas de résultat, mais tu es meilleur. Et là tu travailles, et ça arrive.",
+          qui: "Patrick",
+        },
+      },
+      {
+        titre:
+          "Ses résultats : 24 000 € signés en un mois pour moins de 500 € de publicité",
+        paragraphes: [
+          "La troisième vidéo est lancée le dix-sept mars, et l'entretien a lieu un mois presque jour pour jour après. Sur une seule semaine, Patrick a trois rendez-vous stratégiques et en conclut deux ; un troisième s'ajoute le matin de l'entretien.",
+          "Le bilan du mois : ==plus de vingt-quatre mille euros de chiffre d'affaires signé==, et il précise de lui-même que c'est signé et non encaissé. Le coût d'acquisition tient en une ligne : moins de cinq cents euros dépensés sur la dernière campagne. [Les autres membres racontent des ratios comparables](/resultats).",
+        ],
+        citation: {
+          texte:
+            "En un mois, j'ai fait plus de vingt-quatre mille euros de chiffre d'affaires signé, pas encaissé. Et j'ai dépensé même pas cinq cents balles sur la dernière campagne.",
+          qui: "Patrick",
+        },
+      },
+      {
+        titre: "Ce qu'il ne s'attendait pas à trouver dans le programme",
+        paragraphes: [
+          "Sa réponse à ce qui l'a le plus aidé est une prise de conscience, et il la présente comme paradoxale : ==celle de la montagne qu'il fallait gravir.== Il pensait qu'une vidéo de vente et un système d'acquisition suffiraient. Il a découvert que ça allait bien plus loin.",
+          "Ce qui l'a agréablement surpris, et qu'il ne savait pas en entrant, c'est la partie qui apprend à construire le contenu de la formation elle-même : structurer un cours, cartographier un programme, faire ses fiches. Il ne savait pas faire, et il le dit franchement. [Charlotte a eu la même surprise](/resultats/charlotte) en transformant un métier manuel en vidéos.",
+        ],
+        citation: {
+          texte:
+            "Je n'avais pas compris à la base que vous accompagniez aussi pour créer le contenu de formation. J'ai été agréablement surpris.",
+          qui: "Patrick",
+        },
+      },
+      {
+        titre: "Sa réserve, et son avis pour ceux qui hésitent à prendre l'appel",
+        paragraphes: [
+          "Patrick pose une réserve, et c'est la même que [Cédric](/resultats/cedric) : il y a beaucoup de contenu, il faut du temps, et il ne faut pas hésiter à revenir plusieurs fois sur les mêmes leçons. Il ajoute une observation sur les cours de mentalité : ils ont surtout mis des mots sur ce qu'il vivait déjà.",
+          "Sur l'appel, son argument n'est pas commercial, et il vient de quelqu'un qui a vu l'envers du décor chez un autre infopreneur : si le profil ne correspond pas, on le dit. Il refuse d'ailleurs le mot closing et lui préfère celui de coaching décisionnel. [L'appel découverte est gratuit](https://www.funnels.club/appel?el=site).",
+        ],
+        citation: {
+          texte:
+            "Ce n'est pas des gens qui sont là pour vendre pour vendre. Si le profil ne correspond pas, on vous le dit clairement.",
+          qui: "Patrick",
+        },
+      },
+    ],
+    transcription: [
+      {
+        qui: "Geoffrey",
+        texte:
+          "Salut Patrick, merci d'avoir accepté aujourd'hui de faire cette interview avec moi pour expliquer un peu ton parcours dans Funnels Club. Pour commencer, tu peux peut-être te présenter simplement, et aussi ton activité, ce que tu fais.",
+      },
+      {
+        qui: "Patrick",
+        texte:
+          "Bonjour à tous, c'est Patrick. Je suis entrepreneur depuis une dizaine d'années, j'ai monté des studios de sport, donc une franchise même : on a eu plus de cent vingt points de vente en cinq ans. Suite à ça, j'ai voulu me lancer dans l'accompagnement des réseaux de franchise, soit des réseaux naissants, soit des réseaux déjà établis, pour les aider à structurer, à organiser leur opérationnel, leur business. Et quand j'ai cédé des parts de ma franchise, j'avais toujours cette envie d'accompagner. J'ai toujours eu cette envie d'accompagner, mais aucune méthodologie. Donc ce que j'ai fait, c'est que j'ai d'abord travaillé pour un infopreneur, pour comprendre un petit peu comment ça fonctionnait de l'intérieur, quels étaient les outils à utiliser, les stratégies, les méthodologies pour tout ce qui est accompagnement en ligne, parce que le digital, je ne connaissais pas du tout.",
+      },
+      {
+        qui: "Patrick",
+        texte:
+          "Ensuite, le truc, c'est que je ne connaissais rien. Donc j'ai vu passer plusieurs fois sur les réseaux des publicités de Rémy sur les vidéos de vente. Je connaissais les termes, il y avait des webinaires, il y avait des vidéos de vente, les systèmes evergreen, j'en entendais beaucoup parler, mais je ne savais pas comment ça fonctionnait. J'ai vu passer les publicités plusieurs fois, j'ai regardé. Au début, je ne savais pas trop. Mais en fait, j'ai un ami qui est rentré chez Funnels Club, qui m'a dit : tu devrais tester, ce n'est pas mal. Donc là, j'ai pris un appel avec Kylian, à l'époque. Très sympa. Il m'a expliqué comment ça fonctionnait, et du coup je me suis dit : mieux vaut être accompagné que de le faire seul. Même si je suis un peu autodidacte, on aurait pu le tenter, mais ça m'a quand même fait pas mal gagner de temps. Je suis rentré en septembre dernier, donc ça fait déjà sept mois, mine de rien.",
+      },
+      {
+        qui: "Geoffrey",
+        texte:
+          "N'hésite pas à rentrer dans les détails, c'est vraiment une discussion sur ton parcours. S'il y a des points que tu veux aborder, il n'y a aucun problème, il n'y a zéro tabou.",
+      },
+      {
+        qui: "Patrick",
+        texte:
+          "Le truc, c'est qu'à la base, je ne me suis jamais fait accompagner. On a créé notre enseigne de franchise à trois, en autodidactes. Et c'est au bout de deux, trois ans, quand le Covid est arrivé, parce qu'on a ouvert en deux mille dix-sept et qu'en deux mille vingt on a pris le Covid de plein fouet, qu'on s'est dit : c'est peut-être le moment de voir pour se faire accompagner. On s'est fait accompagner par un organisme. Je ne vais pas dire qu'on a été déçus, mais le prix qu'on a payé était quand même excessivement cher pour juste nous dire qu'en fait, on avait bien fait les choses. Donc j'étais conforté dans l'idée que je pouvais tout réussir moi-même, en solo.",
+      },
+      {
+        qui: "Patrick",
+        texte:
+          "Et quand j'ai travaillé pour l'infopreneur pour apprendre la méthodologie, j'avais vu aussi les systèmes de vidéos de vente, comment les construire, comment construire un tunnel de vente. Donc j'avais pareil la possibilité de le faire en solo, j'avais pris une formation sur un outil qu'on m'avait passé. Mais pareil, le truc c'est : est-ce que j'aurais réussi ? Est-ce que j'aurais eu les retours comme j'ai eus avec Funnels Club ? Je ne pense pas, et j'aurais peut-être abandonné avant d'aller jusqu'au bout. Donc je pense que le sujet ne se pose même pas : si on a vraiment un projet de formation digitale, d'apprentissage en ligne, peu importe, il faut se faire accompagner, parce que ça fait gagner du temps.",
+      },
+      {
+        qui: "Geoffrey",
+        texte:
+          "Avant même de rentrer dans Funnels Club, tu as passé pas mal d'étapes : tu avais déjà créé ta franchise, tu avais plein de points de vente, tu as cédé des parts, tu as commencé à travailler avec quelqu'un dans l'accompagnement. Et à ce moment-là, tu t'es dit : c'est parti, je veux lancer mon activité avec les compétences que j'ai acquises. Dans quelle situation étais-tu, qui fait que tu t'es dit que tu allais te faire accompagner, alors que tu n'avais jamais suivi d'accompagnement avant ?",
+      },
+      {
+        qui: "Patrick",
+        texte:
+          "Ce qui est drôle, c'est que le gars pour qui je bossais mettait beaucoup en avant le fait qu'il avait dans ses coachs quelqu'un qui avait un gros nombre de points de vente. Quand j'avais fait des événements, j'avais rencontré les closers de cet infopreneur, qui me disaient : Patrick, tu es notre argument. Parce qu'il me mettait toujours en avant dans les closings, pour dire : si jamais vous signez, vous aurez untel. Et le truc, c'est que c'étaient des programmes qui coûtaient quasiment trente mille euros. Moi, je me suis dit : purée, le mec me met en avant, j'aimerais bien que ces trente mille euros soient dans ma poche plutôt que dans les siennes. Et du coup, j'ai commencé à chercher comment faire pour mettre tout ça en place.",
+      },
+      {
+        qui: "Patrick",
+        texte:
+          "On peut trouver tout ce qu'on veut avec YouTube, avec l'intelligence artificielle, mais le problème, c'est que si ce n'est pas cadré, si ce n'est pas ultra tramé, on va prendre tout et n'importe quoi et on ne va jamais faire les choses correctement. C'est un peu comme une franchise, en fait : tu signes une franchise pour avoir une ligne directrice, pour faire ton bonhomme de chemin, être accompagné. Je pense que la formation, c'est la même chose. On peut le faire en solo, mais c'est compliqué. Et c'est vrai que quand je suis rentré dans Funnels Club, il n'y a rien à dire, c'est carré. Alors il y a du contenu, on ne va pas se mentir, il y a beaucoup de contenu. Il faut avoir du temps, il ne faut pas hésiter à revenir plusieurs fois sur les choses, parce que tu as des contenus qui sont très longs. Mais en suivant la trame, et avec ta réactivité, Geoffrey, moins de vingt-quatre heures, c'est répondu sur l'avancée du processus. En fait, il n'y a pas de sujet. Il faut juste être prêt, vraiment, ça c'est ce que je retiens, à y consacrer du temps.",
+      },
+      {
+        qui: "Patrick",
+        texte:
+          "Un truc important, et je crois que je l'ai déjà dit dans la communauté : toutes les leçons, que ce soit sur l'état d'esprit, l'entrepreneuriat en général ou autre, ça a mis des mots sur des choses que je connaissais déjà. Ça a appuyé certaines choses, et je me suis dit : ah, ok, d'accord, donc cette période-là, c'est comme ça que ça s'appelle. Tu vois, par exemple, la traversée du désert : tu n'as pas de business et puis d'un coup ça arrive. Ça, je l'avais vécu aussi avant, et je l'ai revécu avec l'accompagnement.",
+      },
+      {
+        qui: "Patrick",
+        texte:
+          "Ce qui est important, c'est d'écouter. Alors là, je peux le dire : je n'ai pas réussi ma première vidéo de vente, on ne va pas se mentir, ça a été galère quand même. Première vidéo de vente, coup d'épée dans l'eau. Donc on en retourne une, sachant que ça prend du temps, qu'il faut maîtriser tous les outils. On en retourne une deuxième : purée, deuxième coup d'épée dans l'eau. Donc je ne vais pas mentir, j'étais un peu, je suis entrepreneur, mais bon, tu te dis : est-ce que c'est vraiment fait pour moi ? Et ensuite, on réitère une dernière fois, et forcément, avec l'habitude, on devient meilleur dans les montages, on devient meilleur dans les scripts, on sait ce qui fonctionne et ce qui ne fonctionne pas. Et au final, la troisième, troisième combo gagnant.",
+      },
+      {
+        qui: "Geoffrey",
+        texte: "On l'a lancée quand ?",
+      },
+      {
+        qui: "Patrick",
+        texte:
+          "On l'a lancée le dix-sept mars. Ça fait un mois presque tout pile. Et alors, c'est pareil, je ne pense pas que ce soit du bol, mais en une semaine, j'ai eu trois personnes qui sont passées en rendez-vous stratégique, et du coup j'en ai closé deux. Et là, j'en ai reclosé un autre ce matin, qui est venu par la vidéo de vente, mais que je connaissais déjà. Donc en un mois, je calcule plus de vingt-quatre mille euros de chiffre d'affaires signé, pas encaissé. Mais pour le budget dépensé, j'ai dépensé même pas cinq cents balles sur la dernière campagne, donc c'est plutôt pas mal. Il faut juste se donner le temps, et ça fonctionne, je pense. Toujours la même chose : travailler, travailler, hop, on devient un peu meilleur, on travaille, on travaille, on est un peu meilleur, on travaille, toujours pas de résultat mais on est meilleur, et là tu travailles, ça arrive, le jackpot entre guillemets. Mais il faut de la résilience. Ce qu'il faut bien se dire, c'est qu'on ne va pas regarder des vidéos et rester les mains dans les poches. Ça prend beaucoup de temps quand même.",
+      },
+      {
+        qui: "Geoffrey",
+        texte:
+          "Clairement, c'est du travail en réalité. Le temps, forcément, c'est propre à chacun, mais oui, c'est du travail, et ce serait faux de dire que ça arrive en claquant des doigts. Je pense qu'on est les premiers à dire qu'il va falloir avancer, qu'il va falloir travailler pour en arriver là. En tout cas, félicitations pour les chiffres que tu partages, puisqu'en effet, ce n'est pas venu en claquant des doigts. Si tu devais partager quelque chose qui, dans le programme, t'a aidé tout particulièrement, ce serait quoi ?",
+      },
+      {
+        qui: "Patrick",
+        texte:
+          "Je pense que c'est la prise de conscience de la montagne qu'il faut gravir pour y arriver. Alors, c'est un peu paradoxal, parce que ce n'est pas pour faire peur aux gens. Mais moi, je m'étais dit à la base : ok, je fais une vidéo de vente, un système d'acquisition, ça va tourner. En fait, ça va beaucoup plus loin que ça. Et c'est d'ailleurs ce que je trouvais dommage, je pense que c'est votre stratégie de ne pas en parler, mais je n'avais pas compris à la base que vous accompagniez aussi pour créer le contenu de formation. Ça, c'est un sujet, j'ai été agréablement surpris. J'ai vu : ah ouais, donc on apprend à faire notre formation, à faire nos fiches de formation. Tout ça, c'est ultra puissant, parce que je n'en avais pas idée. Je ne savais pas créer une fiche, peu importe sur quel support, mais la méthodologie, la structuration d'un cours, la cartographie d'une formation, toutes ces choses-là, c'est un gros atout.",
+      },
+      {
+        qui: "Patrick",
+        texte:
+          "Pareil, je n'avais pas la notion pour créer des vidéos YouTube. Alors ça, c'est un challenge aussi. Je suis sur mon challenge de cinquante-deux vidéos, je les tiens pour l'instant, mais ce sont des vidéos qui ne font même pas cinq minutes, et ça prend un temps fou. Par contre, ça monte petit à petit : au début, j'avais un abonné, là j'en ai trente-trois, je suis content. C'est progressif, et c'est surtout de se sentir épaulé. Et puis après, c'est la communauté, c'est tout le monde qui est en interne, on ne nous lâche pas. Mais il ne faut pas hésiter non plus à vous demander les choses, parce que c'est pareil : on ne demande pas, on n'a pas. C'est bienveillant.",
+      },
+      {
+        qui: "Patrick",
+        texte:
+          "Parce que c'est pareil, j'avais mis du temps avant de signer. Pourquoi ? Parce que travaillant pour un infopreneur, voyant aussi parfois des déceptions de clients, je me suis dit : même si j'ai de l'argent, c'est un budget, et il y a tout et n'importe quoi sur le marché. Mais là, je n'ai pas vu grand monde, mais pour moi c'est tip top. Et puis c'est simple : l'histoire de la vidéo de vente, ça me plaît bien d'en faire une qui tourne pendant un an, plutôt que de faire des webinaires une fois par mois. Tu imagines, il y avait eu ce gros bug avec le logiciel, je crois qu'il y avait dix mille personnes dessus et cinq mille qui ont été coupées au bout d'une heure. Tu ne sais pas combien tu as mis en marketing, et pour avoir un bug, ça fait mal. Alors que là, c'est progressif. Je n'ai pas été payé pour dire ça, mais je pense que c'est vraiment la méthodologie la plus simple. Certes, ce n'est pas celle qui te fait avoir un gros coup d'un seul coup, mais au moins c'est progressif, et tout le monde est gagnant.",
+      },
+      {
+        qui: "Geoffrey",
+        texte:
+          "C'est quelque chose qui est tenable sur le long terme, et qui s'optimise aussi avec le temps. C'est aussi un peu cette image de bosser un peu plus au début pour être un peu plus tranquille demain. Juste pour tout le monde qui regarderait la vidéo : on a parlé de webinaire en direct, ce sont ceux où on est vraiment présent, avec plein de participants pendant une soirée. Et le modèle dont tu parlais, la vidéo de vente, c'est une vidéo enregistrée, qui n'est pas en direct, et qui du coup permet d'être présentée à tout le monde tout le temps. Merci beaucoup pour ce que tu as pu partager. C'est important aussi de refléter la réalité derrière : on a parlé de très beaux chiffres, assez rapidement en plus, mais derrière il y a eu du travail, du temps investi, et le fait de suivre assidûment les coachings. Est-ce que tu aurais un mot à dire à quelqu'un qui hésite à prendre un appel avec nous pour discuter de son projet ?",
+      },
+      {
+        qui: "Patrick",
+        texte:
+          "En vrai, ça ne mange pas de pain. Alors, c'est un truc que j'ai appris aussi via le closing, et que je n'aime pas du tout comme mot, on ne va pas se mentir. C'est pour ça que j'utilise le mot de coaching décisionnel. Ce ne sont pas des gens qui sont là pour vendre pour vendre. Si le profil ne correspond pas, on vous le dit clairement. Moi, il y a des gens qui m'ont contacté, je leur dis : non, écoute, je ne suis pas pro dans ce domaine, je t'envoie vers un collègue. Ce n'est pas le but. Comme dans mon accompagnement, comme dans tout accompagnement, on veut des gens qui aient le potentiel et qui soient satisfaits. Donc prendre l'appel, ça ne mange pas de pain, et on vous dira si oui ou non vous êtes un bon profil. Il faut y aller, il n'y a pas de sujet. Puis on repart avec de la valeur, déjà rien que ça : je sais qu'on m'avait partagé pas mal de choses. Moi, c'était particulier : j'avais pris l'appel je crois en août, et je lui ai dit que je ne pouvais pas dans deux jours, que j'avais mon gamin dans les pattes. J'ai repris un rendez-vous quinze jours après, il n'y a pas eu de sujet. C'est rare quand même.",
+      },
+      {
+        qui: "Geoffrey",
+        texte:
+          "Merci beaucoup pour ce retour transparent et honnête sur ta situation, sur ce que tu as traversé. C'est important pour nous de pouvoir mettre en avant des membres qui donnent de l'énergie, qui se donnent à fond pour aller chercher ces résultats, et qui peuvent partager leur expérience. Parce que comme tu le disais au départ, tu doutes, tu peux sonder un peu partout, tu ne sais pas forcément où tu mets les pieds, puisque c'était nouveau pour toi, cette aventure. Merci pour ce partage, je suis sûr que ça va aider plein de personnes qui pourraient se reconnaître dans ton parcours.",
+      },
+      {
+        qui: "Patrick",
+        texte: "Faire confiance au processus.",
+      },
+      {
+        qui: "Geoffrey",
+        texte:
+          "C'est vrai, c'est un mot que tu m'as partagé souvent. Merci beaucoup en tout cas, et on se dit à très vite.",
+      },
+      {
+        qui: "Patrick",
+        texte: "À bientôt.",
+      },
+    ],
+  },
+  /* L'intervieweur est Geoffrey : Guy le nomme au dernier tour de parole.
+
+     **Le contrat de 120 000 € n'est pas une vente de formation en ligne**, et
+     l'article ne le laisse pas croire : c'est une formation en présentiel, née
+     du travail de structuration fait dans le programme. Guy l'explique
+     lui-même, et la nuance est gardée partout où le montant apparaît. */
+  {
+    id: "gcfo8miafe",
+    slug: "guy-anastaze",
+    titre:
+      "Avis Funnels Club : Guy Anastaze, 72 ans, un contrat de 120 000 € né de sa formation structurée",
+    titrePage: "Avis Funnels Club : Guy Anastaze, un contrat à 120 000 €",
+    description:
+      "Guy Anastaze est mentor de dirigeants depuis dix ans. Il raconte pourquoi il a quitté le coaching pour la formation, et le contrat que ça lui a rapporté.",
+    afficheAlt:
+      "Guy Anastaze en entretien vidéo avec Geoffrey, de Funnels Club, depuis Genève",
+    chapo:
+      "Guy Anastaze a soixante-douze ans et accompagne des dirigeants depuis plus de dix ans, depuis Genève. Il raconte la remise en question qui l'a fait passer du coaching à la formation, et ce qu'elle a déclenché.",
+    sections: [
+      {
+        titre: "Mentor de dirigeants depuis dix ans, et un parcours qui vient de loin",
+        paragraphes: [
+          "Guy accompagne des entrepreneurs et des managers qui veulent gagner en impact sans perdre leur authenticité. Son approche combine le questionnement, le conseil et le partage d'expérience, parce qu'il considère qu'un bon accompagnement doit éveiller, éclairer et outiller.",
+          "Son parcours explique ce mélange : il vient de la physique théorique, puis de longues années en direction commerciale. Il a ensuite passé un MBA, une formation de coach, de superviseur de coach, et la formation suisse de mentor d'entreprise. ==Il a soixante-douze ans, et il précise que ça fait partie de l'équation.==",
+        ],
+        citation: {
+          texte:
+            "J'ai aussi soixante-douze ans, donc ça fait partie de l'équation.",
+          qui: "Guy",
+        },
+      },
+      {
+        titre: "Les trois constats qui l'ont décidé",
+        paragraphes: [
+          "Guy est précis sur ce qui l'a fait bouger, et il les compte. Le premier : il fonctionnait au bouche-à-oreille, ==et le bouche-à-oreille a des limites.== Le deuxième : beaucoup de choses reviennent d'un accompagnement à l'autre, donc pourquoi ne pas les faire à plusieurs plutôt qu'un par un.",
+          "Le troisième est plus net encore : on ne peut plus passer à côté de la digitalisation. Il avait lu le livre de Rémy, puis regardé les vidéos. Ce qui lui manquait n'était pas l'envie, c'était le comment. [La formation gratuite est ce point d'entrée](https://www.funnels.club/course-2025?el=site).",
+        ],
+        citation: {
+          texte:
+            "Je réfléchissais à ça, mais en fait, je ne savais pas comment faire.",
+          qui: "Guy",
+        },
+      },
+      {
+        titre: "La remise en question : passer du coaching à la formation",
+        paragraphes: [
+          "C'est le cœur de son témoignage, et il le nomme lui-même une sacrée remise en question. Il pensait vendre du coaching à travers un tunnel de vente. Il s'est retrouvé à construire une formation, ce qui n'est pas la même chose du tout.",
+          "La différence qu'il formule est celle d'un formateur, et elle est nette : ==une formation a pour but de rendre la personne autonome==, alors qu'en coaching il accompagne. Il garde d'ailleurs les deux, en visant quatre-vingts pour cent de formation en ligne et vingt pour cent d'accompagnement individuel, parce que ce dernier le remet en question et le tient à la page. C'est la même bascule qu'a faite [Tatiana en changeant de niche](/resultats/tatiana), à un autre endroit.",
+        ],
+        citation: {
+          texte:
+            "En coaching, je ne les rends pas autonomes, je les accompagne. Ce n'est pas la même chose que de former quelqu'un à acquérir les fondamentaux du leadership.",
+          qui: "Guy",
+        },
+      },
+      {
+        titre: "Ce que le programme lui a apporté : clarté et structuration",
+        paragraphes: [
+          "Quand on lui demande ce qui l'a le plus aidé, il répond en deux mots. La clarté d'abord : construire une formation oblige à se mettre à la place de celui qu'on va former, donc à clarifier. C'est cette clarification qui lui a fait changer de modèle.",
+          "La structuration ensuite : avoir une démarche, poser des jalons. Il y ajoute le travail sur LinkedIn, qu'il a mené plusieurs mois pour se rendre visible, et qui a cassé une croyance au passage. Il dit aussi avoir appris la différence entre vendre et offrir : faire venir des gens intéressés plutôt que démarcher.",
+        ],
+        citation: {
+          texte:
+            "Ce que Funnels Club m'a apporté, c'est deux choses : clarté et structuration.",
+          qui: "Guy",
+        },
+      },
+      {
+        titre: "Son résultat : un contrat de plus de 120 000 €, et d'où il vient",
+        paragraphes: [
+          "Le résultat qu'il annonce n'est pas une vente en ligne, et il le dit lui-même : c'est une opportunité différente, née du même travail. Ayant structuré sa formation, il l'a montrée à un ancien client, simplement pour partager ce qu'il était en train de faire.",
+          "Ce client lui a demandé de la donner en présentiel, pour une douzaine de personnes et deux équipes, dont le comité de direction. ==Le contrat dépasse cent vingt mille euros.== Guy est catégorique sur l'origine : il ne l'aurait pas obtenu sans être passé par le programme, parce que c'est la structuration qui a rendu l'offre montrable. C'est la même logique que chez [Patrick Pinot](/resultats/patrick-pinot), qui ne savait pas non plus cartographier une formation.",
+        ],
+        citation: {
+          texte:
+            "Ça m'a permis de remporter un contrat à plus de cent vingt mille euros. Je ne l'aurais certainement pas obtenu si je n'étais pas passé par Funnels Club.",
+          qui: "Guy",
+        },
+      },
+      {
+        titre: "Ce qu'il appelle une école d'entrepreneuriat",
+        paragraphes: [
+          "Guy va plus loin que la technique dans ce qu'il retient, et sa formule est sa propre conclusion : pour lui, ==c'est une école d'entrepreneuriat.== Il cite le module sur l'état d'esprit comme allant nettement au-delà de la réalisation d'un tunnel de vente.",
+          "Il ajoute une observation qui vient de son âge, et qu'il assume : ce que les plus jeunes lui apportent, c'est l'agilité. Essayer, constater que ça ne marche pas, passer à autre chose, au lieu d'attendre la fin pour tout recommencer. Il cite aussi la règle de la première version : faire la version un, point. [Charlotte dit la même chose de son bêta-test](/resultats/charlotte).",
+        ],
+        citation: {
+          texte:
+            "Être entrepreneur, ça s'apprend. Ce n'est pas simplement parce que je décide d'ouvrir une boîte de conseil que je deviens consultant.",
+          qui: "Guy",
+        },
+      },
+      {
+        titre: "Sa mise en garde, et son avis pour ceux qui hésitent",
+        paragraphes: [
+          "Sa réserve est celle d'un homme qui a formé des commerciaux : il répétait qu'il faut cinq ans pour devenir bon, pas cinq mois. Il concède que les choses s'accélèrent, mais insiste sur le fait que monter une formation demande du travail, et que les promesses en trois semaines ne sont pas vraies.",
+          "Il met surtout en garde sur les croyances de départ : qui croit obtenir tout en claquant des doigts sera déçu. Sa réponse à ceux qui hésitent est simple, et il la formule en homme qui a passé sa vie à faire prendre des décisions aux autres. [L'appel découverte est gratuit](https://www.funnels.club/appel?el=site), et [les autres membres racontent le même chemin](/resultats).",
+        ],
+        citation: {
+          texte:
+            "Un appel, ça n'engage à rien d'autre que de prendre son téléphone, de parler à quelqu'un, et après de prendre une décision.",
+          qui: "Guy",
+        },
+      },
+    ],
+    transcription: [
+      {
+        qui: "Geoffrey",
+        texte:
+          "Salut Guy, merci d'avoir accepté ce rendez-vous pour faire ton interview, pour que tu puisses raconter un peu l'histoire que tu as vécue et ton parcours dans Funnels Club. Pour commencer, est-ce que tu veux te présenter, dire ce que tu fais, et dans quelles conditions tu nous as rejoints ?",
+      },
+      {
+        qui: "Guy",
+        texte:
+          "D'accord, très bien. Et puis merci, ravi que tu m'aies invité à partager mon expérience. Je suis mentor de dirigeants, c'est-à-dire des entrepreneurs ou des managers. Ce sont deux profils qui sont un peu différents. J'ai aussi soixante-douze ans, donc ça fait partie de l'équation. Et depuis plus de dix ans, j'accompagne des leaders qui veulent gagner en impact, mais sans perdre leur authenticité. Mon approche, c'est de développer la conscience de soi, appliquée à soi-même, appliquée à l'autre et appliquée aux autres. C'est un accompagnement qui combine à la fois du questionnement, mais aussi du conseil et du partage d'expérience. Parce que je considère qu'un bon accompagnement doit permettre d'éveiller, d'éclairer, d'outiller aussi la personne que l'on accompagne.",
+      },
+      {
+        qui: "Guy",
+        texte:
+          "Moi, je viens initialement de la physique théorique, il y a très longtemps, puis je suis passé par de nombreuses années dans la direction commerciale. J'ai également fait un MBA, une formation de coach, de superviseur de coach, et puis une formation en Suisse, puisque j'habite à Genève, qui est typiquement suisse : c'est la formation de mentor d'entreprise, qui combine les trois postures que j'ai indiquées tout à l'heure. J'intègre tout ça dans une approche qui est simple : aider le leader à mieux se connaître. Donc un travail en profondeur. Et puis, ces dernières années, je me suis aperçu que ça avait un certain nombre de limites.",
+      },
+      {
+        qui: "Geoffrey",
+        texte: "C'est déjà quelque chose que tu faisais avant, c'est ça ?",
+      },
+      {
+        qui: "Guy",
+        texte:
+          "Oui, ça fait dix ans que je fais ça. Et quand j'ai vu, d'abord j'ai lu le livre de Rémy, et puis j'ai vu les vidéos, j'ai réalisé deux choses. La première, c'est que moi, je fonctionnais et je fonctionne toujours avec le bouche-à-oreille, et ça, ça a des limites. La deuxième chose que j'avais constatée, c'est que beaucoup de choses sont similaires dans les accompagnements, ça revient de manière un peu récurrente. Et je me suis dit : plutôt que de faire du un à un, pourquoi pas faire à plusieurs. Puis le troisième point, c'est qu'on ne peut plus passer à côté de la digitalisation. Ce sont ces trois points qui m'ont fait vraiment réfléchir et adhérer à Funnels Club.",
+      },
+      {
+        qui: "Geoffrey",
+        texte:
+          "Donc tu étais déjà dans cette démarche où tu voulais digitaliser, à ce moment-là, quand tu nous as trouvés ?",
+      },
+      {
+        qui: "Guy",
+        texte:
+          "Voilà. Je réfléchissais à ça, mais en fait, je ne savais pas comment faire. C'est le point. C'est un premier point : comment s'y prendre. Et puis il y a aussi une chose : au départ, je croyais que je pourrais, à travers Funnels Club et les tunnels de vente, proposer du coaching. Et je m'aperçois que j'ai eu une sacrée remise en question, parce que je suis passé de ce type d'accompagnement à vouloir proposer une formation. Ce qui est différent, parce que la formation, le but, c'est de rendre la personne autonome. Et ça, c'est une chose que j'ai apprise avec vous, avec Rémy, toi et Maxime, enfin toute l'équipe : c'est de rendre nos clients autonomes. Alors qu'en coaching, je ne les rends pas autonomes, je les accompagne. À un moment, effectivement, ils prennent leur envol, mais ce n'est pas la même chose que de former quelqu'un à acquérir les fondamentaux du leadership. Et la formation que Funnels Club propose me sert exactement à ça : à construire une formation qui permet de rendre mes clients totalement autonomes.",
+      },
+      {
+        qui: "Geoffrey",
+        texte:
+          "Donc au final, tu as même changé un peu le modèle que tu avais, puisque tu faisais du un à un en accompagnement en entreprise pour les dirigeants, manager ou chef d'entreprise. Et aujourd'hui, tu as basculé sur ce côté où tu les rends vraiment indépendants grâce à une formation. Et ensuite, tu as aussi une partie toujours en accompagnement, ou c'est uniquement la formation ?",
+      },
+      {
+        qui: "Guy",
+        texte:
+          "C'est un bon point. Je garde toujours une partie d'accompagnement. Mon objectif est de faire quatre-vingts pour cent de la formation en ligne et vingt pour cent d'accompagnement individuel, parce que j'aime bien ça, et ça me permet de me remettre en question. Pourquoi ? Parce que chaque personne est un univers, et de le découvrir, je trouve ça superbe. Ça me permet aussi de rester à la page, si je peux dire, parce qu'au fur et à mesure, on voit des managers évoluer et répondre aux contraintes d'aujourd'hui, qui ne sont pas du tout les mêmes que celles que moi j'avais vécues. C'est un monde totalement différent, qui a beaucoup changé. Par exemple, l'introduction de l'intelligence artificielle, que j'utilise beaucoup, et d'ailleurs l'approche que Rémy et l'équipe donnent est extrêmement pertinente. Ça fait partie des outils qu'il faut maîtriser, mais aussi que mes clients doivent maîtriser. Ce n'est pas l'intelligence artificielle qui va nous remplacer, ce sont les gens qui savent l'utiliser qui vont nous remplacer, si on ne se forme pas aussi à ça.",
+      },
+      {
+        qui: "Geoffrey",
+        texte:
+          "Et donc, ce que tu as trouvé au sein de Funnels Club, on a commencé à en parler : au début, c'était vraiment ce côté où tu souhaitais digitaliser, ensuite ça a remis en question presque un peu le modèle, la manière dont tu le présentes et dont tu accompagnes tes clients. Qu'est-ce qui t'a le plus aidé dans ton passage dans Funnels Club ?",
+      },
+      {
+        qui: "Guy",
+        texte:
+          "Deux choses essentielles. La première, ça m'a permis de clarifier mon offre. Parce que quand on cherche à faire une formation, il faut se mettre à la place de celui que l'on va former, et donc clarifier un certain nombre de choses. Ça, c'est le premier point, qui a été assez fondamental, parce que c'est en clarifiant que ça m'a permis de changer le modèle d'affaires, de passer de l'accompagnement en tant que tel à la formation. Et puis la deuxième chose, ça m'a aidé à structurer, à avoir une démarche, à pouvoir mettre des jalons dans cette formation.",
+      },
+      {
+        qui: "Guy",
+        texte:
+          "Moi, je pars du principe, et c'est une croyance, que de même qu'on ne naît pas physicien, médecin ou chauffeur de taxi, on le devient, il faut se former. De même, on ne naît pas leader, on le devient. C'est vrai qu'il y a des gens qui ont plus d'appétence, plus de facilité. Mais c'est comme un gamin qui est très bon en mathématiques : ce n'est pas parce qu'il est bon en mathématiques qu'il va devenir mathématicien. Il va falloir qu'il passe par certaines formations, il faut qu'il en ait l'appétence aussi, qu'il le veuille. Donc le vouloir est vraiment très important. C'est pareil pour le leadership : il faut le vouloir. Il y en a qui ne veulent pas, il n'y a pas de problème. Mais si on le veut, il faut se former, parce que par exemple, gérer un conflit, ce n'est pas du tout évident. Gérer ses propres émotions face à une situation difficile, prendre des décisions en phase d'incertitude, quand on n'a pas toutes les informations : tout ça, ça s'apprend, y compris l'empathie. L'empathie, on peut la travailler. Moi, j'ai travaillé par exemple sur la communication non violente : on apprend à affiner l'empathie. Donc ce que Funnels Club m'a apporté, c'est deux choses : clarté et structuration.",
+      },
+      {
+        qui: "Geoffrey",
+        texte:
+          "Tu disais qu'aujourd'hui tu fonctionnes encore avec le bouche-à-oreille ? Ou tu as aussi ce côté où tu communiques un peu plus sur les réseaux, où tu attires des nouvelles personnes vers toi ?",
+      },
+      {
+        qui: "Guy",
+        texte:
+          "Les deux. Il y a une notion qui est très importante, c'est que je crée de mes clients des ambassadeurs. C'est-à-dire que je garde un contact avec eux, et les clients qui ont apprécié le travail que nous avons fait deviennent, certains, pas tous, mais certains deviennent mes ambassadeurs. C'est un point très important, parce que l'ambassadeur, c'est celui qui va parler en bien de toi quand tu n'es pas dans la pièce. Et donc, c'est eux qui peuvent m'apporter de nouvelles opportunités. Et pour ça, il faut prendre soin des ambassadeurs.",
+      },
+      {
+        qui: "Guy",
+        texte:
+          "Il y a aussi une chose que Funnels Club m'a apportée, c'est de travailler sur LinkedIn. Là, j'ai fait un gros travail pendant plusieurs mois pour me rendre visible. Et ce qui m'a aussi permis de casser certaines croyances, comme se dire : ce que je vais dire, ça n'intéresse pas les gens. Ce n'est absolument pas vrai. On a beaucoup plus de choses à apporter que ce que l'on pourrait imaginer au départ. Mais il faut plonger dans la piscine pour s'apercevoir qu'on sait nager.",
+      },
+      {
+        qui: "Geoffrey",
+        texte: "Ou qu'il faut apprendre à nager.",
+      },
+      {
+        qui: "Guy",
+        texte:
+          "Qu'il faut apprendre à nager, et qu'on est capable d'apprendre à nager. Donc le travail sur LinkedIn a été vraiment encouragé par la formation. Alors évidemment, il y aura encore une autre étape, mais pour l'instant je n'y suis pas encore, c'est la publicité, que tu connais très bien. Parce que je m'aperçois que créer du contenu, c'est donner du chocolat gratuit aux gens : tout le monde te dit que c'est super, c'est très bon. Mais dans mon cas, ce n'est pas ça qui amène vraiment les clients. Ça me rend visible, et ça conforte un certain nombre de personnes qui se disent : tiens, je vois ce qu'il dit, ce qu'il propose, ça rassure. Mais il y a une étape, et je mise beaucoup sur Funnels Club pour m'aider à aller vers cette publicité, qui est beaucoup plus ciblée.",
+      },
+      {
+        qui: "Guy",
+        texte:
+          "Et là aussi, c'est une chose que j'ai apprise avec Funnels Club : la différence entre vendre et offrir. C'est-à-dire faire en sorte que ce soient des gens intéressés qui viennent vers moi, plutôt que d'aller démarcher, ce que je fais avec le bouche-à-oreille, sauf avec les ambassadeurs, qui me permettent d'éviter un gros travail de marketing. Donc, pour répondre à ta question, je continue le bouche-à-oreille, mais je me prépare à mettre sur pied une automatisation d'un certain nombre de processus. Ça, c'est une chose aussi que j'ai apprise avec Funnels Club : l'automatisation d'un certain nombre de choses, qui me permet de me concentrer sur ce que moi je peux apporter. Le fait aussi d'utiliser l'intelligence artificielle pour faciliter un certain nombre de choses, ça fait gagner du temps. Il faut l'utiliser comme un assistant, et pas un substitut, surtout pas un substitut.",
+      },
+      {
+        qui: "Guy",
+        texte:
+          "Alors, tu évoquais à un moment les résultats : j'ai eu un résultat très concret. C'est très intéressant, parce que le fait, comme je l'ai dit tout à l'heure, d'avoir structuré la formation en ligne, ce que je pouvais apporter, je l'ai montré à un de mes anciens clients, simplement pour partager ce que j'étais en train de faire. Puis il m'a dit : mais c'est extrêmement intéressant. Et ça m'a conduit, il m'a demandé de faire la formation que je fais en ligne, de la faire en présentiel, pour une douzaine de personnes, deux équipes, notamment le comité de direction. Et ça, c'est le résultat de tout le travail de structuration que j'ai fait, de construction de la formation. Lui, il a trouvé ça génial, et ça m'a permis de remporter un contrat à plus de cent vingt mille euros.",
+      },
+      {
+        qui: "Geoffrey",
+        texte: "Félicitations.",
+      },
+      {
+        qui: "Guy",
+        texte:
+          "Je ne l'aurais certainement pas obtenu, enfin c'est sûr, je ne l'aurais pas obtenu si je n'étais pas passé par Funnels Club. C'est intéressant, parce que c'est une opportunité qui est différente de la formation en ligne, mais qui est un résultat. Ce qui montre aussi qu'on peut avoir des directions comme ça, puis tout à coup il y a des choses nouvelles qui apparaissent, et il faut être prêt à les saisir. Il faut aussi les provoquer : si je n'étais pas allé parler à cet ambassadeur de ce que j'étais en train de faire, ça ne serait pas arrivé. Mais c'est quand même grâce à Funnels Club que j'ai pu mettre sur pied cette formation, et c'est un véritable bonheur, parce que ça me permet d'aller au fond de la pensée et d'apporter tout ce que je pense pouvoir apporter. Et d'ailleurs, il faut que je fasse attention, parce que je m'aperçois qu'on a en nous tellement de choses qu'on peut y passer des plombes.",
+      },
+      {
+        qui: "Guy",
+        texte:
+          "C'est comme un tableau, où on peut ne jamais considérer qu'il est fini, et à un moment il faut dire stop. Ça aussi, c'est une chose que j'ai apprise avec Rémy : faire une première version, et faire la version, point. C'est la version un, ce n'est pas la version finale géniale qui comprend tout. Funnels Club en est un exemple vivant, après plusieurs années d'existence. Et ça, c'est aussi un point que je trouve très important, surtout pour quelqu'un de ma génération : ce que les jeunes m'apportent, et quand je dis les jeunes, c'est toi, Rémy, enfin des gens qui ont moins de trente ans, c'est cette agilité. C'est-à-dire : ok, on essaie un truc, ça ne marche pas, ce n'est pas grave, on passe à autre chose. Ce qui est important, c'est de ne pas arrêter d'essayer, d'apprendre. C'est un modèle très différent de ce que moi j'avais connu, où on fait un truc, on attend la fin, et puis si ça ne marche pas, on recommence.",
+      },
+      {
+        qui: "Guy",
+        texte:
+          "Donc il y a énormément de choses que la formation m'apprend en dehors de faire un tunnel de vente. Pour moi, si je devais dire une chose, c'est une école d'entrepreneuriat. Un certain nombre de modules, ne serait-ce que celui sur l'état d'esprit que Rémy a fait, c'est très profond, et ça va nettement au-delà de la réalisation technique d'un tunnel de vente. C'est aussi prendre soin de soi, c'est comment travailler. Être entrepreneur, ça s'apprend. Ce n'est pas simplement parce que je décide d'ouvrir une boîte de conseil que je deviens consultant. Il y a tout un cheminement, une réflexion, un apprentissage, une construction à développer.",
+      },
+      {
+        qui: "Guy",
+        texte:
+          "Une chose qui est importante, et je crois que j'ai aussi cette qualité, c'est de me remettre en question. Je n'hésite pas à me remettre en question. À part qu'évidemment, il faut me donner les bonnes raisons, il faut avoir des arguments, ce n'est pas une question de girouette. La fois où j'avais discuté avec Rémy sur le fait que moi j'allais dans cette direction du coaching, il me dit : oui, mais il faudrait quand même que tes clients soient à la fin totalement autonomes. Et ça veut dire un travail en profondeur pour aller expliquer, ce n'est pas simplement le quoi, mais c'est le comment. Comment développer telle ou telle qualité de leader, comment développer telle ou telle qualité de communication. Et ça, ça fait creuser.",
+      },
+      {
+        qui: "Geoffrey",
+        texte: "Ce que ça veut dire aussi, c'est qu'il y a du boulot.",
+      },
+      {
+        qui: "Guy",
+        texte:
+          "Bien sûr. Il y a du boulot pour mettre sur pied une formation. J'ai vu des ouvrages qui promettent ça en trois semaines : non, ce n'est pas vrai. Il y a du travail, comme toute chose. Dans un certain nombre de formations que j'ai faites, j'ai toujours dit : pour devenir un bon commercial, il faut cinq ans. Ce n'est pas cinq mois. Les choses s'accélèrent, c'est vrai. Mais il faut le rappeler, et donc c'est un investissement en temps, en énergie, et il ne faut pas lâcher. C'est pour ça que c'est important aussi de partir avec de bonnes croyances : si on croit qu'on obtient tout en claquant des doigts, on va être déçu, et là ça ne marche pas. Après, il faut analyser, mesurer les choses, pour voir pourquoi est-ce que ça n'avance pas aussi vite que je pensais. Il faut avoir des éléments concrets, tangibles, et ça, la formation Funnels Club apporte tous ces éléments.",
+      },
+      {
+        qui: "Geoffrey",
+        texte:
+          "C'est intéressant, parce que ce côté analyse fait partie aussi de la remise en question : il faut avoir des éléments pour se remettre en question, mais une fois qu'on les a, c'est aussi le faire, et remettre les mains dedans, puisque mécaniquement il va y avoir des changements à faire, qui vont demander du travail, et qui derrière vont amener d'autres résultats. Je tenais à le souligner, parce que c'est quelque chose que tu as très bien fait : tu étais parti avec l'idée de continuer le consulting sans forcément créer la formation, et pourtant tu l'as fait, et c'est ce qui t'a permis de décrocher ce contrat. Est-ce que tu aurais un mot à partager à une personne qui regarde cette interview et qui hésite encore à prendre le premier appel avec l'équipe ?",
+      },
+      {
+        qui: "Guy",
+        texte:
+          "Je dirais très simplement : si vous êtes vraiment engagé dans votre projet, n'hésitez pas, prenez un appel. Prenez l'appel, parce que ça va clarifier un certain nombre de choses. Grâce à l'appel, vous allez découvrir peut-être quelque chose que vous ne savez pas. Et un appel, ça n'engage à rien d'autre que de prendre son téléphone, de parler à quelqu'un, et après de prendre une décision. Donc c'est gagnant-gagnant. En un seul mot : ne pas hésiter du tout.",
+      },
+      {
+        qui: "Geoffrey",
+        texte:
+          "Merci beaucoup Guy, merci pour ton temps, merci pour ton partage aussi. Encore une fois, félicitations pour tes résultats.",
+      },
+      {
+        qui: "Guy",
+        texte:
+          "Je tenais quand même à te remercier pour ce rendez-vous. Parce qu'il y a encore du chemin à faire.",
+      },
+      {
+        qui: "Geoffrey",
+        texte: "Il y a encore du chemin, oui. Mais c'est une bonne chose.",
+      },
+      {
+        qui: "Guy",
+        texte: "Absolument. Merci Geoffrey.",
+      },
+    ],
+  },
+  /* **Le mastermind Mentium n'est plus proposé : il est en pause, et le
+     consulting privé en tête-à-tête l'a remplacé.** Même avertissement que sur
+     `/resultats/corentin-mastermind`, pour la même raison, et il est dit dès le
+     chapô et repris en dernière section.
+
+     **C'est le même Roland que `/resultats/roland-buffet`, un an et demi
+     après.** La première page raconte le passage du présentiel au distanciel et
+     les 109 778 € ; celle-ci raconte la suite. C'est Rémy qui mène l'entretien.
+
+     **Le chiffre est une fourchette mensuelle, pas un cumul**, et Roland refuse
+     d'aller plus loin sur la rentabilité, qu'il dit confidentielle. L'article
+     s'arrête où il s'arrête. */
+  {
+    id: "i8j0mw0ddt",
+    slug: "roland-buffet-mastermind",
+    titre:
+      "Avis mastermind : Roland Buffet, de 10 000 € à 50 000-70 000 € par mois, avec sa femme et son fils",
+    titrePage: "Avis mastermind : Roland Buffet, 50 à 70 000 € par mois",
+    description:
+      "Un an et demi après son premier entretien, Roland Buffet raconte le séminaire où il ne voulait pas aller, et ce qu'il a changé à son retour.",
+    afficheAlt:
+      "Roland Buffet en entretien vidéo avec Rémy Jupille, chacun depuis son bureau",
+    chapo:
+      "Roland Buffet avait raconté son passage du présentiel au distanciel ; un an et demi plus tard, il travaille avec sa femme et son fils et annonce cinquante à soixante-dix mille euros par mois. Le mastermind dont il parle est aujourd'hui en pause : c'est le consulting privé qui l'a remplacé.",
+    sections: [
+      {
+        titre: "Où il en était un an et demi plus tôt",
+        paragraphes: [
+          "Roland forme les entreprises du bâtiment à la gestion. Au moment de [son premier entretien](/resultats/roland-buffet), il venait de passer la barre des dix mille euros par mois : un programme qui tournait, commercialisé, avec une vraie marge de progression.",
+          "Mais il ne présente pas cette étape comme un aboutissement, et c'est ce qui rend son récit utile. Il parle de balbutiements, de mois où les objectifs n'étaient pas atteints, ==et d'encore beaucoup d'inquiétude.== Il faisait entrer deux ou trois artisans par mois, ce qui correspondait à son objectif d'alors.",
+        ],
+        citation: {
+          texte:
+            "On était sur des balbutiements de l'atteinte de certains objectifs, et certains mois on ne les atteignait pas, avec beaucoup d'inquiétude encore.",
+          qui: "Roland",
+        },
+      },
+      {
+        titre: "Pourquoi il a voulu aller plus loin : l'image de la voiture",
+        paragraphes: [
+          "Roland explique par une image, et elle est claire. Avant, il était à pied. ==Funnels Club a été la voiture== : il pouvait se déplacer plus vite, aller plus loin, et il y était confortable.",
+          "Ce qui ne collait plus, ce n'était pas le véhicule, c'étaient ses objectifs. Il voulait accompagner beaucoup plus d'artisans, et il avait une intention précise derrière : sortir sa femme de son emploi salarié dans la fonction publique pour qu'elle travaille avec lui. Ces ambitions-là demandaient autre chose.",
+        ],
+        citation: {
+          texte:
+            "Non pas que le véhicule d'avant était mauvais, pas du tout. Sauf que là, vu mes ambitions, il fallait quelque chose de plus efficient, de plus personnalisé et de plus puissant.",
+          qui: "Roland",
+        },
+      },
+      {
+        titre: "Le séminaire où il ne voulait pas aller",
+        paragraphes: [
+          "C'est le fait marquant qu'il retient de toute l'année, et il le raconte sans se ménager. Le mastermind comportait une semaine en présentiel à l'île Maurice, et Roland a failli ne pas y aller pour deux raisons qu'il énumère : il fallait payer le billet, et ==il ne se sentait pas à sa place.==",
+          "Il voyait les autres membres comme des stars aux centaines de milliers d'abonnés, et se jugeait débutant à côté. Il est allé jusqu'à réserver, dit-il, le logement le moins cher de l'île, parce qu'il estimait ne pas mériter plus. C'est le même sentiment que décrit [Sandrine avant sa pause de six mois](/resultats/sandrine).",
+        ],
+        citation: {
+          texte:
+            "Je me disais : n'y va pas, tu vas dépenser de l'argent, tu n'es pas à la hauteur, tu ne devrais pas.",
+          qui: "Roland",
+        },
+      },
+      {
+        titre: "Ce que le présentiel lui a fait comprendre",
+        paragraphes: [
+          "Ce qu'il a vu sur place a défait la croyance qui le retenait, et sa formule est la meilleure du témoignage : les autres n'avaient rien d'exceptionnel. Certains y faisaient même des résultats plus petits que les siens.",
+          "Il décrit une semaine de vrai travail, de huit ou neuf heures du matin jusqu'au soir, et surtout les échanges avec ceux qui avaient plusieurs coups d'avance. Il note aussi, et ça compte pour lui, que personne n'est arrivé en voiture de luxe : des gens simples, dans un bel endroit. [Guy Anastaze dit la même chose](/resultats/guy-anastaze) de ce que les autres lui apportent.",
+        ],
+        citation: {
+          texte:
+            "Vous étiez exceptionnels, mais vous n'aviez rien d'exceptionnel. Je me suis dit : finalement, je ne suis peut-être pas si nul, et j'ai peut-être ma place.",
+          qui: "Roland",
+        },
+      },
+      {
+        titre: "Ses résultats : de 10 000 € à 50 000-70 000 € par mois",
+        paragraphes: [
+          "Le séminaire a lieu en décembre 2024. Roland rentre, passe le mois de janvier à réaligner tout ce qu'il y a compris, ==et à partir de février les chiffres doublent.==",
+          "Il donne l'échelle complète : zéro euro de chiffre d'affaires à distance avant d'entrer dans le programme, quinze à vingt mille pendant, et ==entre cinquante et soixante-dix mille euros par mois== aujourd'hui. Il refuse d'aller plus loin sur la rentabilité, qu'il garde confidentielle, mais précise que dans ce modèle le chiffre et la marge montent ensemble.",
+        ],
+        citation: {
+          texte:
+            "En janvier, j'ai réaligné tout ce que j'avais compris et modélisé sur place. Et à partir de février, j'ai explosé les chiffres.",
+          qui: "Roland",
+        },
+      },
+      {
+        titre: "Ce dont il est le plus fier, et ce n'est pas le chiffre",
+        paragraphes: [
+          "Il classe lui-même ses résultats par priorité, et l'argent arrive en troisième. En premier : une communauté d'artisans qui s'est beaucoup développée, et surtout des clients satisfaits, dont un influenceur du bâtiment qui raconte publiquement ce que ça a changé.",
+          "En deuxième, le rêve qu'il avait formulé : ==depuis septembre 2025, sa femme travaille avec lui à plein temps==, pour un salaire équivalent à celui de la fonction publique qu'elle a quitté. Et une chose qu'il n'avait pas prévue : son fils s'occupe désormais de sa publicité et de ses réseaux sociaux. Il a aussi deux collaborateurs au closing.",
+        ],
+        citation: {
+          texte:
+            "Aujourd'hui, je travaille avec ma femme et mon fils dans quelque chose qui est efficace pour des clients totalement satisfaits. Qu'est-ce que tu as envie de plus ?",
+          qui: "Roland",
+        },
+      },
+      {
+        titre: "Ses 20 % d'écarts, et ce qu'ils lui ont appris",
+        paragraphes: [
+          "Roland se décrit comme quelqu'un qui aime modéliser ce que font les autres, et il concède que dans environ vingt pour cent des cas il a fait autrement que ce qu'on lui conseillait, en se disant que son cas était différent.",
+          "Son aveu est celui qu'on lit rarement dans un témoignage : ==sur ces vingt pour cent, il est presque toujours revenu à la méthode initiale.== Il en tire un conseil direct pour qui regarde. C'est exactement l'erreur que [Cédric décrit sur son site et ses articles](/resultats/cedric).",
+        ],
+        citation: {
+          texte:
+            "Ne perdez pas trop de temps à vous dire que vous, c'est différent. La méthode, vous pouvez la suivre à la lettre.",
+          qui: "Roland",
+        },
+      },
+      {
+        titre:
+          "Le mastermind est en pause, et c'est le consulting privé qui l'a remplacé",
+        paragraphes: [
+          "Comme pour [le second entretien de Corentin](/resultats/corentin-mastermind), un point à savoir avant de chercher à rejoindre ce dont parle Roland : ==le mastermind n'est plus proposé.== Il est en pause, et c'est l'accompagnement en tête-à-tête, le consulting privé, qui a pris sa place.",
+          "Son conseil à ceux qui hésiteraient reste transposable, parce qu'il porte sur une crainte et non sur un format : il dit de ne pas venir si l'on veut réussir en écrasant les autres, et de venir si l'on a peur de ne pas être à la hauteur. Si vous voulez en parler, [l'appel découverte est gratuit](https://www.funnels.club/appel?el=site).",
+        ],
+        citation: {
+          texte:
+            "Si vous voyez grand et que vous vous dites que ce n'est pas pour vous parce que vous êtes trop petit, vous vous trompez : c'est pour vous.",
+          qui: "Roland",
+        },
+      },
+    ],
+    transcription: [
+      {
+        qui: "Rémy",
+        texte:
+          "Salut Roland, merci d'avoir accepté mon invitation pour refaire le point. On avait déjà fait une interview ensemble il y a un petit moment maintenant. C'était il y a combien de temps, d'ailleurs ? Quasiment un an, un an et demi ?",
+      },
+      {
+        qui: "Roland",
+        texte: "Il y a plus d'un an, je pense, il y a un an et demi.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Et d'ailleurs, je pense que c'est l'une des interviews les plus vues que j'aie faites. Je crois qu'elle a plusieurs milliers de vues, peut-être presque cinq mille. Donc je trouve que c'est intéressant de refaire le point : qu'est-ce qui s'est passé depuis ? Est-ce que tu te rappelles à quel niveau de business tu étais il y a un an, un an et demi ?",
+      },
+      {
+        qui: "Roland",
+        texte:
+          "On avait passé la barre des dix mille euros de chiffre d'affaires par mois, il me semble. On avait atteint une première étape, celle de pouvoir avoir un programme qui tournait, qui était commercialisé, qui avait une certaine proportion à se développer. Mais on était sur des balbutiements, on va dire, de l'atteinte de certains objectifs, et en même temps, certains mois, on ne les atteignait pas, avec beaucoup d'inquiétude encore, et quelques problématiques à solutionner.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Juste pour redonner un peu de contexte : quand tu nous avais rejoints à la base dans Funnels Club, tu avais déjà une activité. Est-ce que tu peux dire de quel modèle à quel modèle tu étais passé ?",
+      },
+      {
+        qui: "Roland",
+        texte:
+          "Effectivement, je travaille dans le monde du BTP depuis plusieurs dizaines d'années, et en deux mille treize je suis devenu consultant pour le monde du BTP, et je faisais tout ça en présentiel. C'est-à-dire que je travaillais auprès des artisans du bâtiment en allant chez eux, dans leur entreprise. En deux mille vingt-deux, j'ai voulu accompagner plus d'entreprises, parce que j'étais à la limite de ce que je pouvais faire physiquement : je faisais plus de mille, mille cinq cents kilomètres par semaine, et je n'arrivais pas à répondre à la demande du monde du BTP, qui cherche à se former et à se professionnaliser sur la gestion d'entreprise.",
+      },
+      {
+        qui: "Roland",
+        texte:
+          "Et c'est là que j'ai eu l'idée. Pour être transparent, simple et honnête : retrouver une vie personnelle, et pouvoir accompagner plus d'entreprises. Ça m'embêtait de refuser d'aider les artisans du bâtiment, parce que ça me passionne, et en même temps je n'avais plus de vie de famille, je n'avais plus rien. Donc j'ai pris la décision. J'ai mis six, huit mois à chercher comment j'allais faire ça, et à te scanner, ce que j'avais déjà dit dans le précédent témoignage. Mais je pense que c'est important de le redire : toute la réticence que j'avais, ce n'était pas de la réticence, c'était la crainte de me faire avoir, de me faire accompagner par la mauvaise personne. Par mauvaise personne, j'entends quelqu'un qui ne m'accompagnerait pas à l'atteinte de mes objectifs, parce que je suis très performeur, j'aime fixer des objectifs et les atteindre. Et aussi quelqu'un qui partage mes valeurs, parce que j'ai cinquante ans cette année, et plus je vieillis, plus mes valeurs sont puissantes et moins j'ai envie de transiger avec elles.",
+      },
+      {
+        qui: "Roland",
+        texte:
+          "Et c'est comme ça que je suis rentré dans ton programme Funnels Club, en prenant le pari que tu étais la bonne personne. Dans cette première arrivée sur Funnels Club, j'ai pu structurer, dématérialiser mon offre. J'ai pu structurer mon présentiel en distanciel. Autant te dire que dans mon monde de la gestion d'entreprise dans le BTP, il y a déjà vraiment peu de monde. Et en plus, quand on dit qu'on va faire ça en distanciel avec des artisans qui parfois ont encore du mal à manipuler l'informatique, je passais pour un fou. Mais tu ne m'as pas pris pour un fou, au contraire, tu m'as accompagné à déployer ça correctement, très professionnellement, avec ton équipe.",
+      },
+      {
+        qui: "Roland",
+        texte:
+          "Je tiens aussi à le dire, parce que moi je suis à Chambéry, en Savoie, à mon âge, je ne suis pas entouré de gens qui sont sur internet, donc je suis vraiment isolé dans mon monde. Et en plus, j'étais encore plus isolé dans cette stratégie de déploiement internet. Personne autour de moi. Même si je suis bien marié, très heureux, et c'est sûrement grâce à elle que je réussis, mon épouse m'a toujours soutenu, mais personne ne la comprenait et personne ne pouvait véritablement communiquer avec moi sur ce sujet-là. Donc ça m'a beaucoup aidé, dans Funnels Club, de me sentir faire partie d'un groupe. Mais aussi et surtout que ton équipe et toi m'ayez vraiment accompagné à structurer mon offre, ce qui m'a permis d'atteindre des premiers résultats. Je faisais rentrer deux, trois artisans par mois, donc j'étais ravi, parce que c'était un volume que je voulais atteindre. Et puis j'ai réussi à développer un vrai business, qui aujourd'hui me fait vivre, et qui me permet de faire vivre d'autres personnes.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Funnels Club, c'était plutôt ça, finalement : restructurer le business, créer cette offre, fixer les premiers tarifs, mettre en place la base. Qu'est-ce qui a fait qu'à un moment donné tu t'es dit que tu avais besoin d'aller plus loin ? C'était à quel moment dans le business, où tu t'es dit que tu étais un peu bloqué ?",
+      },
+      {
+        qui: "Roland",
+        texte:
+          "Je ferai l'image d'un véhicule. J'étais à pied, et je trouvais une voiture, et on l'appelle Funnels Club. Elle me permet d'être confortable dedans, de me déplacer plus rapidement, d'aller plus loin, ce que permet une voiture par rapport au fait d'être à pied. Le truc, c'est qu'à un moment donné, mes objectifs m'ont obligé à me dire : Roland, tu veux faire les vingt-quatre heures du Mans, tu as ce niveau d'exigence, tu veux accompagner encore plus d'artisans, tu veux développer ton business. Parce que j'avais une vraie stratégie de récupérer ma femme dans mon boulot. Je ne voyais pas l'intérêt de réussir en distanciel, de me libérer physiquement d'un lieu de travail, et que mon épouse ait toujours un boulot salarié dans la fonction publique. J'avais vraiment cet objectif-là. J'avais envie d'accompagner encore plus, mais j'étais en voiture familiale. C'est une belle voiture, ça marche très bien, ça permet plein de choses, mais j'avais besoin d'un véhicule supérieur. Non pas que le véhicule d'avant était mauvais, pas du tout : j'aurais pu perdurer comme ça avec moins d'objectifs personnels et moins d'ambition, c'était parfait. Sauf que là, vu mes ambitions, il fallait quelque chose de plus efficient, de plus personnalisé et de plus puissant.",
+      },
+      {
+        qui: "Rémy",
+        texte: "Et qu'est-ce qui est plus puissant, du coup ?",
+      },
+      {
+        qui: "Roland",
+        texte:
+          "Ce qui est plus puissant, c'est déjà l'état d'esprit des gens qui sont dedans. Je reste sur mon image de véhicule : quand tu es en voiture familiale et que tu arrives avec tout le monde, les gens te disent : attends, regarde, tu pourrais avoir ça comme voiture, tel réglage. Et en fait, tu es tiré vers le haut, juste par le fait d'y entrer. Ce que j'ai trouvé, c'est déjà de l'ultra-personnalisation. J'ai trouvé Rémy Jupille ultra investi auprès de chacun, puisqu'on est un tout petit groupe. J'ai trouvé des gens qui étaient à mon niveau, et attention, ce n'est pas de la fausse humilité : à mon niveau, ça veut dire au niveau des ambitions qu'on a. Ce n'est pas tant de savoir si je fais dix mille, douze mille, cent mille, on s'en fout de ce qu'on brasse. Je reviens sur les valeurs : je retrouve aussi des gens qui ont les mêmes valeurs, c'est-à-dire développer un business, mais aussi et surtout satisfaire nos clients. S'il y a une chose que j'aime à bosser avec toi depuis deux mille vingt-trois, c'est ces valeurs-là : la priorité n'est pas de faire de l'argent, mais d'être utile pour la société et pour les gens pour qui on travaille.",
+      },
+      {
+        qui: "Rémy",
+        texte: "Quel élément t'a le plus marqué ?",
+      },
+      {
+        qui: "Roland",
+        texte:
+          "Le présentiel. Je suis quelqu'un qui pense toujours que je vais y arriver, mais j'ai toujours l'impression que les autres sont meilleurs que moi, que finalement je ne suis pas à la hauteur. C'est une inquiétude que j'ai vis-à-vis des autres. Quand je regarde dans la glace, je me dis : tu vas tout défoncer, lâche rien. Et ce qui s'est passé, c'est qu'en rentrant, j'ai vu la réussite des autres avant la mienne, bien avant la mienne, en me disant : putain, ils sont tous meilleurs. Ce sont des stars, les mecs ont déjà des centaines de milliers d'abonnés à droite à gauche. Et je me disais : qu'est-ce que tu fous là-dedans ?",
+      },
+      {
+        qui: "Roland",
+        texte:
+          "Et puis arrive le présentiel, que tu poses là où tu habites, à l'île Maurice. Franchement, si tu l'avais fait dans la zone industrielle de Chambéry ou dans un endroit paumé de la France, je n'aurais pas réfléchi, je serais venu. Mais là, tu m'as posé face à deux problèmes : un, il faut que je dépense de l'argent pour aller là-bas, même si le mastermind en fait partie, il y a quand même le billet. Et deux, est-ce que je mérite d'aller sur une île paradisiaque en plein développement de business ? Je disais à ma femme que je n'avais pas le temps le samedi, pas le temps le dimanche, je bossais beaucoup. Et je n'avais pas l'impression d'avoir ma place là-bas. Vu que mes résultats étaient bons pour Funnels Club, mais débutants par rapport à un mastermind, je me disais : n'y va pas, tu vas dépenser de l'argent, tu n'es pas à la hauteur, tu ne devrais pas. Et toi, tu me dis toujours avec beaucoup de bienveillance : fais ce que tu veux, mais tu vas faire une erreur à ne pas y aller, parce que tu as toute ta place.",
+      },
+      {
+        qui: "Roland",
+        texte:
+          "Je suis venu, évidemment, j'ai pris le billet. On peut faire une parenthèse pour rire : vous étiez dans un bel endroit, et moi j'avais trouvé, je pense, la cabane la moins chère de l'île Maurice. Je dormais dans un endroit où je me disais : je ne mérite pas plus. Mais vous m'avez accepté tel quel. On a partagé des super moments, j'ai vu de très belles personnes, c'était exceptionnel. Mais ce qui était encore plus magique, c'est qu'on a fait ça en décembre deux mille vingt-quatre. Je suis revenu fin décembre, et en janvier j'ai réaligné tout ce que j'avais capté, compris, vu et modélisé sur place avec vous. J'ai fait ça durant janvier, et à partir de février, j'ai explosé les chiffres. Je ne sais même pas si je n'ai pas fait fois deux par rapport à ce que je faisais avant. Donc si tu me demandes le fait marquant, c'est ce mastermind auquel je ne voulais pas venir, parce que un, je ne le méritais pas, deux, il fallait dépenser de l'argent que j'estimais ne pas avoir, et trois, l'explosion de mon modèle économique à l'issue.",
+      },
+      {
+        qui: "Rémy",
+        texte: "Qu'est-ce qui explique ça, selon toi ?",
+      },
+      {
+        qui: "Roland",
+        texte:
+          "Le fait de vous voir. Le distanciel permet de capter des choses que le présentiel met en exergue. Ce que j'ai vu sur place, c'est en fait que vous n'aviez rien d'exceptionnel, pardon de le dire comme ça, Rémy. Vous étiez exceptionnels, mais vous n'aviez rien d'exceptionnel. Vous faites des résultats, et puis il y en avait aussi, au mastermind, qui faisaient des résultats plus petits que les miens. Je me suis dit : ah tiens, finalement, je ne suis peut-être pas si nul et j'ai peut-être ma place. Et surtout, on a pu partager. Au-delà des modules de formation, on passait des journées à bosser. Pour ceux qui se disent qu'on n'a rien foutu : on attaquait à huit ou neuf heures, et on finissait tard, on ne plaisantait pas, ça a vraiment bossé. Mais en dehors de ça, les échanges, le partage et les conseils de ceux qui ont trois temps d'avance, qui avaient beaucoup plus de chiffre d'affaires et beaucoup plus de clients que moi, dont toi : ça, c'est un booster fabuleux.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Je vois très bien ce que tu veux dire, parce que moi, le mastermind, je l'avais imaginé aussi en présentiel, parce que j'en ai moi-même fait avant. Le fait de voir quelqu'un en ligne, ça paraît loin, tu dis que ce sont des stars. Et quand tu le vois en vrai, tu te dis : c'est un mec normal ou une femme normale, et du coup ça rend les choses concrètes.",
+      },
+      {
+        qui: "Roland",
+        texte:
+          "Je t'ai vu arriver en voiture, et je ne sais plus laquelle tu avais, mais une voiture toute simple. Moi j'avais loué une voiture pareille, un truc tout simple. Mais on est arrivés sur un très bel endroit, et c'est ça qui m'a plu : tu ne t'es vraiment pas foutu de notre gueule dans le lieu, dans l'accueil, dans la générosité de l'accueil. Et pour autant, on était sur le parking, tu aurais pu nous mettre sur le parking d'un hôtel bon marché avec nos bagnoles et habillés comme on était, c'était pareil. Ça m'a tout de suite plu. Je me suis dit : des gens simples, qui ne se prennent pas la tête, mais qui font des choses exceptionnelles. C'était parfaitement ce que je voulais.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Et donc, pour parler de tes résultats : qu'est-ce qui a changé depuis la dernière interview ? Tu peux parler des choses dont tu as envie, mais tu avais d'autres objectifs, comme tu parlais de ta femme.",
+      },
+      {
+        qui: "Roland",
+        texte:
+          "Je vais scinder ta question en trois, par priorité. La première chose, c'est que j'ai une communauté d'artisans du bâtiment que j'adore, qui s'est développée énormément. J'ai beaucoup de clients, mais j'ai surtout beaucoup de clients satisfaits. Ce que j'ai réussi à modéliser de ce que tu m'as appris, c'est vraiment cette satisfaction client en première ligne. Et on y trouve de la reconnaissance, il ne faut pas se mentir. Il y a beaucoup de reconnaissance aussi à voir les artisans que j'accompagne réussir. J'ai même la chance d'avoir un influenceur dans le BTP qui communique beaucoup, et qui dit à quel point sa vie a changé depuis qu'on bosse ensemble. Et je vois ça avec beaucoup de monde : tous les clients de mon programme ont des évolutions, progressent financièrement, progressent humainement. C'est ma première satisfaction.",
+      },
+      {
+        qui: "Roland",
+        texte:
+          "Deuxième chose : j'avais un rêve, c'était de travailler avec ma femme. J'arriverais un jour à faire que mon épouse puisse avoir sa place dans mon modèle économique, encore plus quand on est sur des modèles comme les nôtres, digitaux et entièrement délocalisables. Et là, depuis septembre deux mille vingt-cinq, elle travaille avec moi à plein temps, et elle a un salaire. Pour qu'on soit très clair, elle gagne autant qu'elle gagnait avant dans la fonction publique, et je compte d'ailleurs à ce qu'elle gagne plus. Elle a sa place, elle travaille avec moi, et on s'éclate à bosser ensemble. Et ce que je n'avais pas vu dans mes objectifs, c'est que j'ai réussi à embarquer mon fils aussi dans l'histoire, qui aujourd'hui s'occupe de tout mon achat média, de tout mon community management, de tous mes réseaux sociaux. Aujourd'hui, je travaille avec ma femme et mon fils dans quelque chose qui est efficace pour des clients totalement satisfaits. Qu'est-ce que tu as envie de plus ?",
+      },
+      {
+        qui: "Roland",
+        texte:
+          "La troisième chose, on peut parler d'argent, puisqu'il faut arrêter, en France, c'est tabou, mais il n'y a pas de raison. Pour donner une idée : avant d'entrer dans Funnels Club, je faisais zéro euro de chiffre d'affaires en distanciel. En étant dans Funnels Club, je faisais quinze, vingt mille, quelque chose comme ça, je ne m'en rappelle plus honnêtement. Là, on est entre cinquante et soixante-dix par mois de chiffre d'affaires. Et on ne va pas en parler parce que c'est confidentiel, mais ce qu'il faut dire aussi, c'est qu'entre faire du chiffre d'affaires et faire de la rentabilité, il y a quelque chose de très pertinent. On arrive à être rentable dans l'évolution d'un chiffre d'affaires. Ce n'est pas toujours vrai avec certains modèles économiques, où plus tu fais de chiffre d'affaires, plus tu fais de dépenses. Nous, on a la chance de pouvoir augmenter notre chiffre d'affaires et augmenter nos marges. Donc aujourd'hui, je vis totalement de ce modèle, je paye le salaire de mon fils et de ma femme, j'ai la chance d'avoir deux collaborateurs qui font le closing, et une communauté qui est hyper heureuse de travailler avec nous.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Comme je dis toujours, c'est aussi parce que tu as fait ce qu'il faut : tu as appliqué à la lettre, tu dupliques.",
+      },
+      {
+        qui: "Roland",
+        texte:
+          "Merci, et ta phrase me permet de venir sur un sujet pour ceux qui nous écoutent, et qui ne fait pas plaisir à dire. Par défaut, j'aime modéliser ce que font les gens, et je ne suis pas trop mauvais à le faire, c'est une de mes compétences : je peux discuter avec n'importe qui et voir comment ce qu'il me dit peut être utile dans ma propre évolution. Ce dont je peux témoigner, c'est que dans quatre-vingts pour cent des cas, j'ai appliqué ce que tu as dit à la lettre. Et dans les vingt pour cent, je me suis dit : là, c'est parce que c'est Rémy, là, c'est son business et pas le mien. Et je suis parti dans d'autres façons de faire. Et ça va me piquer un peu de le dire comme ça, mais je pense que dans ces vingt pour cent où j'ai fait autrement, il y a quatre-vingt-dix-neuf pour cent des cas où je suis revenu à faire ce que tu avais dit de faire. Donc j'ai envie de témoigner pour ceux qui regarderaient cette vidéo : ne perdez pas trop de temps à vous dire que vous, c'est différent, que vous, c'est unique. Votre accompagnement, votre programme, vous le ferez comme vous voulez, évidemment. Par contre, la méthode que Rémy Jupille donne, vous pouvez la suivre à la lettre. C'est en la suivant à la lettre que j'arrive tous les mois à dépasser mes chiffres et à continuer à progresser.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Il y a encore des fois des petits moments où tu essayes quand même, mais c'est la nature de l'entrepreneur : tu testes, tu as envie de tester, c'est normal. On n'est pas des moutons, on est des chefs d'entreprise.",
+      },
+      {
+        qui: "Roland",
+        texte:
+          "Je pense qu'on s'apporte beaucoup, justement parce qu'on fait tous un petit peu ça. Mais honnêtement, si on regarde les proportions, on le fait à cinq, dix pour cent : à quatre-vingt-dix pour cent on te suit, et à dix pour cent on va tous faire nos tests. Et le fait de les faire, on revient avec beaucoup d'humilité, parce qu'il y a ce partage de valeurs. On se dit : là, ça a réussi, là, ça a raté. On te redemande comment revenir dans le droit chemin. Concrètement, ça permet aussi de voir les erreurs et les bonnes choses que font les autres. Franchement, je suis encore surpris aujourd'hui : il n'y a pas de barrières. La rentabilité, quelle publicité tu as utilisée, quel truc : on partage cent pour cent, on ne se voit pas comme des concurrents, alors qu'on a parfois des modèles qui sont proches dans l'acquisition client. Il y a vraiment cette notion de transparence absolue, qui nous permet de continuer à modéliser et de progresser grâce aux autres.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Tu l'as vu dès le départ dans les valeurs : l'idée, c'est que moi j'apporte ma vision, mais je veux absolument que tout le monde amène sa compétence, son expertise, ses domaines de compétence. Je suis sûr que tu as dû parfois ajuster des choses en fonction non pas de ce que moi j'ai dit, mais de ce qu'un autre membre a dit et qui fonctionnait très bien pour lui. Ce qui peut être intimidant, parce que tu te demandes si tu es légitime pour rejoindre le groupe, mais il y a un vrai cerveau collectif.",
+      },
+      {
+        qui: "Roland",
+        texte:
+          "Aujourd'hui, je ne vais pas dire que je fais partie des vieux, mais un peu, tout doucement. Et je vois les nouveaux arriver, et je pense à François, qui est juste génial, ce gars. Il arrive en disant : pardon les gars, excusez-moi de vous déranger, de vous poser une question. Mais non : le matin, je me connecte, j'ai toujours la même routine, je vois, on répond, on est trop contents de voir quelqu'un qui débarque avec un chiffre d'affaires deux ou trois fois moins élevé que le nôtre, en se disant : le jeune là, il va venir avec tout. On a envie d'embarquer tout le monde dans cette réussite.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Juste pour finir : qu'est-ce que tu dirais à un membre de Funnels Club, ou à quelqu'un qui a déjà un niveau de business à cinq, dix, quinze mille par mois, s'il hésitait à rejoindre un groupe comme celui-là ?",
+      },
+      {
+        qui: "Roland",
+        texte:
+          "Je vais refaire la même que je t'avais faite sur Funnels Club : je lui dirais effectivement d'hésiter dans un premier temps, pour bien se poser les bonnes questions. Si tu fais quinze, vingt mille, ou si tu hésites, mais que tu es quelqu'un qui veut garder pour soi, qui veut absolument réussir en écrasant les autres, ou qui n'a pas les valeurs qu'on transmet, alors n'y venez pas. Par contre, si vous avez ces valeurs et que vous avez cette crainte de ne pas avoir votre place ou de ne pas y arriver, alors là vous faites une erreur. Parce que comme moi j'ai failli faire l'énorme erreur d'aller faire ce mastermind. N'ayez pas cette crainte-là : un, vous aurez votre place ; deux, vous aurez la chance d'être avec des gens qui n'ont rien d'exceptionnel, mais qui font des choses exceptionnelles. Mon expert-comptable regarde mon modèle économique et me dit : mais qu'est-ce que tu es en train de nous faire là ? Donc ça va vous aspirer naturellement.",
+      },
+      {
+        qui: "Roland",
+        texte:
+          "N'hésitez pas, parce que si vous voyez grand et que vous avez de la détermination, vous êtes pleinement au bon endroit. C'est bienveillant, et ce n'est justement pas un concours d'ego. Personne ne sait finalement quel chiffre d'affaires fait l'autre, dans l'absolu. C'est la dernière des questions qu'on se pose. Ce n'est pas un concours de qui a le plus gros, on s'en fout littéralement. C'est : qui pourra t'aider ? Comment on pourra t'aider ? Comment tu vas pouvoir progresser ? Donc n'hésitez pas, et si vous vous dites que ce n'est pas pour vous parce que vous êtes trop petit, vous vous trompez : c'est pour vous.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Merci beaucoup en tout cas, Roland, pour ta franchise. Tu parles comme tu parles d'habitude, et je pense que c'est ça aussi que les gens aiment bien : tu es franc. C'est ce que j'aime aussi dans ces interviews.",
+      },
+      {
+        qui: "Roland",
+        texte: "Avec plaisir, Rémy. Merci, à très bientôt.",
+      },
+    ],
+    autreEntretien: {
+      slug: "roland-buffet",
+      libelle:
+        "Le premier entretien de Roland : 109 778 € en six mois, et le passage du présentiel au distanciel",
+    },
+  },
+  /* **Le mastermind Mentium n'est plus proposé : il est en pause, et le
+     consulting privé l'a remplacé.** Même avertissement que sur les deux autres
+     pages qui en parlent, dit dès le chapô et repris en dernière section.
+
+     **C'est le même François que `/resultats/francois`, neuf mois après.** La
+     première page raconte le passage de douze produits à un seul ; celle-ci
+     raconte ce que ça a donné sur une année. C'est Rémy qui mène cet
+     entretien-ci, alors que le premier était mené par Geoffrey.
+
+     **Un écart entre les deux entretiens, et il est signalé plutôt que
+     lissé.** En mai 2025, François annonçait 8 300 € facturés ; ici, de
+     mémoire, il dit « neuf mille, dix mille euros, quelque chose comme ça ».
+     C'est un souvenir approximatif, et il le formule comme tel. L'article garde
+     son approximation et renvoie à la première page, qui porte le chiffre
+     relevé sur le moment. */
+  {
+    id: "755btwnbr4",
+    slug: "francois-mastermind",
+    titre:
+      "Avis mastermind : François Daoud, de 4 000 € à 17 000 € par mois avec dix fois moins de clients",
+    titrePage: "Avis mastermind : François Daoud, 17 000 € par mois",
+    description:
+      "Neuf mois après son premier entretien, François Daoud raconte son mois de rentrée à 17 000 €, et pourquoi il a dix fois moins de clients qu'avant.",
+    afficheAlt:
+      "François Daoud en entretien vidéo avec Rémy Jupille, chacun depuis son bureau",
+    chapo:
+      "François Daoud forme des guitaristes. Neuf mois après [son premier entretien](/resultats/francois), il raconte ce qu'une seule offre à trois mille cinq cents euros a changé, et ce qu'il pense aujourd'hui de ses anciens prix. Le mastermind dont il parle est en pause : c'est le consulting privé qui l'a remplacé.",
+    sections: [
+      {
+        titre: "Trois modèles en huit ans : l'école, les petits produits, le programme",
+        paragraphes: [
+          "François a d'abord tenu une école de musique en région parisienne : une équipe de professeurs, près de cent élèves par semaine, des événements, un spectacle de fin d'année. L'année se vendait neuf cents euros, ==pour cinquante-cinq mille euros de charges annuelles==, ce qu'il donne comme l'une des grandes raisons de son arrêt.",
+          "Il est ensuite passé aux formations en ligne, vendues à la carte : une dizaine de modules entre quarante-neuf et cent dix-neuf euros, avec une chaîne YouTube pour y amener les gens. Aujourd'hui, il dirige un programme intensif qui vise à rendre un guitariste autonome en moins de neuf mois.",
+        ],
+        citation: {
+          texte:
+            "Mon panier moyen tournait autour de cent euros. Ça fait presque quelque chose de le dire maintenant, vraiment.",
+          qui: "François",
+        },
+      },
+      {
+        titre: "Le plafond d'un an, et ce qu'il venait chercher",
+        paragraphes: [
+          "Son blocage a duré près d'un an : ==trois mille cinq cents à quatre mille euros par mois==, sans parvenir à monter. Il précise que c'était déjà bien pour de la prestation entièrement en ligne, après une activité à local et à charges.",
+          "Ce qu'il venait chercher était précis, et ce n'est pas ce qu'il a trouvé. Il envoyait ses courriels à la main, faisait des promotions de temps en temps, et voulait automatiser. Il ne soupçonnait pas les deux choses qui allaient réellement changer son chiffre : ==vendre beaucoup plus cher, et simplifier.==",
+        ],
+        citation: {
+          texte:
+            "Je venais chercher des stratégies pour automatiser au maximum. Et en fait, j'ai appris mille et une choses que je ne soupçonnais pas.",
+          qui: "François",
+        },
+      },
+      {
+        titre: "De douze offres à une seule, et de 100 € à 3 500 €",
+        paragraphes: [
+          "Le changement qu'il cite en premier est celui de l'offre : il a compacté dix, onze, douze programmes en un seul, vendu aujourd'hui entre trois mille et trois mille cinq cents euros. C'est la remarque en coaching qu'il raconte dans [son premier entretien](/resultats/francois), et qu'il a appliquée sans négocier.",
+          "L'arithmétique qu'il en tire est celle qui frappe le plus : ==un seul client d'aujourd'hui vaut ce que trente à cinquante clients lui rapportaient en un mois.== Il ajoute le second chantier, le tunnel complet, de YouTube ou de la publicité jusqu'à l'appel, où quatre-vingt-dix pour cent du travail d'explication est déjà fait quand la personne décroche.",
+        ],
+        citation: {
+          texte:
+            "Au lieu d'avoir dix, onze, douze offres, j'ai tout compacté en une seule et même offre.",
+          qui: "François",
+        },
+      },
+      {
+        titre: "Ce qu'il croyait impossible : vendre 3 500 € des cours de guitare",
+        paragraphes: [
+          "Il est franc sur sa propre croyance : il ne pensait pas que quelqu'un mettrait un gros budget pour se perfectionner à la guitare. Et il explique d'où venait ce formatage : il avait vendu une année entière de cours en présentiel, événements compris, neuf cents euros.",
+          "Ce qu'il constate aujourd'hui est l'inverse. Ses élèves sont plus motivés, les résultats sont là, et des gens qui ne le connaissaient pas trois semaines plus tôt rejoignent le programme après une publicité. [Charlotte a fait exactement la même découverte](/resultats/charlotte) en passant du présentiel au distanciel.",
+        ],
+        citation: {
+          texte:
+            "Je me disais : qui va s'inscrire à un tel programme pour apprendre de la guitare ? Mais derrière, c'était moi qui voyais les choses de travers.",
+          qui: "François",
+        },
+      },
+      {
+        titre: "Pourquoi le distanciel bat son présentiel d'avant",
+        paragraphes: [
+          "La question lui est posée franchement : parmi ses trois modèles, lequel donne les meilleurs résultats à ses élèves ? Sa réponse est nette, ==et ce n'est pas le présentiel.==",
+          "Il garde un rendez-vous en direct chaque semaine, qui reproduit le cours hebdomadaire d'avant. Ce qu'il gagne en plus, ce sont les outils numériques d'apprentissage, impossibles en salle. Et il décrit un effet auquel il ne s'attendait pas : chaque semaine, il corrige le passage du programme où un élève a buté, donc ==le programme se perfectionne tout seul== pour les suivants.",
+        ],
+        citation: {
+          texte:
+            "Cette amélioration continue du programme, ça, c'est surpuissant.",
+          qui: "François",
+        },
+      },
+      {
+        titre: "Ses résultats sur un an : de 4 000 € à un mois de rentrée à 17 000 €",
+        paragraphes: [
+          "Il rejoint le programme en avril 2025, le suit entièrement en un mois, et dès mai son offre et son tunnel sont en place. Il évalue ce premier mois à neuf ou dix mille euros, de mémoire ; le chiffre relevé sur le moment était de [huit mille trois cents euros facturés](/resultats/francois). Juin dans les mêmes eaux, juillet et août plus calmes, à six mille.",
+          "Puis vient septembre 2025, sa première rentrée avec le nouveau système : ==dix-sept mille euros sur le mois==, soit cinq à six mois de ce qu'il faisait avant, en quatre semaines. Et il souligne le point qui compte : deux à quatre clients par mois au lieu de trente à cinquante.",
+        ],
+        citation: {
+          texte:
+            "Ça faisait deux ans que je plafonnais à trois mille cinq cents. Quand tu fais dix-sept mille euros, c'était presque violent.",
+          qui: "François",
+        },
+      },
+      {
+        titre: "Ce que le mastermind a ajouté, et son curseur d'aujourd'hui",
+        paragraphes: [
+          "C'est ce mois de septembre qui l'a décidé à aller plus loin. Ce qu'il en retient tient en trois choses : se retrouver entre membres qui ont déjà installé un système à plusieurs dizaines de milliers d'euros, le plan d'action monté à son arrivée, et le soutien pendant les moments de doute, qu'il reconnaît avoir eus.",
+          "Son déclic technique est la publicité à plus gros budget, qui lui faisait très peur. Et il mesure le chemin par une boutade : février est un mauvais mois, ==il n'a fait que treize mille cinq cents euros.== Octobre à l'équivalent de septembre, décembre au-dessus, janvier à dix mille. Son seuil bas est devenu dix mille euros, et il vise vingt à trente mille.",
+        ],
+        citation: {
+          texte:
+            "Ce mois de février, c'est un mauvais mois pour moi, je n'ai fait que treize mille cinq cents euros. C'est pour montrer que le curseur a quand même vachement évolué.",
+          qui: "François",
+        },
+      },
+      {
+        titre:
+          "Le mastermind est en pause, et ce qu'il dit à ceux qui vendent trop bas",
+        paragraphes: [
+          "Comme pour [Corentin](/resultats/corentin-mastermind) et [Roland](/resultats/roland-buffet-mastermind), à savoir avant de chercher à rejoindre ce dont parle François : ==le mastermind est en pause==, et c'est le consulting privé en tête-à-tête qui l'a remplacé.",
+          "Ce qu'il laisse en dernier ne porte pas sur un format mais sur une question qu'il se pose à lui-même, en repensant à ses offres à quatre-vingts euros. Si elle vous parle, [l'appel découverte est gratuit](https://www.funnels.club/appel?el=site), et [les autres membres racontent la même bascule de prix](/resultats).",
+        ],
+        citation: {
+          texte:
+            "Comment est-ce qu'on peut vivre en vendant des produits aussi peu chers, mais surtout en dévalorisant autant son travail ?",
+          qui: "François",
+        },
+      },
+    ],
+    transcription: [
+      {
+        qui: "Rémy",
+        texte:
+          "Salut François, merci beaucoup d'avoir accepté mon invitation, ça me fait très plaisir de refaire le point. Ce n'était pas moi qui avais fait ton interview précédente. Est-ce que tu peux rapidement dire ce que tu fais, le domaine dans lequel tu es ? Et ça peut être intéressant de faire une petite rétrospective : tu es venu à nous, tu avais déjà une activité, ensuite tu es passé par Funnels Club, et ensuite le mastermind.",
+      },
+      {
+        qui: "François",
+        texte:
+          "Bien sûr. Alors, François Daoud, j'ai fondé la Guitare Pro Académie. C'est un programme de formation intensif à accès en direct qui s'adresse à des guitaristes, dans le but de les rendre autonomes sur leur instrument. On a un parcours qui est très structuré, et ça s'adresse à ceux qui veulent atteindre un gros niveau en un minimum de temps, donc en moins de neuf mois. Le parcours d'apprentissage est balisé par plein de modules, c'est un parcours ultra complet.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Qu'est-ce que tu faisais avant de venir à nous, et qu'est-ce qu'on a commencé à mettre en place au début ? Raconte-le comme tu l'as vécu.",
+      },
+      {
+        qui: "François",
+        texte:
+          "Très simplement : avant de rejoindre Funnels Club puis le mastermind, qui sont une sorte de continuité, j'avais déjà commencé à travailler en ligne, à créer des programmes, des formations en ligne que les gens pouvaient suivre librement. Je vendais des petits programmes comme ça, l'équivalent d'un module à la fois. J'avais une dizaine de modules différents que je vendais. Et j'avais mon YouTube, où je faisais mon contenu gratuit, avec des appels à l'action qui redirigeaient vers mes petits programmes, que les gens achetaient un peu à la carte.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Est-ce que tu peux dire le prix d'un produit en moyenne, et le panier moyen ?",
+      },
+      {
+        qui: "François",
+        texte:
+          "C'était très bas. Le prix moyen tournait autour des quatre-vingts euros : j'avais des programmes à quarante-neuf euros, des programmes à cent dix-neuf euros. Ça fait presque quelque chose de le dire maintenant, vraiment. Le panier moyen était dans ces eaux-là : des fois, certains achetaient plusieurs programmes, un à soixante-dix-neuf euros, un à cent dix-neuf. Mais je tournais autour de cent euros de panier moyen.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "À cette époque, quand tu vendais ces offres à quelques dizaines d'euros, avec cent, cent vingt euros de panier moyen, quel a été ton problème ? Si à un moment tu nous as contactés, c'est que tu avais décelé quelque chose.",
+      },
+      {
+        qui: "François",
+        texte:
+          "Très clairement. Le problème que je rencontrais, et que j'ai traîné sur quasiment une année, c'est que je plafonnais en termes de chiffre d'affaires mensuel. J'étais déjà dans l'activité en ligne, et c'est génial, puisque avant ça j'étais sur une activité plus traditionnelle avec un local, une équipe, plein de charges. Là, j'avais un chiffre d'affaires qui tournait autour des trois mille cinq cents, quatre mille euros par mois, et c'était plutôt pas mal pour de la prestation de services uniquement en ligne. Mais je plafonnais là-dessus, et j'avais l'ambition d'aller chercher des chiffres bien supérieurs, comme six, sept, huit mille euros à l'époque.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Qu'est-ce que tu imaginais apprendre pour faire fois deux sur ton activité ? Et est-ce que ce que tu pensais qu'on allait te demander de faire, c'est ce qu'on a fait réellement ?",
+      },
+      {
+        qui: "François",
+        texte:
+          "C'est une excellente question, parce que je me souviens précisément de ce que je suis venu chercher. Je venais chercher des stratégies pour automatiser au maximum. À l'époque, je faisais mes courriels manuellement : j'avais mon YouTube, je captais des adresses, j'envoyais des messages à la main, je faisais des petites promotions de temps en temps. Et à force de faire ça, au bout de quasiment deux ans, je me disais que c'était dommage, parce qu'il y avait des séries de messages plus pertinentes que d'autres, et dommage de ne pas les renvoyer à chaque nouveau prospect. Donc je pensais rejoindre Funnels Club pour rejoindre, entre guillemets, Rémy Jupille, l'expert en tunnel de vente. C'est ce que je suis venu chercher. Et en fait, j'ai appris mille et une choses que je ne soupçonnais pas : l'histoire du high ticket, par exemple, donc vendre un programme calibré complètement différemment, quelque chose que je n'avais pas du tout en tête, et qui a complètement fait exploser mon chiffre d'affaires. Et le fait de simplifier vachement le business. Jamais je n'imaginais que simplifier changerait la chose à ce point.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Tu dirais que ce que tu faisais avant était plus compliqué que maintenant, avec moins de chiffre d'affaires ?",
+      },
+      {
+        qui: "François",
+        texte:
+          "Beaucoup plus compliqué, et beaucoup moins prévisible. Même si aujourd'hui, il faut encore que je me rode sur pas mal de choses, j'ai une idée de comment vont se passer les choses. À l'époque, j'avançais à vue, et comme rien n'était automatisé, il n'y avait pas de processus, je ne maîtrisais pas grand-chose finalement.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Qu'est-ce que tu as mis en place ? Deux ou trois vraies actions qui ont eu un gros impact, et les résultats que ça t'a permis d'obtenir d'abord dans Funnels Club.",
+      },
+      {
+        qui: "François",
+        texte:
+          "Les gros changements que j'ai apportés, c'est l'offre déjà. Au lieu d'avoir dix, onze, douze offres, j'ai tout compacté en une seule et même offre. Au lieu d'avoir plusieurs offres qui tournent autour de quatre-vingts, quatre-vingt-dix, cent euros en moyenne, j'ai une offre qui tourne aujourd'hui à trois mille, trois mille cinq cents euros. Donc ça change complètement la donne.",
+      },
+      {
+        qui: "Rémy",
+        texte: "Une vente, c'était ton chiffre d'affaires d'avant.",
+      },
+      {
+        qui: "François",
+        texte:
+          "C'est ça. Aujourd'hui, un client, c'est ce que je faisais en un mois à l'époque. Pas cent clients, mais plutôt trente, quarante clients pour faire ce qu'aujourd'hui j'ai avec un seul client. Donc ça change complètement la donne. Et ensuite, il y a tout le tunnel que j'ai installé, qui va de YouTube, à travers de l'organique ou de la publicité, jusqu'à l'appel téléphonique derrière, pour avoir les gens au téléphone et potentiellement les faire intégrer le programme. Tout ce qui est entre les deux a été automatisé, et c'est un truc de dingue. Les gens arrivent déjà prêts, déjà mûrs. Je n'ai pas besoin derrière de vendre quoi que ce soit : ils savent où ils en sont et ils sont prêts à se lancer, ou bien je me rends compte que pas vraiment. Une grosse partie du travail, quatre-vingt-dix pour cent du travail d'éducation et de filtre, a déjà été faite. Et ça, c'est énorme.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Quand tu étais arrivé, tu faisais de la création de contenu, tes clients venaient essentiellement de là. Il y en a beaucoup qui ont la croyance que si ça a marché pour toi, c'est parce que tu avais une audience. Est-ce que tu pensais qu'il était possible de vendre dans ton domaine des offres à plus de trois mille euros ? Et aujourd'hui, est-ce que quelqu'un qui ne t'a jamais connu et qui te découvre sur une publicité devient client ?",
+      },
+      {
+        qui: "François",
+        texte:
+          "Tout d'abord, non, évidemment que non, je ne pensais pas qu'une personne ne me connaissant pas, ou même me connaissant, serait prête à mettre un gros budget dans le perfectionnement de la guitare. Pour plein de raisons, d'ailleurs : j'étais moi-même formaté d'une certaine façon. Avant de travailler en ligne, j'avais monté une école de musique en région parisienne, avec une équipe de profs, une belle structure, pas loin de cent élèves qui venaient chaque semaine prendre leurs cours. On se démarquait bien de la concurrence, on était très impliqués, il y avait un bel esprit dans cette école, et l'année, on la vendait neuf cents euros. L'année incluait les cours hebdomadaires, plein d'événements, le spectacle de fin d'année, une plateforme en ligne aussi à l'époque. Donc il y avait tout ça pour neuf cents balles sur l'année. Et aujourd'hui, quand je propose de rejoindre un programme à trois mille, trois mille cinq cents euros, ça me semblait, qui va s'inscrire à un tel programme pour apprendre de la guitare ? Mais derrière, c'était moi qui voyais les choses de travers. Aujourd'hui, les élèves qui me suivent sont ultra motivés et ravis. Le programme est complètement différent, on a un contact quotidien avec les élèves, c'est très intensif, les résultats sont là, c'est juste magique. Mais tout ce stade-là était pour moi inenvisageable.",
+      },
+      {
+        qui: "François",
+        texte:
+          "Les gens me découvrent à travers une publicité, puis, comme il y a tout le tunnel automatisé, ils vont ensuite me découvrir à travers des vidéos YouTube ou les vidéos que j'ai préparées. Donc oui, même s'ils ne me connaissaient pas quelques jours auparavant, ils vont derrière rejoindre le programme. Il y en a plein qui m'ont rejoint et qui ne me connaissaient pas deux, trois semaines avant.",
+      },
+      {
+        qui: "Rémy",
+        texte: "Et qu'est-ce que ça t'a fait, la première fois que tu as réalisé ça ?",
+      },
+      {
+        qui: "François",
+        texte:
+          "C'est un changement de vie, c'est énorme. C'est énorme de se dire que tu as créé un système qui tourne tout seul, moi qui ai toujours énormément travaillé pour essayer de faire tenir le machin. Là, tu vois que ça tourne quasiment en automatique. YouTube est tellement immense, il y a tellement de gens intéressés, et pouvoir aller trouver des gens chaque semaine, puisque là j'ai plein de nouveaux élèves par mois, presque chaque semaine j'ai une inscription. Et là, je n'en suis qu'au début. C'était inimaginable il y a un ou deux ans.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Il y a un truc qui me tient à cœur et que je partage souvent : notre stratégie nous permet d'améliorer notre chiffre d'affaires et nos processus, avec beaucoup moins de clients. Mais ce qui me tient à cœur, c'est qu'on fait ce genre d'offre aussi pour nos clients, parce que ça permet d'avoir des personnes plus engagées, qui vont bien bosser, qu'on va pouvoir faire réussir. Toi, tu as connu le présentiel avec des clients qui payent neuf cents euros l'année, puis les petites offres où ils sont totalement autonomes, et maintenant cette version adaptée à internet. Parmi ces trois offres, laquelle t'a permis d'obtenir les meilleurs résultats pour tes clients ?",
+      },
+      {
+        qui: "François",
+        texte: "La dernière, la toute dernière.",
+      },
+      {
+        qui: "Rémy",
+        texte: "Même le présentiel n'était pas au niveau de ce que tu fais aujourd'hui ?",
+      },
+      {
+        qui: "François",
+        texte:
+          "Pas du tout, clairement pas. Avec l'offre actuelle, il y a ce côté visioconférence en direct une fois par semaine, donc j'ai mes élèves en direct, et ça reproduit un peu ce cours hebdomadaire qu'on avait en présentiel. Bon, je n'ai pas la vue à trois cent soixante degrés, mais dans ma posture, je n'ai aucun problème avec ça. Par contre, je bénéficie de toute la puissance du numérique, de plein de logiciels aujourd'hui adaptés à l'apprentissage en ligne, qui permettent de booster fois mille l'apprentissage des élèves. Il y a plein d'outils que je peux intégrer dans le parcours pédagogique, ce qui aurait été impossible à faire avec du cours uniquement en présentiel. L'intégration d'outils numériques, ça change complètement la donne.",
+      },
+      {
+        qui: "Rémy",
+        texte: "Tu l'avais anticipé, ça, ou pas ?",
+      },
+      {
+        qui: "François",
+        texte:
+          "Franchement, ça a été une réalisation assez surprenante. Je m'en rendais compte au fur et à mesure de l'expérience que prenait mon offre. Au début, j'ai fait une première version de mon parcours. À chaque fois qu'un élève passe dedans, il se confronte à des difficultés. Je ne vends qu'une seule offre : ce ne sont pas des cours comme en présentiel, où à chaque cours tu fais un truc différent, et ce ne sont pas non plus les dix modules différents de ma deuxième version en ligne, où tous les deux mois je sortais un nouveau module, et où on était presque dans de la consommation. Cette dernière version, on est vraiment sur du perfectionnement. J'ai un programme, et chaque semaine je l'améliore, parce que mes élèves passent par là et se confrontent à une difficulté, donc je peaufine ce passage. Et cette amélioration continue du programme, plus l'intégration de nouveaux outils, pour les élèves c'est le top. Je ne me rendais pas compte que les élèves suivants, quand ils passent par là, c'est ultra fluide pour eux. Donc le programme se perfectionne au fur et à mesure. Ça, c'est surpuissant.",
+      },
+      {
+        qui: "Rémy",
+        texte: "Quel résultat tu avais eu d'abord dans Funnels Club ?",
+      },
+      {
+        qui: "François",
+        texte:
+          "J'avais rejoint Funnels Club en avril deux mille vingt-cinq, et sur un mois je me suis fait tout le programme. Dès le mois de mai, le mois suivant, j'ai mis en place mon offre. Mon programme, mon tunnel, tout était fait en un mois. J'y suis allé à fond, et j'ai eu des résultats très rapidement : dès le mois de mai, j'avais déjà fait fois deux et demi sur mon chiffre, je tournais autour de huit mille, neuf mille, dix mille euros par mois. Je sais que le mois de mai, j'avais fait quatre ventes à deux mille euros, plus je vendais encore mes petites offres. Donc il y avait un mix des deux, je crois que j'ai fait neuf mille, dix mille euros facturés, quelque chose comme ça. Pour moi, ce sont des chiffres énormes, ça n'avait jamais été vu dans mon activité en ligne.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Tu n'avais jamais atteint ça, même avec des promotions, des pics de vente ? Jamais neuf mille sur trente jours glissants ?",
+      },
+      {
+        qui: "François",
+        texte:
+          "Non, jamais. Même en faisant des promotions. Dans l'école de musique, la rentrée c'était septembre, donc juste avant les vacances scolaires et en septembre, c'est là que j'avais les pics d'inscription, quatre-vingts, quatre-vingt-cinq pour cent du chiffre d'affaires était fait là. Donc potentiellement, oui, je faisais rentrer vingt mille euros à ce moment-là, peut-être plus, mais il fallait payer en dix fois. Et j'avais cinquante-cinq mille euros de charges annuelles, c'est très précis. Donc j'avais plein de choses compliquées. C'est d'ailleurs l'une des très grandes raisons pour lesquelles j'ai arrêté l'école. L'école avait huit ans, donc au bout de huit ans, faire vingt, vingt-cinq mille euros de chiffre d'affaires sur un ou deux mois dans l'année, ce n'est vraiment pas exceptionnel, ça vient à peine couvrir mes charges.",
+      },
+      {
+        qui: "François",
+        texte:
+          "Alors que quand j'ai créé mon offre, dès le premier mois, je fais huit, neuf, dix mille euros de chiffre d'affaires, donc ça, c'était mai. Juin, j'ai dû faire l'équivalent, entre six et dix mille euros. Juillet, août, c'était un peu plus calme, j'ai dû faire six mille euros en juillet, et août un très petit mois, six mille euros à tout casser. Donc on était déjà sur un autre niveau pour moi.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Avec beaucoup moins de clients, il ne faut pas l'oublier : les petits mois représentaient déjà une croissance de cent pour cent, mais en plus tu avais quasiment dix fois moins de clients.",
+      },
+      {
+        qui: "François",
+        texte:
+          "C'est ça. Je tournais en moyenne à deux à quatre clients par mois pour faire ces chiffres-là, là où je pouvais en avoir entre trente et cinquante selon le panier moyen du mois. Donc oui, c'est dix fois moins, clairement.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Je préfère le préciser : toi, tu avais déjà une activité, déjà un business. Je me rappelle très bien, on avait fait ton premier coaching dans Funnels Club, j'arrive et je te dis : bon François, toi tu vas faire une offre comme ci, comme ça. Et tu l'as tout de suite mis en place. C'est aussi ça qui fait que ça a fonctionné rapidement pour toi : je t'ai dit un truc, tu n'as pas négocié, tu l'as fait, même si ça te faisait peut-être un peu peur de passer de quatre-vingts à deux mille. Et ensuite, tu as commencé à mettre en place une nouvelle source d'acquisition en plus de ta chaîne YouTube ?",
+      },
+      {
+        qui: "François",
+        texte:
+          "Ouais, j'avais l'inertie de YouTube, j'avais commencé un peu plus sérieusement en septembre deux mille vingt-trois, donc j'ai l'inertie d'un an et demi à peu près. Et très rapidement, j'ai commencé à développer la publicité. J'étais bien accompagné là-dedans. J'ai commencé très gentiment avec un petit budget, puis petit à petit, j'avais des gens qui m'appelaient, qui ne me connaissaient pas, qui découvraient le truc. Donc petit à petit, tu as de plus en plus de monde qui t'appelle, et je mettais de plus en plus de budget dans la publicité. J'avais de plus en plus de personnes qui me rejoignaient, pas uniquement du côté de mes vidéos YouTube.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Qu'est-ce qui t'a donné envie d'aller un peu plus loin, et qu'est-ce que ça a changé, cette seconde étape ?",
+      },
+      {
+        qui: "François",
+        texte:
+          "C'est très clairement le mois de septembre deux mille vingt-cinq, où j'ai eu ma première rentrée avec ma nouvelle offre, tout mon nouveau système, et c'est un mois explosif. J'ai fait dix-sept mille euros sur ce mois-là, ce qui était énorme. Ça faisait deux ans que je plafonnais à trois mille cinq cents, puis six, sept, huit, neuf, avec dix mille sur les pics. Quand tu fais dix-sept mille euros, tu dis waouh. C'est presque six mois par rapport à avant. On est sur cinq, six mois de ce que je pouvais faire avant, que tu te fais en quatre semaines. Et en plus, ils tombent presque tous sur les mêmes semaines. C'était presque violent, en fait. C'est très surprenant, la première fois que ça arrive.",
+      },
+      {
+        qui: "François",
+        texte:
+          "J'avais commencé à faire de la publicité un peu avant septembre, mais à très petit budget, je chatouillais un peu la publicité sans vraiment maîtriser le truc. Je l'ai fait parce qu'on m'a dit que c'était l'étape suivante pour moi. Et quand j'ai fait ce mois de septembre aussi explosif, j'étais super ravi de le partager dans Funnels Club auprès des autres membres, et c'est là que tu m'as parlé du mastermind. Où on fait tout en plus fort, plus vite, plus concentré. Forcément, ça m'a parlé, j'étais là aussi pour gagner un maximum de temps. C'était ça, le point de bascule : ce fameux mois de septembre, où je me suis dit que si on a les bons leviers en main, tout peut aller tellement plus vite.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Et comment ça s'est passé ? Quel est ton retour, et la différence avec Funnels Club, sachant qu'il n'y a pas encore eu l'événement ?",
+      },
+      {
+        qui: "François",
+        texte:
+          "Le gros point pour moi, il y a plusieurs choses super intéressantes. Tout d'abord, le fait de se retrouver entre membres qui ont réussi à installer un système qui génère plusieurs dizaines de milliers d'euros chaque mois. Le fait de se retrouver dans ce petit cercle-là, c'est un vrai gros booster, je trouve ça puissant. Deuxièmement, le fait de pouvoir interagir beaucoup plus facilement et rapidement avec tout le monde : on a vraiment un espace pour nous, entre personnes validées, entre guillemets, à cette étape-là. Et je trouve que c'est aussi un très gros booster, parce que j'ai eu mes moments de doute dans l'activité, et quand j'ai ton soutien, celui de Geoffrey, celui des coachs, mais aussi celui des autres membres qui eux ont déjà réussi, ça a une certaine valeur.",
+      },
+      {
+        qui: "François",
+        texte:
+          "Et à titre personnel, ce qui m'a énormément aidé, c'est quand on a fait le point ensemble et qu'on a fait le plan d'action. Le plan d'action que tu m'as mis en place, où tout a été boosté, où on est allés beaucoup plus vite sur les choses, où tu m'as donné plein de trucs à faire. Et je me suis plutôt bien exécuté, j'ai été à fond. Donc ça aussi, ça m'a permis d'avancer beaucoup plus vite. Et puis tous les directs qu'on a, uniquement avec les membres, c'est très spécifique : c'est un peu moins générique, on s'adresse un peu moins aux débutants. Il y a de nouvelles techniques, certes, mais surtout un nouvel état d'esprit. Si on va chercher d'autres chiffres, d'autres étapes, tout va beaucoup plus vite. Et pour moi, un des gros déclics, c'est d'avoir commencé à faire un peu de croissance, donc tout de suite des gros budgets publicitaires. Au début, ça fait très peur, mais tu aides à prendre du recul sur les choses.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Est-ce que ça t'a permis de passer un palier dans ton business ? Et peut-être que tu peux nous partager le prochain objectif que tu as.",
+      },
+      {
+        qui: "François",
+        texte:
+          "Pour la petite blague : ce mois de février, c'est un mauvais mois pour moi, je n'ai fait que treize mille cinq cents euros. C'est une boutade, mais c'est pour montrer que le curseur a quand même vachement évolué. Le mois de septembre est devenu presque un mois normal, finalement. Dix-sept mille euros, c'était un très bon mois avant. J'ai fait l'équivalent en octobre, j'ai fait plus en décembre. Le mois de janvier, c'était un petit mois, je n'ai fait que dix mille euros, entre guillemets. Février, petit mois, treize mille cinq cents. Donc on est sur une autre échelle. Je n'ai pas énormément de recul, mais disons que mon seuil bas est devenu dix mille euros facilement chaque mois. Et mon nouveau palier, ce que j'aimerais aller chercher, c'est stabiliser à minimum vingt mille euros par mois, entre vingt et trente mille je pense.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Ce qui se passe généralement, c'est qu'on a des paliers, mais ce ne sont jamais ceux qu'on pense. Peut-être que tu penses que ton palier c'est vingt mille, mais si ça se trouve tu vas tout de suite aller à trente mille. Le palier, on le subit, on ne le choisit pas. Merci beaucoup, je pense que ton histoire peut vraiment inspirer, parce que tu as connu le business dans le dur, tu as connu ensuite les petits produits, tu as suivi le chemin le plus classique possible dans le domaine de la formation. Beaucoup de gens passent par les petits produits avant d'aller vers des offres premium. Et c'est après coup, quand on réalise tout ça, que ça fait bizarre de reparler de ce qu'on vendait à quatre-vingts euros.",
+      },
+      {
+        qui: "François",
+        texte:
+          "Complètement. Juste pour clôturer avec ça, parce que là je me replonge dans cette phase à soixante-dix, quatre-vingts, quatre-vingt-dix euros : comment est-ce qu'on peut vivre en vendant des produits aussi peu chers, mais surtout en dévalorisant autant son travail ? Comment est-ce qu'on peut réellement en vivre ? Et quand on apprend à valoriser son travail, à le vendre à sa juste valeur, et encore, je pense que j'ai un travail à faire là-dessus, je pense qu'on peut aller encore plus loin.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "C'est marrant de regarder en arrière, des fois. Merci beaucoup François pour ce partage, pour ton histoire. Et puis l'aventure continue, on va passer au prochain palier.",
+      },
+      {
+        qui: "François",
+        texte: "Avec plaisir. Merci à toi Rémy, merci pour tout, vraiment.",
+      },
+    ],
+    autreEntretien: {
+      slug: "francois",
+      libelle:
+        "Le premier entretien de François : comment il est passé de douze produits à un seul",
+    },
   },
 ];
 

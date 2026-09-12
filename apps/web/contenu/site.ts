@@ -1097,8 +1097,11 @@ export const resultats: readonly {
  *
  * Les identifiants viennent de la page `/avis-funnels-club` du site actuel, et
  * les durées du média lui-même. Ils étaient seize ; celui de Rayan Arifa a été
- * retiré sur décision de Rémy, ainsi que son affiche. Il en reste quinze, auxquels trois ont été ajoutés : Lilian, Sébastien et le
- * second entretien de Corentin. Les affiches sont téléchargées puis
+ * retiré sur décision de Rémy, ainsi que son affiche. Il en reste quinze, auxquels sept ont été ajoutés : Lilian, Sébastien, Patrick
+ * Pinot, Guy Anastaze, et les seconds entretiens de Corentin, Roland et
+ * François. **Trois personnes apparaissent donc deux fois**, avec deux
+ * entretiens à un an d'écart ; leurs descriptions et leurs articles disent
+ * lequel est lequel. Les affiches sont téléchargées puis
  * servies par nous, dans `public/temoignages/` : rien ne part chez Wistia tant
  * qu'une vidéo n'est pas lancée.
  *
@@ -1293,6 +1296,38 @@ export const temoignages: readonly {
       "17 600 € au mois d'août, sans un euro de publicité",
     secondes: 438,
     publie: "2023-09-05",
+  },
+  {
+    id: "f2ie1v99b8",
+    nom: "Patrick Pinot",
+    description:
+      "24 000 € signés en un mois, après deux lancements ratés",
+    secondes: 973,
+    publie: "2026-04-16",
+  },
+  {
+    id: "gcfo8miafe",
+    nom: "Guy Anastaze",
+    description:
+      "À 72 ans, un contrat de 120 000 € né de sa formation",
+    secondes: 1515,
+    publie: "2026-03-27",
+  },
+  {
+    id: "i8j0mw0ddt",
+    nom: "Roland Buffet",
+    description:
+      "Un an et demi après : 50 000 à 70 000 € par mois",
+    secondes: 1822,
+    publie: "2026-02-14",
+  },
+  {
+    id: "755btwnbr4",
+    nom: "François Daoud",
+    description:
+      "Neuf mois après : 17 000 € par mois, dix fois moins de clients",
+    secondes: 2034,
+    publie: "2026-03-04",
   },
 ];
 

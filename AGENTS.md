@@ -256,6 +256,36 @@ là** : aucune description de ce qu'ils proposent, aucune promesse d'effet, aucu
 vocabulaire de soin. Ce qui est raconté, c'est la façon dont ils ont organisé et
 tarifé leur activité.
 
+### Deux entretiens d'une même personne font deux pages, reliées structurellement
+
+Trois membres ont témoigné deux fois, à un an d'écart. **Deux pages et non une
+seule**, parce qu'elles ne portent pas sur le même sujet : la première raconte le
+lancement, la seconde le palier suivant. Les fusionner demanderait un gabarit à
+deux vidéos et noierait deux récits distincts dans une page unique.
+
+Mais deux pages sur la même personne ne peuvent pas s'ignorer. Le lien est donc
+**structurel et pas seulement écrit dans une phrase** : le champ `autreEntretien`
+de `avis.ts` rend un bandeau en haut de l'article, dans les deux sens, et un
+contrôle vérifie que la relation est réciproque. Les paragraphes se citent aussi
+l'un l'autre, ce qui vaut pour un moteur, mais un lien noyé dans un paragraphe se
+rate à la lecture.
+
+Le bandeau est **en haut et non en bas** : le lecteur vient de voir la vidéo et
+sait de qui il s'agit, c'est là que « il y en a un second » a du sens. Son
+libellé dit **ce qu'on va lire**, jamais « lire aussi ».
+
+### Une page d'avis ne vend pas un programme qui n'existe plus
+
+Le mastermind est en pause, remplacé par le consulting privé en tête-à-tête.
+Trois articles racontent des résultats obtenus dedans : ils gardent leur sujet,
+parce que c'est là que ces résultats ont eu lieu et qu'une page d'avis raconte ce
+qui s'est passé. Mais **elles le disent dès le chapô et y consacrent leur
+dernière section**.
+
+Laisser croire qu'on peut encore rejoindre un programme arrêté, c'est vendre ce
+qui n'existe plus, et une page d'avis fait vivre cette erreur des années. Le jour
+où le mastermind rouvre, ça se corrige dans ces trois fichiers.
+
 ### Les pages d'une même famille se citent entre elles
 
 **C'est le levier le plus fort, et il ne se voit pas sur une page seule.** Quinze
