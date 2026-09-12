@@ -343,193 +343,67 @@ summary {
   cursor: pointer;
 }
 
-/* La texture de la bande des témoignages.
-
-   La première version empilait cinq petits foyers, dont un teal. Résultat :
-   des taches visibles et une zone sale au milieu. En regardant de près la
-   bande de calendly.com, ce n'est pas ça : c'est d'abord une **progression
-   verticale** franche, indigo profond en haut vers lavande très clair en bas,
-   et seulement deux ou trois foyers énormes et très diffus posés dessus pour
-   casser la régularité. C'est ce qui est refait ici.
-
-   **Le bleu est celui d'origine, éclairci d'un cran, sur décision de Rémy.**
-   Une version d'ardoise désaturée a été essayée et écartée : ce n'était pas
-   « plus clair », c'était une autre couleur. Les teintes et les saturations
-   sont donc exactement celles d'avant ; seule la luminosité monte de cinq
-   points, en HLS, ce qui est la seule façon d'éclaircir sans déplacer la
-   teinte.
-
-   Éclaircir coûte du contraste, et c'est là qu'il faut regarder plutôt que de
-   monter à l'œil : `bleu` passe de 6,6 à 5,5 pour du blanc. Il reste au-dessus
-   du seuil, mais la marge n'est plus grande, et un cran de plus le ferait
-   passer dessous.
-
-   **La bande a deux zones, et ce n'est pas décoratif.**
-
-   La zone haute porte le texte : `nuit`, `indigo` et `bleu` tiennent
-   respectivement 13,2, 9,7 et 5,5 pour du blanc, tous au-dessus du seuil de
-   4,5. La zone basse est claire, `bleuet` à 2,8 et `lavande` à 1,8, donc elle
-   ne peut **rien** porter directement. Ce n'est pas un hasard de cadrage :
-   c'est la zone où la bande s'éteint vers la couleur de page. Ce qui doit s'y
-   poser porte sa propre surface opaque, voir `AGENTS.md`.
-
-   La limite est utile à connaître pour la suite : `bleu`, à 5,5, est le dernier
-   palier où du blanc tient de lui-même, et il n'a plus qu'un point de marge.
-
-   En thème sombre, la progression s'arrête bien avant le clair : une bande qui
-   virerait au lavande pâle au milieu d'une page sombre éblouirait. */
-:root {
-  --bande-nuit: #182678;
-  --bande-indigo: #2737a4;
-  --bande-bleu: #3962ce;
-  --bande-bleuet: #8497e2;
-  --bande-lavande: #bcc0ec;
-  --bande-pale: #e0e2f5;
-}
-
-.dark {
-  --bande-nuit: #0e164e;
-  --bande-indigo: #18236b;
-  --bande-bleu: #23398d;
-  --bande-bleuet: #3b50a2;
-  --bande-lavande: #5264ad;
-  --bande-pale: #6e7bb1;
-}
-
-/* Un rang qui défile sans montrer sa barre.
-
-   La barre de défilement native traverse le bas des miniatures du rang des
-   témoignages, et sur macOS elle apparaît en plein geste, ce qui fait sauter
-   la hauteur du bloc.
-
-   **Cacher la barre ne retire pas le défilement** : le rang reste glissable au
-   doigt, à la molette horizontale, et chaque miniature est un bouton
-   atteignable au clavier, donc rien n'est perdu pour qui n'a pas de souris.
-   C'est la condition pour que cette classe soit acceptable, et elle ne
-   s'emploie que là où elle est remplie.
-
-   Les deux écritures sont nécessaires : `scrollbar-width` est la propriété
-   normalisée, `::-webkit-scrollbar` est ce que comprennent Safari et Chrome. */
-@utility scrollbar-cachee {
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
 /* ------------------------------------------------------------------
-   Le rouge du livre.
+   Le fond des résultats, repris du deck publicitaire Funnels Club.
 
-   Ce n'est pas une couleur choisie : c'est **celle de la couverture**,
-   relevée au compte-gouttes dans l'aplat de `Digital Selfmade`
-   (#e40d3a, #e6103d, #dc0a36 selon l'endroit). La section du livre est le
-   seul écran du site qui montre un objet ayant déjà sa couleur, et lui
-   appliquer le bleu du reste du site ferait cohabiter deux rouges, celui de
-   la couverture et rien pour lui répondre.
+   Il remplace la bande bleue en dégradé, sur décision de Rémy. Les valeurs
+   sont celles du deck, relevées dans son fichier : un fond très clair
+   légèrement bleuté, trois halos bleus décentrés, et un grain très fin.
 
-   **Deux jetons et pas un seul**, parce qu'un plein et un creux ne demandent
-   pas la même chose au même rouge.
+   **Le deck est toujours clair ; le site a deux thèmes.** Les halos sont donc
+   remontés en opacité pour le sombre : sur un fond presque noir, un bleu à
+   10 % ne se voit pas du tout, alors qu'il suffit à donner sa profondeur au
+   blanc. Le fond lui-même passe à un presque-noir bleuté, pour que le
+   changement de famille de couleur reste lisible dans les deux thèmes.
 
-   `--livre` porte le plein, donc du blanc par-dessus : #e40d3a y tient
-   4,75:1, juste au-dessus du seuil. C'est le rouge de la couverture au pixel
-   près, et il passe, donc on ne le fonce pas pour se donner de la marge.
-
-   `--livre-texte` porte le creux, donc le rouge lui-même sur la carte. Là,
-   #e40d3a ne tient que 4,75:1 sur du blanc et le creux demande aussi une
-   bordure lisible : le ton est descendu à #c4092f, qui donne 6,13:1 sur
-   `--card` en clair. En sombre, il faut au contraire remonter, un rouge foncé
-   sur #16161a étant illisible : #ff5c7a donne 6,07:1.
-
-   Le plein, lui, ne change pas d'un thème à l'autre. Le blanc dessus tient ses
-   4,75:1 dans les deux cas, et une couverture de livre n'a pas deux couleurs
-   selon l'heure.
+   Ce que font les halos, c'est empêcher le fond d'être plat. Sans eux, la
+   section paraît « en carton » : c'est le mot du deck, et il est juste.
    ------------------------------------------------------------------ */
 :root {
-  --livre: #e40d3a;
-  --livre-texte: #c4092f;
+  --fond-resultats: #fbfcff;
+  --halo-a: rgba(4, 94, 230, 0.1);
+  --halo-b: rgba(75, 147, 255, 0.09);
+  --halo-c: rgba(4, 94, 230, 0.055);
+
+  /* Le vert de la courbe, `emerald-500`, celui du deck. Rien d'autre ne le
+     porte. */
+  --courbe: #10b981;
 }
 
 .dark {
-  --livre: #e40d3a;
-  --livre-texte: #ff5c7a;
+  --fond-resultats: #0b0e16;
+  --halo-a: rgba(4, 94, 230, 0.22);
+  --halo-b: rgba(75, 147, 255, 0.14);
+  --halo-c: rgba(4, 94, 230, 0.1);
+
+  --courbe: #10b981;
 }
 
-/* L'ordre des couches compte : les foyers sont déclarés avant la progression
-   verticale, donc ils se peignent **au-dessus** d'elle. Chacun s'éteint bien
-   avant son bord pour qu'aucun ne dessine de cercle net, et leurs rayons
-   dépassent la largeur de la bande, ce qui garantit qu'on n'en voit jamais la
-   courbure.
+/* Le fond et ses trois foyers.
 
-   **La progression finit sur `--background`, la couleur de la page.** C'est ce
-   qui remplace le voile de raccord qu'il y avait auparavant, et c'est la seule
-   façon d'obtenir un raccord naturel : la bande finissait sur un lavande, la
-   page est en beige très clair, et un voile posé par-dessus devait rattraper
-   l'écart de force, ce qui se voyait comme une brume.
-
-   Le dernier foyer est de la même couleur de page, et il est décalé sous la
-   bande : il fait mordre la page dans la texture de façon irrégulière, au lieu
-   d'une ligne horizontale parfaitement droite. C'est ce détail qui fait que la
-   jonction ne se lit plus. */
-.texture-bande {
-  background-color: var(--bande-nuit);
+   Ils sont déclarés dans le même ordre que dans le deck, et à ses positions.
+   L'œil ne les lit pas un par un : il voit seulement que le fond respire. */
+@utility fond-resultats {
+  background-color: var(--fond-resultats);
   background-image:
-    radial-gradient(130% 85% at 82% 4%, var(--bande-bleu) 0%, transparent 58%),
-    radial-gradient(
-      115% 75% at 8% 30%,
-      var(--bande-indigo) 0%,
-      transparent 60%
-    ),
-    radial-gradient(
-      150% 95% at 46% 112%,
-      var(--background) 0%,
-      transparent 62%
-    ),
-    linear-gradient(
-      180deg,
-      var(--bande-nuit) 0%,
-      var(--bande-indigo) 24%,
-      var(--bande-bleu) 48%,
-      var(--bande-bleuet) 70%,
-      var(--bande-lavande) 84%,
-      var(--bande-pale) 93%,
-      var(--background) 100%
-    );
+    radial-gradient(52% 62% at 12% 8%, var(--halo-a) 0%, transparent 62%),
+    radial-gradient(46% 56% at 92% 4%, var(--halo-b) 0%, transparent 60%),
+    radial-gradient(58% 66% at 80% 96%, var(--halo-c) 0%, transparent 64%);
 }
 
-/* Le grain.
+/* Le grain, repris du deck lui aussi.
 
-   Sans lui, la bande reste trop lisse : les dégradés CSS sont mathématiquement
-   parfaits, et cette perfection se voit. Sur de grands aplats dégradés, les
-   écrans 8 bits produisent des bandes de quantification bien visibles ; le
-   bruit les casse et donne la matière.
-
-   Il vient d'un `feTurbulence` SVG en URI de données, donc calculé par le
-   navigateur : aucun fichier à télécharger. `overlay` assombrit les zones
-   sombres et éclaircit les claires, là où un voile gris aplatirait tout.
-
-   L'opacité reste basse. Le grain doit se sentir, pas se voir : au-delà, la
-   bande a l'air sale plutôt que texturée. */
-.grain-bande::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.13;
-  mix-blend-mode: overlay;
-
-  /* Le grain s'éteint avant le bas, sinon il rate la jonction.
-
-     La progression finit sur `--background` et se raccorde donc à la page sans
-     couture ; le grain, lui, s'arrêtait net au bord de la bande. Sur la
-     dernière ligne de pixels, la couleur était déjà celle de la page mais
-     texturée d'un côté et lisse de l'autre, et cette différence de matière
-     dessinait exactement le trait horizontal que la couleur ne dessinait plus.
-
-     Le masque le fait disparaître sur le dernier cinquième, c'est-à-dire dans
-     la même zone où la couleur finit sa course. Les deux écritures s'écrivent :
-     Safari n'a levé son préfixe qu'en 15.4. */
-  -webkit-mask-image: linear-gradient(to bottom, black 78%, transparent 100%);
-  mask-image: linear-gradient(to bottom, black 78%, transparent 100%);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='b'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23b)'/%3E%3C/svg%3E");
+   Il casse les bandes de quantification que les dégradés larges laissent
+   apparaître sur les écrans 8 bits. Il doit se sentir et pas se voir :
+   au-delà de deux ou trois centièmes, le fond a l'air sale plutôt que
+   texturé. */
+@utility grain-resultats {
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.022;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
 }

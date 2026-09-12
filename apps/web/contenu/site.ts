@@ -242,8 +242,30 @@ export const menus: readonly {
  * C'est donc du contenu et pas de la mise en forme : c'est Rémy qui a décidé
  * où la phrase se coupe. Corriger le texte, c'est corriger ces deux lignes.
  */
-/** Le titre de la bande des résultats. Écrit par Rémy. */
-export const titreResultats = "Résultats de nos clients";
+/**
+ * Le titre de la section des résultats.
+ *
+ * **À VALIDER PAR RÉMY.** C'est la seule phrase du site que l'agent ait écrite,
+ * et elle l'a été sur sa demande explicite : il a fourni « Real people. Real
+ * results. », le titre de la section de functionhealth.com dont la nôtre reprend
+ * la forme, et demandé un équivalent français.
+ *
+ * Ce n'est donc pas une invention mais une traduction, et elle se relit comme
+ * telle. Deux autres rendus ont été écartés : « Des gens réels. Des résultats
+ * réels. », plus littéral mais qui sonne comme une traduction automatique, et
+ * « Vraies personnes. Vrais résultats. », plus sec mais qui perd l'article et
+ * donc le rythme de l'original.
+ *
+ * Le titre précédent était « Résultats de nos clients », écrit par Rémy. Si
+ * celui-ci ne convient pas, c'est là qu'il faut revenir.
+ *
+ * La coupure en deux segments n'est pas de la mise en forme : le second porte
+ * l'accent, comme dans l'original où il change de couleur et passe en italique.
+ */
+export const titreResultats = [
+  { texte: "De vraies personnes." },
+  { texte: "De vrais résultats.", accent: true },
+] as const;
 
 export const titreOffres = [
   "Nos deux accompagnements",

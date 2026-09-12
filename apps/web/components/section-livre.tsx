@@ -1,4 +1,5 @@
 import { BoutonScintillant } from "@/components/bouton-scintillant";
+import { TitreRoulant } from "@/components/titre-roulant";
 import { livre } from "@/contenu/site";
 import { ArrowRight } from "lucide-react";
 
@@ -81,9 +82,14 @@ export function SectionLivre() {
           {/* `h2` : le même rang que le titre des offres et celui des
               résultats. La section n'a pas de sous-titre de rang inférieur, le
               plan reste donc plat et sans marche sautée. */}
-          <h2 className="titre mt-5 text-4xl text-card-foreground sm:text-5xl">
-            {livre.nom}
-          </h2>
+          {/* Le titre roule lui aussi quand la carte entre dans la vue. Il est
+              ferré à gauche, donc pas de `text-balance` : le bord est déjà
+              l'axe, et l'équilibrage ne ferait que raccourcir la première ligne
+              sans raison. */}
+          <TitreRoulant
+            segments={[{ texte: livre.nom }]}
+            className="titre mt-5 text-4xl text-card-foreground sm:text-5xl"
+          />
 
           <p className="mt-3 text-lg leading-relaxed text-pretty text-foreground">
             {livre.sousTitre}

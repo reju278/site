@@ -1,13 +1,15 @@
-import { BandeDegradee } from "@/components/bande-degradee";
+import { CourbeVivante } from "@/components/courbe-vivante";
+import { FondResultats } from "@/components/fond-resultats";
 import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { CarrouselTemoignages } from "@/components/carrousel-temoignages";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { LogoFunnels } from "@/components/logo-funnels";
 import { SectionLivre } from "@/components/section-livre";
 import { SurtitreOffre } from "@/components/surtitre-offre";
+import { TitreRoulant } from "@/components/titre-roulant";
 import { KineticText } from "@repo/ui/components/kinetic-text";
 import { ParticulesHero } from "@/components/particules-hero";
-import { Section, TitreSection } from "@/components/section";
+import { Section } from "@/components/section";
 import {
   SITE,
   identite,
@@ -228,7 +230,10 @@ export default function Accueil() {
           texte, et deux descriptions de longueur différente produisent deux
           boutons décalés de dix pixels, ce que l'œil voit immédiatement.
       --------------------------------------------------------------- */}
-      <Section>
+      {/* `pb-12` : la section des offres se termine plus près de ses cartes,
+          sur décision de Rémy. Le rembourrage par défaut de `Section` vaut
+          `py-20 sm:py-28` ; seul le bas est réduit, le haut garde le sien. */}
+      <Section className="[&>div]:pb-12 sm:[&>div]:pb-16">
         {/* Le titre de la section, centré et coupé à la main.
 
             Chaque ligne est un `block` : la césure est donc garantie, à toutes
@@ -239,13 +244,12 @@ export default function Accueil() {
             lignes sont posées. `text-pretty` reste utile sur l'écran étroit,
             où la seconde ligne se recoupe d'elle-même : il empêche qu'un mot
             s'y retrouve seul. */}
-        <TitreSection
-          titre={titreOffres.map((ligne) => (
-            <span key={ligne} className="block text-pretty">
-              {ligne}
-            </span>
-          ))}
-          className="mx-auto mb-10 max-w-4xl text-center sm:mb-12"
+        {/* La césure est posée à la main par Rémy, donc chaque ligne est un
+            segment : voir `titreOffres`. Le roulement se fait mot à mot, ce qui
+            laisse la coupure intacte. */}
+        <TitreRoulant
+          segments={titreOffres.map((ligne) => ({ texte: ligne }))}
+          className="titre mx-auto mb-10 max-w-4xl text-center text-4xl text-foreground sm:mb-12 sm:text-5xl"
         />
 
         <div className="grid gap-4 lg:grid-cols-2">
@@ -320,62 +324,63 @@ export default function Accueil() {
           n'ont rien à voir avec les résultats, et un cadre pointillé posé sur
           une texture se lit comme un défaut d'affichage, pas comme une
           réserve. */}
-      <BandeDegradee>
-        <div className="mx-auto max-w-6xl px-5 text-center">
-          <h2 className="titre mx-auto max-w-3xl text-4xl text-balance text-white sm:text-5xl">
-            {titreResultats}
-          </h2>
+      {/* ---------------------------------------------------------------
+          Les résultats, puis le livre, sur le fond du deck.
 
-          {/* Le carrousel ne déborde plus des marges du conteneur.
+          Les deux sections partagent un seul fond, et c'est ce qui fait la
+          transition plutôt qu'une frontière : le fond s'éteint derrière la
+          carte du livre, donc il n'y a aucun endroit où l'on puisse dire qu'il
+          s'arrête.
 
-              Il le faisait pour que le bord de l'écran tranche les cartes
-              voisines, ce qui était censé dire qu'il y en a d'autres. Ça le
-              disait en coupant des visages en deux à la verticale. C'est le
-              rang de miniatures qui le dit maintenant, et il montre les seize
-              au lieu d'en suggérer deux. */}
-          <div className="mt-12 text-left sm:mt-14">
+          L'ordre compte aussi : quelqu'un qui vient de regarder des gens
+          raconter ce qu'ils ont obtenu n'est pas au même endroit qu'en haut de
+          page, et le livre est la marche la moins chère du site.
+      --------------------------------------------------------------- */}
+      <FondResultats>
+        {/* `pt-36` : le titre a besoin de plus que le rembourrage ordinaire,
+            parce que la lèvre lui mange ses quatre-vingts premiers pixels. Avec
+            le `py-20` par défaut, il ne lui restait presque rien entre le bord
+            de la lèvre et la première lettre. */}
+        <Section className="[&>div]:pt-36 sm:[&>div]:pt-44">
+          {/* Le titre. Ses mots montent de dessous quand la section entre dans
+              la vue : c'est l'effet des titres du deck, repris ici. Le second
+              membre porte l'accent, comme dans la référence.
+
+              `text-balance` est justifié ici : le titre est centré, et c'est le
+              seul cas où équilibrer les lignes a un sens. */}
+          <TitreRoulant
+            segments={titreResultats}
+            className="titre mx-auto max-w-3xl text-center text-4xl text-balance text-foreground sm:text-5xl"
+          />
+
+          {/* La courbe passe derrière la vidéo, et son voile flouté l'en
+              dégage. C'est la slide 1 du deck, où la même courbe passait
+              derrière la phrase d'accroche. */}
+          <CourbeVivante className="mt-14 sm:mt-16">
             <CarrouselTemoignages />
-          </div>
+          </CourbeVivante>
 
           {/* Le passage vers la page qui les porte tous.
 
-              Le texte du lien dit où il mène : la bande n'en montre que
+              Le texte du lien dit où il mène : la section n'en montre que
               seize, et c'est la page « Résultats » qui les rassemble. Un
               « en savoir plus » ne dirait rien à un robot, qui lit ce texte
-              pour décrire la page d'arrivée.
-
-              La pastille est blanche pleine, et le texte en `--bande-nuit`.
-              Le lien tombe à 81 % de la hauteur de la bande, donc sur la zone
-              claire de la texture : en thème clair le fond y vaut
-              `--bande-lavande`, où du texte blanc ne tient que 2,13:1. Sur du
-              blanc opaque, le texte tient 14,9:1 en clair et 18,4:1 en sombre,
-              sans rien devoir à ce qu'il y a dessous. */}
-          <div className="mt-12">
+              pour décrire la page d'arrivée. */}
+          <div className="mt-14 text-center">
             <Link
               href="/resultats"
-              className="inline-flex h-11 items-center gap-2 rounded-md bg-white px-6 text-sm font-semibold text-[var(--bande-nuit)] transition-colors hover:bg-white/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              className="inline-flex h-11 items-center gap-2 rounded-md border border-border bg-card px-6 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
             >
               Voir tous les résultats
               <ArrowRight aria-hidden className="size-4" />
             </Link>
           </div>
-        </div>
-      </BandeDegradee>
+        </Section>
 
-      {/* ---------------------------------------------------------------
-          Le livre.
-
-          Il vient juste après les résultats, et c'est l'ordre qui compte :
-          quelqu'un qui vient de regarder seize personnes raconter ce qu'elles
-          ont obtenu n'est pas au même endroit qu'en haut de page. Le livre est
-          la marche la moins chère du site, et c'est celle qu'on lui propose là.
-
-          Tout son texte vient de sa page de vente, mot pour mot. Voir le
-          commentaire de `livre` dans `site.ts`.
-      --------------------------------------------------------------- */}
-      <Section>
-        <SectionLivre />
-      </Section>
+        <Section>
+          <SectionLivre />
+        </Section>
+      </FondResultats>
 
       {/* Rien entre le livre et le pied de page.
 

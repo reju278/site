@@ -37,3 +37,9 @@ next-env.d.ts
 
 # turborepo
 .turbo
+
+# Copie locale du deck publicitaire, servie par le serveur de dev pour être
+# lisible dans le panneau navigateur : celui-ci rend les fichiers hors projet en
+# instantané figé, sans JavaScript, et ce deck est un lecteur de slides en JS.
+# Ce n'est pas du contenu du site : elle ne se committe pas.
+apps/web/public/deck.html

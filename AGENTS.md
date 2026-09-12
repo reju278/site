@@ -320,29 +320,81 @@ l'ancien `--muted-foreground` ratait, à 4,47:1 sur le fond et 3,62:1 sur
   supposant l'image entièrement blanche sous le texte. Le voile assombri est ce
   qui garantit le seuil, pas le hasard du cadrage.
 
-### Dans la bande dégradée, le bas n'est pas le haut
+### Le fond des résultats vient du deck publicitaire
 
-La bande des résultats descend du bleu nuit au lavande pâle, et ses paliers sont
-en pourcentage de sa hauteur : ce qu'on ajoute à la fin d'un contenu remonte
-donc tout le reste et **change le fond sous ce qui était déjà là**. En thème
-clair, le blanc vaut 13,5:1 sur `--bande-nuit` en haut, et **2,13:1 sur
-`--bande-lavande` vers 81 %**. Le même texte blanc, correct en haut, est
-illisible en bas.
+La bande bleue en dégradé a été remplacée, sur décision de Rémy, par le fond du
+deck publicitaire Funnels Club : un fond très clair légèrement bleuté, trois
+halos bleus décentrés, un grain très fin. Les valeurs sont relevées dans le
+fichier du deck, pas approchées à l'œil.
 
-Rallonger le rembourrage ne répare rien : le dégradé suit la hauteur de la
-bande, donc pousser le bas pousse aussi le lavande. Il faudrait 530 px de
-rembourrage pour ramener un bloc de la fin dans la zone sûre.
+**Le deck est toujours clair ; le site a deux thèmes.** Les halos sont donc
+remontés en opacité pour le sombre : sur un fond presque noir, un bleu à 10 %
+ne se voit pas du tout, alors qu'il suffit à donner sa profondeur au blanc.
 
-**Ce qui passe en bas de bande porte donc sa propre surface opaque**, et son
-contraste ne se mesure plus contre la texture : pastille blanche pleine et texte
-en `--bande-nuit`, ce qui donne 14,9:1 en clair et 18,4:1 en sombre, aux deux
-thèmes et à n'importe quelle hauteur. Une barre de progression applique le même
-principe autrement : son remplissage se lit contre **sa propre piste**, teintée,
-et non contre la bande.
+**Le fond couvre les résultats et le livre d'un seul tenant**, et c'est ce qui
+fait une transition plutôt qu'une frontière : il s'éteint derrière la carte du
+livre, donc il n'y a aucun endroit où l'on puisse dire qu'il s'arrête.
 
-C'est aussi pourquoi les flèches du carrousel sont descendues sous les cartes :
-elles flottaient dessus, à `left-2` en dessous de `sm`, c'est-à-dire par-dessus
-l'image de la vidéo qu'on demande au visiteur de regarder.
+**Ses deux bouts ne font pas la même chose, et c'est voulu.** En haut, une
+coupure nette : une lèvre de la couleur de page descend sur le bloc, ses deux
+angles bas arrondis. En bas, aucune arête : un masque fond la couche jusqu'à
+rien. Ce n'est pas une incohérence — **un raccord ne se voit que lorsqu'il
+essaie de se cacher.** Celui du haut ne s'en cache pas, il se dessine ; celui du
+bas disparaît vraiment, parce qu'un masque retire des pixels au lieu de faire
+coïncider deux couleurs.
+
+Le filet en `--border` de la lèvre n'est pas décoratif. L'ancienne bande était
+bleu nuit sur du beige, la coupure se lisait toute seule. Ce fond-ci est à un
+cheveu de la couleur de page, `#fbfcff` contre `#fcfbf8` : sans filet, l'arrondi
+ne se verrait pas.
+
+### La courbe vivante, et ce qu'elle a le droit de dire
+
+C'est le « Live Line » du registre Bklit, porté du deck. Le tracé est dessiné
+une fois pour toutes, en entier, et c'est un `translateX` qui le fait défiler :
+redessiner le chemin à chaque image sous deux masques faisait saccader la page
+du deck.
+
+Deux contraintes propres au site, qui n'existaient pas dans le deck :
+
+- **Ce qui passe derrière une carte opaque est invisible.** Le deck faisait
+  passer sa courbe derrière du texte ; la nôtre passe derrière une carte vidéo.
+  La tête de courbe et sa pastille se posent donc dans la **marge mesurée** à
+  droite de la carte, et s'effacent en dessous de `lg`, où cette marge n'existe
+  plus. Une abscisse en pixels fixes, comme dans le deck, tombait hors champ sur
+  tout écran de moins de 1 500 px.
+- **La pastille affiche un montant en euros.** Elle avait été écartée pour cette
+  raison et Rémy l'a demandée : à côté de témoignages de clients, un montant qui
+  défile peut se lire comme une promesse de revenus plutôt que comme une
+  décoration, et sur un site de formation c'est une allégation commerciale. Si
+  la question revient, ce qui se retire est la pastille, pas la courbe : le
+  mouvement ne chiffre rien de lui-même.
+
+Le voile flouté entre la courbe et la vidéo est la **quatrième exception** à
+« le flou va derrière, jamais devant », et la plus justifiée : le flou n'y sert
+pas d'habillage, il sert à effacer ce qui gênerait la lecture.
+
+### Un effet d'apparition ne doit jamais pouvoir cacher un titre
+
+Les titres de section montent de dessous quand ils entrent dans la vue, mot par
+mot, chacun dans son propre masque. C'est l'effet des titres du deck.
+
+Le mot à mot n'est pas un raffinement : c'est ce qui le fait marcher sur
+plusieurs lignes. Un titre masqué d'un seul bloc voit sa dernière ligne monter
+depuis trois hauteurs de ligne plus bas, et les lignes se croisent.
+
+**Deux pièges, tous deux rencontrés :**
+
+- **L'espace se met en dehors du bloc masqué.** À l'intérieur d'un
+  `inline-block`, un espace en fin de contenu est supprimé par le moteur de
+  rendu : le titre s'affichait « Devraiespersonnes. Devraisrésultats. » et se
+  copiait comme ça.
+- **La contre-règle sans JavaScript ne se met pas dans le titre.** React
+  sérialise le contenu d'un `noscript` comme du texte : la feuille de style se
+  retrouvait dans le `textContent` du `h2`, invisible à l'écran mais lue par un
+  robot. Elle vit dans `layout.tsx`, écrite une fois. Sans elle, un titre dont
+  le script n'a pas tourné reste sous son masque, et c'est un niveau entier du
+  plan que Google ne voit plus.
 
 ### Une image rognée perd son fondu, et ça se voit
 

@@ -50,39 +50,37 @@ import { cn } from "@repo/ui/lib/utils";
  *
  * Elles sont les `CarouselPrevious` et `CarouselNext` du registre shadcn, avec
  * leur `variant` passé par leur propre API plutôt que des classes empilées
- * par-dessus. C'est le rond et l'ombre qui les rendent présentables, pas une
- * réécriture : le fichier de registre n'est pas touché, et il reste alignable
- * sur ses mises à jour.
+ * par-dessus. C'est le rond, la taille et l'ombre qui les rendent présentables,
+ * pas une réécriture : le fichier de registre n'est pas touché, et il reste
+ * alignable sur ses mises à jour.
  *
- * **Le nom accessible est réécrit.** Le registre pose « Previous slide » et
- * « Next slide » en `sr-only`. Sur un site en français, un lecteur d'écran
- * annoncerait deux commandes en anglais au milieu d'une page française ;
+ * **Elles n'ont plus de fond écrit en dur.** Elles en avaient un, blanc plein,
+ * parce qu'elles se posaient sur la bande bleue et que le lavande de son bas ne
+ * tenait pas le contraste. Le fond est maintenant celui du deck, une surface
+ * claire en clair et sombre en sombre : la variante `outline` du registre, qui
+ * suit `--background` et `--border`, fait exactement ce qu'il faut dans les
+ * deux thèmes, et c'est une classe de moins à maintenir.
+ *
+ * Le nom accessible, lui, se réécrit. Le registre pose « Previous slide » et
+ * « Next slide » en `sr-only` : sur un site en français, un lecteur d'écran
+ * annoncerait deux commandes en anglais au milieu d'une page française.
  * `aria-label` reprend la main et dit de quoi il s'agit, un témoignage et non
  * une diapositive.
- *
- * **Le fond est blanc plein.** À cette hauteur, la texture de la bande est
- * passée au lavande, où le blanc ne tient que 1,8:1 en thème clair : une
- * commande translucide y serait illisible. Sur blanc opaque, le glyphe en
- * `--bande-nuit` tient 14,9:1 dans les deux thèmes, sans rien devoir à ce qu'il
- * y a dessous.
- *
- * Les variantes `dark:` sont doublées, et il le faut : le bouton du registre
- * pose `dark:bg-input/30`, que `tailwind-merge` ne voit pas comme un conflit
- * avec `bg-white`. Sans elles, le fond retombe à 30 % d'opacité en thème sombre
- * et le glyphe ne vaut plus que 1,14:1. Voir `AGENTS.md`.
  */
 const FLECHE = cn(
   // Douze pixels de plus que le rond du registre, qui en fait 32 : c'est sous
   // les 40 px de cible tactile que le projet demande.
-  "static size-12 translate-y-0 border-0 shadow-lg shadow-black/25",
-  "bg-white text-[var(--bande-nuit)] hover:bg-white hover:text-[var(--bande-nuit)]",
-  "dark:border-0 dark:bg-white dark:text-[var(--bande-nuit)] dark:hover:bg-white",
-  // Le survol passe par l'échelle et non par la couleur : sur un rond déjà
-  // blanc, il n'y a pas de blanc plus clair pour répondre au geste.
+  "static size-12 translate-y-0 shadow-md",
+  // Le survol passe par l'échelle en plus de la couleur : la variante du
+  // registre change déjà de fond, l'échelle ajoute la réponse au geste.
   "transition-transform duration-300 hover:scale-105 active:scale-100",
-  // À partir de `lg`, la bande laisse plus de cent pixels de marge de chaque
-  // côté de la carte : les flèches s'y logent entièrement, hors de l'image.
-  "lg:absolute lg:top-1/2 lg:-left-16 lg:-translate-y-1/2",
+  // **Elles restent sous la carte à toutes les largeurs.** Elles ont flanqué
+  // la carte un temps, dans la marge, et c'était bien : elles ne recouvraient
+  // pas la vidéo et le geste était à portée. Mais cette marge ne fait que
+  // 172 px sur un écran de 1440, et la tête de la courbe y vit aussi, avec sa
+  // pastille. Deux objets n'y tiennent pas : la pastille passait sous les
+  // flèches. Ce sont elles qui cèdent, parce qu'un rang centré sous la carte
+  // est une place légitime, alors que la tête de courbe n'en a qu'une.
 );
 
 export function CarrouselTemoignages() {
@@ -109,28 +107,36 @@ export function CarrouselTemoignages() {
                   de la carte, alors qu'on veut qu'elle ait l'air posée dessus.
                   Le liseré clair fait le reste, `--border` n'ayant rien à voir
                   avec ce qu'il y a sous la bande. */}
-              <LecteurVideo
-                id={temoignage.id}
-                titre={temoignage.nom}
-                secondes={temoignage.secondes}
-                affiche={`/temoignages/${temoignage.id}.jpg`}
-                className="shadow-[0_24px_60px_-20px_rgba(0,0,0,0.45)] ring-1 ring-white/20"
-                legende={
-                  <>
-                    {/* Des `span` en `block` et non des `p` : la légende est
+              {/* `data-carte` n'est pas décoratif : c'est ce repère que la
+                  courbe mesure pour savoir où finit la carte et où commence la
+                  marge dans laquelle poser sa tête. Sans lui, elle ne trouve
+                  rien, croit que la carte occupe toute la largeur, et se cache.
+                  Le repère est sur le conteneur et non sur le lecteur, parce
+                  que c'est lui qui porte la largeur. */}
+              <div data-carte className="mx-auto w-full max-w-3xl">
+                <LecteurVideo
+                  id={temoignage.id}
+                  titre={temoignage.nom}
+                  secondes={temoignage.secondes}
+                  affiche={`/temoignages/${temoignage.id}.jpg`}
+                  className="border border-border shadow-[0_24px_60px_-24px_rgba(0,0,0,0.28)]"
+                  legende={
+                    <>
+                      {/* Des `span` en `block` et non des `p` : la légende est
                         rendue dans le bouton de lecture, dont le contenu doit
                         rester du contenu de phrase. */}
-                    <span className="block text-base font-semibold text-white sm:text-lg">
-                      {temoignage.nom}
-                    </span>
-                    {temoignage.resultat ? (
-                      <span className="mt-1 block text-sm text-white/85 sm:text-base">
-                        {temoignage.resultat}
+                      <span className="block text-base font-semibold text-white sm:text-lg">
+                        {temoignage.nom}
                       </span>
-                    ) : null}
-                  </>
-                }
-              />
+                      {temoignage.resultat ? (
+                        <span className="mt-1 block text-sm text-white/85 sm:text-base">
+                          {temoignage.resultat}
+                        </span>
+                      ) : null}
+                    </>
+                  }
+                />
+              </div>
             </CarouselItem>
           ))}
         </CarouselContent>
@@ -142,20 +148,20 @@ export function CarrouselTemoignages() {
             lecture. En dessous de `lg`, la marge n'existe pas et elles
             repassent sous la carte en une rangée centrée.
 
-            `lg:contents` fait disparaître cette rangée de la mise en page sans
-            retirer ses enfants, ce qui laisse les flèches se positionner par
-            rapport au cadre de la carte. Sans lui, il faudrait deux paires, et
-            un lecteur d'écran en annoncerait quatre. */}
-        <div className="mt-6 flex justify-center gap-3 lg:contents">
+            Elles ont flanqué la carte un temps, dans la marge à partir de `lg`.
+            C'était bien, et c'est la tête de la courbe qui les a délogées : la
+            marge ne fait que 172 px sur un écran de 1440, et sa pastille y vit
+            aussi. Deux objets n'y tiennent pas. */}
+        <div className="mt-8 flex justify-center gap-3">
           <CarouselPrevious
-            variant="secondary"
+            variant="outline"
             aria-label="Témoignage précédent"
             className={FLECHE}
           />
           <CarouselNext
-            variant="secondary"
+            variant="outline"
             aria-label="Témoignage suivant"
-            className={cn(FLECHE, "lg:-right-16 lg:left-auto")}
+            className={FLECHE}
           />
         </div>
       </div>

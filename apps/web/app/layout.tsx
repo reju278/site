@@ -161,6 +161,21 @@ export default function RootLayout({
             style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>
+
+        {/* La contre-règle du titre roulant.
+
+            Les mots de `TitreRoulant` partent cachés sous leur masque et
+            remontent quand le titre entre dans la vue. Sans script, rien ne
+            vient jamais poser `data-vu` : le titre resterait invisible, pour le
+            lecteur comme pour un robot qui rend la page, et c'est un niveau
+            entier du plan qui disparaît.
+
+            Elle est ici et non dans le composant : React sérialise le contenu
+            d'un `noscript` comme du texte, donc la feuille se retrouvait dans le
+            `textContent` du titre. Invisible à l'écran, mais lue. */}
+        <noscript>
+          <style>{`[data-titre-roulant] span{transform:none}`}</style>
+        </noscript>
         <Script id="gtm" strategy="afterInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
