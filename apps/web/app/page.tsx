@@ -7,6 +7,7 @@ import { CarrouselTemoignages } from "@/components/carrousel-temoignages";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { LogoFunnels } from "@/components/logo-funnels";
 import { SectionLivre } from "@/components/section-livre";
+import { SectionTunnel } from "@/components/section-tunnel";
 import { SurtitreOffre } from "@/components/surtitre-offre";
 import { TexteRoulant } from "@/components/texte-roulant";
 import { TitreRoulant } from "@/components/titre-roulant";
@@ -365,6 +366,17 @@ export default function Accueil() {
           ))}
         </div>
       </Section>
+
+      {/* ---------------------------------------------------------------
+          Le cadrage, le blocage, la solution.
+
+          Trois slides du deck publicitaire, reprises dans leur ordre, sur
+          demande de Rémy. Elle vient **après** les offres et pas avant : le
+          deck s'adresse à quelqu'un qui ne sait pas encore ce qu'on vend, la
+          page à quelqu'un qui vient de le lire. Ici, la section ne présente
+          plus l'offre, elle dit pourquoi elle existe.
+      --------------------------------------------------------------- */}
+      <SectionTunnel />
 
       {/* ---------------------------------------------------------------
           Ce qui attend votre texte.

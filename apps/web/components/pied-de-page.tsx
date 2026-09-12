@@ -8,7 +8,7 @@ import {
   legales,
   liens,
 } from "@/contenu/site";
-import { LogoFunnels } from "@/components/logo-funnels";
+import { CarteFunnelsClub } from "@/components/carte-funnels-club";
 import { KineticText } from "@repo/ui/components/kinetic-text";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -188,32 +188,22 @@ export function PiedDePage() {
               La phrase est la promesse de funnels.club, reprise au mot près, et
               le libellé du bouton est celui du hero. Rien n'est écrit ici. */}
             <div className="col-span-2 sm:col-span-3 lg:col-span-1">
-              {/* Pas de surtitre au-dessus, sur décision de Rémy : « Funnels
-                  Club » se suffit, et « Le programme » répétait ce que la
-                  colonne « Programmes » dit déjà deux colonnes plus loin.
+              {/* La colonne est devenue une carte, sur demande de Rémy : le
+                  fond du deck, un relief, et une inclinaison qui suit la
+                  souris. Tout est dans `CarteFunnelsClub` ; ce qu'elle porte
+                  n'a pas changé d'un mot.
 
-                  La marque est **dans** le titre et dimensionnée en `em`, comme
-                sur la carte d'offre de l'accueil : `em` se résout sur la taille
-                du texte qui la porte, donc la tuile suit le titre au lieu
-                d'être figée. Elle est `aria-hidden`, donc le titre se lit
-                « Funnels Club » et non « image, Funnels Club ». */}
-              <p className="titre mt-4 flex items-center text-2xl text-foreground">
-                <LogoFunnels className="mr-[0.28em] inline-grid size-[0.95em] align-[-0.13em]" />
-                Funnels Club
-              </p>
-              <p className="mt-2 text-sm text-pretty text-muted-foreground">
-                {identite.promesse}
-              </p>
-
-              <a
+                  `-mt-4` la remonte au ras des titres de colonnes : les trois
+                  colonnes voisines commencent par une ligne de titre, et la
+                  carte, qui n'en a pas, démarrait plus bas qu'elles. Elle
+                  descend en revanche jusqu'au bas de la rangée, `h-full`, ce
+                  qui est le « de haut en bas » demandé. */}
+              <CarteFunnelsClub
+                promesse={identite.promesse}
                 href={liens.decouvrir}
-                target="_blank"
-                rel="noreferrer"
-                className="group/roule mt-5 inline-flex h-11 items-center gap-2 rounded-md bg-primary px-5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-              >
-                <TexteRoulant>Découvrir Funnels Club</TexteRoulant>
-                <ArrowRight aria-hidden className="size-4 shrink-0" />
-              </a>
+                action="Découvrir Funnels Club"
+                className="lg:-mt-4"
+              />
             </div>
           </div>
 

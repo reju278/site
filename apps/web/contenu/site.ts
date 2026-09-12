@@ -419,6 +419,82 @@ export const offres = [
 ] as const;
 
 /**
+ * La section qui suit les deux offres : le cadrage, le blocage, la solution.
+ *
+ * **Tout le texte vient du deck publicitaire Funnels Club, au mot près.** Ce
+ * sont trois slides successives, reprises dans leur ordre : `cadrage`,
+ * `pour-qui` et `tunnel`. Rien n'est réécrit, rien n'est résumé, et c'est la
+ * raison d'être de ce bloc : Rémy a demandé « reprends cette slide », pas
+ * « écris une section qui dit ça ».
+ *
+ * **Le cadrage est là parce que la suite ne tient pas sans lui.** La phrase du
+ * blocage commence par « Et que », qui suppose une première condition : sans la
+ * slide de cadrage au-dessus, il aurait fallu la transformer en « Si vous avez
+ * une vraie expertise », donc réécrire une phrase de Rémy pour la faire entrer
+ * dans un découpage qu'il n'a pas choisi. Les deux slides se suivent dans le
+ * deck ; elles se suivent ici.
+ *
+ * **La coupure en segments n'est pas de la mise en forme.** Elle reprend les
+ * appuis du deck, où les mêmes membres sont en gras ou en italique : le segment
+ * `accent` est celui que Rémy met en avant, pas celui qui tombe bien dans la
+ * ligne.
+ *
+ * **Le barré de « site internet » est le sien** et il porte le sens de la
+ * slide : le tunnel ne s'ajoute pas au site, il le remplace. C'est aussi ce que
+ * dit la slide suivante du deck, « les sites internet sont morts », qui n'est
+ * pas reprise ici : Rémy s'est arrêté au tunnel.
+ *
+ * Ce qui vient après dans le deck, et qui n'est donc pas ici : la slide des
+ * sites morts, puis celle du nombre de clients nécessaires. Elles s'ajoutent le
+ * jour où il le demande, au même endroit et de la même façon.
+ */
+export const sectionTunnel = {
+  /* Le titre, dicté par Rémy. Il ne vient pas du deck, mais il en reprend la
+     slide « sites-morts » : le deck dit « les sites internet sont morts… vous
+     n'aurez jamais de client avec ». Ici la phrase est retournée en deux temps,
+     le constat puis la relève, et c'est la seconde qui porte l'accent.
+
+     La coupure en deux segments n'est pas de la mise en forme : ce sont deux
+     phrases, et la seconde est celle qu'on veut entendre. */
+  titre: [
+    { texte: "Les sites internet sont morts." },
+    { texte: "Place aux tunnels de vente.", accent: true },
+  ],
+
+  /* Le sous-titre, dicté par Rémy lui aussi. C'est la slide « cadrage » du
+     deck, raccourcie par lui : le deck disait « votre formation, votre coaching
+     ou votre accompagnement à plusieurs milliers d'euros », il dit ici « une
+     formation, du coaching ou de la prestation de service ». Le prix a disparu
+     de cette phrase ; il reste dans les quatre lignes qui suivent. */
+  sousTitre:
+    "Si vous souhaitez vendre une formation, du coaching ou de la prestation de service.",
+
+  /* Slide « pour-qui ». La phrase et la liste ne font qu'un : « vous ne savez
+     pas » commande les quatre lignes, qui la complètent chacune. C'est pour ça
+     que l'amorce finit par deux points et que la liste n'a pas de titre à
+     elle. */
+  amorce:
+    "Et que vous avez une vraie expertise dans votre domaine, mais que vous ne savez pas :",
+  blocages: [
+    "Où trouver des clients capables de payer de telles sommes.",
+    "Si vous serez capable de vendre à plusieurs milliers d'euros.",
+    "Comment justifier un tel prix face à quelqu'un qui hésite.",
+    "Comment les faire venir à vous, au lieu de les démarcher un par un.",
+  ],
+
+  /* Slide « tunnel ». Les points de suspension sont ceux du deck : la phrase
+     s'y coupe en deux temps, et la chute arrive après. */
+  solution: [
+    { texte: "La solution, c'est de mettre en place un" },
+    { texte: "tunnel de vente…", accent: true },
+  ],
+  chute: {
+    avant: "…qui remplace complètement votre ",
+    barre: "site internet",
+  },
+} as const;
+
+/**
  * Les piliers de chaque offre, pour la section en accordéon de l'accueil.
  *
  * **Tout le texte vient de Rémy.** Les quatre piliers de Funnels Club sont
