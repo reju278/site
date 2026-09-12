@@ -65,7 +65,18 @@ export default function Resultats() {
         </p>
       </EnTetePage>
 
-      <Section>
+      {/* Le rembourrage haut est rentré, sur demande de Rémy : l'écart entre le
+          sous-titre et la première rangée de cartes était trop grand. Il
+          s'additionnait de deux endroits, le bas de `EnTetePage` et le haut de
+          `Section`, et aucun des deux ne savait que l'autre existait. C'est le
+          second qu'on rentre, parce que le premier appartient à toutes les
+          pages intérieures.
+
+          La retouche passe par `[&>div]` et non par un `className` nu : dans
+          `Section`, le rembourrage vit sur le bloc intérieur et non sur la
+          balise qui reçoit la classe. C'est l'écriture déjà employée sur
+          l'accueil et sur la page d'un avis. */}
+      <Section className="[&>div]:pt-10 sm:[&>div]:pt-14">
         {/* La grille des entretiens, **en liens et non en lecteurs**, sur
             décision de Rémy.
 
