@@ -251,6 +251,44 @@ l'ancien `--muted-foreground` ratait, à 4,47:1 sur le fond et 3,62:1 sur
   supposant l'image entièrement blanche sous le texte. Le voile assombri est ce
   qui garantit le seuil, pas le hasard du cadrage.
 
+### Dans la bande dégradée, le bas n'est pas le haut
+
+La bande des résultats descend du bleu nuit au lavande pâle, et ses paliers sont
+en pourcentage de sa hauteur : ce qu'on ajoute à la fin d'un contenu remonte
+donc tout le reste et **change le fond sous ce qui était déjà là**. En thème
+clair, le blanc vaut 13,5:1 sur `--bande-nuit` en haut, et **2,13:1 sur
+`--bande-lavande` vers 81 %**. Le même texte blanc, correct en haut, est
+illisible en bas.
+
+Rallonger le rembourrage ne répare rien : le dégradé suit la hauteur de la
+bande, donc pousser le bas pousse aussi le lavande. Il faudrait 530 px de
+rembourrage pour ramener un bloc de la fin dans la zone sûre.
+
+**Ce qui passe en bas de bande porte donc sa propre surface opaque**, et son
+contraste ne se mesure plus contre la texture : pastille blanche pleine et texte
+en `--bande-nuit`, ce qui donne 14,9:1 en clair et 18,4:1 en sombre, aux deux
+thèmes et à n'importe quelle hauteur. Une barre de progression applique le même
+principe autrement : son remplissage se lit contre **sa propre piste**, teintée,
+et non contre la bande.
+
+C'est aussi pourquoi les flèches du carrousel sont descendues sous les cartes :
+elles flottaient dessus, à `left-2` en dessous de `sm`, c'est-à-dire par-dessus
+l'image de la vidéo qu'on demande au visiteur de regarder.
+
+### Une image rognée perd son fondu, et ça se voit
+
+Les deux paysages du site portent leur propre transparence, qui s'éteint dans
+leur tiers haut. Cadrer une telle image par le bas, avec `object-cover
+object-bottom`, supprime exactement la partie qui fondait : le bord redevient
+une ligne droite en travers d'un paysage, et une ligne droite dans une montagne
+se lit comme un défaut d'affichage.
+
+**Le raccord se refait au masque**, `mask-image`, et non par un voile de la
+couleur de page posé par-dessus. Le voile ne tient que tant que le fond ne bouge
+pas ; le masque retire des pixels, donc il vaut dans les deux thèmes et quoi
+qu'on mette derrière. Les deux écritures s'écrivent, `mask-image` et
+`-webkit-mask-image` : Safari n'a levé son préfixe qu'en 15.4.
+
 ### Le mouvement réduit est un contrat, pas une option
 
 `globals.css` neutralise transitions et animations sous

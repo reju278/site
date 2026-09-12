@@ -81,7 +81,7 @@ export const liens = {
   consulting: avecTag("https://calendly.com/funnels-club/consulting"),
   lettre: avecTag("https://lettre.funnels.club"),
   espaceMembre: avecTag("https://groupe.funnels.club"),
-  livre: avecTag("https://www.digital-selfmade.com"),
+  livre: avecTag("https://www.digital-selfmade.com/livre-1"),
 
   // Sans balise : les plateformes tierces ne sont pas suivies par Hyros, et un
   // paramètre inconnu dans une URL de profil n'apporte rien.
@@ -443,6 +443,93 @@ export const lettre = {
   baseline: "Profit, liberté, no stress",
   flux: "https://lettre.funnels.club/feed",
 } as const;
+
+/**
+ * Le livre, tel que sa propre page de vente le présente.
+ *
+ * **Tout le texte est repris mot pour mot de `digital-selfmade.com/livre-1`.**
+ * Rien n'est résumé et rien n'est écrit pour l'occasion : c'est la page de
+ * vente de Rémy, donc ses mots, et une accroche de livre réécrite par un agent
+ * serait une allégation commerciale inventée.
+ *
+ * **Deux graphies cohabitent sur sa page**, « Digital Selfmade » et « Digital
+ * Self Made ». C'est la première qui est retenue ici, parce que c'est celle du
+ * titre, du domaine, et celle que le reste de ce fichier emploie déjà pour la
+ * lettre. La citation qui porte l'autre graphie a donc été alignée sur
+ * celle-ci : c'est la seule retouche, et elle se relit.
+ *
+ * Le tiret cadratin de la page d'origine ne passe pas la règle du projet. Les
+ * phrases qui en portaient un ne sont pas reprises, plutôt que d'être
+ * recoupées : recouper, c'est réécrire.
+ */
+export const livre = {
+  nom: "Digital Selfmade",
+  etiquette: "Chapitre #1 OFFERT",
+  sousTitre:
+    "La méthode simple et prouvée pour vivre d'Internet en vendant ses connaissances",
+  paragraphes: [
+    "Digital Selfmade n'est comme aucun autre livre de business ou de marketing que vous avez pu lire. Il s'agit d'un guide pratique, qui vous donnera le plan étape par étape vers l'indépendance financière via la création d'un business en ligne extrêmement profitable.",
+    "Sa stratégie s'adapte à toutes les niches, pour vendre tout type d'offres (physique, digital ou de service) et à tous les prix.",
+  ],
+  action: "Obtenez votre copie",
+  actionSecondaire: "Téléchargez le chapitre 1 gratuitement",
+  href: liens.livre,
+
+  /* Le rendu 3D vient de la page de vente elle-même, rogné de ses marges
+     transparentes et servi par nous en deux largeurs. L'alternative décrit ce
+     que l'image montre, sans « image de » : c'est une couverture de livre, et
+     le lecteur d'écran annonce déjà qu'il s'agit d'une image. */
+  visuel: {
+    large: "/livre-digital-selfmade.webp",
+    mobile: "/livre-digital-selfmade-mobile.webp",
+    alt: "Le livre Digital Selfmade de Rémy Jupille, posé devant ses pages ouvertes",
+  },
+} as const;
+
+/**
+ * Les colonnes du pied de page.
+ *
+ * Elles reprennent les deux menus de l'en-tête, entrée pour entrée : un pied de
+ * page qui expose d'autres destinations que le menu oblige le lecteur à
+ * comparer deux listes pour savoir ce que le site contient.
+ *
+ * Les libellés sont ceux qui existent déjà ailleurs. Les deux « Digital
+ * Selfmade » sont désambiguïsés par le mot qui les suit, la lettre et le livre,
+ * parce qu'ici il n'y a pas de descriptif sous le libellé pour les distinguer
+ * comme dans le menu.
+ */
+export const colonnesPiedDePage: readonly {
+  titre: string;
+  entrees: readonly EntreeNavigation[];
+}[] = [
+  {
+    titre: "Programmes",
+    entrees: [
+      { libelle: "Funnels Club", href: liens.appel, externe: true },
+      {
+        libelle: "Consulting privé avec Rémy",
+        href: liens.consulting,
+        externe: true,
+      },
+      { libelle: "Espace membre", href: liens.espaceMembre, externe: true },
+    ],
+  },
+  {
+    titre: "Ressources",
+    entrees: [
+      { libelle: "Résultats", href: "/resultats" },
+      { libelle: "Digital Selfmade, la lettre", href: "/articles" },
+      { libelle: "Digital Selfmade, le livre", href: liens.livre, externe: true },
+    ],
+  },
+  {
+    titre: "Podcasts",
+    entrees: [
+      { libelle: "Profit, liberté, no stress", href: "/podcast" },
+      { libelle: podcastMaverick.nom, href: podcastMaverick.site, externe: true },
+    ],
+  },
+];
 
 /**
  * Les sections dont Rémy n'a pas encore écrit le texte.
