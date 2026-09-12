@@ -356,7 +356,7 @@ export const messageRemy = {
       "Ce tunnel de vente, je l'applique aujourd'hui moi-même dans mon propre business. Et au cours des dernières années, nous l'avons mis en place dans plus de ",
     souligne: "1\u00a0000 business",
     milieu:
-      " de formation et de coaching, dans des centaines de thématiques : ",
+      " de formation et de coaching, dans des centaines de thématiques, comme par exemple : ",
     /* Une thématique par surlignage, comme les quatre métiers plus haut : c'est
        la liste qui fait la démonstration, et huit traits séparés se comptent du
        regard là où un seul trait de huit mots se lit comme une phrase. Le jaune
@@ -364,15 +364,36 @@ export const messageRemy = {
 
        Le « etc. » est de Rémy et il n'est pas surligné : il n'est pas une
        thématique, il dit qu'il y en a d'autres. */
+    /* Seize thématiques, sur demande de Rémy, et **elles ne sont pas
+       inventées** : les huit ajoutées sont reprises de sa page Notion « Liste
+       des domaines clients », qui recense les domaines dans lesquels les clients
+       de Funnels Club créent leur offre. Les huit premières sont celles qu'il
+       avait dictées.
+
+       C'est la seule façon d'allonger une liste de références : une thématique
+       de plus est un client de plus, donc une affirmation de plus, et elle se
+       prend dans ses documents ou nulle part.
+
+       L'ordre alterne les deux origines plutôt que de les empiler : une liste
+       qui commence par huit métiers du corps et finit par huit métiers de
+       l'argent se lit comme deux listes. */
     thematiques: [
       "le basket",
+      "l'investissement immobilier",
       "la formation professionnelle du BTP",
+      "la naturopathie",
       "le yoga",
+      "le trading",
       "la batterie",
+      "la reconversion professionnelle",
       "le piano",
+      "l'ostéopathie",
       "le violoncelle",
+      "l'éducation des enfants",
       "le développement personnel",
+      "la prise de parole en public",
       "la spiritualité",
+      "la préparation à l'accouchement",
     ],
     apres: ", etc.",
   },

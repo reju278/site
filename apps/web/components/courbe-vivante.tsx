@@ -52,8 +52,17 @@ const CB = {
    pas son abscisse : le défilement reste donc exact au pixel. Le trait, lui,
    garde son épaisseur grâce à `vector-effect`. */
 const H = 620;
-const Y0 = H * 0.78;
-const Y1 = H * 0.24;
+
+/* La bande que parcourt la vague, et elle est **remontée** : la courbe tenait le
+   milieu du cadre, elle tient maintenant son tiers haut. C'est la seconde
+   moitié de la demande de Rémy, la première étant l'inclinaison : il veut que la
+   tête et sa pastille finissent en haut à droite, et l'inclinaison seule ne
+   lève le bord droit que de quatre-vingts pixels. La bande fait le reste.
+
+   Elle reste aussi large qu'avant, 0,48 de la hauteur contre 0,54 : ce qui est
+   demandé est de déplacer la courbe, pas de l'aplatir. */
+const Y0 = H * 0.66;
+const Y1 = H * 0.18;
 
 /* La série : quatre sinusoïdes dont les fréquences sont des multiples entiers
    de la période. La série se referme donc exactement sur elle-même, et la
@@ -164,6 +173,29 @@ const hauteurEntre = (pos: number) => {
     (u3 - u2) * CB.pas * TAN[i + 1]!
   );
 };
+
+/* L'inclinaison de la courbe, en degrés, et le débord vertical qu'elle coûte.
+
+   **La montée est une rotation et non une pente dans les données**, sur demande
+   de Rémy : elle doit partir du bas à gauche de la vidéo et arriver en haut à
+   droite. Ajouter une pente aux points aurait cassé la boucle, qui ne se voit
+   aujourd'hui pas du tout : la série se referme exactement sur elle-même au bout
+   d'une période, et un tracé qui monterait en permanence devrait retomber d'un
+   coup à chaque tour. Une rotation, elle, ne touche ni à la série ni au
+   défilement, qui reste un `translateX` au pixel.
+
+   **Le débord est ce qui évite que la rotation se voie.** Une couche large de
+   1 260 px tournée de neuf degrés lève son coin droit d'une centaine de
+   pixels et enfonce son coin gauche d'autant : sans marge, on verrait le bord
+   du dessin traverser le cadre en diagonale. La couche est donc plus haute que
+   le cadre de `DEBORD` de chaque côté, et ses bords restent dehors.
+
+   La tête et la courbe partagent la **même** couche agrandie et la **même**
+   rotation, et c'est obligatoire : la tête se place en pourcentage de la hauteur
+   de sa couche, donc deux couches de hauteurs différentes les feraient diverger
+   d'un écran à l'autre. */
+const INCLINAISON = 9;
+const DEBORD = 150;
 
 const LARGE = Math.ceil(PTS[PTS.length - 1]!.x) + 40;
 const D_AIRE = chemin(true);
@@ -335,10 +367,20 @@ export function CourbeVivante({
               "linear-gradient(90deg, transparent 0%, #000 7%, #000 86%, transparent 100%)",
           }}
         >
+          {/* La couche inclinée : c'est elle qui fait monter la courbe du bas à
+              gauche vers le haut à droite. Voir `INCLINAISON`. */}
           <div
-            ref={piste}
-            className="absolute inset-y-0 left-0 will-change-transform"
+            className="absolute inset-x-0"
+            style={{
+              top: -DEBORD,
+              bottom: -DEBORD,
+              rotate: `-${INCLINAISON}deg`,
+            }}
           >
+            <div
+              ref={piste}
+              className="absolute inset-y-0 left-0 will-change-transform"
+            >
             {/* `preserveAspectRatio="none"` étire le dessin en hauteur sur le
                 conteneur sans toucher à l'abscisse : le défilement reste exact
                 au pixel. `vector-effect` garde au trait son épaisseur malgré
@@ -384,17 +426,23 @@ export function CourbeVivante({
                 strokeLinejoin="round"
                 vectorEffect="non-scaling-stroke"
               />
-            </svg>
+              </svg>
+            </div>
+
+            {/* Le pointillé, dans la couche inclinée lui aussi.
+
+                Il suit donc la pente et non l'horizontale, et c'est ce qu'on
+                veut : un repère horizontal sous une courbe qui monte en biais
+                dirait que la courbe s'écarte d'une valeur, alors qu'elle tient
+                sa trajectoire. Il traverse toute la largeur et reste au fond,
+                derrière la carte, sans quoi il passerait sur la vidéo. */}
+            <div
+              className="absolute inset-x-0 border-t-2 border-dashed opacity-25"
+              data-suit
+              style={{ borderColor: "var(--courbe)", top: "50%" }}
+            />
           </div>
         </div>
-
-        {/* Le pointillé reste au fond, derrière la carte : il traverse toute la
-            largeur, donc il passerait sur la vidéo s'il montait avec la tête. */}
-        <div
-          className="absolute inset-x-0 border-t-2 border-dashed opacity-25"
-          data-suit
-          style={{ borderColor: "var(--courbe)", top: "50%" }}
-        />
       </div>
 
       {/* La tête de la courbe : le point qui bat et la pastille du montant.
@@ -415,7 +463,12 @@ export function CourbeVivante({
           le même rapport. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 z-10 overflow-hidden"
+        className="pointer-events-none absolute inset-x-0 z-10 overflow-hidden"
+        style={{
+          top: -DEBORD,
+          bottom: -DEBORD,
+          rotate: `-${INCLINAISON}deg`,
+        }}
       >
         <div
           ref={tete}
@@ -448,7 +501,14 @@ export function CourbeVivante({
 
               `whitespace-nowrap` l'est tout autant : sans lui, la pastille se
               casse entre le nombre et l'unité dès qu'elle approche du bord. */}
-          <span className="absolute top-0 left-4 -translate-y-1/2 rounded-md border border-border bg-card px-2.5 py-1 text-xs font-medium whitespace-nowrap tabular-nums text-card-foreground shadow-sm">
+          {/* La pastille se redresse de l'angle de la couche : un montant lu
+              de travers se lit mal, et c'est le seul élément de la courbe qui
+              porte du texte. Le point, lui, est un disque : la rotation ne lui
+              fait rien. */}
+          <span
+            style={{ rotate: `${INCLINAISON}deg` }}
+            className="absolute top-0 left-4 origin-left -translate-y-1/2 rounded-md border border-border bg-card px-2.5 py-1 text-xs font-medium whitespace-nowrap tabular-nums text-card-foreground shadow-sm"
+          >
             <span data-montant>{euros(0.5)}</span>
           </span>
         </div>
