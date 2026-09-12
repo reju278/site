@@ -1,13 +1,14 @@
 import { AppelFormation } from "@/components/appel-formation";
+import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { AppelOffres } from "@/components/appel-offres";
-import { EnTetePage } from "@/components/en-tete-page";
 import { HAUTEUR_ENTETE } from "@/components/en-tete";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { Section } from "@/components/section";
 import { TexteLie } from "@/components/texte-lie";
 import { avis } from "@/contenu/avis";
-import { SITE, temoignages } from "@/contenu/site";
+import { SITE, liens, temoignages } from "@/contenu/site";
 import type { Metadata } from "next";
+import { ArrowRight } from "lucide-react";
 import { notFound } from "next/navigation";
 
 /**
@@ -113,14 +114,38 @@ export default async function PageAvis({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(donnees) }}
       />
 
-      {/* L'en-tête, sur le fond du deck.
+      {/* Le cadre commun à l'en-tête, à l'entretien et à l'article.
 
-          C'est `EnTetePage`, la même couche que les autres pages intérieures,
-          sur demande de Rémy : un avis est une page du site, pas un document à
-          part. Elle centre son contenu, ce qui donne au titre et au chapô l'axe
-          des autres pages. L'article, lui, redevient ferré à gauche plus bas :
-          un texte long se lit à gauche, un titre s'annonce au centre. */}
-      <EnTetePage>
+          Il existe pour deux raisons qui doivent tenir ensemble. C'est lui qui
+          porte le **fond du deck**, étendu jusque derrière la vidéo sur demande
+          de Rémy, pour que l'entretien se détache au lieu de flotter sur la
+          couleur de page. Et c'est lui le parent du `sticky` : sans parent
+          commun, la vidéo se décollerait à la fin de sa propre section.
+
+          Le fond n'a pas besoin de fondu par le bas, contrairement aux autres
+          pages : la couche de l'article est opaque et passe par-dessus, donc il
+          n'y a aucun endroit où on puisse le voir s'arrêter. C'est le même
+          principe que le fondu, obtenu sans masque. */}
+      <div className="relative isolate">
+        <div
+          aria-hidden
+          className="fond-resultats grain-resultats pointer-events-none absolute inset-0 -z-10"
+        />
+
+      {/* L'en-tête.
+
+          Il ne porte plus son fond lui-même, `EnTetePage` étant remplacé par le
+          cadre ci-dessus : deux couches de la même matière l'une sur l'autre
+          doubleraient le grain et les halos.
+
+          Les cotes sont celles d'`EnTetePage`, reprises telles quelles pour que
+          la page d'un avis démarre exactement comme les autres pages
+          intérieures. Le contenu est centré, ce qui donne au titre et au chapô
+          l'axe des autres pages ; l'article, lui, redevient ferré à gauche plus
+          bas, un texte long se lisant à gauche et un titre s'annonçant au
+          centre. */}
+      <section className="px-5 pt-32 pb-16 sm:pt-40 sm:pb-20">
+        <div className="mx-auto max-w-6xl text-center">
         <h1 className="titre text-3xl text-balance text-foreground sm:text-4xl lg:text-5xl">
           {article.titre}
         </h1>
@@ -128,7 +153,8 @@ export default async function PageAvis({
         <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground">
           {article.chapo}
         </p>
-      </EnTetePage>
+        </div>
+      </section>
 
       {/* L'entretien, puis l'article qui vient le recouvrir.
 
@@ -154,7 +180,6 @@ export default async function PageAvis({
           Il est plus large que le texte, `max-w-4xl` contre `max-w-3xl` : une
           vidéo se regarde, un texte se lit, et les deux n'ont pas la même bonne
           mesure. Le lecteur n'appelle Wistia qu'au clic. */}
-      <div className="relative">
         <section
           className="sticky px-5"
           style={{ top: HAUTEUR_ENTETE + 16 }}
@@ -166,26 +191,48 @@ export default async function PageAvis({
               secondes={temoignage.secondes}
               affiche={affiche}
             />
+
+            {/* L'appel, juste sous l'entretien, sur demande de Rémy.
+
+                Sa place est le moment : quelqu'un qui vient de voir un client
+                raconter ses résultats est exactement là où la question se pose,
+                et c'est avant d'avoir lu l'article, pas après. Les deux autres
+                appels de la page ne visent pas le même moment, celui du milieu
+                d'article propose de comprendre, celui de la fin propose de
+                choisir entre les deux offres.
+
+                Il est **dans la couche collante**, avec la vidéo : il part
+                donc sous l'article au même moment qu'elle, au lieu de rester
+                seul au milieu de l'écran quand le texte monte.
+
+                `BoutonScintillant` est le bouton d'appel du site, celui de la
+                page Résultats, et son fond se passe en valeur CSS et jamais en
+                classe : voir la règle dans `AGENTS.md`. */}
+            <div className="mt-6 flex justify-center">
+              <BoutonScintillant href={liens.appel}>
+                Réserver mon appel gratuit
+                <ArrowRight className="size-4" />
+              </BoutonScintillant>
+            </div>
           </div>
         </section>
 
-        <div className="relative z-10 bg-background">
+        {/* La couche de l'article : c'est elle, la page qui s'ouvre.
 
-      {/* La séparation entre l'entretien et l'article, sur demande de Rémy.
+            **L'arrondi et le filet sont sur elle et non sur un bandeau
+            au-dessus**, et c'est la réparation d'un défaut visible. Ils vivaient
+            sur une lèvre posée par-dessus : la courbe se dessinait, mais le
+            panneau opaque derrière gardait ses angles droits et venait remplir
+            l'encoche. On voyait un trait courbe collé à un angle droit, ce qui
+            n'a de sens nulle part. Porté par le panneau lui-même, l'arrondi
+            découpe vraiment la matière, et le fond du deck se voit dans les
+            deux coins.
 
-          C'est la lèvre de l'accueil : un filet qui remonte à ses deux bouts,
-          `rounded-t` et `border-t`. Elle ne sépare pas deux couleurs, les deux
-          côtés sont sur le fond de page ; elle sépare deux **natures**, ce
-          qu'on regarde et ce qu'on lit, et c'est une frontière qui mérite d'être
-          dessinée plutôt que cachée.
+            Le rayon est `--rayon-jonction` et non 5 px : la jonction fait toute
+            la largeur de l'écran, et c'est exactement le cas que l'exception
+            d'échelle du projet décrit. Voir `AGENTS.md`. */}
+        <div className="relative z-10 mt-16 rounded-t-[var(--rayon-jonction)] border-t border-border bg-background sm:mt-20">
 
-          Le rayon est `--rayon-jonction` et non 5 px : la jonction fait toute la
-          largeur de l'écran, et c'est exactement le cas que l'exception
-          d'échelle du projet décrit. Voir `AGENTS.md`. */}
-      <div
-        aria-hidden
-        className="mt-16 h-16 rounded-t-[var(--rayon-jonction)] border-t border-border sm:mt-20"
-      />
 
       <Section className="[&>div]:pt-0">
         {/* L'article.
