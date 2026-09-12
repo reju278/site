@@ -194,34 +194,61 @@ export default function Accueil() {
                 quatre images sans nom n'apportent rien à l'oreille, et les
                 annoncer une par une découperait la phrase en cinq morceaux. */}
             <div className="mb-6 flex justify-center sm:mb-8">
-              <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/6 py-1.5 pr-3.5 pl-1.5 backdrop-blur-md">
+              <div
+                /* La gélule est un cran plus petite que le relevé, sur
+                   décision de Rémy : elle ne doit pas dépasser la largeur du
+                   titre qu'elle annonce. Une mention plus large que le titre
+                   cesse d'être une mention, elle devient le premier objet de
+                   la page. Le corps descend d'un cran sur téléphone, où le
+                   titre est lui-même plus court. */
+                className="flex items-center gap-2.5 rounded-full border border-white/10 bg-white/6 py-1 pr-3 pl-1 backdrop-blur-md"
+              >
                 <span aria-hidden className="flex">
                   {pastilleHero.portraits.map((portrait, i) => (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
+                    /* Le rond est le conteneur, l'image est dedans et
+                       **agrandie**, sur correction de Rémy.
+
+                       Les affiches portent les bandes noires de
+                       l'enregistrement, treize pour cent de la hauteur en haut
+                       comme en bas. Un `object-cover` dans un carré cale la
+                       hauteur de l'image sur celle du cadre : les bandes
+                       tombaient donc pile dans le rond, et chaque portrait
+                       avait un trait noir au-dessus et en dessous.
+
+                       Un facteur de 1,5 ne laisse voir que les deux tiers du
+                       milieu, donc uniquement l'image. C'est la même idée que
+                       le recadrage en 2,4/1 du carrousel, écrite dans
+                       `AGENTS.md` : ces bandes sont dans les fichiers et ne
+                       s'enlèvent qu'en rognant. */
+                    <span
                       key={portrait.fichier}
-                      src={`/temoignages/${portrait.fichier}.jpg`}
-                      alt=""
-                      width={1280}
-                      height={720}
-                      // L'image du haut de page ne prend pas `lazy` : c'est
-                      // celle que Google chronomètre. Celles-ci sont dans le
-                      // hero, donc visibles d'emblée.
-                      fetchPriority="high"
-                      // Le chevauchement se fait par une marge négative et non
-                      // par un décalage : une marge retire de la place, donc la
-                      // file se resserre vraiment au lieu de se superposer en
-                      // laissant un trou à la fin.
                       className={cn(
-                        "size-7 rounded-full object-cover ring-2 ring-white/15",
-                        i > 0 && "-ml-2.5",
+                        "block size-6 shrink-0 overflow-hidden rounded-full ring-2 ring-white/15",
+                        // Le chevauchement se fait par une marge négative et
+                        // non par un décalage : une marge retire de la place,
+                        // donc la file se resserre vraiment au lieu de se
+                        // superposer en laissant un trou à la fin.
+                        i > 0 && "-ml-2",
                       )}
-                      style={{ objectPosition: portrait.cadrage }}
-                    />
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={`/temoignages/${portrait.fichier}.jpg`}
+                        alt=""
+                        width={1280}
+                        height={720}
+                        // L'image du haut de page ne prend pas `lazy` : c'est
+                        // celle que Google chronomètre. Celles-ci sont dans le
+                        // hero, donc visibles d'emblée.
+                        fetchPriority="high"
+                        className="size-full scale-150 object-cover"
+                        style={{ objectPosition: portrait.cadrage }}
+                      />
+                    </span>
                   ))}
                 </span>
 
-                <span className="text-sm font-medium text-white">
+                <span className="text-xs font-medium text-white sm:text-sm">
                   {pastilleHero.texte}
                 </span>
               </div>
