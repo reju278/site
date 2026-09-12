@@ -637,6 +637,35 @@ depuis trois hauteurs de ligne plus bas, et les lignes se croisent.
   le script n'a pas tourné reste sous son masque, et c'est un niveau entier du
   plan que Google ne voit plus.
 
+### L'écart entre un en-tête de page et son contenu s'écrit une seule fois
+
+`EnTetePage` porte un rembourrage bas, `Section` un rembourrage haut, et aucun
+des deux ne sait que l'autre existe : ils s'additionnaient à **144 px sur
+téléphone et 192 en large** entre un sous-titre et la première rangée de
+contenu. Rémy a demandé de resserrer.
+
+La correction avait d'abord été posée page par page, ce qui la condamnait à être
+oubliée sur la page suivante. Elle vit donc **dans `globals.css`**, sur le voisin
+immédiat de l'en-tête :
+
+```css
+[data-entete-page] + section > div { padding-top: 0; }
+```
+
+D'où le `data-entete-page` sur le bloc racine d'`EnTetePage`. Le reste de l'écart
+est le `pb-10 sm:pb-12` de l'en-tête lui-même. **Total : 40 px et 48 px**, et
+c'est vrai sur les résultats, le blog, le podcast et la page d'erreur sans que
+personne ait à y penser en créant la page suivante.
+
+Deux garde-fous dans le sélecteur. Il ne vise que la **première** section : les
+suivantes gardent le rythme vertical du site, qui n'a aucune raison de changer au
+milieu d'une page. Et il ne vise que `section`, donc il épargne les pages
+légales, dont le bloc suivant est un `div` sans rembourrage haut.
+
+Le `> div` n'est pas une coquetterie : dans `Section`, le rembourrage vit sur le
+bloc intérieur et non sur la balise qui reçoit la classe. Un `className` nu
+n'écrase rien.
+
 ### Une image rognée perd son fondu, et ça se voit
 
 Les deux paysages du site portent leur propre transparence, qui s'éteint dans

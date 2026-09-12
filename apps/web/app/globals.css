@@ -822,3 +822,24 @@ html {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 }
+
+/* La première section d'une page intérieure colle à son en-tête.
+
+   `EnTetePage` porte déjà un rembourrage bas, et `Section` un rembourrage haut.
+   Aucun des deux ne sait que l'autre existe, donc ils s'additionnaient : 144 px
+   entre un sous-titre et la première rangée de contenu sur téléphone, 192 en
+   large. Rémy a demandé de resserrer, et la correction avait d'abord été posée
+   page par page, ce qui la condamnait à être oubliée sur la page suivante.
+
+   Elle s'écrit donc ici, **une fois**, sur le voisin immédiat de l'en-tête. Le
+   rembourrage vit sur le bloc intérieur de `Section` et non sur la balise
+   elle-même, d'où le `> div`. La spécificité, un attribut plus un type, passe
+   devant les `py-*` que Tailwind pose en classe simple.
+
+   Elle ne touche que la **première** section : les suivantes gardent le rythme
+   vertical du site, qui n'a aucune raison de changer au milieu d'une page. Et
+   elle ne touche pas les pages légales, dont le bloc suivant est un `div`
+   sans rembourrage haut : elles n'ont jamais eu le défaut. */
+[data-entete-page] + section > div {
+  padding-top: 0;
+}

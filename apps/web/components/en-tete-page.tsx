@@ -35,7 +35,7 @@ export function EnTetePage({
   className?: string;
 }) {
   return (
-    <div className={cn("relative isolate", className)}>
+    <div data-entete-page className={cn("relative isolate", className)}>
       <div
         aria-hidden
         className="fond-resultats grain-resultats pointer-events-none absolute inset-0 -z-10"
@@ -51,8 +51,20 @@ export function EnTetePage({
 
       {/* Le rembourrage haut dégage l'en-tête flottant, qui est fixe et
           recouvrirait le titre sans lui. C'est la même valeur que celle que les
-          pages portaient avant, reprise telle quelle pour ne rien déplacer. */}
-      <section className="px-5 pt-32 pb-16 sm:pt-40 sm:pb-20">
+          pages portaient avant, reprise telle quelle pour ne rien déplacer.
+
+          **Le rembourrage bas a été rentré, et il vaut pour toutes les pages
+          intérieures**, sur décision de Rémy : l'écart entre le sous-titre et
+          le contenu était trop grand. Il était de `pb-16 sm:pb-20`.
+
+          Il ne fait que la moitié du travail. L'autre moitié est le haut de la
+          `Section` qui suit, et les deux s'additionnaient sans se connaître :
+          144 px sur téléphone, 192 en large. La règle qui les réunit est écrite
+          **une seule fois**, dans `globals.css`, sur `[data-entete-page] +
+          section` : c'est ce qui la rend vraie sur le blog, le podcast et les
+          résultats sans que personne ait à y penser en créant la page suivante.
+          C'est aussi pourquoi ce bloc porte `data-entete-page`. */}
+      <section className="px-5 pt-32 pb-10 sm:pt-40 sm:pb-12">
         <div className="mx-auto max-w-6xl text-center">{children}</div>
       </section>
     </div>
