@@ -78,8 +78,6 @@ export function MessageRemy() {
               deux, et un `mt` sur le premier enfant décollerait tout le bloc de
               son titre. */}
           <div className="mt-10 space-y-6 text-base leading-relaxed text-pretty text-muted-foreground sm:mt-12 sm:text-lg">
-            <p className="text-foreground">{messageRemy.intro}</p>
-
             <p>{messageRemy.amorceVoies}</p>
 
             {/* Les trois voies, numérotées.

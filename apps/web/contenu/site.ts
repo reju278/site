@@ -244,10 +244,19 @@ export const podcastMaverick = {
  * commerciales : elles viennent de lui et n'ont pas été touchées.
  */
 export const messageRemy = {
-  titre: "Message de Rémy",
-  portrait: "/remy.webp",
+  /* Le titre est la première phrase de la lettre, et le bloc entier est entre
+     guillemets, sur décision de Rémy : le guillemet ouvrant est collé au titre,
+     le fermant termine le dernier paragraphe. Ce n'est plus une section qui
+     annonce un message, c'est le message qui commence.
 
-  intro: "Hey, c'est Rémy.",
+     La phrase ne se répète donc plus en tête de corps : elle était l'intro, elle
+     est devenue le titre.
+
+     Les espaces à l'intérieur des guillemets sont insécables, comme le veut la
+     typographie française : une espace ordinaire y autorise un retour à la
+     ligne, et le guillemet se retrouve seul en fin de ligne. */
+  titre: "«\u00a0Hey, c'est Rémy",
+  portrait: "/remy.webp",
 
   amorceVoies:
     "Si vous voulez très bien vivre de vos connaissances ou de vos compétences en ligne, vous avez aujourd'hui trois façons de le faire.",
@@ -309,7 +318,7 @@ export const messageRemy = {
     milieu:
       " dans laquelle je vous explique en détail comment fonctionne ce tunnel de vente. Si vous souhaitez aller plus loin après l'avoir visionnée, vous pourrez ",
     lienAppel: "entrer en contact avec nous",
-    apres: " pour échanger de vive voix.",
+    apres: " pour échanger de vive voix.\u00a0»",
   },
 
   salutation: "À votre succès,",
