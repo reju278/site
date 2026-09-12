@@ -523,6 +523,24 @@ summary {
      `--livre-texte`. */
   --courbe-morte: #dc2626;
 
+  /* Le relief de verre des panneaux de menu, relevé chez TrendTrack.
+
+     C'est leur `--sh-glass`, au pixel : un filet en haut, un halo très large et
+     un halo court, tous **à l'intérieur**. C'est ce triplé qui fait qu'une
+     tuile a l'air taillée dans la matière plutôt que peinte dessus, et il ne
+     s'obtient pas avec une bordure : une bordure cerne, une ombre intérieure
+     creuse.
+
+     **Ils l'écrivent en blanc, nous en `currentColor`**, et c'est la seule
+     adaptation. Leur site n'a qu'un thème sombre, où le blanc lève la matière ;
+     sur notre thème clair, un blanc à quatre pour cent ne se voit pas du tout.
+     Mêlé à `currentColor`, le même relief se lit dans les deux : clair sur le
+     sombre, sombre sur le clair. */
+  --ombre-verre:
+    0 1px 0 0 color-mix(in srgb, currentColor 8%, transparent) inset,
+    0 0 70px 0 color-mix(in srgb, currentColor 4%, transparent) inset,
+    0 0 12px 0 color-mix(in srgb, currentColor 8%, transparent) inset;
+
 }
 
 .dark {

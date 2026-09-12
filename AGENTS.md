@@ -247,6 +247,44 @@ carte sont des objets qu'on regarde de près, exactement ce que la règle des
 5 px décrit ; elles sont revenues à `rounded-md`, sur décision de Rémy. Une
 troisième jonction pleine largeur aurait droit au jeton ; rien d'autre.
 
+### Le menu déroulant est relevé sur TrendTrack, cotes comprises
+
+Le panneau des menus de l'en-tête reprend celui de trendtrack.io, sur demande de
+Rémy et à sa troisième formulation : « je veux exactement, à la lettre près, la
+même chose ». Les valeurs ne sont donc pas approchées à l'œil, elles sont lues
+dans leur feuille de style, sur les classes `nav_mega__wrap`, `nav_mega__layout`,
+`nav_mega__link` et `nav_menu__icon`.
+
+**Elles sont toutes en `em` chez eux**, donc proportionnelles au corps du texte,
+et c'est ce qui rend le relevé transposable : panneau à 1,75 em de rayon, grille
+de deux colonnes, entrée à 1 em de rayon, tuile de 2,75 em à 0,875 em de rayon.
+Résolues sur nos 16 px, elles donnent 28, 16 et 14 px.
+
+**Ce sont donc trois rayons de plus que 5 px**, et ils ne s'étendent à rien
+d'autre. La règle des 5 px décrit un objet qu'on regarde de près ; un panneau de
+menu est une surface flottante, de la même famille que les capsules à 12 px dont
+il sort. Une quatrième valeur ne s'ajoute pas sans se décider ici.
+
+**Le relief est leur `--sh-glass`**, trois ombres intérieures : un filet en haut,
+un halo très large, un halo court. C'est ce triplé qui fait qu'une tuile a l'air
+taillée dans la matière ; une bordure ne le remplace pas, elle cerne au lieu de
+creuser. Il vit chez nous dans `--ombre-verre`.
+
+**La seule adaptation est la couleur, et elle était obligatoire.** Leur site n'a
+qu'un thème sombre : fond de tuile, filet et reliefs y sont écrits en blanc
+translucide. Sur notre thème clair, un blanc à quatre pour cent ne se voit pas.
+Tout passe donc par `color-mix(in srgb, currentColor …%, transparent)`, qui donne
+du clair sur le sombre et du sombre sur le clair sans qu'on écrive deux valeurs.
+
+**La description de chaque entrée tient sur une ligne**, `line-clamp-1`, comme
+leur `u-text-clamp-1`. Ce n'est pas cosmétique : dans une grille à deux colonnes,
+une entrée qui déborde sur deux lignes décale sa voisine et le peigne est perdu.
+
+Ce qui ne se relève pas dans une feuille de style : **leurs pictogrammes sont des
+dessins**, onze illustrations pleines. Les nôtres sont des tracés Lucide. Le
+relief vient de la tuile et non du glyphe, donc l'écart se voit peu, mais le
+combler demande des dessins, pas du code.
+
 ### Les commandes rondes du lecteur de témoignages
 
 `rounded-full` est réservé aux photos de profil. Il a maintenant une seconde
@@ -619,8 +657,14 @@ l'en-tête, donc à 5 px. Elle flotte au-dessus du contenu de la page comme les
 capsules au-dessus du hero, et c'est la même raison qui justifie le même
 traitement.
 
-Ces deux exceptions couvrent tout ce qui a le droit de flouter par-devant. Une
-troisième ne s'ajoute pas parce qu'elle irait bien : elle se décide, et elle
+**Troisième exception : le panneau des menus déroulants de l'en-tête.** Même
+`card/85`, même flou de douze pixels, sur insistance de Rémy. C'est celle des
+trois qui se justifie le mieux : ce panneau **sort** d'une capsule en verre, il
+lui est accroché, et un panneau opaque accroché à une capsule translucide se lit
+comme deux objets étrangers posés l'un sous l'autre.
+
+Ces trois exceptions couvrent tout ce qui a le droit de flouter par-devant. Une
+quatrième ne s'ajoute pas parce qu'elle irait bien : elle se décide, et elle
 s'écrit ici.
 
 ### L'habillage de l'en-tête suit la page, jamais le défilement

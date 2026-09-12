@@ -3,7 +3,14 @@
 import { BasculeTheme } from "@/components/bascule-theme";
 import { TexteRoulant } from "@/components/texte-roulant";
 import { Reseaux } from "@/components/reseaux";
-import { estExterne, identite, liens, menus, navigation } from "@/contenu/site";
+import {
+  estExterne,
+  identite,
+  liens,
+  menus,
+  navigation,
+  podcastMaverick,
+} from "@/contenu/site";
 import { Button } from "@repo/ui/components/button";
 import {
   NavigationMenu,
@@ -21,7 +28,18 @@ import {
   SheetTrigger,
 } from "@repo/ui/components/sheet";
 import { cn } from "@repo/ui/lib/utils";
-import { ArrowUpRight, Menu } from "lucide-react";
+import {
+  ArrowUpRight,
+  BookOpen,
+  GraduationCap,
+  type LucideIcon,
+  Menu,
+  MessagesSquare,
+  Mic,
+  Newspaper,
+  Radio,
+  TrendingUp,
+} from "lucide-react";
 import Link from "next/link";
 import { useLayoutEffect, useState } from "react";
 import { usePathname } from "next/navigation";
@@ -45,6 +63,36 @@ import { usePathname } from "next/navigation";
  * vaut 12 px et non 5, et le flou est devant et non derrière. L'exception est
  * consignée dans `AGENTS.md`, et elle ne vaut que pour cet en-tête.
  */
+/**
+ * Une icône par entrée de menu, rangée par destination.
+ *
+ * La forme vient de TrendTrack, fournie par Rémy : une tuile carrée à gauche de
+ * chaque entrée, à la place de l'illustration qui occupait la colonne de
+ * droite. Le gain n'est pas décoratif. L'illustration était un emplacement vide
+ * qui donnait sa largeur au panneau ; l'icône, elle, appartient à l'entrée, donc
+ * le panneau n'a plus besoin d'une seconde colonne pour tenir debout.
+ *
+ * **La table est rangée par adresse et non par libellé.** Un libellé se
+ * renomme : « Digital Selfmade » est déjà devenu « Blog » une fois. Une adresse
+ * qui change est une page qui a bougé, et il faut de toute façon repasser
+ * partout. L'entrée sans icône n'est pas une erreur, elle tombe simplement sur
+ * `Newspaper`.
+ *
+ * Les icônes ne disent rien que le libellé ne dise : elles servent à retrouver
+ * une ligne dans une liste qu'on a déjà lue, pas à la comprendre la première
+ * fois. C'est pour ça qu'elles sont `aria-hidden` et que le lien s'annonce par
+ * son seul texte.
+ */
+const ICONES: Record<string, LucideIcon> = {
+  [liens.appel]: GraduationCap,
+  [liens.consulting]: MessagesSquare,
+  [liens.livre]: BookOpen,
+  [podcastMaverick.site]: Radio,
+  "/resultats": TrendingUp,
+  "/articles": Newspaper,
+  "/podcast": Mic,
+};
+
 const CAPSULE_BASE =
   "flex items-center gap-2 rounded-[12px] p-1.25 pr-1.5 transition-all duration-300 backdrop-blur-md ring-1 ring-inset";
 
@@ -212,69 +260,154 @@ export function EnTete() {
                   >
                     <TexteRoulant>{menu.libelle}</TexteRoulant>
                   </NavigationMenuTrigger>
-                  {/* Le panneau en deux colonnes : la liste à gauche, une
-                      illustration à droite, comme chez le modèle. La colonne
-                      de droite est un cadre vide pour l'instant ; c'est elle
-                      qui donne au panneau sa largeur et son assise, et la
-                      retirer ferait retomber le menu sur une simple liste. */}
-                  <NavigationMenuContent className="rounded-md border border-border bg-popover p-2 shadow-[0_12px_40px_rgba(0,0,0,0.18)]">
-                    <div className="flex gap-2">
-                      <ul className="w-[380px] shrink-0">
-                        {menu.entrees.map((entree) => (
+                  {/* Le panneau déroulant, relevé sur TrendTrack.
+
+                      **Les cotes ne sont pas approchées, elles sont lues dans
+                      leur feuille de style** : `nav_mega__wrap`, `nav_mega__
+                      layout`, `nav_mega__link` et `nav_menu__icon`. Panneau à
+                      1,75 em de rayon, grille de deux colonnes à 0,75 em et
+                      0,375 em d'écart, rembourrage de 1 em ; entrée à 1 em de
+                      rayon, 1 em d'écart, rembourrage de 0,625 em avec 1,75 em
+                      à droite ; tuile de 2,75 em à 0,875 em de rayon,
+                      rembourrage de 0,625 em. Tout est en `em` chez eux, donc
+                      tout est proportionnel au corps du texte : les valeurs en
+                      pixels ci-dessous sont ces `em` résolus sur nos 16 px.
+
+                      **Trois choses sont à eux et restent à eux** : le fond de
+                      la tuile et son filet, tirés de `currentColor` à 4 % et
+                      2 %, et l'ombre de verre `--ombre-verre`. Le
+                      `color-mix` sur `currentColor` est ce qui rend la recette
+                      transposable : leur site n'a qu'un thème, le nôtre en a
+                      deux, et une valeur en blanc dur n'aurait rien donné en
+                      clair.
+
+                      **Le verre de l'en-tête est conservé par-dessus**, sur
+                      insistance de Rémy : `card/85` et flou de douze pixels,
+                      exactement les capsules. C'est la troisième exception du
+                      projet à « le flou va derrière, jamais devant », et elle
+                      se tient : ce panneau **sort** d'une capsule en verre, et
+                      les deux se lisaient comme deux objets étrangers quand
+                      l'un était opaque. Écrite dans `AGENTS.md`.
+
+                      Le fond et le rayon sont écrits **deux fois**, nus et
+                      préfixés `group-data-[viewport=false]`. Le composant de
+                      registre pose les siens sous ce préfixe, `cn()` ne voit
+                      pas là un conflit, et c'est la classe préfixée qui gagne :
+                      sans le doublage, le panneau restait opaque et à 5 px
+                      pendant que le code disait le contraire. C'est la leçon
+                      des flèches du carrousel, dans `AGENTS.md`. */}
+                  <NavigationMenuContent
+                    style={{ boxShadow: "var(--ombre-verre)" }}
+                    className={cn(
+                      "overflow-hidden p-4 backdrop-blur-md",
+                      "rounded-[28px] group-data-[viewport=false]/navigation-menu:rounded-[28px]",
+                      "bg-card/85 group-data-[viewport=false]/navigation-menu:bg-card/85",
+                      "border-border group-data-[viewport=false]/navigation-menu:border-border",
+                    )}
+                  >
+                    {/* La grille.
+
+                        Deux colonnes comme chez eux, et la largeur suit : leur
+                        panneau fait 54 em pour deux colonnes, le nôtre 44, nos
+                        libellés étant plus courts que les leurs. Le
+                        `max-w` borne le panneau à la fenêtre, sinon il déborde
+                        à droite sur un portable à 900 px, où le menu existe
+                        encore.
+
+                        Une entrée seule sur sa dernière ligne n'est pas un
+                        défaut ici : la grille se remplit de gauche à droite, et
+                        c'est ce que fait leur menu à onze entrées. */}
+                    <ul className="grid w-[44rem] max-w-[calc(100vw-5rem)] grid-cols-2 gap-x-1.5 gap-y-3">
+                      {menu.entrees.map((entree) => {
+                        const Icone = ICONES[entree.href] ?? Newspaper;
+                        const externe =
+                          entree.externe || estExterne(entree.href);
+
+                        return (
                           <li key={entree.href}>
                             <NavigationMenuLink asChild>
                               <a
                                 href={entree.href}
-                                target={
-                                  entree.externe || estExterne(entree.href)
-                                    ? "_blank"
-                                    : undefined
-                                }
-                                rel={
-                                  entree.externe || estExterne(entree.href)
-                                    ? "noreferrer"
-                                    : undefined
-                                }
-                                className="flex flex-col gap-1 rounded-md p-3 transition-colors hover:bg-accent"
+                                target={externe ? "_blank" : undefined}
+                                rel={externe ? "noreferrer" : undefined}
+                                /* `flex-row` est écrit alors qu'il est le
+                                   défaut de `flex`, et il le faut : le lien du
+                                   registre pose `flex-col`, que `cn()` ne voit
+                                   pas comme un conflit avec `flex`. Sans lui,
+                                   la tuile se range au-dessus du texte au lieu
+                                   d'être à sa gauche.
+
+                                   Le survol est un voile tiré de `currentColor`
+                                   et non un jeton : c'est la même mécanique que
+                                   la tuile, donc il suit le thème sans qu'on
+                                   écrive deux valeurs. */
+                                className="group/entree flex flex-row items-center gap-4 rounded-[16px] py-2.5 pr-7 pl-2.5 transition-colors hover:bg-[color-mix(in_srgb,currentColor_5%,transparent)]"
                               >
-                                <span className="flex items-center gap-1.5 text-sm font-semibold text-popover-foreground">
-                                  {entree.libelle}
-                                  {entree.externe ? (
-                                    <ArrowUpRight className="size-3.5 opacity-50" />
+                                {/* La tuile.
+
+                                    44 px de côté, 14 px de rayon, un fond à
+                                    4 % de la couleur du texte, un filet à 2 %
+                                    et l'ombre de verre : ce sont leurs quatre
+                                    valeurs. Le glyphe est en `--primary`, la
+                                    couleur du site, là où le leur est dans leur
+                                    vert de marque.
+
+                                    **Leurs icônes sont des dessins, les nôtres
+                                    sont des tracés Lucide.** C'est la seule
+                                    chose qui ne se relève pas dans une feuille
+                                    de style : ils ont fait dessiner onze
+                                    pictogrammes pleins. Le relief vient de la
+                                    tuile, pas du glyphe, donc l'écart se voit
+                                    peu ; le combler demande des dessins, pas du
+                                    code. */}
+                                <span
+                                  aria-hidden
+                                  style={{ boxShadow: "var(--ombre-verre)" }}
+                                  className="grid size-11 shrink-0 place-items-center overflow-hidden rounded-[14px] bg-[color-mix(in_srgb,currentColor_4%,transparent)] p-2.5 text-primary outline outline-[color-mix(in_srgb,currentColor_8%,transparent)] -outline-offset-1"
+                                >
+                                  <Icone className="size-full" />
+                                </span>
+
+                                {/* `min-w-0` : sans lui, un bloc de texte dans
+                                    un conteneur en `flex` refuse de descendre
+                                    sous la largeur de son plus long mot, et la
+                                    coupure à une ligne ne se déclenche jamais. */}
+                                <span className="min-w-0">
+                                  <span className="flex items-center gap-1.5 text-sm font-medium text-popover-foreground">
+                                    {entree.libelle}
+                                    {externe ? (
+                                      <ArrowUpRight className="size-3.5 shrink-0 opacity-50" />
+                                    ) : null}
+                                  </span>
+                                  {/* Une seule ligne, coupée aux points de
+                                      suspension : c'est leur `u-text-clamp-1`,
+                                      et ce n'est pas cosmétique. Deux entrées
+                                      dont l'une déborde sur deux lignes
+                                      décalent toute la colonne voisine, et la
+                                      grille perd son peigne. */}
+                                  {entree.texte ? (
+                                    <span className="line-clamp-1 text-sm text-muted-foreground">
+                                      {entree.texte}
+                                    </span>
                                   ) : null}
                                 </span>
-                                {entree.texte ? (
-                                  <span className="text-sm leading-snug text-muted-foreground">
-                                    {entree.texte}
-                                  </span>
-                                ) : null}
                               </a>
                             </NavigationMenuLink>
                           </li>
-                        ))}
-                        {/* Les réseaux, en pied de la seule liste des
-                            ressources : ce sont des lieux où l'on suit Rémy,
-                            pas des programmes. Le filet les sépare du reste
-                            comme la section « resources » du modèle. */}
-                        {menu.libelle === "Ressources" ? (
-                          <li className="mt-2 border-t border-border px-1 pt-2">
-                            <Reseaux />
-                          </li>
-                        ) : null}
-                      </ul>
+                        );
+                      })}
 
-                      <div
-                        aria-hidden
-                        className="flex w-[300px] shrink-0 items-center justify-center rounded-md border border-dashed border-border bg-muted/40 p-6 text-center"
-                      >
-                        <span className="text-sm text-muted-foreground">
-                          <span className="font-semibold text-foreground">
-                            Emplacement :{" "}
-                          </span>
-                          l&apos;illustration de ce menu
-                        </span>
-                      </div>
-                    </div>
+                      {/* Les réseaux, en pied de la seule liste des
+                          ressources : ce sont des lieux où l'on suit Rémy, pas
+                          des programmes. Ils tiennent les deux colonnes, une
+                          rangée de pictogrammes n'ayant pas à se plier au
+                          peigne des entrées. */}
+                      {menu.libelle === "Ressources" ? (
+                        <li className="col-span-2 mt-1 border-t border-border px-2.5 pt-3">
+                          <Reseaux />
+                        </li>
+                      ) : null}
+                    </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
               ))}

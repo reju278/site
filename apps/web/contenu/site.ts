@@ -445,13 +445,15 @@ export const sectionTunnel = {
      La coupure en deux segments n'est pas de la mise en forme : ce sont deux
      phrases, et la seconde est celle qu'on veut entendre.
 
-     « Le parfait tunnel de vente » est venu remplacer « les tunnels de vente »,
-     sur décision de Rémy. C'est le mot de la promesse du deck, « le PARFAIT
-     tunnel de vente », qu'il emploie partout ailleurs : le singulier dit une
-     méthode arrêtée là où le pluriel disait une catégorie d'outils. */
+     « Le parfait « tunnel de vente » » est venu remplacer « les tunnels de
+     vente », sur décision de Rémy. C'est la promesse du deck reprise telle
+     quelle, guillemets compris : le singulier dit une méthode arrêtée là où le
+     pluriel disait une catégorie d'outils, et les guillemets disent que
+     l'expression est de lui. Ils encadrent « tunnel de vente » et non
+     « parfait », comme dans le deck. */
   titre: [
     { texte: "Les sites internet sont morts." },
-    { texte: "Place au parfait tunnel de vente.", accent: true },
+    { texte: "Place au parfait « tunnel de vente ».", accent: true },
   ],
 
   /* Le sous-titre, dicté par Rémy lui aussi. C'est la slide « cadrage » du
@@ -464,10 +466,14 @@ export const sectionTunnel = {
 
   /* Les noms des deux courbes du graphique. Ce sont les deux membres du titre,
      repris tels quels : la comparaison montrée doit porter les mêmes mots que
-     la phrase qui l'annonce, sinon le lecteur doit faire la traduction. */
+     la phrase qui l'annonce, sinon le lecteur doit faire la traduction. C'est
+     pour cette raison que la courbe verte s'appelle « Parfait tunnel de
+     vente » et non « Tunnels de vente », sur correction de Rémy : le titre dit
+     « parfait », la légende doit le dire aussi. Les guillemets, eux, restent au
+     titre : dans une légende de deux mots, ils encombrent. */
   courbes: {
     sites: "Sites internet",
-    tunnels: "Tunnels de vente",
+    tunnels: "Parfait tunnel de vente",
   },
 } as const;
 
