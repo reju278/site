@@ -22,16 +22,25 @@
 :root {
   --radius: 5px;
 
-  /* Le papier et l'encre. */
-  --background: #f2ede4;
+  /* Le papier et l'encre.
+
+     Le fond est celui de calendly.com, `rgb(252, 251, 248)`, relevé par Rémy
+     sur leur page et repris tel quel. Il remplace le beige `#f2ede4`, nettement
+     plus chaud et plus sombre.
+
+     **Toute la rampe claire a bougé avec lui, et il le fallait.** Les blocs
+     étaient à peine plus clairs que le fond ; posés tels quels sur un fond
+     presque blanc, ils seraient devenus plus *sombres* que lui et la hiérarchie
+     se serait inversée. Les surfaces montent donc au blanc et les gris chauds
+     s'éclaircissent d'autant. Ce qui détache un bloc reste son filet, pas son
+     remplissage. */
+  --background: #fcfbf8;
   --foreground: #2b2118;
 
-  /* Les blocs sont à peine plus clairs que le fond : ce qui les détache,
-     c'est leur filet, pas leur remplissage. */
-  --card: #f7f3ea;
+  --card: #ffffff;
   --card-foreground: #2b2118;
 
-  --popover: #faf7f0;
+  --popover: #ffffff;
   --popover-foreground: #2b2118;
 
   /* Le bleu de la marque, donné par Rémy : rgb(4, 94, 230). Il est identique
@@ -40,33 +49,35 @@
   --primary: #045ee6;
   --primary-foreground: #ffffff;
 
-  --secondary: #e7dfd2;
+  --secondary: #f0ede5;
   --secondary-foreground: #3b2e22;
 
-  --muted: #e7dfd2;
-  /* 4,50:1 sur `--accent`, la plus foncée des surfaces claires, et 5,55:1 sur
-     le fond de page. L'ancienne valeur, #7a6a58, tombait à 3,62:1 sur
-     `--accent` et 3,94:1 sur `--muted` : un texte atténué reste du texte
-     courant, il lui faut 4,5:1 sur TOUTES les surfaces où il peut se poser,
-     pas seulement sur le fond de page. */
+  --muted: #f0ede5;
+  /* Inchangé, et vérifié à nouveau contre la rampe éclaircie : 5,14:1 sur
+     `--accent`, la plus foncée des surfaces claires, 6,25:1 sur le fond de page
+     et 6,47:1 sur les blocs. Le fond plus clair lui profite, il gagne partout.
+
+     Un texte atténué reste du texte courant : il lui faut 4,5:1 sur TOUTES les
+     surfaces où il peut se poser, pas seulement sur le fond de page. C'est ce
+     que ratait #7a6a58, à 3,62:1 sur `--accent`. */
   --muted-foreground: #675c57;
 
-  --accent: #e0d6c6;
+  --accent: #e9e5da;
   --accent-foreground: #2b2118;
 
   --destructive: #a4442f;
   --destructive-foreground: #f7f3ea;
 
-  --border: #dccfbc;
-  --input: #dccfbc;
+  --border: #e4dfd3;
+  --input: #e4dfd3;
   --ring: #045ee6;
 
   /* Le menu latéral. */
-  --sidebar: #ede7dc;
+  --sidebar: #f5f2eb;
   --sidebar-foreground: #2b2118;
   --sidebar-primary: #045ee6;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #e0d6c6;
+  --sidebar-accent: #e9e5da;
   --sidebar-accent-foreground: #2b2118;
   --sidebar-border: #dccfbc;
   --sidebar-ring: #045ee6;
@@ -226,25 +237,28 @@
   --radius-xl: 5px;
   --radius-2xl: 5px;
   --radius-3xl: 5px;
-  --animate-shimmer-slide: shimmer-slide var(--speed) ease-in-out infinite alternate;
+  --animate-shimmer-slide: shimmer-slide var(--speed) ease-in-out infinite
+    alternate;
   --animate-spin-around: spin-around calc(var(--speed) * 2) infinite linear;
   @keyframes shimmer-slide {
-  to {
-    transform: translate(calc(100cqw - 100%), 0);
+    to {
+      transform: translate(calc(100cqw - 100%), 0);
     }
   }
   @keyframes spin-around {
-  0% {
-    transform: translateZ(0) rotate(0);
+    0% {
+      transform: translateZ(0) rotate(0);
     }
-  15%, 35% {
-    transform: translateZ(0) rotate(90deg);
+    15%,
+    35% {
+      transform: translateZ(0) rotate(90deg);
     }
-  65%, 85% {
-    transform: translateZ(0) rotate(270deg);
+    65%,
+    85% {
+      transform: translateZ(0) rotate(270deg);
     }
-  100% {
-    transform: translateZ(0) rotate(360deg);
+    100% {
+      transform: translateZ(0) rotate(360deg);
     }
   }
 }
@@ -290,17 +304,47 @@
       scroll-behavior: auto !important;
     }
 
-    /* La bascule de thème animée s'appuie sur l'API View Transitions, qui ne
-       passe ni par `animation` ni par `transition` sur des éléments ordinaires :
-       il faut la neutraliser nommément.
+    /* La bascule de thème s'anime par la Web Animations API, en JavaScript, sur
+       un pseudo-élément : ni `animation-duration` ni `transition-duration`
+       ci-dessus ne l'atteignent, et `*` ne sélectionne pas les
+       `::view-transition-*`. Il faut donc la neutraliser nommément.
 
-       `shadcn add` avait posé cette règle hors du bloc de mouvement réduit, ce
-       qui l'aurait annulée pour tout le monde et aurait vidé de son sens le
-       composant qu'elle accompagne. */
-    ::view-transition-old(root),
+       Une déclaration `!important` d'auteur passe devant une animation dans la
+       cascade : le disque est posé ouvert, et le thème bascule d'un coup. C'est
+       exactement ce qui est demandé ici. */
     ::view-transition-new(root) {
-      animation: none;
-      mix-blend-mode: normal;
+      clip-path: none !important;
     }
+  }
+
+  /* Le révélateur circulaire de la bascule de thème.
+
+     L'API View Transitions applique d'office un fondu croisé à ces deux
+     pseudo-éléments, en `mix-blend-mode: plus-lighter`. Ce fondu est
+     indépendant du disque que la bascule dessine au `clip-path` : pendant toute
+     l'ouverture, la page neuve se superpose donc à l'ancienne sur *toute* sa
+     surface, et le texte est traversé par un voile qui éclaircit. C'est ce
+     qu'on voyait passer devant.
+
+     On coupe le fondu et le mélange, puis on ordonne les deux calques :
+     l'ancien thème dessous, le neuf dessus et découpé par le disque. Le seul
+     mouvement qui reste est l'ouverture du disque.
+
+     Cette règle vaut en permanence. Elle avait été rangée sous
+     `prefers-reduced-motion`, où elle ne servait plus qu'aux personnes qui
+     demandent moins de mouvement, c'est-à-dire précisément à celles qui ne
+     voient jamais l'animation. */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+
+  ::view-transition-old(root) {
+    z-index: 0;
+  }
+
+  ::view-transition-new(root) {
+    z-index: 1;
   }
 }
