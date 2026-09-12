@@ -55,6 +55,10 @@ const donneesStructurees = {
   jobTitle: "Formateur et consultant en acquisition",
   worksFor: { "@type": "Organization", name: identite.societe },
   sameAs: [
+    /* Les trois chaînes, et la principale en tête : `sameAs` sert à rattacher
+       le site aux profils d'une même personne, donc en oublier une revient à
+       laisser Google la traiter comme celle de quelqu'un d'autre. */
+    liens.youtubeRemy,
     liens.youtube,
     liens.youtubeFunnels,
     liens.instagram,

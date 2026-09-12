@@ -163,12 +163,25 @@ export const liens = {
   // Sans balise : les plateformes tierces ne sont pas suivies par Hyros, et un
   // paramètre inconnu dans une URL de profil n'apporte rien.
   //
-  // Les deux chaînes YouTube sont distinctes et vérifiées par leur flux Atom.
-  // Attention : `@profitlibertenostress` n'est PAS une troisième chaîne, c'est
-  // le nom d'usage de la première, `UCzGq4I0pXnDJizd0fitt10w`. Les deux
-  // adresses mènent au même endroit.
+  // **Il y a trois chaînes, et l'ancien commentaire disait le contraire.** Il
+  // affirmait que `@profitlibertenostress` était le nom d'usage de
+  // `UCzGq4I0pXnDJizd0fitt10w` et que les deux adresses menaient au même
+  // endroit. C'est faux, et ça a coûté un mauvais lien dans le menu jusqu'à ce
+  // que Rémy le corrige. Les identifiants sont relevés dans le `externalId` de
+  // chaque page de chaîne, pas déduits d'un nom :
+  //
+  // - `@RémyJupille`, `UCzGq4I0pXnDJizd0fitt10w`, « Rémy Jupille ». **C'est la
+  //   chaîne principale**, celle que `chaine.flux` lit déjà.
+  // - `@profitlibertenostress`, `UCCKabalzdV9FU2k7gX69vkQ`, celle du podcast.
+  // - `@remyjupillefunnels`, `UC95WKod9sR3tcAaEuPXpWyw`, « Funnels Club ».
+  //
+  // L'adresse de la principale porte des accents, donc elle s'écrit
+  // **percent-encodée** : `@R%C3%A9myJupille`. Écrite avec ses accents dans un
+  // attribut `href`, elle marche dans un navigateur, qui encode tout seul, et
+  // casse partout ailleurs, à commencer par un flux ou un fichier de données.
   youtube: "https://www.youtube.com/@profitlibertenostress",
   youtubeFunnels: "https://www.youtube.com/@remyjupillefunnels",
+  youtubeRemy: "https://www.youtube.com/@R%C3%A9myJupille",
 
   instagram: "https://www.instagram.com/remy_jupille/",
   tiktok: "https://www.tiktok.com/@remy_jupille",
@@ -570,12 +583,14 @@ export const menus: readonly {
         href: "/articles",
         texte: "Tous les articles",
       },
-      /* **Libellé et descriptif à valider par Rémy.** Le nom de la chaîne est
-         « Funnels Club - Rémy Jupille », qui aurait fait doublon avec l'entrée
-         Funnels Club du menu des programmes. */
+      /* **La chaîne principale, corrigée par Rémy.** Cette ligne pointait vers
+         `@remyjupillefunnels`, la chaîne Funnels Club, parce qu'un commentaire
+         de ce fichier affirmait à tort que la chaîne du podcast et la principale
+         n'en faisaient qu'une. Il y en a trois, et la principale est
+         `@RémyJupille`. Voir `liens`, où les trois identifiants sont relevés. */
       {
         libelle: "Rémy Jupille sur YouTube",
-        href: liens.youtubeFunnels,
+        href: liens.youtubeRemy,
         texte: "La chaîne principale",
         externe: true,
       },

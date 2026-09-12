@@ -155,6 +155,7 @@ const IMAGES: Record<
 const GLYPHES_MARQUE: Record<string, string> = {
   [liens.youtube]: siYoutube.path,
   [liens.youtubeFunnels]: siYoutube.path,
+  [liens.youtubeRemy]: siYoutube.path,
   [podcastMaverick.youtube]: siYoutube.path,
 };
 
@@ -174,6 +175,7 @@ const GLYPHES_MARQUE: Record<string, string> = {
 const TEINTES: Record<string, string> = {
   [liens.youtube]: "var(--youtube)",
   [liens.youtubeFunnels]: "var(--youtube)",
+  [liens.youtubeRemy]: "var(--youtube)",
   [podcastMaverick.youtube]: "var(--youtube)",
   "/resultats": "var(--icone-resultats)",
 };
