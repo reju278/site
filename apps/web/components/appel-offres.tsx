@@ -34,13 +34,19 @@ export function AppelOffres() {
                  différente les décalent de dix pixels. */
               className="relief-verre flex h-full flex-col rounded-md border border-border bg-card p-6 sm:p-8"
             >
-              <h2 className="titre flex items-center text-2xl text-card-foreground sm:text-3xl">
+              {/* `h3` et non `h2`, et ce n'est pas un détail de balise. Ces
+                  deux cartes ferment un article dont les chapitres sont des
+                  `h2` : au même rang, « Funnels Club » et « Consulting privé »
+                  se retrouvaient dans le plan de la page au même niveau que les
+                  chapitres, et une page qui annonce neuf `h2` dont deux hors
+                  sujet dilue ce dont elle parle. */}
+              <h3 className="titre flex items-center text-2xl text-card-foreground sm:text-3xl">
                 <LogoFunnels
                   lettre={offre.id === "funnels-club" ? "F" : "C"}
                   className="mr-[0.28em] inline-grid size-[0.95em] align-[-0.13em]"
                 />
                 {offre.nom}
-              </h2>
+              </h3>
 
               <p className="mt-3 text-base leading-relaxed text-pretty text-muted-foreground">
                 {offre.texte}

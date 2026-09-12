@@ -80,6 +80,7 @@ export function LecteurVideo({
   afficheMobile,
   legende,
   actif = true,
+  afficheAlt,
   className,
 }: {
   id: string;
@@ -105,6 +106,15 @@ export function LecteurVideo({
    * tiers, et ça rend au passage la mémoire du lecteur.
    */
   actif?: boolean;
+  /**
+   * La description de l'affiche.
+   *
+   * Vide par défaut, et c'est le bon défaut : dans un carrousel ou une grille,
+   * le nom et le résultat sont déjà écrits à côté, et décrire l'image les
+   * ferait annoncer deux fois. Sur une page d'avis, où l'affiche est la seule
+   * image du document, elle mérite d'être décrite.
+   */
+  afficheAlt?: string;
   className?: string;
 }) {
   const [lance, setLance] = useState(false);
@@ -167,7 +177,7 @@ export function LecteurVideo({
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={afficheMobile ?? affiche}
-              alt=""
+              alt={afficheAlt ?? ""}
               width={1280}
               height={720}
               loading="lazy"

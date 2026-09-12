@@ -152,6 +152,87 @@ et les deux tailles d'écran.
 - **`robots: { index: false }`** sur les pages légales : elles diluent le site
   sans jamais amener personne.
 
+### Le titre d'onglet et le `h1` ne sont pas le même texte
+
+Ils ne s'adressent pas aux mêmes gens. Le `h1` parle à quelqu'un qui est déjà sur
+la page et peut courir sur deux lignes ; le `title` s'affiche dans une liste de
+résultats qui coupe autour de **soixante caractères**, et le gabarit du site lui
+ajoute encore « · Rémy Jupille ». Un `h1` de cent dix caractères recopié dans le
+`title` devient une phrase tronquée au milieu d'un mot.
+
+Une page dont le `h1` est long porte donc **deux titres** : le long pour l'écran,
+le court pour l'onglet. C'est ce que fait `titrePage` dans `avis.ts`.
+
+### Un bloc d'appel n'est jamais un `h2`
+
+Le plan que les robots lisent doit décrire **le sujet de la page**. Un article de
+sept chapitres en `h2` qui finit par deux cartes d'offres en `h2` annonce neuf
+sujets, dont deux qui parlent d'autre chose. Les blocs d'appel, les encarts et
+les cartes de fin descendent en `h3`, ou n'ont pas de titre du tout.
+
+### Une page enfant déclare son fil d'Ariane
+
+Toute page qui a un parent évident porte un `BreadcrumbList` en données
+structurées. C'est lui qui fait afficher « Résultats › Roland Buffet » dans les
+résultats de recherche au lieu de l'adresse brute. Deux échelons suffisent quand
+le parent est unique : remonter jusqu'à l'accueil n'ajoute qu'une ligne que tout
+le monde connaît.
+
+### Les avis : `VideoObject` oui, `Review` jamais
+
+**Les avis qu'une entreprise publie sur elle-même sont exclus des résultats
+enrichis de Google depuis 2019.** Poser un balisage `Review` ou
+`AggregateRating` sur un témoignage client n'apporte aucune étoile et expose à
+une pénalité manuelle. Ce qui est éligible, et réel, c'est le `VideoObject` :
+vignette, durée, date de mise en ligne.
+
+**La date de mise en ligne se relève, elle ne s'approche pas.** Une date fausse
+déclarée à Google est pire qu'une date absente.
+
+**La transcription se déclare** dans la propriété `transcript` du `VideoObject`
+quand la page la publie. La donner évite à Google d'avoir à deviner que le texte
+replié sous l'article est la parole de la vidéo.
+
+### La transcription d'une vidéo se publie, nettoyée
+
+Un moteur indexe normalement ce qui est replié dans un `details`, depuis
+l'indexation mobile d'abord : c'est donc mille mots de plus par page, sur le bon
+sujet et dans les mots de la personne. Et c'est d'abord de l'accessibilité, que
+ce fichier réclame déjà pour toute vidéo qui porte le message d'une page.
+
+**Mais jamais brute.** La reconnaissance vocale écorche les noms propres, pose la
+ponctuation au hasard et répète les hésitations. Quinze pages de transcription
+brute n'ont pas l'air riches, elles ont l'air automatiques, et c'est exactement
+ce que les signaux de contenu utile cherchent. Ce qui se corrige : les noms
+propres, la ponctuation, les répétitions d'oral, les nombres écrits en lettres,
+et les tours de parole rendus à qui les dit. **Aucun mot remplacé, aucune phrase
+reformulée** : ce qui est mal dit reste mal dit, c'est de la parole.
+
+`details` et `summary` natifs, jamais un accordéon écrit à la main : le texte est
+dans le document dès le premier octet, et un composant React retirerait le
+contenu du DOM tant qu'il est fermé, ce qui est l'inverse du but.
+
+### Les pages d'une même famille se citent entre elles
+
+**C'est le levier le plus fort, et il ne se voit pas sur une page seule.** Quinze
+articles qui ne se citent pas sont quinze pages isolées ; les mêmes qui se citent
+forment un groupe où chacune renforce les autres.
+
+Les voisins se prennent **à la suite dans la liste, en bouclant** : chaque page
+en cite trois, et chacune est citée autant de fois. Un tirage au hasard fait des
+orphelins ; un tri par date laisse les plus anciennes sans personne pour les
+pointer.
+
+### Un lien interne vit dans une phrase
+
+C'est là que l'ancre porte du sens, pour un lecteur comme pour un moteur : un
+lien au milieu d'une phrase dit de quoi parle la page d'arrivée, une liste de
+liens en bas de page ne dit rien. Un article vise **quatre à cinq liens internes
+en contexte**, en plus de ceux du pied de page, qui ne comptent pas.
+
+Le texte du lien s'écrit dans le contenu et non dans le JSX : voir `TexteLie` et
+sa syntaxe `[libellé](adresse)`.
+
 ### Les images
 
 - **Tout `alt` est décidé, jamais oublié.** Une image qui porte du sens décrit

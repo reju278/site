@@ -8,6 +8,7 @@ import { avis } from "@/contenu/avis";
 import { SITE, liens, temoignages } from "@/contenu/site";
 import type { Metadata } from "next";
 import { ArrowRight, ChevronRight } from "lucide-react";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 /**
@@ -56,8 +57,14 @@ export async function generateMetadata({
   const { article, temoignage } = trouve;
   const affiche = `/temoignages/${temoignage.id}.jpg`;
 
+  /* Les trois avis qui suivent celui-ci dans le tableau, en bouclant. */
+  const depart = avis.findIndex((a) => a.slug === article.slug);
+  const voisins = Array.from({ length: Math.min(3, avis.length - 1) }, (_, i) =>
+    avis[(depart + i + 1) % avis.length],
+  ).filter((a): a is NonNullable<typeof a> => Boolean(a));
+
   return {
-    title: article.titre,
+    title: article.titrePage,
     description: article.description,
     alternates: { canonical: `/resultats/${article.slug}` },
     openGraph: {
@@ -89,6 +96,14 @@ export default async function PageAvis({
   const { article, temoignage } = trouve;
   const affiche = `/temoignages/${temoignage.id}.jpg`;
 
+  /* Les trois avis qui suivent celui-ci dans le tableau, en bouclant : chaque
+     avis en cite donc trois, et chacun est cité autant de fois. */
+  const depart = avis.findIndex((a) => a.slug === article.slug);
+  const voisins = Array.from(
+    { length: Math.min(3, avis.length - 1) },
+    (_, i) => avis[(depart + i + 1) % avis.length],
+  ).filter((a): a is (typeof avis)[number] => Boolean(a));
+
   /* Les données structurées de la vidéo.
 
      `uploadDate` est obligatoire pour `VideoObject` et **elle n'est pas
@@ -104,6 +119,38 @@ export default async function PageAvis({
     uploadDate: temoignage.publie,
     duration: dureeIso(temoignage.secondes),
     embedUrl: `https://fast.wistia.net/embed/iframe/${temoignage.id}`,
+    /* La transcription est **déclarée** et non laissée à découvrir :
+       schema.org a une propriété faite pour ça, et la page la publie déjà en
+       entier. La donner évite à Google d'avoir à deviner que le texte replié
+       sous l'article est la parole de la vidéo. */
+    transcript: article.transcription
+      .map((tour) => `${tour.qui} : ${tour.texte}`)
+      .join("\n\n"),
+  };
+
+  /* Le fil d'Ariane.
+
+     C'est lui qui fait afficher « Résultats › Roland Buffet » dans les résultats
+     de recherche au lieu de l'adresse brute. La page a un parent évident et un
+     seul, donc deux échelons suffisent : un fil qui remonterait à l'accueil
+     n'ajouterait qu'une ligne que tout le monde connaît déjà. */
+  const filDAriane = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Résultats",
+        item: `${SITE}/resultats`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: temoignage.nom,
+        item: `${SITE}/resultats/${article.slug}`,
+      },
+    ],
   };
 
   return (
@@ -111,6 +158,10 @@ export default async function PageAvis({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(donnees) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(filDAriane) }}
       />
 
       {/* Le cadre commun à l'en-tête, à l'entretien et à l'article.
@@ -172,6 +223,7 @@ export default async function PageAvis({
               titre={temoignage.nom}
               secondes={temoignage.secondes}
               affiche={affiche}
+              afficheAlt={article.afficheAlt}
             />
 
             {/* L'appel, juste sous l'entretien, sur demande de Rémy.
@@ -245,8 +297,12 @@ export default async function PageAvis({
                   guillemets français, avec leurs espaces insécables : une espace
                   ordinaire y autorise un retour à la ligne, et le guillemet se
                   retrouve seul en fin de ligne. */}
+              {/* Le filet de la citation est en `foreground` et non en
+                  `primary`, sur décision de Rémy : le bleu du site sert aux
+                  actions, et une citation n'en est pas une. Un trait neutre
+                  marque le retrait sans promettre un clic. */}
               {section.citation ? (
-                <figure className="mt-6 border-l-2 border-primary pl-5">
+                <figure className="mt-6 border-l-2 border-foreground pl-5">
                   <blockquote className="text-lg leading-relaxed text-pretty text-foreground sm:text-xl">
                     {`«\u00a0${section.citation.texte}\u00a0»`}
                   </blockquote>
@@ -304,10 +360,45 @@ export default async function PageAvis({
               ))}
             </div>
           </details>
+
+          {/* Les avis voisins.
+
+              **C'est le levier le plus fort de l'ensemble**, et il ne se voit
+              pas sur une page seule : quinze articles qui ne se citent pas sont
+              quinze pages isolées ; les mêmes qui se citent forment un groupe où
+              chacune renforce les autres.
+
+              Les voisins sont pris **à la suite dans le tableau, en bouclant**.
+              Chaque avis en cite donc trois, et chacun est cité autant de fois.
+              Un tirage au hasard ferait des orphelins ; un tri par date
+              laisserait les plus anciens sans personne pour les pointer.
+
+              Le bloc ne s'affiche pas tant qu'il n'y a pas d'autre avis : une
+              page ne s'annonce pas des voisins qui n'existent pas encore. */}
+          {voisins.length > 0 ? (
+            <section className="mt-16 border-t border-border pt-10">
+              <h2 className="titre text-2xl text-foreground sm:text-3xl">
+                D&apos;autres membres racontent
+              </h2>
+
+              <ul className="mt-6 space-y-4">
+                {voisins.map((voisin) => (
+                  <li key={voisin.slug}>
+                    <Link
+                      href={`/resultats/${voisin.slug}`}
+                      className="text-base font-medium text-foreground underline decoration-border underline-offset-4 transition-colors hover:text-primary hover:decoration-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:text-lg"
+                    >
+                      {voisin.titre}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
         </article>
       </Section>
 
-          <AppelOffres />
+      <AppelOffres />
         </div>
       </div>
     </>

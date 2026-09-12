@@ -73,8 +73,26 @@ export type Avis = {
   slug: string;
   /** Le `h1` de la page, et le titre de sa carte sur `/resultats`. */
   titre: string;
+  /**
+   * Le `title` de l'onglet, plus court que le `h1`.
+   *
+   * Les deux ne font pas le même travail. Le `h1` s'adresse à quelqu'un qui est
+   * déjà sur la page et peut courir sur deux lignes ; le `title` s'affiche dans
+   * une liste de résultats qui coupe autour de soixante caractères, et le
+   * gabarit du site lui ajoute encore « · Rémy Jupille ». Un `h1` de cent dix
+   * caractères recopié là devient une phrase tronquée au milieu d'un mot.
+   */
+  titrePage: string;
   /** La méta-description. Entre 120 et 160 caractères, voir `AGENTS.md`. */
   description: string;
+  /**
+   * La description de l'affiche de la vidéo.
+   *
+   * C'est la seule image de la page, et un `alt` vide y serait une occasion
+   * perdue : deux personnes en entretien, ça se décrit. Ni « image de » ni
+   * « photo de », qui ne disent rien de plus qu'une balise `img`.
+   */
+  afficheAlt: string;
   /** Le chapô, sous le titre. Deux phrases au plus. */
   chapo: string;
   sections: readonly SectionAvis[];
@@ -109,8 +127,11 @@ export const avis: readonly Avis[] = [
     slug: "roland-buffet",
     titre:
       "Avis Funnels Club : Roland Buffet, 109 778 € en six mois avec un tunnel de vente dans le BTP",
+    titrePage: "Avis Funnels Club : Roland Buffet, 109 778 € en 6 mois",
     description:
-      "Formateur des entreprises du bâtiment, Roland Buffet raconte comment il a digitalisé son expertise et vendu 109 778 € de formation en ligne en six mois avec un tunnel de vente.",
+      "Roland Buffet forme les entreprises du bâtiment. Il raconte comment il a vendu 109 778 € de formation en ligne en six mois avec un tunnel de vente.",
+    afficheAlt:
+      "Roland Buffet en entretien vidéo avec Rémy Jupille, chacun depuis son bureau",
     chapo:
       "Roland Buffet forme les entreprises du bâtiment à la gestion depuis plus de treize ans. Dans cet entretien avec Rémy Jupille, il raconte comment il est passé de mille kilomètres de voiture par semaine à une formation en ligne vendue par un tunnel de vente.",
     sections: [
@@ -119,7 +140,7 @@ export const avis: readonly Avis[] = [
           "Avant le tunnel de vente : mille kilomètres par semaine pour former des artisans",
         paragraphes: [
           "Roland a d'abord été militaire de carrière. Il a ensuite repris l'entreprise de charpente de son père, qui était celle de son grand-père, puis en a créé deux ou trois autres. De ce parcours, il a tiré une expertise qu'il a voulu transmettre à d'autres entreprises du bâtiment : depuis plus de treize ans, il les accompagne sur la partie gestion, et non sur le métier.",
-          "Il y a trois ans, il crée sa propre entreprise pour être libre de son temps, de sa stratégie et de ses choix, après une période de salariat dans la formation. C'est là qu'il se heurte au mur : pour être performant auprès de ses clients, il fallait être présent. Et être présent, dans son métier, ça se comptait en kilomètres.",
+          "Il y a trois ans, il crée sa propre entreprise pour être libre de son temps, de sa stratégie et de ses choix, après une période de salariat dans la formation. C'est là qu'il se heurte au mur : pour être performant auprès de ses clients, il fallait être présent. Et être présent, dans son métier, ==ça se comptait en kilomètres==.",
         ],
         citation: {
           texte:
@@ -131,7 +152,7 @@ export const avis: readonly Avis[] = [
         titre:
           "Les fausses croyances qui empêchent de digitaliser une expertise du bâtiment",
         paragraphes: [
-          "Roland savait qu'il voulait servir plus d'artisans. Il ne savait pas encore que la réponse serait digitale, et deux croyances l'en éloignaient. La première : dans le bâtiment, on ne peut pas travailler en digitalisé, parce que les artisans ne seraient ni équipés ni réceptifs. La seconde : dans la formation, tout passe par les financements d'État, et commercialiser sans eux paraissait impossible.",
+          "Roland savait qu'il voulait servir plus d'artisans. Il ne savait pas encore que la réponse serait digitale, et deux croyances l'en éloignaient. La première : ==dans le bâtiment, on ne peut pas travailler en digitalisé==, parce que les artisans ne seraient ni équipés ni réceptifs. La seconde : dans la formation, tout passe par les financements d'État, et commercialiser sans eux paraissait impossible.",
           "Il le dit lui-même, il était alors à peu près seul dans son domaine à croire à ce qu'il voulait faire. Ce qu'il visait, c'était de faire tomber la barrière géographique : installé en Savoie, il trouvait dommage d'être limité par sa zone et sa capacité de déplacement.",
         ],
         citation: {
@@ -157,7 +178,7 @@ export const avis: readonly Avis[] = [
         titre:
           "Cinq mois pour structurer sa formation en ligne et son tunnel de vente",
         paragraphes: [
-          "Roland n'a pas cherché à aller vite, il a cherché à faire bien. Deux mois de découverte complète, où il se décrit perdu, puis la structuration de la formation et de l'offre. Cinq mois en tout avant de commercialiser quoi que ce soit.",
+          "Roland n'a pas cherché à aller vite, il a cherché à faire bien. Deux mois de découverte complète, où il se décrit perdu, puis la structuration de la formation et de l'offre. ==Cinq mois en tout avant de commercialiser quoi que ce soit.==",
           "Sa chaîne YouTube démarre le 15 septembre. La commercialisation de son programme, BTP Performance, commence début novembre. Il insiste sur un point : rien n'est magique, le travail reste chez lui, et il faut de la ténacité. Ce qu'il a trouvé, ce n'est pas un raccourci, c'est une méthode à appliquer : celle que Rémy détaille dans [sa formation gratuite sur le tunnel de vente](https://www.funnels.club/course-2025?el=site).",
         ],
         citation: {
@@ -170,8 +191,8 @@ export const avis: readonly Avis[] = [
         titre:
           "Ses résultats : 109 778 € de chiffre d'affaires en six mois de commercialisation",
         paragraphes: [
-          "De début novembre au jour de l'entretien, Roland annonce 109 778 € de chiffre d'affaires. Il donne le chiffre au centime, précisant qu'il a le tableau devant lui au moment où il le dit. Son objectif sur l'année est de 250 000 €, et il ne lâche pas l'idée du million.",
-          "Ce qui le frappe, c'est le caractère mathématique de la chose : une fois l'équation trouvée pour faire cent mille, puis deux cent cinquante mille, la suite ne peut aller que dans ce sens. Il ajoute une condition, et elle compte : il connaît son métier, il a une vraie expertise. Sans elle, il n'aurait vendu que du vent. C'est ce que montrent aussi [les autres témoignages de membres](/resultats), dans des domaines qui n'ont rien à voir avec le bâtiment.",
+          "De début novembre au jour de l'entretien, Roland annonce ==109 778 € de chiffre d'affaires==. Il donne le chiffre au centime, précisant qu'il a le tableau devant lui au moment où il le dit. Son objectif sur l'année est de ==250 000 €==, et il ne lâche pas l'idée du million.",
+          "Ce qui le frappe, c'est le caractère mathématique de la chose : une fois l'équation trouvée pour faire cent mille, puis deux cent cinquante mille, la suite ne peut aller que dans ce sens. Il ajoute une condition, et elle compte : ==il connaît son métier, il a une vraie expertise==. Sans elle, il n'aurait vendu que du vent. C'est ce que montrent aussi [les autres témoignages de membres](/resultats), dans des domaines qui n'ont rien à voir avec le bâtiment.",
         ],
         citation: {
           texte:
@@ -183,7 +204,7 @@ export const avis: readonly Avis[] = [
         titre:
           "Ce que vendre une formation en ligne a changé dans son quotidien",
         paragraphes: [
-          "Roland travaille désormais de chez lui. Il parle de ses enfants, qu'il n'a pas vraiment vu grandir et avec qui il peut maintenant être, de clients partout en France, et de la sensation d'être utile de partout. Il pose une seule limite à son territoire, la francophonie, faute de parler anglais.",
+          "==Roland travaille désormais de chez lui.== Il parle de ses enfants, qu'il n'a pas vraiment vu grandir et avec qui il peut maintenant être, de clients partout en France, et de la sensation d'être utile de partout. Il pose une seule limite à son territoire, la francophonie, faute de parler anglais.",
           "Il y a une suite qu'il n'attendait pas : son fils s'est intéressé au monde numérique en voyant son père s'y lancer, s'est mis au montage vidéo, et ils travaillent à faire peut-être du closing ensemble.",
         ],
         citation: {
