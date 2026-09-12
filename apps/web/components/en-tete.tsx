@@ -8,7 +8,6 @@ import {
   estExterne,
   identite,
   liens,
-  livre,
   menus,
   navigation,
   podcastMaverick,
@@ -105,27 +104,37 @@ const ICONES: Record<string, LucideIcon> = {
 /**
  * Les entrées qui portent une image plutôt qu'un pictogramme.
  *
- * Une seule, Digital Selfmade, et elle a demandé deux corrections de Rémy. La
- * première version posait le `BookOpen` de Lucide sur un rose choisi à l'œil ;
- * il a demandé « le vrai icône de Digital Selfmade et la vraie couleur », puis
- * a tranché : « tu mets la petite icône comme dans le footer, là ».
+ * Une seule, Digital Selfmade, et elle a demandé quatre passes. Un `BookOpen` de
+ * Lucide sur un rose choisi à l'œil ; Rémy a demandé « le vrai icône de Digital
+ * Selfmade et la vraie couleur », puis « la petite icône comme dans le footer »,
+ * puis « laisse-la dans un petit carré pour qu'elle ressorte », puis « la photo
+ * dans le menu pour le livre est cassée ».
  *
- * **C'est donc exactement la tuile du pied de page**, et pas une image de plus :
- * la couverture du livre, recadrée en carré aux angles arrondis, à côté de la
- * marque de Funnels Club et de celle du consulting. Le fichier est celui que
- * sert déjà le pied de page, donc il est en cache quand on ouvre le menu, et
- * `livre.visuel` reste l'unique endroit où son adresse est écrite.
+ * **La couverture du livre ne fait pas une icône, et c'est ce dernier retour qui
+ * l'a montré.** Le fichier du pied de page est un rendu de 1200 sur 832 qui
+ * montre trois exemplaires posés côte à côte : recadré en carré de 34 px, il n'en
+ * reste qu'un fragment du milieu, illisible. L'image ne manquait pas, elle était
+ * simplement rognée jusqu'à ne plus rien dire. Une image large ne devient pas une
+ * icône en la recadrant : une icône se dessine carrée.
  *
- * Elle n'a **ni fond ni filet** : l'image remplit le carré, sa couleur est celle
- * de la couverture, et c'est ce qui la fait ressortir au milieu de cinq tuiles
- * de verre. Un fond posé derrière une image opaque ne se verrait nulle part.
+ * C'est donc **le logo de Digital Selfmade**, celui que sert
+ * digital-selfmade.com, rapetissé à 128 px et posé dans `public/` : il est servi
+ * par nous, donc rien ne part chez ClickFunnels à l'ouverture d'un menu. Il est
+ * dessiné pour être petit, son disque rose porte la couleur de la marque, et il
+ * reste lisible à la taille de la tuile.
  *
- * Comme `LETTRES_MARQUE`, elle **remplace** la tuile de verre au lieu de se
- * poser dedans. Deux reliefs emboîtés ne font pas un objet, ils font une
- * bordure de trop.
+ * `object-contain` et non `cover` : c'est un logo, pas une photographie, et le
+ * rogner d'un pixel lui couperait son disque.
  */
-const IMAGES: Record<string, { fichier: string }> = {
-  [liens.livre]: { fichier: livre.visuel.large },
+const IMAGES: Record<
+  string,
+  { fichier: string; largeur: number; hauteur: number }
+> = {
+  [liens.livre]: {
+    fichier: "/digital-selfmade.png",
+    largeur: 128,
+    hauteur: 111,
+  },
 };
 
 /**
@@ -322,46 +331,46 @@ export function EnTete() {
           className="relative max-w-none items-start justify-start"
         >
           <div className={capsule}>
-          <div className="flex h-9 items-center justify-center px-2">
-            <Link
-              href="/"
-              // Le logo est le mot « expertise » du hero : même serif en
-              // italique, `titre` portant la fonte comme le `h1` le fait
-              // là-bas.
-              //
-              // **Il n'a plus l'effet lettre à lettre au survol**, retiré sur
-              // décision de Rémy. `KineticText` reste en place partout
-              // ailleurs, dans le hero et dans la signature du pied de page :
-              // ce qui est retiré, c'est l'effet **ici**. Un logo d'en-tête est
-              // survolé à chaque visite, au passage vers les menus voisins,
-              // donc un effet qui se justifie sur un mot qu'on rencontre une
-              // fois devient un tressautement permanent.
-              //
-              // `tracking-tight` reste : il rattrapait le crénage que le
-              // découpage lettre à lettre supprimait, et il fait maintenant
-              // partie du dessin du logo. `whitespace-nowrap` aussi : le nom
-              // fait deux mots, et le `flex-nowrap` qui les tenait sur une
-              // ligne appartenait au composant qu'on vient de retirer. Sans
-              // lui, la capsule casserait le nom en deux sur un écran étroit.
+            <div className="flex h-9 items-center justify-center px-2">
+              <Link
+                href="/"
+                // Le logo est le mot « expertise » du hero : même serif en
+                // italique, `titre` portant la fonte comme le `h1` le fait
+                // là-bas.
+                //
+                // **Il n'a plus l'effet lettre à lettre au survol**, retiré sur
+                // décision de Rémy. `KineticText` reste en place partout
+                // ailleurs, dans le hero et dans la signature du pied de page :
+                // ce qui est retiré, c'est l'effet **ici**. Un logo d'en-tête est
+                // survolé à chaque visite, au passage vers les menus voisins,
+                // donc un effet qui se justifie sur un mot qu'on rencontre une
+                // fois devient un tressautement permanent.
+                //
+                // `tracking-tight` reste : il rattrapait le crénage que le
+                // découpage lettre à lettre supprimait, et il fait maintenant
+                // partie du dessin du logo. `whitespace-nowrap` aussi : le nom
+                // fait deux mots, et le `flex-nowrap` qui les tenait sur une
+                // ligne appartenait au composant qu'on vient de retirer. Sans
+                // lui, la capsule casserait le nom en deux sur un écran étroit.
+                className={cn(
+                  "titre titre-fort text-lg whitespace-nowrap tracking-tight transition-colors duration-300",
+                  surImage ? "text-white" : "text-foreground",
+                )}
+              >
+                {identite.nom}
+              </Link>
+            </div>
+
+            {/* Le filet vertical qui sépare la marque de la navigation. */}
+            <span
+              aria-hidden
               className={cn(
-                "titre titre-fort text-lg whitespace-nowrap tracking-tight transition-colors duration-300",
-                surImage ? "text-white" : "text-foreground",
+                "hidden h-5 w-px transition-colors duration-300 md:block",
+                surImage ? "bg-white/15" : "bg-border",
               )}
-            >
-              {identite.nom}
-            </Link>
-          </div>
+            />
 
-          {/* Le filet vertical qui sépare la marque de la navigation. */}
-          <span
-            aria-hidden
-            className={cn(
-              "hidden h-5 w-px transition-colors duration-300 md:block",
-              surImage ? "bg-white/15" : "bg-border",
-            )}
-          />
-
-          {/* Les menus déroulants.
+            {/* Les menus déroulants.
 
               Le panneau se rend dans le `viewport` de la racine, qui est
               au-dessus, hors de la capsule : voir le commentaire de la capsule
@@ -373,7 +382,7 @@ export function EnTete() {
               L'ouverture et la fermeture sont animées par les états
               `data-[state]` du composant, pas par une transition écrite à la
               main. */}
-          <NavigationMenuList className="hidden gap-1 md:flex">
+            <NavigationMenuList className="hidden gap-1 md:flex">
               {menus.map((menu) => (
                 <NavigationMenuItem key={menu.libelle}>
                   {/* `group/roule` est posé ici et non dans `classesEntree` :
@@ -527,16 +536,16 @@ export function EnTete() {
                                   <span
                                     aria-hidden
                                     style={{ boxShadow: "var(--ombre-verre)" }}
-                                    className="grid size-11 shrink-0 place-items-center overflow-hidden rounded-[10px] bg-[color-mix(in_srgb,currentColor_4%,transparent)] p-1.25 outline outline-[color-mix(in_srgb,currentColor_8%,transparent)] -outline-offset-1"
+                                    className="grid size-11 shrink-0 place-items-center overflow-hidden rounded-[10px] bg-[color-mix(in_srgb,currentColor_4%,transparent)] p-1.5 outline outline-[color-mix(in_srgb,currentColor_8%,transparent)] -outline-offset-1"
                                   >
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img
                                       src={image.fichier}
                                       alt=""
-                                      width={640}
-                                      height={640}
+                                      width={image.largeur}
+                                      height={image.hauteur}
                                       loading="lazy"
-                                      className="size-full rounded-[6px] object-cover"
+                                      className="size-full object-contain"
                                     />
                                   </span>
                                 ) : lettre ? (
@@ -644,7 +653,6 @@ export function EnTete() {
                           </li>
                         );
                       })}
-
                     </ul>
 
                     {/* Les réseaux, en pied de la seule liste des ressources :

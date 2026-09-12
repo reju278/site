@@ -468,9 +468,9 @@ combler demande des dessins, pas du code.
 
 ### Le menu « Ressources » se lit en colonnes, et ses tuiles sont des marques
 
-Rémy l'a dicté colonne par colonne : le livre, les résultats et sa chaîne
-principale à gauche ; les deux podcasts et le blog à droite. La grille remplit
-donc **les colonnes avant les lignes**, `grid-flow-col` et un nombre de rangées
+Rémy l'a dicté colonne par colonne, puis corrigé : **ce qui est chez nous à
+gauche**, le livre, les résultats et le blog ; **les trois chaînes YouTube à
+droite**. La grille remplit donc **les colonnes avant les lignes**, `grid-flow-col` et un nombre de rangées
 calculé, et l'ordre du tableau de `site.ts` est celui qu'on lit à l'écran. Écrire
 cet ordre en remplissage par lignes aurait demandé d'entrelacer le tableau,
 c'est-à-dire d'y ranger une mise en page.
@@ -496,12 +496,21 @@ tient que 2,45:1 sur la page claire, en dessous des 3:1 d'un glyphe.
 marque à partir de sa version 1, mais de `simple-icons`, comme la rangée des
 réseaux. Un écran de télévision générique ne dit pas « YouTube ».
 
-**Digital Selfmade porte la couverture du livre, dans la tuile et non à sa
-place.** Trois corrections de Rémy ont mené là : un `BookOpen` sur un rose choisi
-à l'œil, puis « le vrai icône et la vraie couleur », puis « la petite icône comme
-dans le footer », puis « laisse-la dans un petit carré pour qu'elle ressorte ».
-C'est donc exactement la tuile du pied de page, le même fichier, et c'est le
-**cadre** qui la fait ressortir au milieu des autres, pas son absence.
+**Digital Selfmade porte son logo, et pas la couverture du livre.** Quatre
+passes ont mené là : un `BookOpen` sur un rose choisi à l'œil, puis « le vrai
+icône et la vraie couleur », puis « la petite icône comme dans le footer », puis
+« la photo dans le menu pour le livre est cassée ».
+
+**Une image large ne devient pas une icône en la recadrant.** Le fichier du pied
+de page est un rendu de 1200 sur 832 montrant trois exemplaires côte à côte :
+recadré en carré de 34 px, il n'en restait qu'un fragment du milieu. Rien
+n'échouait, l'image se chargeait, elle était simplement rognée jusqu'à ne plus
+rien dire. Une icône se dessine carrée, et c'est le logo de la marque qui l'est,
+pas la photo de l'objet. Il est servi par nous, donc rien ne part chez
+ClickFunnels à l'ouverture d'un menu.
+
+Et il reste **dans la tuile de verre**, sur demande de Rémy : c'est le cadre qui
+le fait ressortir au milieu des autres, pas son absence.
 
 **Une entrée dont le logo annonce une plateforme mène à cette plateforme.**
 Esprits Maverick affichait Ausha ; depuis qu'il porte le logo YouTube, il mène à

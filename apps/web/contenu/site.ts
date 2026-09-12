@@ -508,28 +508,27 @@ export const menus: readonly {
   {
     libelle: "Ressources",
     /* **L'ordre est celui de Rémy, et il se lit en colonnes, pas en lignes.**
-       Il a dicté la colonne de gauche puis celle de droite : le livre, les
-       résultats et sa chaîne principale à gauche ; les deux podcasts et le blog
-       à droite. C'est le panneau qui s'adapte, `grid-flow-col` dans
-       `en-tete.tsx` : la grille remplit la première colonne avant de passer à
-       la seconde, donc l'ordre de ce tableau est celui qu'on lit à l'écran.
+       Il l'a dicté colonne par colonne, puis corrigé : « mets toutes les chaînes
+       YouTube sur la partie droite et le blog en dessous des résultats ». Donc à
+       gauche ce qui est chez nous, le livre, les résultats et le blog ; à droite
+       les trois chaînes. C'est le panneau qui s'adapte, `grid-flow-col` dans
+       `en-tete.tsx` : la grille remplit la première colonne avant de passer à la
+       seconde, donc l'ordre de ce tableau est celui qu'on lit à l'écran.
 
-       **Les deux chaînes YouTube sont deux chaînes, pas deux liens vers la
+       **Les trois chaînes YouTube sont trois chaînes, pas trois liens vers la
        même.** Leurs noms sont relevés sur YouTube et non approchés : « Funnels
        Club - Rémy Jupille » pour la principale, « Profit, liberté, no stress »
-       pour celle du podcast. Voir le commentaire de `liens`, où la confusion
-       est déjà signalée.
+       et « Esprits Maverick » pour les deux podcasts. Voir le commentaire de
+       `liens`, où la confusion entre les deux premières est déjà signalée.
 
-       **Le podcast a perdu son entrée ici** : `/podcast`, la page qui liste
-       tous les épisodes, n'est plus dans ce menu puisque la ligne « Profit,
-       liberté, no stress » mène désormais à la chaîne YouTube. La page reste
-       atteignable par la colonne « Podcasts » du pied de page, donc elle n'est
-       pas orpheline, mais c'est un chemin de moins. **À confirmer par Rémy.** */
+       **Le podcast a perdu son entrée ici** : `/podcast`, la page qui liste tous
+       les épisodes, n'est plus dans ce menu puisque la ligne « Profit, liberté,
+       no stress » mène désormais à la chaîne YouTube. La page reste atteignable
+       par la colonne « Podcasts » du pied de page, donc elle n'est pas
+       orpheline, mais c'est un chemin de moins. **À confirmer par Rémy.** */
     entrees: [
-      /* Le livre en tête, sur décision de Rémy, et avec sa tuile rose : voir
-         `TUILES_PLEINES` dans `en-tete.tsx`. C'est la seule entrée du menu qui
-         ne soit ni une page du site ni une chaîne, et le fond plein est ce qui
-         la fait ressortir dans une colonne de tuiles de verre. */
+      /* Le livre en tête, sur décision de Rémy, et avec son logo : voir
+         `IMAGES` dans `en-tete.tsx`. */
       {
         libelle: "Digital Selfmade",
         href: liens.livre,
@@ -541,9 +540,18 @@ export const menus: readonly {
         href: "/resultats",
         texte: "Ce que les membres ont obtenu",
       },
-      /* **Libellés et descriptifs à valider par Rémy.** Les deux lignes qui
-         suivent sont nouvelles : le nom de la chaîne est celui de YouTube, le
-         descriptif est de l'agent. */
+      /* « Blog » et non « Digital Selfmade », sur décision de Rémy : deux
+         entrées du même menu portaient le même nom, la lettre et le livre, et
+         seul le descriptif les distinguait. Le descriptif est raccourci en
+         conséquence : il n'a plus à dire de quoi il s'agit. */
+      {
+        libelle: "Blog",
+        href: "/articles",
+        texte: "Tous les articles",
+      },
+      /* **Libellé et descriptif à valider par Rémy.** Le nom de la chaîne est
+         « Funnels Club - Rémy Jupille », qui aurait fait doublon avec l'entrée
+         Funnels Club du menu des programmes. */
       {
         libelle: "Rémy Jupille sur YouTube",
         href: liens.youtubeFunnels,
@@ -564,15 +572,6 @@ export const menus: readonly {
            points de suspension au milieu du nom de Nassim. */
         texte: "Coanimé avec Nassim Sheikh Ali",
         externe: true,
-      },
-      /* « Blog » et non « Digital Selfmade », sur décision de Rémy : deux
-         entrées du même menu portaient le même nom, la lettre et le livre, et
-         seul le descriptif les distinguait. Le descriptif est raccourci en
-         conséquence : il n'a plus à dire de quoi il s'agit. */
-      {
-        libelle: "Blog",
-        href: "/articles",
-        texte: "Tous les articles",
       },
     ],
   },
