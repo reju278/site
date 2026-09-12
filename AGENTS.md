@@ -844,8 +844,20 @@ d'elle : on voit un cadre posé dans un paysage. La même moitié sur 375 px n'e
 laisse que 94 pour une vidéo de 188, et il n'en reste presque rien à regarder.
 Le rapport est le même, l'image ne l'est pas.
 
-Le chevauchement passe donc aux trois quarts en dessous de `sm`. C'est toujours
-une proportion et non des pixels, donc ça vaut pour tous les téléphones.
+La ligne visible n'est d'ailleurs **pas le bord de l'image** : c'est le haut de
+la lèvre, un bandeau de 96 px de la couleur de page qui recouvre l'image pour
+masquer son bord rogné. Chercher la jonction du côté de l'image menait donc à
+corriger la mauvaise valeur.
+
+**Elle s'écrit une fois, dans `--jonction`.** Elle était écrite deux fois, une
+sur l'image et une sur la lèvre, et les deux ont divergé à la première
+correction : l'image a bougé, la lèvre est restée, et la lèvre a dessiné sa
+jonction en travers de l'image. C'est exactement ce que la règle sur les valeurs
+partagées annonce, et ça s'est produit à un jour d'intervalle.
+
+Sur téléphone la jonction passe **au milieu de la vidéo**, sur demande de Rémy ;
+au-dessus de `sm` elle reste à 30 % de sa hauteur, la valeur d'avant au pixel
+près.
 
 La leçon dépasse ce cas : **une valeur relative qui tient à une largeur ne tient
 pas forcément à l'autre**, parce que ce qu'on regarde n'est pas le rapport, c'est

@@ -374,6 +374,36 @@ html #cookiescript_bottompart:empty {
   }
 }
 
+/* La ligne où l'image du hero cède la place à la page, mesurée depuis le bas
+   de la section.
+
+   **Elle s'écrit ici une fois, et c'est une réparation.** Elle était écrite
+   deux fois, une sur l'image et une sur la lèvre qui la recouvre, et les deux
+   ont divergé à la première correction : l'image est descendue sur téléphone,
+   la lèvre est restée, et la lèvre dessinait donc sa jonction en travers de
+   l'image, six pixels sous le haut de la vidéo. C'est ce que Rémy a photographié.
+
+   **Ce qu'on voit n'est pas le bord de l'image, c'est le haut de la lèvre**, qui
+   la recouvre sur ses 96 derniers pixels. D'où le `- 96px` du bandeau et le
+   `- 88px` de l'image : huit pixels de plus bas que la lèvre, pour que le bord
+   rogné de l'image passe dessous. Ce recouvrement existe parce que ce bord tombe
+   sur un pixel fractionnaire et que son lissage dessinait un trait clair sur
+   toute la largeur de l'écran.
+
+   **Au milieu de la vidéo sur téléphone**, sur demande de Rémy, et à 70 % de sa
+   hauteur au-dessus : ce sont deux valeurs et non une, parce qu'un même
+   pourcentage ne donne pas la même image à deux largeurs. Voir la règle dans
+   `AGENTS.md`. La valeur large est celle d'avant, au pixel près. */
+[data-hero] {
+  --jonction: calc(var(--video-h) / 2);
+}
+
+@media (min-width: 640px) {
+  [data-hero] {
+    --jonction: calc(var(--video-h) / 2 + 88px);
+  }
+}
+
 /* Le rayon de la jonction entre une bande pleine largeur et la page.
 
    C'est une exception assumée au rayon de 5 px du projet, et la seule de son

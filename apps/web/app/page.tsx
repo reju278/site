@@ -91,6 +91,10 @@ export default function Accueil() {
           titre vers le milieu de l'image.
       --------------------------------------------------------------- */}
       <section
+        /* `data-hero` : c'est lui que vise `--jonction` dans `globals.css`, la
+           ligne où l'image cède la place à la page. Elle y est écrite une fois,
+           parce qu'elle était écrite deux fois et que les deux ont divergé. */
+        data-hero
         /* `pt-28` sur téléphone et non `pt-40`, sur remarque de Rémy : « la
            vidéo est beaucoup trop basse ».
 
@@ -134,22 +138,14 @@ export default function Accueil() {
           // est le défaut sûr : c'est cette absence qui le rendait blanc sur
           // beige en haut des pages sans hero.
           data-bande-sombre
-          /* **Le quart sur téléphone, la moitié à partir de `sm`**, sur
-             demande de Rémy : la vidéo lui paraissait posée sous l'image plutôt
-             que dedans.
+          /* L'image descend **huit pixels plus bas que la lèvre** qui la
+             recouvre : son bord est rogné sur un pixel fractionnaire, et le
+             lissage de cette arête dessinait un trait clair sur toute la largeur
+             de l'écran. Un bord recouvert ne se lisse plus contre rien.
 
-             Le chevauchement valait bien 50 % aux deux largeurs, mesuré, et
-             c'est justement le problème : un pourcentage identique ne donne pas
-             la même image. Sur un grand écran, la moitié d'une vidéo de 432 px
-             fait 216 px de montagne de chaque côté d'elle, et on voit la vidéo
-             posée dans le paysage. Sur 375 px, la même moitié ne fait que 94 px
-             pour une vidéo de 188, et il n'en reste presque rien : le cadre
-             paraît accroché sous l'image.
-
-             À un quart, la montagne redescend derrière les trois premiers quarts
-             de la vidéo. C'est une proportion et non une valeur en pixels, donc
-             elle tient à toutes les tailles de téléphone. */
-          className="absolute inset-x-0 top-0 bottom-[calc(var(--video-h)/4)] -z-10 overflow-hidden sm:bottom-[calc(var(--video-h)/2)]"
+             La ligne elle-même vit dans `--jonction`, écrite une fois dans
+             `globals.css`. */
+          className="absolute inset-x-0 top-0 bottom-[calc(var(--jonction)-88px)] -z-10 overflow-hidden"
         >
           <picture>
             <source media="(min-width: 768px)" srcSet="/fond-hero.jpg" />
@@ -206,7 +202,9 @@ export default function Accueil() {
         <div
           aria-hidden
           className="absolute inset-x-0 -z-10 h-24 rounded-t-[var(--rayon-jonction)] bg-background"
-          style={{ bottom: "calc(var(--video-h) / 2 - 8px)" }}
+          /* Le haut de la lèvre **est** la jonction : elle fait 96 px de haut,
+             donc son bord bas se pose 96 px plus bas. */
+          style={{ bottom: "calc(var(--jonction) - 96px)" }}
         />
 
         <div className="mx-auto max-w-6xl">
