@@ -1,5 +1,6 @@
 import { EnTetePage } from "@/components/en-tete-page";
 import { Section } from "@/components/section";
+import { TexteRoulant } from "@/components/texte-roulant";
 import { avisDe } from "@/contenu/avis";
 import { temoignages } from "@/contenu/site";
 import { ArrowRight } from "lucide-react";
@@ -127,7 +128,7 @@ export default function Resultats() {
                     pour l'instant. */}
                 <Carte
                   href={article ? `/resultats/${article.slug}` : undefined}
-                  className="relief-verre group/carte flex h-full flex-col overflow-hidden rounded-md border border-border bg-card transition-colors hover:border-ring focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                  className="relief-verre group/carte group/roule flex h-full flex-col overflow-hidden rounded-md border border-border bg-card transition-colors hover:border-ring focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                 >
                   {/* L'affiche est en 16/9 et porte les bandes noires de
                       l'enregistrement : ce sont des appels à deux, et elles
@@ -155,9 +156,20 @@ export default function Resultats() {
                       {temoignage.description}
                     </p>
 
+                    {/* Le libellé roule au survol, comme tous les appels du
+                        site. Deux groupes sur la même carte et non un seul :
+                        `group/carte` porte la flèche qui avance, `group/roule`
+                        est le nom que `texte-roule` attend dans `globals.css`.
+                        Ils sont posés sur le lien entier, donc l'effet part du
+                        survol de la carte et pas des seules lettres.
+
+                        Le libellé reste dans `TexteRoulant` et pas recopié à
+                        côté : la seconde ligne est un pseudo-élément, donc le
+                        texte du lien reste « Lire son parcours » une seule fois
+                        pour un robot. */}
                     {article ? (
                       <span className="mt-auto flex items-center gap-1.5 pt-4 text-sm font-medium text-primary">
-                        Lire son parcours
+                        <TexteRoulant>Lire son parcours</TexteRoulant>
                         <ArrowRight
                           aria-hidden
                           className="size-4 transition-transform group-hover/carte:translate-x-0.5"
