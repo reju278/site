@@ -46,9 +46,20 @@ export function GrilleArticles({
     <>
       <EnTetePage>
         <h1 className="titre text-5xl text-balance text-foreground sm:text-6xl">
-          {lettre.nom}
+          {lettre.titreBlog}
         </h1>
-        <p className="mt-5 text-lg text-muted-foreground">{lettre.baseline}</p>
+
+        {/* Le sous-titre dit **de quoi parlent les articles** et non ce qu'est
+            la lettre. La baseline y était, et elle ne renseignait personne : un
+            visiteur qui arrive par une recherche ne sait pas encore s'il est au
+            bon endroit, et « Profit, liberté, no stress » ne le lui dit pas.
+            Elle reste dans le menu et le pied de page, où elle signe la marque.
+
+            `max-w-2xl` : une ligne de texte courant qui court sur toute la
+            largeur d'une page se relit mal. */}
+        <p className="mx-auto mt-6 max-w-2xl text-lg text-pretty text-muted-foreground">
+          {lettre.sujets}
+        </p>
         <div className="mt-8 flex justify-center">
           <BoutonScintillant href={liens.lettre}>
             <TexteRoulant>S&apos;abonner à la lettre</TexteRoulant>

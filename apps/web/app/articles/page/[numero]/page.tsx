@@ -48,8 +48,8 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
      yeux de Google, ce qui est le cas d'école que la règle du projet vise. */
   return {
     alternates: { canonical: `/articles/page/${numero}` },
-    title: `${lettre.nom}, page ${numero}`,
-    description: lettre.baseline,
+    title: `${lettre.titreBlog}, page ${numero}`,
+    description: lettre.description,
   };
 }
 

@@ -5,8 +5,11 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/articles" },
-  title: lettre.nom,
-  description: lettre.baseline,
+  title: lettre.titreBlog,
+  /* L'ancienne description était la baseline, soit vingt-six caractères : la
+     règle du projet en demande entre 120 et 160, et une description trop courte
+     laisse Google en inventer une à partir de la page. */
+  description: lettre.description,
 };
 
 /**

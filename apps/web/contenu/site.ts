@@ -894,7 +894,29 @@ export const podcast = {
 /** La lettre, telle que son propre flux se décrit. */
 export const lettre = {
   nom: "Digital Selfmade",
+  /**
+   * Le titre de la page du blog, sur décision de Rémy.
+   *
+   * Il n'est pas construit par `` `Blog ${nom}` `` à l'affichage : le jour où le
+   * blog prendra un autre nom, on ne veut pas chercher dans quel fichier le mot
+   * « Blog » a été collé devant.
+   */
+  titreBlog: "Blog Digital Selfmade",
   baseline: "Profit, liberté, no stress",
+  /**
+   * Ce dont parlent les articles, en une phrase.
+   *
+   * **Écrite par l'agent, à valider par Rémy**, et tirée des sujets réellement
+   * publiés : les vingt articles du flux parlent de lancer et vendre une offre,
+   * de prix, de croissance, d'investissement et d'expatriation. Aucune
+   * fréquence n'est annoncée, parce qu'une promesse de rythme se dément toute
+   * seule dès la première semaine sautée.
+   */
+  sujets:
+    "Rémy y écrit sur ce qu'il fait vraiment : créer une offre et la vendre, monter ses prix sans avoir honte, faire grandir un business en ligne, placer l'argent que ça rapporte, et vivre ailleurs.",
+  /** La même chose en 149 caractères, pour la balise `description`. */
+  description:
+    "Rémy Jupille écrit sur le business en ligne : créer une offre, la vendre, monter ses prix, faire grandir l'activité, puis placer ce qu'elle rapporte.",
   flux: "https://lettre.funnels.club/feed",
 } as const;
 
