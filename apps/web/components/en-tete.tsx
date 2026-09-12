@@ -30,6 +30,7 @@ import {
 } from "@repo/ui/components/sheet";
 import { cn } from "@repo/ui/lib/utils";
 import {
+  ArrowLeft,
   ArrowUpRight,
   BookOpen,
   GraduationCap,
@@ -210,6 +211,19 @@ export function EnTete() {
     CLASSES_ENTREE,
     surImage ? CLASSES_ENTREE_SUR_IMAGE : CLASSES_ENTREE_SUR_PAGE,
   );
+
+  /* Le retour, sur les pages qui ont un parent évident.
+     
+     Il vit dans l'en-tête et non dans la page, sur décision de Rémy : posé
+     au-dessus du titre, il ressemblait à un élément de l'article ; ici, il est
+     au même endroit sur toutes les pages qui en ont un, et il ne bouge pas.
+
+     La règle est écrite en une ligne et non par page : tout ce qui descend sous
+     `/resultats` remonte à `/resultats`. Le jour où une autre famille de pages
+     apparaît, c'est une condition de plus ici, et rien à toucher ailleurs. */
+  const retour = chemin.startsWith("/resultats/")
+    ? { href: "/resultats", libelle: "Tous les résultats" }
+    : null;
 
   return (
     <header className="pointer-events-none fixed inset-x-0 top-2 z-50 px-3 lg:top-5 lg:px-5">
@@ -520,6 +534,44 @@ export function EnTete() {
 
         {/* La capsule de droite. */}
         <div className={capsule}>
+          {/* Le retour au parent, quand la page en a un.
+
+              Le libellé ne s'affiche qu'à partir de `sm` : sur 375 px, la
+              capsule porte déjà la bascule de thème et le menu, et « Tous les
+              résultats » l'aurait fait déborder. En dessous, l'icône est seule,
+              et c'est `aria-label` qui la nomme, comme le veut la règle du
+              projet pour toute icône sans texte.
+
+              Le filet qui suit sépare le retour du reste : ce n'est pas une
+              action du site, c'est une action sur la navigation. */}
+          {retour ? (
+            <>
+              <Link
+                href={retour.href}
+                aria-label={retour.libelle}
+                className={cn(
+                  "group/roule inline-flex h-9 items-center gap-2 rounded-md px-2.5 text-sm font-semibold whitespace-nowrap transition-colors duration-300 sm:px-3",
+                  surImage
+                    ? "text-white/80 hover:bg-white/10 hover:text-white"
+                    : "text-muted-foreground hover:bg-accent hover:text-foreground",
+                )}
+              >
+                <ArrowLeft aria-hidden className="size-4 shrink-0" />
+                <span className="hidden sm:inline">
+                  <TexteRoulant>{retour.libelle}</TexteRoulant>
+                </span>
+              </Link>
+
+              <span
+                aria-hidden
+                className={cn(
+                  "h-5 w-px transition-colors duration-300",
+                  surImage ? "bg-white/15" : "bg-border",
+                )}
+              />
+            </>
+          ) : null}
+
           <BasculeTheme surImage={surImage} />
 
           {/* L'accès à l'espace membre, à côté de la bascule de thème. Il est

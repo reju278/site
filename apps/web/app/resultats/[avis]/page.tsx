@@ -1,11 +1,12 @@
+import { AppelFormation } from "@/components/appel-formation";
 import { AppelOffres } from "@/components/appel-offres";
+import { EnTetePage } from "@/components/en-tete-page";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { Section } from "@/components/section";
+import { TexteLie } from "@/components/texte-lie";
 import { avis } from "@/contenu/avis";
 import { SITE, temoignages } from "@/contenu/site";
-import { ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 /**
@@ -111,39 +112,29 @@ export default async function PageAvis({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(donnees) }}
       />
 
-      <Section className="[&>div]:pt-32 [&>div]:pb-0 sm:[&>div]:pt-40">
-        <div className="mx-auto max-w-3xl">
-          {/* Le retour au sommaire, au-dessus du titre.
+      {/* L'en-tête, sur le fond du deck.
 
-              C'est le fil d'Ariane du pauvre, et il suffit ici : la page n'a
-              qu'un seul parent, et un fil de deux échelons sur trois lignes
-              coûte plus qu'il ne rapporte. Il est **avant** le titre parce
-              qu'un lien de retour placé après l'article n'aide que ceux qui
-              l'ont lu en entier. */}
-          <Link
-            href="/resultats"
-            className="group/roule inline-flex items-center gap-2 rounded-md text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-          >
-            <ArrowLeft aria-hidden className="size-4" />
-            Tous les résultats
-          </Link>
+          C'est `EnTetePage`, la même couche que les autres pages intérieures,
+          sur demande de Rémy : un avis est une page du site, pas un document à
+          part. Elle centre son contenu, ce qui donne au titre et au chapô l'axe
+          des autres pages. L'article, lui, redevient ferré à gauche plus bas :
+          un texte long se lit à gauche, un titre s'annonce au centre. */}
+      <EnTetePage>
+        <h1 className="titre text-3xl text-balance text-foreground sm:text-4xl lg:text-5xl">
+          {article.titre}
+        </h1>
 
-          <h1 className="titre mt-6 text-3xl text-balance text-foreground sm:text-4xl lg:text-5xl">
-            {article.titre}
-          </h1>
+        <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground">
+          {article.chapo}
+        </p>
+      </EnTetePage>
 
-          <p className="mt-5 text-lg leading-relaxed text-pretty text-muted-foreground">
-            {article.chapo}
-          </p>
-        </div>
-      </Section>
-
-      {/* L'entretien, en haut de page comme demandé.
+      {/* L'entretien.
 
           Il est plus large que le texte, `max-w-4xl` contre `max-w-3xl` : une
           vidéo se regarde, un texte se lit, et les deux n'ont pas la même bonne
           mesure. Le lecteur n'appelle Wistia qu'au clic. */}
-      <Section className="[&>div]:pt-10 [&>div]:pb-0 sm:[&>div]:pt-12">
+      <section className="px-5">
         <div className="mx-auto max-w-4xl">
           <LecteurVideo
             id={temoignage.id}
@@ -152,16 +143,32 @@ export default async function PageAvis({
             affiche={affiche}
           />
         </div>
-      </Section>
+      </section>
 
-      <Section className="[&>div]:pt-12 sm:[&>div]:pt-16">
+      {/* La séparation entre l'entretien et l'article, sur demande de Rémy.
+
+          C'est la lèvre de l'accueil : un filet qui remonte à ses deux bouts,
+          `rounded-t` et `border-t`. Elle ne sépare pas deux couleurs, les deux
+          côtés sont sur le fond de page ; elle sépare deux **natures**, ce
+          qu'on regarde et ce qu'on lit, et c'est une frontière qui mérite d'être
+          dessinée plutôt que cachée.
+
+          Le rayon est `--rayon-jonction` et non 5 px : la jonction fait toute la
+          largeur de l'écran, et c'est exactement le cas que l'exception
+          d'échelle du projet décrit. Voir `AGENTS.md`. */}
+      <div
+        aria-hidden
+        className="mt-16 h-16 rounded-t-[var(--rayon-jonction)] border-t border-border sm:mt-20"
+      />
+
+      <Section className="[&>div]:pt-0">
         {/* L'article.
 
             `max-w-3xl` et non la mesure des blocs : une ligne de texte courant
             se lit entre soixante et quatre-vingts caractères, et à la largeur
             d'une carte elle en porterait le double. */}
         <article className="mx-auto max-w-3xl">
-          {article.sections.map((section) => (
+          {article.sections.map((section, i) => (
             <section key={section.titre} className="mt-12 first:mt-0">
               <h2 className="titre text-2xl text-balance text-foreground sm:text-3xl">
                 {section.titre}
@@ -169,7 +176,9 @@ export default async function PageAvis({
 
               <div className="mt-5 space-y-5 text-base leading-relaxed text-pretty text-foreground/85 sm:text-lg">
                 {section.paragraphes.map((paragraphe) => (
-                  <p key={paragraphe}>{paragraphe}</p>
+                  <p key={paragraphe}>
+                    <TexteLie>{paragraphe}</TexteLie>
+                  </p>
                 ))}
               </div>
 
@@ -177,20 +186,33 @@ export default async function PageAvis({
 
                   `blockquote` et non un paragraphe en italique : c'est
                   l'élément d'une citation, et c'est lui qui dit à un lecteur
-                  d'écran que ces mots sont ceux de quelqu'un d'autre. Le filet
-                  à gauche et non des guillemets dessinés : le texte cité en
-                  porte déjà, et deux marques pour la même chose se gênent.
+                  d'écran que ces mots sont ceux de quelqu'un d'autre.
 
-                  `cite` porte le nom de qui parle, sous la citation. */}
+                  **Les guillemets sont posés ici et non dans le texte**, sur
+                  demande de Rémy : à l'écrire dans la donnée, on finit avec des
+                  citations qui en ont et d'autres qui n'en ont pas. Ce sont les
+                  guillemets français, avec leurs espaces insécables : une espace
+                  ordinaire y autorise un retour à la ligne, et le guillemet se
+                  retrouve seul en fin de ligne. */}
               {section.citation ? (
                 <figure className="mt-6 border-l-2 border-primary pl-5">
                   <blockquote className="text-lg leading-relaxed text-pretty text-foreground sm:text-xl">
-                    {section.citation.texte}
+                    {`«\u00a0${section.citation.texte}\u00a0»`}
                   </blockquote>
                   <figcaption className="mt-2 text-sm text-muted-foreground">
                     <cite className="not-italic">{section.citation.qui}</cite>
                   </figcaption>
                 </figure>
+              ) : null}
+
+              {/* L'appel à l'action, à la moitié de l'article.
+
+                  Sa place est calculée et non écrite dans le contenu : un
+                  article de cinq sections et un de huit ne coupent pas au même
+                  endroit, et un numéro posé à la main dans `avis.ts` serait faux
+                  au premier remaniement. */}
+              {i === Math.floor(article.sections.length / 2) - 1 ? (
+                <AppelFormation />
               ) : null}
             </section>
           ))}

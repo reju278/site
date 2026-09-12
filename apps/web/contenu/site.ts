@@ -105,6 +105,10 @@ export const liens = {
   decouvrir: avecTag("https://www.funnels.club/"),
   funnelsClub: avecTag("https://www.funnels.club/direct"),
   appel: avecTag("https://www.funnels.club/appel"),
+  // La vidéo de formation gratuite, celle qui explique le tunnel de vente.
+  // Fournie par Rémy, et servie sur `www` comme les autres : sans le
+  // sous-domaine, la redirection perd la balise de provenance.
+  formation: avecTag("https://www.funnels.club/course-2025"),
   // `appel-decouverte-clone-2` rendait un 404 : l'événement a été supprimé côté
   // Calendly. Celui-ci est « Candidature Consulting », le seul événement actif
   // du compte qui corresponde à l'offre.

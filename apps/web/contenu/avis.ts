@@ -23,6 +23,22 @@
  * quels chiffres sont encore exacts, et quels noms de famille peuvent
  * s'afficher.
  *
+ * **Les titres portent les mots que les gens tapent.** C'est la seule liberté
+ * que ce fichier prend avec le récit : un `h2` littéraire, « Mille kilomètres par
+ * semaine », ne se cherche pas ; « Avant le tunnel de vente : mille kilomètres
+ * par semaine pour former des artisans » raconte la même chose et existe pour un
+ * moteur. Les mots visés sont ceux du sujet, tunnel de vente, formation en
+ * ligne, avis Funnels Club, plus le métier de la personne, et ils ne sont jamais
+ * empilés : un titre qui ne se lit plus à voix haute est un titre raté, quel que
+ * soit son rendement.
+ *
+ * **Les liens s'écrivent dans le texte**, en `[libellé](adresse)`. C'est là
+ * qu'une ancre porte du sens, pour un lecteur comme pour un moteur : un lien
+ * posé au milieu d'une phrase dit de quoi parle la page d'arrivée, une liste de
+ * liens en bas de page ne dit rien. Les adresses sortantes portent leur balise
+ * `?el=site`, sans quoi la vente est attribuée ailleurs ; voir la règle Hyros
+ * dans `AGENTS.md`. Le rendu est dans `TexteLie`.
+ *
  * Les transcriptions sont celles du dossier « Témoignages » de Wistia, en
  * français, validées et non brouillonnes. Elles restent chez Wistia : ce fichier
  * ne garde que ce qui est publié.
@@ -62,14 +78,15 @@ export const avis: readonly Avis[] = [
     id: "rgio4y4o8f",
     slug: "roland-buffet",
     titre:
-      "Roland Buffet : 109 778 € en six mois en digitalisant son expertise du bâtiment",
+      "Avis Funnels Club : Roland Buffet, 109 778 € en six mois avec un tunnel de vente dans le BTP",
     description:
-      "Ancien charpentier devenu formateur, Roland Buffet raconte comment il est passé de mille kilomètres de voiture par semaine à un tunnel de vente qui travaille sans lui.",
+      "Formateur des entreprises du bâtiment, Roland Buffet raconte comment il a digitalisé son expertise et vendu 109 778 € de formation en ligne en six mois avec un tunnel de vente.",
     chapo:
-      "Roland Buffet accompagne les entreprises du bâtiment sur leur gestion depuis plus de treize ans. Il raconte à Rémy pourquoi il a arrêté de parcourir la France en voiture, et ce que ça a changé.",
+      "Roland Buffet forme les entreprises du bâtiment à la gestion depuis plus de treize ans. Dans cet entretien avec Rémy Jupille, il raconte comment il est passé de mille kilomètres de voiture par semaine à une formation en ligne vendue par un tunnel de vente.",
     sections: [
       {
-        titre: "Mille kilomètres par semaine",
+        titre:
+          "Avant le tunnel de vente : mille kilomètres par semaine pour former des artisans",
         paragraphes: [
           "Roland a d'abord été militaire de carrière. Il a ensuite repris l'entreprise de charpente de son père, qui était celle de son grand-père, puis en a créé deux ou trois autres. De ce parcours, il a tiré une expertise qu'il a voulu transmettre à d'autres entreprises du bâtiment : depuis plus de treize ans, il les accompagne sur la partie gestion, et non sur le métier.",
           "Il y a trois ans, il crée sa propre entreprise pour être libre de son temps, de sa stratégie et de ses choix, après une période de salariat dans la formation. C'est là qu'il se heurte au mur : pour être performant auprès de ses clients, il fallait être présent. Et être présent, dans son métier, ça se comptait en kilomètres.",
@@ -81,7 +98,8 @@ export const avis: readonly Avis[] = [
         },
       },
       {
-        titre: "Les fausses croyances du bâtiment",
+        titre:
+          "Les fausses croyances qui empêchent de digitaliser une expertise du bâtiment",
         paragraphes: [
           "Roland savait qu'il voulait servir plus d'artisans. Il ne savait pas encore que la réponse serait digitale, et deux croyances l'en éloignaient. La première : dans le bâtiment, on ne peut pas travailler en digitalisé, parce que les artisans ne seraient ni équipés ni réceptifs. La seconde : dans la formation, tout passe par les financements d'État, et commercialiser sans eux paraissait impossible.",
           "Il le dit lui-même, il était alors à peu près seul dans son domaine à croire à ce qu'il voulait faire. Ce qu'il visait, c'était de faire tomber la barrière géographique : installé en Savoie, il trouvait dommage d'être limité par sa zone et sa capacité de déplacement.",
@@ -93,9 +111,10 @@ export const avis: readonly Avis[] = [
         },
       },
       {
-        titre: "Le podcast écouté en courant",
+        titre:
+          "Comment Roland a découvert Funnels Club et les tunnels de vente",
         paragraphes: [
-          "Roland prépare un marathon. Il court, beaucoup, et il écoute des podcasts en s'entraînant. C'est comme ça qu'il tombe sur celui de Rémy, et qu'il commence à se dire qu'il y a peut-être quelque chose du côté des tunnels de vente.",
+          "Roland prépare un marathon. Il court, beaucoup, et il écoute des podcasts en s'entraînant. C'est comme ça qu'il tombe sur [le podcast de Rémy](/podcast), et qu'il commence à se dire qu'il y a peut-être quelque chose du côté des tunnels de vente.",
           "Ce qui suit ressemble à son caractère : il analyse. Les réseaux, les avis, tout ce qu'il pouvait croiser, il l'a croisé, et il a passé beaucoup de temps à observer de loin avant de prendre le fameux appel téléphonique. Sa question n'était pas le prix, qu'il assume dès lors qu'il y a un retour sur investissement, mais de savoir vers qui il allait.",
         ],
         citation: {
@@ -105,10 +124,11 @@ export const avis: readonly Avis[] = [
         },
       },
       {
-        titre: "Cinq mois à construire, six mois à vendre",
+        titre:
+          "Cinq mois pour structurer sa formation en ligne et son tunnel de vente",
         paragraphes: [
           "Roland n'a pas cherché à aller vite, il a cherché à faire bien. Deux mois de découverte complète, où il se décrit perdu, puis la structuration de la formation et de l'offre. Cinq mois en tout avant de commercialiser quoi que ce soit.",
-          "Sa chaîne YouTube démarre le 15 septembre. La commercialisation de son programme, BTP Performance, commence début novembre. Il insiste sur un point : rien n'est magique, le travail reste chez lui, et il faut de la ténacité. Ce qu'il a trouvé, ce n'est pas un raccourci, c'est une méthode à appliquer.",
+          "Sa chaîne YouTube démarre le 15 septembre. La commercialisation de son programme, BTP Performance, commence début novembre. Il insiste sur un point : rien n'est magique, le travail reste chez lui, et il faut de la ténacité. Ce qu'il a trouvé, ce n'est pas un raccourci, c'est une méthode à appliquer : celle que Rémy détaille dans [sa formation gratuite sur le tunnel de vente](https://www.funnels.club/course-2025?el=site).",
         ],
         citation: {
           texte:
@@ -117,10 +137,11 @@ export const avis: readonly Avis[] = [
         },
       },
       {
-        titre: "109 778 €, tableau sous les yeux",
+        titre:
+          "Ses résultats : 109 778 € de chiffre d'affaires en six mois de commercialisation",
         paragraphes: [
           "De début novembre au jour de l'entretien, Roland annonce 109 778 € de chiffre d'affaires. Il donne le chiffre au centime, précisant qu'il a le tableau devant lui au moment où il le dit. Son objectif sur l'année est de 250 000 €, et il ne lâche pas l'idée du million.",
-          "Ce qui le frappe, c'est le caractère mathématique de la chose : une fois l'équation trouvée pour faire cent mille, puis deux cent cinquante mille, la suite ne peut aller que dans ce sens. Il ajoute une condition, et elle compte : il connaît son métier, il a une vraie expertise. Sans elle, il n'aurait vendu que du vent.",
+          "Ce qui le frappe, c'est le caractère mathématique de la chose : une fois l'équation trouvée pour faire cent mille, puis deux cent cinquante mille, la suite ne peut aller que dans ce sens. Il ajoute une condition, et elle compte : il connaît son métier, il a une vraie expertise. Sans elle, il n'aurait vendu que du vent. C'est ce que montrent aussi [les autres témoignages de membres](/resultats), dans des domaines qui n'ont rien à voir avec le bâtiment.",
         ],
         citation: {
           texte:
@@ -129,7 +150,8 @@ export const avis: readonly Avis[] = [
         },
       },
       {
-        titre: "Ce que ça a changé chez lui",
+        titre:
+          "Ce que vendre une formation en ligne a changé dans son quotidien",
         paragraphes: [
           "Roland travaille désormais de chez lui. Il parle de ses enfants, qu'il n'a pas vraiment vu grandir et avec qui il peut maintenant être, de clients partout en France, et de la sensation d'être utile de partout. Il pose une seule limite à son territoire, la francophonie, faute de parler anglais.",
           "Il y a une suite qu'il n'attendait pas : son fils s'est intéressé au monde numérique en voyant son père s'y lancer, s'est mis au montage vidéo, et ils travaillent à faire peut-être du closing ensemble.",
@@ -141,10 +163,11 @@ export const avis: readonly Avis[] = [
         },
       },
       {
-        titre: "Ce qu'il dirait à quelqu'un qui hésite",
+        titre:
+          "Son avis sur Funnels Club, pour ceux qui hésitent encore",
         paragraphes: [
           "Rémy lui pose la question franchement : que dire à quelqu'un qui regarde cette vidéo, sceptique, et qui hésite à réserver un appel. La réponse de Roland ne cherche pas à rassurer.",
-          "Il donne raison à celui qui doute. Qu'il hésite, qu'il fouille, qu'il cherche, qu'il aille au bout de sa peur. Parce qu'au bout, dit-il, il découvrira qu'il n'y a pas de piège.",
+          "Il donne raison à celui qui doute. Qu'il hésite, qu'il fouille, qu'il cherche, qu'il aille au bout de sa peur. Parce qu'au bout, dit-il, il découvrira qu'il n'y a pas de piège. L'appel dont il parle est [l'appel découverte de Funnels Club](https://www.funnels.club/appel?el=site), et il est gratuit.",
         ],
         citation: {
           texte:
