@@ -4,7 +4,7 @@ import { GTM, SITE, identite } from "@/contenu/site";
 import { Toaster } from "@repo/ui/components/sonner";
 import { ThemeProvider } from "@repo/ui/components/theme-provider";
 import type { Metadata } from "next";
-import { Fraunces } from "next/font/google";
+import { Fraunces, Ms_Madi } from "next/font/google";
 import localFont from "next/font/local";
 import Script from "next/script";
 import "./globals.css";
@@ -114,6 +114,29 @@ const fraunces = Fraunces({
   display: "swap",
 });
 
+/**
+ * La fonte de la signature, et elle ne sert qu'à ça.
+ *
+ * Ms Madi est une anglaise à plume, d'un seul poids : elle imite une signature
+ * manuscrite, ce que Rémy a demandé pour clore son message. Elle n'a aucun autre
+ * emploi sur le site, et elle n'en aura pas : une écriture manuscrite qui
+ * servirait ailleurs cesserait d'être une signature pour devenir un style.
+ *
+ * Un seul sous-ensemble et un seul poids, donc une quinzaine de kilooctets pour
+ * deux mots. C'est le prix d'une signature, et il est payé une fois.
+ *
+ * `display: "swap"` comme les autres : le nom s'affiche dans la fonte de
+ * remplacement le temps du chargement plutôt que de laisser un trou. Ici le
+ * remplacement est très loin de l'originale, mais deux mots qui changent de
+ * dessin se remarquent moins qu'un blanc à la fin d'une lettre.
+ */
+const signature = Ms_Madi({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-signature",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
   alternates: { canonical: "/" },
@@ -138,7 +161,7 @@ export default function RootLayout({
     <html
       lang="fr"
       suppressHydrationWarning
-      className={`${nunito.variable} ${fraunces.variable}`}
+      className={`${nunito.variable} ${fraunces.variable} ${signature.variable}`}
     >
       <body className="font-sans antialiased">
         {/* Google Tag Manager.

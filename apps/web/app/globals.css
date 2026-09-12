@@ -62,6 +62,21 @@
    la fonte, ce qui écraserait le contraste entre pleins et déliés qui fait le
    caractère de cette famille. La garde ne coûte rien et survit à un changement
    de police. */
+/* La signature de Rémy, en bas de son message.
+
+   Un utilitaire plutôt qu'une classe posée à la main : la fonte ne sert qu'à
+   un endroit, mais c'est justement pour ça qu'elle doit être nommée. Écrite en
+   `font-family` dans le composant, elle serait invisible à qui relit la liste
+   des fontes du projet.
+
+   Le `line-height` est écrasé : une anglaise a de longues hampes et de longues
+   jambes, et l'interligne du texte courant les coupe. */
+@utility signature {
+  font-family: var(--font-signature), cursive;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
 @utility titre-fort {
   font-style: italic;
   font-synthesis: none;

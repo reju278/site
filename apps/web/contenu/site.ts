@@ -214,6 +214,108 @@ export const podcastMaverick = {
  * À relire par Rémy : ces quatre-là ont été choisis pour la netteté de leur
  * cadrage, pas par lui.
  */
+/**
+ * Le message de Rémy, sous le graphique.
+ *
+ * **Le texte est de lui, dicté d'une traite, et il m'a demandé de le relire.**
+ * C'est une exception à la règle du dépôt, et elle est de lui : « je te laisse
+ * relire ce texte et l'adapter pour qu'il soit fluide, sans forcément modifier
+ * le sens de mes phrases ». Ce qui a été fait tient en trois gestes, et aucun
+ * n'invente :
+ *
+ * - **Les fautes de dictée sont corrigées.** « les sites internet sont or »
+ *   pour « sont morts », « tunnels de vent » pour « tunnels de vente »,
+ *   « rentrer en contact » pour « entrer en contact ».
+ * - **Les phrases sont resserrées**, pas réécrites : les reprises de l'oral
+ *   sont retirées, les trois voies et les trois erreurs reçoivent le même
+ *   patron, une amorce en gras puis son explication. Le vocabulaire est le
+ *   sien, mot pour mot, partout où il était déjà net.
+ * - **Rien n'a été ajouté.** Aucune promesse, aucun chiffre, aucun exemple qui
+ *   ne soit pas dans sa dictée.
+ *
+ * **Ce qui a été retiré et qu'il faut décider :** la liste des thématiques
+ * portait « poils à bois », que la dictée a rendu inintelligible. « Poêle à
+ * bois » et « pose de bois » sont tous deux plausibles et ce n'est pas à moi de
+ * choisir : un métier inventé dans une liste de clients est une référence
+ * fausse. La ligne est donc absente, à remettre par Rémy.
+ *
+ * **À VALIDER PAR RÉMY**, phrase par phrase. Les deux chiffres qu'il porte,
+ * « plus de dix ans » et « plus de 1 000 business », sont des allégations
+ * commerciales : elles viennent de lui et n'ont pas été touchées.
+ */
+export const messageRemy = {
+  titre: "Message de Rémy",
+  portrait: "/remy.webp",
+
+  intro: "Hey, c'est Rémy.",
+
+  amorceVoies:
+    "Si vous voulez très bien vivre de vos connaissances ou de vos compétences en ligne, vous avez aujourd'hui trois façons de le faire.",
+  voies: [
+    {
+      titre: "Créer une formation",
+      texte:
+        "Vous créez des modules de formation, avec ou sans accompagnement.",
+    },
+    {
+      titre: "Vendre du coaching ou du consulting",
+      texte: "Vous vendez votre temps contre de l'argent, à un taux horaire.",
+    },
+    {
+      titre: "Faire de la prestation de service",
+      texte: "Vous faites le gros du travail à la place de vos clients.",
+    },
+  ],
+
+  amorceErreurs:
+    "Mais peu importe le type d'offre que vous choisissez, il y a trois erreurs que vous devez absolument éviter.",
+  erreurs: [
+    {
+      titre: "La première : créer un site internet.",
+      texte:
+        "Aujourd'hui, les sites internet ne fonctionnent plus, sauf si c'est d'une vitrine que vous avez besoin. Si votre objectif est d'obtenir des clients, c'est un tunnel de vente qu'il vous faut à la place.",
+    },
+    {
+      titre: "La deuxième : prospecter.",
+      texte:
+        "La prospection vous demandera beaucoup de temps et beaucoup d'énergie pour très peu de résultats, et vous risquez de vous épuiser à passer vos journées à vous justifier.",
+    },
+    {
+      titre:
+        "La troisième : créer du contenu sur les réseaux sociaux avant d'avoir un tunnel de vente qui fonctionne.",
+      texte:
+        "Sans le bon tunnel, peu importe les efforts que vous ferez pour amener du trafic vers vos offres : vous n'obtiendrez jamais aucun client.",
+    },
+  ],
+
+  suite: [
+    "La logique est facile à comprendre. Vous avez beau avoir la meilleure offre du monde : si votre système ne transforme pas un inconnu en client rapidement, il ne vous rapportera aucun client.",
+    "Ça fait maintenant plus de dix ans que je suis entrepreneur sur internet. Au cours de ces dix années, j'ai peaufiné et ajusté le parfait tunnel de vente pour les créateurs de formation, de coaching, d'accompagnement et de prestation de services.",
+    "J'ai fait en sorte qu'il respecte mes valeurs : il doit rester simple, et donner des résultats réguliers et prévisibles. On ne cherche pas à faire un coup. On veut un business qui évolue avec le temps, de façon stable, sur lequel toute une vie peut reposer. Parce que quoi de plus stressant qu'un chiffre d'affaires en montagnes russes ?",
+    "Ce tunnel de vente, je l'applique aujourd'hui moi-même dans mon propre business. Et au cours des dernières années, nous l'avons mis en place dans plus de 1 000 business de formation et de coaching, dans des centaines de thématiques : le basket, la formation professionnelle du BTP, le yoga, la batterie, le piano, le violoncelle, le développement personnel, la spiritualité.",
+    "Ce qui est sûr, c'est que, peu importe le domaine dans lequel vous souhaitez monétiser votre expertise, ce tunnel de vente pourra s'adapter pour vous apporter des clients qualifiés, capables de payer jusqu'à plusieurs milliers d'euros pour obtenir vos conseils.",
+  ],
+
+  /* La conclusion est découpée parce qu'elle porte deux liens, et que le texte
+     d'un lien est du texte : il vit ici comme le reste, et pas dans le JSX.
+
+     Le premier renvoie à la vidéo du haut de page plutôt qu'à une page
+     extérieure, sur décision de Rémy : la formation gratuite dont il parle est
+     celle qui est déjà là, à deux écrans au-dessus. Un lien interne vaut mieux
+     qu'un départ. */
+  conclusion: {
+    avant: "Et j'ai réalisé une ",
+    lienVideo: "vidéo de formation totalement gratuite",
+    milieu:
+      " dans laquelle je vous explique en détail comment fonctionne ce tunnel de vente. Si vous souhaitez aller plus loin après l'avoir visionnée, vous pourrez ",
+    lienAppel: "entrer en contact avec nous",
+    apres: " pour échanger de vive voix.",
+  },
+
+  salutation: "À votre succès,",
+  signature: "Rémy Jupille",
+} as const;
+
 export const pastilleHero = {
   texte: "Plus de 1 000 entrepreneurs accompagnés",
   portraits: [

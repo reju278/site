@@ -6,6 +6,7 @@ import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { CarrouselTemoignages } from "@/components/carrousel-temoignages";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { LogoFunnels } from "@/components/logo-funnels";
+import { MessageRemy } from "@/components/message-remy";
 import { SectionLivre } from "@/components/section-livre";
 import { SectionTunnel } from "@/components/section-tunnel";
 import { SurtitreOffre } from "@/components/surtitre-offre";
@@ -458,6 +459,18 @@ export default function Accueil() {
           plus l'offre, elle dit pourquoi elle existe.
       --------------------------------------------------------------- */}
       <SectionTunnel />
+
+      {/* ---------------------------------------------------------------
+          Le message de Rémy.
+
+          Il suit le graphique et non l'inverse : la démonstration d'abord, la
+          voix ensuite. Quelqu'un qui vient de voir les deux courbes sait de quoi
+          on parle, et la lettre lui explique pourquoi.
+
+          C'est le seul bloc de la page à la mesure d'un texte et non d'une
+          carte, sur décision de Rémy. Voir `MessageRemy`.
+      --------------------------------------------------------------- */}
+      <MessageRemy />
 
       {/* ---------------------------------------------------------------
           Ce qui attend votre texte.
