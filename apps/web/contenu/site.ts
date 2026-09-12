@@ -102,6 +102,15 @@ export function estExterne(href: string): boolean {
  */
 const APPEL = avecTag("https://www.funnels.club/appel");
 
+/**
+ * La vidéo de formation gratuite, celle qui explique le tunnel de vente.
+ *
+ * Écrite une fois, comme `APPEL`, parce que deux entrées de `liens` la
+ * désignent : `formation`, pour ce qu'elle est, et `decouvrir`, pour le bouton
+ * de l'en-tête qui y mène.
+ */
+const FORMATION = avecTag("https://www.funnels.club/course-2025");
+
 export const liens = {
   // Toujours l'hôte `www`. Le domaine nu redirige en 301 vers
   // `www.funnels.club` **en perdant la requête** : `funnels.club/appel?el=site`
@@ -125,17 +134,24 @@ export const liens = {
   // Ce qu'elles visaient avant : `/` pour « Découvrir », `/direct` pour le
   // bouton du hero.
   //
+  // **Sauf `decouvrir`, qui mène à la formation gratuite**, sur décision de Rémy
+  // prise ensuite : « fais en sorte que le bouton Découvrir, à côté du bouton de
+  // connexion, redirige vers funnels.club/course-2025 ». C'est le bouton de
+  // l'en-tête, sur les deux largeurs, et il porte bien son nom : on découvre en
+  // regardant, on appelle après. Le pied de page, lui, garde l'appel, et son
+  // lien est écrit en toutes lettres là-bas pour qu'il ne suive plus celui-ci.
+  //
   // `funnelsClub` ne sert plus à personne : le bouton du hero mène désormais à
   // la formation gratuite, sur décision de Rémy, et le creux posé à côté mène à
   // `appel`. Le nom reste, parce que c'est celui du bouton d'un hero qui peut
   // changer d'avis, et qu'il ne coûte rien.
-  decouvrir: APPEL,
+  decouvrir: FORMATION,
   funnelsClub: APPEL,
   appel: APPEL,
   // La vidéo de formation gratuite, celle qui explique le tunnel de vente.
   // Fournie par Rémy, et servie sur `www` comme les autres : sans le
   // sous-domaine, la redirection perd la balise de provenance.
-  formation: avecTag("https://www.funnels.club/course-2025"),
+  formation: FORMATION,
   // `appel-decouverte-clone-2` rendait un 404 : l'événement a été supprimé côté
   // Calendly. Celui-ci est « Candidature Consulting », le seul événement actif
   // du compte qui corresponde à l'offre.

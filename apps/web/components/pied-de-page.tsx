@@ -246,7 +246,13 @@ export function PiedDePage() {
                 }
                 nom="Funnels Club"
                 texte={identite.promesse}
-                href={liens.decouvrir}
+                /* `appel` en toutes lettres et non `decouvrir` : les deux
+                   pointaient au même endroit, puis Rémy a envoyé le bouton de
+                   l'en-tête vers la formation gratuite. Cette carte-ci, elle,
+                   reste sur l'appel, et l'écrire explicitement est ce qui
+                   l'empêche de suivre le prochain changement d'avis sur un
+                   bouton qui n'est pas le sien. */
+                href={liens.appel}
                 action="Découvrir Funnels Club"
               />
 

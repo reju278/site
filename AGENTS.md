@@ -548,15 +548,28 @@ rend un 404 aujourd'hui et `/confidentialite` un 200 : c'est l'ancien site, et
 c'est précisément ce que ce changement répare. Vérifier une adresse en ligne ne
 dit pas ce que le nouveau site doit servir.
 
-### Tous les boutons Funnels Club mènent à la page d'appel, sauf celui du hero
+### On découvre en regardant, on appelle après
 
-« Découvrir » dans l'en-tête, « Découvrir » dans le pied de page et l'entrée du
-menu : tous vers `www.funnels.club/appel`, sur décision de Rémy. Ils visaient
-avant `/` et `/direct`.
+Deux destinations et pas une, et c'est ce qui décide de chaque bouton :
+`www.funnels.club/course-2025`, la formation gratuite, pour **découvrir**, et
+`/appel` pour **parler**. Ils visaient avant `/` et `/direct`.
 
-**Le hero fait exception, et il porte une paire.** Son plein mène à la formation
-gratuite, `/course-2025`, et un creux posé à côté mène à l'appel : ce sont deux
-moments différents, on regarde d'abord, on parle ensuite. C'est la même paire que
+- **« Découvrir » de l'en-tête**, à côté de Connexion, sur les deux largeurs :
+  la formation.
+- **Le plein du hero** : la formation, avec un creux à côté pour l'appel.
+- **La carte du pied de page et l'entrée du menu** : l'appel.
+
+Le pied de page écrit `liens.appel` **en toutes lettres** plutôt que de partager
+la constante du bouton de l'en-tête. Les deux ont pointé au même endroit pendant
+une heure, et c'est exactement ce qui fait qu'un bouton suit en douce le
+changement d'avis porté sur un autre.
+
+**`/course-2025` redirige en 302 vers `/course-2026`, et la balise survit**,
+vérifié. C'est l'adresse que Rémy donne, donc c'est elle qu'on écrit ; il faut
+juste savoir que la page d'arrivée porte l'autre millésime.
+
+**Le hero porte une paire.** Son plein mène à la formation, son creux à l'appel :
+ce sont deux moments différents, on regarde d'abord, on parle ensuite. C'est la même paire que
 l'encart au milieu des articles d'avis, et la règle des deux actions d'importance
 comparable s'applique telle quelle, même hauteur et même rayon.
 
