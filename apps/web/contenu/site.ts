@@ -916,6 +916,17 @@ export const lettre = {
  * phrases qui en portaient un ne sont pas reprises, plutôt que d'être
  * recoupées : recouper, c'est réécrire.
  */
+/**
+ * La phrase du consulting dans le pied de page.
+ *
+ * C'est celle du menu, mot pour mot : « Accompagnement privé », dictée par Rémy
+ * pour une ligne courte. Le texte de la carte d'accueil fait quatre lignes et
+ * déborderait d'une carte de pied de page, et le raccourcir serait le réécrire.
+ */
+export const consultingPiedDePage = {
+  texte: "Accompagnement privé, animé par Rémy.",
+} as const;
+
 export const livre = {
   nom: "Digital Selfmade",
   etiquette: "Chapitre #1 OFFERT",

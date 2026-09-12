@@ -1,18 +1,19 @@
 "use client";
 
-import { LogoFunnels } from "@/components/logo-funnels";
 import { TexteRoulant } from "@/components/texte-roulant";
 import { cn } from "@repo/ui/lib/utils";
 import { ArrowRight } from "lucide-react";
 import { useCallback, useRef } from "react";
 
 /**
- * La carte Funnels Club du pied de page, qui s'incline sous la souris.
+ * Une carte d'offre du pied de page, qui s'incline sous la souris.
  *
- * Elle occupe la dernière colonne du pied de page, de haut en bas, et porte ce
- * que cette colonne portait déjà : la marque, la promesse et le bouton. Ce qui
- * change, c'est qu'elle est devenue un objet : un fond, un relief, et une
- * réponse au geste. Demandé par Rémy.
+ * Il y en a trois, empilées dans la dernière colonne : Funnels Club, le
+ * consulting et le livre. Elles partagent tout, le fond, le relief et la
+ * réponse au geste ; **seule la teinte de leurs halos change**, bleue pour le
+ * site, dorée pour le consulting, rouge pour le livre, sur décision de Rémy.
+ * Une carte par couleur aurait donné trois fichiers qui divergent au premier
+ * réglage.
  *
  * **Le fond est celui du deck**, `fond-resultats` et `grain-resultats`, la même
  * couche que les en-têtes de pages et le pied de page lui-même. Ce n'est pas
@@ -51,14 +52,47 @@ import { useCallback, useRef } from "react";
 /** L'angle maximal, en degrés, à chaque bord de la carte. */
 const ANGLE = 7;
 
-export function CarteFunnelsClub({
-  promesse,
+/**
+ * Les trois teintes de halo, une par carte.
+ *
+ * Le fond est le même pour les trois, `fond-resultats` ; seuls ses trois foyers
+ * changent, et ils changent en **redéfinissant les variables que l'utilitaire
+ * lit**. C'est ce qui évite trois utilitaires presque identiques dans
+ * `globals.css`, et ce qui fait qu'une correction du fond vaut pour les trois.
+ *
+ * Les valeurs vivent là-bas, avec leurs deux versions de thème : une teinte à
+ * dix pour cent ne se voit pas sur un fond presque noir.
+ */
+const TEINTES = {
+  bleu: {},
+  or: {
+    "--halo-a": "var(--halo-or-a)",
+    "--halo-b": "var(--halo-or-b)",
+    "--halo-c": "var(--halo-or-c)",
+  },
+  rouge: {
+    "--halo-a": "var(--halo-rouge-a)",
+    "--halo-b": "var(--halo-rouge-b)",
+    "--halo-c": "var(--halo-rouge-c)",
+  },
+} as const;
+
+export function CarteOffre({
+  teinte = "bleu",
+  marque,
+  nom,
+  texte,
   href,
   action,
   className,
 }: {
-  /** La promesse de Funnels Club, mot pour mot. Voir `site.ts`. */
-  promesse: string;
+  /** Le jeu de halos du fond. Voir `TEINTES`. */
+  teinte?: keyof typeof TEINTES;
+  /** Ce qui tient la place du logo, à gauche du nom. */
+  marque: React.ReactNode;
+  nom: string;
+  /** La phrase sous le nom, mot pour mot. Voir `site.ts`. */
+  texte: string;
   href: string;
   /** Le libellé du bouton. */
   action: string;
@@ -127,7 +161,7 @@ export function CarteFunnelsClub({
        carte se déforme comme un objet tenu à dix centimètres de l'œil, ce qui
        est spectaculaire une fois et fatigant les suivantes. */
     <div
-      className={cn("h-full [perspective:900px]", className)}
+      className={cn("[perspective:900px]", className)}
       onPointerMove={suivre}
       onPointerEnter={entrer}
       onPointerLeave={sortir}
@@ -149,7 +183,7 @@ export function CarteFunnelsClub({
           transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
         } as React.CSSProperties}
         className={cn(
-          "group relative flex h-full flex-col rounded-md p-6 sm:p-7",
+          "group relative flex flex-col rounded-md p-6 sm:p-7",
           "[transform-style:preserve-3d] [will-change:transform]",
           // Sous le pointeur, la carte suit vite et se soulève : l'ombre
           // grandit avec l'angle, sinon l'objet tourne sans jamais quitter la
@@ -171,6 +205,7 @@ export function CarteFunnelsClub({
             ce qui est rogné doit être rogné par la forme qu'on voit. */}
         <span
           aria-hidden
+          style={TEINTES[teinte] as React.CSSProperties}
           className="fond-resultats grain-resultats pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-md border border-border"
         >
           {/* La lueur : un reflet clair, et rien qu'une clarté.
@@ -214,14 +249,22 @@ export function CarteFunnelsClub({
             image qu'on incline et un objet : le texte et le fond ne se
             déplacent pas de la même quantité quand la carte tourne, et c'est
             exactement ce que l'œil lit comme de la profondeur. */}
-        <div className="relative flex h-full flex-col [transform:translateZ(28px)]">
-          <p className="titre flex items-center text-2xl text-foreground">
-            <LogoFunnels className="mr-[0.28em] inline-grid size-[0.95em] align-[-0.13em]" />
-            Funnels Club
+        <div className="relative flex flex-col [transform:translateZ(28px)]">
+          {/* `text-xl` et non `text-2xl` : les trois cartes sont maintenant
+              empilées dans une colonne étroite, et deux des trois noms,
+              « Consulting privé » et « Digital Selfmade », passaient à la ligne
+              au milieu. Un nom d'offre coupé en deux se lit comme deux offres.
+
+              `items-start` plutôt que `items-center` pour la même raison : sur
+              un nom de deux lignes, une tuile centrée verticalement flotte au
+              milieu du bloc au lieu de tenir la première ligne. */}
+          <p className="titre flex items-start gap-[0.28em] text-xl text-foreground">
+            {marque}
+            {nom}
           </p>
 
           <p className="mt-2 text-sm text-pretty text-muted-foreground">
-            {promesse}
+            {texte}
           </p>
 
           {/* `mt-auto` pousse le bouton en bas de la carte : c'est la règle des

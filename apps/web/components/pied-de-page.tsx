@@ -3,12 +3,15 @@ import { TexteRoulant } from "@/components/texte-roulant";
 import {
   avertissements,
   colonnesPiedDePage,
+  consultingPiedDePage,
   estExterne,
   identite,
   legales,
   liens,
+  livre,
 } from "@/contenu/site";
-import { CarteFunnelsClub } from "@/components/carte-funnels-club";
+import { CarteOffre } from "@/components/carte-offre";
+import { LogoFunnels } from "@/components/logo-funnels";
 import { KineticText } from "@repo/ui/components/kinetic-text";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -197,7 +200,7 @@ export function PiedDePage() {
 
               La phrase est la promesse de funnels.club, reprise au mot près, et
               le libellé du bouton est celui du hero. Rien n'est écrit ici. */}
-            <div className="col-span-2 sm:col-span-3 lg:col-span-1">
+            <div className="col-span-2 flex flex-col gap-3 sm:col-span-3 lg:col-span-1">
               {/* La colonne est devenue une carte, sur demande de Rémy : le
                   fond du deck, un relief, et une inclinaison qui suit la
                   souris. Tout est dans `CarteFunnelsClub` ; ce qu'elle porte
@@ -208,11 +211,52 @@ export function PiedDePage() {
                   carte, qui n'en a pas, démarrait plus bas qu'elles. Elle
                   descend en revanche jusqu'au bas de la rangée, `h-full`, ce
                   qui est le « de haut en bas » demandé. */}
-              <CarteFunnelsClub
-                promesse={identite.promesse}
+              <CarteOffre
+                marque={
+                  <LogoFunnels className="inline-grid size-[0.95em] align-[-0.13em]" />
+                }
+                nom="Funnels Club"
+                texte={identite.promesse}
                 href={liens.decouvrir}
                 action="Découvrir Funnels Club"
-                className="lg:-mt-4"
+              />
+
+              <CarteOffre
+                teinte="or"
+                marque={
+                  <LogoFunnels
+                    lettre="C"
+                    className="inline-grid size-[0.95em] align-[-0.13em]"
+                  />
+                }
+                nom="Consulting privé"
+                texte={consultingPiedDePage.texte}
+                href={liens.consulting}
+                action="Postuler pour le consulting"
+              />
+
+              <CarteOffre
+                teinte="rouge"
+                /* La couverture du livre tient la place du logo : c'est la seule
+                   des trois offres qui soit un objet, et elle a son image. Elle
+                   est `aria-hidden` comme les deux tuiles, le nom étant écrit
+                   juste à côté. */
+                marque={
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={livre.visuel.large}
+                    alt=""
+                    aria-hidden
+                    width={640}
+                    height={640}
+                    loading="lazy"
+                    className="size-[0.95em] shrink-0 rounded-[22%] object-cover align-[-0.13em]"
+                  />
+                }
+                nom={livre.nom}
+                texte={livre.sousTitre}
+                href={livre.href}
+                action={livre.action}
               />
             </div>
           </div>
