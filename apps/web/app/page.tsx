@@ -438,8 +438,33 @@ export default function Accueil() {
                 {offre.texte}
               </p>
 
+              {/* **Le bouton du consulting est doré et non bleu**, sur
+                  décision de Rémy : c'est ce qui distingue les deux offres au
+                  premier coup d'œil, et c'est déjà la teinte de sa carte dans
+                  le pied de page. Les deux endroits partagent le même jeton,
+                  `--or`, donc ils ne peuvent pas diverger.
+
+                  L'encre se passe **avec** le fond et n'est pas laissée au
+                  défaut : le blanc ne tient que 2,38:1 sur ce doré, contre
+                  7,32:1 pour `--or-encre`. Voir `BoutonScintillant`.
+
+                  Le test porte sur l'identifiant de l'offre, comme celui de la
+                  lettre de la tuile juste au-dessus : une offre de plus se
+                  déciderait ici, et pas dans deux endroits différents. */}
               <div className="mt-auto pt-8">
-                <BoutonScintillant href={offre.href}>
+                <BoutonScintillant
+                  href={offre.href}
+                  fond={
+                    offre.id === "funnels-club"
+                      ? "var(--primary)"
+                      : "var(--or)"
+                  }
+                  encre={
+                    offre.id === "funnels-club"
+                      ? "var(--primary-foreground)"
+                      : "var(--or-encre)"
+                  }
+                >
                   <TexteRoulant>{offre.action}</TexteRoulant>
                   <ArrowRight className="size-4" />
                 </BoutonScintillant>

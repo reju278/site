@@ -18,7 +18,15 @@ import type { CSSProperties } from "react";
  * liseré du bord change de teinte au lieu de scintiller. Une variable garantit
  * qu'ils ne peuvent pas diverger, là où deux classes passées de l'extérieur le
  * permettraient. Le défaut reste `--primary`, donc tous les appels existants ne
- * bougent pas. Elles
+ * bougent pas.
+ *
+ * **L'encre suit le fond, et elle ne pouvait pas rester figée.** Le texte était
+ * écrit en dur en `text-primary-foreground`, c'est-à-dire en blanc. Sur le bleu
+ * du site, c'est juste ; sur le doré du consulting, `#d4a017`, le blanc tombe à
+ * **2,38:1**, soit la moitié du seuil. `--or-encre` y tient 7,32:1. Un fond qui
+ * se passe de l'extérieur sans son encre est un piège : la couleur change, le
+ * texte reste, et personne ne mesure. Les deux se passent donc ensemble.
+ * Elles
  * viennent de `@theme` (`--animate-shimmer-slide`, `--animate-spin-around`),
  * donc du thème du projet, et `globals.css` les neutralise déjà sous
  * `prefers-reduced-motion` puisque ce sont des animations CSS ordinaires.
@@ -29,6 +37,13 @@ export function BoutonScintillant({
   vitesse = "3s",
   /** Le fond du bouton, en valeur CSS. Un jeton, jamais une couleur écrite. */
   fond = "var(--primary)",
+  /**
+   * L'encre du texte, en valeur CSS, à changer **avec** le fond.
+   *
+   * Elle a son propre réglage parce qu'aucune encre ne tient sur tous les
+   * fonds : le blanc du défaut ne vaut que sur `--primary`.
+   */
+  encre = "var(--primary-foreground)",
   className,
   children,
 }: {
@@ -36,6 +51,7 @@ export function BoutonScintillant({
   externe?: boolean;
   vitesse?: string;
   fond?: string;
+  encre?: string;
   className?: string;
   children: React.ReactNode;
 }) {
@@ -52,6 +68,7 @@ export function BoutonScintillant({
           // c'est cette bande de un pixel qui fait tout l'effet.
           "--cut": "1px",
           "--fond": fond,
+          "--encre": encre,
         } as CSSProperties
       }
       className={cn(
@@ -60,7 +77,7 @@ export function BoutonScintillant({
         // que les liens secondaires. 56 px de haut, bien au-delà des 40 px de
         // cible tactile que demande le projet.
         "group/roule group relative z-0 inline-flex h-14 cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-md px-8 text-base font-semibold whitespace-nowrap",
-        "bg-(--fond) text-primary-foreground",
+        "bg-(--fond) text-(--encre)",
         "transform-gpu transition-transform duration-300 ease-out hover:scale-[1.03] active:scale-100 active:translate-y-px",
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
         className,
