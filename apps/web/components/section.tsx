@@ -74,7 +74,7 @@ export function Emplacement({
     <div
       className={cn(
         "flex min-h-40 items-center justify-center rounded-md border border-dashed border-border px-6 py-10 text-center",
-        className
+        className,
       )}
     >
       <p className="max-w-md text-sm text-muted-foreground">

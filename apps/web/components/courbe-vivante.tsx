@@ -70,8 +70,7 @@ const valeur = (i: number) => {
   const somme = ONDES.reduce(
     (t, o) =>
       t +
-      o.a *
-        Math.sin((2 * Math.PI * o.k * (m - (CB.fenetre - 1))) / CB.periode),
+      o.a * Math.sin((2 * Math.PI * o.k * (m - (CB.fenetre - 1))) / CB.periode),
     0,
   );
   /* 0,5 est le milieu de la fourchette : la courbe tient la ligne d'horizon et
@@ -336,7 +335,10 @@ export function CourbeVivante({
               "linear-gradient(90deg, transparent 0%, #000 7%, #000 86%, transparent 100%)",
           }}
         >
-          <div ref={piste} className="absolute inset-y-0 left-0 will-change-transform">
+          <div
+            ref={piste}
+            className="absolute inset-y-0 left-0 will-change-transform"
+          >
             {/* `preserveAspectRatio="none"` étire le dessin en hauteur sur le
                 conteneur sans toucher à l'abscisse : le défilement reste exact
                 au pixel. `vector-effect` garde au trait son épaisseur malgré
@@ -364,7 +366,11 @@ export function CourbeVivante({
                     stopColor="var(--courbe)"
                     stopOpacity="0.1"
                   />
-                  <stop offset="100%" stopColor="var(--courbe)" stopOpacity="0" />
+                  <stop
+                    offset="100%"
+                    stopColor="var(--courbe)"
+                    stopOpacity="0"
+                  />
                 </linearGradient>
               </defs>
 

@@ -1,4 +1,5 @@
 import { Reseaux } from "@/components/reseaux";
+import { TexteRoulant } from "@/components/texte-roulant";
 import {
   avertissements,
   colonnesPiedDePage,
@@ -117,9 +118,9 @@ export function PiedDePage() {
                         href={entree.href}
                         target={entree.externe ? "_blank" : undefined}
                         rel={entree.externe ? "noreferrer" : undefined}
-                        className="rounded-md text-sm text-pretty text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                        className="group/roule inline-block rounded-md text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                       >
-                        {entree.libelle}
+                        <TexteRoulant>{entree.libelle}</TexteRoulant>
                       </Link>
                     </li>
                   ))}
@@ -142,11 +143,11 @@ export function PiedDePage() {
               La phrase est la promesse de funnels.club, reprise au mot près, et
               le libellé du bouton est celui du hero. Rien n'est écrit ici. */}
             <div className="col-span-2 sm:col-span-3 lg:col-span-1">
-              <p className="text-sm font-semibold text-foreground">
-                Le programme
-              </p>
+              {/* Pas de surtitre au-dessus, sur décision de Rémy : « Funnels
+                  Club » se suffit, et « Le programme » répétait ce que la
+                  colonne « Programmes » dit déjà deux colonnes plus loin.
 
-              {/* La marque est **dans** le titre et dimensionnée en `em`, comme
+                  La marque est **dans** le titre et dimensionnée en `em`, comme
                 sur la carte d'offre de l'accueil : `em` se résout sur la taille
                 du texte qui la porte, donc la tuile suit le titre au lieu
                 d'être figée. Elle est `aria-hidden`, donc le titre se lit
@@ -163,37 +164,21 @@ export function PiedDePage() {
                 href={liens.decouvrir}
                 target="_blank"
                 rel="noreferrer"
-                className="mt-5 inline-flex h-11 items-center gap-2 rounded-md bg-primary px-5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                className="group/roule mt-5 inline-flex h-11 items-center gap-2 rounded-md bg-primary px-5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
               >
-                Découvrir Funnels Club
+                <TexteRoulant>Découvrir Funnels Club</TexteRoulant>
                 <ArrowRight aria-hidden className="size-4 shrink-0" />
               </a>
             </div>
           </div>
 
-          {/* La rangée basse de la carte : les réseaux, puis les mentions.
+          {/* La rangée basse de la carte : les réseaux, et eux seuls.
 
-            Elles sont à l'intérieur de la carte, comme dans la référence, et
-            c'est ce qui les sépare de l'avertissement : les mentions sont des
-            pages du site, donc de la navigation ; l'avertissement est un texte
-            légal qu'on ne clique pas. */}
+            Les mentions y étaient, à droite. Rémy les a descendues sous la
+            carte, contre le copyright : elles y sont plus discrètes et
+            alignées sur le texte légal, qui est de la même nature. */}
           <div className="mt-16 flex flex-col gap-8 sm:mt-20 sm:flex-row sm:items-center sm:justify-between">
             <Reseaux rond />
-
-            <nav aria-label="Mentions légales">
-              <ul className="flex flex-wrap gap-x-6 gap-y-2 sm:justify-end">
-                {legales.map((entree) => (
-                  <li key={entree.href}>
-                    <Link
-                      href={entree.href}
-                      className="rounded-md text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-                    >
-                      {entree.libelle}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
           </div>
         </div>
 
@@ -224,7 +209,28 @@ export function PiedDePage() {
               </p>
             ))}
 
-            <p className="pt-2">
+            {/* Les mentions, juste au-dessus du copyright et au même fer.
+
+              Elles étaient dans la carte, à droite de la rangée des réseaux.
+              Rémy les a descendues ici : ce sont des textes de même nature que
+              l'avertissement, et les séparer revenait à dire que l'un se lit et
+              l'autre se clique. Même corps, même couleur, même bord gauche. */}
+            <nav aria-label="Mentions légales" className="pt-2">
+              <ul className="flex flex-wrap gap-x-5 gap-y-1">
+                {legales.map((entree) => (
+                  <li key={entree.href}>
+                    <Link
+                      href={entree.href}
+                      className="group/roule inline-block rounded-md transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                    >
+                      <TexteRoulant>{entree.libelle}</TexteRoulant>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
+            <p>
               © {annee} {identite.societe}
             </p>
           </div>

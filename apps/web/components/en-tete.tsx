@@ -1,6 +1,7 @@
 "use client";
 
 import { BasculeTheme } from "@/components/bascule-theme";
+import { TexteRoulant } from "@/components/texte-roulant";
 import { Reseaux } from "@/components/reseaux";
 import { identite, liens, menus, navigation } from "@/contenu/site";
 import { Button } from "@repo/ui/components/button";
@@ -209,8 +210,14 @@ export function EnTete() {
             <NavigationMenuList className="gap-1">
               {menus.map((menu) => (
                 <NavigationMenuItem key={menu.libelle}>
-                  <NavigationMenuTrigger className={classesEntree}>
-                    {menu.libelle}
+                  {/* `group/roule` est posé ici et non dans `classesEntree` :
+                      cette chaîne sert aussi à des entrées qui ne roulent pas,
+                      et un groupe déclaré sans personne pour l'écouter ne fait
+                      rien de mal mais ment sur ce que fait l'élément. */}
+                  <NavigationMenuTrigger
+                    className={cn("group/roule", classesEntree)}
+                  >
+                    <TexteRoulant>{menu.libelle}</TexteRoulant>
                   </NavigationMenuTrigger>
                   {/* Le panneau en deux colonnes : la liste à gauche, une
                       illustration à droite, comme chez le modèle. La colonne
@@ -302,13 +309,13 @@ export function EnTete() {
             target="_blank"
             rel="noreferrer"
             className={cn(
-              "hidden h-9 items-center rounded-md px-3 text-sm font-semibold whitespace-nowrap transition-colors duration-300 sm:inline-flex",
+              "group/roule hidden h-9 items-center rounded-md px-3 text-sm font-semibold whitespace-nowrap transition-colors duration-300 sm:inline-flex",
               surImage
                 ? "text-white/80 hover:bg-white/10 hover:text-white"
                 : "text-muted-foreground hover:bg-accent hover:text-foreground",
             )}
           >
-            Connexion
+            <TexteRoulant>Connexion</TexteRoulant>
           </a>
 
           <a
@@ -316,7 +323,7 @@ export function EnTete() {
             target="_blank"
             rel="noreferrer"
             className={cn(
-              "hidden h-[34px] items-center justify-center gap-2 rounded-md px-3.5 text-sm font-semibold whitespace-nowrap transition-colors duration-300 sm:inline-flex",
+              "group/roule hidden h-[34px] items-center justify-center gap-2 rounded-md px-3.5 text-sm font-semibold whitespace-nowrap transition-colors duration-300 sm:inline-flex",
               // Sur l'image, le fond passe de 8 % à 20 % : à 8 %, le bouton ne
               // se distinguait pas de la capsule qui le porte.
               surImage
@@ -324,7 +331,7 @@ export function EnTete() {
                 : "bg-primary text-primary-foreground hover:bg-primary/90",
             )}
           >
-            Découvrir
+            <TexteRoulant>Découvrir</TexteRoulant>
           </a>
 
           <Sheet open={ouvert} onOpenChange={setOuvert}>

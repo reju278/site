@@ -130,7 +130,6 @@ export function TitreRoulant({
           </Fragment>
         ));
       })}
-
     </Balise>
   );
 }

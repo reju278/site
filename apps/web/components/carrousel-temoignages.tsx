@@ -162,7 +162,7 @@ export function CarrouselTemoignages() {
                   titre={temoignage.nom}
                   secondes={temoignage.secondes}
                   affiche={`/temoignages/${temoignage.id}.jpg`}
-                actif={index === courant}
+                  actif={index === courant}
                   className="border border-border shadow-[0_24px_60px_-24px_rgba(0,0,0,0.28)]"
                   legende={
                     <>

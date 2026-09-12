@@ -59,7 +59,7 @@ export function BoutonScintillant({
         // petit : c'est l'appel principal du site, et il était au même corps
         // que les liens secondaires. 56 px de haut, bien au-delà des 40 px de
         // cible tactile que demande le projet.
-        "group relative z-0 inline-flex h-14 cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-md px-8 text-base font-semibold whitespace-nowrap",
+        "group/roule group relative z-0 inline-flex h-14 cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-md px-8 text-base font-semibold whitespace-nowrap",
         "bg-(--fond) text-primary-foreground",
         "transform-gpu transition-transform duration-300 ease-out hover:scale-[1.03] active:scale-100 active:translate-y-px",
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",

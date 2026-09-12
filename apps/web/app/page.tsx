@@ -6,6 +6,7 @@ import { LecteurVideo } from "@/components/lecteur-video";
 import { LogoFunnels } from "@/components/logo-funnels";
 import { SectionLivre } from "@/components/section-livre";
 import { SurtitreOffre } from "@/components/surtitre-offre";
+import { TexteRoulant } from "@/components/texte-roulant";
 import { TitreRoulant } from "@/components/titre-roulant";
 import { KineticText } from "@repo/ui/components/kinetic-text";
 import { ParticulesHero } from "@/components/particules-hero";
@@ -132,25 +133,40 @@ export default function Accueil() {
               titre sans jamais le recouvrir. */}
           <ParticulesHero />
 
-          {/* Le raccord entre l'image et la page.
-
-              C'était un dégradé, qui fondait l'image vers la couleur de page.
-              C'est maintenant une **lèvre** : un bandeau de la couleur de la
-              page, posé sur le bas de l'image, aux deux angles hauts arrondis.
-              La page ne s'efface plus dans l'image, elle monte par-dessus, et
-              la vidéo chevauche la limite.
-
-              Le bandeau doit être plus haut que son rayon, sinon les deux
-              angles se rejoignent et l'arrondi se coupe au milieu. `h-20` tient
-              les 2,5 rem de `sm` avec de la marge.
-
-              `bg-background` et rien d'autre : aucune couleur n'est écrite, la
-              lèvre suit le thème. */}
-          <div
-            aria-hidden
-            className="absolute inset-x-0 bottom-0 h-20 rounded-t-[var(--rayon-jonction)] bg-background"
-          />
         </div>
+
+        {/* Le raccord entre l'image et la page.
+
+            C'était un dégradé, qui fondait l'image vers la couleur de page.
+            C'est une **lèvre** : un bandeau de la couleur de la page, posé sur
+            le bas de l'image, aux deux angles hauts arrondis. La page ne
+            s'efface plus dans l'image, elle monte par-dessus, et la vidéo
+            chevauche la limite.
+
+            **Elle est en dehors du conteneur de l'image, et c'est la
+            réparation d'un vrai défaut.** Elle était dedans, calée sur son bord
+            bas. Or ce conteneur est rogné, et son bord tombe sur un pixel
+            fractionnaire : `--video-h` vaut `min(100vw - 2.5rem, 48rem) × 9/16`,
+            qui n'est presque jamais un entier. Le navigateur lissait donc cette
+            arête, et ce lissage dessinait un trait clair sur toute la largeur de
+            l'écran, juste sous la vidéo.
+
+            Dehors, la lèvre n'est plus rognée et descend huit pixels plus bas
+            que le conteneur : elle **couvre** l'arête au lieu de s'aligner
+            dessus, et son propre bord bas se pose sur la couleur de page, donc
+            sur la même couleur qu'elle. Un bord qui sépare deux fois la même
+            couleur ne se voit pas, quel que soit le lissage.
+
+            Le bandeau doit être plus haut que son rayon, sinon les deux angles
+            se rejoignent et l'arrondi se coupe au milieu.
+
+            `bg-background` et rien d'autre : aucune couleur n'est écrite, la
+            lèvre suit le thème. */}
+        <div
+          aria-hidden
+          className="absolute inset-x-0 -z-10 h-24 rounded-t-[var(--rayon-jonction)] bg-background"
+          style={{ bottom: "calc(var(--video-h) / 2 - 8px)" }}
+        />
 
         <div className="mx-auto max-w-6xl">
           <div className="mx-auto max-w-3xl text-center">
@@ -196,7 +212,7 @@ export default function Accueil() {
                 déjà le contraste, et non sur la couleur de page. */}
             <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
               <BoutonScintillant href={liens.funnelsClub}>
-                Découvrir Funnels Club
+                <TexteRoulant>Découvrir Funnels Club</TexteRoulant>
               </BoutonScintillant>
             </div>
           </div>
@@ -304,7 +320,7 @@ export default function Accueil() {
 
               <div className="mt-auto pt-8">
                 <BoutonScintillant href={offre.href}>
-                  {offre.action}
+                  <TexteRoulant>{offre.action}</TexteRoulant>
                   <ArrowRight className="size-4" />
                 </BoutonScintillant>
               </div>

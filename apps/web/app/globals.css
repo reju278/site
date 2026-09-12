@@ -343,6 +343,105 @@ summary {
   cursor: pointer;
 }
 
+/* Le roulement d'un libellé au survol.
+
+   Le libellé monte et sa copie arrive par le bas. C'est l'effet des liens de
+   navigation de la référence fournie par Rémy.
+
+   **La copie est un pseudo-élément, pas un second `span`.** C'était un `span`
+   d'abord, `aria-hidden` pour ne pas être annoncé deux fois. Mais `aria-hidden`
+   ne retire un nœud que de l'arbre d'accessibilité : il reste dans le texte de
+   l'élément. Le texte du lien devenait « Funnels ClubFunnels Club », et c'est
+   exactement ce qu'un robot lit d'un lien pour décrire la page d'arrivée. Le
+   contenu d'un `::after` n'est ni dans le `textContent` ni dans ce qu'extraient
+   les moteurs : la copie devient purement visuelle, ce qu'elle a toujours été.
+
+   Le libellé est donc écrit **deux fois dans le balisage** : dans le `span`,
+   qui est le vrai texte, et dans `data-texte`, que le pseudo-élément recopie.
+   C'est le prix de la solution, et il est payé par `TexteRoulant`, qui ne
+   laisse pas les deux diverger.
+
+   **Le roulement ne se joue pas sous `prefers-reduced-motion`.** Les règles de
+   survol sont dans un `@media (prefers-reduced-motion: no-preference)`, et non
+   seulement privées de transition : sans transition, la translation
+   s'appliquerait quand même, d'un coup, et le texte sauterait. Quelqu'un qui
+   demande moins de mouvement ne demande pas un mouvement instantané.
+
+   Le parent doit porter `group/roule` : c'est ce qui fait déclencher le survol
+   du lien entier, rembourrage compris, et non le seul survol des lettres. */
+@utility texte-roule {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  /* Aligne le cadre sur la ligne de base de ce qui l'entoure. Sans lui, un
+     `inline-block` s'aligne sur sa dernière ligne et remonte d'un cheveu
+     au-dessus des icônes voisines. */
+  vertical-align: bottom;
+
+  & > span {
+    display: block;
+  }
+
+  &::after {
+    content: attr(data-texte);
+    position: absolute;
+    inset: 0;
+    display: block;
+    transform: translateY(100%);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .texte-roule > span,
+  .texte-roule::after {
+    transition: transform 420ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  .group\/roule:hover .texte-roule > span,
+  .group\/roule:focus-visible .texte-roule > span {
+    transform: translateY(-100%);
+  }
+
+  .group\/roule:hover .texte-roule::after,
+  .group\/roule:focus-visible .texte-roule::after {
+    transform: translateY(0);
+  }
+}
+
+/* Le roulement d'un signe qui n'est pas du texte, une icône de réseau.
+
+   Même geste que `texte-roule`, mais sur deux nœuds réels : `attr()` ne sait
+   recopier qu'une chaîne, donc un pseudo-élément ne peut pas porter une icône.
+   Dupliquer le nœud est ici sans conséquence, une icône n'ayant pas de contenu
+   textuel. */
+@media (prefers-reduced-motion: no-preference) {
+  .signe-roule-haut,
+  .signe-roule-bas {
+    transition: transform 420ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  .signe-roule-bas {
+    transform: translateY(100%);
+  }
+
+  .group\/roule:hover .signe-roule-haut,
+  .group\/roule:focus-visible .signe-roule-haut {
+    transform: translateY(-100%);
+  }
+
+  .group\/roule:hover .signe-roule-bas,
+  .group\/roule:focus-visible .signe-roule-bas {
+    transform: translateY(0);
+  }
+}
+
+/* Hors mouvement réduit, la copie reste simplement hors champ. */
+@media (prefers-reduced-motion: reduce) {
+  .signe-roule-bas {
+    display: none;
+  }
+}
+
 /* ------------------------------------------------------------------
    Le rouge du livre.
 

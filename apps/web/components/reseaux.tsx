@@ -1,11 +1,7 @@
 import { reseaux } from "@/contenu/site";
+import { SigneRoulant, TexteRoulant } from "@/components/texte-roulant";
 import { cn } from "@repo/ui/lib/utils";
-import {
-  siFacebook,
-  siInstagram,
-  siTiktok,
-  siYoutube,
-} from "simple-icons";
+import { siFacebook, siInstagram, siTiktok, siYoutube } from "simple-icons";
 
 /**
  * La rangée des réseaux, en pied du panneau « Ressources ».
@@ -59,7 +55,7 @@ export function Reseaux({
           aria-label={reseau.nom}
           title={reseau.nom}
           className={cn(
-            "flex items-center justify-center text-muted-foreground transition-colors hover:text-foreground",
+            "group/roule flex items-center justify-center text-muted-foreground transition-colors hover:text-foreground",
             rond
               ? // 40 px : la cible tactile minimale du projet. Le fond est
                 // posé en permanence et non au survol, parce que sur un
@@ -78,15 +74,17 @@ export function Reseaux({
           )}
         >
           {reseau.glyphe ? (
-            <svg
-              viewBox="0 0 24 24"
-              aria-hidden
-              className="size-[18px] fill-current"
-            >
-              <path d={GLYPHES[reseau.glyphe]} />
-            </svg>
+            <SigneRoulant className="size-[18px]">
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden
+                className="size-[18px] fill-current"
+              >
+                <path d={GLYPHES[reseau.glyphe]} />
+              </svg>
+            </SigneRoulant>
           ) : (
-            reseau.nom
+            <TexteRoulant>{reseau.nom}</TexteRoulant>
           )}
         </a>
       ))}

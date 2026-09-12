@@ -1,4 +1,5 @@
 import { BoutonScintillant } from "@/components/bouton-scintillant";
+import { TexteRoulant } from "@/components/texte-roulant";
 import { TitreRoulant } from "@/components/titre-roulant";
 import { livre } from "@/contenu/site";
 import { ArrowRight } from "lucide-react";
@@ -141,7 +142,7 @@ export function SectionLivre() {
               fond="var(--livre)"
               className="h-12 flex-1 justify-center px-4 text-sm sm:h-14 sm:flex-none sm:px-8 sm:text-base"
             >
-              {livre.action}
+              <TexteRoulant>{livre.action}</TexteRoulant>
               {/* La flèche disparaît en dessous de `sm`, et c'est une décision
                   plutôt qu'un accident. Sur téléphone, le bouton fait 151 px
                   pour un libellé qui en demande 118 : l'icône, qui n'a pas de
@@ -170,9 +171,9 @@ export function SectionLivre() {
               href={livre.href}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-md border border-current px-4 text-sm font-semibold whitespace-nowrap text-(--livre-texte) transition-colors hover:bg-[color-mix(in_oklab,var(--livre)_10%,transparent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--livre-texte) sm:h-14 sm:flex-none sm:px-8 sm:text-base"
+              className="group/roule inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-md border border-current px-4 text-sm font-semibold whitespace-nowrap text-(--livre-texte) transition-colors hover:bg-[color-mix(in_oklab,var(--livre)_10%,transparent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--livre-texte) sm:h-14 sm:flex-none sm:px-8 sm:text-base"
             >
-              {livre.actionSecondaire}
+              <TexteRoulant>{livre.actionSecondaire}</TexteRoulant>
             </a>
           </div>
         </div>

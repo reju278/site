@@ -46,7 +46,7 @@ export function BasculeTheme({ surImage = false }: { surImage?: boolean }) {
         // dans le thème clair : l'icône y passe en blanc.
         surImage
           ? "text-white hover:bg-white/15"
-          : "text-foreground hover:bg-accent"
+          : "text-foreground hover:bg-accent",
       )}
     />
   );
