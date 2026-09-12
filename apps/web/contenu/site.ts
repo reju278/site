@@ -380,29 +380,33 @@ export const offres = [
          court, que c'est réglé. */
       fin: "👍",
     },
-    /* **Recoupée, pas réécrite.** Rémy a demandé qu'elle donne plus envie ; ce
-       qui est fait ici est une coupe, pas un ajout. Chaque élément de la phrase
-       d'origine est là, au mot près : « l'accompagnement le plus personnalisé
-       que Rémy propose », « accès à lui en direct dès que vous en avez besoin »,
-       « des visioconférences en illimité du lundi au samedi ».
+    /* **À VALIDER PAR RÉMY. Celle-ci est réécrite, pas recoupée.**
+       C'est la seconde phrase du site que l'agent ait écrite, après le titre des
+       résultats, et elle l'a été sur demande insistante : une première retouche
+       n'était qu'une coupe, et Rémy a demandé d'aller plus loin.
+       La version d'origine, à laquelle revenir si celle-ci ne va pas :
+       « C'est l'accompagnement le plus personnalisé que Rémy propose, où vous
+       avez accès à lui en direct dès que vous en avez besoin et où vous pouvez
+       réserver des visioconférences en illimité du lundi au samedi. »
 
-       Deux choses ont changé, et aucune n'est une promesse. Le « C'est » qui
-       ouvrait a sauté : la carte voisine commence par « Un accompagnement sur
-       mesure », et les deux se lisent mieux sur le même pied. Les deux « où »
-       qui s'enchaînaient sont devenus un deux-points et une virgule, ce qui
-       coupe une phrase de quarante mots en trois temps qu'on peut lire.
+       **La règle tenue : aucun fait nouveau.** Tout ce qui est affirmé ici était
+       déjà affirmé. L'accompagnement le plus personnalisé qu'il propose, l'accès
+       en direct dès qu'on en a besoin, les visioconférences en illimité du lundi
+       au samedi. Rien sur un délai de réponse, rien sur un résultat, rien sur un
+       nombre de places : ces choses-là seraient des promesses commerciales, et
+       elles ne s'inventent pas.
 
-       **« Vous pouvez réserver » est resté.** Une première retouche l'avait
-       passé à « vous réservez », plus affirmatif ; Rémy a demandé de ne pas
-       trop bouger le style, et son verbe est revenu. Changer un mode verbal
-       dans une promesse commerciale n'est pas une coupe, c'est déjà écrire.
+       **Ce qui a changé est l'ordre et la personne.** La phrase d'origine
+       décrivait une offre, en commençant par ce qu'elle est. Celle-ci commence
+       par ce qu'on obtient, « Rémy en direct », et s'adresse à quelqu'un plutôt
+       qu'à personne. C'est de là que vient l'envie, pas d'un adjectif de plus.
 
-       **Rien n'a été ajouté, et c'est la limite de ce qu'un agent peut faire
-       ici.** Donner plus envie demande des choses que le texte ne dit pas
-       encore, et ces choses-là ne s'inventent pas : ce sont des promesses
-       commerciales. Elles s'ajoutent ici quand Rémy les écrit. */
+       « Vous lui écrivez quand la question se pose » dit la même chose que
+       « accès en direct dès que vous en avez besoin », mais en montrant le
+       geste. C'est aussi ce que l'échange animé juste au-dessus donne à voir :
+       les deux se répondent au lieu de se répéter. */
     texte:
-      "L'accompagnement le plus personnalisé que Rémy propose : vous avez accès à lui en direct dès que vous en avez besoin, et vous pouvez réserver des visioconférences en illimité, du lundi au samedi.",
+      "Rémy en direct, dès que vous en avez besoin. C'est l'accompagnement le plus personnalisé qu'il propose : vous lui écrivez quand la question se pose, et vous réservez vos visioconférences en illimité, du lundi au samedi.",
     action: "Postuler pour le consulting privé",
     href: liens.consulting,
   },
