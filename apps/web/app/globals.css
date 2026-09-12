@@ -531,15 +531,19 @@ summary {
      s'obtient pas avec une bordure : une bordure cerne, une ombre intérieure
      creuse.
 
-     **Ils l'écrivent en blanc, nous en `currentColor`**, et c'est la seule
-     adaptation. Leur site n'a qu'un thème sombre, où le blanc lève la matière ;
-     sur notre thème clair, un blanc à quatre pour cent ne se voit pas du tout.
-     Mêlé à `currentColor`, le même relief se lit dans les deux : clair sur le
-     sombre, sombre sur le clair. */
+     **Il est en blanc dans les deux thèmes**, comme chez eux, et c'est une
+     correction de Rémy. Une première version le tirait de `currentColor` pour
+     qu'il se voie aussi en thème clair : mêlé au `--foreground`, qui est un
+     brun sombre, il posait un voile terne sur les bords des cartes blanches,
+     que Rémy a lu comme un bleuté. Un relief est une lumière, pas une ombre :
+     s'il doit ne rien faire sur du blanc, il ne fait rien.
+
+     La conséquence est assumée : le relief se voit en thème sombre, qui est le
+     thème d'arrivée du site, et s'efface en clair. */
   --ombre-verre:
-    0 1px 0 0 color-mix(in srgb, currentColor 8%, transparent) inset,
-    0 0 70px 0 color-mix(in srgb, currentColor 4%, transparent) inset,
-    0 0 12px 0 color-mix(in srgb, currentColor 8%, transparent) inset;
+    0 1px 0 0 rgb(255 255 255 / 0.06) inset,
+    0 0 70px 0 rgb(255 255 255 / 0.03) inset,
+    0 0 12px 0 rgb(255 255 255 / 0.06) inset;
 
 }
 
