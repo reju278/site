@@ -261,8 +261,13 @@ export const menus: readonly {
  * consulting privé. Seules deux sont montrées ici, sur décision de Rémy, et le
  * mastermind n'y est pas.
  *
- * Une phrase par offre, choisie dans leur page et non résumée. Résumer, c'est
- * réécrire, et réécrire une promesse commerciale n'appartient pas à l'agent.
+ * Une phrase par offre. Celle du consulting est choisie dans leur page et non
+ * résumée : résumer, c'est réécrire, et réécrire une promesse commerciale
+ * n'appartient pas à l'agent.
+ *
+ * Celle de Funnels Club fait exception, et il faut savoir laquelle : elle a été
+ * **dictée par Rémy**, point par point, et seulement assemblée ici. Voir le
+ * commentaire qui la précède.
  */
 /**
  * Le titre de la section des offres, écrit par Rémy, **en deux lignes**.
@@ -319,8 +324,31 @@ export const offres = [
        image du site d'un domaine de Google, et prévenu Google à chaque
        visite. */
     surtitre: { texte: "Animé par Rémy", portrait: "/remy.webp" },
+
+    /* La courbe montante, entre le titre et la description.
+     *
+     * **Elle n'ajoute aucune promesse à celle qui est déjà écrite.** La carte
+     * dit « plus de 6 chiffres par an » ; la courbe s'arrête à 250 000 €, qui
+     * est dans cette fourchette. Une courbe qui finirait plus haut que la phrase
+     * qu'elle accompagne serait une seconde promesse, glissée dans un dessin, et
+     * c'est ce qu'il faut éviter sur un site de formation.
+     *
+     * Le consulting n'en a pas : sa phrase ne parle pas de chiffres, donc une
+     * courbe y serait une affirmation nouvelle et non une illustration. */
+    courbe: { fin: 250000, unite: "€/an" },
+    /* Réécrite sous la dictée de Rémy, et c'est ce qui la distingue du reste
+       de ce fichier : les autres phrases sont reprises telles quelles de
+       funnels.club, celle-ci a été dictée point par point, « un accompagnement
+       sur mesure », « on prend par la main », « créer ou développer », « plus de
+       6 chiffres par an ». L'agent n'a fait que l'assembler.
+
+       L'ancienne version disait « nous accompagnons exclusivement des business
+       de formation, de coaching et de prestation de service à atteindre plus de
+       6 chiffres par an avec une offre digitale ». Elle décrivait qui est
+       accepté ; celle-ci décrit ce qu'on fait, et s'ouvre à ceux qui n'ont pas
+       encore de business. */
     texte:
-      "Nous accompagnons exclusivement des business de formation, de coaching et de prestation de service à atteindre plus de 6 chiffres par an avec une offre digitale.",
+      "Un accompagnement sur mesure, où nous prenons par la main les personnes qui souhaitent créer ou développer leur business de formation, de coaching ou de prestation de services, dans l'objectif d'atteindre plus de 6 chiffres par an.",
     action: "Réservez votre appel découverte",
     href: liens.appel,
   },

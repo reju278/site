@@ -1,3 +1,4 @@
+import { CourbeMontante } from "@/components/courbe-montante";
 import { CourbeVivante } from "@/components/courbe-vivante";
 import { FondResultats } from "@/components/fond-resultats";
 import { BoutonScintillant } from "@/components/bouton-scintillant";
@@ -313,6 +314,19 @@ export default function Accueil() {
                 )}
                 {offre.nom}
               </h3>
+
+              {/* La courbe, entre le titre et la description, sur demande de
+                  Rémy. Elle n'est posée que sur l'offre qui l'a déclarée : voir
+                  le commentaire de `courbe` dans `site.ts` pour pourquoi le
+                  consulting n'en a pas. */}
+              {"courbe" in offre && offre.courbe ? (
+                <CourbeMontante
+                  fin={offre.courbe.fin}
+                  unite={offre.courbe.unite}
+                  className="mt-5"
+                />
+              ) : null}
+
               <p className="mt-3 text-base leading-relaxed text-pretty text-muted-foreground">
                 {offre.texte}
               </p>
