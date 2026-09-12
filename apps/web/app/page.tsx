@@ -20,7 +20,6 @@ import {
   video,
 } from "@/contenu/site";
 import { ArrowRight } from "lucide-react";
-import Link from "next/link";
 
 /**
  * Les données structurées de la page d'accueil.
@@ -341,7 +340,7 @@ export default function Accueil() {
             parce que la lèvre lui mange ses quatre-vingts premiers pixels. Avec
             le `py-20` par défaut, il ne lui restait presque rien entre le bord
             de la lèvre et la première lettre. */}
-        <Section className="[&>div]:pt-36 sm:[&>div]:pt-44">
+        <Section className="[&>div]:pt-36 [&>div]:pb-10 sm:[&>div]:pt-44 sm:[&>div]:pb-12">
           {/* Le titre. Ses mots montent de dessous quand la section entre dans
               la vue : c'est l'effet des titres du deck, repris ici. Le second
               membre porte l'accent, comme dans la référence.
@@ -360,24 +359,22 @@ export default function Accueil() {
             <CarrouselTemoignages />
           </CourbeVivante>
 
-          {/* Le passage vers la page qui les porte tous.
+          {/* Pas de bouton vers la page « Résultats » ici.
 
-              Le texte du lien dit où il mène : la section n'en montre que
-              seize, et c'est la page « Résultats » qui les rassemble. Un
-              « en savoir plus » ne dirait rien à un robot, qui lit ce texte
-              pour décrire la page d'arrivée. */}
-          <div className="mt-14 text-center">
-            <Link
-              href="/resultats"
-              className="inline-flex h-11 items-center gap-2 rounded-md border border-border bg-card px-6 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-            >
-              Voir tous les résultats
-              <ArrowRight aria-hidden className="size-4" />
-            </Link>
-          </div>
+              Il y en avait un ; Rémy l'a retiré. La page reste atteignable par
+              le menu « Ressources », qui la porte déjà : un second chemin au
+              même endroit n'ajoutait rien et allongeait la section d'un cran.
+              Si elle doit se retrouver ici, c'est un lien et pas un bouton, et
+              son texte dira où il mène. */}
         </Section>
 
-        <Section>
+        {/* `pt-4` : la carte du livre remonte, sur décision de Rémy. Les deux
+            sections se suivent dans le même fond, donc leurs rembourrages
+            s'additionnaient : le bas de la section des résultats plus le haut
+            de celle du livre faisaient près de deux cents pixels de vide entre
+            la vidéo et la couverture. Le bas des résultats est réduit en même
+            temps, sinon on ne fait que déplacer l'écart. */}
+        <Section className="[&>div]:pt-4 sm:[&>div]:pt-6">
           <SectionLivre />
         </Section>
       </FondResultats>
