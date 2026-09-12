@@ -538,6 +538,20 @@ summary {
      `--livre-texte`. */
   --courbe-morte: #dc2626;
 
+  /* Le rouge des trois erreurs, dans le message de Rémy.
+
+     **Ce n'est ni `--livre` ni `--courbe-morte`, et les trois ont des raisons
+     d'exister séparément.** Le rouge du livre est relevé dans la couverture
+     d'un objet réel et lui appartient. Celui de la courbe ne colore qu'un
+     trait de deux pixels, à qui il suffit de tenir 3:1. Celui-ci porte du
+     texte, donc 4,5:1, et sur `--background` comme sur `--card`.
+
+     `red-700` en clair plutôt que `red-600` pour cette seule raison : sur le
+     beige de la page, le 600 tombe à 4,2:1, sous le seuil, quand le 700 tient
+     5,7:1. En sombre il remonte à `red-400`, un rouge soutenu devenant illisible
+     sur un fond presque noir. C'est la même mécanique que `--livre-texte`. */
+  --erreur-texte: #b91c1c;
+
   /* Le relief de verre des panneaux de menu, relevé chez TrendTrack.
 
      C'est leur `--sh-glass`, au pixel : un filet en haut, un halo très large et
@@ -570,6 +584,7 @@ summary {
 
   --courbe: #10b981;
   --courbe-morte: #f87171;
+  --erreur-texte: #f87171;
 }
 
 /* Le relief de verre, en classe.

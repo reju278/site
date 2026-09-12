@@ -255,7 +255,7 @@ export const messageRemy = {
      Les espaces à l'intérieur des guillemets sont insécables, comme le veut la
      typographie française : une espace ordinaire y autorise un retour à la
      ligne, et le guillemet se retrouve seul en fin de ligne. */
-  titre: "«\u00a0Hey, c'est Rémy",
+  titre: "«\u00a0Hey, c'est Rémy\u00a0!",
   portrait: "/remy.webp",
 
   amorceVoies:
@@ -321,7 +321,7 @@ export const messageRemy = {
     apres: " pour échanger de vive voix.\u00a0»",
   },
 
-  salutation: "À votre succès,",
+  salutation: "À votre succès !",
   signature: "Rémy Jupille",
 } as const;
 

@@ -1,3 +1,4 @@
+import { Apparition } from "@/components/apparition";
 import { liens, messageRemy } from "@/contenu/site";
 import { TitreRoulant } from "@/components/titre-roulant";
 
@@ -54,7 +55,7 @@ export function MessageRemy() {
 
               `alt` vide et assumé : le nom de Rémy est dans le titre juste à
               côté, et le répéter le ferait annoncer deux fois. */}
-          <div className="flex items-center gap-4">
+          <Apparition className="flex items-center gap-4">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={messageRemy.portrait}
@@ -69,7 +70,7 @@ export function MessageRemy() {
               segments={[{ texte: messageRemy.titre }]}
               className="titre text-3xl text-balance text-foreground sm:text-4xl"
             />
-          </div>
+          </Apparition>
 
           {/* La lettre.
 
@@ -77,8 +78,17 @@ export function MessageRemy() {
               entre deux blocs de texte appartient à la suite, pas à l'un des
               deux, et un `mt` sur le premier enfant décollerait tout le bloc de
               son titre. */}
-          <div className="mt-10 space-y-6 text-base leading-relaxed text-pretty text-muted-foreground sm:mt-12 sm:text-lg">
-            <p>{messageRemy.amorceVoies}</p>
+          {/* Le corps de la lettre est en `foreground` et non en
+              `muted-foreground`, sur décision de Rémy, et c'est le bon réglage :
+              `muted` est fait pour du texte de service, une légende, un
+              sous-titre, quelque chose qu'on lit en second. Ici le texte **est**
+              le contenu, et quinze paragraphes en gris demandent un effort qui
+              n'a aucune raison d'être. En thème sombre, c'est aussi ce qui fait
+              la différence entre une lettre et une note de bas de page. */}
+          <div className="mt-10 space-y-6 text-base leading-relaxed text-pretty text-foreground sm:mt-12 sm:text-lg">
+            <Apparition>
+              <p>{messageRemy.amorceVoies}</p>
+            </Apparition>
 
             {/* Les trois voies, numérotées.
 
@@ -86,36 +96,56 @@ export function MessageRemy() {
                 une vraie liste ordonnée, donc un lecteur d'écran l'annonce comme
                 telle et en donne le nombre. `marker:` colore le numéro sans
                 toucher au texte. */}
-            <ol className="list-decimal space-y-3 pl-5 marker:font-semibold marker:text-foreground">
-              {messageRemy.voies.map((voie) => (
-                <li key={voie.titre}>
-                  <span className="font-semibold text-foreground">
-                    {voie.titre} :
-                  </span>{" "}
-                  {voie.texte}
-                </li>
-              ))}
-            </ol>
+            {/* La liste entière est un seul bloc d'apparition, et non un par
+                entrée : découper un `ol` en trois conteneurs animés casserait
+                la liste, qu'un lecteur d'écran n'annoncerait plus comme telle
+                ni avec son nombre d'éléments. */}
+            <Apparition>
+              <ol className="list-decimal space-y-3 pl-5 marker:font-semibold marker:text-foreground">
+                {messageRemy.voies.map((voie) => (
+                  <li key={voie.titre}>
+                    <span className="font-semibold">{voie.titre} :</span>{" "}
+                    {voie.texte}
+                  </li>
+                ))}
+              </ol>
+            </Apparition>
 
-            <p>{messageRemy.amorceErreurs}</p>
+            <Apparition>
+              <p>{messageRemy.amorceErreurs}</p>
+            </Apparition>
 
             {/* Les trois erreurs.
 
                 Chacune est un paragraphe à part entière et non un élément de
                 liste : elles font deux ou trois phrases, et une puce devant un
                 paragraphe de trois lignes donne un document administratif. Le
-                rang est dans la phrase, ce qui suffit à les tenir ensemble. */}
+                rang est dans la phrase, ce qui suffit à les tenir ensemble.
+
+                **L'amorce est en rouge**, sur décision de Rémy. C'est
+                `--erreur-texte`, et non le rouge du livre, qui appartient à un
+                objet, ni celui de la courbe, qui n'a que du trait à colorer et
+                n'a donc jamais eu à tenir le seuil d'un texte. Voir
+                `globals.css` : celui-ci est mesuré pour être lu.
+
+                Le gras reste sous le rouge. Une couleur seule ne distingue rien
+                pour qui ne la voit pas, et c'est le cas d'un homme sur douze au
+                rouge et vert. */}
             {messageRemy.erreurs.map((erreur) => (
-              <p key={erreur.titre}>
-                <span className="font-semibold text-foreground">
-                  {erreur.titre}
-                </span>{" "}
-                {erreur.texte}
-              </p>
+              <Apparition key={erreur.titre}>
+                <p>
+                  <span className="font-semibold text-[var(--erreur-texte)]">
+                    {erreur.titre}
+                  </span>{" "}
+                  {erreur.texte}
+                </p>
+              </Apparition>
             ))}
 
             {messageRemy.suite.map((paragraphe) => (
-              <p key={paragraphe}>{paragraphe}</p>
+              <Apparition key={paragraphe}>
+                <p>{paragraphe}</p>
+              </Apparition>
             ))}
 
             {/* La conclusion et ses deux liens.
@@ -132,8 +162,9 @@ export function MessageRemy() {
 
                 Le second sort du site et porte donc sa balise de provenance,
                 qui est déjà dans `liens.appel`, et son `rel="noreferrer"`. */}
-            <p>
-              {messageRemy.conclusion.avant}
+            <Apparition>
+              <p>
+                {messageRemy.conclusion.avant}
               <a
                 href="#video"
                 className="font-semibold text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
@@ -149,24 +180,42 @@ export function MessageRemy() {
               >
                 {messageRemy.conclusion.lienAppel}
               </a>
-              {messageRemy.conclusion.apres}
-            </p>
+                {messageRemy.conclusion.apres}
+              </p>
+            </Apparition>
           </div>
 
-          {/* La signature.
+          {/* La signature, en bas à droite et de biais.
+
+              **Elle quitte l'axe du texte**, sur décision de Rémy : posée sous
+              le dernier paragraphe et ferrée à gauche comme lui, elle se lisait
+              comme une ligne de plus. À droite et penchée, elle se lit comme un
+              geste posé sur la page après coup, ce qu'une signature est.
+
+              L'inclinaison est faible, trois degrés : au-delà, l'œil la lit
+              comme une image mal posée plutôt que comme une main qui va vite.
+
+              Elle pivote depuis son coin bas droit et non depuis son centre,
+              pour que son extrémité droite reste à la même place quelle que
+              soit la longueur du nom. `pr-2` lui garde de la marge : une
+              anglaise finit en délié, et un délié qui touche le bord du bloc a
+              l'air coupé.
 
               Elle est plus grande que le texte et non plus petite : une
-              signature est un geste, pas une mention. Le `pt` la décolle du
-              dernier paragraphe plus que les paragraphes ne le sont entre eux,
-              parce qu'elle n'appartient plus au corps de la lettre. */}
-          <div className="mt-10 sm:mt-12">
-            <p className="text-base text-muted-foreground sm:text-lg">
+              signature est un geste, pas une mention. */}
+          <Apparition className="mt-10 sm:mt-12">
+            {/* La salutation reste dans l'axe du texte, sur décision de Rémy :
+                c'est la dernière ligne de la lettre, elle appartient au corps.
+                Seule la signature en sort. */}
+            <p className="text-base text-foreground sm:text-lg">
               {messageRemy.salutation}
             </p>
-            <p className="signature mt-1 text-4xl text-foreground sm:text-5xl">
-              {messageRemy.signature}
-            </p>
-          </div>
+            <div className="flex justify-end">
+              <p className="signature mt-2 origin-bottom-right -rotate-3 pr-2 text-5xl text-foreground sm:text-6xl">
+                {messageRemy.signature}
+              </p>
+            </div>
+          </Apparition>
         </div>
       </div>
     </section>

@@ -195,9 +195,15 @@ export default function RootLayout({
 
             Elle est ici et non dans le composant : React sérialise le contenu
             d'un `noscript` comme du texte, donc la feuille se retrouvait dans le
-            `textContent` du titre. Invisible à l'écran, mais lue. */}
+            `textContent` du titre. Invisible à l'écran, mais lue.
+
+            La seconde règle fait le même travail pour `Apparition`, qui révèle
+            les paragraphes de la lettre au défilement : ils partent à
+            `opacity: 0`, et sans script ils ne reviendraient jamais. Un titre
+            perdu est un niveau du plan en moins ; une lettre perdue, c'est la
+            moitié de la page d'accueil. */}
         <noscript>
-          <style>{`[data-titre-roulant] span{transform:none}`}</style>
+          <style>{`[data-titre-roulant] span{transform:none}[data-apparition]{opacity:1;transform:none}`}</style>
         </noscript>
         <Script id="gtm" strategy="afterInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
