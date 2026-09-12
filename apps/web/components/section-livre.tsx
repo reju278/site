@@ -2,7 +2,7 @@ import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { TexteRoulant } from "@/components/texte-roulant";
 import { TitreRoulant } from "@/components/titre-roulant";
 import { livre } from "@/contenu/site";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Star } from "lucide-react";
 
 /**
  * Le livre, en une carte à deux volets.
@@ -34,12 +34,50 @@ import { ArrowRight } from "lucide-react";
  * qui est la moitié de ce qui fait tenir une carte à deux colonnes. L'autre
  * moitié est le `lg:` : en dessous, les volets s'empilent, l'image d'abord.
  */
+/**
+ * Cinq étoiles remplies à la hauteur de la note.
+ *
+ * Deux rangées superposées plutôt que cinq étoiles à demi remplies : la rangée
+ * du dessous est vide, celle du dessus est pleine et coupée à `note / 5` de sa
+ * largeur. C'est la seule façon d'obtenir une fraction d'étoile sans dessiner un
+ * second glyphe, et elle vaut pour n'importe quelle note.
+ *
+ * `aria-hidden` : la note est écrite en toutes lettres juste à côté, et faire
+ * annoncer cinq étoiles par un lecteur d'écran répéterait l'information sous une
+ * forme moins claire.
+ */
+function Etoiles({ note }: { note: number }) {
+  const rangee = (classe: string) => (
+    <span className={`flex gap-0.5 ${classe}`}>
+      {[0, 1, 2, 3, 4].map((i) => (
+        <Star key={i} className="size-4 shrink-0" />
+      ))}
+    </span>
+  );
+
+  return (
+    <span aria-hidden className="relative inline-flex">
+      {rangee("text-(--etoile)/25 [&_svg]:fill-current")}
+      {/* `overflow-hidden` sur un conteneur en position absolue : c'est lui qui
+          coupe la rangée pleine, et la largeur vient du nombre. `w-max` sur la
+          rangée intérieure, sinon elle se rétrécirait avec son masque au lieu
+          d'être rognée par lui. */}
+      <span
+        className="absolute inset-y-0 left-0 overflow-hidden"
+        style={{ width: `${(note / 5) * 100}%` }}
+      >
+        {rangee("w-max text-(--etoile) [&_svg]:fill-current")}
+      </span>
+    </span>
+  );
+}
+
 export function SectionLivre() {
   return (
     <div className="relief-verre overflow-hidden rounded-md border border-border bg-card">
       <div className="grid items-stretch lg:grid-cols-2">
         {/* Le volet de l'objet. */}
-        <div className="relative isolate flex items-center justify-center bg-accent px-6 py-12 sm:px-10 sm:py-16">
+        <div className="relative isolate flex flex-col items-center justify-center gap-6 bg-accent px-6 py-12 sm:px-10 sm:py-16">
           {/* Le halo. `--livre` à 14 % dans un dégradé radial qui s'éteint
               avant les bords : posé en dur, ce serait une couleur écrite, et
               elle ne suivrait pas le thème. Il reprend le rouge de la
@@ -56,6 +94,18 @@ export function SectionLivre() {
 
               `loading="lazy"` parce que cette image est très bas dans la page :
               celle que Google chronomètre est celle du hero. */}
+          {/* Le nombre de commandes, au-dessus de la couverture, sur demande de
+              Rémy. **C'est son chiffre, pas un compte calculé** : voir
+              `livre.preuve` dans `site.ts`, où il est à confirmer.
+
+              Une pastille et non une phrase : posée sur le volet de l'objet,
+              elle se lit comme une étiquette collée sur la couverture, ce
+              qu'elle est. Le fond est tiré de `--livre` très dilué plutôt que
+              d'un jeton gris, pour rester dans la couleur de la section. */}
+          <p className="w-fit rounded-md bg-[color-mix(in_oklab,var(--livre)_12%,transparent)] px-3 py-1.5 text-sm font-semibold text-(--livre-texte)">
+            {livre.preuve.commandes}
+          </p>
+
           <picture>
             <source media="(min-width: 640px)" srcSet={livre.visuel.large} />
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -68,6 +118,26 @@ export function SectionLivre() {
               className="w-full max-w-md drop-shadow-2xl"
             />
           </picture>
+
+          {/* La note, sous la couverture.
+
+              **Les étoiles ne portent pas l'information toutes seules** : la
+              note est écrite à côté, « 4,7 sur 5 ». C'est ce qui la rend lisible
+              d'un lecteur d'écran, d'un daltonien et de quelqu'un qui regarde
+              vite, et c'est aussi ce qui dispense le dessin d'atteindre seul le
+              seuil de contraste d'une information graphique.
+
+              Le remplissage est **calculé depuis la note**, pas dessiné à la
+              main : quatre étoiles pleines et 70 % de la cinquième viennent du
+              même nombre que le texte, donc les deux ne peuvent pas diverger le
+              jour où Rémy corrige la note. */}
+          <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
+            <Etoiles note={livre.preuve.note} />
+            <span className="font-semibold text-foreground">
+              {livre.preuve.note.toLocaleString("fr-FR")} sur 5
+            </span>
+            <span>({livre.preuve.source})</span>
+          </p>
         </div>
 
         {/* Le volet du texte. */}

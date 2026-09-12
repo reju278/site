@@ -602,7 +602,11 @@ export default function Accueil() {
             de celle du livre faisaient près de deux cents pixels de vide entre
             la vidéo et la couverture. Le bas des résultats est réduit en même
             temps, sinon on ne fait que déplacer l'écart. */}
-        <Section className="[&>div]:pt-4 sm:[&>div]:pt-6">
+        {/* Le bas est réduit en même temps que le haut de la section des
+            vidéos, et pour la même raison qu'à l'intérieur du fond : deux
+            rembourrages qui s'additionnent ne se corrigent pas d'un seul côté,
+            on ne fait que déplacer l'écart. */}
+        <Section className="[&>div]:pt-4 [&>div]:pb-10 sm:[&>div]:pt-6 sm:[&>div]:pb-12">
           <SectionLivre />
         </Section>
       </FondResultats>
@@ -616,7 +620,16 @@ export default function Accueil() {
           une couche dont tout le raccord repose sur l'endroit où elle finit.
           La section revient donc sur la couleur de page, comme le pied de page
           qui la suit. */}
-      <Section>
+      {/* **Le rembourrage haut est ramené à presque rien**, sur demande de
+          Rémy, et c'est le même défaut que partout ailleurs : deux blocs
+          voisins portent chacun le leur et personne ne sait que l'autre
+          existe. Le bas de la section du livre et le haut de celle-ci
+          s'additionnaient à 224 px mesurés entre la carte et le titre.
+
+          Ce n'est pas la règle `[data-entete-page] + section`, qui ne vise que
+          le voisin immédiat d'un en-tête de page : ici les deux blocs sont des
+          sections ordinaires, et seule celle-ci doit se resserrer. */}
+      <Section className="[&>div]:pt-4 sm:[&>div]:pt-6">
         <DernieresVideos />
       </Section>
 

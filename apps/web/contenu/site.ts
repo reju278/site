@@ -1109,6 +1109,31 @@ export const livre = {
   actionSecondaire: "Chapitre gratuit",
   href: liens.livre,
 
+  /* La preuve posée autour de la couverture, sur demande de Rémy : le nombre de
+     commandes au-dessus, la note en dessous.
+   *
+   * **Les deux chiffres sont les siens et ils sont À CONFIRMER.** Il a dicté
+   * « plus de 5 000 commandes » et « genre 4,7 sur 5 ». Le « genre » est le
+   * problème : sur une page commerciale, une note affichée est une allégation,
+   * et la loi européenne demande qu'elle corresponde à des avis réels et
+   * vérifiables. Amazon refuse les requêtes automatiques, donc la note n'a PAS
+   * pu être relevée à la source : elle est écrite telle qu'il l'a dite, et il
+   * doit la vérifier sur sa fiche produit avant la mise en ligne.
+   *
+   * **Aucun balisage `AggregateRating` ne l'accompagne, et il ne faut pas en
+   * ajouter.** Une note qu'une entreprise publie sur elle-même est exclue des
+   * résultats enrichis de Google depuis 2019 et expose à une pénalité manuelle.
+   * Voir la règle des avis dans `AGENTS.md`. Ici, la note est affichée pour un
+   * lecteur, pas déclarée à un moteur.
+   *
+   * `note` est un nombre et non une chaîne : c'est lui qui remplit les étoiles,
+   * donc le dessin ne peut pas dire autre chose que le texte. */
+  preuve: {
+    commandes: "Plus de 5 000 commandes",
+    note: 4.7,
+    source: "avis Amazon",
+  },
+
   /* Le rendu 3D vient de la page de vente elle-même, rogné de ses marges
      transparentes et servi par nous en deux largeurs. L'alternative décrit ce
      que l'image montre, sans « image de » : c'est une couverture de livre, et

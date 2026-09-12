@@ -1085,6 +1085,34 @@ se borne toujours à la largeur où il tient, `sm:whitespace-nowrap` et pas
 davantage, et la hauteur se déclare en `min-h-*` pour que le bouton grandisse au
 lieu de rogner son propre texte.
 
+### La preuve autour de la couverture du livre
+
+Sur demande de Rémy : le nombre de commandes au-dessus de l'image, la note en
+dessous, avec ses étoiles et la mention de la source.
+
+**Les deux chiffres sont les siens et restent à confirmer.** Il a dicté « plus de
+5 000 commandes » et « genre 4,7 sur 5 ». Le « genre » est le problème : sur une
+page commerciale, une note affichée est une allégation, et le droit européen
+demande qu'elle corresponde à des avis réels et vérifiables. Amazon refuse les
+requêtes automatiques, donc **la note n'a pas pu être relevée à la source** : elle
+est écrite telle qu'il l'a dite, et c'est à lui de la vérifier sur sa fiche.
+
+**Aucun balisage `AggregateRating`, et il ne faut pas en ajouter.** La règle des
+avis vaut ici comme ailleurs : une note qu'une entreprise publie sur elle-même
+est exclue des résultats enrichis depuis 2019 et expose à une pénalité manuelle.
+La note est affichée pour un lecteur, pas déclarée à un moteur.
+
+Deux points de fabrication :
+
+- **Le remplissage des étoiles est calculé depuis le nombre**, pas dessiné : la
+  rangée pleine est coupée à `note / 5` au-dessus d'une rangée vide. Le dessin ne
+  peut donc pas dire autre chose que le texte le jour où la note change.
+- **La note est aussi écrite en toutes lettres**, « 4,7 sur 5 ». C'est ce qui la
+  rend lisible d'un lecteur d'écran et ce qui dispense les étoiles d'atteindre
+  seules le seuil d'une information graphique. Elles le tiennent quand même :
+  `--or` tombe à 1,89:1 sur `--accent` en thème clair, d'où `--etoile`, qui
+  change de valeur selon le thème.
+
 ### « Mes dernières vidéos » : trois chaînes, une vidéo chacune
 
 Sur demande de Rémy, sous la section du livre. Trois fiches, une par chaîne, au

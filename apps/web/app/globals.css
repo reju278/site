@@ -646,6 +646,23 @@ summary {
      couleur de la palette du site, c'est une marque citée. */
   --youtube: #ff0000;
 
+  /* L'or des étoiles de la note du livre.
+
+     **Ce n'est pas `--or`, et il a fallu le mesurer pour s'en apercevoir.**
+     `--or` est celui du consulting, #d4a017, fait pour porter du texte sombre
+     sur un bouton. Posé en aplat sur `--accent`, le fond du volet de la
+     couverture, il tombe à **1,89:1** en thème clair : les étoiles y sont là
+     sans se voir.
+
+     Il change donc de valeur selon le thème, comme `--livre-texte` : #9a7200 en
+     clair, qui tient 3,49:1 sur `--accent`, et le `--or` franc en sombre, où il
+     tient 6:1. Un or foncé sur un fond sombre serait invisible, c'est la même
+     mécanique à l'envers.
+
+     La note est **aussi écrite en toutes lettres** à côté des étoiles : c'est ce
+     qui fait que l'information ne dépend jamais du dessin. */
+  --etoile: #9a7200;
+
   /* Le vert de la flèche des résultats dans le menu, sur demande de Rémy :
      « pour le résultat, la flèche, tu la fais verte ».
 
@@ -744,6 +761,9 @@ summary {
 
   --courbe: #10b981;
   --courbe-morte: #f87171;
+  /* Voir le commentaire de `--etoile` : l'or franc en sombre, un or foncé
+     en clair. */
+  --etoile: #d4a017;
   /* Voir le commentaire de `--icone-resultats` : le vert franc en sombre,
      le vert foncé en clair. */
   --icone-resultats: #10b981;
