@@ -1,8 +1,7 @@
-import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { EnTetePage } from "@/components/en-tete-page";
 import { Section } from "@/components/section";
 import { avisDe } from "@/contenu/avis";
-import { liens, temoignages } from "@/contenu/site";
+import { temoignages } from "@/contenu/site";
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -48,6 +47,22 @@ export default function Resultats() {
         <h1 className="titre text-5xl text-balance text-foreground sm:text-6xl">
           Résultats de Funnels Club
         </h1>
+
+        {/* **Ce sous-titre est écrit par l'agent, à la demande de Rémy**, comme
+            les articles d'avis : « une petite description sous-titre qui
+            explique ce qu'ils vont voir sur cette page ». Il dit ce que la page
+            contient et rien d'autre, sans promettre de résultat : les chiffres
+            sont dans les entretiens, et ce sont ceux des personnes qui les
+            annoncent. **À valider par Rémy**, au même titre que les articles.
+
+            `max-w-2xl` et non la pleine largeur : une ligne de texte courant
+            qui fait mille cent pixels de long se relit mal, et le sous-titre
+            doit rester plus étroit que le titre qu'il commente. */}
+        <p className="mx-auto mt-6 max-w-2xl text-lg text-pretty text-muted-foreground">
+          Quinze membres racontent, en vidéo, ce qu'ils faisaient avant, ce
+          qu'ils ont changé et où ils en sont. Chaque entretien a sa page, avec
+          la vidéo, le récit et la transcription complète.
+        </p>
       </EnTetePage>
 
       <Section>
@@ -66,7 +81,20 @@ export default function Resultats() {
 
             L'affiche est servie par nous et non par Wistia : rien ne part
             chez eux tant qu'une vidéo n'est pas lancée. */}
-        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Deux par ligne et non trois, sur décision de Rémy. Chaque carte
+            porte désormais une phrase sous le nom : à trois colonnes, cette
+            phrase tombait sur trois lignes et les cartes cessaient d'avoir la
+            même hauteur de texte. Une grille se déclare toujours avec son état
+            étroit, d'où `grid-cols-1` avant `sm:`.
+
+            **Et elle est plus étroite que la section qui la porte**, resserrée
+            au centre sur demande de Rémy : `max-w-4xl` contre les `max-w-6xl`
+            de `Section`. Deux cartes sur toute la largeur d'un grand écran font
+            des affiches de cinq cent cinquante pixels pour une ligne de texte
+            de dix mots, et la grille se lit comme deux colonnes qui s'écartent
+            au lieu d'une liste. Le `mx-auto` est ce qui la recentre : sans lui,
+            la grille rétrécie se collerait à gauche. */}
+        <ul className="mx-auto grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2">
           {temoignages.map((temoignage) => {
             const article = avisDe(temoignage.id);
 
@@ -102,11 +130,14 @@ export default function Resultats() {
                     <p className="text-base font-semibold text-card-foreground">
                       {temoignage.nom}
                     </p>
-                    {temoignage.resultat ? (
-                      <p className="mt-1 text-sm text-muted-foreground">
-                        {temoignage.resultat}
-                      </p>
-                    ) : null}
+                    {/* La phrase est tirée de l'article de la personne et
+                        vient de `site.ts`. Elle n'est plus facultative : une
+                        carte sur quinze qui n'aurait pas sa ligne creuserait un
+                        trou dans la grille, et le nom seul ne dit rien de ce
+                        qu'on va lire. */}
+                    <p className="mt-1 text-sm text-pretty text-muted-foreground">
+                      {temoignage.description}
+                    </p>
 
                     {article ? (
                       <span className="mt-auto flex items-center gap-1.5 pt-4 text-sm font-medium text-primary">
@@ -125,15 +156,13 @@ export default function Resultats() {
         </ul>
       </Section>
 
-      <Section>
-        <div className="flex justify-center">
-          {/* Repris de remy-jupille.com, au mot près. */}
-          <BoutonScintillant href={liens.appel}>
-            Appel découverte gratuit
-            <ArrowRight className="size-4" />
-          </BoutonScintillant>
-        </div>
-      </Section>
+      {/* **Pas d'appel à l'action en bas de cette page**, retiré sur décision
+          de Rémy. Cette page est un sommaire : quelqu'un qui arrive au bout
+          n'a pas encore lu un seul témoignage, et lui proposer de réserver un
+          appel à cet endroit lui demande de décider avant de savoir. L'appel
+          est au bon endroit dans chaque article, au milieu et à la fin, une
+          fois le parcours raconté. */
+      }
     </>
   );
 }

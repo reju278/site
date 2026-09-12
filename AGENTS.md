@@ -212,6 +212,50 @@ reformulée** : ce qui est mal dit reste mal dit, c'est de la parole.
 dans le document dès le premier octet, et un composant React retirerait le
 contenu du DOM tant qu'il est fermé, ce qui est l'inverse du but.
 
+### Un entretien se rend à qui l'a mené, même quand c'est moins commode
+
+Les quinze entretiens d'avis ne sont pas tous menés par Rémy : Geoffrey en mène
+la moitié, et plusieurs intervieweurs ne se nomment jamais. **Les tours de
+parole vont à qui les dit**, donc « Geoffrey » quand le client le nomme et
+« Funnels Club » quand personne ne le nomme. On ne devine pas un prénom à
+l'oreille d'une reconnaissance vocale : elle écrit « Jean-Fré », « Getty »,
+« Jean-Pierre », et un intervieweur mal attribué est une erreur de fait sur une
+page qui porte le nom de vraies personnes.
+
+Corollaire : le chapô ne dit « en entretien avec Rémy Jupille » que lorsque
+c'est vrai, et l'`alt` de l'affiche non plus.
+
+### Un chiffre qu'on n'entend pas clairement ne se publie pas
+
+La reconnaissance vocale écorche les montants avant tout le reste : elle écrit
+« trois cas » pour trois mille, « on a fait cent-quatre » pour une phrase qu'on
+ne reconstitue pas. **Ces passages ne se devinent pas, et rien de ce qui en
+vient n'est publié.** Sur l'entretien de Yannick et Sylvie, le seul résultat
+annoncé est celui que Sylvie énonce en toutes lettres.
+
+Même règle pour une réserve : quand Jérémy dit avoir passé les dix mille euros
+puis ajoute qu'il devrait vérifier ses statistiques, **l'article dit les deux**.
+Retirer la réserve pour ne garder que le montant, c'est faire dire à quelqu'un
+ce qu'il n'a pas dit.
+
+### On ne publie pas un client qui descend un concurrent nommé
+
+Une cliente cite deux formateurs chez qui elle avait acheté avant, et dit de
+l'un que ça ne lui a servi à rien. C'est son opinion et elle a le droit de
+l'avoir. La publier sur une page commerciale qui vend le programme concurrent,
+c'est du dénigrement de personnes nommées, et **ce n'est pas à un agent
+d'engager la société là-dessus**. Le tour de parole est conservé, sans les noms,
+et le retrait est signalé en commentaire. Rémy décide s'il les remet.
+
+### Une page qui parle de santé parle du business, pas du soin
+
+Trois membres travaillent sur la santé ou le bien-être : un psychologue, un
+sexologue, une accompagnante qui part de ses propres maladies chroniques. Leurs
+articles disent leur métier, parce que c'est le sujet de la page, et **s'arrêtent
+là** : aucune description de ce qu'ils proposent, aucune promesse d'effet, aucun
+vocabulaire de soin. Ce qui est raconté, c'est la façon dont ils ont organisé et
+tarifé leur activité.
+
 ### Les pages d'une même famille se citent entre elles
 
 **C'est le levier le plus fort, et il ne se voit pas sur une page seule.** Quinze
@@ -843,6 +887,27 @@ plein mot, et **la page ne déborde pas**, donc rien ne le signale. Un `nowrap`
 se borne toujours à la largeur où il tient, `sm:whitespace-nowrap` et pas
 davantage, et la hauteur se déclare en `min-h-*` pour que le bouton grandisse au
 lieu de rogner son propre texte.
+
+### La page des résultats est un sommaire, pas une page de vente
+
+Trois décisions de Rémy, prises ensemble et qui se tiennent.
+
+**Deux témoignages par ligne**, et la grille est plus étroite que la section qui
+la porte, recentrée en `max-w-4xl`. Chaque carte porte désormais une phrase sous
+le nom : à trois colonnes, cette phrase tombait sur trois lignes et les cartes
+cessaient d'avoir la même hauteur de texte.
+
+**Chaque carte porte sa phrase**, et elle n'est pas facultative : `description`
+dans `temoignages`. Elle est **tirée de l'article de la personne**, jamais
+inventée, et chaque chiffre qui y figure est prononcé dans l'entretien. Elle
+reste courte parce qu'elle sert aussi de légende sur l'affiche du carrousel
+d'accueil, où deux lignes de texte blanc sur une image deviennent illisibles.
+
+**Aucun appel à l'action en bas de page.** Quelqu'un qui arrive au bout de ce
+sommaire n'a pas encore lu un seul témoignage : lui proposer de réserver un
+appel à cet endroit lui demande de décider avant de savoir. L'appel est au bon
+endroit dans chaque article, au milieu et à la fin, une fois le parcours
+raconté.
 
 ### Le pied de page est une carte, et ce qui est légal en sort
 

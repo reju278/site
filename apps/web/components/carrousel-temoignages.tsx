@@ -172,11 +172,9 @@ export function CarrouselTemoignages() {
                       <span className="block text-base font-semibold text-white sm:text-lg">
                         {temoignage.nom}
                       </span>
-                      {temoignage.resultat ? (
-                        <span className="mt-1 block text-sm text-white/85 sm:text-base">
-                          {temoignage.resultat}
-                        </span>
-                      ) : null}
+                      <span className="mt-1 block text-sm text-white/85 sm:text-base">
+                        {temoignage.description}
+                      </span>
                     </>
                   }
                 />

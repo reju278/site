@@ -1120,7 +1120,21 @@ export const temoignageEnAvant = "rgio4y4o8f";
 export const temoignages: readonly {
   id: string;
   nom: string;
-  resultat?: string;
+  /**
+   * La ligne sous le nom, sur la carte de `/resultats` et sur l'affiche du
+   * carrousel d'accueil.
+   *
+   * **Elle est tirée de l'article de la personne**, jamais inventée : chaque
+   * chiffre qui figure ici est prononcé dans l'entretien et repris dans
+   * `avis.ts`. C'est la même règle que pour les articles, et pour la même
+   * raison : ces lignes annoncent les revenus de personnes réelles.
+   *
+   * **Elle reste courte**, une ligne, parce qu'elle se pose aussi sur une
+   * affiche de vidéo dans le carrousel, où deux lignes de texte blanc sur une
+   * image deviennent illisibles. Ce n'est pas le résumé de l'article, c'est son
+   * accroche : le résumé, c'est le chapô, et il est dans `avis.ts`.
+   */
+  description: string;
   secondes: number;
   /** La date de mise en ligne chez Wistia, pour le `VideoObject` des avis.
       Relevée dans le média, jamais approchée : une date fausse déclarée à
@@ -1130,36 +1144,123 @@ export const temoignages: readonly {
   {
     id: "j0vbkt570k",
     nom: "Christian Joyce",
-    resultat: "De 0 € à 160 K€ en 5 mois",
+    description:
+      "160 000 € en quatre mois en vendant sa méthode de nettoyage",
     secondes: 988,
     publie: "2023-11-01",
   },
   {
     id: "rgio4y4o8f",
     nom: "Roland Buffet",
-    resultat: "De 0 € à 109 778 € en 6 mois",
+    description:
+      "109 778 € en six mois en formant les entreprises du bâtiment",
     secondes: 715,
     publie: "2024-04-30",
   },
   {
     id: "2vtsinplyx",
     nom: "Augustin Passy",
-    resultat: "Trois fois son chiffre d'affaires",
+    description:
+      "20 000 € de contrats signés, et moitié moins de temps par client",
     secondes: 485,
     publie: "2024-08-09",
   },
-  { id: "2xege6bt0u", nom: "Yannick et Sylvie", secondes: 1514, publie: "2025-01-24" },
-  { id: "vtfaka0m80", nom: "Olga", secondes: 1365, publie: "2024-09-14" },
-  { id: "fbtr4dqoji", nom: "Sandrine", secondes: 1321, publie: "2025-02-17" },
-  { id: "s3npr5izhy", nom: "Tatiana", secondes: 1248, publie: "2025-06-19" },
-  { id: "tvy3jbhml9", nom: "Charlotte", secondes: 1229, publie: "2025-01-14" },
-  { id: "b5taio9plc", nom: "François", secondes: 1192, publie: "2025-06-02" },
-  { id: "rtil6qeznq", nom: "Jeremy", secondes: 852, publie: "2025-03-22" },
-  { id: "ive07co9xm", nom: "Cédric", secondes: 781, publie: "2024-09-17" },
-  { id: "iy3jgcijgu", nom: "Corentin", secondes: 728, publie: "2025-07-05" },
-  { id: "abj3v8v8ek", nom: "Matthieu", secondes: 718, publie: "2024-09-19" },
-  { id: "4lkp9f6lm4", nom: "Valérie", secondes: 687, publie: "2024-01-07" },
-  { id: "brvvtbkmfo", nom: "Joël", secondes: 527, publie: "2024-09-13" },
+  {
+    id: "2xege6bt0u",
+    nom: "Yannick et Sylvie",
+    description:
+      "Un chiffre triplé en quittant l'abonnement à bas prix",
+    secondes: 1514,
+    publie: "2025-01-24",
+  },
+  {
+    id: "vtfaka0m80",
+    nom: "Olga",
+    description:
+      "10 177 € atteints le treize du mois, sans toucher à son webinaire",
+    secondes: 1365,
+    publie: "2024-09-14",
+  },
+  {
+    id: "fbtr4dqoji",
+    nom: "Sandrine",
+    description:
+      "22 000 € en trois mois avec une formation pour cake designers",
+    secondes: 1321,
+    publie: "2025-02-17",
+  },
+  {
+    id: "s3npr5izhy",
+    nom: "Tatiana",
+    description:
+      "Près de 5 000 € le premier mois, après avoir changé de niche",
+    secondes: 1248,
+    publie: "2025-06-19",
+  },
+  {
+    id: "tvy3jbhml9",
+    nom: "Charlotte",
+    description:
+      "6 335 € sur sa première session de formation en ligne",
+    secondes: 1229,
+    publie: "2025-01-14",
+  },
+  {
+    id: "b5taio9plc",
+    nom: "François",
+    description:
+      "De 4 000 à 8 300 € par mois en ne gardant qu'un seul produit",
+    secondes: 1192,
+    publie: "2025-06-02",
+  },
+  {
+    id: "rtil6qeznq",
+    nom: "Jérémy",
+    description:
+      "Salarié, il a passé la barre des 10 000 € avec des cours d'anglais",
+    secondes: 852,
+    publie: "2025-03-22",
+  },
+  {
+    id: "ive07co9xm",
+    nom: "Cédric",
+    description:
+      "Psychologue, il a fait passer son programme de 250 à 600 €",
+    secondes: 781,
+    publie: "2024-09-17",
+  },
+  {
+    id: "iy3jgcijgu",
+    nom: "Corentin",
+    description:
+      "9 000 € par mois à vingt-cinq ans, avec une offre à 4 500 €",
+    secondes: 728,
+    publie: "2025-07-05",
+  },
+  {
+    id: "abj3v8v8ek",
+    nom: "Mathieu Tison",
+    description:
+      "Chiffre d'affaires doublé un mois et demi après avoir commencé",
+    secondes: 718,
+    publie: "2024-09-19",
+  },
+  {
+    id: "4lkp9f6lm4",
+    nom: "Valérie",
+    description:
+      "De zéro à quinze clients par mois, à cinquante-six ans",
+    secondes: 687,
+    publie: "2024-01-07",
+  },
+  {
+    id: "brvvtbkmfo",
+    nom: "Joël",
+    description:
+      "De 1 800 à 2 800 € par client en quatre mois",
+    secondes: 527,
+    publie: "2024-09-13",
+  },
 ];
 
 export const legales = [
