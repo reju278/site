@@ -356,6 +356,23 @@ export const offres = [
     id: "consulting",
     nom: "Consulting privé avec Rémy",
     surtitre: { texte: "Animé par Rémy", portrait: "/remy.webp" },
+
+    /* La conversation jouée dans la carte, sur demande de Rémy : un client qui
+       écrit, qui envoie, puis Rémy qui écrit et qui répond.
+     *
+     * **Vide, et il faut que Rémy l'écrive.** Ce sont deux messages qui
+     * s'afficheront comme un échange réel entre un client et lui : une question
+     * inventée par l'agent, et une réponse inventée par l'agent, sur la carte
+     * qui vend l'accès direct à Rémy, seraient un faux échange. C'est la règle
+     * la plus stricte du dépôt, et c'est aussi le cas où elle compte le plus.
+     *
+     * Deux lignes suffisent : la question telle qu'un client la poserait, et ce
+     * que Rémy répondrait. Tant qu'elles manquent, la carte s'affiche sans la
+     * conversation, comme avant. */
+    conversation: {
+      question: null as string | null,
+      reponse: null as string | null,
+    },
     texte:
       "C'est l'accompagnement le plus personnalisé que Rémy propose, où vous avez accès à lui en direct dès que vous en avez besoin et où vous pouvez réserver des visioconférences en illimité du lundi au samedi.",
     action: "Postuler pour le consulting privé",

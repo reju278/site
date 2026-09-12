@@ -1,3 +1,4 @@
+import { ConversationConsulting } from "@/components/conversation-consulting";
 import { CourbeMontante } from "@/components/courbe-montante";
 import { CourbeVivante } from "@/components/courbe-vivante";
 import { FondResultats } from "@/components/fond-resultats";
@@ -323,6 +324,19 @@ export default function Accueil() {
                 <CourbeMontante
                   fin={offre.courbe.fin}
                   unite={offre.courbe.unite}
+                  className="mt-5"
+                />
+              ) : null}
+
+              {/* L'échange du consulting, à la même place que la courbe de
+                  l'autre carte : chaque offre montre ce qu'elle est plutôt que
+                  de le décrire. Il ne s'affiche que si Rémy a écrit les deux
+                  messages, voir `conversation` dans `site.ts`. */}
+              {"conversation" in offre && offre.conversation ? (
+                <ConversationConsulting
+                  question={offre.conversation.question}
+                  reponse={offre.conversation.reponse}
+                  portrait={offre.surtitre.portrait}
                   className="mt-5"
                 />
               ) : null}
