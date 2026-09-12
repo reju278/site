@@ -18,6 +18,7 @@ import {
   identite,
   liens,
   offres,
+  sousTitreOffres,
   titreOffres,
   titreResultats,
   video,
@@ -260,13 +261,24 @@ export default function Accueil() {
             lignes sont posées. `text-pretty` reste utile sur l'écran étroit,
             où la seconde ligne se recoupe d'elle-même : il empêche qu'un mot
             s'y retrouve seul. */}
-        {/* La césure est posée à la main par Rémy, donc chaque ligne est un
-            segment : voir `titreOffres`. Le roulement se fait mot à mot, ce qui
-            laisse la coupure intacte. */}
-        <TitreRoulant
-          segments={titreOffres.map((ligne) => ({ texte: ligne }))}
-          className="titre mx-auto mb-10 max-w-4xl text-center text-4xl text-foreground sm:mb-12 sm:text-5xl"
-        />
+        {/* Le titre et son sous-titre.
+
+            Le titre roule mot à mot à l'entrée dans la vue, comme les autres
+            titres de section. Il n'est plus coupé à la main : le texte est assez
+            court pour que le moteur le coupe correctement, voir `titreOffres`.
+
+            `text-balance` est justifié ici : le titre est centré, et c'est le
+            seul cas où équilibrer les lignes a un sens. */}
+        <div className="mx-auto mb-10 max-w-4xl text-center sm:mb-12">
+          <TitreRoulant
+            segments={[{ texte: titreOffres }]}
+            className="titre text-4xl text-balance text-foreground sm:text-5xl"
+          />
+
+          <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground">
+            {sousTitreOffres}
+          </p>
+        </div>
 
         <div className="grid gap-4 lg:grid-cols-2">
           {offres.map((offre) => (

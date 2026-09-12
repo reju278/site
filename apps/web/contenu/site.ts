@@ -270,24 +270,12 @@ export const menus: readonly {
  * commentaire qui la précède.
  */
 /**
- * Le titre de la section des offres, écrit par Rémy, **en deux lignes**.
- *
- * La coupure est posée à la main et non laissée au moteur de rendu. Sept
- * largeurs ont été mesurées avec `text-wrap: balance` : aucune ne produit cette
- * césure. Le moteur remplit la première ligne et laisse tomber le reste, ce qui
- * donnait « Nos deux accompagnements / personnalisés pour / vous accompagner »,
- * trois lignes dont la première écrase les deux autres.
- *
- * C'est donc du contenu et pas de la mise en forme : c'est Rémy qui a décidé
- * où la phrase se coupe. Corriger le texte, c'est corriger ces deux lignes.
- */
-/**
  * Le titre de la section des résultats.
  *
- * **À VALIDER PAR RÉMY.** C'est la seule phrase du site que l'agent ait écrite,
- * et elle l'a été sur sa demande explicite : il a fourni « Real people. Real
- * results. », le titre de la section de functionhealth.com dont la nôtre reprend
- * la forme, et demandé un équivalent français.
+ * **À VALIDER PAR RÉMY.** C'est une des deux phrases du site que l'agent ait
+ * écrites, et elle l'a été sur sa demande explicite : il a fourni « Real people.
+ * Real results. », le titre de la section de functionhealth.com dont la nôtre
+ * reprend la forme, et demandé un équivalent français.
  *
  * Ce n'est donc pas une invention mais une traduction, et elle se relit comme
  * telle. Deux autres rendus ont été écartés : « Des gens réels. Des résultats
@@ -306,10 +294,28 @@ export const titreResultats = [
   { texte: "De vrais résultats.", accent: true },
 ] as const;
 
-export const titreOffres = [
-  "Nos deux accompagnements",
-  "personnalisés pour vous accompagner",
-] as const;
+/**
+ * Le titre de la section des offres, et son sous-titre. Écrits par Rémy, dictés
+ * au mot près.
+ *
+ * **La coupure à la main a disparu, et c'est le nouveau texte qui la rend
+ * inutile.** L'ancien titre, « Nos deux accompagnements personnalisés pour vous
+ * accompagner », était stocké en deux lignes parce qu'aucune largeur ne
+ * produisait la césure voulue : le moteur remplissait la première ligne et
+ * laissait tomber le reste, ce qui donnait une ligne longue écrasant deux
+ * courtes. Celui-ci est plus court d'un tiers et se coupe proprement tout seul.
+ * La forme se mesure quand même, elle ne se suppose pas : voir la règle des
+ * blocs de texte dans `AGENTS.md`.
+ *
+ * Le sous-titre porte ce que le titre ne dit plus : le titre parle de la façon
+ * de travailler, le sous-titre annonce qu'il y a deux formules et invite à les
+ * regarder. C'est pour ça qu'il en faut un ici alors qu'il n'y en avait pas
+ * avant.
+ */
+export const titreOffres = "Nous croyons en un accompagnement humain";
+
+export const sousTitreOffres =
+  "Découvrez nos deux formules d'accompagnement personnalisées.";
 
 export const offres = [
   {
