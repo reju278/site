@@ -287,7 +287,7 @@ export const messageRemy = {
     {
       titre: "La première est de créer un site internet.",
       texte:
-        "Aujourd'hui, les sites internet ne fonctionnent plus, sauf si c'est d'une vitrine que vous avez besoin. Si votre objectif est d'obtenir des clients, c'est un tunnel de vente qu'il vous faut à la place.",
+        "Aujourd'hui, les sites internet ne fonctionnent plus (sauf si c'est une vitrine dont vous avez besoin). Si votre objectif est d'obtenir des clients, c'est un tunnel de vente qu'il vous faut à la place.",
     },
     {
       titre: "La deuxième est de prospecter.",
@@ -302,11 +302,82 @@ export const messageRemy = {
     },
   ],
 
-  suite: [
+  logique:
     "La logique est facile à comprendre. Vous avez beau avoir la meilleure offre du monde : si votre système ne transforme pas un inconnu en client rapidement, il ne vous rapportera aucun client.",
-    "Ça fait maintenant plus de dix ans que je suis entrepreneur sur internet. Au cours de ces dix années, j'ai peaufiné et ajusté le parfait tunnel de vente pour les créateurs de formation, de coaching, d'accompagnement et de prestation de services.",
-    "J'ai fait en sorte qu'il respecte mes valeurs : il doit rester simple, et donner des résultats réguliers et prévisibles. On ne cherche pas à faire un coup. On veut un business qui évolue avec le temps, de façon stable, sur lequel toute une vie peut reposer. Parce que quoi de plus stressant qu'un chiffre d'affaires en montagnes russes ?",
-    "Ce tunnel de vente, je l'applique aujourd'hui moi-même dans mon propre business. Et au cours des dernières années, nous l'avons mis en place dans plus de 1 000 business de formation et de coaching, dans des centaines de thématiques : le basket, la formation professionnelle du BTP, le yoga, la batterie, le piano, le violoncelle, le développement personnel, la spiritualité.",
+
+  /* Le paragraphe d'expérience est découpé parce qu'il porte deux marques : les
+     guillemets du « tunnel de vente », qui sont ceux du deck et du titre de la
+     section, et le surlignage vert des quatre métiers, décidé par Rémy. Le vert
+     après le jaune des voies et le rouge des erreurs : ce qui marche. */
+  experience: {
+    avant:
+      "Ça fait maintenant plus de dix ans que je suis entrepreneur sur internet. Au cours de ces dix années, j'ai peaufiné et ajusté le parfait ",
+    tunnel: "«\u00a0tunnel de vente\u00a0»",
+    milieu: " pour les créateurs ",
+    /* Un surlignage par métier et non un seul sur toute l'énumération, sur
+       décision de Rémy : quatre traits disent quatre métiers, un seul trait dit
+       une phrase. Les liaisons restent en dehors, sinon le surligneur passerait
+       sur les virgules. */
+    metiers: [
+      { avant: "de ", mot: "formation" },
+      { avant: ", de ", mot: "coaching" },
+      { avant: ", d'", mot: "accompagnement" },
+      { avant: " et de ", mot: "prestation de services" },
+    ],
+    apres: ".",
+  },
+
+  /* Les valeurs, découpées pour que trois mots soient soulignés : « simple »,
+     « réguliers » et « prévisibles », sur décision de Rémy. Ce sont les trois
+     mots de la promesse du deck, où ils sont déjà soulignés. Le soulignement et
+     non un surlignage de plus : trois couleurs se répondent déjà au-dessus, une
+     quatrième ferait un nuancier. */
+  valeurs: {
+    avant: "J'ai fait en sorte qu'il respecte mes valeurs : il doit rester ",
+    /* Un soulignement par mot, jamais sur les liaisons : « simple »,
+       « réguliers », « prévisibles », et le « et » reste nu. Même raison que les
+       quatre métiers surlignés plus haut : trois traits disent trois qualités,
+       un seul trait dirait une phrase. */
+    souligne: "simple",
+    milieu: ", et donner des résultats ",
+    souligneBis: "réguliers",
+    liaison: " et ",
+    souligneTer: "prévisibles",
+    apres:
+      ". On ne cherche pas à faire un coup. On veut un business qui évolue avec le temps, de façon stable, sur lequel toute une vie peut reposer. Parce que quoi de plus stressant qu'un chiffre d'affaires en montagnes russes ?",
+  },
+
+  /* Le déploiement, découpé pour souligner « 1 000 business », sur décision de
+     Rémy. L'espace du millier est insécable : sans elle, « 1 » peut finir une
+     ligne et « 000 » commencer la suivante, ce qui est le seul endroit du texte
+     où une coupure change un nombre. */
+  deploiement: {
+    avant:
+      "Ce tunnel de vente, je l'applique aujourd'hui moi-même dans mon propre business. Et au cours des dernières années, nous l'avons mis en place dans plus de ",
+    souligne: "1\u00a0000 business",
+    milieu:
+      " de formation et de coaching, dans des centaines de thématiques : ",
+    /* Une thématique par surlignage, comme les quatre métiers plus haut : c'est
+       la liste qui fait la démonstration, et huit traits séparés se comptent du
+       regard là où un seul trait de huit mots se lit comme une phrase. Le jaune
+       est celui des trois voies, et il dit la même chose : ce qu'on peut faire.
+
+       Le « etc. » est de Rémy et il n'est pas surligné : il n'est pas une
+       thématique, il dit qu'il y en a d'autres. */
+    thematiques: [
+      "le basket",
+      "la formation professionnelle du BTP",
+      "le yoga",
+      "la batterie",
+      "le piano",
+      "le violoncelle",
+      "le développement personnel",
+      "la spiritualité",
+    ],
+    apres: ", etc.",
+  },
+
+  suite: [
     "Ce qui est sûr, c'est que, peu importe le domaine dans lequel vous souhaitez monétiser votre expertise, ce tunnel de vente pourra s'adapter pour vous apporter des clients qualifiés, capables de payer jusqu'à plusieurs milliers d'euros pour obtenir vos conseils.",
   ],
 

@@ -182,6 +182,98 @@ export function MessageRemy() {
               </Apparition>
             ))}
 
+            <Apparition>
+              <p>{messageRemy.logique}</p>
+            </Apparition>
+
+            {/* Le paragraphe d'expérience, et ses deux marques.
+
+                Les guillemets du « tunnel de vente » sont ceux du deck et du
+                titre de la section, repris ici pour que l'expression soit la
+                même partout.
+
+                Le surlignage des quatre métiers est vert, sur décision de Rémy,
+                et il reprend `--courbe`, le vert du graphique. C'est voulu :
+                là-haut il dit « ça monte », ici il dit « ce qui marche », et
+                introduire un quatrième vert pour la même idée n'aurait servi
+                qu'à en avoir deux qui divergent. */}
+            <Apparition>
+              <p>
+                {messageRemy.experience.avant}
+                <span className="font-semibold">
+                  {messageRemy.experience.tunnel}
+                </span>
+                {messageRemy.experience.milieu}
+                {messageRemy.experience.metiers.map((metier) => (
+                  <span key={metier.mot}>
+                    {metier.avant}
+                    <mark
+                      className="surlignage"
+                      style={
+                        {
+                          "--surlignage-fond":
+                            "color-mix(in srgb, var(--courbe) 28%, transparent)",
+                        } as React.CSSProperties
+                      }
+                    >
+                      {metier.mot}
+                    </mark>
+                  </span>
+                ))}
+                {messageRemy.experience.apres}
+              </p>
+            </Apparition>
+
+            {/* Les valeurs, avec leurs trois mots soulignés.
+
+                Le soulignement est épais et décollé du texte : un trait d'un
+                pixel collé aux lettres se confond avec un lien, et il y en a
+                deux dans ce même bloc. */}
+            <Apparition>
+              <p>
+                {messageRemy.valeurs.avant}
+                <span className="underline decoration-2 underline-offset-4">
+                  {messageRemy.valeurs.souligne}
+                </span>
+                {messageRemy.valeurs.milieu}
+                <span className="underline decoration-2 underline-offset-4">
+                  {messageRemy.valeurs.souligneBis}
+                </span>
+                {messageRemy.valeurs.liaison}
+                <span className="underline decoration-2 underline-offset-4">
+                  {messageRemy.valeurs.souligneTer}
+                </span>
+                {messageRemy.valeurs.apres}
+              </p>
+            </Apparition>
+
+            <Apparition>
+              <p>
+                {messageRemy.deploiement.avant}
+                <span className="underline decoration-2 underline-offset-4">
+                  {messageRemy.deploiement.souligne}
+                </span>
+                {messageRemy.deploiement.milieu}
+                {messageRemy.deploiement.thematiques.map((thematique, i) => (
+                  <span key={thematique}>
+                    {i > 0 ? ", " : null}
+                    <mark
+                      className="surlignage"
+                      style={
+                        {
+                          "--surlignage-fond":
+                            "color-mix(in srgb, var(--surlignage-jaune) 32%, transparent)",
+                        } as React.CSSProperties
+                      }
+                    >
+                      {thematique}
+                    </mark>
+                  </span>
+                ))}
+                {messageRemy.deploiement.apres}
+              </p>
+            </Apparition>
+
             {messageRemy.suite.map((paragraphe) => (
               <Apparition key={paragraphe}>
                 <p>{paragraphe}</p>
