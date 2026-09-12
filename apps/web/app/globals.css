@@ -360,6 +360,28 @@ html #cookiescript_bottompart:empty {
   --bande-pale: #5d6ca8;
 }
 
+/* Un rang qui défile sans montrer sa barre.
+
+   La barre de défilement native traverse le bas des miniatures du rang des
+   témoignages, et sur macOS elle apparaît en plein geste, ce qui fait sauter
+   la hauteur du bloc.
+
+   **Cacher la barre ne retire pas le défilement** : le rang reste glissable au
+   doigt, à la molette horizontale, et chaque miniature est un bouton
+   atteignable au clavier, donc rien n'est perdu pour qui n'a pas de souris.
+   C'est la condition pour que cette classe soit acceptable, et elle ne
+   s'emploie que là où elle est remplie.
+
+   Les deux écritures sont nécessaires : `scrollbar-width` est la propriété
+   normalisée, `::-webkit-scrollbar` est ce que comprennent Safari et Chrome. */
+@utility scrollbar-cachee {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 /* ------------------------------------------------------------------
    Le rouge du livre.
 

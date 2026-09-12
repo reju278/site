@@ -105,34 +105,27 @@ export function SectionLivre() {
               Le texte de chacun dit lequel des deux il est, donc aucun « en
               savoir plus ».
 
-              **Le creux ne se coupe jamais en deux lignes.** Son libellé fait
-              deux mots de plus que celui du plein : posés côte à côte dans le
-              volet de droite, qui ne fait que la moitié de la carte, il n'a pas
-              la place de tenir sur une ligne et se cassait en deux, à côté d'un
-              plein qui en tenait une. Deux boutons de même hauteur dont l'un
-              porte deux lignes et l'autre une ne se lisent plus comme une
-              paire.
+              **Ils tiennent sur une seule ligne, à toutes les largeurs**, sur
+              décision de Rémy. C'est le libellé court qui le permet : « Chapitre
+              gratuit » et non la phrase entière, donc ses mots quand même,
+              puisque c'est ainsi que son propre menu l'appelle. La phrase
+              longue ne tenait pas, se coupait en deux lignes à côté d'un plein
+              qui en tenait une, et deux boutons de hauteur égale dont l'un porte
+              deux lignes ne se lisent plus comme une paire.
 
-              `whitespace-nowrap` sur le creux et `flex-wrap` sur la rangée : le
-              libellé reste d'un seul tenant, et c'est la **rangée** qui cède
-              quand la place manque, en faisant passer le creux sous le plein.
-              Le point de bascule n'est donc écrit nulle part, il se déduit de
-              la largeur réelle du texte, ce qu'aucun point de rupture choisi à
-              la main ne saurait faire.
+              `flex-1` en dessous de `sm` : sur téléphone les deux se partagent
+              la largeur en parts égales, ce qui aligne leurs quatre bords. Au
+              delà, `sm:flex-none` leur rend la largeur de leur texte, sinon
+              deux boutons étirés sur la moitié d'un volet auraient l'air d'une
+              barre d'onglets.
 
-              **Mais le `nowrap` s'arrête en dessous de `sm`.** Sur un écran de
-              375 px, la carte ne laisse que 223 px au texte du creux, qui en
-              demande 300 : d'un seul tenant, il sortait du bouton, et
-              `overflow-hidden` sur la carte le coupait en plein mot, sans que
-              la page déborde ni que rien ne signale la perte. Le bouton
-              retrouve donc le droit de se couper en deux lignes là où il n'a
-              pas le choix, et `min-h-14` le laisse grandir au lieu de rogner
-              son propre texte.
-
-              `w-full sm:w-auto` : sur téléphone les deux prennent toute la
-              largeur, ce qui aligne leurs deux bords. Au-delà, ils reprennent
-              la largeur de leur texte. */}
-          <div className="mt-8 flex flex-wrap items-center gap-3 sm:gap-4">
+              Le corps et le rembourrage descendent d'un cran sur téléphone.
+              Sans ça, les deux libellés demandent 338 px là où la carte n'en
+              offre que 287, et `whitespace-nowrap` les ferait sortir du bouton
+              **sans que la page déborde** : `overflow-hidden` sur la carte les
+              couperait en plein mot, et rien ne le signalerait. Les valeurs
+              sont mesurées dans le navigateur, pas estimées. */}
+          <div className="mt-8 flex items-stretch gap-3 sm:gap-4">
             {/* Le plein. Le scintillement reste, mais sur le rouge de la
                 couverture : il passe par `--fond` et non par une classe, pour
                 que le bouton et le masque de son liseré ne puissent pas
@@ -140,10 +133,16 @@ export function SectionLivre() {
             <BoutonScintillant
               href={livre.href}
               fond="var(--livre)"
-              className="w-full justify-center sm:w-auto"
+              className="h-12 flex-1 justify-center px-4 text-sm sm:h-14 sm:flex-none sm:px-8 sm:text-base"
             >
               {livre.action}
-              <ArrowRight className="size-4" />
+              {/* La flèche disparaît en dessous de `sm`, et c'est une décision
+                  plutôt qu'un accident. Sur téléphone, le bouton fait 151 px
+                  pour un libellé qui en demande 118 : l'icône, qui n'a pas de
+                  `shrink-0`, se faisait écraser à zéro de largeur par le flex.
+                  Elle était donc déjà invisible, mais par accident, et le jour
+                  où le libellé raccourcit elle réapparaît à moitié. */}
+              <ArrowRight className="hidden size-4 shrink-0 sm:block" />
             </BoutonScintillant>
 
             {/* Le creux.
@@ -165,7 +164,7 @@ export function SectionLivre() {
               href={livre.href}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-md border border-current px-6 py-3 text-center text-base font-semibold text-(--livre-texte) transition-colors hover:bg-[color-mix(in_oklab,var(--livre)_10%,transparent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--livre-texte) sm:w-auto sm:px-8 sm:whitespace-nowrap"
+              className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-md border border-current px-4 text-sm font-semibold whitespace-nowrap text-(--livre-texte) transition-colors hover:bg-[color-mix(in_oklab,var(--livre)_10%,transparent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--livre-texte) sm:h-14 sm:flex-none sm:px-8 sm:text-base"
             >
               {livre.actionSecondaire}
             </a>

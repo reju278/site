@@ -327,12 +327,14 @@ export default function Accueil() {
             {titreResultats}
           </h2>
 
-          {/* Le carrousel déborde volontairement des marges du conteneur pour
-              que les cartes voisines soient coupées par le bord de l'écran et
-              non par une marge : c'est ce débordement qui dit qu'il y en a
-              d'autres. `-mx-5` annule le `px-5` du conteneur, et les cartes
-              retrouvent leur gouttière par le `pl-4` de chaque élément. */}
-          <div className="mt-12 -mx-5 px-5 text-left sm:mt-14">
+          {/* Le carrousel ne déborde plus des marges du conteneur.
+
+              Il le faisait pour que le bord de l'écran tranche les cartes
+              voisines, ce qui était censé dire qu'il y en a d'autres. Ça le
+              disait en coupant des visages en deux à la verticale. C'est le
+              rang de miniatures qui le dit maintenant, et il montre les seize
+              au lieu d'en suggérer deux. */}
+          <div className="mt-12 text-left sm:mt-14">
             <CarrouselTemoignages />
           </div>
 

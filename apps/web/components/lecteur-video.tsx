@@ -62,6 +62,7 @@ export function LecteurVideo({
   affiche,
   afficheMobile,
   libelle = "Voir la vidéo",
+  recadre = false,
   className,
 }: {
   id: string;
@@ -71,9 +72,29 @@ export function LecteurVideo({
   /** Une seconde source, plus légère, pour les écrans étroits. */
   afficheMobile?: string;
   libelle?: string;
+  /**
+   * Recadre le cadre en 2,4/1 et demande au lecteur d'en faire autant.
+   *
+   * Réservé aux vidéos dont l'enregistrement porte ses propres bandes noires,
+   * les appels à deux des témoignages. Sur une vidéo cadrée plein écran, ça
+   * mangerait le haut et le bas de l'image.
+   */
+  recadre?: boolean;
   className?: string;
 }) {
   const [lance, setLance] = useState(false);
+
+  /* `fitStrategy=cover` demande au lecteur de remplir le cadre en rognant,
+     plutôt que d'y faire tenir l'image en ajoutant des bandes. Sans lui, une
+     vidéo 16/9 posée dans un cadre en 2,4/1 rétrécirait pour tenir en hauteur
+     et se retrouverait avec des bandes sur les côtés : on aurait déplacé le
+     problème d'un quart de tour.
+
+     C'est la seule façon d'enlever les bandes **à la lecture aussi**. Recadrer
+     l'affiche seule ferait sauter le cadre au moment du clic. */
+  const options = recadre
+    ? new URLSearchParams({ ...Object.fromEntries(OPTIONS), fitStrategy: "cover" })
+    : OPTIONS;
 
   return (
     <div
@@ -81,12 +102,12 @@ export function LecteurVideo({
         // Fond noir et non `bg-card` : le rapport 16/9 du cadre et celui de la
         // vidéo ne tombent jamais au pixel près, et le cheveu qui reste
         // laisserait voir la couleur du thème tout autour de l'image.
-        // Le cadre reprend le rayon des jonctions pleine largeur et non les
-        // 5 px du reste du site. Il chevauche la lèvre arrondie qui sépare le
-        // hero de la page : deux rayons différents au même endroit se lisent
-        // comme une erreur d'assemblage. Le bouton et la pastille de durée,
-        // eux, restent à 5 px, ce sont des objets qu'on regarde de près.
-        "relative isolate aspect-16/9 overflow-hidden rounded-md bg-black",
+        // Le rayon est celui du reste du site, 5 px : une vidéo est un objet
+        // qu'on regarde de près, pas une jonction pleine largeur.
+        "relative isolate overflow-hidden rounded-md bg-black",
+        // Le rapport du cadre. 2,4/1 pour les enregistrements qui portent
+        // leurs bandes noires, 16/9 partout ailleurs.
+        recadre ? "aspect-[2.4/1]" : "aspect-16/9",
         className,
       )}
     >
@@ -104,7 +125,7 @@ export function LecteurVideo({
         //
         // Le prix est un rognage de moins d'un pour cent de l'image.
         <iframe
-          src={`https://fast.wistia.net/embed/iframe/${id}?${OPTIONS}`}
+          src={`https://fast.wistia.net/embed/iframe/${id}?${options}`}
           title={titre}
           allow="autoplay; fullscreen"
           allowFullScreen

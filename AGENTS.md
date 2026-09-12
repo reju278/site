@@ -382,6 +382,61 @@ d'offres ou de tarifs :
 Même principe pour les autres éléments répétés d'une carte à l'autre : un titre
 sur deux lignes ne doit pas décaler ce qui le suit dans la carte voisine.
 
+### `tailwind-merge` ne voit pas `dark:` comme un conflit
+
+Une classe passée de l'extérieur à un composant de registre **ne gagne pas
+toujours**. `cn()` résout les conflits par groupe de propriété, mais il traite
+`bg-white` et `dark:bg-input/30` comme deux groupes distincts : les deux
+survivent, et en thème sombre c'est la préfixée qui l'emporte.
+
+C'est arrivé aux flèches du carrousel. La variante `outline` du bouton shadcn
+pose `dark:bg-input/30` et `dark:border-input` ; le `bg-white` posé par-dessus
+n'a rien écrasé du tout en sombre, le fond est retombé à 30 % d'opacité, et le
+glyphe en `--bande-nuit` par-dessus valait **1,14:1**, c'est-à-dire rien. À
+l'œil, la pastille avait simplement l'air un peu grise : c'est la mesure qui
+l'a trouvé, pas le regard.
+
+**Donc : dès qu'on repeint un composant de registre, on double la classe en
+`dark:`.** Et on vérifie la couleur calculée dans les deux thèmes plutôt que de
+regarder une capture.
+
+### Un carrousel centré ne peut pas avoir à la fois une grande carte et des voisins entiers
+
+C'est de la géométrie, pas du goût, et ça évite d'y revenir. Dans un carrousel
+centré, le voisin commence exactement là où finit la carte courante : son centre
+est à une largeur de carte du centre de l'écran. Pour qu'il tienne entier, il
+faut `largeur × (1 + échelle ∕ 2) ≤ 50 %`, soit **36 % de la zone au maximum**,
+390 px sur un écran de 1440.
+
+On a donc le choix entre une carte étroite et des voisins tranchés par le bord.
+Le site a essayé les deux : les voisins coupés donnaient des demi-visages
+sectionnés à la verticale. La troisième voie est de renoncer aux voisins,
+`basis-full`, et de dire autrement qu'il y en a d'autres. Le rang de miniatures
+le dit mieux : on ne devine plus qu'il y en a seize, on les voit.
+
+Calendly, dont la forme est reprise, s'en tire parce que ses tuiles sont des
+portraits étroits. Une vidéo en 16/9 n'a pas cette chance.
+
+### Une bande noire dans une vidéo se recadre des deux côtés, ou pas du tout
+
+Les témoignages sont des appels à deux : l'enregistrement porte ses propres
+bandes noires, la moitié de la hauteur sur huit des seize. Wistia n'expose
+qu'une image, celle-là, donc « prendre une autre miniature » n'existe pas.
+
+Le cadre est en **2,4/1** plutôt qu'en 16/9, ce qui les fait disparaître sans
+toucher au fichier. Mais recadrer l'affiche seule ne suffit pas : au clic, le
+lecteur reprend la main, sert sa vidéo en 16/9 et soit fait sauter la hauteur du
+cadre, soit rétrécit l'image pour la faire tenir, ce qui remet des bandes sur
+les côtés. L'iframe reçoit donc `fitStrategy=cover`, qui lui demande de remplir
+en rognant. **Affiche et lecteur se recadrent ensemble, ou on a juste déplacé le
+problème d'un quart de tour.**
+
+Le rapport n'est pas choisi à l'œil : les seize affiches ont été relevées au
+pixel en lisant leur luminance ligne par ligne. Leur contenu finit toutes à la
+même ligne et la plus haute commence à 48 sur 360 ; 2,4/1 découvre la bande 47 à
+313, donc ne coupe le contenu d'aucune. Ce qui reste de noir est dans la vidéo
+et ne s'enlève qu'en la réexportant.
+
 ### Un raccord se juge aussi sur la matière, pas seulement sur la couleur
 
 La bande des résultats se raccorde à la page par le bas sans lèvre ni voile :

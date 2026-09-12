@@ -472,7 +472,10 @@ export const livre = {
     "Sa stratégie s'adapte à toutes les niches, pour vendre tout type d'offres (physique, digital ou de service) et à tous les prix.",
   ],
   action: "Obtenez votre copie",
-  actionSecondaire: "Téléchargez le chapitre 1 gratuitement",
+  /* « Chapitre gratuit » et non « Téléchargez le chapitre 1 gratuitement ».
+     C'est le libellé court de sa propre page, celui de son menu du haut, et
+     c'est donc encore son texte : le raccourci n'a pas été inventé ici. */
+  actionSecondaire: "Chapitre gratuit",
   href: liens.livre,
 
   /* Le rendu 3D vient de la page de vente elle-même, rogné de ses marges
