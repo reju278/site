@@ -1097,7 +1097,8 @@ export const resultats: readonly {
  *
  * Les identifiants viennent de la page `/avis-funnels-club` du site actuel, et
  * les durées du média lui-même. Ils étaient seize ; celui de Rayan Arifa a été
- * retiré sur décision de Rémy, ainsi que son affiche. Il en reste quinze. Les affiches sont téléchargées puis
+ * retiré sur décision de Rémy, ainsi que son affiche. Il en reste quinze, auxquels trois ont été ajoutés : Lilian, Sébastien et le
+ * second entretien de Corentin. Les affiches sont téléchargées puis
  * servies par nous, dans `public/temoignages/` : rien ne part chez Wistia tant
  * qu'une vidéo n'est pas lancée.
  *
@@ -1260,6 +1261,38 @@ export const temoignages: readonly {
       "De 1 800 à 2 800 € par client en quatre mois",
     secondes: 527,
     publie: "2024-09-13",
+  },
+  /* Les trois derniers ne portent pas tous sur Funnels Club, et c'est assumé :
+     la page s'appelle « Résultats » et couvre les trois offres. Lilian parle du
+     consulting privé, Corentin du mastermind. Leurs articles le disent dès le
+     titre, pour qu'on n'attribue pas à un programme ce qu'un autre a produit.
+
+     **Corentin apparaît deux fois**, et c'est la même personne : son premier
+     entretien raconte le lancement, celui-ci la suite, un an et demi après. Les
+     deux descriptions sont ce qui les distingue sur la grille. */
+  {
+    id: "9a6g6hsyzp",
+    nom: "Lilian",
+    description:
+      "8 100 € contractés en deux semaines, à vingt ans",
+    secondes: 581,
+    publie: "2026-02-13",
+  },
+  {
+    id: "1db8el08jl",
+    nom: "Corentin",
+    description:
+      "Un an et demi après : de 10 000 à 30 000 € par mois",
+    secondes: 526,
+    publie: "2026-02-13",
+  },
+  {
+    id: "8de9q4ed4l",
+    nom: "Sébastien",
+    description:
+      "17 600 € au mois d'août, sans un euro de publicité",
+    secondes: 438,
+    publie: "2023-09-05",
   },
 ];
 

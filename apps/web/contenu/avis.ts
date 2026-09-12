@@ -3653,6 +3653,603 @@ export const avis: readonly Avis[] = [
       },
     ],
   },
+  /* **Ce témoignage ne porte pas sur Funnels Club mais sur le consulting
+     privé**, et le titre le dit. Lilian est passé par Funnels Club d'abord,
+     puis a pris un accompagnement en tête-à-tête d'un mois ; les résultats
+     qu'il annonce sont ceux de ce mois-là. Confondre les deux ferait attribuer
+     à un programme ce qu'un autre a produit.
+
+     C'est Rémy qui mène l'entretien : Lilian le tutoie et parle de « ton
+     expérience » tout du long.
+
+     La reconnaissance vocale écrit « Lien Serré » pour son nom. Son prénom est
+     celui que Rémy prononce et celui du média Wistia ; **son nom de famille
+     n'est pas publié**, faute de l'avoir entendu clairement. */
+  {
+    id: "9a6g6hsyzp",
+    slug: "lilian",
+    titre:
+      "Avis consulting privé : Lilian, 20 ans, 8 100 € contractés en deux semaines en travaillant son closing",
+    titrePage: "Avis consulting : Lilian, 8 100 € en deux semaines",
+    description:
+      "Lilian a vingt ans et une agence de communication pour artisans. Il raconte le mois de consulting privé qui a fait basculer ses appels de vente.",
+    afficheAlt:
+      "Lilian en entretien vidéo avec Rémy Jupille, chacun depuis son bureau",
+    chapo:
+      "Lilian a vingt ans et dirige depuis deux ans et demi une agence de communication pour les artisans du bâtiment. Après Funnels Club, il a pris un mois d'accompagnement en tête-à-tête. Il raconte ce qu'il croyait venir corriger, et ce qui l'était vraiment.",
+    sections: [
+      {
+        titre:
+          "Vingt ans, une agence de communication pour artisans, et des dizaines de clients",
+        paragraphes: [
+          "Lilian a monté son entreprise pendant ses études, dans la climatisation. De fil en aiguille, elle est devenue une agence de communication spécialisée dans le bâtiment, qui accompagne aujourd'hui ==des dizaines d'artisans à se digitaliser==.",
+          "Au moment de l'entretien, il a vingt ans, il n'est plus en études, et il vient de passer d'auto-entreprise à société. C'est de là que part sa demande : il cherchait à passer au niveau supérieur, avec de l'acquisition de clients et de la structure.",
+        ],
+        citation: {
+          texte:
+            "J'ai commencé à monter cette entreprise quand j'étais en études, dans la climatisation. Et après, de fil en aiguille, on s'est développés.",
+          qui: "Lilian",
+        },
+      },
+      {
+        titre: "Pourquoi il a pris un consulting après être passé par Funnels Club",
+        paragraphes: [
+          "Il a d'abord suivi Funnels Club, qui s'est bien passé, et il s'est développé. Puis il a vu passer une story annonçant un accompagnement en tête-à-tête, et il y a répondu dans la foulée. Il décrit lui-même son tempérament : on y va.",
+          "Ce qu'il voulait, c'était une lecture extérieure de ce qu'il avait construit. Le même réflexe que celui de [Corentin, qui se fait accompagner dès qu'il monte une boîte](/resultats/corentin). Si vous voulez d'abord voir la méthode, [la formation est en accès libre](https://www.funnels.club/course-2025?el=site).",
+        ],
+        citation: {
+          texte:
+            "J'avais un tunnel qui marche, j'avais tout qui marche, mais je voulais vraiment pousser ça à fond, l'analyser avec ton expérience.",
+          qui: "Lilian",
+        },
+      },
+      {
+        titre:
+          "Ce qu'il pensait venir corriger, et ce qui l'était vraiment",
+        paragraphes: [
+          "C'est le cœur de son témoignage, et il répond sans détour à la question. Non, il ne s'attendait pas du tout à travailler ce qu'il a travaillé. Il pensait n'avoir que son tunnel à peaufiner.",
+          "En creusant, ==c'est le closing qui est ressorti en priorité==, c'est-à-dire ses appels de vente. Il nuance lui-même le diagnostic : ce n'est pas qu'il était mauvais, c'est qu'il n'avait pas tous les éléments. C'est exactement ce que décrit [François, à qui l'on a dit de supprimer onze de ses douze produits](/resultats/francois) : le problème n'était pas là où il le cherchait.",
+        ],
+        citation: {
+          texte:
+            "De base, j'ai pris ça en me disant que je n'avais pas grand-chose à travailler à part le tunnel. Et finalement, on a creusé, et j'avais beaucoup de points.",
+          qui: "Lilian",
+        },
+      },
+      {
+        titre: "Ce qui a changé dans ses appels : la posture avant la technique",
+        paragraphes: [
+          "Quand on lui demande ce qui lui a concrètement permis de vendre, il ne cite pas un script. Il cite sa posture et sa confiance en lui, et il décrit le basculement en une phrase : ==c'est lui qui guide l'appel, et non l'inverse.==",
+          "Il distingue les deux temps de son processus : les premiers rendez-vous ne lui posent plus de problème, les seconds restent à affiner. Il ne prétend donc pas que tout est réglé. C'est le même genre de déblocage que [Sandrine décrit sur le fait de se montrer](/resultats/sandrine), au même endroit : avant la technique.",
+        ],
+        citation: {
+          texte:
+            "Je suis beaucoup plus à l'aise, j'ai moins peur, je suis beaucoup plus rassuré. Je sais que maintenant c'est moi qui guide l'appel, et pas l'inverse.",
+          qui: "Lilian",
+        },
+      },
+      {
+        titre: "Ses résultats : 8 100 € contractés en deux semaines",
+        paragraphes: [
+          "Le mois d'accompagnement terminé, Lilian annonce ==huit mille cent euros hors taxes contractés sur deux semaines==, en trois ventes. Il précise lui-même la nuance, sans qu'on la lui demande : contractés, et pas encore encaissés.",
+          "Il rapporte ces trois conclusions à ce qu'ils ont travaillé ensemble, et parle d'une aisance qu'il n'avait pas. Le reste du chantier portait sur l'offre, le tunnel, la prise de rendez-vous et la publicité. [Les autres membres racontent leurs propres chantiers](/resultats).",
+        ],
+        citation: {
+          texte:
+            "En l'espace de deux semaines, j'ai contracté, donc pas reçu mais contracté, huit mille cent euros hors taxes.",
+          qui: "Lilian",
+        },
+      },
+      {
+        titre: "Son avis pour ceux qui hésitent à passer en tête-à-tête",
+        paragraphes: [
+          "Il adresse sa réponse à un profil précis : quelqu'un qui a encore des doutes et qui sent qu'il a besoin d'être accompagné de près, pas seulement de regarder des vidéos. Ce qu'il met en avant, c'est la boucle courte entre la question et la réponse.",
+          "Il chiffre aussi ce qu'il estime avoir gagné, et c'est du temps et non de l'argent. Si vous voulez en parler, [l'appel découverte est gratuit](https://www.funnels.club/appel?el=site), et [le podcast de Rémy](/podcast) revient souvent sur les appels de vente.",
+        ],
+        citation: {
+          texte:
+            "Si je n'avais pas pris cet accompagnement, j'aurais dû prendre trois ou quatre mois de plus pour apprendre le closing. Là, ça a été fait en quatre semaines.",
+          qui: "Lilian",
+        },
+      },
+    ],
+    transcription: [
+      {
+        qui: "Rémy",
+        texte:
+          "Salut Lilian, merci d'avoir accepté d'échanger avec moi par rapport au travail qu'on a fait ensemble. Ça me fait très plaisir de t'avoir en discussion comme ça pour avoir ton avis, parce que je suis sûr qu'il y a plein de gens qui pourraient se reconnaître un petit peu dans ton parcours. Est-ce que tu peux dire rapidement ce que tu fais, dans quel domaine tu es, et après on pourra expliquer sur quoi on a travaillé dans ton cas en particulier, et un petit peu ton retour d'expérience par rapport à ce qu'on a mis en place ?",
+      },
+      {
+        qui: "Lilian",
+        texte:
+          "Pas de souci. Alors moi, je m'appelle Lilian, j'ai une agence de communication spécialisée dans le bâtiment depuis deux ans et demi maintenant. Moi, j'ai vingt ans, donc maintenant je ne suis plus en études, et j'ai commencé à monter cette entreprise quand j'étais en études, dans la climatisation. Et après, de fil en aiguille, on s'est développés. Aujourd'hui, je suis en société et j'accompagne des dizaines d'artisans à se digitaliser. Voilà concrètement ce que je fais aujourd'hui.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Et pour quelle raison tu étais venu vers moi à la base ? Parce que toi, tu as été dans Funnels Club, puis ensuite on a fait un consulting ensemble. Qu'est-ce qui t'a motivé à venir ? Qu'est-ce que tu cherchais, qu'est-ce que tu voulais optimiser ?",
+      },
+      {
+        qui: "Lilian",
+        texte:
+          "Tout simplement, ce que je cherchais, c'était de passer à la vitesse supérieure. J'étais en auto-entreprise, bon, je suis passé en société, maintenant il faut passer au niveau supérieur, avoir de l'acquisition client, être structuré. Dans un premier temps, j'ai rejoint Funnels Club, donc ça s'est super bien passé, je me développe. Et puis moi, j'ai un peu du caractère « on y va, on y va ». J'ai vu une story où tu parlais justement du fait que tu lançais ce coaching en tête-à-tête, du coup j'ai réagi à la story et je me suis dit : bon, on va voir. Et finalement, de fil en aiguille, ça m'a plu, la façon dont tu me l'as expliqué. Et écoute, on est partis sur un tête-à-tête pendant un mois, et ça s'est super bien passé, en tout cas.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Est-ce que, par rapport à ce consulting, tu imaginais avoir besoin des points sur lesquels on a finalement travaillé ensemble ? Est-ce que tu savais que ton problème venait de là, ou pas du tout ? Au final, on a travaillé ensemble sur pas mal de choses dans ton activité. Tu pourras d'ailleurs dire, sans donner toute la liste, les gros chantiers sur lesquels on a travaillé. Mais avant ça, ça m'intéresse de savoir si tu t'imaginais qu'on allait travailler sur ça.",
+      },
+      {
+        qui: "Lilian",
+        texte:
+          "Non, pas du tout. Quand j'ai pris ce tête-à-tête, je me suis dit : j'ai un tunnel qui marche, j'ai tout qui marche, un environnement qui marche, mais par contre je veux vraiment pousser ça à fond, l'analyser avec ton expérience. Donc de base, j'ai pris ça en me disant : bon, voilà, je n'ai pas grand-chose à travailler à part le tunnel, et passer un peu au niveau supérieur, avoir ton expérience. Et finalement, on a creusé, et j'avais beaucoup, beaucoup de points, surtout un point en closing, où en fait, je ne sais pas si j'étais mauvais, c'est que je n'avais pas tous les éléments, je n'avais pas tout ce qu'il fallait. Donc on a travaillé surtout le closing, c'était quelque chose à travailler en priorité. On a bien travaillé ça, on a eu des retours qui sont parfaits. C'était cette priorité-là, mais finalement on a vu vraiment tout l'environnement de mon business, et on a peaufiné ensuite sur le closing.",
+      },
+      {
+        qui: "Rémy",
+        texte: "Et qu'est-ce qu'on a vu d'autre ? Est-ce que tu te rappelles ?",
+      },
+      {
+        qui: "Lilian",
+        texte:
+          "Bien sûr. On a travaillé le tunnel, donc on a revu un peu le tunnel, on a travaillé aussi les publicités, où justement j'avais pas mal de questions. On a retravaillé vraiment l'ensemble : il y a le closing principalement, mais aussi le tunnel de vente, où il fallait peaufiner les derniers détails, le Calendly par exemple aussi, où il y avait des points à retravailler, et la publicité, où j'avais pas mal de questions et où il fallait recadrer avec une bonne stratégie que tu m'as expliquée. Et aujourd'hui, ça se déroule parfaitement.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Est-ce que tu es à l'aise avec le fait de partager un résultat, par exemple, ou pas forcément ? Vas-y, tu peux donner un résultat avec lequel tu es content.",
+      },
+      {
+        qui: "Lilian",
+        texte:
+          "Écoute, aujourd'hui, ce qui est bien, c'est qu'on a repris tout cet ensemble-là, et j'ai vu une nette progression sur le closing, que ce soit sur ma posture, plein de petits facteurs qu'il fallait que je retravaille. Aujourd'hui, on a fait un mois de coaching, et là, en l'espace de deux semaines, j'ai contracté, donc pas reçu, mais contracté huit mille cent euros. Donc en deux semaines, on a fait huit mille cent euros de chiffre d'affaires hors taxes.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Bravo d'ailleurs, puisque je n'avais pas eu l'occasion de te le dire de vive voix. Donc bravo en tout cas en visio. Et du coup, qu'est-ce qui t'a permis concrètement de réaliser ces ventes, par rapport à ce qu'on a vu ensemble ?",
+      },
+      {
+        qui: "Lilian",
+        texte:
+          "Ma posture, surtout la confiance en moi. C'est-à-dire que dans le closing, chacun est différent, bien évidemment. Mais là, j'ai senti qu'arrivé à la fin de ce coaching, j'ai pris les appels, que ce soit des premiers ou des seconds rendez-vous. Maintenant, je n'ai plus de problème dans les premiers, donc ça, c'est magnifique. Par contre, il y a encore à peaufiner le second, mais je suis beaucoup plus à l'aise, j'ai moins peur, je suis beaucoup plus rassuré. Je sais que maintenant c'est moi qui guide l'appel, et pas l'inverse. Et c'est ce qui m'a permis de conclure sur ces deux dernières semaines. Les trois conclusions, j'ai été d'une aisance incroyable. C'est ce qu'on a travaillé, et c'est grâce à ça que maintenant j'arrive à closer.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Dans ton cas, il y a beaucoup de personnes qui me demandent ce qu'on va faire dans ce consulting, quel est le plan. Je réponds toujours qu'il est impossible de donner un plan, en tout cas un modèle qu'on va reproduire chez tout le monde, parce que c'est vraiment du cas par cas. Et c'est vrai que dans ton cas, j'avais tout de suite vu que ton tunnel était bon, parce que tu avais bien suivi la méthode de Funnels Club, donc c'était vraiment nickel. Il te manquait juste cette partie consulting, un petit peu sur l'offre aussi qu'on a retravaillée, mais vraiment la partie closing, et du coup on s'est vraiment mis à fond dessus. C'est bien, tu as vraiment progressé, et c'est important aussi que tu appliques en face. Le consulting, c'est un appel illimité avec moi, tu peux envoyer des messages quand tu veux. Comment tu as vécu l'expérience ? Est-ce que tu t'es senti bridé ? Est-ce que tu avais l'impression que les réponses étaient longues ? Dis vraiment ce que tu penses.",
+      },
+      {
+        qui: "Lilian",
+        texte:
+          "Franchement, je n'ai eu aucun accroc, c'est hyper simple. Honnêtement, si on est un minimum à l'aise avec le digital, on comprend vite comment on va converser. Et vu que c'est tout centralisé, sur Google Chat, c'est comme ça qu'on travaillait, c'est super bien. Et ce qui est bien, c'est que tous les appels, tous les échanges sont enregistrés. Donc par exemple, moi, je continue encore à regarder ce qu'on faisait ensemble, tes retours d'expérience, tes astuces. Et c'est super bien. Ce que j'ai aimé aussi, c'est que tu es disponible : on t'envoie un message, tu réponds quand tu réponds, mais tu réponds, et d'une façon bien structurée. Honnêtement, on a toutes les réponses. Je pense qu'il n'y a rien qu'on oublie, c'est hyper structuré, et c'est ça qui m'a plu : on arrive, on sait où on va, et dès les premières visios on sait ce qu'on va travailler. Tu arrives vraiment à faire cette analyse-là. En plus de ça, j'ai oublié de parler de l'offre qu'on a retravaillée ensemble. Là pareil : on a retravaillé, tout de suite tu as vu qu'il y avait un problème, et on a tout repris. Et aujourd'hui, les offres sont top, on est au détail parfait.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Qu'est-ce que tu dirais à quelqu'un qui hésiterait à faire vraiment du tête-à-tête avec moi, sous forme de consulting comme ça ? Peu importe le niveau de business, qu'est-ce que tu dirais à quelqu'un qui hésite à aller plus loin, juste à demander des informations, à prendre un appel ?",
+      },
+      {
+        qui: "Lilian",
+        texte:
+          "Moi, je dirais surtout, s'il a des doutes, s'il se pose encore beaucoup de questions et qu'il sent qu'il a besoin d'être accompagné, mais vraiment en tête-à-tête, c'est-à-dire main dans la main, où toi tu donnes ton expérience, tout simplement qu'il n'hésite pas. Parce qu'en fait, on est accompagné : dès qu'on a un doute, on pose la question, on a la réponse. Moi, je pense que si je n'avais pas pris cet accompagnement, j'aurais dû prendre trois ou quatre mois de plus pour encore apprendre le closing, alors que là, ça a été fait en quatre semaines. On a, entre guillemets, plié le travail, et maintenant je sais que je suis opérationnel. Donc, s'il y a un doute, c'est de prendre un appel avec toi ou de se renseigner auprès de toi, et de ne pas hésiter, parce qu'honnêtement, c'est un gain de temps et un gain d'énergie aussi.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Merci beaucoup en tout cas, Lilian, et hâte de voir aussi comment ça va évoluer, parce que je suis certain que ce n'est qu'un début.",
+      },
+      {
+        qui: "Lilian",
+        texte: "Franchement, j'ai hâte aussi. Merci à toi.",
+      },
+    ],
+  },
+  /* **C'est le même Corentin que `/resultats/corentin`, un an et demi après.**
+     Son premier entretien se terminait sur « qui sait, dans six mois on en
+     reparle » : voici la suite. Deux pages et non une seule, parce qu'elles ne
+     portent pas sur la même chose : la première raconte Funnels Club et le
+     lancement, celle-ci le mastermind et le passage de dix mille à trente
+     mille. Elles se citent l'une l'autre en contexte, dans les deux sens.
+
+     **À arbitrer par Rémy** : s'il préfère une seule page par personne, les
+     deux se fusionnent, mais il faudra alors un gabarit qui porte deux vidéos.
+
+     L'intervieweur est Rémy : Corentin le tutoie et lui dit « depuis le début,
+     c'est toi qui nous accompagnes ». */
+  {
+    id: "1db8el08jl",
+    slug: "corentin-mastermind",
+    titre:
+      "Avis mastermind : Corentin, de 10 000 € à 30 000 € par mois un an et demi après ses débuts",
+    titrePage: "Avis mastermind : Corentin, 20 000 à 30 000 € par mois",
+    description:
+      "Un an et demi après son premier entretien, Corentin revient sur ce que le mastermind a changé, et sur la barrière des 30 000 € qu'il n'a pas encore passée.",
+    afficheAlt:
+      "Corentin en entretien vidéo avec Rémy Jupille, chacun depuis son bureau",
+    chapo:
+      "Corentin avait raconté son lancement dans un premier entretien. Un an et demi plus tard, il accompagne les entreprises d'énergies renouvelables, tourne entre vingt et trente mille euros par mois, et explique pourquoi il n'est pas satisfait de ce rythme.",
+    sections: [
+      {
+        titre: "Un an et demi plus tard : où en est son activité de conseil",
+        paragraphes: [
+          "Corentin accompagne les entreprises d'énergies renouvelables en France sur leur structuration et leur développement. C'est le même métier que celui de [son premier entretien](/resultats/corentin), élargi : il partait des seules sociétés de poêles à bois et à granulés.",
+          "Il rappelle d'où il est parti, et c'est net : ==il n'avait rien du tout==, juste l'idée. Pas de structure, rien. Il précise aussi ce qui rendait la chose pressante, et c'est le même détail qu'il donnait la première fois : il avait coupé le salaire que lui versait son autre société.",
+        ],
+        citation: {
+          texte:
+            "Je n'avais rien du tout, c'est assez simple. J'avais juste l'idée de faire ça.",
+          qui: "Corentin",
+        },
+      },
+      {
+        titre: "Ce que Funnels Club avait produit : 10 000 € dès le deuxième mois",
+        paragraphes: [
+          "Le premier objectif était de créer un revenu, et il a été atteint vite : cinq à dix mille euros rapidement, et ==dix mille euros par mois dès le deuxième mois==.",
+          "Mais son étalon n'était pas celui-là. Il avait une autre société en amont où il faisait cent mille euros par mois, et il présente ce montant non pas comme un objectif mais comme son seuil de tolérance. C'est ce décalage qui explique la suite.",
+        ],
+        citation: {
+          texte:
+            "Avec Funnels Club, le premier objectif, c'était de créer un revenu. On est arrivés à dix mille euros par mois dès le deuxième mois.",
+          qui: "Corentin",
+        },
+      },
+      {
+        titre: "Ce que le mastermind a changé : faire moins, mais mieux",
+        paragraphes: [
+          "Son constat est l'inverse de ce qu'on attend d'un accompagnement plus cher. Il n'a pas eu grand-chose à bouger. Il résume le piège en une phrase : ==quand on veut faire plus, on veut souvent faire plus d'actions, alors qu'il faut parfois en faire moins et mieux les faire.==",
+          "Ce qu'il en retient, c'est une consigne de répétition : refaire quotidiennement les mêmes actions, et ne pas ajouter de surcouches inutiles. C'est exactement l'erreur qu'il décrivait déjà dans [son premier entretien](/resultats/corentin), quand il avait voulu complexifier.",
+        ],
+        citation: {
+          texte:
+            "On n'a pas forcément besoin de faire des choses extrêmement complexes. Il faut juste faire les bonnes choses, mais les répéter quotidiennement.",
+          qui: "Corentin",
+        },
+      },
+      {
+        titre: "Son rythme actuel, et la barrière qu'il n'a pas encore passée",
+        paragraphes: [
+          "Au moment de l'entretien, son activité tourne ==entre vingt et trente mille euros par mois==. C'est deux à trois fois ce qu'il faisait au moment du premier entretien.",
+          "Et il dit dans la même phrase qu'il en est frustré. La barrière des vingt à trente mille lui paraît pénible à passer, même s'il ne doute pas d'y arriver avec le temps. C'est le genre de plafond que décrivent aussi [François](/resultats/francois) et [Mathieu Tison](/resultats/matthieu), à d'autres hauteurs.",
+        ],
+        citation: {
+          texte:
+            "On est un peu frustrés de ce rythme, parce qu'on sent que cette barrière-là est un peu pénible à passer.",
+          qui: "Corentin",
+        },
+      },
+      {
+        titre: "Ce qu'il cite comme le vrai apport : l'exécution, pas l'information",
+        paragraphes: [
+          "C'est la partie la plus intéressante de son témoignage, et elle vaut pour les deux publics à qui Rémy lui demande de s'adresser : les membres de Funnels Club, et les entrepreneurs qui font déjà dix ou vingt mille euros. Selon lui, ==les uns comme les autres ont déjà l'information.==",
+          "Ce qui sépare ceux qui y arrivent, dit-il, c'est l'exécution, et ce qui abîme l'exécution, ce sont les émotions. Il donne l'exemple concret : on dépense deux ou trois cents euros par jour, ça ne marche pas pendant trois jours, on réagit émotionnellement, et on change tout. Il reconnaît l'avoir fait lui-même.",
+        ],
+        citation: {
+          texte:
+            "On sait tous ce qu'il faut faire. Mais la seule chose qui sépare tout ça, c'est l'exécution.",
+          qui: "Corentin",
+        },
+      },
+      {
+        titre: "Son avis pour un membre de Funnels Club qui hésite à aller plus loin",
+        paragraphes: [
+          "Il vise précisément ceux qui pensent que l'étape suivante ne leur servirait pas à grand-chose, parce qu'ils ont déjà la méthode. Son argument est que c'est l'inverse : plus les chiffres montent, plus c'est dur émotionnellement, et plus il faut quelqu'un pour tenir la barre.",
+          "Son image finale est celle qu'il emploie pour décrire ce qu'il achète : quelqu'un qui écarte les ronces devant lui. Si vous voulez en parler, [l'appel découverte est gratuit](https://www.funnels.club/appel?el=site), et [d'autres membres racontent la même chose](/resultats).",
+        ],
+        citation: {
+          texte:
+            "On a besoin de quelqu'un qui nous dit : non, arrête de mettre ton clignotant, reste sur ta route tout droit et continue.",
+          qui: "Corentin",
+        },
+      },
+    ],
+    transcription: [
+      {
+        qui: "Rémy",
+        texte:
+          "Salut Corentin, merci d'avoir accepté mon invitation et de donner un petit peu ton avis, de partager ton retour d'expérience, de partager un peu ton histoire sur le bout de chemin qu'on a fait ensemble, notamment dans le mastermind. Est-ce que rapidement tu peux te présenter, dire ce que tu fais, ton activité ?",
+      },
+      {
+        qui: "Corentin",
+        texte:
+          "Très bien. Donc je m'appelle Corentin, j'ai une activité de conseil où on accompagne les entreprises d'énergies renouvelables en France sur leur structuration, sur leur développement de manière globale. Ça fait un an, un an et demi quasiment qu'on fait ça. Depuis le début, c'est toi qui nous accompagnes. Donc grosso modo, ça fait un an et demi maintenant, et tout marche très, très bien. On est très contents de tout ça.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Quand tu dis depuis le début, est-ce que tu peux me rappeler ce que tu avais quand on avait commencé à travailler ensemble, au tout début, par rapport à cette activité de conseil, de consulting, de coaching ?",
+      },
+      {
+        qui: "Corentin",
+        texte:
+          "Je n'avais rien du tout, c'est assez simple. J'avais juste l'idée de faire ça, mais je n'avais pas du tout de structure ni quoi que ce soit, et c'est pour ça que je suis venu te voir. C'est pour la structurer directement de la bonne manière et pour ne pas perdre de temps sur la manière de le faire, étant donné que j'avais un peu brûlé les bateaux en montant cette activité.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Toi, tu es passé par Funnels Club d'abord, c'est là qu'on a construit la base. Juste pour comprendre dans quel état d'esprit tu as voulu aller dans le mastermind après, pour aller un peu plus loin : déjà, quel résultat tu as eu avec Funnels Club, et ensuite quelle réflexion tu as eue pour te dire que tu avais envie d'aller un peu plus loin, de passer un nouveau palier dans le business ?",
+      },
+      {
+        qui: "Corentin",
+        texte:
+          "L'objectif de cette société, c'était d'atteindre au moins les cent mille euros par mois dès que possible, étant donné que j'avais une autre société en amont où je faisais ces résultats-là. Donc c'était au minimum mon palier de tolérance à atteindre dès que possible. Avec Funnels Club, le premier objectif, c'était de créer un revenu. Donc on est arrivés à cinq, dix mille euros assez rapidement. Dès le deuxième mois, on était à dix mille euros par mois, grosso modo. Et après, je voulais accélérer, tout simplement. Je voulais aller un peu plus vite, et c'est pour ça qu'après, en juin, on a commencé le mastermind.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Qu'est-ce que ça a changé, le mastermind ? Est-ce que ça t'a permis de débloquer un plafond ? Quel niveau tu as atteint ? Qu'est-ce que ça a changé concrètement par rapport à Funnels Club, et aux informations qui te manquaient ?",
+      },
+      {
+        qui: "Corentin",
+        texte:
+          "Alors, l'avantage, c'est que ça n'a pas demandé beaucoup de travail pour débloquer les choses, c'est ça qui est bien. Essentiellement, le souci, c'est que quand on veut faire plus, souvent on veut faire plus d'actions, alors que des fois il faut juste en faire moins, mais peut-être mieux les faire. L'avantage, c'est que je n'ai pas eu beaucoup à bouger pour qu'au final on atteigne notre rythme de croisière en ce moment, qui est grosso modo entre vingt mille et trente mille euros tous les mois. C'est le rythme qu'on a pris maintenant. On est un peu frustrés de ce rythme, parce qu'on sent que cette barrière-là est un peu pénible à passer, cette barrière des vingt, trente mille euros. On sait très bien qu'avec le temps ça va le faire, il faut juste répéter les choses quotidiennement. Chose que tu nous as répétée lorsqu'on rentre dans le mastermind : c'est juste répéter constamment les actions qu'on fait quotidiennement, et ne pas rajouter des surcouches inutiles. Et c'est un peu la beauté de tout ça : on n'a pas forcément besoin de faire des choses extrêmement complexes. Je pense que comme dans toutes les entreprises, il faut juste faire les bonnes choses, mais les répéter quotidiennement.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Clairement. Je me rappelle très bien, parce que dans le mastermind, on a un appel d'intégration dans lequel on fait un plan sur les quatre-vingt-dix premiers jours, et toi il y avait deux ou trois trucs à modifier qui n'étaient pas très compliqués, mais qui pouvaient avoir un gros levier. Est-ce qu'il y a quelque chose en particulier qui t'a plu, qui t'a intéressé, ou qui a bien fonctionné pour toi dans le mastermind ?",
+      },
+      {
+        qui: "Corentin",
+        texte:
+          "Particulièrement, c'est le contact avec toi, parce que tu as l'expérience, ça fait des années que tu fais ça. L'accélérateur, il est là : c'est d'avoir quelqu'un qui est passé par les étapes que nous, on est en train de franchir. Et plutôt que de se prendre les ronces en passant la barrière, tu nous pousses les ronces, et du coup on passe la barrière un peu plus facilement. Sauf que sur des vingt, trente mille euros, on gagne beaucoup d'argent à faire en sorte que tu nous enlèves ces ronces. Même si des fois les ronces sont toutes petites, et que tu mets juste un coup de ciseaux dedans, des fois c'est nécessaire, et ça nous permet de gagner beaucoup de temps, et au final beaucoup plus d'argent sur du long terme.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Dernière chose sur laquelle j'aimerais avoir ton avis. Je pense à deux types de personnes qui pourraient regarder cette vidéo : il y a les membres de Funnels Club, qui connaissent déjà très bien ce qu'on fait, et il y a des personnes qui ont peut-être déjà un business qui marche et qui veulent le faire grandir, qui ne sont pas forcément membres de Funnels Club, mais qui ont envie d'aller un peu plus loin, d'être dans un groupe avec des personnes qui ont déjà un certain niveau de business. D'abord aux membres de Funnels Club : tu leur dirais quoi s'ils hésitent à en savoir plus sur le mastermind ?",
+      },
+      {
+        qui: "Corentin",
+        texte:
+          "Alors, je pense que ça conviendra très bien aux deux. On a tous l'information de ce qu'il faut faire pour continuer de développer notre entreprise, on sait tous ce qu'on a à faire. Mais le souci, c'est que ce qui change le fait qu'on y arrive ou pas, c'est l'exécution qu'on va en avoir derrière. Et le fait que cette exécution se fasse bien ou pas, ça dépend aussi de nos émotions derrière, de comment on va réagir émotionnellement. Et ton enjeu, il est là. Parce que l'information, tu sais qu'on l'a, parce qu'on est passés par Funnels Club, ou alors ceux qui font dix, vingt mille euros déjà ont déjà de bonnes informations, puisqu'ils font déjà ces chiffres-là. Pour atteindre vingt, trente, quarante, cinquante mille, on sait tous ce qu'il faut faire. Mais la seule chose qui sépare tout ça, c'est l'exécution.",
+      },
+      {
+        qui: "Corentin",
+        texte:
+          "Et le souci, c'est que quotidiennement, on a plein d'émotions qui entrent en compte : on dépense deux cents, trois cents euros par jour, ça ne marche pas pendant trois jours, on réagit émotionnellement, on retombe. Et c'est là où toi tu as toute ton importance, parce que tu connais tous ces cycles un peu émotionnels. Tu sais très bien comment on doit réagir, comment on doit exécuter pour pouvoir l'atteindre. Je suis sûr qu'il y a plein de gens qui sont à ma place, qui étaient à ma place dans Funnels Club, et qui pensent que ça ne servira pas à grand-chose de passer à l'étape suivante, alors qu'en fait il en faut encore plus, parce que c'est de plus en plus dur émotionnellement à mesure que les chiffres sont élevés. On a de plus en plus besoin de quelqu'un derrière qui nous guide émotionnellement, qui dit : non, là, reste comme ça, reste stoïque, ne t'inquiète pas, ça va se débloquer, il faut juste rester comme ça. Et c'est juste comme ça que le business se développe. Il n'y a rien de magique au final, c'est juste arriver à faire ces choses tous les jours. Mais vu qu'on est impacté par plein d'émotions négatives toute la journée, on remet tout le temps en question nos actions : est-ce qu'on fait la bonne chose, est-ce qu'on n'essaierait pas cette chose-là ? Et au final, on les essaie. Je pense que tu l'as vu avec moi durant les six mois : à chaque fois que j'ai des moments un peu de panique, j'ai envie de tout changer. Alors qu'en fait, c'est ce qui fait se casser la figure à chaque fois.",
+      },
+      {
+        qui: "Rémy",
+        texte: "Et pourtant on le sait, c'est logique.",
+      },
+      {
+        qui: "Corentin",
+        texte:
+          "On le sait. Mais on a besoin de quelqu'un comme toi qui nous dit : non, arrête de mettre ton clignotant, reste sur ta route tout droit et continue. C'est tout.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Donc c'est vraiment avoir tout le temps la confiance dans le système, et l'endroit dans lequel tu peux demander, valider, juste être rassuré finalement.",
+      },
+      {
+        qui: "Corentin",
+        texte: "Exactement.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Écoute, merci beaucoup en tout cas de partager ton retour d'expérience. De toute façon, je suis sûr qu'on va passer ce fameux palier des trente mille. Il s'agit juste de continuer à faire ce que tu sais déjà faire, donc on va le passer, et puis éventuellement on pourra refaire un point quand tu l'auras atteint.",
+      },
+      {
+        qui: "Corentin",
+        texte: "Oui, mais bien sûr.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Merci en tout cas, Corentin, d'avoir partagé ton avis. Je suis sûr que ton histoire va vraiment inspirer pas mal de personnes, donc merci pour ça, et à bientôt.",
+      },
+      {
+        qui: "Corentin",
+        texte: "Avec grand plaisir, à bientôt. Merci à toi.",
+      },
+    ],
+  },
+  /* **Ce n'est pas un entretien, c'est un extrait de coaching de groupe**, et
+     la page le dit dès le chapô. Sébastien prend le micro pendant une séance,
+     annonce son mois, et Rémy lui répond devant tout le monde. D'où la forme :
+     moins de chapitres, et un article qui raconte un échange plutôt qu'un
+     parcours.
+
+     **Trois médias Wistia, un seul enregistrement.** « Sebastien qui fait 17K€
+     par mois », « Sebastien partage son mois d'aout à 17K€ » et « Sebastien
+     partage ses résultats dans un coaching de groupe » sont la même prise, à
+     quelques secondes près. C'est le plus ancien qui est publié.
+
+     **On ne sait pas ce que Sébastien vend.** Il ne le dit pas dans cet
+     extrait, et rien ici ne l'invente : un autre membre le dit « dans la
+     musique », mais c'est un propos rapporté et ça ne se publie pas comme un
+     fait. Son nom de famille n'est pas prononcé non plus. À compléter par Rémy
+     s'il veut que la page porte son domaine. */
+  {
+    id: "8de9q4ed4l",
+    slug: "sebastien",
+    titre:
+      "Avis Funnels Club : Sébastien, 17 600 € au mois d'août sans un euro de publicité",
+    titrePage: "Avis Funnels Club : Sébastien, 17 600 € en août",
+    description:
+      "Sébastien vend une formation à 2 500 € sans publicité, depuis ses vidéos YouTube. Il annonce son meilleur mois en direct pendant un coaching de groupe.",
+    afficheAlt:
+      "Sébastien prend la parole pendant un coaching de groupe Funnels Club, en visioconférence",
+    chapo:
+      "Cet extrait n'est pas un entretien : Sébastien prend le micro pendant un coaching de groupe pour annoncer son meilleur mois. Ce qui suit est l'échange avec Rémy, et il porte moins sur le chiffre que sur ce qu'il ne faut surtout pas faire ensuite.",
+    sections: [
+      {
+        titre: "Son meilleur mois : 17 600 € en août",
+        paragraphes: [
+          "Sébastien ouvre son micro pour dire qu'il vient de faire son meilleur mois : ==dix-sept mille six cents euros en août==.",
+          "Rémy relève aussitôt ce qui rend le chiffre plus parlant que son montant : août est normalement l'un des mois les plus bas de l'année en ligne, quand tout le monde est en vacances, le plus haut étant plutôt novembre et décembre. [Cédric fait son meilleur lancement au même mois d'août](/resultats/cedric), et le note pareillement.",
+        ],
+        citation: {
+          texte:
+            "J'ai fait mon meilleur mois. En août, j'ai fait dix-sept mille six cents.",
+          qui: "Sébastien",
+        },
+      },
+      {
+        titre: "Sans publicité : ses vidéos YouTube, et rien d'autre",
+        paragraphes: [
+          "Le détail qu'il ajoute change la lecture du chiffre : ==il n'a pas dépensé un euro de publicité.== Tout vient de ses vidéos YouTube, où il présente sa formation à chaque fois, et des gens qui le contactent ensuite.",
+          "Sa formation se vend deux mille cinq cents euros. Comme le fait remarquer Rémy, quand une personne paie d'un coup, le chiffre du mois bouge vite. [Les autres membres racontent leurs propres chiffres](/resultats). C'est la même mécanique que chez [François, qui n'avait pas encore lancé de publicité non plus](/resultats/francois).",
+        ],
+        citation: {
+          texte:
+            "Et sans faire de pub, juste avec mes vidéos YouTube. À chaque fois que je fais une vidéo YouTube, je fais ma pub pour la formation, et les gens me contactent par rapport à ça.",
+          qui: "Sébastien",
+        },
+      },
+      {
+        titre: "Le moment où le prix cesse d'être un problème",
+        paragraphes: [
+          "Il raconte l'échange qui l'a le plus décontenancé : la dernière personne qu'il a conclue lui a dit que deux mille cinq cents euros, ==ce n'était pas cher.==",
+          "Il dit lui-même qu'il lui faut se poser, qu'il vit une sorte d'ajustement. Et il touche un problème très concret : il approche du seuil de taxe sur la valeur ajoutée de l'auto-entreprise, avec déjà quatre-vingt mille euros au compteur, et quatre formations de plus suffiraient à le franchir.",
+        ],
+        citation: {
+          texte:
+            "Il faut que je me calme, il faut que je me pose. Ça fait un petit peu bizarre, je suis en train de vivre une espèce d'ajustement.",
+          qui: "Sébastien",
+        },
+      },
+      {
+        titre: "Le conseil qu'il reçoit : grandir en profondeur, pas en largeur",
+        paragraphes: [
+          "C'est la partie la plus utile de l'extrait, et elle prend la forme d'une mise en garde. Rémy lui dit que l'erreur, à cet endroit précis, serait de créer une deuxième offre parce que la première marche. Sébastien répond qu'il en a déjà une, à vingt mille euros de ventes, et qu'il l'a mise en pause.",
+          "Ce qu'on lui recommande à la place tient en une phrase : ==ne pas se développer horizontalement, mais verticalement.== C'est-à-dire améliorer l'offre qui existe, renforcer ce qu'il y a autour, rendre les témoignages de ses clients visibles publiquement. C'est ce que [Corentin formule autrement](/resultats/corentin-mastermind) : faire moins de choses, mais mieux.",
+        ],
+        citation: {
+          texte:
+            "Attention à ne pas développer horizontalement, mais verticalement.",
+          qui: "Rémy",
+        },
+      },
+      {
+        titre: "Ce qu'il retient du closing",
+        paragraphes: [
+          "Sébastien avait regardé la leçon sur les appels de vente avant ce mois-là, et il en dit une chose que peu de gens formulent : on ne comprend pas vraiment ce qui y est dit tant qu'on n'est pas passé par l'expérience.",
+          "Ce qu'il a changé concrètement, c'est qu'il ne laisse plus l'autre mener l'appel, ce qui écarte les tentatives de négociation. Son mot de la fin, adressé à tout le groupe, est aussi celui qu'il laisse à qui regarde. Si vous voulez en parler, [l'appel découverte est gratuit](https://www.funnels.club/appel?el=site), et [la formation gratuite montre la méthode](https://www.funnels.club/course-2025?el=site).",
+        ],
+        citation: {
+          texte:
+            "Lâchez pas l'affaire. Si vous faites les choses bien, ça le fait, ça vient.",
+          qui: "Sébastien",
+        },
+      },
+    ],
+    transcription: [
+      {
+        qui: "Rémy",
+        texte:
+          "Tiens, vas-y Sébastien, tu peux mettre le micro. J'ai vu qu'il y avait des messages dans le chat, je vais y répondre juste après.",
+      },
+      {
+        qui: "Sébastien",
+        texte:
+          "Salut à tous. Bon, j'ai fait comme tu m'as dit, j'ai regardé ta vidéo sur le closing, donc effectivement, ça aide. Du coup, j'ai fait un mois, j'ai fait mon meilleur mois en fait.",
+      },
+      {
+        qui: "Rémy",
+        texte: "En août, c'est ça ?",
+      },
+      {
+        qui: "Sébastien",
+        texte: "En août, ouais, j'ai fait dix-sept mille six cents.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Félicitations. Donc voilà, c'est pas mal. Et pourtant, c'est août, parce qu'août reste un petit mois normalement sur internet. Il y a beaucoup de gens qui ne sont pas là, beaucoup de gens qui sont en vacances. Donc août, c'est normalement l'un des mois les plus bas de l'année en ligne, le mois le plus haut étant généralement novembre, décembre, tu vois, période Black Friday.",
+      },
+      {
+        qui: "Sébastien",
+        texte:
+          "Et sans faire de pub, juste avec mes vidéos YouTube. En fait, maintenant, à chaque fois que je fais une vidéo YouTube, je fais ma pub pour la formation, et les gens me contactent par rapport à ça.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Ok, pour toi, c'est top, parce que tu vois, là, tu la vends deux mille cinq cents euros. Donc c'est vrai que quand on en vend une et que la personne paye tout d'un coup, ça booste vite ton chiffre.",
+      },
+      {
+        qui: "Sébastien",
+        texte:
+          "Et là, la dernière personne que j'ai closée avant-hier, elle m'a carrément dit : deux mille cinq cents euros, ce n'est pas cher. Il faut que je me calme, il faut que je me pose. En fait, ça fait un petit peu bizarre, j'avoue que je suis en train de vivre une espèce d'ajustement. En plus, je vais exploser mon plafond d'auto-entreprise, donc il va falloir que je pense à changer de statut, et je vais commencer à payer la TVA, parce que là, je suis déjà à quatre-vingt mille. En auto-entreprise, on est plafonné à cent soixante-dix, mais tu payes la TVA à partir de quatre-vingt-dix mille. Ça veut dire que si je revends quatre formations, je paye la TVA.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Ouais, après tu pourras éventuellement partir du principe que c'est deux mille cinq hors taxes, mais du coup ça change le prix : si tes clients sont surtout des particuliers, il y aura en effet une différence. Ce qui est intéressant dans ton cas, c'est que maintenant, ce sur quoi tu peux mettre énormément d'efforts, c'est améliorer ton produit, et voir comment tu vas éventuellement automatiser plus tard. Même si ce n'est pas encore la question, je pense que c'est bien que tu continues encore un peu à faire toi-même les appels, cette partie-là. Plus tard, tu pourras le déléguer, mais c'est bien que tu le fasses maintenant, parce que ça va te permettre de bien comprendre tout le processus du tunnel, ce qui se passe à chaque étape.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Et là, ce qui est bien, c'est que maintenant tu peux être à l'étape d'améliorer vraiment ton offre, pour faire quelque chose de vraiment bien, de vraiment abouti, qui procure des résultats à tes clients encore plus rapidement. L'erreur, ce serait de se dire : maintenant que ça fonctionne dans ce business-là, je vais essayer de faire une autre offre, un autre truc que je vais pouvoir recoller à ça. Mais en fait, il faut vraiment que tu restes concentré sur ce modèle-là, sur une seule offre, éventuellement l'améliorer, jusqu'à ce que tu fasses bien plus que ça. Donc peut-être cinq, dix fois plus que ce que tu fais aujourd'hui : tu en as largement le potentiel, sans même créer de nouveaux produits, peut-être en améliorant celui que tu fais, pour avoir une expérience encore meilleure. Et essayer de commencer à travailler, j'ai envie de dire, l'écosystème. C'est-à-dire : est-ce que tu as un endroit sur lequel mettre des témoignages, ou sur lequel tes clients peuvent mettre des témoignages ?",
+      },
+      {
+        qui: "Sébastien",
+        texte:
+          "Oui, c'est sur le site, sur la page de réservation de l'appel, j'ai mis les témoignages en dessous.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Oui, mais les témoignages écrits. Les nouveaux, où est-ce qu'ils peuvent te mettre un témoignage public ? Imaginons, demain je tape ton nom sur Google : est-ce que je tombe sur des témoignages publics ?",
+      },
+      {
+        qui: "Sébastien",
+        texte: "Non, je ne pense pas.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Il faut commencer à le faire. C'est ça que je te disais : plutôt que de commencer à créer un nouveau produit, une nouvelle offre. C'était peut-être pas l'idée que tu en avais, mais je préfère te le dire.",
+      },
+      {
+        qui: "Sébastien",
+        texte:
+          "En fait, j'ai déjà fait ça, j'ai déjà un deuxième produit, mais je l'ai mis en stand-by. J'ai déjà fait vingt mille euros de ventes sur ce produit-là, sur le nouveau.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Ah bon, bah très bien. Tu pourras du coup le développer un peu plus tard, on pourra éventuellement le rattacher plus tard. Mais pour l'instant, mets plutôt ton énergie sur le fait d'accueillir plus de clients, d'améliorer l'offre et tout l'écosystème qu'il y a autour. C'est-à-dire éventuellement avoir une meilleure plateforme de formation, même si ce n'est peut-être pas encore d'actualité, avoir un endroit sur lequel les personnes qui veulent travailler avec toi peuvent voir les témoignages. Donc par exemple une page. Développer tes réseaux sociaux pour avoir encore plus de preuves. Donc développer cette partie-là. C'était juste une parenthèse pour dire : attention à ne pas développer horizontalement, mais verticalement.",
+      },
+      {
+        qui: "Sébastien",
+        texte:
+          "Mais déjà, tu vois, par exemple, le closing, je trouve ça génial. J'en apprends à chaque fois que je fais un appel, parce que quand on regarde ta vidéo, tu dis des choses, mais on ne les comprend pas tant qu'on n'est pas passé par l'expérience.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Ouais, et ça, c'est vraiment fort. Et plus tu fais d'appels, plus tu vois à quel moment les gens te prennent pour un con, et plus tu te fais berner.",
+      },
+      {
+        qui: "Sébastien",
+        texte:
+          "Et moi, je sais que je ne donne plus le lead maintenant à la personne, parce qu'il y a des gens qui vont commencer à essayer de te négocier des trucs comme ça. Et ça change le résultat.",
+      },
+      {
+        qui: "Rémy",
+        texte: "Ok, tiens-nous au courant de l'évolution.",
+      },
+      {
+        qui: "Sébastien",
+        texte:
+          "Là, ce qu'il faut, c'est que je fasse mon webinaire, et puis il faudrait que je lance la publicité, parce que je me dis que si je commence à lancer des pubs, je me vois vendre quinze, vingt produits par mois sans problème.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Prépare juste ça, tu vois. Prépare-toi au fait d'avoir plus de membres, d'accueillir plus de personnes sans perdre en qualité. Ce serait un mauvais scaling d'obtenir plus de clients mais au final de perdre en qualité pour chacun. Donc c'est pour ça qu'il faut vraiment que tu renforces les fondations, pour ensuite aller plus loin.",
+      },
+      {
+        qui: "Sébastien",
+        texte:
+          "Merci. Et puis, pour tout le monde, franchement : lâchez pas l'affaire. Si vous faites les choses bien, ça le fait, ça vient.",
+      },
+    ],
+  },
 ];
 
 /** L'avis d'un témoignage, s'il en a un. */
