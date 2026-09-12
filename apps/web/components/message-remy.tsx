@@ -83,9 +83,15 @@ export function MessageRemy() {
               `muted` est fait pour du texte de service, une légende, un
               sous-titre, quelque chose qu'on lit en second. Ici le texte **est**
               le contenu, et quinze paragraphes en gris demandent un effort qui
-              n'a aucune raison d'être. En thème sombre, c'est aussi ce qui fait
-              la différence entre une lettre et une note de bas de page. */}
-          <div className="mt-10 space-y-6 text-base leading-relaxed text-pretty text-foreground sm:mt-12 sm:text-lg">
+              n'a aucune raison d'être.
+
+              **À 85 % et non à plein**, second réglage de Rémy. Un blanc pur sur
+              un fond presque noir éblouit : les lettres bavent sur le fond, et
+              une page entière devient fatigante avant d'être illisible. Ce
+              quinzième de fond mêlé à l'encre calme le trait sans rien coûter au
+              contraste, qui reste à plus de dix pour un dans les deux thèmes,
+              très au-dessus du seuil. */}
+          <div className="mt-10 space-y-6 text-base leading-relaxed text-pretty text-foreground/85 sm:mt-12 sm:text-lg">
             <Apparition>
               <p>{messageRemy.amorceVoies}</p>
             </Apparition>
@@ -104,7 +110,22 @@ export function MessageRemy() {
               <ol className="list-decimal space-y-3 pl-5 marker:font-semibold marker:text-foreground">
                 {messageRemy.voies.map((voie) => (
                   <li key={voie.titre}>
-                    <span className="font-semibold">{voie.titre} :</span>{" "}
+                    {/* Surlignées en jaune, comme les erreurs le sont en
+                        rouge, sur décision de Rémy. Les deux couleurs disent
+                        deux choses opposées, ce qu'on peut faire et ce qu'il ne
+                        faut pas faire, et c'est le seul endroit du site où elles
+                        se répondent. */}
+                    <mark
+                      className="surlignage"
+                      style={
+                        {
+                          "--surlignage-fond":
+                            "color-mix(in srgb, var(--surlignage-jaune) 32%, transparent)",
+                        } as React.CSSProperties
+                      }
+                    >
+                      {voie.titre}
+                    </mark>{" "}
                     {voie.texte}
                   </li>
                 ))}
@@ -122,21 +143,40 @@ export function MessageRemy() {
                 paragraphe de trois lignes donne un document administratif. Le
                 rang est dans la phrase, ce qui suffit à les tenir ensemble.
 
-                **L'amorce est en rouge**, sur décision de Rémy. C'est
-                `--erreur-texte`, et non le rouge du livre, qui appartient à un
-                objet, ni celui de la courbe, qui n'a que du trait à colorer et
-                n'a donc jamais eu à tenir le seuil d'un texte. Voir
-                `globals.css` : celui-ci est mesuré pour être lu.
+                **L'amorce est surlignée en rouge**, sur décision de Rémy. Elle
+                a d'abord été écrite en rouge ; le surlignage marque plus fort
+                sans toucher à la lisibilité du texte, qui reste en
+                `foreground`.
 
-                Le gras reste sous le rouge. Une couleur seule ne distingue rien
-                pour qui ne la voit pas, et c'est le cas d'un homme sur douze au
-                rouge et vert. */}
+                `mark` et non un `span` : c'est l'élément du surlignage, et
+                c'est le seul qui dise à un lecteur d'écran que ce passage est
+                mis en avant. Sa couleur par défaut est réécrite, le navigateur
+                posant un jaune et une encre noire qui ne suivent aucun thème.
+
+                `box-decoration-clone` n'est pas un détail : sur une amorce qui
+                passe à la ligne, sans lui le fond ne prend son rembourrage qu'au
+                tout début et à la toute fin, et la deuxième ligne se retrouve
+                collée au bord de sa surbrillance.
+
+                Le fond est tiré de `--erreur-texte` par `color-mix`, à 28 % :
+                assez pour qu'on lise « rouge » et pas « brun », assez peu pour
+                que le texte garde son contraste, qui reste celui de
+                `foreground` sur la page. La valeur est montée depuis 18 %, où la
+                teinte se perdait sur le fond sombre. */}
             {messageRemy.erreurs.map((erreur) => (
               <Apparition key={erreur.titre}>
                 <p>
-                  <span className="font-semibold text-[var(--erreur-texte)]">
+                  <mark
+                    className="surlignage"
+                    style={
+                      {
+                        "--surlignage-fond":
+                          "color-mix(in srgb, var(--erreur-texte) 28%, transparent)",
+                      } as React.CSSProperties
+                    }
+                  >
                     {erreur.titre}
-                  </span>{" "}
+                  </mark>{" "}
                   {erreur.texte}
                 </p>
               </Apparition>

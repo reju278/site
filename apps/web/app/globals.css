@@ -71,6 +71,88 @@
 
    Le `line-height` est écrasé : une anglaise a de longues hampes et de longues
    jambes, et l'interligne du texte courant les coupe. */
+/* Le surlignage, dans le message de Rémy.
+
+   L'utilitaire ne porte que la **forme** : le rayon, le rembourrage, la graisse
+   et la couleur de l'encre. Le fond reste une classe à part, parce qu'il y en a
+   deux, un rouge pour les erreurs et un jaune pour les voies, et qu'un
+   utilitaire par couleur en ferait deux presque identiques.
+
+   `box-decoration-break: clone` n'est pas un détail. Sur un passage qui va à la
+   ligne, sans lui le fond ne prend son rembourrage qu'au tout début et à la
+   toute fin : la seconde ligne se retrouve collée au bord de sa surbrillance.
+   Les deux écritures s'écrivent, Safari n'ayant jamais levé son préfixe.
+
+   L'encre est en `foreground` : c'est le fond qui marque. C'est aussi ce qui
+   garde le contraste, un fond à un cinquième ne déplaçant presque pas la
+   couleur de la page sous le texte. */
+@utility surlignage {
+  border-radius: 5px;
+  padding: 0.125rem 0.375rem;
+  font-weight: 600;
+
+  /* L'encre reste celle du texte, sur décision de Rémy. Une version l'a mise
+     dans la teinte du surlignage, un rouge sombre sur le rouge et un ambre sur
+     le jaune ; il l'a fait revenir. C'est le fond qui marque, le texte n'a pas à
+     le dire une seconde fois.
+
+     `--surlignage-encre` reste lu, avec `--foreground` pour repli : un
+     surlignage qui voudrait un jour son encre à lui la déclare, et celui qui
+     n'en déclare pas reste lisible au lieu de disparaître. */
+  color: var(--surlignage-encre, var(--foreground));
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+
+  /* Le fond est une **image** et non une couleur, et c'est ce qui permet de le
+     tirer de gauche à droite : une couleur de fond ne se redimensionne pas, un
+     dégradé d'une seule couleur, si. Chaque emploi pose sa teinte dans
+     `--surlignage-fond`.
+
+     **`background-color: transparent` n'est pas une précaution, c'est une
+     réparation.** Le navigateur donne à `mark` un fond jaune par sa feuille par
+     défaut, et une image de fond ne le remplace pas, elle se pose dessus : les
+     trois erreurs, peintes d'un rouge à 18 %, se voyaient donc en jaune sale.
+     C'est ce que Rémy a vu, et le code disait pourtant rouge. Tant que le fond
+     était une couleur, la question ne se posait pas ; elle est apparue en même
+     temps que l'animation. */
+  background-color: transparent;
+  background-image: linear-gradient(
+    var(--surlignage-fond),
+    var(--surlignage-fond)
+  );
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  transition: background-size 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Le trait de surligneur, tiré de gauche à droite quand le paragraphe entre
+   dans la vue.
+
+   **L'état plein est le défaut et l'état vide est l'exception**, et l'ordre
+   compte. Écrit dans l'autre sens, un surlignage dont l'animation ne se joue
+   jamais resterait invisible : sous mouvement réduit, où `globals.css`
+   neutralise les transitions, et sans JavaScript, où rien ne vient poser
+   `data-vu`. Ici, ces deux cas retombent sur le fond plein, et l'animation
+   n'existe que pour ceux qui peuvent la voir. La contre-règle sans script est
+   dans `layout.tsx`, avec les autres.
+
+   Le retard est celui du paragraphe qui monte : surligner un texte qui n'est
+   pas encore arrivé n'aurait aucun sens.
+
+   Avec `box-decoration-break: clone`, un passage sur deux lignes a deux fonds,
+   donc deux traits qui partent ensemble. C'est ce que fait une main qui
+   surligne vite, pas ce qu'elle fait vraiment, et c'est le bon compromis :
+   enchaîner les lignes demanderait de mesurer chaque fragment. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-apparition]:not([data-vu]) .surlignage {
+    background-size: 0% 100%;
+  }
+
+  [data-apparition] .surlignage {
+    transition-delay: 250ms;
+  }
+}
+
 @utility signature {
   font-family: var(--font-signature), cursive;
   font-weight: 400;
@@ -552,6 +634,14 @@ summary {
      sur un fond presque noir. C'est la même mécanique que `--livre-texte`. */
   --erreur-texte: #b91c1c;
 
+  /* Le jaune des trois voies, dans le message de Rémy.
+
+     Il ne sert **que** de fond de surlignage, jamais d'encre : un jaune assez
+     vif pour se voir en fond est illisible en texte, sur le clair comme sur le
+     sombre, et c'est la raison pour laquelle il n'a pas de variante « texte »
+     comme le rouge en a une. */
+  --surlignage-jaune: #eab308;
+
   /* Le relief de verre des panneaux de menu, relevé chez TrendTrack.
 
      C'est leur `--sh-glass`, au pixel : un filet en haut, un halo très large et
@@ -585,6 +675,7 @@ summary {
   --courbe: #10b981;
   --courbe-morte: #f87171;
   --erreur-texte: #f87171;
+  --surlignage-jaune: #facc15;
 }
 
 /* Le relief de verre, en classe.
