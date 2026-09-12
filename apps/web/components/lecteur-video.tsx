@@ -2,7 +2,7 @@
 
 import { cn } from "@repo/ui/lib/utils";
 import { Play } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 /**
  * Un lecteur vidéo Wistia, habillé par nous.
@@ -46,6 +46,23 @@ const OPTIONS = new URLSearchParams({
   copyLinkAndThumbnailEnabled: "false",
   // À la fin, revenir à l'affiche plutôt que de figer la dernière image.
   endVideoBehavior: "reset",
+
+  /* Les commandes du lecteur, demandées **explicitement**.
+   *
+   * Elles sont réglées côté compte Wistia, donc elles peuvent y être coupées
+   * sans que ce dépôt en sache rien : la vidéo se lançait alors sans barre de
+   * lecture, sans son réglable et sans plein écran, et rien dans le code ne
+   * l'expliquait. Les écrire ici, c'est refuser qu'un réglage distant décide
+   * de ce que le site propose.
+   *
+   * C'est la même raison que `playerColor` juste au-dessus, et le même risque :
+   * un réglage de compte qui change ne doit pas modifier le site en silence. */
+  controlsVisibleOnLoad: "true",
+  playbar: "true",
+  volumeControl: "true",
+  fullscreenButton: "true",
+  settingsControl: "true",
+  smallPlayButton: "true",
 });
 
 /** « 981 » devient « 16:21 ». */
@@ -62,6 +79,7 @@ export function LecteurVideo({
   affiche,
   afficheMobile,
   legende,
+  actif = true,
   className,
 }: {
   id: string;
@@ -78,9 +96,22 @@ export function LecteurVideo({
    * bouton est du HTML invalide et donnerait deux cibles au clavier.
    */
   legende?: React.ReactNode;
+  /**
+   * `false` remet le lecteur à son affiche et **coupe la lecture**.
+   *
+   * C'est ce qui empêche une vidéo de continuer à parler quand on passe au
+   * témoignage suivant. La coupure passe par le démontage de l'iframe et non
+   * par l'API de Wistia : c'est plus radical, ça ne dépend d'aucun script
+   * tiers, et ça rend au passage la mémoire du lecteur.
+   */
+  actif?: boolean;
   className?: string;
 }) {
   const [lance, setLance] = useState(false);
+
+  useEffect(() => {
+    if (!actif) setLance(false);
+  }, [actif]);
 
   return (
     <div

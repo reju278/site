@@ -623,6 +623,15 @@ export const resultats: readonly {
  * seul sait quels prénoms peuvent être affichés et quels chiffres sont encore
  * exacts.
  */
+/**
+ * Le témoignage montré en premier, sur décision de Rémy.
+ *
+ * C'est un identifiant et non une position : l'ordre du tableau peut changer
+ * sans que celui-ci cesse d'être juste, et on lit tout de suite **de qui** il
+ * s'agit, ce qu'un `1` ne dirait pas.
+ */
+export const temoignageEnAvant = "rgio4y4o8f";
+
 export const temoignages: readonly {
   id: string;
   nom: string;

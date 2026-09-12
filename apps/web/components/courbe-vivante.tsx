@@ -233,8 +233,12 @@ export function CourbeVivante({
 
          Cette marge n'est à elle que depuis que les flèches sont redescendues
          sous la carte : elles l'occupaient, et la pastille leur passait
-         dessus. Deux objets ne peuvent pas tenir dans 172 px. */
-      xTete = (large + largeCarte) / 2 + 22;
+         dessus. Deux objets ne peuvent pas tenir dans 172 px.
+
+         Le décalage est de 58 px et non de 22 : la carte porte une ombre large
+         et diffuse, qui déborde bien au-delà de son bord. Collée à 22 px, la
+         pastille tombait dedans et s'y assourdissait. */
+      xTete = (large + largeCarte) / 2 + 58;
       marque.style.left = `${xTete}px`;
 
       /* Sous `lg`, la carte prend toute la largeur : il n'y a pas de marge, donc
@@ -251,8 +255,10 @@ export function CourbeVivante({
     const mesure = new ResizeObserver(caler);
     mesure.observe(rail.parentElement!);
 
+    /* Depuis le cadre et non depuis un parent : le pointillé et la tête ne
+       vivent plus dans la même couche, voir plus bas. */
     const suiveurs = [
-      ...marque.parentElement!.querySelectorAll<HTMLElement>("[data-suit]"),
+      ...cadre.current!.querySelectorAll<HTMLElement>("[data-suit]"),
     ];
     const montant = marque.querySelector<HTMLElement>("[data-montant]");
 
@@ -376,22 +382,35 @@ export function CourbeVivante({
           </div>
         </div>
 
-        {/* La tête : le pointillé au niveau de la valeur, et le point qui bat.
-
-            Elle est en HTML et non dans le SVG, et ce n'est pas un détail de
-            confort. Le tracé est étiré en hauteur par `preserveAspectRatio`,
-            et un cercle posé dedans serait écrasé dans le même rapport : au
-            lieu d'un point, on aurait une ellipse dont la forme changerait
-            avec la hauteur du bloc. En HTML, seule sa position est calculée,
-            pas son dessin.
-
-            Elle vit hors du cadre fondu, donc elle reste franche. */}
+        {/* Le pointillé reste au fond, derrière la carte : il traverse toute la
+            largeur, donc il passerait sur la vidéo s'il montait avec la tête. */}
         <div
           className="absolute inset-x-0 border-t-2 border-dashed opacity-25"
           data-suit
           style={{ borderColor: "var(--courbe)", top: "50%" }}
         />
+      </div>
 
+      {/* La tête de la courbe : le point qui bat et la pastille du montant.
+
+          **Elle est au-dessus de la carte et non derrière**, contrairement au
+          reste de la courbe. C'est une nécessité : la carte porte une ombre
+          large et diffuse qui déborde loin de son bord, et la pastille, posée
+          dessous, s'y assourdissait au point de ne plus se lire. Au-dessus,
+          elle ne dépend plus de rien.
+
+          Ce n'est pas dangereux parce qu'elle ne recouvre jamais la vidéo : elle
+          vit dans la marge à droite de la carte, et s'efface là où cette marge
+          n'existe pas. Le pointillé, lui, traverse toute la largeur et reste
+          donc au fond.
+
+          Elle est en HTML et non dans le SVG : le tracé est étiré en hauteur
+          par `preserveAspectRatio`, et un cercle posé dedans serait écrasé dans
+          le même rapport. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-10 overflow-hidden"
+      >
         <div
           ref={tete}
           data-suit
@@ -399,14 +418,13 @@ export function CourbeVivante({
           style={{ top: "50%" }}
         >
           {/* L'onde. `animate-ping` est l'animation du thème, donc
-              `globals.css` la neutralise déjà sous `prefers-reduced-motion`
-              sans qu'on ait à s'en occuper ici. */}
+              `globals.css` la neutralise déjà sous `prefers-reduced-motion`. */}
           <span
             className="absolute size-5 -translate-x-1/2 -translate-y-1/2 animate-ping rounded-full opacity-40"
             style={{ backgroundColor: "var(--courbe)" }}
           />
           <span
-            className="absolute size-3 -translate-x-1/2 -translate-y-1/2 rounded-full ring-[3px]"
+            className="absolute size-3 -translate-x-1/2 -translate-y-1/2 rounded-full"
             style={{
               backgroundColor: "var(--courbe)",
               // Le liseré reprend la couleur du fond de section : c'est lui qui
@@ -415,10 +433,7 @@ export function CourbeVivante({
             }}
           />
 
-          {/* La pastille du montant, à droite du point.
-
-              Elle est en HTML comme le point, et pour la même raison : dans le
-              SVG étiré, elle serait écrasée avec lui.
+          {/* La pastille du montant.
 
               `tabular-nums` est indispensable et non cosmétique : le montant
               change soixante fois par seconde, et avec des chiffres de largeur
@@ -426,12 +441,7 @@ export function CourbeVivante({
               seule la valeur bouge.
 
               `whitespace-nowrap` l'est tout autant : sans lui, la pastille se
-              casse entre le nombre et le symbole dès qu'elle approche du bord,
-              et « 4 230 € » s'affiche sur deux lignes.
-
-              `aria-hidden` sur tout le décor : ce nombre ne décrit rien, et un
-              lecteur d'écran qui l'annoncerait à chaque image serait
-              inutilisable. */}
+              casse entre le nombre et l'unité dès qu'elle approche du bord. */}
           <span className="absolute top-0 left-4 -translate-y-1/2 rounded-md border border-border bg-card px-2.5 py-1 text-xs font-medium whitespace-nowrap tabular-nums text-card-foreground shadow-sm">
             <span data-montant>{euros(0.5)}</span>
           </span>

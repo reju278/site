@@ -1,15 +1,17 @@
 "use client";
 
 import { LecteurVideo } from "@/components/lecteur-video";
-import { temoignages } from "@/contenu/site";
+import { temoignageEnAvant, temoignages } from "@/contenu/site";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
+  type CarouselApi,
 } from "@repo/ui/components/carousel";
 import { cn } from "@repo/ui/lib/utils";
+import { useEffect, useState } from "react";
 
 /**
  * Les témoignages vidéo : une vidéo à la fois, et deux flèches.
@@ -44,6 +46,13 @@ import { cn } from "@repo/ui/lib/utils";
  * `LecteurVideo` n'appelle Wistia qu'au clic : seize lecteurs chargés d'avance
  * mettraient la page à genoux, seize affiches servies par nous ne coûtent
  * presque rien.
+ *
+ * **Le carrousel ne démarre pas sur le premier témoignage.** Il démarre sur
+ * celui que Rémy met en avant, `temoignageEnAvant` dans `site.ts`.
+ *
+ * **Et la vidéo qu'on quitte s'arrête.** C'est `actif` qui le fait : le lecteur
+ * démonte son iframe dès qu'il cesse d'être le témoignage affiché. Sans ça, on
+ * passe au suivant et la précédente continue de parler hors champ.
  */
 /**
  * L'habillage des deux flèches, écrit une fois.
@@ -83,10 +92,44 @@ const FLECHE = cn(
   // est une place légitime, alors que la tête de courbe n'en a qu'une.
 );
 
+/* Le rang du témoignage mis en avant.
+ *
+ * Il est cherché par identifiant et non écrit en dur : l'ordre du tableau peut
+ * changer sans que ce départ cesse d'être juste. `-1` devient `0`, donc une
+ * suppression du témoignage en avant fait revenir au premier au lieu de
+ * casser. */
+const DEPART = Math.max(
+  0,
+  temoignages.findIndex((t) => t.id === temoignageEnAvant),
+);
+
 export function CarrouselTemoignages() {
+  const [api, setApi] = useState<CarouselApi>();
+  const [courant, setCourant] = useState(DEPART);
+
+  /* On suit le témoignage affiché pour une seule raison : **couper la vidéo
+     qu'on quitte**. Sans ça, on passe au suivant et la précédente continue de
+     parler hors champ, ce qui est la pire façon de découvrir qu'un carrousel
+     ne démonte pas ses diapositives. */
+  useEffect(() => {
+    if (!api) return;
+
+    const suivre = () => setCourant(api.selectedScrollSnap());
+
+    suivre();
+    api.on("select", suivre);
+    api.on("reInit", suivre);
+
+    return () => {
+      api.off("select", suivre);
+      api.off("reInit", suivre);
+    };
+  }, [api]);
+
   return (
     <Carousel
-      opts={{ loop: true }}
+      setApi={setApi}
+      opts={{ loop: true, startIndex: DEPART }}
       className="w-full"
       // Le nom vient de la section, pas du composant : un lecteur d'écran qui
       // annonce « carrousel » ne dit pas ce qu'il y a dedans.
@@ -100,7 +143,7 @@ export function CarrouselTemoignages() {
           donc trop bas. */}
       <div className="relative mx-auto w-full max-w-3xl">
         <CarouselContent>
-          {temoignages.map((temoignage) => (
+          {temoignages.map((temoignage, index) => (
             <CarouselItem key={temoignage.id} className="basis-full">
               {/* L'ombre est large et douce plutôt que marquée : sur la texture
                   de la bande, une ombre nette dessinerait un contour dur autour
@@ -119,6 +162,7 @@ export function CarrouselTemoignages() {
                   titre={temoignage.nom}
                   secondes={temoignage.secondes}
                   affiche={`/temoignages/${temoignage.id}.jpg`}
+                actif={index === courant}
                   className="border border-border shadow-[0_24px_60px_-24px_rgba(0,0,0,0.28)]"
                   legende={
                     <>

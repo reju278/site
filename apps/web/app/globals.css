@@ -344,6 +344,45 @@ summary {
 }
 
 /* ------------------------------------------------------------------
+   Le rouge du livre.
+
+   Ce n'est pas une couleur choisie : c'est **celle de la couverture**, relevée
+   au compte-gouttes dans l'aplat de `Digital Selfmade` (#e40d3a, #e6103d,
+   #dc0a36 selon l'endroit). La section du livre est le seul écran du site qui
+   montre un objet ayant déjà sa couleur, et lui appliquer le bleu du reste du
+   site ferait cohabiter deux rouges dont aucun ne répond à l'autre.
+
+   **Deux jetons et pas un seul**, parce qu'un plein et un creux ne demandent
+   pas la même chose au même rouge.
+
+   `--livre` porte le plein, donc du blanc par-dessus : #e40d3a y tient 4,75:1,
+   juste au-dessus du seuil. C'est le rouge de la couverture au pixel près, et
+   il passe, donc on ne le fonce pas pour se donner de la marge. Il ne change
+   pas d'un thème à l'autre : une couverture de livre n'a pas deux couleurs
+   selon l'heure.
+
+   `--livre-texte` porte le creux, donc le rouge lui-même sur la carte. En clair
+   il descend à #c4092f, qui donne 6,13:1 sur `--card` ; en sombre il **remonte**
+   à #ff5c7a, un rouge foncé sur #16161a étant illisible.
+
+   **Ces six lignes ont déjà disparu une fois**, emportées par une réécriture du
+   bloc voisin qui a tronqué la fin du fichier. Rien n'a échoué : le bouton
+   principal du livre s'est simplement affiché sans fond, donc invisible sur la
+   carte blanche. Une variable CSS absente ne lève aucune erreur, ni au build ni
+   au typage. C'est pour ce genre de panne que ce commentaire dit à quoi servent
+   ces valeurs.
+   ------------------------------------------------------------------ */
+:root {
+  --livre: #e40d3a;
+  --livre-texte: #c4092f;
+}
+
+.dark {
+  --livre: #e40d3a;
+  --livre-texte: #ff5c7a;
+}
+
+/* ------------------------------------------------------------------
    Le fond des résultats, repris du deck publicitaire Funnels Club.
 
    Il remplace la bande bleue en dégradé, sur décision de Rémy. Les valeurs
