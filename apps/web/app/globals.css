@@ -823,6 +823,144 @@ html {
   }
 }
 
+/* Le corps d'un article de la lettre.
+
+   Le texte vient du flux Substack, assaini par `lib/article-substack.ts`. Il
+   arrive donc en HTML nu, sans une seule classe : l'habillage se fait ici, sur
+   les balises, et pas à coups d'utilitaires qu'on ne peut de toute façon pas
+   poser sur du contenu qu'on n'écrit pas.
+
+   Les cotes reprennent celles des articles d'avis, qui sont la même chose : une
+   colonne de texte lisible, des titres en serif, des figures qui respirent. Un
+   article de blog et un avis ne se lisent pas différemment. */
+.corps-article {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: color-mix(in srgb, var(--foreground) 85%, transparent);
+  text-wrap: pretty;
+}
+
+@media (width >= 640px) {
+  .corps-article {
+    font-size: 1.125rem;
+  }
+}
+
+.corps-article > * + * {
+  margin-top: 1.25rem;
+}
+
+.corps-article h2,
+.corps-article h3,
+.corps-article h4 {
+  font-family: var(--font-serif);
+  color: var(--foreground);
+  text-wrap: balance;
+  margin-top: 3rem;
+  line-height: 1.25;
+}
+
+.corps-article h2 {
+  font-size: 1.5rem;
+}
+
+.corps-article h3 {
+  font-size: 1.25rem;
+}
+
+@media (width >= 640px) {
+  .corps-article h2 {
+    font-size: 1.875rem;
+  }
+}
+
+.corps-article strong {
+  color: var(--foreground);
+  font-weight: 600;
+}
+
+.corps-article a {
+  color: var(--foreground);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: var(--border);
+  text-underline-offset: 4px;
+  transition: color 0.2s;
+}
+
+.corps-article a:hover {
+  color: var(--primary);
+  text-decoration-color: var(--primary);
+}
+
+.corps-article ul,
+.corps-article ol {
+  padding-left: 1.5rem;
+}
+
+.corps-article ul {
+  list-style: disc;
+}
+
+.corps-article ol {
+  list-style: decimal;
+}
+
+.corps-article li + li {
+  margin-top: 0.5rem;
+}
+
+/* Le filet est neutre et non bleu, et la citation n'est pas en italique :
+   c'est exactement le traitement des citations des pages d'avis, décidé par
+   Rémy. Deux façons de citer sur le même site en feraient deux sens. */
+.corps-article blockquote {
+  border-left: 2px solid var(--foreground);
+  padding-left: 1.25rem;
+  color: var(--foreground);
+}
+
+.corps-article figure {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.corps-article img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+.corps-article figcaption {
+  margin-top: 0.625rem;
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  text-align: center;
+}
+
+/* Une vidéo intégrée garde son rapport sans qu'on ait à connaître sa taille :
+   `aspect-ratio` sur le cadre, et l'iframe le remplit. Sans ça, la page saute
+   au chargement exactement comme avec une image sans cotes. */
+.corps-article figure.video {
+  position: relative;
+  aspect-ratio: 16 / 9;
+}
+
+.corps-article figure.video iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: var(--radius-md);
+}
+
+.corps-article hr {
+  margin-top: 2.5rem;
+  margin-bottom: 2.5rem;
+  border-color: var(--border);
+}
+
 /* La première section d'une page intérieure colle à son en-tête.
 
    `EnTetePage` porte déjà un rembourrage bas, et `Section` un rembourrage haut.

@@ -1070,6 +1070,46 @@ Une section sans texte n'affiche pas une phrase de remplissage : elle affiche un
 `<Emplacement>` qui dit ce qu'elle attend. Il en reste plusieurs, et le site ne
 part pas en production tant qu'il en reste un.
 
+### Les articles de la lettre sont hébergés ici, pas seulement liés
+
+Le flux Substack ne porte pas qu'un titre et un lien : il porte **le corps
+entier de l'article**, ses images, son auteur et sa date. Le site n'en affichait
+que l'accroche avant d'envoyer le lecteur ailleurs, donc tout le référencement de
+textes écrits par Rémy allait à Substack. Chaque article a désormais sa page.
+
+**Le HTML du flux est reconstruit, jamais recopié.** Sur vingt articles, Substack
+émet 1 040 `div`, 220 `button`, 86 `form`, 86 `input` : ce sont ses encarts
+d'abonnement et l'habillage de son éditeur. `lib/article-substack.ts` tient une
+**liste blanche qui réécrit balise par balise** ; tout ce qui n'y est pas
+disparaît, ses enfants restent, et aucun attribut ne survit sauf ceux listés. La
+différence avec une liste noire n'est pas de style : une expression rationnelle
+qui efface les `<script>` se contourne, une sortie réécrite ne peut contenir que
+ce qu'on a émis. C'est ce qui rend le `dangerouslySetInnerHTML` acceptable.
+
+Seule exception active : les `iframe` de `youtube-nocookie.com`, comparées sur
+l'origine entière et non par `includes`. Une vidéo intégrée fait partie de
+l'article.
+
+**Le slug vient de Substack**, pas du titre. Un titre se corrige après
+publication, une adresse non : le recalculer ferait changer nos adresses sous
+les pieds de Google à chaque retouche.
+
+**Les cotes des images se relisent dans le nom du fichier.** Substack laisse
+`…_2816x1536.jpeg` dans l'adresse de son redimensionneur ; sans `width` et
+`height`, la page saute au chargement.
+
+**Ce que le code ne règle pas, et qui se décide.** Le même texte existe
+maintenant à deux adresses, et `lettre.funnels.club` se déclare canonique de
+lui-même. Nos pages font de même : les deux revendiquent l'original, et Google
+choisit celle qui porte le plus de signaux. **La seule réparation complète est
+chez Substack**, en y déclarant notre adresse comme canonique ou en cessant d'y
+publier. C'est une décision de Rémy, pas de l'agent, et la mention de source en
+bas de chaque article existe pour cette raison.
+
+**Le blog n'affichera jamais que les vingt derniers articles**, parce que c'est
+ce que le flux Substack expose. Le vingt et unième publié fait disparaître le
+plus ancien, page comprise.
+
 ### Le contenu extérieur arrive par flux RSS
 
 La lettre est lue dans le flux Substack de `lettre.funnels.club`, au build puis

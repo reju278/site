@@ -1,4 +1,33 @@
+import { assainir } from "@/lib/article-substack";
 import { chaine, lettre, podcast } from "@/contenu/site";
+
+/** `https://lettre.funnels.club/p/mon-titre` donne `mon-titre`. */
+function slugDepuis(lien: string): string {
+  const propre = lien.split("?")[0]?.replace(/\/$/, "") ?? lien;
+  return propre.slice(propre.lastIndexOf("/") + 1);
+}
+
+/**
+ * Un lien de la lettre devient un lien du site.
+ *
+ * Quand un article en cite un autre, le lien pointe chez Substack. Le réécrire
+ * garde le lecteur ici et transforme les renvois que Rémy a déjà écrits en
+ * maillage interne, ce qui est le levier que `AGENTS.md` décrit comme le plus
+ * fort. Tout ce qui n'est pas une adresse d'article de la lettre est laissé
+ * intact : une page d'accueil Substack ou un lien d'abonnement n'a pas
+ * d'équivalent chez nous.
+ */
+function versArticleDuSite(href: string): string | null {
+  const trouve = href.match(
+    /^https?:\/\/lettre\.funnels\.club\/p\/([a-z0-9-]+)/i,
+  );
+  return trouve ? `/articles/${trouve[1]}` : null;
+}
+
+/** Les articles qui ont un corps : les seuls qui puissent avoir une page. */
+export function articlesPublies(articles: readonly Article[]): Article[] {
+  return articles.filter((a) => a.contenu.length > 0 && a.slug.length > 0);
+}
 
 /**
  * Les articles de la lettre, lus dans son flux RSS.
@@ -16,11 +45,58 @@ import { chaine, lettre, podcast } from "@/contenu/site";
 export type Article = {
   titre: string;
   chapeau: string;
+  /** L'adresse de l'article sur Substack, gardée pour la mention de source. */
   lien: string;
+  /**
+   * Le dernier segment de l'adresse Substack, qui devient `/articles/<slug>`.
+   *
+   * Il vient de Substack et n'est pas recalculé à partir du titre : un titre
+   * peut être corrigé après publication, une adresse non. Recalculer ferait
+   * changer notre adresse sous les pieds de Google à chaque retouche.
+   */
+  slug: string;
   date: string;
   /** L'illustration de couverture, absente sur certains articles. */
   image: string | null;
+  /**
+   * Les cotes de la couverture, relues dans le nom du fichier.
+   *
+   * Substack laisse `…_2816x1536.jpeg` dans l'adresse. Sans elles, le
+   * navigateur ne réserve pas la place et la page saute au chargement : c'est
+   * le décalage de mise en page, et il est mesuré. Voir `AGENTS.md`.
+   */
+  imageLargeur: number | null;
+  imageHauteur: number | null;
+  /** L'auteur déclaré par le flux. */
+  auteur: string | null;
+  /**
+   * Le corps de l'article, assaini et réduit aux balises que le site rend.
+   *
+   * Il est vide quand le flux ne porte pas de `content:encoded`, ce qui arrive
+   * sur un article payant dont Substack ne diffuse que l'accroche. Une page
+   * sans corps ne se publie pas : voir `articlesPublies`.
+   */
+  contenu: string;
 };
+
+/**
+ * La description d'une page d'article, entre 120 et 160 caractères.
+ *
+ * Le flux donne un sous-titre, mais il fait souvent moins de cent caractères,
+ * ce qui laisse la moitié de la place vide dans une page de résultats. **Rien
+ * n'est inventé pour combler** : on complète avec les premières phrases de
+ * l'article, qui sont de Rémy, et on coupe au mot.
+ */
+export function resume(article: Article): string {
+  const nu = texteNu(article.contenu);
+  const base =
+    article.chapeau.length >= 120
+      ? article.chapeau
+      : `${article.chapeau} ${nu}`.trim();
+  if (base.length <= 160) return base;
+  const coupe = base.slice(0, 157);
+  return `${coupe.slice(0, coupe.lastIndexOf(" "))}…`;
+}
 
 /** Une heure. Au-delà, la page est reconstruite à la prochaine visite. */
 const FRAICHEUR = 3600;
@@ -82,13 +158,23 @@ export async function lireArticles(combien = 3): Promise<Article[]> {
 
     const image = bloc.match(/<enclosure[^>]*url="([^"]+)"/i)?.[1] ?? null;
     const brut = balise(bloc, "description") ?? "";
+    const corps = balise(bloc, "content:encoded") ?? "";
+
+    const cotes = image?.match(/_(\d{2,5})x(\d{2,5})\.[a-z]+/i) ?? null;
 
     articles.push({
       titre: texteNu(titre),
       chapeau: texteNu(brut),
       lien,
+      slug: slugDepuis(lien),
       date: balise(bloc, "pubDate") ?? "",
       image,
+      imageLargeur: cotes ? Number(cotes[1]) : null,
+      imageHauteur: cotes ? Number(cotes[2]) : null,
+      auteur: balise(bloc, "dc:creator"),
+      /* Le corps est assaini ici et pas à l'affichage : il ne doit exister
+         qu'une seule version du texte dans le site, celle qui est sûre. */
+      contenu: assainir(corps, { resoudreLien: versArticleDuSite }),
     });
 
     if (articles.length === combien) break;

@@ -44,6 +44,12 @@ import { cn } from "@repo/ui/lib/utils";
 const donneesStructurees = {
   "@context": "https://schema.org",
   "@type": "Person",
+  /* **L'identifiant est ce qui rend cette personne citable.** Les pages
+     d'articles déclarent leur auteur par `{"@id": SITE + "/#personne"}` plutôt
+     que de recopier son nom : sans cet ancrage ici, elles pointeraient vers
+     rien, et Google verrait une chaîne de caractères au lieu de l'entité qu'il
+     connaît déjà par cette page. */
+  "@id": `${SITE}/#personne`,
   name: identite.nom,
   url: SITE,
   jobTitle: "Formateur et consultant en acquisition",

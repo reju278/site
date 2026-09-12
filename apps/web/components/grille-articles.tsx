@@ -59,22 +59,28 @@ export function GrilleArticles({
 
       <Section>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {/* **La carte mène désormais à notre page et non plus à Substack.**
+              Le flux porte le corps entier de l'article, donc il se lit ici :
+              envoyer le lecteur ailleurs revenait à donner à une autre
+              plateforme le référencement de textes écrits par Rémy. La mention
+              de source, elle, reste en bas de chaque article. */}
           {articles.map((article) => (
-            <a
-              key={article.lien}
-              href={article.lien}
-              target="_blank"
-              rel="noreferrer"
-              className="relief-verre group flex flex-col overflow-hidden rounded-md border border-border bg-card transition-colors hover:border-ring"
+            <Link
+              key={article.slug}
+              href={`/articles/${article.slug}`}
+              className="relief-verre group flex flex-col overflow-hidden rounded-md border border-border bg-card transition-colors hover:border-ring focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
             >
               {article.image ? (
-                // Une image de Substack, servie par leur CDN et de taille
-                // inconnue au build : `next/image` n'y gagnerait rien et
-                // exigerait de déclarer leur domaine.
+                // Une image servie par le CDN de Substack : `next/image` n'y
+                // gagnerait rien et exigerait de déclarer leur domaine. Ses
+                // cotes viennent du nom du fichier, relues dans `flux.ts`, sans
+                // quoi la page saute au chargement.
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={article.image}
                   alt=""
+                  width={article.imageLargeur ?? undefined}
+                  height={article.imageHauteur ?? undefined}
                   loading="lazy"
                   className="aspect-16/9 w-full object-cover"
                 />
@@ -93,7 +99,7 @@ export function GrilleArticles({
                   {article.chapeau}
                 </p>
               </div>
-            </a>
+            </Link>
           ))}
         </div>
 
