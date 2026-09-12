@@ -194,10 +194,14 @@ export const menus: readonly {
         href: "/resultats",
         texte: "Ce que les membres ont obtenu",
       },
+      /* « Blog » et non « Digital Selfmade », sur décision de Rémy : deux
+         entrées du même menu portaient le même nom, la lettre et le livre, et
+         seul le descriptif les distinguait. Le descriptif est raccourci en
+         conséquence : il n'a plus à dire de quoi il s'agit. */
       {
-        libelle: "Digital Selfmade",
+        libelle: "Blog",
         href: "/articles",
-        texte: "La lettre, tous les articles",
+        texte: "Tous les articles",
       },
       {
         libelle: "Profit, liberté, no stress",
@@ -518,10 +522,11 @@ export const livre = {
  * page qui expose d'autres destinations que le menu oblige le lecteur à
  * comparer deux listes pour savoir ce que le site contient.
  *
- * Les libellés sont ceux qui existent déjà ailleurs. Les deux « Digital
- * Selfmade » sont désambiguïsés par le mot qui les suit, la lettre et le livre,
- * parce qu'ici il n'y a pas de descriptif sous le libellé pour les distinguer
- * comme dans le menu.
+ * Les libellés sont ceux qui existent déjà ailleurs. Les deux entrées ont
+ * longtemps porté le même nom, « Digital Selfmade », pour la lettre et pour le
+ * livre : dans l'en-tête, un descriptif sous le libellé les distinguait ; ici,
+ * il n'y en a pas, et il fallait allonger les deux. Rémy a tranché autrement en
+ * renommant la lettre « Blog », ce qui rend le nom au livre seul.
  */
 export const colonnesPiedDePage: readonly {
   titre: string;
@@ -543,8 +548,8 @@ export const colonnesPiedDePage: readonly {
     titre: "Ressources",
     entrees: [
       { libelle: "Résultats", href: "/resultats" },
-      { libelle: "Digital Selfmade, la lettre", href: "/articles" },
-      { libelle: "Digital Selfmade, le livre", href: liens.livre, externe: true },
+      { libelle: "Blog", href: "/articles" },
+      { libelle: "Digital Selfmade", href: liens.livre, externe: true },
     ],
   },
   {
@@ -607,6 +612,53 @@ export const resultats: readonly {
   texte?: string;
   teinte?: string;
 }[] = [];
+
+/**
+ * Les témoignages écrits, pour les blocs sous les offres et sous le livre.
+ *
+ * **Vide, et ce n'est pas un oubli.** La demande était de reprendre les avis
+ * Trustpilot de Funnels Club et les avis Amazon du livre, sans citer la source.
+ * Ce tableau reste vide parce que ça ne se fait pas, et pour trois raisons qui
+ * ne sont pas des précautions d'agent :
+ *
+ * - **La source doit être dite.** L'article L111-7-2 du Code de la consommation
+ *   impose à un site qui affiche des avis de dire d'où ils viennent et s'ils
+ *   sont vérifiés. Retirer la mention est précisément ce que le texte vise.
+ * - **Le nom et la photo sont des données personnelles.** Ces gens ont posté
+ *   sur Trustpilot ou Amazon, pas sur ce site : leur consentement ne suit pas.
+ * - **Les conditions des deux plateformes** interdisent de republier leurs avis
+ *   ailleurs. Trustpilot fournit un widget officiel pour ça, justement.
+ *
+ * Et surtout, c'est déjà la règle du dépôt, écrite plus haut pour `resultats` :
+ * un témoignage engage la personne citée, il faut ses mots **et son accord**.
+ *
+ * **Trois chemins pour le remplir**, du plus simple au plus propre :
+ *
+ * 1. Demander leur accord aux clients concernés. Leurs mots entrent ici comme
+ *    le reste du contenu, et le bloc s'affiche.
+ * 2. Poser le widget Trustpilot officiel, qui garde l'attribution et se met à
+ *    jour seul. Il demande un script tiers, donc une décision : le site n'en
+ *    charge aucun aujourd'hui en dehors de GTM.
+ * 3. Pour le livre, lier les avis Amazon vérifiés, ce que la page de vente de
+ *    Rémy fait déjà.
+ *
+ * `photo` est un chemin dans `public/`, jamais une URL de plateforme : servir
+ * l'image depuis chez elle la préviendrait de chaque visite et la ferait
+ * disparaître le jour où elle change d'adresse.
+ */
+export type TemoignageEcrit = {
+  /** Les mots de la personne, au mot près, jamais résumés. */
+  texte: string;
+  nom: string;
+  /** Ce qu'elle fait, si elle accepte qu'on le dise. */
+  metier?: string;
+  /** Un fichier de `public/`, ou rien. Une initiale prend le relais. */
+  photo?: string;
+};
+
+export const temoignagesOffres: readonly TemoignageEcrit[] = [];
+
+export const temoignagesLivre: readonly TemoignageEcrit[] = [];
 
 /**
  * Les témoignages vidéo, hébergés chez Wistia.

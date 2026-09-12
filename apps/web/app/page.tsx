@@ -1,10 +1,11 @@
+import { BlocTemoignages } from "@/components/bloc-temoignages";
 import { CourbeVivante } from "@/components/courbe-vivante";
 import { FondResultats } from "@/components/fond-resultats";
 import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { CarrouselTemoignages } from "@/components/carrousel-temoignages";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { LogoFunnels } from "@/components/logo-funnels";
-import { SectionLivre } from "@/components/section-livre";
+import { AvisLivre, SectionLivre } from "@/components/section-livre";
 import { SurtitreOffre } from "@/components/surtitre-offre";
 import { TexteRoulant } from "@/components/texte-roulant";
 import { TitreRoulant } from "@/components/titre-roulant";
@@ -16,6 +17,7 @@ import {
   identite,
   liens,
   offres,
+  temoignagesOffres,
   titreOffres,
   titreResultats,
   video,
@@ -327,6 +329,18 @@ export default function Accueil() {
             </article>
           ))}
         </div>
+
+        {/* Les témoignages, sous les deux offres.
+
+            Vides pour l'instant, et l'emplacement dit pourquoi. Voir le
+            commentaire de `temoignagesOffres` dans `site.ts` : reprendre des
+            avis Trustpilot en retirant la mention de la source n'est pas une
+            option, et la règle du dépôt le disait déjà pour `resultats`. */}
+        <BlocTemoignages
+          temoignages={temoignagesOffres}
+          attendu="les témoignages écrits des membres, avec leur accord"
+          className="mt-6"
+        />
       </Section>
 
       {/* ---------------------------------------------------------------
@@ -392,6 +406,7 @@ export default function Accueil() {
             temps, sinon on ne fait que déplacer l'écart. */}
         <Section className="[&>div]:pt-4 sm:[&>div]:pt-6">
           <SectionLivre />
+          <AvisLivre />
         </Section>
       </FondResultats>
 

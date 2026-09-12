@@ -1,7 +1,8 @@
+import { BlocTemoignages } from "@/components/bloc-temoignages";
 import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { TexteRoulant } from "@/components/texte-roulant";
 import { TitreRoulant } from "@/components/titre-roulant";
-import { livre } from "@/contenu/site";
+import { livre, temoignagesLivre } from "@/contenu/site";
 import { ArrowRight } from "lucide-react";
 
 /**
@@ -179,5 +180,22 @@ export function SectionLivre() {
         </div>
       </div>
     </div>
+  );
+}
+
+/**
+ * Les avis des lecteurs, sous la carte du livre.
+ *
+ * Séparé de `SectionLivre` et non imbriqué dedans : la carte est un objet clos,
+ * et y glisser une grille de citations la ferait déborder de son propre cadre.
+ * Les deux se posent l'un sous l'autre dans la même section.
+ */
+export function AvisLivre() {
+  return (
+    <BlocTemoignages
+      temoignages={temoignagesLivre}
+      attendu="les avis des lecteurs du livre, avec leur accord"
+      className="mt-6"
+    />
   );
 }
