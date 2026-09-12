@@ -532,6 +532,22 @@ chaînes ont leur entrée juste au-dessus et qu'un sixième lien YouTube renverr
 Le pied de page garde ses pastilles rondes et son YouTube : il n'a pas d'entrées
 de chaînes au-dessus, et c'est là que la rangée de signes est à sa place.
 
+### Une adresse qu'on a distribuée ne se corrige plus, elle se sert
+
+La politique de confidentialité vit à **`/confidentialites`**, au pluriel, parce
+que c'est l'adresse que Rémy a déjà posée dans ses tunnels. Le singulier, qu'on
+avait choisi et que sert le site actuel, est redirigé en 308 : il traîne
+forcément ailleurs, et une redirection permanente coûte moins qu'un 404.
+
+La règle vaut pour toute page légale et pour toute page dont l'adresse circule
+hors du site : **on ne renomme pas une route parce qu'une autre orthographe
+paraît plus juste.** Les CGV et les mentions ne bougent pas.
+
+**Attention à ce que dit le site en ligne.** `remy-jupille.com/confidentialites`
+rend un 404 aujourd'hui et `/confidentialite` un 200 : c'est l'ancien site, et
+c'est précisément ce que ce changement répare. Vérifier une adresse en ligne ne
+dit pas ce que le nouveau site doit servir.
+
 ### Tous les boutons Funnels Club mènent à la page d'appel, sauf celui du hero
 
 « Découvrir » dans l'en-tête, « Découvrir » dans le pied de page et l'entrée du

@@ -1427,7 +1427,7 @@ export const temoignages: readonly {
 
 export const legales = [
   { libelle: "CGV", href: "/cgv" },
-  { libelle: "Confidentialité", href: "/confidentialite" },
+  { libelle: "Confidentialité", href: "/confidentialites" },
   { libelle: "Mentions", href: "/mentions" },
 ] as const;
 
