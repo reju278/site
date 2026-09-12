@@ -278,20 +278,25 @@ export const messageRemy = {
 
   amorceErreurs:
     "Mais peu importe le type d'offre que vous choisissez, il y a trois erreurs que vous devez absolument éviter.",
+  /* Les trois amorces sont des phrases entières et non des étiquettes suivies
+     de deux points, sur décision de Rémy : « La première est de créer un site
+     internet. » et non « La première : créer un site internet. » Le deux-points
+     donnait une fiche, la phrase donne quelqu'un qui parle, et c'est une lettre.
+     Le rouge se pose sur cette phrase, la suite reste au corps du texte. */
   erreurs: [
     {
-      titre: "La première : créer un site internet.",
+      titre: "La première est de créer un site internet.",
       texte:
         "Aujourd'hui, les sites internet ne fonctionnent plus, sauf si c'est d'une vitrine que vous avez besoin. Si votre objectif est d'obtenir des clients, c'est un tunnel de vente qu'il vous faut à la place.",
     },
     {
-      titre: "La deuxième : prospecter.",
+      titre: "La deuxième est de prospecter.",
       texte:
         "La prospection vous demandera beaucoup de temps et beaucoup d'énergie pour très peu de résultats, et vous risquez de vous épuiser à passer vos journées à vous justifier.",
     },
     {
       titre:
-        "La troisième : créer du contenu sur les réseaux sociaux avant d'avoir un tunnel de vente qui fonctionne.",
+        "La troisième est de créer du contenu sur les réseaux sociaux avant d'avoir un tunnel de vente qui fonctionne.",
       texte:
         "Sans le bon tunnel, peu importe les efforts que vous ferez pour amener du trafic vers vos offres : vous n'obtiendrez jamais aucun client.",
     },
