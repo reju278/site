@@ -83,6 +83,20 @@ export const liens = {
   espaceMembre: avecTag("https://groupe.funnels.club"),
   livre: avecTag("https://www.digital-selfmade.com/livre-1"),
 
+  /* Les avis vérifiés du livre, chez Amazon.
+   *
+   * Sans balise de provenance : Amazon n'est pas une propriété de Rémy et
+   * Hyros ne la suit pas, donc un paramètre inconnu dans cette URL n'apporte
+   * rien. C'est l'exception prévue par `AGENTS.md`.
+   *
+   * Amazon n'offre aucun widget d'avis : recopier les siens ici poserait les
+   * mêmes problèmes que pour Trustpilot, en pire, puisque rien ne dirait qu'ils
+   * viennent de là. Le lien est donc la seule intégration honnête, et c'est
+   * déjà ce que fait la page de vente du livre. */
+  avisLivre:
+    "https://www.amazon.fr/Digital-Selfmade-irr%C3%A9sistible-internet-atteindre/product-reviews/2958479307/",
+
+
   // Sans balise : les plateformes tierces ne sont pas suivies par Hyros, et un
   // paramètre inconnu dans une URL de profil n'apporte rien.
   //
@@ -655,6 +669,36 @@ export type TemoignageEcrit = {
   /** Un fichier de `public/`, ou rien. Une initiale prend le relais. */
   photo?: string;
 };
+
+/**
+ * La fiche Trustpilot de Funnels Club.
+ *
+ * **Seul le lien vers la fiche est utilisé.** Deux autres voies ont été
+ * essayées et écartées, et il vaut mieux savoir laquelle avant d'y revenir.
+ *
+ * Recopier les avis dans ce fichier, ce qui était la demande de départ : non.
+ * L'article L111-7-2 du Code de la consommation impose de dire d'où viennent
+ * les avis affichés et s'ils sont vérifiés ; retirer la mention est exactement
+ * ce que le texte vise. S'y ajoutent les données personnelles de ces gens, dont
+ * le consentement ne suit pas d'une plateforme à un site commercial, et les
+ * conditions de Trustpilot, qui l'interdisent.
+ *
+ * Le widget officiel, qui réglait tout cela : posé, puis retiré sur décision de
+ * Rémy. Il apporte un script tiers, sa propre mise en forme et sa marque au
+ * milieu de la page. `unite` et `gabarit` restent notés ici pour qu'on n'ait pas
+ * à les rechercher si la question revient : ce sont l'identifiant de la fiche,
+ * relevé dans sa page publique, et le modèle de carrousel d'avis.
+ *
+ * **Amazon n'a pas d'équivalent.** Aucun widget d'avis pour un site tiers : les
+ * seuls modules intégrables sont des liens et bannières d'affiliation, et l'API
+ * Product Advertising ne renvoie plus le texte des avis. Le lien est la seule
+ * intégration possible, et c'est déjà ce que fait la page de vente du livre.
+ */
+export const trustpilot = {
+  unite: "60cc5d274404620001728cbd",
+  gabarit: "53aa8912dec7e10d38f59f36",
+  profil: "https://fr.trustpilot.com/review/funnels.club",
+} as const;
 
 export const temoignagesOffres: readonly TemoignageEcrit[] = [];
 

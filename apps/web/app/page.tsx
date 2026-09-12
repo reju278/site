@@ -18,6 +18,7 @@ import {
   liens,
   offres,
   temoignagesOffres,
+  trustpilot,
   titreOffres,
   titreResultats,
   video,
@@ -330,15 +331,37 @@ export default function Accueil() {
           ))}
         </div>
 
-        {/* Les témoignages, sous les deux offres.
+        {/* Les avis, sous les deux offres.
 
-            Vides pour l'instant, et l'emplacement dit pourquoi. Voir le
-            commentaire de `temoignagesOffres` dans `site.ts` : reprendre des
-            avis Trustpilot en retirant la mention de la source n'est pas une
-            option, et la règle du dépôt le disait déjà pour `resultats`. */}
+            **Un lien, et pas un widget.** Le widget officiel de Trustpilot a
+            été posé puis retiré, sur décision de Rémy. Il affichait les vrais
+            avis avec leur source, ce qui était la façon licite de les montrer,
+            mais il apporte un script tiers, sa propre mise en forme et sa
+            marque au milieu de la page.
+
+            Reste ce qui ne coûte rien et ne triche pas : un lien vers la fiche,
+            dont le texte dit où il mène et ce qu'on y trouve. Recopier les avis
+            ici en retirant la source n'est toujours pas une option, pour les
+            raisons écrites dans `site.ts`.
+
+            Le bloc de citations attend, lui, les témoignages que Rémy aura
+            recueillis directement. */}
+        <p className="mt-10 text-center">
+          <a
+            href={trustpilot.profil}
+            target="_blank"
+            rel="noreferrer"
+            className="group/roule inline-flex items-center gap-2 rounded-md text-sm font-semibold text-primary underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          >
+            <TexteRoulant>
+              Lire les avis vérifiés des membres de Funnels Club
+            </TexteRoulant>
+          </a>
+        </p>
+
         <BlocTemoignages
           temoignages={temoignagesOffres}
-          attendu="les témoignages écrits des membres, avec leur accord"
+          attendu="les témoignages écrits que Rémy aura recueillis lui-même, avec l'accord des personnes citées"
           className="mt-6"
         />
       </Section>
