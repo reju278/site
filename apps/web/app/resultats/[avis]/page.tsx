@@ -1,6 +1,7 @@
 import { AppelFormation } from "@/components/appel-formation";
 import { AppelOffres } from "@/components/appel-offres";
 import { EnTetePage } from "@/components/en-tete-page";
+import { HAUTEUR_ENTETE } from "@/components/en-tete";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { Section } from "@/components/section";
 import { TexteLie } from "@/components/texte-lie";
@@ -129,21 +130,46 @@ export default async function PageAvis({
         </p>
       </EnTetePage>
 
-      {/* L'entretien.
+      {/* L'entretien, puis l'article qui vient le recouvrir.
+
+          **La vidéo est collante et l'article passe par-dessus**, sur demande de
+          Rémy : au défilement, l'entretien reste en place et le texte monte
+          dessus, comme une page qu'on ouvre. C'est du CSS et rien d'autre, pas
+          une ligne de JavaScript : `sticky` cale la vidéo sous l'en-tête, et
+          l'article, qui la suit dans le flux, la couvre parce qu'il est
+          au-dessus dans la pile et qu'il porte un fond opaque.
+
+          Les trois conditions tiennent ensemble et se cassent séparément. Il
+          faut un **parent commun** aux deux, sinon la vidéo se décolle dès la
+          fin de sa propre section. Il faut que ce parent n'ait **aucun
+          `overflow`** : une valeur autre que `visible` sur n'importe quel
+          ancêtre annule `sticky` sans rien signaler. Et il faut un **fond
+          opaque** sur l'article, sans quoi le texte se superpose à l'image au
+          lieu de la masquer.
+
+          Le décalage du haut est la hauteur de l'en-tête flottant, importée et
+          non recopiée : deux nombres qui doivent rester d'accord finissent
+          toujours par diverger.
 
           Il est plus large que le texte, `max-w-4xl` contre `max-w-3xl` : une
           vidéo se regarde, un texte se lit, et les deux n'ont pas la même bonne
           mesure. Le lecteur n'appelle Wistia qu'au clic. */}
-      <section className="px-5">
-        <div className="mx-auto max-w-4xl">
-          <LecteurVideo
-            id={temoignage.id}
-            titre={temoignage.nom}
-            secondes={temoignage.secondes}
-            affiche={affiche}
-          />
-        </div>
-      </section>
+      <div className="relative">
+        <section
+          className="sticky px-5"
+          style={{ top: HAUTEUR_ENTETE + 16 }}
+        >
+          <div className="mx-auto max-w-4xl">
+            <LecteurVideo
+              id={temoignage.id}
+              titre={temoignage.nom}
+              secondes={temoignage.secondes}
+              affiche={affiche}
+            />
+          </div>
+        </section>
+
+        <div className="relative z-10 bg-background">
 
       {/* La séparation entre l'entretien et l'article, sur demande de Rémy.
 
@@ -219,7 +245,9 @@ export default async function PageAvis({
         </article>
       </Section>
 
-      <AppelOffres />
+          <AppelOffres />
+        </div>
+      </div>
     </>
   );
 }
