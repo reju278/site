@@ -300,11 +300,44 @@ export default function Accueil() {
 
             {/* L'appel à l'action, sous le sous-titre et au-dessus de la
                 vidéo. Il est donc sur l'image, où le voile assombri garantit
-                déjà le contraste, et non sur la couleur de page. */}
-            <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-              <BoutonScintillant href={liens.funnelsClub}>
+                déjà le contraste, et non sur la couleur de page.
+
+                **Deux boutons et non un**, sur demande de Rémy, et c'est la
+                paire du projet : un plein, un creux, même hauteur et même rayon.
+                Ils mènent à deux moments différents, la formation gratuite puis
+                l'appel, exactement comme l'encart posé au milieu des articles
+                d'avis. Un lien souligné à côté d'un bouton de 56 px se lirait
+                comme une note de bas de page, et prendre rendez-vous n'en est
+                pas une.
+
+                **Le plein mène désormais à la formation gratuite** et non plus
+                à la page d'accueil de Funnels Club, sur décision de Rémy.
+
+                `flex-col` puis `sm:flex-row` : deux boutons de 56 px côte à côte
+                sur 375 px coupent leurs libellés en trois lignes. */}
+            <div className="mt-7 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+              <BoutonScintillant href={liens.formation}>
                 <TexteRoulant>Découvrir Funnels Club</TexteRoulant>
               </BoutonScintillant>
+
+              {/* Le creux.
+
+                  **Le blanc est en dur, et c'est le même cas que les capsules
+                  de l'en-tête** : ce bouton ne se pose pas sur une couleur de
+                  thème mais sur une photographie, sombre dans les deux thèmes,
+                  et déjà voilée. Un jeton de texte y serait noir en thème clair.
+
+                  Sa bordure est en `currentColor`, donc elle ne peut pas
+                  diverger de son texte, et elle tient d'office ses 3:1 puisque
+                  le blanc sur le voile en tient bien plus. */}
+              <a
+                href={liens.appel}
+                target="_blank"
+                rel="noreferrer"
+                className="group/roule inline-flex h-14 items-center justify-center gap-2 rounded-md border border-current px-8 text-base font-semibold whitespace-nowrap text-white transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              >
+                <TexteRoulant>Réserver un appel</TexteRoulant>
+              </a>
             </div>
           </div>
 

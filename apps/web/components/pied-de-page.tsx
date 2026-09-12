@@ -268,20 +268,31 @@ export function PiedDePage() {
               <CarteOffre
                 className="lg:flex-1"
                 teinte="rouge"
-                /* La couverture du livre tient la place du logo : c'est la seule
-                   des trois offres qui soit un objet, et elle a son image. Elle
-                   est `aria-hidden` comme les deux tuiles, le nom étant écrit
-                   juste à côté. */
+                /* **Le logo de Digital Selfmade, et non la couverture du
+                   livre.** C'est la couverture qui tenait cette place, et Rémy
+                   l'a signalée cassée : `livre.visuel.large` est un rendu de
+                   1200 sur 832 montrant trois exemplaires côte à côte, et
+                   recadré dans un carré d'un cadratin il n'en restait qu'un
+                   fragment du milieu. Rien n'échouait, l'image se chargeait.
+
+                   **Une image large ne devient pas une icône en la rognant.**
+                   Ce qui est carré ici, c'est le logo de la marque, pas la photo
+                   de l'objet, et c'est le même fichier que la tuile du menu des
+                   ressources. `object-contain` pour la même raison : le rogner
+                   d'un pixel lui couperait son disque.
+
+                   Elle est `aria-hidden` comme les deux tuiles, le nom étant
+                   écrit juste à côté. */
                 marque={
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    src={livre.visuel.large}
+                    src="/digital-selfmade.png"
                     alt=""
                     aria-hidden
-                    width={640}
-                    height={640}
+                    width={128}
+                    height={111}
                     loading="lazy"
-                    className="mr-[0.28em] inline-block size-[0.95em] rounded-[22%] object-cover align-[-0.13em]"
+                    className="mr-[0.28em] inline-block size-[0.95em] object-contain align-[-0.13em]"
                   />
                 }
                 nom={livre.nom}

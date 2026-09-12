@@ -124,6 +124,11 @@ export const liens = {
   //
   // Ce qu'elles visaient avant : `/` pour « Découvrir », `/direct` pour le
   // bouton du hero.
+  //
+  // `funnelsClub` ne sert plus à personne : le bouton du hero mène désormais à
+  // la formation gratuite, sur décision de Rémy, et le creux posé à côté mène à
+  // `appel`. Le nom reste, parce que c'est celui du bouton d'un hero qui peut
+  // changer d'avis, et qu'il ne coûte rien.
   decouvrir: APPEL,
   funnelsClub: APPEL,
   appel: APPEL,

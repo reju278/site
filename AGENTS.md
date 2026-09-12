@@ -501,8 +501,8 @@ passes ont mené là : un `BookOpen` sur un rose choisi à l'œil, puis « le vr
 icône et la vraie couleur », puis « la petite icône comme dans le footer », puis
 « la photo dans le menu pour le livre est cassée ».
 
-**Une image large ne devient pas une icône en la recadrant.** Le fichier du pied
-de page est un rendu de 1200 sur 832 montrant trois exemplaires côte à côte :
+**Une image large ne devient pas une icône en la recadrant.** Le fichier de la
+couverture est un rendu de 1200 sur 832 montrant trois exemplaires côte à côte :
 recadré en carré de 34 px, il n'en restait qu'un fragment du milieu. Rien
 n'échouait, l'image se chargeait, elle était simplement rognée jusqu'à ne plus
 rien dire. Une icône se dessine carrée, et c'est le logo de la marque qui l'est,
@@ -511,6 +511,11 @@ ClickFunnels à l'ouverture d'un menu.
 
 Et il reste **dans la tuile de verre**, sur demande de Rémy : c'est le cadre qui
 le fait ressortir au milieu des autres, pas son absence.
+
+**La même image était cassée dans le pied de page**, où la carte du livre la
+posait dans un carré d'un cadratin, et elle l'était depuis le début : personne ne
+l'avait vue parce qu'un fragment de couverture rouge à cette taille ressemble à
+une vignette. Les deux endroits portent désormais le même fichier.
 
 **Une entrée dont le logo annonce une plateforme mène à cette plateforme.**
 Esprits Maverick affichait Ausha ; depuis qu'il porte le logo YouTube, il mène à
@@ -527,11 +532,22 @@ chaînes ont leur entrée juste au-dessus et qu'un sixième lien YouTube renverr
 Le pied de page garde ses pastilles rondes et son YouTube : il n'a pas d'entrées
 de chaînes au-dessus, et c'est là que la rangée de signes est à sa place.
 
-### Tous les boutons Funnels Club mènent à la page d'appel
+### Tous les boutons Funnels Club mènent à la page d'appel, sauf celui du hero
 
-« Découvrir » dans l'en-tête, « Découvrir » dans le pied de page, le bouton du
-hero et l'entrée du menu : tous vers `www.funnels.club/appel`, sur décision de
-Rémy. Ils visaient avant `/` et `/direct`.
+« Découvrir » dans l'en-tête, « Découvrir » dans le pied de page et l'entrée du
+menu : tous vers `www.funnels.club/appel`, sur décision de Rémy. Ils visaient
+avant `/` et `/direct`.
+
+**Le hero fait exception, et il porte une paire.** Son plein mène à la formation
+gratuite, `/course-2025`, et un creux posé à côté mène à l'appel : ce sont deux
+moments différents, on regarde d'abord, on parle ensuite. C'est la même paire que
+l'encart au milieu des articles d'avis, et la règle des deux actions d'importance
+comparable s'applique telle quelle, même hauteur et même rayon.
+
+Son creux porte **du blanc en dur**, comme les capsules de l'en-tête et pour la
+même raison : il ne se pose pas sur une couleur de thème mais sur une
+photographie, sombre dans les deux thèmes et déjà voilée. Un jeton de texte y
+serait noir en clair.
 
 Ils restent **trois noms dans `liens` et non un seul**, `decouvrir`,
 `funnelsClub` et `appel`, chacun disant à quel endroit du site il sert : le jour
