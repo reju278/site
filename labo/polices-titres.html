@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Bancs d'essai : la serif des titres, deuxième série</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,600,50;1,9..144,600,50&family=Vollkorn:ital,wght@0,600;1,600&family=Lora:ital,wght@0,600;1,600&family=Bitter:ital,wght@0,600;1,600&family=Faustina:ital,wght@0,600;1,600&family=Literata:ital,opsz,wght@0,7..72,600;1,7..72,600&family=Source+Sans+3:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --fond: #fcfbf8;
+        --encre: #2b2118;
+        --attenue: #675c57;
+        --filet: #e4dfd3;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        padding: 3rem 1.5rem 6rem;
+        background: var(--fond);
+        color: var(--encre);
+        font-family: "Source Sans 3", system-ui, sans-serif;
+      }
+      .intro {
+        max-width: 46rem;
+        margin: 0 auto 2.5rem;
+        color: var(--attenue);
+        font-size: 0.9375rem;
+        line-height: 1.6;
+      }
+      .essai {
+        max-width: 46rem;
+        margin: 0 auto;
+        padding: 2rem 0;
+        border-top: 1px solid var(--filet);
+      }
+      .nom {
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--attenue);
+        margin: 0 0 1rem;
+      }
+      .quoi {
+        text-transform: none;
+        letter-spacing: 0;
+        font-weight: 400;
+      }
+      .titre {
+        margin: 0;
+        font-size: clamp(2.25rem, 5vw, 3.25rem);
+        line-height: 1.12;
+        letter-spacing: -0.015em;
+        font-weight: 600;
+      }
+      .titre em { font-style: italic; }
+      .sous {
+        margin: 0.9rem 0 0;
+        font-size: 1.5rem;
+        font-weight: 600;
+        letter-spacing: -0.015em;
+      }
+      .texte {
+        margin: 0.6rem 0 0;
+        max-width: 34rem;
+        color: var(--attenue);
+        font-size: 0.9375rem;
+        line-height: 1.6;
+      }
+
+      .fraunces .titre, .fraunces .sous { font-family: "Fraunces", serif; }
+      .vollkorn .titre, .vollkorn .sous { font-family: "Vollkorn", serif; }
+      .lora     .titre, .lora     .sous { font-family: "Lora", serif; }
+      .bitter   .titre, .bitter   .sous { font-family: "Bitter", serif; }
+      .faustina .titre, .faustina .sous { font-family: "Faustina", serif; }
+      .literata .titre, .literata .sous { font-family: "Literata", serif; }
+    </style>
+  </head>
+  <body>
+    <p class="intro">
+      Deuxième série : des serifs plus arrondies et plus charpentées, avec moins
+      de contraste entre pleins et déliés que la première. Toutes sont posées en
+      graisse 600 pour qu'aucune ne paraisse maigre. Le texte courant est Source
+      Sans Pro, comme sur le site.
+    </p>
+
+    <section class="essai fraunces">
+      <p class="nom">Fraunces <span class="quoi">· la plus arrondie, formes douces et un peu vintage</span></p>
+      <h1 class="titre">Vivez de votre <em>expertise</em> en ligne.</h1>
+      <p class="sous">Funnels Club</p>
+      <p class="texte">Nous vous accompagnons à travers toutes les étapes de votre business de formation, du lancement jusqu'à 6 ou 7 chiffres par an.</p>
+    </section>
+
+    <section class="essai vollkorn">
+      <p class="nom">Vollkorn <span class="quoi">· chaleureuse et solide, empattements épais</span></p>
+      <h1 class="titre">Vivez de votre <em>expertise</em> en ligne.</h1>
+      <p class="sous">Funnels Club</p>
+      <p class="texte">Nous vous accompagnons à travers toutes les étapes de votre business de formation, du lancement jusqu'à 6 ou 7 chiffres par an.</p>
+    </section>
+
+    <section class="essai lora">
+      <p class="nom">Lora <span class="quoi">· courbes calligraphiques, le juste milieu</span></p>
+      <h1 class="titre">Vivez de votre <em>expertise</em> en ligne.</h1>
+      <p class="sous">Funnels Club</p>
+      <p class="texte">Nous vous accompagnons à travers toutes les étapes de votre business de formation, du lancement jusqu'à 6 ou 7 chiffres par an.</p>
+    </section>
+
+    <section class="essai bitter">
+      <p class="nom">Bitter <span class="quoi">· empattements carrés, très franche</span></p>
+      <h1 class="titre">Vivez de votre <em>expertise</em> en ligne.</h1>
+      <p class="sous">Funnels Club</p>
+      <p class="texte">Nous vous accompagnons à travers toutes les étapes de votre business de formation, du lancement jusqu'à 6 ou 7 chiffres par an.</p>
+    </section>
+
+    <section class="essai faustina">
+      <p class="nom">Faustina <span class="quoi">· arrondie et compacte, gagne de la place</span></p>
+      <h1 class="titre">Vivez de votre <em>expertise</em> en ligne.</h1>
+      <p class="sous">Funnels Club</p>
+      <p class="texte">Nous vous accompagnons à travers toutes les étapes de votre business de formation, du lancement jusqu'à 6 ou 7 chiffres par an.</p>
+    </section>
+
+    <section class="essai literata">
+      <p class="nom">Literata <span class="quoi">· dessinée pour la lecture, sobre et robuste</span></p>
+      <h1 class="titre">Vivez de votre <em>expertise</em> en ligne.</h1>
+      <p class="sous">Funnels Club</p>
+      <p class="texte">Nous vous accompagnons à travers toutes les étapes de votre business de formation, du lancement jusqu'à 6 ou 7 chiffres par an.</p>
+    </section>
+  </body>
+</html>

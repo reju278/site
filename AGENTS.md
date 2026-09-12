@@ -215,6 +215,15 @@ dans `packages/ui/src/styles/globals.css`. Jamais de rayon en dur
 (`rounded-[8px]`, `rounded-xl`). Seule exception : `rounded-full` pour les
 photos de profil.
 
+**Une exception d'échelle : les jonctions pleine largeur.** Le hero ne se fond
+plus dans la page par un dégradé, il s'arrête sous une lèvre de la couleur de
+page aux deux angles hauts arrondis. Un rayon de 5 px sur 1400 px de large ne
+se voit pas : 5 px sert à adoucir l'angle d'un objet qu'on regarde de près, un
+bouton, un champ, une carte. Le rayon de ces jonctions est donc
+`--rayon-jonction`, dans `apps/web/app/globals.css`, écrit une fois pour que
+deux jonctions ne divergent jamais. Ce n'est pas une licence pour arrondir plus
+ailleurs : à l'intérieur de la page, tout reste à 5 px.
+
 ### Thème clair et sombre : toujours les deux
 
 Chaque écran doit fonctionner dans les deux. Ce n'est pas une finition de fin de
@@ -276,6 +285,40 @@ téléphone tenu à la main.
   thèmes. Le panneau navigateur émule le téléphone avec `resize_window`, il n'y
   a pas d'excuse à ne pas regarder.
 
+### La forme d'un bloc de texte se décide, elle ne se subit pas
+
+Un titre mal coupé ne produit pas une erreur : il produit une gêne que le
+lecteur ne sait pas nommer. Un mot seul sur sa ligne, une ligne du milieu deux
+fois plus courte que ses voisines, et l'ensemble a l'air négligé sans qu'on
+puisse dire pourquoi.
+
+**Jamais un mot seul sur une ligne**, ni au milieu ni à la fin. Et pas de ligne
+qui fasse moins de la moitié de la plus longue.
+
+**`text-balance` ne s'emploie que sur du texte centré**, et il ne suffit pas.
+Il équilibre les lignes autour d'un axe ; sur un texte ferré à gauche, le bord
+est déjà l'axe et l'équilibrage ne fait que raccourcir la première ligne sans
+raison. Même centré, il se relit : le moteur remplit la première ligne avant de
+répartir, et produit volontiers une ligne longue suivie de deux courtes.
+
+**Quand la césure compte, elle s'écrit.** Si aucune largeur ne donne la forme
+voulue, la coupure devient du contenu : le texte est stocké ligne par ligne
+dans `site.ts` et chaque ligne est rendue en `block`. C'est le cas du titre des
+offres. Ce n'est pas de la mise en forme déguisée en contenu : c'est Rémy qui
+décide où sa phrase se coupe.
+
+**Ça se vérifie en mesurant, pas à l'œil.** On relève les rectangles de chaque
+ligne (`Range.getClientRects()`), on compte les lignes, on compare la plus
+courte à la plus longue, et on regarde combien de mots porte chaque ligne. Aux
+deux largeurs, 375 px et grand écran. Un titre juste en large peut être
+catastrophique sur un téléphone.
+
+**Un signe posé dans une ligne de texte s'aligne sur la hauteur de capitale**,
+et par `vertical-align`, pas par `translate-y`. Une translation déplace le
+dessin sans rien dire à la ligne : le réglage est juste à un seul corps et se
+refait à chaque changement de taille. `vertical-align` s'exprime en `em` par
+rapport à la ligne de base, donc il tient à toutes les tailles.
+
 ### Dans une grille, les actions s'alignent entre elles
 
 Deux cartes côte à côte n'ont jamais des textes de même longueur. Si le bouton
@@ -304,12 +347,24 @@ Ce qui passe **sous** une fenêtre se brouille ; la fenêtre elle-même reste op
 - Le rayon du flou s'écrit **en toutes lettres** : `blur(var(--x))` est
   silencieusement jeté par le compilateur CSS.
 
-**Une exception, et une seule : les deux capsules de l'en-tête.** Elles sont
-reprises de passionfroot à l'identique, sur décision de Rémy : rayon de 12 px
-et non 5, dégradé blanc translucide, `backdrop-blur-md` et filet intérieur.
-Elles flottent au-dessus de l'image du hero, et c'est le flou qui les fait
-tenir. L'exception ne couvre **que** les deux capsules : à l'intérieur, les
-entrées, le bouton et le panneau déroulant sont à 5 px comme partout.
+**Première exception : les deux capsules de l'en-tête.** Elles sont reprises de
+passionfroot à l'identique, sur décision de Rémy : rayon de 12 px et non 5,
+dégradé blanc translucide, `backdrop-blur-md` et filet intérieur. Elles flottent
+au-dessus de l'image du hero, et c'est le flou qui les fait tenir. L'exception ne
+couvre **que** les deux capsules : à l'intérieur, les entrées, le bouton et le
+panneau déroulant sont à 5 px comme partout.
+
+**Seconde exception : la carte de cookies**, habillée dans
+`apps/web/app/globals.css`. Elle reprend le verre des capsules au pixel, sur
+décision de Rémy : même `card/85`, même flou de 12 px, même filet intérieur en
+`--border`, même rayon de 12 px et même ombre. Son bouton, lui, est celui de
+l'en-tête, donc à 5 px. Elle flotte au-dessus du contenu de la page comme les
+capsules au-dessus du hero, et c'est la même raison qui justifie le même
+traitement.
+
+Ces deux exceptions couvrent tout ce qui a le droit de flouter par-devant. Une
+troisième ne s'ajoute pas parce qu'elle irait bien : elle se décide, et elle
+s'écrit ici.
 
 ### L'habillage de l'en-tête suit la page, jamais le défilement
 
@@ -344,6 +399,20 @@ demande passe par une server action.
 
 Tout le texte du site tient dans ce fichier. Les pages ne font que le mettre en
 forme. Corriger une phrase, c'est modifier ce fichier, rien d'autre.
+
+Une seule exception : `apps/web/contenu/legal.ts`, qui porte les CGV, la
+politique de confidentialité et les mentions légales. Ces trois documents pèsent
+le double du reste du site, personne ne les édite à la phrase, et ils se
+remplacent en bloc le jour où un juriste en produit une version neuve. Les
+mélanger au contenu de vitrine noierait ce qui se relit sous ce qui ne se relit
+pas.
+
+Ce fichier a été produit par extraction du site en ligne, pas saisi à la main.
+**Il est reproduit avec ses défauts**, signalés en commentaire là où ils
+tombent : les CGV portent les traces d'un remplacement automatique raté, la
+confidentialité a trois variables de gabarit jamais remplies. Réparer une phrase
+de CGV au jugé, c'est modifier un document qui engage la société. Cela se
+décide, cela ne se devine pas, et cela n'appartient pas à l'agent.
 
 **Le texte est écrit par Rémy, jamais par l'agent.** C'est la règle la plus
 stricte du dépôt et elle n'a pas d'exception. Un titre, une accroche, un
