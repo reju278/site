@@ -137,6 +137,26 @@ intentions à repasser avant la mise en ligne : ce sont des conditions pour
 qu'une page soit considérée comme terminée, au même titre que les deux thèmes
 et les deux tailles d'écran.
 
+### Un texte de page ne compte jamais ses éléments
+
+Le sous-titre de la page des résultats disait « quinze membres racontent ». Ils
+ont été quinze, puis dix-huit, puis vingt-deux, **et personne ne pense à corriger
+une phrase en ajoutant une vignette**. Un compte écrit en toutes lettres est juste
+le jour où on l'écrit et faux au suivant.
+
+Sur décision de Rémy : pas de nombre dans le texte, ni maintenant ni plus tard.
+« Les membres racontent », et c'est la grille qui compte, puisqu'elle est
+calculée à partir des données.
+
+La règle vaut pour tout ce qui se compte et qui bouge : le nombre d'articles, le
+nombre d'épisodes, le nombre d'offres. Si un chiffre doit vraiment apparaître, il
+se calcule dans le JSX, il ne s'écrit pas dans une phrase.
+
+**Même prudence avec un nom propre dans une description.** Celle de la page des
+résultats annonçait « en entretien avec Rémy Jupille » : c'est faux depuis que
+Geoffrey en mène la moitié. Une description qui nomme quelqu'un se vérifie comme
+un chiffre.
+
 ### Chaque page déclare son identité
 
 - **Un `export const metadata`** par page, avec son `title` et sa

@@ -10,8 +10,13 @@ import Link from "next/link";
 export const metadata: Metadata = {
   alternates: { canonical: "/resultats" },
   title: "Résultats",
+  /* **Ni nombre ni nom d'intervieweur**, et les deux pour la même raison :
+     une description qui compte les témoignages vieillit au premier ajout, et
+     tous les entretiens ne sont pas menés par Rémy. Elle tient la fourchette de
+     120 à 160 caractères que le projet demande, ce que l'ancienne, à 78, ne
+     faisait pas. */
   description:
-    "Les témoignages vidéo des membres de Funnels Club, en entretien avec Rémy Jupille.",
+    "Les membres de Funnels Club racontent en vidéo ce qu'ils faisaient avant et où ils en sont. Chaque entretien a sa page, avec sa transcription.",
 };
 
 /**
@@ -61,13 +66,19 @@ export default function Resultats() {
             sont dans les entretiens, et ce sont ceux des personnes qui les
             annoncent. **À valider par Rémy**, au même titre que les articles.
 
+            **Aucun nombre, sur décision de Rémy.** Il y en avait quinze, puis
+            dix-huit, puis vingt-deux. Un compte écrit dans une phrase est juste
+            le jour où on l'écrit et faux au suivant, et personne ne pense à le
+            corriger en ajoutant un témoignage : c'est la grille qui compte, et
+            elle est toujours à jour puisqu'elle est calculée.
+
             `max-w-2xl` et non la pleine largeur : une ligne de texte courant
             qui fait mille cent pixels de long se relit mal, et le sous-titre
             doit rester plus étroit que le titre qu'il commente. */}
         <p className="mx-auto mt-6 max-w-2xl text-lg text-pretty text-muted-foreground">
-          Quinze membres racontent, en vidéo, ce qu'ils faisaient avant, ce
-          qu'ils ont changé et où ils en sont. Chaque entretien a sa page, avec
-          la vidéo, le récit et la transcription complète.
+          Les membres racontent, en vidéo, ce qu'ils faisaient avant, ce qu'ils
+          ont changé et où ils en sont. Chaque entretien a sa page, avec la
+          vidéo, le récit et la transcription complète.
         </p>
       </EnTetePage>
 
@@ -91,8 +102,8 @@ export default function Resultats() {
             relie. C'est aussi ce qui la rend lisible par un moteur, qui ne sait
             rien lire d'une vidéo et tout d'un article.
 
-            Le gain est aussi mécanique : quinze lecteurs Wistia, c'est environ
-            505 Ko de JavaScript chacun, donc sept mégaoctets si on les charge
+            Le gain est aussi mécanique : un lecteur Wistia, c'est environ 505 Ko
+            de JavaScript, donc plusieurs mégaoctets si on les charge tous
             d'avance. Ils ne se chargeaient qu'au clic, mais ils s'assemblaient
             quand même ; ici, il n'y a plus qu'une image par carte.
 
@@ -149,7 +160,7 @@ export default function Resultats() {
                     </p>
                     {/* La phrase est tirée de l'article de la personne et
                         vient de `site.ts`. Elle n'est plus facultative : une
-                        carte sur quinze qui n'aurait pas sa ligne creuserait un
+                        carte qui n'aurait pas sa ligne creuserait un
                         trou dans la grille, et le nom seul ne dit rien de ce
                         qu'on va lire. */}
                     <p className="mt-1 text-sm text-pretty text-muted-foreground">

@@ -1097,9 +1097,9 @@ export const resultats: readonly {
  *
  * Les identifiants viennent de la page `/avis-funnels-club` du site actuel, et
  * les durées du média lui-même. Ils étaient seize ; celui de Rayan Arifa a été
- * retiré sur décision de Rémy, ainsi que son affiche. Il en reste quinze, auxquels sept ont été ajoutés : Lilian, Sébastien, Patrick
- * Pinot, Guy Anastaze, et les seconds entretiens de Corentin, Roland et
- * François. **Trois personnes apparaissent donc deux fois**, avec deux
+ * retiré sur décision de Rémy, ainsi que son affiche. La liste a grandi depuis : Lilian, Sébastien, Patrick Pinot, Guy Anastaze, et
+ * les seconds entretiens de Corentin, Roland et François. **Trois personnes
+ * apparaissent donc deux fois**, avec deux
  * entretiens à un an d'écart ; leurs descriptions et leurs articles disent
  * lequel est lequel. Les affiches sont téléchargées puis
  * servies par nous, dans `public/temoignages/` : rien ne part chez Wistia tant
