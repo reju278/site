@@ -1,4 +1,5 @@
 import { BoutonScintillant } from "@/components/bouton-scintillant";
+import { EnTetePage } from "@/components/en-tete-page";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { Section } from "@/components/section";
 import { liens, temoignages } from "@/contenu/site";
@@ -15,14 +16,12 @@ export const metadata: Metadata = {
 export default function Resultats() {
   return (
     <>
-      <section className="px-5 pt-32 pb-16 sm:pt-40 sm:pb-20">
-        <div className="mx-auto max-w-6xl text-center">
-          {/* Repris de remy-jupille.com, au mot près. */}
-          <h1 className="titre text-5xl text-balance text-foreground sm:text-6xl">
-            Résultats de Funnels Club
-          </h1>
-        </div>
-      </section>
+      <EnTetePage>
+        {/* Repris de remy-jupille.com, au mot près. */}
+        <h1 className="titre text-5xl text-balance text-foreground sm:text-6xl">
+          Résultats de Funnels Club
+        </h1>
+      </EnTetePage>
 
       <Section>
         {/* Seize entretiens, et aucune iframe chargée tant qu'on n'a pas

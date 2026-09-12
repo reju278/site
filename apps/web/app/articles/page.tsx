@@ -1,9 +1,6 @@
-import { BoutonScintillant } from "@/components/bouton-scintillant";
-import { Section } from "@/components/section";
-import { lettre, liens } from "@/contenu/site";
-import { formaterDate, lireArticles } from "@/lib/flux";
-import { Button } from "@repo/ui/components/button";
-import { ArrowUpRight } from "lucide-react";
+import { GrilleArticles, PAR_PAGE } from "@/components/grille-articles";
+import { lettre } from "@/contenu/site";
+import { lireArticles } from "@/lib/flux";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -12,65 +9,28 @@ export const metadata: Metadata = {
   description: lettre.baseline,
 };
 
+/**
+ * La première page du blog.
+ *
+ * Elle vit à `/articles` et non à `/articles/page/1` : deux adresses pour la
+ * même liste feraient un doublon aux yeux de Google, et c'est exactement ce que
+ * la règle des canoniques du projet cherche à éviter.
+ *
+ * `TOUT` borne la lecture du flux. Substack n'en renvoie de toute façon qu'une
+ * cinquantaine, mais un nombre écrit ici évite qu'une évolution de leur côté
+ * fasse silencieusement gonfler le build.
+ */
+export const TOUT = 120;
+
 export default async function Articles() {
-  const articles = await lireArticles(24);
+  const articles = await lireArticles(TOUT);
+  const total = Math.max(1, Math.ceil(articles.length / PAR_PAGE));
 
   return (
-    <>
-      <section className="px-5 pt-32 pb-16 sm:pt-40 sm:pb-20">
-        <div className="mx-auto max-w-6xl text-center">
-          <h1 className="titre text-5xl text-balance text-foreground sm:text-6xl">
-            {lettre.nom}
-          </h1>
-          <p className="mt-5 text-lg text-muted-foreground">
-            {lettre.baseline}
-          </p>
-          <div className="mt-8 flex justify-center">
-            <BoutonScintillant href={liens.lettre}>
-              S&apos;abonner à la lettre
-              <ArrowUpRight className="size-4" />
-            </BoutonScintillant>
-          </div>
-        </div>
-      </section>
-
-      <Section>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {articles.map((article) => (
-            <a
-              key={article.lien}
-              href={article.lien}
-              target="_blank"
-              rel="noreferrer"
-              className="group flex flex-col overflow-hidden rounded-md border border-border bg-card transition-colors hover:border-ring"
-            >
-              {article.image ? (
-                // Une image de Substack, servie par leur CDN et de taille
-                // inconnue au build : `next/image` n'y gagnerait rien et
-                // exigerait de déclarer leur domaine.
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={article.image}
-                  alt=""
-                  loading="lazy"
-                  className="aspect-16/9 w-full object-cover"
-                />
-              ) : null}
-              <div className="flex flex-1 flex-col p-6">
-                <p className="text-sm text-muted-foreground">
-                  {formaterDate(article.date)}
-                </p>
-                <h2 className="mt-2 text-lg leading-snug font-semibold text-balance text-card-foreground">
-                  {article.titre}
-                </h2>
-                <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-muted-foreground">
-                  {article.chapeau}
-                </p>
-              </div>
-            </a>
-          ))}
-        </div>
-      </Section>
-    </>
+    <GrilleArticles
+      articles={articles.slice(0, PAR_PAGE)}
+      page={1}
+      total={total}
+    />
   );
 }

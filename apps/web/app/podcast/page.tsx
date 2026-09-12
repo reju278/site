@@ -1,4 +1,5 @@
 import { Section } from "@/components/section";
+import { EnTetePage } from "@/components/en-tete-page";
 import { podcast } from "@/contenu/site";
 import { formaterDate, lireEpisodes } from "@/lib/flux";
 import { ArrowUpRight } from "lucide-react";
@@ -14,31 +15,29 @@ export default async function Podcast() {
 
   return (
     <>
-      <section className="px-5 pt-32 pb-16 sm:pt-40 sm:pb-20">
-        <div className="mx-auto max-w-6xl text-center">
-          <h1 className="titre text-5xl text-balance text-foreground sm:text-6xl">
-            {podcast.nom}
-          </h1>
+      <EnTetePage>
+        <h1 className="titre text-5xl text-balance text-foreground sm:text-6xl">
+          {podcast.nom}
+        </h1>
 
-          {/* Les plateformes plutôt qu'un lecteur intégré : un podcast s'écoute
+        {/* Les plateformes plutôt qu'un lecteur intégré : un podcast s'écoute
               dans l'application où l'on est déjà abonné, pas dans un onglet de
               navigateur qu'on ferme en changeant de page. */}
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            {podcast.plateformes.map((plateforme) => (
-              <a
-                key={plateforme.nom}
-                href={plateforme.href}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex h-11 items-center gap-2 rounded-md border border-border bg-card px-5 text-sm font-semibold text-card-foreground transition-colors hover:bg-accent"
-              >
-                {plateforme.nom}
-                <ArrowUpRight className="size-4 opacity-50" />
-              </a>
-            ))}
-          </div>
+        <div className="mt-8 flex flex-wrap justify-center gap-3">
+          {podcast.plateformes.map((plateforme) => (
+            <a
+              key={plateforme.nom}
+              href={plateforme.href}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex h-11 items-center gap-2 rounded-md border border-border bg-card px-5 text-sm font-semibold text-card-foreground transition-colors hover:bg-accent"
+            >
+              {plateforme.nom}
+              <ArrowUpRight className="size-4 opacity-50" />
+            </a>
+          ))}
         </div>
-      </section>
+      </EnTetePage>
 
       <Section>
         {episodes.length === 0 ? (

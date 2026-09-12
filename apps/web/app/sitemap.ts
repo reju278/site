@@ -1,4 +1,7 @@
+import { TOUT } from "@/app/articles/page";
+import { PAR_PAGE, adressePage } from "@/components/grille-articles";
 import { SITE } from "@/contenu/site";
+import { lireArticles } from "@/lib/flux";
 import type { MetadataRoute } from "next";
 
 /**
@@ -11,14 +14,33 @@ import type { MetadataRoute } from "next";
  * Toute page publique nouvelle s'ajoute ici. C'est une liste écrite à la main
  * et non une lecture du dossier `app` : un fichier oublié se remarque, une
  * page indexée par erreur beaucoup moins.
+ *
+ * **Les pages du blog font exception à cette règle, et il le faut.** Leur
+ * nombre dépend du flux Substack : l'écrire à la main condamnerait le plan à
+ * être faux dès la publication suivante. Elles sont donc comptées, et la seule
+ * chose écrite ici est qu'elles existent.
+ *
+ * La première page du blog est `/articles`, pas `/articles/page/1` :
+ * `adressePage` le sait, et le plan ne peut donc pas inscrire de doublon.
  */
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const modifie = new Date();
+
+  const articles = await lireArticles(TOUT);
+  const pagesBlog = Math.max(1, Math.ceil(articles.length / PAR_PAGE));
+
+  /* À partir de la deuxième : la première est déjà dans la liste écrite. */
+  const suite = Array.from({ length: Math.max(0, pagesBlog - 1) }, (_, i) => ({
+    url: `${SITE}${adressePage(i + 2)}`,
+    lastModified: modifie,
+    priority: 0.5,
+  }));
 
   return [
     { url: SITE, lastModified: modifie, priority: 1 },
     { url: `${SITE}/resultats`, lastModified: modifie, priority: 0.8 },
     { url: `${SITE}/articles`, lastModified: modifie, priority: 0.7 },
     { url: `${SITE}/podcast`, lastModified: modifie, priority: 0.7 },
+    ...suite,
   ];
 }

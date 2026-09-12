@@ -65,6 +65,36 @@ export function avecTag(url: string): string {
   return url.includes("el=site") ? url : `${url}${separateur}el=site`;
 }
 
+/**
+ * Un lien quitte-t-il le site ?
+ *
+ * La question se posait jusqu'ici à la main : chaque entrée de menu portait un
+ * drapeau `externe`, et c'est lui qui décidait du `target="_blank"` et du
+ * `rel="noreferrer"`. Aucun n'avait été oublié, mais **un oubli ne se verrait
+ * pas** : le lien marcherait, il remplacerait simplement la page du site au
+ * lieu de s'ouvrir à côté, et personne ne le remarquerait avant de regarder ses
+ * statistiques de sortie.
+ *
+ * C'est exactement le raisonnement d'`avecTag` plus haut, et la même réponse :
+ * une fonction plutôt qu'une consigne. Les composants la préfèrent désormais au
+ * drapeau, qui ne sert plus qu'à forcer le cas contraire.
+ *
+ * Une adresse relative reste interne. Une absolue est comparée à `SITE` : un
+ * lien vers notre propre domaine écrit en absolu n'est pas un lien sortant, et
+ * l'ouvrir dans un onglet serait une petite trahison de plus.
+ */
+export function estExterne(href: string): boolean {
+  if (!/^(https?:)?\/\//i.test(href)) return false;
+
+  try {
+    return new URL(href, SITE).origin !== new URL(SITE).origin;
+  } catch {
+    /* Une adresse illisible n'est pas un lien sortant : c'est un bug, et le
+       traiter comme interne le laisse visible au lieu de l'ouvrir ailleurs. */
+    return false;
+  }
+}
+
 export const liens = {
   // Toujours l'hôte `www`. Le domaine nu redirige en 301 vers
   // `www.funnels.club` **en perdant la requête** : `funnels.club/appel?el=site`

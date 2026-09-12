@@ -3,6 +3,7 @@ import { TexteRoulant } from "@/components/texte-roulant";
 import {
   avertissements,
   colonnesPiedDePage,
+  estExterne,
   identite,
   legales,
   liens,
@@ -116,8 +117,16 @@ export function PiedDePage() {
                     <li key={entree.href}>
                       <Link
                         href={entree.href}
-                        target={entree.externe ? "_blank" : undefined}
-                        rel={entree.externe ? "noreferrer" : undefined}
+                        target={
+                          entree.externe || estExterne(entree.href)
+                            ? "_blank"
+                            : undefined
+                        }
+                        rel={
+                          entree.externe || estExterne(entree.href)
+                            ? "noreferrer"
+                            : undefined
+                        }
                         className="group/roule inline-block rounded-md text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                       >
                         <TexteRoulant>{entree.libelle}</TexteRoulant>

@@ -3,7 +3,7 @@
 import { BasculeTheme } from "@/components/bascule-theme";
 import { TexteRoulant } from "@/components/texte-roulant";
 import { Reseaux } from "@/components/reseaux";
-import { identite, liens, menus, navigation } from "@/contenu/site";
+import { estExterne, identite, liens, menus, navigation } from "@/contenu/site";
 import { Button } from "@repo/ui/components/button";
 import {
   NavigationMenu,
@@ -232,8 +232,16 @@ export function EnTete() {
                             <NavigationMenuLink asChild>
                               <a
                                 href={entree.href}
-                                target={entree.externe ? "_blank" : undefined}
-                                rel={entree.externe ? "noreferrer" : undefined}
+                                target={
+                                  entree.externe || estExterne(entree.href)
+                                    ? "_blank"
+                                    : undefined
+                                }
+                                rel={
+                                  entree.externe || estExterne(entree.href)
+                                    ? "noreferrer"
+                                    : undefined
+                                }
                                 className="flex flex-col gap-1 rounded-md p-3 transition-colors hover:bg-accent"
                               >
                                 <span className="flex items-center gap-1.5 text-sm font-semibold text-popover-foreground">
@@ -283,8 +291,16 @@ export function EnTete() {
                   <NavigationMenuLink asChild>
                     <Link
                       href={entree.href}
-                      target={entree.externe ? "_blank" : undefined}
-                      rel={entree.externe ? "noreferrer" : undefined}
+                      target={
+                        entree.externe || estExterne(entree.href)
+                          ? "_blank"
+                          : undefined
+                      }
+                      rel={
+                        entree.externe || estExterne(entree.href)
+                          ? "noreferrer"
+                          : undefined
+                      }
                       className={cn(classesEntree, "whitespace-nowrap")}
                     >
                       {entree.libelle}
@@ -365,8 +381,16 @@ export function EnTete() {
                       <a
                         key={entree.href}
                         href={entree.href}
-                        target={entree.externe ? "_blank" : undefined}
-                        rel={entree.externe ? "noreferrer" : undefined}
+                        target={
+                          entree.externe || estExterne(entree.href)
+                            ? "_blank"
+                            : undefined
+                        }
+                        rel={
+                          entree.externe || estExterne(entree.href)
+                            ? "noreferrer"
+                            : undefined
+                        }
                         onClick={() => setOuvert(false)}
                         className="flex h-10 items-center gap-1.5 rounded-md px-3 text-sm font-semibold text-foreground hover:bg-accent"
                       >
