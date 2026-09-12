@@ -201,7 +201,7 @@ export default function Accueil() {
                    cesse d'être une mention, elle devient le premier objet de
                    la page. Le corps descend d'un cran sur téléphone, où le
                    titre est lui-même plus court. */
-                className="flex items-center gap-2.5 rounded-full border border-white/10 bg-white/6 py-1 pr-3 pl-1 backdrop-blur-md"
+                className="flex items-center gap-2.5 rounded-full border border-white/10 bg-white/6 py-1.5 pr-4 pl-1.5 backdrop-blur-md"
               >
                 <span aria-hidden className="flex">
                   {pastilleHero.portraits.map((portrait, i) => (
@@ -223,12 +223,12 @@ export default function Accueil() {
                     <span
                       key={portrait.fichier}
                       className={cn(
-                        "block size-6 shrink-0 overflow-hidden rounded-full ring-2 ring-white/15",
+                        "block size-7 shrink-0 overflow-hidden rounded-full ring-2 ring-white/15",
                         // Le chevauchement se fait par une marge négative et
                         // non par un décalage : une marge retire de la place,
                         // donc la file se resserre vraiment au lieu de se
                         // superposer en laissant un trou à la fin.
-                        i > 0 && "-ml-2",
+                        i > 0 && "-ml-2.5",
                       )}
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}

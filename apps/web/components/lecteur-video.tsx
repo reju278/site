@@ -210,18 +210,26 @@ export function LecteurVideo({
                 `rounded-full` est une exception à la règle des 5 px, consignée
                 dans `AGENTS.md` avec les autres commandes rondes du site.
 
-                **Il est clair et non foncé**, sur décision de Rémy, et c'est ce
-                qui décide de la couleur du triangle. Un disque clair ne peut
-                pas porter un triangle blanc : c'est l'erreur de la référence,
-                invisible dès que l'image est lumineuse. Le triangle est donc en
-                `--bande-nuit`, le bleu nuit du site.
+                **Le disque est foncé et le triangle blanc**, et c'est la
+                réparation d'une panne, pas un changement de goût.
 
-                Le blanc est à 60 % et pas moins, et ce nombre est mesuré. Un
-                signe posé sur une photo se mesure au pire cas, et ici il y en a
-                **deux**, opposés : sur une image entièrement noire le disque
-                s'assombrit et le triangle y tient 5,2:1 ; sur une image
-                entièrement blanche, 14,9:1. À 50 %, le premier cas tombe à 3,8
-                et passe sous le seuil d'un texte.
+                Le triangle était peint en `var(--bande-nuit)`, un jeton qui
+                **n'existe plus** : il est parti avec la bande bleue qu'il
+                servait. Une référence `var()` sans valeur de repli ne tombe pas
+                en erreur, elle laisse la propriété à sa valeur héritée : le
+                remplissage retombait donc sur le noir par défaut et le contour
+                sur la couleur de texte courante, claire en thème sombre. Ce que
+                Rémy voyait, un triangle noir cerné d'un liseré blanc, n'avait
+                jamais été choisi par personne. **Un jeton retiré doit être
+                cherché partout où il est écrit**, sinon il laisse derrière lui
+                des couleurs que personne n'a décidées et que rien ne signale.
+
+                Le triangle est blanc dans les deux thèmes, sur décision de
+                Rémy, et un triangle blanc demande un fond foncé : le disque
+                repasse donc à 45 % de noir. Ce nombre est mesuré. Un signe posé
+                sur une photo se mesure au pire cas, image entièrement blanche
+                dessous : à 45 %, le blanc y tient 3,35:1 ; à 35 %, il tombe à
+                2,46 et disparaît sur un visage en pleine lumière.
 
                 **Pas de filet**, et pas de changement d'échelle au survol : les
                 deux dessinaient un bord au moment précis où le disque bouge, et
@@ -234,17 +242,22 @@ export function LecteurVideo({
                 contraste, un flou ne changeant pas la luminosité moyenne de ce
                 qu'il brouille : il s'ajoute à la densité du fond, il ne la
                 remplace pas. */}
-            <span className="flex size-20 items-center justify-center rounded-full bg-white/60 backdrop-blur-md transition-colors duration-300 group-hover:bg-primary sm:size-24">
+            <span className="flex size-20 items-center justify-center rounded-full bg-black/45 backdrop-blur-md transition-colors duration-300 group-hover:bg-primary sm:size-24">
               {/* Le triangle est décalé d'un cheveu : son centre optique n'est
                   pas son centre géométrique, et centré au pixel il paraît collé
                   à gauche.
 
-                  Au survol, le disque passe au bleu plein : le triangle passe
-                  donc au blanc, qui y tient 5,6:1, là où le bleu nuit sur le
-                  bleu du site ne vaudrait que 2,7:1. La couleur du signe suit
-                  celle de son fond, sinon le survol rendrait le bouton moins
-                  lisible qu'au repos. */}
-              <Play className="ml-[4px] size-8 fill-[var(--bande-nuit)] text-[var(--bande-nuit)] transition-colors duration-300 group-hover:fill-white group-hover:text-white sm:size-9" />
+                  **Le remplissage et le trait sont blancs tous les deux**, et
+                  c'est ce qui retire le liseré : les icônes Lucide sont des
+                  tracés, donc un remplissage d'une couleur et un contour d'une
+                  autre dessinent un cerne. Une seule couleur donne une forme
+                  pleine.
+
+                  Rien ne change au survol : le disque passe au bleu du site, où
+                  le blanc tient 5,6:1. La couleur du signe n'a donc pas à
+                  suivre celle de son fond, comme c'était le cas quand le
+                  triangle était sombre. */}
+              <Play className="ml-[4px] size-8 fill-white text-white sm:size-9" />
             </span>
           </span>
 
