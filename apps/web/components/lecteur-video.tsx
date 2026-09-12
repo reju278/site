@@ -81,8 +81,13 @@ export function LecteurVideo({
         // Fond noir et non `bg-card` : le rapport 16/9 du cadre et celui de la
         // vidéo ne tombent jamais au pixel près, et le cheveu qui reste
         // laisserait voir la couleur du thème tout autour de l'image.
-        "relative isolate aspect-16/9 overflow-hidden rounded-md bg-black",
-        className
+        // Le cadre reprend le rayon des jonctions pleine largeur et non les
+        // 5 px du reste du site. Il chevauche la lèvre arrondie qui sépare le
+        // hero de la page : deux rayons différents au même endroit se lisent
+        // comme une erreur d'assemblage. Le bouton et la pastille de durée,
+        // eux, restent à 5 px, ce sont des objets qu'on regarde de près.
+        "relative isolate aspect-16/9 overflow-hidden rounded-[var(--rayon-jonction)] bg-black",
+        className,
       )}
     >
       {lance ? (

@@ -19,6 +19,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@repo/ui/components/sheet";
+import { KineticText } from "@repo/ui/components/kinetic-text";
 import { cn } from "@repo/ui/lib/utils";
 import { ArrowUpRight, Menu } from "lucide-react";
 import Link from "next/link";
@@ -83,13 +84,12 @@ const CLASSES_ENTREE =
  * blanc sur un blanc à peine posé. C'est aussi ce qui rattache visuellement le
  * bouton au panneau, au lieu de les laisser flotter séparément.
  */
-const OUVERT = "data-[state=open]:bg-popover data-[state=open]:text-popover-foreground";
+const OUVERT =
+  "data-[state=open]:bg-popover data-[state=open]:text-popover-foreground";
 
-const CLASSES_ENTREE_SUR_IMAGE =
-  `text-white/80 hover:bg-white/15 hover:text-white focus:bg-white/15 ${OUVERT}`;
+const CLASSES_ENTREE_SUR_IMAGE = `text-white/80 hover:bg-white/15 hover:text-white focus:bg-white/15 ${OUVERT}`;
 
-const CLASSES_ENTREE_SUR_PAGE =
-  `text-muted-foreground hover:bg-accent hover:text-foreground focus:bg-accent ${OUVERT}`;
+const CLASSES_ENTREE_SUR_PAGE = `text-muted-foreground hover:bg-accent hover:text-foreground focus:bg-accent ${OUVERT}`;
 
 export function EnTete() {
   const [ouvert, setOuvert] = useState(false);
@@ -125,7 +125,7 @@ export function EnTete() {
 
     const observateur = new IntersectionObserver(
       ([entree]) => setSurImage(entree?.isIntersecting ?? false),
-      { rootMargin: `-${HAUTEUR_ENTETE}px 0px 0px 0px`, threshold: 0 }
+      { rootMargin: `-${HAUTEUR_ENTETE}px 0px 0px 0px`, threshold: 0 },
     );
     observateur.observe(bande);
     return () => observateur.disconnect();
@@ -133,7 +133,7 @@ export function EnTete() {
 
   const capsule = cn(
     CAPSULE_BASE,
-    surImage ? CAPSULE_SUR_IMAGE : CAPSULE_SUR_PAGE
+    surImage ? CAPSULE_SUR_IMAGE : CAPSULE_SUR_PAGE,
   );
   // Ce nom ne doit surtout pas être `entree` : c'est celui des variables de
   // boucle plus bas, et l'avoir réutilisé ici faisait passer l'objet de
@@ -142,7 +142,7 @@ export function EnTete() {
   // registre, en encre sombre sur l'image.
   const classesEntree = cn(
     CLASSES_ENTREE,
-    surImage ? CLASSES_ENTREE_SUR_IMAGE : CLASSES_ENTREE_SUR_PAGE
+    surImage ? CLASSES_ENTREE_SUR_IMAGE : CLASSES_ENTREE_SUR_PAGE,
   );
 
   return (
@@ -153,16 +153,36 @@ export function EnTete() {
           <div className="flex h-9 items-center justify-center px-2">
             <Link
               href="/"
-              // Le logo quitte le serif pour la sans en gras. Instrument
-              // Serif n'existe qu'en 400 : un gras y serait fabriqué par le
-              // navigateur, uniformément, ce qui écraserait le contraste entre
-              // pleins et déliés. Nunito Sans a un vrai 700.
+              // Le logo est le mot « expertise » du hero, à l'identique : même
+              // serif en italique, même effet au survol. `titre` porte la
+              // fonte, comme le `h1` le fait là-bas ; le reste vient de
+              // `KineticText`, avec la même variable.
+              //
+              // Instrument Serif n'existe qu'en 400, et `titre-fort` pose
+              // `font-synthesis: none` : le `font-[900]` que le composant
+              // applique au survol ne fabrique donc aucun faux gras. Ce qui se
+              // voit, ici comme dans le titre, c'est le filet de contour et
+              // l'écartement des lettres.
               className={cn(
-                "text-base font-bold tracking-tight whitespace-nowrap transition-colors duration-300",
-                surImage ? "text-white" : "text-foreground"
+                "titre text-lg transition-colors duration-300",
+                surImage ? "text-white" : "text-foreground",
               )}
             >
-              {identite.nom}
+              <KineticText
+                as="span"
+                text={identite.nom}
+                // Les deux mêmes correctifs que dans le hero : l'écartement au
+                // survol divisé par quarante, sans quoi le nom pousse la
+                // capsule, et `tracking-tight` pour rattraper le crénage que
+                // le découpage lettre à lettre supprime.
+                //
+                // `flex-nowrap` en plus : le nom fait deux mots, et le
+                // composant enveloppe par défaut.
+                style={
+                  { "--hover-padding": "calc(1em / 40)" } as React.CSSProperties
+                }
+                className="titre-fort inline-flex flex-nowrap tracking-tight"
+              />
             </Link>
           </div>
 
@@ -171,7 +191,7 @@ export function EnTete() {
             aria-hidden
             className={cn(
               "hidden h-5 w-px transition-colors duration-300 md:block",
-              surImage ? "bg-white/15" : "bg-border"
+              surImage ? "bg-white/15" : "bg-border",
             )}
           />
 
@@ -285,7 +305,7 @@ export function EnTete() {
               "hidden h-9 items-center rounded-md px-3 text-sm font-semibold whitespace-nowrap transition-colors duration-300 sm:inline-flex",
               surImage
                 ? "text-white/80 hover:bg-white/10 hover:text-white"
-                : "text-muted-foreground hover:bg-accent hover:text-foreground"
+                : "text-muted-foreground hover:bg-accent hover:text-foreground",
             )}
           >
             Connexion
@@ -301,7 +321,7 @@ export function EnTete() {
               // se distinguait pas de la capsule qui le porte.
               surImage
                 ? "bg-white/20 text-white ring-1 ring-white/45 ring-inset hover:bg-white/30"
-                : "bg-primary text-primary-foreground hover:bg-primary/90"
+                : "bg-primary text-primary-foreground hover:bg-primary/90",
             )}
           >
             Découvrir
@@ -316,7 +336,7 @@ export function EnTete() {
                   "flex size-9 items-center justify-center rounded-md transition-colors duration-300 md:hidden",
                   surImage
                     ? "text-white hover:bg-white/10"
-                    : "text-foreground hover:bg-accent"
+                    : "text-foreground hover:bg-accent",
                 )}
               >
                 <Menu className="size-4" />

@@ -43,11 +43,15 @@ export function BoutonScintillant({
         } as CSSProperties
       }
       className={cn(
-        "group relative z-0 inline-flex h-12 cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-md px-6 text-sm font-semibold whitespace-nowrap",
+        // Plus haut, plus large, et le texte au corps courant plutôt qu'en
+        // petit : c'est l'appel principal du site, et il était au même corps
+        // que les liens secondaires. 56 px de haut, bien au-delà des 40 px de
+        // cible tactile que demande le projet.
+        "group relative z-0 inline-flex h-14 cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-md px-8 text-base font-semibold whitespace-nowrap",
         "bg-primary text-primary-foreground",
         "transform-gpu transition-transform duration-300 ease-out hover:scale-[1.03] active:scale-100 active:translate-y-px",
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-        className
+        className,
       )}
     >
       {/* Le cône lumineux qui tourne, sous tout le reste. */}

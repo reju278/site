@@ -25,6 +25,22 @@ export type AEcrire = null;
  */
 export const SITE = "https://remy-jupille.com";
 
+/**
+ * Le conteneur Google Tag Manager.
+ *
+ * Un identifiant de conteneur n'est pas un secret : il part dans le HTML de
+ * chaque page, et n'importe qui peut le lire. Il vit donc ici, avec le reste de
+ * ce qui décrit le site, plutôt que dans une variable d'environnement qui
+ * donnerait l'illusion de le protéger et ferait échouer le build de qui clone
+ * le dépôt sans elle.
+ *
+ * Ce que le conteneur charge ensuite se règle dans l'interface de GTM, pas
+ * dans ce dépôt. C'est tout l'intérêt, et c'est aussi le piège : le jour où une
+ * balise y dépose un cookie qui n'est pas strictement nécessaire, c'est le
+ * bandeau de consentement qui manque au site, pas une ligne de code ici.
+ */
+export const GTM = "GTM-WHF5LQM";
+
 export const identite = {
   nom: "Rémy Jupille",
   societe: "Jupille Group Ltd",
@@ -50,12 +66,19 @@ export function avecTag(url: string): string {
 }
 
 export const liens = {
-  decouvrir: avecTag("https://funnels.club"),
+  // Toujours l'hôte `www`. Le domaine nu redirige en 301 vers
+  // `www.funnels.club` **en perdant la requête** : `funnels.club/appel?el=site`
+  // arrive sur `www.funnels.club/appel`, sans balise. C'est la panne
+  // silencieuse que décrit `avecTag` : le lien marche, la page s'affiche, et la
+  // vente est attribuée ailleurs. Sur `www`, la réponse est un 200 direct et la
+  // balise survit.
+  decouvrir: avecTag("https://www.funnels.club/"),
   funnelsClub: avecTag("https://www.funnels.club/direct"),
-  appel: avecTag("https://funnels.club/appel"),
-  consulting: avecTag(
-    "https://calendly.com/funnels-club/appel-decouverte-clone-2"
-  ),
+  appel: avecTag("https://www.funnels.club/appel"),
+  // `appel-decouverte-clone-2` rendait un 404 : l'événement a été supprimé côté
+  // Calendly. Celui-ci est « Candidature Consulting », le seul événement actif
+  // du compte qui corresponde à l'offre.
+  consulting: avecTag("https://calendly.com/funnels-club/consulting"),
   lettre: avecTag("https://lettre.funnels.club"),
   espaceMembre: avecTag("https://groupe.funnels.club"),
   livre: avecTag("https://www.digital-selfmade.com"),
@@ -150,7 +173,7 @@ export const menus: readonly {
     libelle: "Programmes",
     entrees: [
       {
-        libelle: "Accompagnement Funnels Club",
+        libelle: "Funnels Club",
         href: liens.appel,
         texte: "Jusqu'à plus de 6 chiffres par an avec une offre digitale",
         externe: true,
@@ -207,10 +230,39 @@ export const menus: readonly {
  * Une phrase par offre, choisie dans leur page et non résumée. Résumer, c'est
  * réécrire, et réécrire une promesse commerciale n'appartient pas à l'agent.
  */
+/**
+ * Le titre de la section des offres, écrit par Rémy, **en deux lignes**.
+ *
+ * La coupure est posée à la main et non laissée au moteur de rendu. Sept
+ * largeurs ont été mesurées avec `text-wrap: balance` : aucune ne produit cette
+ * césure. Le moteur remplit la première ligne et laisse tomber le reste, ce qui
+ * donnait « Nos deux accompagnements / personnalisés pour / vous accompagner »,
+ * trois lignes dont la première écrase les deux autres.
+ *
+ * C'est donc du contenu et pas de la mise en forme : c'est Rémy qui a décidé
+ * où la phrase se coupe. Corriger le texte, c'est corriger ces deux lignes.
+ */
+/** Le titre de la bande des résultats. Écrit par Rémy. */
+export const titreResultats = "Résultats de nos clients";
+
+export const titreOffres = [
+  "Nos deux accompagnements",
+  "personnalisés pour vous accompagner",
+] as const;
+
 export const offres = [
   {
     id: "funnels-club",
-    nom: "Accompagnement Funnels Club",
+    nom: "Funnels Club",
+    /* Le surtitre, au-dessus du nom. Les mots sont ceux de Rémy.
+
+       Le portrait est l'avatar de sa chaîne YouTube, repris depuis la chaîne
+       elle-même et servi par nous : 160 px de côté pour une pastille de 28,
+       ce qui reste net jusqu'aux écrans à trois fois la densité, et 2,5 Ko.
+       Le servir depuis `yt3.googleusercontent.com` aurait fait dépendre une
+       image du site d'un domaine de Google, et prévenu Google à chaque
+       visite. */
+    surtitre: { texte: "Animé par Rémy", portrait: "/remy.webp" },
     texte:
       "Nous accompagnons exclusivement des business de formation, de coaching et de prestation de service à atteindre plus de 6 chiffres par an avec une offre digitale.",
     action: "Réservez votre appel découverte",
@@ -219,12 +271,124 @@ export const offres = [
   {
     id: "consulting",
     nom: "Consulting privé avec Rémy",
+    surtitre: { texte: "Animé par Rémy", portrait: "/remy.webp" },
     texte:
       "C'est l'accompagnement le plus personnalisé que Rémy propose, où vous avez accès à lui en direct dès que vous en avez besoin et où vous pouvez réserver des visioconférences en illimité du lundi au samedi.",
     action: "Postuler pour le consulting privé",
     href: liens.consulting,
   },
 ] as const;
+
+/**
+ * Les piliers de chaque offre, pour la section en accordéon de l'accueil.
+ *
+ * **Tout le texte vient de Rémy.** Les quatre piliers de Funnels Club sont
+ * repris de la transcription de sa vidéo de présentation, au mot près : ce sont
+ * les quatre points qu'il énumère lui-même quand il répond à « comment on
+ * accompagne les business avec qui on travaille ». Les titres sont ses propres
+ * mots, pris dans la phrase qu'ils coiffent.
+ *
+ * **Ce que l'agent a fait, et qu'il faut relire :** couper. La transcription
+ * est de la parole, donc sans ponctuation ni phrases nettes. Les passages ont
+ * été bornés à des phrases complètes et les répétitions d'oral retirées. Rien
+ * n'a été reformulé, aucun mot n'a été ajouté, mais le choix de l'endroit où
+ * couper est un choix, et il se relit.
+ *
+ * Le consulting n'a pas de piliers : Rémy n'a pas encore fourni sa matière. La
+ * liste est vide, et la section affiche un emplacement plutôt que d'inventer
+ * quatre lignes plausibles.
+ */
+/**
+ * Le texte de la maquette de l'espace membre.
+ *
+ * **Tout vient des captures de l'espace membre, au mot près :** les entrées de
+ * navigation, les noms de modules, les libellés de carte et la phrase de
+ * présentation. Rien n'est inventé, et rien ne le sera : une maquette qui
+ * montre un produit doit montrer *ce* produit.
+ *
+ * **Ce qui a été volontairement retiré**, et qu'il ne faut pas réintroduire :
+ *
+ * - Les noms des membres et le contenu de leurs publications. Les captures en
+ *   montrent de vrais, et les afficher sur une page publique exposerait des
+ *   personnes qui n'ont rien demandé.
+ * - Le nombre d'étudiants par module, « 430 étudiants » dans les captures. Le
+ *   chiffre est vrai aujourd'hui et faux le mois prochain, et sur un site de
+ *   formation un chiffre affiché est une allégation commerciale. S'il doit
+ *   revenir, c'est une décision de Rémy, pas une reprise de capture.
+ */
+export const maquette = {
+  nom: "Funnels Club",
+  navigation: ["Communauté", "Formation", "Coachings", "Classement"],
+  rubriques: [
+    { titre: "Communauté", entrees: ["Groupe", "Histoires"] },
+    {
+      titre: "Apprentissage",
+      entrees: [
+        "Modèle",
+        "État d'esprit",
+        "Funnel Alchimie",
+        "Social Architecte",
+        "Marketing Genesis",
+        "Closing Suprématie",
+      ],
+    },
+    { titre: "Coachings", entrees: ["Rediffusion", "Règles", "Calendrier"] },
+  ],
+  presentation:
+    "Développons un business de formation, coaching ou consulting dont vous serez fier, qui aide vraiment vos clients et vous permet de bien vivre de votre activité.",
+  action: "Commencez-ici",
+  modules: [
+    "Modèle",
+    "État d'esprit",
+    "Funnel Alchimie",
+    "Marketing Genesis",
+    "Social Architecte",
+    "Closing Suprématie",
+  ],
+  etiquette: "Espace secret",
+  categorie: "Apprentissage",
+} as const;
+
+export type Pilier = {
+  id: string;
+  titre: string;
+  texte: string;
+  /** Deux fichiers, un par largeur. Absent tant que l'image n'existe pas. */
+  visuel?: { large: string; mobile: string; alt: string };
+};
+
+export const piliers: Record<string, readonly Pilier[]> = {
+  "funnels-club": [
+    {
+      id: "niche",
+      titre: "Valider votre niche et votre positionnement",
+      texte:
+        "On va valider votre niche et votre positionnement afin de vous distinguer de la concurrence et d'attirer vos clients de rêve à vous comme un aimant. D'expérience, c'est sur ce point-là que la plupart des business qu'on a accompagnés ont les plus grosses difficultés.",
+    },
+    {
+      id: "offre",
+      titre: "Créer votre offre digitale",
+      texte:
+        "Soit vous partez de zéro et vous n'en avez pas, dans ce cas-là on va vous aider à la créer de A à Z, soit vous avez déjà une offre digitale et bien souvent on va vous permettre de l'adapter, de l'améliorer afin de vraiment aider vos clients. Vous n'aurez besoin que de deux à dix clients par mois pour atteindre dix mille euros par mois.",
+    },
+    {
+      id: "tunnel",
+      titre: "Mettre en place le parfait tunnel de vente",
+      texte:
+        "On va vous aider à mettre en place et adapter à votre business, votre niche, vos clients, le parfait tunnel de vente, pour qu'il vous génère des rendez-vous ultra qualifiés dans votre agenda. Et quand je dis qualifiés, c'est des personnes qui sont déjà convaincues qu'elles ont besoin de votre aide.",
+    },
+    {
+      id: "clients",
+      titre: "Attirer vos clients de rêve",
+      texte:
+        "On va attirer l'attention de ces clients de rêve au travers notamment de la publicité en ligne ou de la création de contenu. Et on va le faire de la façon la plus profitable et la plus automatisée qui soit.",
+    },
+  ],
+
+  // Vide à dessein : la matière n'existe pas encore. Voir le commentaire
+  // ci-dessus.
+  consulting: [],
+};
 
 /**
  * La chaîne YouTube.
@@ -353,9 +517,24 @@ export const temoignages: readonly {
   resultat?: string;
   secondes: number;
 }[] = [
-  { id: "j0vbkt570k", nom: "Christian Joyce", resultat: "De 0 € à 160 K€ en 5 mois", secondes: 988 },
-  { id: "rgio4y4o8f", nom: "Roland Buffet", resultat: "De 0 € à 109 778 € en 6 mois", secondes: 715 },
-  { id: "2vtsinplyx", nom: "Augustin Passy", resultat: "Trois fois son chiffre d'affaires", secondes: 485 },
+  {
+    id: "j0vbkt570k",
+    nom: "Christian Joyce",
+    resultat: "De 0 € à 160 K€ en 5 mois",
+    secondes: 988,
+  },
+  {
+    id: "rgio4y4o8f",
+    nom: "Roland Buffet",
+    resultat: "De 0 € à 109 778 € en 6 mois",
+    secondes: 715,
+  },
+  {
+    id: "2vtsinplyx",
+    nom: "Augustin Passy",
+    resultat: "Trois fois son chiffre d'affaires",
+    secondes: 485,
+  },
   { id: "h24icz3l8d", nom: "Rayan Arifa", secondes: 759 },
   { id: "2xege6bt0u", nom: "Yannick et Sylvie", secondes: 1514 },
   { id: "vtfaka0m80", nom: "Olga", secondes: 1365 },

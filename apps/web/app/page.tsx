@@ -1,12 +1,23 @@
+import { BandeDegradee } from "@/components/bande-degradee";
 import { BoutonScintillant } from "@/components/bouton-scintillant";
+import { CarrouselTemoignages } from "@/components/carrousel-temoignages";
 import { LecteurVideo } from "@/components/lecteur-video";
+import { LogoFunnels } from "@/components/logo-funnels";
+import { SurtitreOffre } from "@/components/surtitre-offre";
 import { KineticText } from "@repo/ui/components/kinetic-text";
 import { ParticulesHero } from "@/components/particules-hero";
-import { Emplacement, Section } from "@/components/section";
-import { SITE, identite, liens, offres, sections, video } from "@/contenu/site";
-import { Button } from "@repo/ui/components/button";
+import { Emplacement, Section, TitreSection } from "@/components/section";
+import {
+  SITE,
+  identite,
+  liens,
+  offres,
+  sections,
+  titreOffres,
+  titreResultats,
+  video,
+} from "@/contenu/site";
 import { ArrowRight } from "lucide-react";
-import Link from "next/link";
 
 /**
  * Les données structurées de la page d'accueil.
@@ -121,13 +132,21 @@ export default function Accueil() {
 
           {/* Le raccord entre l'image et la page.
 
-              Sans lui, l'image s'arrête net sur une ligne horizontale. Le
-              dégradé va du transparent vers `--background`, donc vers le beige
-              en thème clair et vers le brun sombre en thème sombre : un seul
-              élément couvre les deux, sans qu'aucune couleur ne soit écrite. */}
+              C'était un dégradé, qui fondait l'image vers la couleur de page.
+              C'est maintenant une **lèvre** : un bandeau de la couleur de la
+              page, posé sur le bas de l'image, aux deux angles hauts arrondis.
+              La page ne s'efface plus dans l'image, elle monte par-dessus, et
+              la vidéo chevauche la limite.
+
+              Le bandeau doit être plus haut que son rayon, sinon les deux
+              angles se rejoignent et l'arrondi se coupe au milieu. `h-20` tient
+              les 2,5 rem de `sm` avec de la marge.
+
+              `bg-background` et rien d'autre : aucune couleur n'est écrite, la
+              lèvre suit le thème. */}
           <div
             aria-hidden
-            className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-background sm:h-56"
+            className="absolute inset-x-0 bottom-0 h-20 rounded-t-[var(--rayon-jonction)] bg-background"
           />
         </div>
 
@@ -156,7 +175,12 @@ export default function Accueil() {
                 style={
                   { "--hover-padding": "calc(1em / 40)" } as React.CSSProperties
                 }
-                className="titre-fort inline-flex tracking-tight"
+                // `font-[700]` n'est pas décoratif : `KineticText` pose `font-[300]`
+                // sur son conteneur, et `cn()` ne le voit pas comme un conflit
+                // puisque `titre-fort` n'est pas une classe de graisse. Sans
+                // lui, le mot accentué rendait en 300 au milieu d'un titre en
+                // 700, donc visiblement plus maigre que ce qui l'entoure.
+                className="titre-fort inline-flex font-[600] tracking-tight"
               />{" "}
               en ligne.
             </h1>
@@ -165,7 +189,10 @@ export default function Accueil() {
               {identite.resume}
             </p>
 
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            {/* L'appel à l'action, sous le sous-titre et au-dessus de la
+                vidéo. Il est donc sur l'image, où le voile assombri garantit
+                déjà le contraste, et non sur la couleur de page. */}
+            <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
               <BoutonScintillant href={liens.funnelsClub}>
                 Découvrir Funnels Club
               </BoutonScintillant>
@@ -190,23 +217,84 @@ export default function Accueil() {
       </section>
 
       {/* ---------------------------------------------------------------
-          Les deux programmes. Texte repris de remy-jupille.com, au mot près.
+          Les deux programmes, côte à côte.
+
+          Une carte par offre, et rien de plus : le design de cette section
+          n'est pas arrêté, et une carte sobre se remplace sans rien casser.
+
+          `h-full` sur la carte et `mt-auto` sur l'action : c'est ce couple qui
+          aligne les boutons entre eux. Sans lui, chaque bouton suit son propre
+          texte, et deux descriptions de longueur différente produisent deux
+          boutons décalés de dix pixels, ce que l'œil voit immédiatement.
       --------------------------------------------------------------- */}
       <Section>
+        {/* Le titre de la section, centré et coupé à la main.
+
+            Chaque ligne est un `block` : la césure est donc garantie, à toutes
+            les largeurs, au lieu de dépendre de ce que le moteur veut bien
+            produire. Voir le commentaire de `titreOffres` pour la raison.
+
+            Pas de `text-balance` : il n'a plus rien à équilibrer puisque les
+            lignes sont posées. `text-pretty` reste utile sur l'écran étroit,
+            où la seconde ligne se recoupe d'elle-même : il empêche qu'un mot
+            s'y retrouve seul. */}
+        <TitreSection
+          titre={titreOffres.map((ligne) => (
+            <span key={ligne} className="block text-pretty">
+              {ligne}
+            </span>
+          ))}
+          className="mx-auto mb-10 max-w-4xl text-center sm:mb-12"
+        />
+
         <div className="grid gap-4 lg:grid-cols-2">
           {offres.map((offre) => (
-            // `h-full` sur la carte et `mt-auto` sur l'action : c'est ce
-            // couple qui aligne les boutons entre eux. Sans lui, chaque bouton
-            // suit son propre texte, et deux descriptions de longueur
-            // différente produisent deux boutons décalés.
             <article
               key={offre.id}
               className="flex h-full flex-col rounded-md border border-border bg-card p-8"
             >
-              <h2 className="titre text-3xl text-card-foreground">
+              {"surtitre" in offre && offre.surtitre && (
+                <SurtitreOffre
+                  texte={offre.surtitre.texte}
+                  portrait={offre.surtitre.portrait}
+                />
+              )}
+
+              {/* La marque n'accompagne que l'offre qui en a une. Le
+                  consulting n'est pas un produit distinct, c'est Rémy en
+                  direct : lui coller une tuile inventée serait fabriquer une
+                  identité qui n'existe pas. */}
+              {/* La marque est **dans** le titre, et dimensionnée en `em`.
+
+                  C'est ce qui la rend proportionnelle : `em` se résout sur la
+                  taille du texte qui la porte, donc la tuile suit le titre à
+                  chaque point de rupture au lieu d'être figée à une valeur qui
+                  ne vaut qu'à une seule largeur d'écran.
+
+                  Elle est `aria-hidden`, donc le nom accessible du titre reste
+                  « Funnels Club » et non « image, Funnels Club ».
+
+                  Le consulting n'en a pas : ce n'est pas un produit distinct,
+                  c'est Rémy en direct, et lui inventer une tuile fabriquerait
+                  une identité qui n'existe pas. */}
+              {/* `h3` et non `h2` : le titre de la section occupe désormais
+                  le `h2`, et deux niveaux ne peuvent pas cohabiter sur le même
+                  rang sans casser le plan que les robots lisent. */}
+              <h3 className="titre text-3xl text-balance text-card-foreground">
+                {offre.id === "funnels-club" && (
+                  <LogoFunnels // L'alignement passe par `vertical-align` et non par une
+                    // translation. Une translation déplace le dessin sans
+                    // rien dire à la ligne, donc le réglage se refait à
+                    // chaque changement de corps. `vertical-align` s'exprime
+                    // en `em` par rapport à la ligne de base : la tuile est
+                    // centrée sur la hauteur de capitale et y reste à
+                    // n'importe quelle taille.
+                    className="mr-[0.28em] inline-grid size-[0.95em] align-[-0.13em]"
+                  />
+                )}
                 {offre.nom}
-              </h2>
-              <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+              </h3>
+              <p className="mt-3 text-base leading-relaxed text-pretty text-muted-foreground">
                 {offre.texte}
               </p>
 
@@ -224,19 +312,34 @@ export default function Accueil() {
       {/* ---------------------------------------------------------------
           Ce qui attend votre texte.
       --------------------------------------------------------------- */}
-      <Section>
-        <div className="grid gap-4 lg:grid-cols-2">
-          <Emplacement attendu={sections.preuve.attendu} />
-          <Emplacement attendu={sections.aPropos.attendu} />
-        </div>
-        <Emplacement attendu={sections.appel.attendu} className="mt-4" />
+      {/* La bande des résultats.
 
-        <Button asChild variant="ghost" className="mt-8 font-semibold">
-          <Link href="/resultats">
-            Page Résultats
-            <ArrowRight className="size-4" />
-          </Link>
-        </Button>
+          Elle ne porte plus que son titre et le lien vers la page. Les
+          emplacements qui s'y trouvaient sont redescendus sous la bande : ils
+          n'ont rien à voir avec les résultats, et un cadre pointillé posé sur
+          une texture se lit comme un défaut d'affichage, pas comme une
+          réserve. */}
+      <BandeDegradee>
+        <div className="mx-auto max-w-6xl px-5 text-center">
+          <h2 className="titre mx-auto max-w-3xl text-4xl text-balance text-white sm:text-5xl">
+            {titreResultats}
+          </h2>
+
+          {/* Le carrousel déborde volontairement des marges du conteneur pour
+              que les cartes voisines soient coupées par le bord de l'écran et
+              non par une marge : c'est ce débordement qui dit qu'il y en a
+              d'autres. `-mx-5` annule le `px-5` du conteneur, et les cartes
+              retrouvent leur gouttière par le `pl-4` de chaque élément. */}
+          <div className="mt-12 -mx-5 px-5 text-left sm:mt-14">
+            <CarrouselTemoignages />
+          </div>
+        </div>
+      </BandeDegradee>
+
+      {/* Ce qui attend encore le texte de Rémy, sur le fond de page. */}
+      <Section>
+        <Emplacement attendu={sections.aPropos.attendu} />
+        <Emplacement attendu={sections.appel.attendu} className="mt-4" />
       </Section>
     </>
   );
