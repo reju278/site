@@ -98,8 +98,20 @@ export function resume(article: Article): string {
   return `${coupe.slice(0, coupe.lastIndexOf(" "))}…`;
 }
 
-/** Une heure. Au-delà, la page est reconstruite à la prochaine visite. */
-const FRAICHEUR = 3600;
+/**
+ * Dix minutes. Au-delà, la page est reconstruite à la prochaine visite.
+ *
+ * C'était une heure. Rémy veut qu'un article publié apparaisse **dès** que le
+ * flux le porte, et une heure est le délai qu'on attend le moins bien : c'est
+ * aussi la fenêtre pendant laquelle l'adresse d'un article tout neuf peut
+ * encore rendre un 404, faute d'être dans le flux en cache.
+ *
+ * Dix minutes coûtent six relectures par heure d'un flux de 458 Ko, mis en
+ * cache par Next puisqu'il tient sous la limite de deux mégaoctets. Le flux du
+ * podcast, lui, la dépasse et n'est pas mis en cache : c'est la différence à
+ * garder en tête avant de baisser ce nombre davantage.
+ */
+const FRAICHEUR = 600;
 
 /**
  * Le contenu d'une balise, `<![CDATA[…]]>` retiré.

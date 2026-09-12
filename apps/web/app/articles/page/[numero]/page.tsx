@@ -13,10 +13,16 @@ import { notFound } from "next/navigation";
  *
  * **Les pages sont construites au build**, par `generateStaticParams` : elles
  * sont donc servies en statique par le CDN comme le reste du site, et se
- * rafraîchissent avec le flux. `dynamicParams` à `false` fait rendre un 404 sur
- * un numéro qui n'existe pas, plutôt qu'une page vide construite à la demande.
+ * rafraîchissent avec le flux.
+ *
+ * **`dynamicParams` est à `true` pour la même raison que sur la page d'un
+ * article** : `generateStaticParams` fige la liste au build. Vingt articles et
+ * neuf par page font trois pages ; le jour où il y en aurait davantage, une
+ * quatrième page rendrait un 404 alors que la pagination y renverrait. À
+ * `true`, elle se construit à la demande, et un numéro qui dépasse le compte
+ * réel passe quand même par le `notFound()` plus bas.
  */
-export const dynamicParams = false;
+export const dynamicParams = true;
 
 type Params = { params: Promise<{ numero: string }> };
 

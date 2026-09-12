@@ -37,10 +37,30 @@ import { notFound } from "next/navigation";
  * un lecteur, et accessoirement à un robot, d'où vient le texte.
  */
 
-export const revalidate = 3600;
+/* Aligné sur `FRAICHEUR` dans `lib/flux.ts` : la page et le flux qu'elle lit
+   n'ont aucune raison de vieillir à des rythmes différents. */
+export const revalidate = 600;
 
-/** `dynamicParams` à `false` : un slug inconnu rend un 404, pas une page vide. */
-export const dynamicParams = false;
+/**
+ * **`true`, et c'est indispensable ici.**
+ *
+ * `generateStaticParams` ne s'exécute qu'au build : elle fige la liste des
+ * adresses connues au moment du déploiement. À `false`, tout ce qui n'y figure
+ * pas rend un 404 — donc **chaque nouvel article publié sur Substack aurait une
+ * carte sur `/articles`, qui rafraîchit toutes les heures, et une page qui
+ * n'existe pas**, jusqu'au prochain déploiement. Le défaut est silencieux : le
+ * build passe, la liste se met à jour, et seul un visiteur qui clique le
+ * découvre.
+ *
+ * À `true`, une adresse inconnue est construite à la demande puis mise en
+ * cache. Un slug qui ne correspond à aucun article du flux passe quand même par
+ * `notFound()`, donc on ne gagne pas de page vide au passage.
+ *
+ * Le seul reste est une fenêtre : un article publié à l'instant peut rendre un
+ * 404 tant que le flux en cache n'a pas expiré, au plus une heure. C'est le
+ * même délai que la liste, et il se réduit en baissant `revalidate`.
+ */
+export const dynamicParams = true;
 
 type Params = { params: Promise<{ article: string }> };
 

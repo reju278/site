@@ -1106,6 +1106,22 @@ chez Substack**, en y déclarant notre adresse comme canonique ou en cessant d'y
 publier. C'est une décision de Rémy, pas de l'agent, et la mention de source en
 bas de chaque article existe pour cette raison.
 
+**Un article publié apparaît tout seul, et `dynamicParams` est ce qui le
+permet.** `generateStaticParams` ne s'exécute qu'au build : elle fige la liste
+des adresses connues au moment du déploiement. À `false`, un article publié
+après coup aurait **une carte sur `/articles`, qui rafraîchit toute seule, et une
+page qui rend 404** jusqu'au prochain déploiement. Le défaut est silencieux : le
+build passe, la liste se met à jour, et seul un visiteur qui clique le découvre.
+
+Il a été vérifié plutôt que supposé : en limitant `generateStaticParams` à trois
+articles puis en construisant, les articles hors liste rendent 200 avec leur
+texte entier, et un slug inventé rend toujours 404. La même règle vaut pour les
+pages de pagination.
+
+Le délai est de **dix minutes**, dans `FRAICHEUR`. C'est aussi la fenêtre
+pendant laquelle l'adresse d'un article tout neuf peut encore rendre un 404,
+faute d'être dans le flux en cache.
+
 **Le blog n'affichera jamais que les vingt derniers articles**, parce que c'est
 ce que le flux Substack expose. Le vingt et unième publié fait disparaître le
 plus ancien, page comprise.
