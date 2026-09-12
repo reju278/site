@@ -1,14 +1,14 @@
 import { AppelFormation } from "@/components/appel-formation";
 import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { AppelOffres } from "@/components/appel-offres";
-import { HAUTEUR_ENTETE } from "@/components/en-tete";
+import { HAUTEUR_ENTETE } from "@/lib/entete";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { Section } from "@/components/section";
 import { TexteLie } from "@/components/texte-lie";
 import { avis } from "@/contenu/avis";
 import { SITE, liens, temoignages } from "@/contenu/site";
 import type { Metadata } from "next";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ChevronRight } from "lucide-react";
 import { notFound } from "next/navigation";
 
 /**
@@ -234,7 +234,7 @@ export default async function PageAvis({
         <div className="relative z-10 mt-16 rounded-t-[var(--rayon-jonction)] border-t border-border bg-background sm:mt-20">
 
 
-      <Section className="[&>div]:pt-0">
+      <Section className="[&>div]:pt-14 sm:[&>div]:pt-20">
         {/* L'article.
 
             `max-w-3xl` et non la mesure des blocs : une ligne de texte courant
@@ -289,6 +289,43 @@ export default async function PageAvis({
               ) : null}
             </section>
           ))}
+          {/* La transcription, repliée sous l'article.
+
+              `details` et `summary` natifs : aucun JavaScript, le texte est dans
+              le document dès le premier octet, et le pli s'ouvre au clavier
+              comme à la souris. Un accordéon écrit à la main demanderait un état
+              React et retirerait le contenu du DOM tant qu'il est fermé, ce qui
+              est exactement l'inverse de ce qu'on veut ici.
+
+              Un moteur indexe normalement ce qui est replié, depuis
+              l'indexation mobile d'abord : mille mots de plus par page, sur le
+              bon sujet et dans les mots de la personne. Et c'est d'abord de
+              l'accessibilité, que les conventions du projet réclament pour toute
+              vidéo qui porte le message d'une page.
+
+              `marker:` retire le triangle du navigateur, qui n'a pas la même
+              forme d'un navigateur à l'autre, au profit d'un chevron qui pivote
+              à l'ouverture. */}
+          <details className="group/pli mt-16 border-t border-border pt-8">
+            <summary className="flex cursor-pointer list-none items-center gap-2 text-base font-semibold text-foreground marker:hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring [&::-webkit-details-marker]:hidden">
+              <ChevronRight
+                aria-hidden
+                className="size-4 shrink-0 transition-transform group-open/pli:rotate-90"
+              />
+              Lire la transcription de l&apos;entretien
+            </summary>
+
+            <div className="mt-6 space-y-4 text-base leading-relaxed text-pretty text-foreground/75">
+              {article.transcription.map((tour, i) => (
+                <p key={`${i}-${tour.qui}`}>
+                  <span className="font-semibold text-foreground">
+                    {tour.qui} :
+                  </span>{" "}
+                  {tour.texte}
+                </p>
+              ))}
+            </div>
+          </details>
         </article>
       </Section>
 

@@ -28,6 +28,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@repo/ui/components/sheet";
+import { HAUTEUR_ENTETE } from "@/lib/entete";
 import { cn } from "@repo/ui/lib/utils";
 import {
   ArrowLeft,
@@ -131,14 +132,10 @@ const CAPSULE_SUR_IMAGE =
 const CAPSULE_SUR_PAGE =
   "bg-card/85 ring-border shadow-[0_2px_8px_rgba(0,0,0,0.06)]";
 
-/**
- * La hauteur occupée par l'en-tête flottant, décalage du haut compris.
- *
- * Elle sert à deux choses qui doivent rester d'accord : la zone que l'on
- * observe pour savoir si une bande sombre passe dessous, et le `scroll-mt` des
- * ancres, pour qu'une cible ne finisse pas cachée derrière les capsules.
- */
-export const HAUTEUR_ENTETE = 66;
+/* La hauteur de l'en-tête vit dans `lib/entete.ts` et non ici : ce fichier
+   porte `"use client"`, et un composant serveur qui importerait la valeur d'ici
+   recevrait une référence client, c'est-à-dire une fonction, à la place du
+   nombre. Voir le commentaire là-bas, la panne est silencieuse. */
 
 /** Une entrée de navigation : 36 px de haut, comme chez eux. */
 const CLASSES_ENTREE =

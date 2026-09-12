@@ -562,6 +562,27 @@ d'offres ou de tarifs :
 Même principe pour les autres éléments répétés d'une carte à l'autre : un titre
 sur deux lignes ne doit pas décaler ce qui le suit dans la carte voisine.
 
+### Une valeur partagée n'habite jamais dans un module `"use client"`
+
+Un composant serveur qui importe une constante d'un fichier marqué
+`"use client"` **ne reçoit pas la valeur**. Next remplace chaque export d'un
+module client par une **référence client**, c'est-à-dire une fonction qui
+désigne l'export à travers la frontière. La constante arrive donc sous forme de
+fonction.
+
+C'est arrivé à `HAUTEUR_ENTETE`, qui vivait dans `en-tete.tsx`. La page d'un
+avis s'en servait pour caler un élément collant : `top: HAUTEUR_ENTETE + 16`
+rendait `style="top:function() {…}"`, que le navigateur jette. L'élément n'avait
+donc plus de décalage, et **un élément collant sans décalage ne colle jamais**.
+
+**Rien n'échouait.** Pas d'erreur de type, pas d'avertissement au build, pas de
+message dans la console : simplement, l'effet ne se produisait pas, et on le
+cherche dans le CSS pendant des heures. Le seul endroit où ça se voyait était le
+HTML servi.
+
+La valeur vit donc dans `lib/entete.ts`, un module neutre que les deux côtés
+importent. La règle vaut pour toute donnée partagée, pas seulement pour celle-là.
+
 ### `tailwind-merge` ne voit pas `dark:` comme un conflit
 
 Une classe passée de l'extérieur à un composant de registre **ne gagne pas
