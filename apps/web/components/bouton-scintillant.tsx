@@ -76,7 +76,24 @@ export function BoutonScintillant({
         // petit : c'est l'appel principal du site, et il était au même corps
         // que les liens secondaires. 56 px de haut, bien au-delà des 40 px de
         // cible tactile que demande le projet.
-        "group/roule group relative z-0 inline-flex h-14 cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-md px-8 text-base font-semibold whitespace-nowrap",
+        //
+        // **`sm:whitespace-nowrap` et non `whitespace-nowrap`, `min-h-14` et non
+        // `h-14`, et c'est une panne réparée, pas une précaution.** Sur 375 px,
+        // « Réservez votre appel découverte » demande 313 px avec ses
+        // rembourrages : le bouton refusait de descendre en dessous, la carte
+        // qui le porte s'élargissait à 377 px dans une cellule de 335, et toute
+        // la page se décalait de 23 px vers la droite. Rémy l'a vu sur son
+        // iPhone comme « une bande sur la droite ».
+        //
+        // Le défaut est doublement silencieux : un `min-width` implicite ne
+        // produit aucune erreur, et l'élargissement se voit sur la **page**,
+        // pas sur le bouton. `AGENTS.md` décrivait déjà la règle, elle n'était
+        // pas appliquée ici.
+        //
+        // `min-h-14` est ce qui rend la coupure utilisable : sans lui, un
+        // libellé passé sur deux lignes serait rogné par la hauteur fixe.
+        // `px-6` en dessous de `sm` rend 16 px de plus à la ligne.
+        "group/roule group relative z-0 inline-flex min-h-14 cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-md px-6 py-2 text-center text-base font-semibold sm:px-8 sm:whitespace-nowrap",
         "bg-(--fond) text-(--encre)",
         "transform-gpu transition-transform duration-300 ease-out hover:scale-[1.03] active:scale-100 active:translate-y-px",
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",

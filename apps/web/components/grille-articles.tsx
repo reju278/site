@@ -5,6 +5,7 @@ import { TexteRoulant } from "@/components/texte-roulant";
 import { lettre, liens } from "@/contenu/site";
 import { formaterDate, type Article } from "@/lib/flux";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
+import { insecables } from "@/lib/typographie";
 import Link from "next/link";
 
 /**
@@ -104,7 +105,7 @@ export function GrilleArticles({
                     cartes sont les sections de la liste. Aucun niveau n'est
                     sauté. */}
                 <h2 className="mt-2 text-lg leading-snug font-semibold text-balance text-card-foreground">
-                  {article.titre}
+                  {insecables(article.titre)}
                 </h2>
                 <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-muted-foreground">
                   {article.chapeau}

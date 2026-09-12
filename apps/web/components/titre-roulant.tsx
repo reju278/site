@@ -44,6 +44,59 @@ import { Fragment, useEffect, useRef, useState } from "react";
  */
 export type SegmentTitre = { texte: string; accent?: boolean };
 
+/**
+ * Les signes qui ne peuvent pas commencer une ligne, et ceux qui ne peuvent pas
+ * la finir.
+ *
+ * C'est de la typographie française et non une préférence : un guillemet
+ * ouvrant appartient au mot qu'il ouvre, un guillemet fermant et la ponctuation
+ * haute appartiennent au mot qu'ils suivent. Les séparer produit une ligne qui
+ * finit sur « ou qui commence par », et le lecteur bute dessus sans savoir
+ * pourquoi.
+ */
+const OUVRANT = "«";
+const FERMANTS = ["»", "!", "?", ";", ":"];
+
+/**
+ * Les mots du titre, les signes recollés à qui ils appartiennent.
+ *
+ * Le découpage à l'espace donne un masque par mot, ce qui est exactement ce
+ * qu'il faut pour l'effet. Mais il donne aussi un masque pour un guillemet seul,
+ * et un masque est une boîte en ligne : le titre pouvait donc se couper entre
+ * « et le mot qu'il ouvre. C'est arrivé, et Rémy l'a vu sur son iPhone :
+ *
+ *     Place au parfait «
+ *     tunnel de vente ».
+ *
+ * Le signe est donc recollé à son mot avec une **espace insécable**, et les
+ * deux voyagent dans le même masque. Rien ne change pour le texte : c'est la
+ * même phrase, avec la coupure que le français interdit en moins.
+ */
+function regrouper(texte: string): string[] {
+  const mots: string[] = [];
+
+  for (const brut of texte.split(" ")) {
+    const dernier = mots.length - 1;
+
+    if (
+      dernier >= 0 &&
+      (mots[dernier] === OUVRANT || mots[dernier]?.endsWith(OUVRANT))
+    ) {
+      mots[dernier] = `${mots[dernier]}\u00a0${brut}`;
+      continue;
+    }
+
+    if (dernier >= 0 && FERMANTS.some((signe) => brut.startsWith(signe))) {
+      mots[dernier] = `${mots[dernier]}\u00a0${brut}`;
+      continue;
+    }
+
+    mots.push(brut);
+  }
+
+  return mots;
+}
+
 export function TitreRoulant({
   segments,
   as: Balise = "h2",
@@ -100,9 +153,30 @@ export function TitreRoulant({
       className={cn("group/titre", className)}
     >
       {segments.map((segment, s) => {
-        const mots = segment.texte.split(" ");
+        const mots = regrouper(segment.texte);
 
-        return mots.map((mot, i) => (
+        /* **Un segment est une ligne, donc il en occupe une.**
+
+           C'est ce que dit déjà la documentation de la propriété, « un segment
+           par phrase ou par ligne voulue », mais ce n'était pas ce que faisait
+           le rendu : les segments se suivaient en ligne, séparés d'une espace,
+           et c'était la largeur disponible qui décidait de la coupure. Sur grand
+           écran, `text-balance` tombait juste par chance, une phrase par ligne ;
+           sur 375 px, le titre des résultats donnait
+
+               De vraies
+               personnes. De
+               vrais résultats.
+
+           avec « De » seul en fin de ligne, ce que la règle de forme du projet
+           interdit. Un segment par ligne rend la coupure identique aux deux
+           largeurs, et c'est Rémy qui décide où sa phrase se coupe, pas la
+           fenêtre.
+
+           `block` et non `<br>` : le masque de chaque mot reste un `inline-block`
+           à l'intérieur, et l'alignement du titre continue de venir de sa classe.
+           Un titre d'un seul segment ne bouge pas d'un pixel. */
+        const corps = mots.map((mot, i) => (
           // L'index fait partie de la clé et il le faut : un titre répète
           // volontiers un mot, et deux clés identiques feraient sauter le
           // second.
@@ -126,9 +200,17 @@ export function TitreRoulant({
 
                 Le dernier mot du dernier segment n'en prend pas, sinon le titre
                 traîne une espace qui décale son centrage d'un demi-caractère. */}
-            {i < mots.length - 1 || s < segments.length - 1 ? " " : null}
+            {i < mots.length - 1 ? " " : null}
           </Fragment>
         ));
+
+        return segments.length > 1 ? (
+          <span key={s} className="block">
+            {corps}
+          </span>
+        ) : (
+          <Fragment key={s}>{corps}</Fragment>
+        );
       })}
     </Balise>
   );

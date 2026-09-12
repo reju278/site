@@ -91,7 +91,16 @@ export default function Accueil() {
           titre vers le milieu de l'image.
       --------------------------------------------------------------- */}
       <section
-        className="relative isolate px-5 pt-40 sm:pt-52"
+        /* `pt-28` sur téléphone et non `pt-40`, sur remarque de Rémy : « la
+           vidéo est beaucoup trop basse ».
+
+           Le chevauchement de la vidéo sur le bord de l'image est le même aux
+           deux largeurs, 50 % mesurés, puisqu'il vient de `--video-h`. Ce qui
+           diffère, c'est ce qu'il y a **au-dessus** : 160 px de rembourrage
+           au-dessus de la pastille sur un écran de 812 de haut poussaient tout
+           le bloc vers le bas, et la vidéo finissait collée au bord inférieur.
+           48 px de moins la remontent d'autant, sans toucher au chevauchement. */
+        className="relative isolate px-5 pt-28 sm:pt-52"
         // La hauteur exacte du cadre vidéo, en 16/9 : la largeur disponible
         // (l'écran moins les marges, plafonnée à la largeur du cadre) multipliée
         // par 9/16. Le fond s'arrête à la moitié de cette valeur, ce qui coupe
@@ -399,7 +408,20 @@ export default function Accueil() {
         <div className="mx-auto mb-10 max-w-4xl text-center sm:mb-12">
           <TitreRoulant
             segments={[{ texte: titreOffres }]}
-            className="titre text-4xl text-balance text-foreground sm:text-5xl"
+            /* `text-3xl` sur téléphone : à 36 px, le titre tombait sur trois
+               lignes dont la dernière, « humain », faisait 129 px contre 324 à
+               la plus longue, soit 40 %. La règle de forme du projet demande
+               qu'aucune ligne ne fasse moins de la moitié de la plus longue, et
+               `text-balance` n'y peut rien : il répartit ce qui tient, il ne
+               change pas ce qui ne tient pas.
+
+               **1,7 rem et non une taille de l'échelle**, et c'est mesuré :
+               « accompagnement humain » demande 365 px à 30 px de corps pour
+               une colonne de 335, donc trois lignes quelle que soit la
+               répartition. À 27,2 px il tient sur une ligne, et le titre en
+               fait deux. `text-3xl` restait à trois lignes, `text-2xl` tombait
+               à 24 px, plus petit que les autres titres de la page. */
+            className="titre text-[1.7rem] text-balance text-foreground sm:text-5xl"
           />
 
           <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground">
@@ -577,7 +599,13 @@ export default function Accueil() {
               seul cas où équilibrer les lignes a un sens. */}
           <TitreRoulant
             segments={titreResultats}
-            className="titre mx-auto max-w-3xl text-center text-4xl text-balance text-foreground sm:text-5xl"
+            /* `text-3xl` sur téléphone et non `text-4xl` : à 36 px, « De vraies
+               personnes. » demande 340 px là où la colonne en offre 335, donc
+               « personnes. » tombait seul sur sa ligne, ce que la règle de forme
+               du projet interdit. À 30 px, chaque phrase tient sur sa ligne, et
+               le titre retrouve les deux lignes qu'il a en grand. Mesuré, pas
+               estimé. */
+            className="titre mx-auto max-w-3xl text-center text-3xl text-balance text-foreground sm:text-5xl"
           />
 
           {/* La courbe passe derrière la vidéo, et son voile flouté l'en

@@ -832,6 +832,89 @@ téléphone tenu à la main.
   thèmes. Le panneau navigateur émule le téléphone avec `resize_window`, il n'y
   a pas d'excuse à ne pas regarder.
 
+### Le débordement horizontal se mesure, il ne se regarde pas
+
+Rémy a décrit « une bande sur la droite » sur son iPhone. C'était **23 px de
+débordement** du document, et deux causes sans rapport l'une avec l'autre, dont
+aucune ne se voit sur l'élément fautif :
+
+- **Un `whitespace-nowrap` sur `BoutonScintillant`.** « Réservez votre appel
+  découverte » demande 313 px ; le bouton refusait de descendre en dessous, la
+  carte qui le porte passait de 335 à 377 px, et c'est **la page** qui
+  s'élargissait. Le bouton, lui, avait l'air normal.
+- **Une couche inclinée dans `CourbeVivante`.** Une rotation élargit la boîte
+  d'un élément : `inset-x-0` sur 335 px donnait 420 px à partir de moins 22.
+  Aucun parent ne la coupait.
+
+D'où deux règles. `whitespace-nowrap` ne s'écrit jamais sans borne, c'est
+`sm:whitespace-nowrap`, et la hauteur va avec, `min-h-*` et non `h-*`, sinon un
+libellé qui passe à deux lignes est rogné. Et **tout bloc qui contient une
+rotation porte `overflow-x-clip`** : `clip` et non `hidden`, qui ferait du bloc
+un conteneur de défilement et casserait les éléments collants.
+
+Le contrôle tient en une ligne, et il vaut pour chaque page :
+
+```js
+document.documentElement.scrollWidth === document.documentElement.clientWidth
+```
+
+### La typographie française ne se coupe pas n'importe où
+
+Trois coupures interdites sont apparues le même jour sur le téléphone de Rémy, et
+les trois sont des fautes de français, pas des gênes de mise en page :
+
+- `Place au parfait «` en fin de ligne, `tunnel de vente ».` à la suivante ;
+- `Avis Funnels Club` puis `: Christian Joyce` ;
+- `160` puis `000 €`, c'est-à-dire **un nombre coupé en deux** sur une page qui
+  annonce un chiffre d'affaires.
+
+`lib/typographie.ts` pose les espaces insécables **à l'affichage** : devant
+`: ; ! ?` et `»`, derrière `«`, entre les groupes de chiffres et entre un nombre
+et son unité. Au rendu et non dans le contenu, parce que `avis.ts` porte
+vingt-deux titres et que les flux Substack et YouTube en apportent de nouveaux
+chaque semaine : une règle appliquée au rendu vaut pour ce qui arrivera.
+
+`TitreRoulant` a sa propre version du problème et sa propre réparation : il
+découpe le titre en mots pour les masquer un par un, donc un guillemet seul
+devenait un mot, et un mot est une boîte qui peut passer à la ligne. Les signes y
+sont recollés à leur mot avant le découpage.
+
+**Et un segment de `TitreRoulant` occupe sa ligne.** Sa documentation le disait
+déjà, « un segment par phrase ou par ligne voulue », mais le rendu les mettait
+bout à bout et laissait la fenêtre décider. Sur grand écran `text-balance`
+tombait juste par chance ; sur 375 px le titre des résultats donnait « De vraies
+/ personnes. De / vrais résultats. »
+
+### Un titre de section se dimensionne pour la largeur du téléphone
+
+`text-balance` répartit ce qui tient, il ne change pas ce qui ne tient pas. Trois
+titres de l'accueil laissaient un mot seul sur la dernière ligne à 36 px sur
+375 px de large, ce que la règle de forme interdit. Les tailles sont donc
+mesurées et non choisies : « accompagnement humain » demande 365 px à 30 px de
+corps pour une colonne de 335, d'où `text-[1.7rem]` et non une taille de
+l'échelle. Les autres descendent à `text-3xl`.
+
+### Un rayon de jonction se juge en proportion de la largeur
+
+`--rayon-jonction` valait 28 px partout. Sur 1400 px c'est discret ; sur 375 px
+c'est 7,5 % de la largeur, et l'arrondi devient le premier objet qu'on voit,
+ce que Rémy a signalé pour la lèvre posée derrière la vidéo. Le jeton descend
+donc à 1 rem en dessous de 480 px, ce qui lui rend à peu près la proportion
+qu'il a en grand.
+
+### Une hauteur fixe partagée entre deux blocs se vérifie à la largeur la plus étroite
+
+`HAUTEUR_ANIMATION` est partagée par les deux cartes d'offres pour que leurs
+descriptions démarrent à la même ligne. À 160 px, la conversation du consulting
+tenait tant que la carte était large ; à 269 px de large, ses bulles demandent
+192 px mesurés. Le bloc est en `overflow-hidden` avec `justify-end`, donc le
+dépassement ne débordait pas : **il coupait le haut de la conversation**, et la
+carte montrait une boîte presque vide.
+
+La hauteur ne revient à sa valeur d'origine qu'à partir de `lg`, là où les deux
+cartes sont côte à côte. En dessous elles sont empilées, et deux blocs empilés
+n'ont aucune raison d'avoir la même hauteur.
+
 ### La forme d'un bloc de texte se décide, elle ne se subit pas
 
 Un titre mal coupé ne produit pas une erreur : il produit une gêne que le

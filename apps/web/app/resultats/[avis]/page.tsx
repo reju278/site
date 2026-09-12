@@ -6,6 +6,7 @@ import { Section } from "@/components/section";
 import { TexteLie } from "@/components/texte-lie";
 import { avis } from "@/contenu/avis";
 import { SITE, liens, temoignages } from "@/contenu/site";
+import { insecables } from "@/lib/typographie";
 import type { Metadata } from "next";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import Link from "next/link";
@@ -196,8 +197,11 @@ export default async function PageAvis({
           centre. */}
       <section className="px-5 pt-32 pb-16 sm:pt-40 sm:pb-20">
         <div className="mx-auto max-w-6xl text-center">
+        {/* `insecables` : sans elle, ce titre se coupait avant le deux-points
+            sur un téléphone, « Avis Funnels Club / : Christian Joyce ». Voir
+            `lib/typographie.ts`. */}
         <h1 className="titre text-3xl text-balance text-foreground sm:text-4xl lg:text-5xl">
-          {article.titre}
+          {insecables(article.titre)}
         </h1>
 
         <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground">

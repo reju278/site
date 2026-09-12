@@ -1,4 +1,5 @@
 import { formaterDate, lireDernieresVideos } from "@/lib/flux";
+import { insecables } from "@/lib/typographie";
 import { ArrowUpRight } from "lucide-react";
 
 /**
@@ -37,7 +38,10 @@ export async function DernieresVideos() {
           au-dessus : leurs titres sont des phrases de deux membres dont l'un
           porte l'accent, et l'effet mot à mot a été relevé sur elles. Celui-ci
           est une étiquette de trois mots. */}
-      <h2 className="titre text-center text-4xl text-balance text-foreground sm:text-5xl">
+      {/* `text-3xl` sur téléphone : à 36 px, « Mes dernières vidéos » se coupe
+          et laisse « vidéos » seul sur sa ligne, ce que la règle de forme du
+          projet interdit. À 30 px, le titre tient sur une ligne. Mesuré. */}
+      <h2 className="titre text-center text-3xl text-balance text-foreground sm:text-5xl">
         Mes dernières vidéos
       </h2>
 
@@ -75,7 +79,7 @@ export async function DernieresVideos() {
                 {formaterDate(video.date)}
               </p>
               <h3 className="mt-2 text-lg leading-snug font-semibold text-balance text-card-foreground">
-                {video.titre}
+                {insecables(video.titre)}
               </h3>
 
               {/* Le nom de la chaîne, poussé en bas de la fiche : `mt-auto`

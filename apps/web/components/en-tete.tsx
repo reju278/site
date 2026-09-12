@@ -784,7 +784,11 @@ export function EnTete() {
                 type="button"
                 aria-label="Ouvrir le menu"
                 className={cn(
-                  "flex size-9 items-center justify-center rounded-md transition-colors duration-300 md:hidden",
+                  /* `size-10` et non `size-9` : c'est la cible tactile
+                     minimale du projet, 40 px, et ce bouton ne s'affiche qu'en
+                     dessous de `md`, donc il n'y a pas de version large à
+                     ménager. La bascule de thème à côté était déjà à 40. */
+                  "flex size-10 items-center justify-center rounded-md transition-colors duration-300 md:hidden",
                   surImage
                     ? "text-white hover:bg-white/10"
                     : "text-foreground hover:bg-accent",

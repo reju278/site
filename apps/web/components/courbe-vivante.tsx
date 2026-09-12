@@ -340,7 +340,23 @@ export function CourbeVivante({
   }, []);
 
   return (
-    <div ref={cadre} className={cn("relative isolate", className)}>
+    /* `overflow-x-clip` : **c'est ce qui empêchait la page de déborder de
+       23 px sur la droite.**
+
+       La couche de la tête de courbe est inclinée, et une rotation élargit la
+       boîte qu'occupe l'élément : `inset-x-0` sur 335 px donnait 420 px de large
+       à partir de moins 22. Aucun parent ne la coupait, donc le document
+       s'élargissait, l'en-tête fixe suivait, et toute la page se décalait vers
+       la droite. Rémy l'a vu sur son iPhone comme une bande à droite.
+
+       `clip` et non `hidden` : `hidden` ferait de ce bloc un conteneur de
+       défilement, ce qui casserait tout élément collant à l'intérieur et
+       changerait le comportement du bloc. `clip` ne fait que couper.
+
+       Rien d'utile n'est perdu : la courbe s'éteint déjà au masque avant ses
+       bords, et la tête vit dans la marge à droite de la carte vidéo, donc à
+       l'intérieur de ce cadre. */
+    <div ref={cadre} className={cn("relative isolate overflow-x-clip", className)}>
       {/* La courbe, tout au fond.
 
           Le masque du bas évite que l'aire se termine sur une arête. Celui des

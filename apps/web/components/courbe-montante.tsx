@@ -79,7 +79,25 @@ const SERIE = EUROS.map((valeur, i) => ({
  * paragraphes décalés de trente pixels se voient immédiatement. La valeur est
  * donc écrite une fois, ici, et importée là-bas.
  */
-export const HAUTEUR_ANIMATION = "h-40";
+/**
+ * La hauteur des deux animations des cartes d'offres, partagée.
+ *
+ * **Elle est plus haute sur téléphone, et c'est une réparation.** Les 160 px de
+ * `h-40` suffisent à la conversation du consulting tant que la carte est large ;
+ * à 269 px de large, les deux bulles se replient sur plus de lignes et demandent
+ * **192 px mesurés**. Le bloc est en `overflow-hidden` avec `justify-end`, donc
+ * le dépassement ne débordait pas, il **coupait le haut de la conversation** :
+ * Rémy voyait une boîte presque vide avec les trois points en bas.
+ *
+ * `h-52` laisse 16 px de marge sur le besoin mesuré. Le surplus se voit comme du
+ * vide au-dessus, pas comme un trou, puisque le contenu est calé en bas.
+ *
+ * Elle ne revient à `h-40` qu'à partir de `lg`, parce que c'est là que les deux
+ * cartes se retrouvent côte à côte : en dessous elles sont empilées, et deux
+ * blocs empilés n'ont aucune raison d'avoir la même hauteur. Au-dessus, si, et
+ * c'est tout l'objet de cette constante.
+ */
+export const HAUTEUR_ANIMATION = "h-52 lg:h-40";
 
 export function CourbeMontante({ className }: { className?: string }) {
   const cadre = useRef<HTMLDivElement>(null);

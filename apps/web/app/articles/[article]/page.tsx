@@ -11,6 +11,7 @@ import {
   type Article,
 } from "@/lib/flux";
 import { ArrowRight, ArrowUpRight, ChevronRight } from "lucide-react";
+import { insecables } from "@/lib/typographie";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -202,8 +203,11 @@ export default async function PageArticle({ params }: Params) {
           </span>
         </nav>
 
+        {/* `insecables` : les titres viennent de Substack et portent volontiers
+            un point d'interrogation précédé d'une espace, qui se retrouverait
+            seul en début de ligne. Voir `lib/typographie.ts`. */}
         <h1 className="titre mx-auto max-w-4xl text-4xl text-balance text-foreground sm:text-5xl">
-          {article.titre}
+          {insecables(article.titre)}
         </h1>
 
         <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground">

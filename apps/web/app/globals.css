@@ -384,9 +384,23 @@ html #cookiescript_bottompart:empty {
 
    La valeur est écrite une fois ici plutôt que dans la classe, parce qu'une
    seconde jonction devra avoir exactement le même rayon, et que deux nombres
-   écrits à deux endroits finissent toujours par diverger. */
+   écrits à deux endroits finissent toujours par diverger.
+
+   **Elle change avec la largeur, et c'est la même raison qui l'impose.** Le
+   rayon d'une jonction se juge en proportion de ce qu'elle traverse : 28 px sur
+   un écran de 375 font 7,5 % de la largeur, et l'arrondi devient le premier
+   objet qu'on voit, ce que Rémy a signalé sur son iPhone à propos de la lèvre
+   posée derrière la vidéo. Les mêmes 28 px sur 1400 se remarquent à peine. La
+   valeur du téléphone descend donc à 1 rem, ce qui la ramène à 4 % de la
+   largeur, à peu près la proportion qu'elle a en grand. */
 :root {
-  --rayon-jonction: 1.75rem;
+  --rayon-jonction: 1rem;
+}
+
+@media (min-width: 480px) {
+  :root {
+    --rayon-jonction: 1.75rem;
+  }
 }
 
 @media (min-width: 640px) {

@@ -202,7 +202,19 @@ export function SectionLivre() {
               **sans que la page déborde** : `overflow-hidden` sur la carte les
               couperait en plein mot, et rien ne le signalerait. Les valeurs
               sont mesurées dans le navigateur, pas estimées. */}
-          <div className="mt-8 flex items-stretch gap-3 sm:gap-4">
+          {/* **Les deux boutons s'empilent sur téléphone**, et c'est ce qui
+              répare « Obtenez votre copie » coupé, signalé par Rémy.
+
+              Côte à côte, la carte n'offre que 287 px pour deux boutons, donc
+              136 chacun, et le libellé du plein en demande 162. Il était rogné
+              par le `overflow-hidden` de la carte sans que la page déborde,
+              c'est-à-dire la panne que `AGENTS.md` décrit comme la pire : rien
+              ne le signale. Empilés, chacun a toute la largeur, tient sur une
+              ligne et garde la hauteur de l'autre.
+
+              `items-stretch` reste : c'est lui qui leur donne la même largeur
+              empilés et la même hauteur côte à côte. */}
+          <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:gap-4">
             {/* Le plein. Le scintillement reste, mais sur le rouge de la
                 couverture : il passe par `--fond` et non par une classe, pour
                 que le bouton et le masque de son liseré ne puissent pas
@@ -210,7 +222,7 @@ export function SectionLivre() {
             <BoutonScintillant
               href={livre.href}
               fond="var(--livre)"
-              className="h-12 flex-1 justify-center px-4 text-sm sm:h-14 sm:flex-none sm:px-8 sm:text-base"
+              className="min-h-12 flex-1 justify-center px-4 text-sm sm:min-h-14 sm:flex-none sm:px-8 sm:text-base"
             >
               <TexteRoulant>{livre.action}</TexteRoulant>
               {/* La flèche disparaît en dessous de `sm`, et c'est une décision
@@ -241,7 +253,7 @@ export function SectionLivre() {
               href={livre.href}
               target="_blank"
               rel="noreferrer"
-              className="group/roule inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-md border border-current px-4 text-sm font-semibold whitespace-nowrap text-(--livre-texte) transition-colors hover:bg-[color-mix(in_oklab,var(--livre)_10%,transparent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--livre-texte) sm:h-14 sm:flex-none sm:px-8 sm:text-base"
+              className="group/roule inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-md border border-current px-4 text-sm font-semibold whitespace-nowrap text-(--livre-texte) transition-colors hover:bg-[color-mix(in_oklab,var(--livre)_10%,transparent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--livre-texte) sm:min-h-14 sm:flex-none sm:px-8 sm:text-base"
             >
               <TexteRoulant>{livre.actionSecondaire}</TexteRoulant>
             </a>
