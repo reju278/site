@@ -91,7 +91,17 @@ export function PiedDePage() {
           seulement s'en détacher. Elle est pensée pour les deux thèmes : en
           sombre, c'est la différence entre `--card` et `--background` qui
           sépare, et le filet en `--border` qui la souligne. */}
-        <div className="rounded-md border border-border bg-card px-6 py-10 shadow-[0_18px_50px_-30px_rgba(0,0,0,0.35)] sm:px-10 sm:py-14 lg:px-14">
+        <div
+          /* Le relief de verre et l'ombre portée dans la même déclaration :
+             deux `box-shadow` sur un même élément ne s'additionnent pas, le
+             second remplace le premier. Les autres cartes prennent
+             `relief-verre` en classe, n'ayant pas d'ombre à composer avec. */
+          style={{
+            boxShadow:
+              "var(--ombre-verre), 0 18px 50px -30px rgba(0,0,0,0.35)",
+          }}
+          className="rounded-md border border-border bg-card px-6 py-10 sm:px-10 sm:py-14 lg:px-14"
+        >
           {/* Le nom, en haut à gauche.
 
             Il était au centre et très grand. Ici il tient la place du logo de

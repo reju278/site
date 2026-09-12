@@ -553,6 +553,55 @@ summary {
   --courbe-morte: #f87171;
 }
 
+/* Le relief de verre, en classe.
+
+   Le jeton `--ombre-verre` dit la recette, cet utilitaire la pose. Il existe
+   parce que le relief sert maintenant à deux familles d'objets qui n'ont rien
+   à voir : les tuiles et le panneau des menus, et les grandes cartes de la
+   page. Écrire trois ombres à la main sur chacune, c'est trois occasions de
+   les faire diverger.
+
+   **Il ne porte aucune ombre portée.** Une carte qui en a une la garde dans sa
+   propre classe, et les deux se composent : le relief est intérieur, l'ombre
+   est extérieure, elles ne se disputent pas la même place. La seule exception
+   est le pied de page, dont l'ombre portée est écrite avec le relief dans la
+   même déclaration : deux `box-shadow` sur un même élément ne s'additionnent
+   pas, le second remplace le premier. */
+@utility relief-verre {
+  box-shadow: var(--ombre-verre);
+}
+
+/* ------------------------------------------------------------------
+   Le cadre des menus déroulants de l'en-tête.
+
+   Il est habillé ici et non dans `en-tete.tsx` parce que le composant de
+   registre rend son `viewport` lui-même, sans laisser passer la moindre
+   classe : c'est son `data-slot` qui est la seule prise.
+
+   **Le verre est celui des capsules**, sur insistance de Rémy : `card/85`,
+   flou de douze pixels, filet en `--border`.
+
+   **Le rayon est de 16 px et non de 28**, sur correction de Rémy. Le relevé de
+   TrendTrack donnait 1,75 em, soit 28 px, et c'était juste chez eux : leur
+   panneau fait 864 px de large. Sur le nôtre, l'arrondi devenait le premier
+   objet qu'on voyait, et il ne ressemblait plus à rien d'autre sur le site. À
+   16, il reste dans la famille des 12 px des capsules dont il sort. La règle
+   des 5 px et ses exceptions sont dans `AGENTS.md`.
+
+   `background-color` avec `color-mix` plutôt que le jeton nu : le jeton n'a
+   pas d'alpha, et c'est l'alpha qui fait le verre.
+   ------------------------------------------------------------------ */
+[data-slot="navigation-menu-viewport"] {
+  border-radius: 16px;
+  background-color: color-mix(in srgb, var(--card) 85%, transparent);
+  border-color: var(--border);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow:
+    var(--ombre-verre),
+    0 12px 40px rgba(0, 0, 0, 0.18);
+}
+
 /* Le fond et ses trois foyers.
 
    Ils sont déclarés dans le même ordre que dans le deck, et à ses positions.

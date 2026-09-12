@@ -36,7 +36,7 @@ import { ArrowRight } from "lucide-react";
  */
 export function SectionLivre() {
   return (
-    <div className="overflow-hidden rounded-md border border-border bg-card">
+    <div className="relief-verre overflow-hidden rounded-md border border-border bg-card">
       <div className="grid items-stretch lg:grid-cols-2">
         {/* Le volet de l'objet. */}
         <div className="relative isolate flex items-center justify-center bg-accent px-6 py-12 sm:px-10 sm:py-16">

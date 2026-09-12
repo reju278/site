@@ -18,6 +18,7 @@ import {
   SITE,
   identite,
   liens,
+  pastilleHero,
   offres,
   sousTitreOffres,
   titreOffres,
@@ -25,6 +26,7 @@ import {
   video,
 } from "@/contenu/site";
 import { ArrowRight } from "lucide-react";
+import { cn } from "@repo/ui/lib/utils";
 
 /**
  * Les données structurées de la page d'accueil.
@@ -173,6 +175,58 @@ export default function Accueil() {
 
         <div className="mx-auto max-w-6xl">
           <div className="mx-auto max-w-3xl text-center">
+            {/* La pastille de preuve, au-dessus du titre.
+
+                La forme est celle du hero de TrendTrack, fournie par Rémy :
+                une gélule en verre, une file de portraits qui se chevauchent,
+                une phrase. Le verre est celui des capsules de l'en-tête, et
+                pour la même raison : elle flotte sur la photo, qui est sombre
+                dans les deux thèmes, donc le blanc translucide y est chez lui
+                et un jeton de thème n'aurait rien à suivre.
+
+                **Les visages sont ceux de vrais clients**, pris dans les
+                affiches de leurs témoignages, déjà publiques sur `/resultats`.
+                Le cadrage est relevé image par image : ce sont des appels à
+                deux, et le client n'est pas toujours du même côté. Voir
+                `pastilleHero` dans `site.ts`.
+
+                Les portraits sont `aria-hidden` et la phrase se lit seule :
+                quatre images sans nom n'apportent rien à l'oreille, et les
+                annoncer une par une découperait la phrase en cinq morceaux. */}
+            <div className="mb-6 flex justify-center sm:mb-8">
+              <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/6 py-1.5 pr-3.5 pl-1.5 backdrop-blur-md">
+                <span aria-hidden className="flex">
+                  {pastilleHero.portraits.map((portrait, i) => (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      key={portrait.fichier}
+                      src={`/temoignages/${portrait.fichier}.jpg`}
+                      alt=""
+                      width={1280}
+                      height={720}
+                      // L'image du haut de page ne prend pas `lazy` : c'est
+                      // celle que Google chronomètre. Celles-ci sont dans le
+                      // hero, donc visibles d'emblée.
+                      fetchPriority="high"
+                      // Le chevauchement se fait par une marge négative et non
+                      // par un décalage : une marge retire de la place, donc la
+                      // file se resserre vraiment au lieu de se superposer en
+                      // laissant un trou à la fin.
+                      className={cn(
+                        "size-7 rounded-full object-cover ring-2 ring-white/15",
+                        i > 0 && "-ml-2.5",
+                      )}
+                      style={{ objectPosition: portrait.cadrage }}
+                    />
+                  ))}
+                </span>
+
+                <span className="text-sm font-medium text-white">
+                  {pastilleHero.texte}
+                </span>
+              </div>
+            </div>
+
             <h1 className="titre text-4xl text-balance text-white sm:text-5xl lg:text-6xl">
               Vivez de votre{" "}
               {/* `as="span"` et `inline-flex` : le composant pose un
@@ -285,7 +339,7 @@ export default function Accueil() {
           {offres.map((offre) => (
             <article
               key={offre.id}
-              className="flex h-full flex-col rounded-md border border-border bg-card p-8"
+              className="relief-verre flex h-full flex-col rounded-md border border-border bg-card p-8"
             >
               {"surtitre" in offre && offre.surtitre && (
                 <SurtitreOffre

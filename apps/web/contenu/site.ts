@@ -190,28 +190,72 @@ export const podcastMaverick = {
  * lettre. Aucune n'est écrite pour l'occasion : une entrée sans texte n'en
  * affiche pas.
  */
+/**
+ * La pastille au-dessus du titre du hero.
+ *
+ * La forme est celle de trendtrack.io, `main_hero__label`, fournie par Rémy :
+ * une gélule en verre, une file de portraits qui se chevauchent, une phrase.
+ *
+ * **Le texte est de Rémy, et le chiffre est le sien.** « Plus de 1 000
+ * entrepreneurs accompagnés » est une allégation commerciale : elle n'a pas été
+ * écrite ici, elle a été dictée, et c'est la seule façon dont un chiffre entre
+ * sur ce site.
+ *
+ * **Les quatre portraits sont de vrais clients**, pris dans les affiches de
+ * leurs témoignages vidéo, déjà publiques sur `/resultats`. Aucun visage n'est
+ * inventé et aucune banque d'images n'est employée : une preuve sociale illustrée
+ * par des inconnus est exactement ce qu'il ne faut pas faire.
+ *
+ * **Le cadrage est relevé image par image**, et il le fallait : ce sont des
+ * appels à deux, et le client n'est pas toujours du même côté. Augustin Passy et
+ * le couple Yannick et Sylvie sont à gauche, Christian Joyce et Roland Buffet à
+ * droite. Une valeur unique aurait cadré Rémy une fois sur deux.
+ *
+ * À relire par Rémy : ces quatre-là ont été choisis pour la netteté de leur
+ * cadrage, pas par lui.
+ */
+export const pastilleHero = {
+  texte: "Plus de 1 000 entrepreneurs accompagnés",
+  portraits: [
+    { fichier: "j0vbkt570k", cadrage: "78% 45%" },
+    { fichier: "rgio4y4o8f", cadrage: "76% 46%" },
+    { fichier: "2vtsinplyx", cadrage: "27% 48%" },
+    { fichier: "2xege6bt0u", cadrage: "35% 48%" },
+  ],
+} as const;
+
 export const menus: readonly {
   libelle: string;
   entrees: readonly {
     libelle: string;
     href: string;
     texte?: string;
+    /** La signature sous la description, « Animé par Rémy ». */
+    mention?: string;
     externe?: boolean;
   }[];
 }[] = [
   {
     libelle: "Programmes",
     entrees: [
+      /* Les deux descriptions ont été raccourcies par Rémy pour le menu, et
+         chacune porte sa mention. Elles ne disent plus ce que le programme
+         rapporte mais ce qu'il est : dans une grille à deux colonnes, une
+         description tient sur une ligne, et une promesse tronquée aux points de
+         suspension est pire que pas de promesse. Le chiffre reste sur la carte
+         de l'accueil, où il a la place de s'écrire en entier. */
       {
         libelle: "Funnels Club",
         href: liens.appel,
-        texte: "Jusqu'à plus de 6 chiffres par an avec une offre digitale",
+        texte: "Accompagnement sur mesure",
+        mention: "Animé par Rémy",
         externe: true,
       },
       {
         libelle: "Consulting privé avec Rémy",
         href: liens.consulting,
-        texte: "L'accompagnement le plus personnalisé que Rémy propose",
+        texte: "Accompagnement privé",
+        mention: "Animé par Rémy",
         externe: true,
       },
     ],

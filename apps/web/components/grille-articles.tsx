@@ -65,7 +65,7 @@ export function GrilleArticles({
               href={article.lien}
               target="_blank"
               rel="noreferrer"
-              className="group flex flex-col overflow-hidden rounded-md border border-border bg-card transition-colors hover:border-ring"
+              className="relief-verre group flex flex-col overflow-hidden rounded-md border border-border bg-card transition-colors hover:border-ring"
             >
               {article.image ? (
                 // Une image de Substack, servie par leur CDN et de taille

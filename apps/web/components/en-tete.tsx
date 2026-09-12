@@ -1,6 +1,7 @@
 "use client";
 
 import { BasculeTheme } from "@/components/bascule-theme";
+import { LogoFunnels } from "@/components/logo-funnels";
 import { TexteRoulant } from "@/components/texte-roulant";
 import { Reseaux } from "@/components/reseaux";
 import {
@@ -91,6 +92,23 @@ const ICONES: Record<string, LucideIcon> = {
   "/resultats": TrendingUp,
   "/articles": Newspaper,
   "/podcast": Mic,
+};
+
+/**
+ * Les deux entrées qui portent la marque plutôt qu'un pictogramme.
+ *
+ * Sur demande de Rémy : dans le menu « Programmes », les deux lignes sont les
+ * deux offres de l'accueil, et elles doivent porter la même tuile qu'elles, le
+ * `F` de Funnels Club et le `C` du consulting. Un pictogramme générique à cet
+ * endroit dirait « une rubrique parmi d'autres » là où la carte, deux écrans
+ * plus bas, dit « un produit ».
+ *
+ * Rangée par adresse pour la même raison que les icônes : un libellé se
+ * renomme, une adresse est l'identité de la page.
+ */
+const LETTRES_MARQUE: Record<string, "F" | "C"> = {
+  [liens.appel]: "F",
+  [liens.consulting]: "C",
 };
 
 const CAPSULE_BASE =
@@ -196,8 +214,30 @@ export function EnTete() {
   return (
     <header className="pointer-events-none fixed inset-x-0 top-2 z-50 px-3 lg:top-5 lg:px-5">
       <div className="pointer-events-auto mx-auto flex max-w-[1320px] items-center justify-between gap-3">
-        {/* La capsule de gauche. */}
-        <div className={capsule}>
+        {/* La capsule de gauche.
+
+            **La racine du menu enveloppe la capsule au lieu d'être rangée
+            dedans, et c'est la seule façon d'avoir un panneau flouté.** Un
+            `backdrop-filter` ne brouille que ce qui est peint **sous** lui ;
+            posé à l'intérieur d'un élément qui en porte déjà un, il n'a plus
+            pour arrière-plan que le contenu de cet élément, c'est-à-dire rien.
+            Le panneau était donc translucide mais net, et aucune valeur de flou
+            n'y changeait quoi que ce soit : ce n'était pas un réglage, c'était
+            sa place dans l'arbre.
+
+            La racine sort donc de la capsule, et le panneau part dans le
+            `viewport` du composant, que celui-ci rend **à côté** de ses
+            enfants. Il n'est plus sous le verre de la capsule, il est à côté :
+            son arrière-plan redevient la page, et le flou reprend son travail.
+
+            C'est aussi pourquoi `viewport={false}` a disparu : avec lui, le
+            panneau se rend dans son entrée de menu, donc dans la capsule, ce
+            qu'on vient précisément de défaire. */}
+        <NavigationMenu
+          delayDuration={0}
+          className="relative max-w-none items-start justify-start"
+        >
+          <div className={capsule}>
           <div className="flex h-9 items-center justify-center px-2">
             <Link
               href="/"
@@ -238,17 +278,18 @@ export function EnTete() {
           />
 
           {/* Les menus déroulants.
-              `viewport={false}` colle le panneau sous son propre déclencheur au
-              lieu de le centrer sous la barre : c'est ce qui donne le
-              déroulé aligné à gauche de passionfroot. L'ouverture et la
-              fermeture sont animées par les états `data-[state]` du composant,
-              pas par une transition écrite à la main. */}
-          <NavigationMenu
-            viewport={false}
-            className="hidden md:flex"
-            delayDuration={0}
-          >
-            <NavigationMenuList className="gap-1">
+
+              Le panneau se rend dans le `viewport` de la racine, qui est
+              au-dessus, hors de la capsule : voir le commentaire de la capsule
+              pour pourquoi il ne peut pas en être autrement. Le `viewport` est
+              calé à gauche, comme le déroulé de passionfroot, et son verre est
+              écrit dans `globals.css`, le composant de registre ne laissant
+              passer aucune classe jusqu'à lui.
+
+              L'ouverture et la fermeture sont animées par les états
+              `data-[state]` du composant, pas par une transition écrite à la
+              main. */}
+          <NavigationMenuList className="hidden gap-1 md:flex">
               {menus.map((menu) => (
                 <NavigationMenuItem key={menu.libelle}>
                   {/* `group/roule` est posé ici et non dans `classesEntree` :
@@ -281,30 +322,20 @@ export function EnTete() {
                       deux, et une valeur en blanc dur n'aurait rien donné en
                       clair.
 
-                      **Le verre de l'en-tête est conservé par-dessus**, sur
-                      insistance de Rémy : `card/85` et flou de douze pixels,
-                      exactement les capsules. C'est la troisième exception du
-                      projet à « le flou va derrière, jamais devant », et elle
-                      se tient : ce panneau **sort** d'une capsule en verre, et
-                      les deux se lisaient comme deux objets étrangers quand
-                      l'un était opaque. Écrite dans `AGENTS.md`.
+                      **Le verre de l'en-tête est conservé**, sur insistance
+                      de Rémy : `card/85` et flou de douze pixels, exactement
+                      les capsules. C'est la troisième exception du projet à
+                      « le flou va derrière, jamais devant », et elle se tient :
+                      ce panneau **sort** d'une capsule en verre, et les deux se
+                      lisaient comme deux objets étrangers quand l'un était
+                      opaque. Écrite dans `AGENTS.md`.
 
-                      Le fond et le rayon sont écrits **deux fois**, nus et
-                      préfixés `group-data-[viewport=false]`. Le composant de
-                      registre pose les siens sous ce préfixe, `cn()` ne voit
-                      pas là un conflit, et c'est la classe préfixée qui gagne :
-                      sans le doublage, le panneau restait opaque et à 5 px
-                      pendant que le code disait le contraire. C'est la leçon
-                      des flèches du carrousel, dans `AGENTS.md`. */}
-                  <NavigationMenuContent
-                    style={{ boxShadow: "var(--ombre-verre)" }}
-                    className={cn(
-                      "overflow-hidden p-4 backdrop-blur-md",
-                      "rounded-[28px] group-data-[viewport=false]/navigation-menu:rounded-[28px]",
-                      "bg-card/85 group-data-[viewport=false]/navigation-menu:bg-card/85",
-                      "border-border group-data-[viewport=false]/navigation-menu:border-border",
-                    )}
-                  >
+                      Ce verre n'est pas ici mais dans `globals.css`, sur le
+                      `viewport` : c'est lui le cadre visible, et le composant
+                      de registre le rend lui-même, sans laisser passer la
+                      moindre classe. Ce panneau-ci ne porte plus que son
+                      rembourrage et sa grille. */}
+                  <NavigationMenuContent className="p-4">
                     {/* La grille.
 
                         Deux colonnes comme chez eux, et la largeur suit : leur
@@ -320,6 +351,7 @@ export function EnTete() {
                     <ul className="grid w-[44rem] max-w-[calc(100vw-5rem)] grid-cols-2 gap-x-1.5 gap-y-3">
                       {menu.entrees.map((entree) => {
                         const Icone = ICONES[entree.href] ?? Newspaper;
+                        const lettre = LETTRES_MARQUE[entree.href];
                         const externe =
                           entree.externe || estExterne(entree.href);
 
@@ -341,7 +373,7 @@ export function EnTete() {
                                    et non un jeton : c'est la même mécanique que
                                    la tuile, donc il suit le thème sans qu'on
                                    écrive deux valeurs. */
-                                className="group/entree flex flex-row items-center gap-4 rounded-[16px] py-2.5 pr-7 pl-2.5 transition-colors hover:bg-[color-mix(in_srgb,currentColor_5%,transparent)]"
+                                className="group/entree flex flex-row items-center gap-4 rounded-[12px] py-2.5 pr-7 pl-2.5 transition-colors hover:bg-[color-mix(in_srgb,currentColor_5%,transparent)]"
                               >
                                 {/* La tuile.
 
@@ -360,13 +392,29 @@ export function EnTete() {
                                     tuile, pas du glyphe, donc l'écart se voit
                                     peu ; le combler demande des dessins, pas du
                                     code. */}
-                                <span
-                                  aria-hidden
-                                  style={{ boxShadow: "var(--ombre-verre)" }}
-                                  className="grid size-11 shrink-0 place-items-center overflow-hidden rounded-[14px] bg-[color-mix(in_srgb,currentColor_4%,transparent)] p-2.5 text-primary outline outline-[color-mix(in_srgb,currentColor_8%,transparent)] -outline-offset-1"
-                                >
-                                  <Icone className="size-full" />
-                                </span>
+                                {lettre ? (
+                                  /* Les deux programmes portent la marque et
+                                     non un pictogramme, sur demande de Rémy :
+                                     la même tuile que les cartes de l'accueil,
+                                     un `F` pour Funnels Club et un `C` pour le
+                                     consulting. Elle a son fond et son relief à
+                                     elle, donc elle remplace la tuile de verre
+                                     au lieu de se poser dedans : deux reliefs
+                                     emboîtés ne font pas un objet, ils font une
+                                     bordure de trop. */
+                                  <LogoFunnels
+                                    lettre={lettre}
+                                    className="size-11 shrink-0"
+                                  />
+                                ) : (
+                                  <span
+                                    aria-hidden
+                                    style={{ boxShadow: "var(--ombre-verre)" }}
+                                    className="grid size-11 shrink-0 place-items-center overflow-hidden rounded-[10px] bg-[color-mix(in_srgb,currentColor_4%,transparent)] p-2.5 text-primary outline outline-[color-mix(in_srgb,currentColor_8%,transparent)] -outline-offset-1"
+                                  >
+                                    <Icone className="size-full" />
+                                  </span>
+                                )}
 
                                 {/* `min-w-0` : sans lui, un bloc de texte dans
                                     un conteneur en `flex` refuse de descendre
@@ -388,6 +436,38 @@ export function EnTete() {
                                   {entree.texte ? (
                                     <span className="line-clamp-1 text-sm text-muted-foreground">
                                       {entree.texte}
+                                    </span>
+                                  ) : null}
+
+                                  {/* La signature, sous la description.
+
+                                      C'est celle des cartes de l'accueil, en
+                                      plus petit et sans son fond : dans une
+                                      carte, la pastille grise tient ensemble un
+                                      rond et trois mots qui flotteraient
+                                      autrement ; ici, la ligne est déjà tenue
+                                      par la tuile à sa gauche, et un second
+                                      fond gris à l'intérieur d'une entrée
+                                      survolable ferait un bouton dans un
+                                      bouton.
+
+                                      Le portrait est celui de `site.ts`, servi
+                                      par nous. `alt` vide et assumé : le nom de
+                                      Rémy est dans le texte juste à côté. */}
+                                  {entree.mention ? (
+                                    <span className="mt-1 flex items-center gap-1.5">
+                                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                                      <img
+                                        src="/remy.webp"
+                                        alt=""
+                                        width={160}
+                                        height={160}
+                                        loading="lazy"
+                                        className="size-4 rounded-full object-cover"
+                                      />
+                                      <span className="text-xs font-medium text-muted-foreground">
+                                        {entree.mention}
+                                      </span>
                                     </span>
                                   ) : null}
                                 </span>
@@ -435,8 +515,8 @@ export function EnTete() {
                 </NavigationMenuItem>
               ))}
             </NavigationMenuList>
-          </NavigationMenu>
-        </div>
+          </div>
+        </NavigationMenu>
 
         {/* La capsule de droite. */}
         <div className={capsule}>

@@ -258,12 +258,18 @@ dans leur feuille de style, sur les classes `nav_mega__wrap`, `nav_mega__layout`
 **Elles sont toutes en `em` chez eux**, donc proportionnelles au corps du texte,
 et c'est ce qui rend le relevé transposable : panneau à 1,75 em de rayon, grille
 de deux colonnes, entrée à 1 em de rayon, tuile de 2,75 em à 0,875 em de rayon.
-Résolues sur nos 16 px, elles donnent 28, 16 et 14 px.
+
+**Les rayons, eux, ont été rentrés**, sur correction de Rémy : 16 px pour le
+panneau, 12 pour l'entrée, 10 pour la tuile, au lieu des 28, 16 et 14 du relevé.
+Les leurs sont justes chez eux, sur un panneau de 864 px ; sur le nôtre,
+l'arrondi devenait le premier objet qu'on voyait. À 16, le panneau reste dans la
+famille des 12 px des capsules dont il sort, et la tuile tombe pile sur le rayon
+du logo Funnels Club, qui est à 22 % de son côté.
 
 **Ce sont donc trois rayons de plus que 5 px**, et ils ne s'étendent à rien
 d'autre. La règle des 5 px décrit un objet qu'on regarde de près ; un panneau de
-menu est une surface flottante, de la même famille que les capsules à 12 px dont
-il sort. Une quatrième valeur ne s'ajoute pas sans se décider ici.
+menu est une surface flottante, de la même famille que les capsules. Une
+quatrième valeur ne s'ajoute pas sans se décider ici.
 
 **Le relief est leur `--sh-glass`**, trois ombres intérieures : un filet en haut,
 un halo très large, un halo court. C'est ce triplé qui fait qu'une tuile a l'air
