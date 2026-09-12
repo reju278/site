@@ -1,6 +1,7 @@
 import { ConversationConsulting } from "@/components/conversation-consulting";
 import { CourbeMontante } from "@/components/courbe-montante";
 import { CourbeVivante } from "@/components/courbe-vivante";
+import { DernieresVideos } from "@/components/dernieres-videos";
 import { FondResultats } from "@/components/fond-resultats";
 import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { CarrouselTemoignages } from "@/components/carrousel-temoignages";
@@ -605,6 +606,19 @@ export default function Accueil() {
           <SectionLivre />
         </Section>
       </FondResultats>
+
+      {/* « Mes dernières vidéos », juste sous la section du livre, sur demande
+          de Rémy.
+
+          **Hors du fond des résultats et non dedans.** Ce fond couvre les
+          témoignages et le livre d'un seul tenant, et il s'éteint au masque
+          sous la carte du livre : y ajouter une troisième section rallongerait
+          une couche dont tout le raccord repose sur l'endroit où elle finit.
+          La section revient donc sur la couleur de page, comme le pied de page
+          qui la suit. */}
+      <Section>
+        <DernieresVideos />
+      </Section>
 
       {/* Rien entre le livre et le pied de page.
 

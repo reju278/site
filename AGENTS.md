@@ -1085,6 +1085,52 @@ se borne toujours à la largeur où il tient, `sm:whitespace-nowrap` et pas
 davantage, et la hauteur se déclare en `min-h-*` pour que le bouton grandisse au
 lieu de rogner son propre texte.
 
+### « Mes dernières vidéos » : trois chaînes, une vidéo chacune
+
+Sur demande de Rémy, sous la section du livre. Trois fiches, une par chaîne, au
+dessin de celles du blog : image en 16/9, date, titre, et une ligne en bas qui
+porte le nom de la chaîne, puisque c'est ce qui distingue les trois.
+
+**Ces fiches mènent à YouTube et n'ont pas de page ici, contrairement aux
+articles de la lettre, et ce n'est pas une inconséquence.** Le flux Substack
+porte le corps entier de l'article, donc il y a de quoi faire une page. Le flux
+Atom de YouTube ne porte qu'un titre, une date, une vignette et une description :
+**ni la durée, ni les sous-titres**, ce qui interdit au passage le `VideoObject`
+que le projet exige. Une page par vidéo ne contiendrait qu'un lecteur embarqué et
+trois lignes, c'est-à-dire une page vide pour un moteur.
+
+Le flux n'expose que **les quinze dernières vidéos**, ce qui suffit pour n'en
+prendre qu'une. Il est public et sans quota, contrairement à l'API Data v3.
+
+Trois détails qui se sont décidés en écrivant :
+
+- **Les trois flux se lisent en parallèle.** Trois attentes qui se suivent
+  s'additionnent dans le rendu ; lancées ensemble, elles coûtent la plus lente.
+  Et une chaîne qui tombe n'emporte pas les deux autres.
+- **Les shorts sont écartés.** Leur vignette est un portrait, recadré de force
+  dans une fiche en 16/9.
+- **La vignette est `hqdefault`, recadrée en 16/9 par la fiche.** Elle existe
+  pour toute vidéo, là où `maxresdefault` manque sur celles qui n'ont jamais été
+  servies en haute définition, et une vignette absente rend une image cassée sans
+  que rien ne le signale. Elle est en 4/3, donc c'est le cadre qui porte le
+  rapport et l'image qui le remplit.
+- **La section ne s'affiche pas si elle n'a rien.** Un titre seul au-dessus du
+  vide est pire que pas de section.
+
+### Le pied de page suit l'en-tête, entrée pour entrée
+
+Sur demande de Rémy, et c'était déjà la règle. Sa troisième colonne s'appelle
+« Chaînes YouTube » et reprend la colonne droite du menu ; « Espace membre » en
+est sorti, parce que ce n'est pas une page du site mais la porte d'entrée des
+clients, et qu'elle reste dans l'en-tête à côté de « Connexion ».
+
+**Mais le pied de page tient la carte du site, donc il porte ce que l'en-tête ne
+porte plus.** `/podcast` a quitté le menu quand « Profit, liberté, no stress » est
+devenu un lien vers la chaîne : la page existe toujours et liste tous les
+épisodes, elle est donc dans la colonne « Ressources » sous « Épisodes du
+podcast », et c'est son seul chemin. Suivre l'en-tête ne veut pas dire s'y
+réduire.
+
 ### La page des résultats est un sommaire, pas une page de vente
 
 Trois décisions de Rémy, prises ensemble et qui se tiennent.

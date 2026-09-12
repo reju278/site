@@ -958,6 +958,7 @@ export const chaine = {
   flux: "https://www.youtube.com/feeds/videos.xml?channel_id=UCzGq4I0pXnDJizd0fitt10w",
 } as const;
 
+
 /**
  * La vidéo de présentation, hébergée chez Wistia.
  *
@@ -993,6 +994,46 @@ export const podcast = {
     { nom: "YouTube", href: "https://www.youtube.com/@profitlibertenostress" },
   ],
 } as const;
+
+/**
+ * Les trois chaînes, pour la section « Mes dernières vidéos » de l'accueil.
+ *
+ * Sur demande de Rémy : une fiche par chaîne, la dernière vidéo de chacune, et
+ * la section se met à jour toute seule comme le blog.
+ *
+ * **Les identifiants sont relevés dans le `externalId` de chaque page de
+ * chaîne**, pas déduits d'un nom d'usage. Un commentaire de ce fichier a
+ * longtemps affirmé que deux d'entre elles n'en faisaient qu'une, et ça a coûté
+ * un mauvais lien dans le menu. Voir `liens`.
+ *
+ * Le flux Atom de YouTube est public et sans quota, contrairement à l'API Data
+ * v3 qui demande une clé. **Il n'expose que les quinze dernières vidéos**, ce
+ * qui est largement assez pour n'en prendre qu'une, et il ne donne ni la durée
+ * ni les sous-titres : c'est la raison pour laquelle ces fiches mènent à
+ * YouTube au lieu d'avoir leur page ici, contrairement aux articles de la
+ * lettre, dont le flux porte le texte entier.
+ */
+export const chaines: readonly {
+  nom: string;
+  identifiant: string;
+  href: string;
+}[] = [
+  {
+    nom: chaine.nom,
+    identifiant: "UCzGq4I0pXnDJizd0fitt10w",
+    href: liens.youtubeRemy,
+  },
+  {
+    nom: podcast.nom,
+    identifiant: "UCCKabalzdV9FU2k7gX69vkQ",
+    href: liens.youtube,
+  },
+  {
+    nom: podcastMaverick.nom,
+    identifiant: "UCjPxzaZXn0t8edQ21_8bv1Q",
+    href: podcastMaverick.youtube,
+  },
+];
 
 /** La lettre, telle que son propre flux se décrit. */
 export const lettre = {
@@ -1105,24 +1146,44 @@ export const colonnesPiedDePage: readonly {
         href: liens.consulting,
         externe: true,
       },
-      { libelle: "Espace membre", href: liens.espaceMembre, externe: true },
+      /* **« Espace membre » a été retiré**, sur demande de Rémy. Ce n'est pas
+         une page du site mais la porte d'entrée des clients, et le pied de page
+         tient la carte du site. Le lien reste dans l'en-tête, à côté de
+         « Connexion », qui est l'endroit où on le cherche. */
     ],
   },
   {
     titre: "Ressources",
     entrees: [
+      { libelle: "Digital Selfmade", href: liens.livre, externe: true },
       { libelle: "Résultats", href: "/resultats" },
       { libelle: "Blog", href: "/articles" },
-      { libelle: "Digital Selfmade", href: liens.livre, externe: true },
+      /* **`/podcast` n'est plus dans l'en-tête** depuis que la ligne « Profit,
+         liberté, no stress » du menu mène à la chaîne YouTube. Cette page
+         existe toujours et liste tous les épisodes : elle est ici, et c'est son
+         seul chemin. Le libellé dit ce qu'on y trouve plutôt que le nom du
+         podcast, qui est déjà celui d'une chaîne dans la colonne voisine. */
+      { libelle: "Épisodes du podcast", href: "/podcast" },
     ],
   },
   {
-    titre: "Podcasts",
+    /* La troisième colonne reprend la colonne droite du menu « Ressources »,
+       entrée pour entrée, sur demande de Rémy : « mets à jour tous les liens du
+       footer par rapport à ce qu'on a mis aussi dans le header ».
+
+       Elle s'appelait « Podcasts » et pointait vers Ausha. Les trois lignes sont
+       des chaînes YouTube, donc le titre le dit. */
+    titre: "Chaînes YouTube",
     entrees: [
-      { libelle: "Profit, liberté, no stress", href: "/podcast" },
+      { libelle: "Rémy Jupille", href: liens.youtubeRemy, externe: true },
+      {
+        libelle: "Profit, liberté, no stress",
+        href: liens.youtube,
+        externe: true,
+      },
       {
         libelle: podcastMaverick.nom,
-        href: podcastMaverick.site,
+        href: podcastMaverick.youtube,
         externe: true,
       },
     ],

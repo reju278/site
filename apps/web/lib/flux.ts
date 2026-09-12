@@ -1,5 +1,5 @@
 import { assainir } from "@/lib/article-substack";
-import { chaine, lettre, podcast } from "@/contenu/site";
+import { chaine, chaines, lettre, podcast } from "@/contenu/site";
 
 /** `https://lettre.funnels.club/p/mon-titre` donne `mon-titre`. */
 function slugDepuis(lien: string): string {
@@ -321,4 +321,83 @@ export async function lireEpisodes(combien = 12): Promise<Episode[]> {
   }
 
   return episodes;
+}
+
+/* ---------------------------------------------------------------------------
+   La dernière vidéo de chaque chaîne.
+
+   Trois flux Atom lus en parallèle, une vidéo retenue par flux : c'est ce que
+   montre la section « Mes dernières vidéos » de l'accueil.
+
+   **En parallèle et non l'un après l'autre.** Trois attentes qui se suivent
+   s'additionnent dans le temps de rendu de la page ; lancées ensemble, elles
+   coûtent la plus lente des trois. Et une chaîne qui tombe n'emporte pas les
+   deux autres : son entrée disparaît de la grille, les autres restent.
+--------------------------------------------------------------------------- */
+
+export type DerniereVideo = Video & {
+  /** Le nom de la chaîne, affiché sous le titre. */
+  chaine: string;
+  /** L'adresse de la chaîne, pour le lien « voir la chaîne ». */
+  chaineHref: string;
+};
+
+/**
+ * La dernière vidéo de chaque chaîne, dans l'ordre de `chaines`.
+ *
+ * **Les shorts sont écartés.** Ils sont verticaux, donc leur vignette est un
+ * portrait recadré de force dans une fiche en 16/9, et ce sont des formats
+ * courts qui ne représentent pas la chaîne. On prend la première vidéo qui n'en
+ * est pas un.
+ *
+ * Une chaîne sans vidéo utilisable, ou dont le flux ne répond pas, ne rend rien
+ * plutôt que de faire échouer la page : la section s'affiche avec ce qu'elle a,
+ * et disparaît si elle n'a rien.
+ */
+export async function lireDernieresVideos(): Promise<DerniereVideo[]> {
+  const lectures = chaines.map(async (ch) => {
+    let xml: string;
+
+    try {
+      const reponse = await fetch(
+        `https://www.youtube.com/feeds/videos.xml?channel_id=${ch.identifiant}`,
+        { next: { revalidate: FRAICHEUR } }
+      );
+      if (!reponse.ok) return null;
+      xml = await reponse.text();
+    } catch {
+      return null;
+    }
+
+    for (const bloc of xml.split("<entry>").slice(1)) {
+      const id = balise(bloc, "yt:videoId");
+      const titre = balise(bloc, "title");
+      if (!id || !titre) continue;
+
+      const lien =
+        bloc.match(/<link[^>]*rel="alternate"[^>]*href="([^"]+)"/i)?.[1] ??
+        `https://www.youtube.com/watch?v=${id}`;
+
+      if (lien.includes("/shorts/")) continue;
+
+      return {
+        titre: texteNu(titre),
+        lien,
+        date: balise(bloc, "published") ?? "",
+        // `hqdefault` et non `maxresdefault` : la première existe pour toute
+        // vidéo, la seconde manque sur celles qui n'ont jamais été servies en
+        // haute définition, et une vignette absente rend une image cassée sans
+        // que rien ne le signale. Elle est en 4/3 : c'est la fiche qui la
+        // recadre en 16/9, voir le commentaire du composant.
+        image: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
+        court: false,
+        chaine: ch.nom,
+        chaineHref: ch.href,
+      } satisfies DerniereVideo;
+    }
+
+    return null;
+  });
+
+  return (await Promise.all(lectures)).filter((v) => v !== null);
 }
