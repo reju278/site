@@ -506,6 +506,7 @@ summary {
   /* Le vert de la courbe, `emerald-500`, celui du deck. Rien d'autre ne le
      porte. */
   --courbe: #10b981;
+
 }
 
 .dark {

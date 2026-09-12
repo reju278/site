@@ -321,11 +321,7 @@ export default function Accueil() {
                   le commentaire de `courbe` dans `site.ts` pour pourquoi le
                   consulting n'en a pas. */}
               {"courbe" in offre && offre.courbe ? (
-                <CourbeMontante
-                  fin={offre.courbe.fin}
-                  unite={offre.courbe.unite}
-                  className="mt-5"
-                />
+                <CourbeMontante className="mt-5" />
               ) : null}
 
               {/* L'échange du consulting, à la même place que la courbe de
@@ -336,6 +332,7 @@ export default function Accueil() {
                 <ConversationConsulting
                   question={offre.conversation.question}
                   reponse={offre.conversation.reponse}
+                  fin={offre.conversation.fin}
                   portrait={offre.surtitre.portrait}
                   className="mt-5"
                 />

@@ -325,17 +325,19 @@ export const offres = [
        visite. */
     surtitre: { texte: "Animé par Rémy", portrait: "/remy.webp" },
 
-    /* La courbe montante, entre le titre et la description.
+    /* La courbe de croissance, entre le titre et la description.
      *
-     * **Elle n'ajoute aucune promesse à celle qui est déjà écrite.** La carte
-     * dit « plus de 6 chiffres par an » ; la courbe s'arrête à 250 000 €, qui
-     * est dans cette fourchette. Une courbe qui finirait plus haut que la phrase
-     * qu'elle accompagne serait une seconde promesse, glissée dans un dessin, et
-     * c'est ce qu'il faut éviter sur un site de formation.
+     * C'est un drapeau et non des données : la forme vit dans `CourbeMontante`,
+     * parce qu'elle ne dit rien de chiffrable. Elle part à plat, longtemps, puis
+     * monte. C'est ce plat du début qui porte le sens, et il n'appartient pas au
+     * contenu.
      *
-     * Le consulting n'en a pas : sa phrase ne parle pas de chiffres, donc une
-     * courbe y serait une affirmation nouvelle et non une illustration. */
-    courbe: { fin: 250000, unite: "€/an" },
+     * **Aucun montant n'y est écrit.** Une première version en affichait un ; la
+     * carte dit déjà « plus de 6 chiffres par an », et un nombre dans le dessin
+     * en ferait une seconde promesse, plus précise que la phrase.
+     *
+     * Le consulting n'en a pas : il montre autre chose, un échange. */
+    courbe: true,
     /* Réécrite sous la dictée de Rémy, et c'est ce qui la distingue du reste
        de ce fichier : les autres phrases sont reprises telles quelles de
        funnels.club, celle-ci a été dictée point par point, « un accompagnement
@@ -370,8 +372,13 @@ export const offres = [
      * que Rémy répondrait. Tant qu'elles manquent, la carte s'affiche sans la
      * conversation, comme avant. */
     conversation: {
-      question: null as string | null,
-      reponse: null as string | null,
+      question: "Disponible pour un appel en visio ?",
+      reponse: "Oui bien-sûr, je t'envoie un lien",
+      /* Le pouce du client, qui clôt l'échange. C'est la réponse de Rémy :
+         « dernière réponse de la personne après Rémy : 👍 ». Un émoji seul est
+         du contenu comme un autre, et il dit ce qu'aucune phrase ne dirait plus
+         court, que c'est réglé. */
+      fin: "👍",
     },
     texte:
       "C'est l'accompagnement le plus personnalisé que Rémy propose, où vous avez accès à lui en direct dès que vous en avez besoin et où vous pouvez réserver des visioconférences en illimité du lundi au samedi.",
