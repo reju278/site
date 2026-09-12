@@ -184,7 +184,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','${GTM}');`}
         </Script>
 
-        <ThemeProvider>
+        {/* Le thème par défaut est le **sombre**, sur décision de Rémy.
+
+            Il vaut pour quelqu'un qui arrive sans préférence enregistrée, et
+            quelle que soit celle de son système : c'est dans ce thème que le
+            site se regarde. Quelqu'un qui a déjà basculé garde son choix, la
+            valeur étant stockée par `next-themes`.
+
+            `enableSystem` reste en place, et ce n'est pas une contradiction :
+            il ne décide plus de l'accueil, mais il continue de faire vivre la
+            valeur « système » déjà enregistrée dans le navigateur des
+            visiteurs précédents. La retirer ferait retomber ceux-là sur un
+            thème non résolu, donc sur le clair, ce qui est exactement
+            l'inverse de ce qu'on demande ici.
+
+            La valeur est passée ici et non dans `packages/ui` : le composant
+            partagé reste un fournisseur générique, et c'est le site qui dit ce
+            qu'il veut. */}
+        <ThemeProvider defaultTheme="dark">
           <div className="flex min-h-svh flex-col">
             <EnTete />
             <main className="flex-1">{children}</main>

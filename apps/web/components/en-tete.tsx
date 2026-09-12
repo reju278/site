@@ -20,7 +20,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@repo/ui/components/sheet";
-import { KineticText } from "@repo/ui/components/kinetic-text";
 import { cn } from "@repo/ui/lib/utils";
 import { ArrowUpRight, Menu } from "lucide-react";
 import Link from "next/link";
@@ -154,36 +153,30 @@ export function EnTete() {
           <div className="flex h-9 items-center justify-center px-2">
             <Link
               href="/"
-              // Le logo est le mot « expertise » du hero, à l'identique : même
-              // serif en italique, même effet au survol. `titre` porte la
-              // fonte, comme le `h1` le fait là-bas ; le reste vient de
-              // `KineticText`, avec la même variable.
+              // Le logo est le mot « expertise » du hero : même serif en
+              // italique, `titre` portant la fonte comme le `h1` le fait
+              // là-bas.
               //
-              // Instrument Serif n'existe qu'en 400, et `titre-fort` pose
-              // `font-synthesis: none` : le `font-[900]` que le composant
-              // applique au survol ne fabrique donc aucun faux gras. Ce qui se
-              // voit, ici comme dans le titre, c'est le filet de contour et
-              // l'écartement des lettres.
+              // **Il n'a plus l'effet lettre à lettre au survol**, retiré sur
+              // décision de Rémy. `KineticText` reste en place partout
+              // ailleurs, dans le hero et dans la signature du pied de page :
+              // ce qui est retiré, c'est l'effet **ici**. Un logo d'en-tête est
+              // survolé à chaque visite, au passage vers les menus voisins,
+              // donc un effet qui se justifie sur un mot qu'on rencontre une
+              // fois devient un tressautement permanent.
+              //
+              // `tracking-tight` reste : il rattrapait le crénage que le
+              // découpage lettre à lettre supprimait, et il fait maintenant
+              // partie du dessin du logo. `whitespace-nowrap` aussi : le nom
+              // fait deux mots, et le `flex-nowrap` qui les tenait sur une
+              // ligne appartenait au composant qu'on vient de retirer. Sans
+              // lui, la capsule casserait le nom en deux sur un écran étroit.
               className={cn(
-                "titre text-lg transition-colors duration-300",
+                "titre titre-fort text-lg whitespace-nowrap tracking-tight transition-colors duration-300",
                 surImage ? "text-white" : "text-foreground",
               )}
             >
-              <KineticText
-                as="span"
-                text={identite.nom}
-                // Les deux mêmes correctifs que dans le hero : l'écartement au
-                // survol divisé par quarante, sans quoi le nom pousse la
-                // capsule, et `tracking-tight` pour rattraper le crénage que
-                // le découpage lettre à lettre supprime.
-                //
-                // `flex-nowrap` en plus : le nom fait deux mots, et le
-                // composant enveloppe par défaut.
-                style={
-                  { "--hover-padding": "calc(1em / 40)" } as React.CSSProperties
-                }
-                className="titre-fort inline-flex flex-nowrap tracking-tight"
-              />
+              {identite.nom}
             </Link>
           </div>
 

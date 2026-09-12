@@ -46,7 +46,43 @@ export function PiedDePage() {
     // propre mesure et tombait 20 px plus large de chaque côté que la carte du
     // livre juste au-dessus : deux blancs voisins qui ne s'alignent pas se
     // voient tout de suite, même sans savoir dire pourquoi.
-    <footer className="pb-5">
+    <footer className="relative isolate pb-5">
+      {/* Le fond du deck, celui des en-têtes de pages intérieures.
+
+          C'est exactement la même couche que `EnTetePage` et `FondResultats` :
+          `fond-resultats` et `grain-resultats`, écrits une fois dans
+          `globals.css`. Posé ici sur décision de Rémy, pour que la page se
+          ferme sur la matière sur laquelle les pages s'ouvrent.
+
+          **Le fondu est en haut et non en bas, et c'est la position du bloc qui
+          le décide.** L'en-tête d'une page intérieure a du contenu en dessous,
+          donc il s'éteint par le bas ; le pied de page a du contenu au-dessus
+          et plus rien en dessous, donc il s'allume par le haut et va jusqu'au
+          bord. Il n'y a aucun raccord à cacher en bas : il n'y a pas de bas.
+
+          Pas de lèvre ni de filet, pour la même raison qu'en tête de page
+          intérieure : une lèvre est la page qui **descend** sur un bloc, avec
+          ses angles arrondis. Ici le fond monte vers la page au lieu de s'y
+          heurter, donc il n'y a pas d'arête à rendre lisible.
+
+          Le masque emporte le grain en même temps que la couleur, puisqu'il
+          s'applique à l'élément et à son `::after`. C'est ce qui compte : une
+          couche de couleur qui se fond sous un grain qui s'arrête net dessine
+          exactement la ligne que le fondu essayait d'effacer. Voir `AGENTS.md`.
+
+          Les deux écritures du masque s'écrivent : Safari n'a levé son préfixe
+          qu'en 15.4. */}
+      <div
+        aria-hidden
+        className="fond-resultats grain-resultats pointer-events-none absolute inset-0 -z-10"
+        style={{
+          WebkitMaskImage:
+            "linear-gradient(to bottom, transparent 0%, #000 45%, #000 100%)",
+          maskImage:
+            "linear-gradient(to bottom, transparent 0%, #000 45%, #000 100%)",
+        }}
+      />
+
       <div className="mx-auto max-w-6xl px-5">
         {/* La carte.
 

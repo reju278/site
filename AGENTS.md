@@ -304,6 +304,19 @@ projet, c'est une contrainte de chaque modification.
   dans l'autre thème. Si un jeton manque, l'ajouter pour `:root` **et** `.dark`.
 - Vérifier l'écran dans les deux thèmes avant de le considérer terminé.
 
+**Le thème d'arrivée est le sombre**, sur décision de Rémy. `defaultTheme="dark"`
+est passé au `ThemeProvider` depuis `layout.tsx`, et non dans `packages/ui` : le
+fournisseur partagé reste générique, c'est le site qui dit ce qu'il veut. Il ne
+s'applique qu'à quelqu'un qui n'a rien enregistré ; un visiteur qui a basculé
+garde son choix.
+
+`enableSystem` reste actif, et ce n'est pas une contradiction : il ne décide plus
+de l'accueil, il fait encore vivre la valeur « système » déjà écrite dans le
+navigateur des visiteurs précédents. Le retirer les ferait retomber sur un thème
+non résolu, donc sur le clair, c'est-à-dire l'inverse de ce qu'on vient de
+décider. **Le thème par défaut ne dispense de rien** : les deux restent à
+vérifier, écran par écran.
+
 ### Le contraste se mesure sur toutes les surfaces, pas sur le fond de page
 
 Un texte atténué reste du texte courant : il lui faut **4,5:1 sur chacune des
@@ -330,6 +343,15 @@ fichier du deck, pas approchées à l'œil.
 **Le deck est toujours clair ; le site a deux thèmes.** Les halos sont donc
 remontés en opacité pour le sombre : sur un fond presque noir, un bleu à 10 %
 ne se voit pas du tout, alors qu'il suffit à donner sa profondeur au blanc.
+
+**Il sert aussi en tête des pages intérieures et sous le pied de page.** Trois
+emplacements, une seule couche : `fond-resultats` et `grain-resultats`, écrits
+une fois dans `globals.css`. Ce qui change d'un endroit à l'autre, c'est
+seulement le sens du fondu, et il se déduit de la position du bloc. Un bloc qui a
+du contenu **en dessous** s'éteint par le bas, c'est l'en-tête de page ; un bloc
+qui n'a rien en dessous s'allume par le haut et va jusqu'au bord, c'est le pied
+de page. La lèvre et son filet n'appartiennent qu'à l'accueil, où la page
+**descend** sur la section : ailleurs, il n'y a aucune arête à rendre lisible.
 
 **Le fond couvre les résultats et le livre d'un seul tenant**, et c'est ce qui
 fait une transition plutôt qu'une frontière : il s'éteint derrière la carte du
