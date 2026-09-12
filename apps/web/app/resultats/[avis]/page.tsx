@@ -1,7 +1,6 @@
 import { AppelFormation } from "@/components/appel-formation";
 import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { AppelOffres } from "@/components/appel-offres";
-import { HAUTEUR_ENTETE } from "@/lib/entete";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { Section } from "@/components/section";
 import { TexteLie } from "@/components/texte-lie";
@@ -156,34 +155,17 @@ export default async function PageAvis({
         </div>
       </section>
 
-      {/* L'entretien, puis l'article qui vient le recouvrir.
+      {/* L'entretien.
 
-          **La vidéo est collante et l'article passe par-dessus**, sur demande de
-          Rémy : au défilement, l'entretien reste en place et le texte monte
-          dessus, comme une page qu'on ouvre. C'est du CSS et rien d'autre, pas
-          une ligne de JavaScript : `sticky` cale la vidéo sous l'en-tête, et
-          l'article, qui la suit dans le flux, la couvre parce qu'il est
-          au-dessus dans la pile et qu'il porte un fond opaque.
-
-          Les trois conditions tiennent ensemble et se cassent séparément. Il
-          faut un **parent commun** aux deux, sinon la vidéo se décolle dès la
-          fin de sa propre section. Il faut que ce parent n'ait **aucun
-          `overflow`** : une valeur autre que `visible` sur n'importe quel
-          ancêtre annule `sticky` sans rien signaler. Et il faut un **fond
-          opaque** sur l'article, sans quoi le texte se superpose à l'image au
-          lieu de la masquer.
-
-          Le décalage du haut est la hauteur de l'en-tête flottant, importée et
-          non recopiée : deux nombres qui doivent rester d'accord finissent
-          toujours par diverger.
+          Il défile avec la page : l'effet collant, où la vidéo restait en place
+          pendant que l'article montait par-dessus, a été retiré sur décision de
+          Rémy. Ce qui reste de lui est le panneau arrondi de l'article, qui
+          était la moitié visible de l'idée.
 
           Il est plus large que le texte, `max-w-4xl` contre `max-w-3xl` : une
           vidéo se regarde, un texte se lit, et les deux n'ont pas la même bonne
           mesure. Le lecteur n'appelle Wistia qu'au clic. */}
-        <section
-          className="sticky px-5"
-          style={{ top: HAUTEUR_ENTETE + 16 }}
-        >
+        <section className="px-5">
           <div className="mx-auto max-w-4xl">
             <LecteurVideo
               id={temoignage.id}
@@ -200,10 +182,6 @@ export default async function PageAvis({
                 appels de la page ne visent pas le même moment, celui du milieu
                 d'article propose de comprendre, celui de la fin propose de
                 choisir entre les deux offres.
-
-                Il est **dans la couche collante**, avec la vidéo : il part
-                donc sous l'article au même moment qu'elle, au lieu de rester
-                seul au milieu de l'écran quand le texte monte.
 
                 `BoutonScintillant` est le bouton d'appel du site, celui de la
                 page Résultats, et son fond se passe en valeur CSS et jamais en
@@ -231,7 +209,7 @@ export default async function PageAvis({
             Le rayon est `--rayon-jonction` et non 5 px : la jonction fait toute
             la largeur de l'écran, et c'est exactement le cas que l'exception
             d'échelle du projet décrit. Voir `AGENTS.md`. */}
-        <div className="relative z-10 mt-16 rounded-t-[var(--rayon-jonction)] border-t border-border bg-background sm:mt-20">
+        <div className="relative mt-16 rounded-t-[var(--rayon-jonction)] border-t border-border bg-background sm:mt-20">
 
 
       <Section className="[&>div]:pt-14 sm:[&>div]:pt-20">
