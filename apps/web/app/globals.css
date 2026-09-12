@@ -507,6 +507,22 @@ summary {
      porte. */
   --courbe: #10b981;
 
+  /* Le rouge de la courbe qui stagne, dans le graphique des tunnels.
+     `red-600` en clair.
+
+     **Ce n'est pas `--livre`.** Le rouge du livre est relevé dans la couverture
+     d'un objet réel et lui appartient ; celui-ci ne dit rien d'une marque, il
+     dit « ça ne monte pas », comme le vert dit « ça monte ». Deux rouges pour
+     deux métiers, et c'est la raison pour laquelle la règle du livre parle d'un
+     objet qui a déjà sa couleur : ici, il n'y a pas d'objet.
+
+     **Il a deux valeurs quand le vert n'en a qu'une**, et ce n'est pas une
+     négligence. Le vert d'origine tient sur les deux fonds ; un rouge assez
+     soutenu pour se lire sur le fond clair devient sourd sur le fond presque
+     noir, où il faut l'éclaircir. C'est exactement ce que fait déjà
+     `--livre-texte`. */
+  --courbe-morte: #dc2626;
+
 }
 
 .dark {
@@ -516,6 +532,7 @@ summary {
   --halo-c: rgba(4, 94, 230, 0.1);
 
   --courbe: #10b981;
+  --courbe-morte: #f87171;
 }
 
 /* Le fond et ses trois foyers.

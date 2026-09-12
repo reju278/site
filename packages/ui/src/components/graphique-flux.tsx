@@ -16,3 +16,14 @@ export { ChartTooltip } from "./charts/tooltip";
 export { BarChart } from "./charts/bar-chart";
 export { Bar } from "./charts/bar";
 export { Grid } from "./charts/grid";
+/* La courbe de tracé passe par ici elle aussi.
+
+   `@visx/curve` est une dépendance du registre, donc de `packages/ui` : le
+   déclarer une seconde fois dans l'application pour importer une fonction de
+   quatre lignes ferait exister deux copies de la même bibliothèque dans le
+   monorepo, et c'est exactement ce que ce fichier existe pour éviter. */
+export { curveCatmullRom, curveNatural } from "@visx/curve";
+
+export { LineChart } from "./charts/line-chart";
+export { Line } from "./charts/line";
+export { Background } from "./charts/background";

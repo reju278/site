@@ -548,7 +548,7 @@ On a donc le choix entre une carte étroite et des voisins tranchés par le bord
 Le site a essayé les deux : les voisins coupés donnaient des demi-visages
 sectionnés à la verticale. La troisième voie est de renoncer aux voisins,
 `basis-full`, et de dire autrement qu'il y en a d'autres. Le rang de miniatures
-le dit mieux : on ne devine plus qu'il y en a seize, on les voit.
+le dit mieux : on ne devine plus combien il y en a, on les voit.
 
 Calendly, dont la forme est reprise, s'en tire parce que ses tuiles sont des
 portraits étroits. Une vidéo en 16/9 n'a pas cette chance.
@@ -556,7 +556,7 @@ portraits étroits. Une vidéo en 16/9 n'a pas cette chance.
 ### Une bande noire dans une vidéo se recadre des deux côtés, ou pas du tout
 
 Les témoignages sont des appels à deux : l'enregistrement porte ses propres
-bandes noires, la moitié de la hauteur sur huit des seize. Wistia n'expose
+bandes noires, la moitié de la hauteur sur huit d'entre elles. Wistia n'expose
 qu'une image, celle-là, donc « prendre une autre miniature » n'existe pas.
 
 Le cadre est en **2,4/1** plutôt qu'en 16/9, ce qui les fait disparaître sans
@@ -567,7 +567,7 @@ les côtés. L'iframe reçoit donc `fitStrategy=cover`, qui lui demande de rempl
 en rognant. **Affiche et lecteur se recadrent ensemble, ou on a juste déplacé le
 problème d'un quart de tour.**
 
-Le rapport n'est pas choisi à l'œil : les seize affiches ont été relevées au
+Le rapport n'est pas choisi à l'œil : les affiches ont été relevées au
 pixel en lisant leur luminance ligne par ligne. Leur contenu finit toutes à la
 même ligne et la plus haute commence à 48 sur 360 ; 2,4/1 découvre la bande 47 à
 313, donc ne coupe le contenu d'aucune. Ce qui reste de noir est dans la vidéo

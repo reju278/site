@@ -24,7 +24,7 @@ import { useEffect, useState } from "react";
  * filmés et non des portraits tournés pour l'occasion.
  *
  * Le module n'a plus rien d'autre. Il a porté tour à tour des cartes voisines
- * tranchées par le bord, une barre de progression, puis un rang de seize
+ * tranchées par le bord, une barre de progression, puis un rang de
  * miniatures ; il ne garde que ce qui sert à passer d'une vidéo à la suivante.
  *
  * **`basis-full` est ce qui garantit qu'aucune vidéo n'est coupée.** Une carte
@@ -37,15 +37,15 @@ import { useEffect, useState } from "react";
  * de Wistia au fichier près : le média n'en expose qu'une, en 1280 sur 720.
  *
  * Elles portent donc les bandes noires de l'enregistrement, des appels à deux :
- * sur huit des seize, la moitié de la hauteur. Un cadre de 2,4/1 les faisait
+ * sur huit d'entre elles, la moitié de la hauteur. Un cadre de 2,4/1 les faisait
  * disparaître sans toucher au fichier, et il a été essayé ; le 16/9 a été
  * préféré. Ce n'est pas un oubli : ces bandes sont **dans les vidéos**, et le
  * seul endroit où elles s'enlèvent pour de bon est le réexport des vidéos, pas
  * ce dépôt.
  *
- * `LecteurVideo` n'appelle Wistia qu'au clic : seize lecteurs chargés d'avance
- * mettraient la page à genoux, seize affiches servies par nous ne coûtent
- * presque rien.
+ * `LecteurVideo` n'appelle Wistia qu'au clic : quinze lecteurs chargés
+ * d'avance mettraient la page à genoux, quinze affiches servies par nous ne
+ * coûtent presque rien.
  *
  * **Le carrousel ne démarre pas sur le premier témoignage.** Il démarre sur
  * celui que Rémy met en avant, `temoignageEnAvant` dans `site.ts`.
