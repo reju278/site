@@ -83,20 +83,6 @@ export const liens = {
   espaceMembre: avecTag("https://groupe.funnels.club"),
   livre: avecTag("https://www.digital-selfmade.com/livre-1"),
 
-  /* Les avis vérifiés du livre, chez Amazon.
-   *
-   * Sans balise de provenance : Amazon n'est pas une propriété de Rémy et
-   * Hyros ne la suit pas, donc un paramètre inconnu dans cette URL n'apporte
-   * rien. C'est l'exception prévue par `AGENTS.md`.
-   *
-   * Amazon n'offre aucun widget d'avis : recopier les siens ici poserait les
-   * mêmes problèmes que pour Trustpilot, en pire, puisque rien ne dirait qu'ils
-   * viennent de là. Le lien est donc la seule intégration honnête, et c'est
-   * déjà ce que fait la page de vente du livre. */
-  avisLivre:
-    "https://www.amazon.fr/Digital-Selfmade-irr%C3%A9sistible-internet-atteindre/product-reviews/2958479307/",
-
-
   // Sans balise : les plateformes tierces ne sont pas suivies par Hyros, et un
   // paramètre inconnu dans une URL de profil n'apporte rien.
   //
@@ -570,7 +556,11 @@ export const colonnesPiedDePage: readonly {
     titre: "Podcasts",
     entrees: [
       { libelle: "Profit, liberté, no stress", href: "/podcast" },
-      { libelle: podcastMaverick.nom, href: podcastMaverick.site, externe: true },
+      {
+        libelle: podcastMaverick.nom,
+        href: podcastMaverick.site,
+        externe: true,
+      },
     ],
   },
 ];
@@ -628,81 +618,40 @@ export const resultats: readonly {
 }[] = [];
 
 /**
- * Les témoignages écrits, pour les blocs sous les offres et sous le livre.
+ * Ce qui a été essayé pour afficher les avis clients, et pourquoi il n'en reste
+ * rien dans le site.
  *
- * **Vide, et ce n'est pas un oubli.** La demande était de reprendre les avis
- * Trustpilot de Funnels Club et les avis Amazon du livre, sans citer la source.
- * Ce tableau reste vide parce que ça ne se fait pas, et pour trois raisons qui
- * ne sont pas des précautions d'agent :
+ * Rien de tout cela n'est en place. C'est noté parce que la question reviendra,
+ * et qu'elle mérite mieux que de refaire trois fois le même chemin.
  *
- * - **La source doit être dite.** L'article L111-7-2 du Code de la consommation
- *   impose à un site qui affiche des avis de dire d'où ils viennent et s'ils
- *   sont vérifiés. Retirer la mention est précisément ce que le texte vise.
- * - **Le nom et la photo sont des données personnelles.** Ces gens ont posté
- *   sur Trustpilot ou Amazon, pas sur ce site : leur consentement ne suit pas.
- * - **Les conditions des deux plateformes** interdisent de republier leurs avis
- *   ailleurs. Trustpilot fournit un widget officiel pour ça, justement.
+ * **Recopier les avis Trustpilot et Amazon dans ce fichier, sans citer la
+ * source.** C'était la demande de départ, et c'est le seul des chemins qui soit
+ * fermé pour de bon. L'article L111-7-2 du Code de la consommation impose à un
+ * site qui affiche des avis de dire d'où ils viennent et s'ils sont vérifiés :
+ * retirer la mention est exactement ce que le texte vise. S'y ajoutent le nom et
+ * la photo de ces personnes, dont le consentement ne suit pas d'une plateforme
+ * à un site commercial, et les conditions des deux plateformes, qui
+ * l'interdisent. C'est aussi ce que dit déjà la règle du dépôt pour
+ * `resultats` : un témoignage engage la personne citée, il faut ses mots **et
+ * son accord**.
  *
- * Et surtout, c'est déjà la règle du dépôt, écrite plus haut pour `resultats` :
- * un témoignage engage la personne citée, il faut ses mots **et son accord**.
- *
- * **Trois chemins pour le remplir**, du plus simple au plus propre :
- *
- * 1. Demander leur accord aux clients concernés. Leurs mots entrent ici comme
- *    le reste du contenu, et le bloc s'affiche.
- * 2. Poser le widget Trustpilot officiel, qui garde l'attribution et se met à
- *    jour seul. Il demande un script tiers, donc une décision : le site n'en
- *    charge aucun aujourd'hui en dehors de GTM.
- * 3. Pour le livre, lier les avis Amazon vérifiés, ce que la page de vente de
- *    Rémy fait déjà.
- *
- * `photo` est un chemin dans `public/`, jamais une URL de plateforme : servir
- * l'image depuis chez elle la préviendrait de chaque visite et la ferait
- * disparaître le jour où elle change d'adresse.
- */
-export type TemoignageEcrit = {
-  /** Les mots de la personne, au mot près, jamais résumés. */
-  texte: string;
-  nom: string;
-  /** Ce qu'elle fait, si elle accepte qu'on le dise. */
-  metier?: string;
-  /** Un fichier de `public/`, ou rien. Une initiale prend le relais. */
-  photo?: string;
-};
-
-/**
- * La fiche Trustpilot de Funnels Club.
- *
- * **Seul le lien vers la fiche est utilisé.** Deux autres voies ont été
- * essayées et écartées, et il vaut mieux savoir laquelle avant d'y revenir.
- *
- * Recopier les avis dans ce fichier, ce qui était la demande de départ : non.
- * L'article L111-7-2 du Code de la consommation impose de dire d'où viennent
- * les avis affichés et s'ils sont vérifiés ; retirer la mention est exactement
- * ce que le texte vise. S'y ajoutent les données personnelles de ces gens, dont
- * le consentement ne suit pas d'une plateforme à un site commercial, et les
- * conditions de Trustpilot, qui l'interdisent.
- *
- * Le widget officiel, qui réglait tout cela : posé, puis retiré sur décision de
- * Rémy. Il apporte un script tiers, sa propre mise en forme et sa marque au
- * milieu de la page. `unite` et `gabarit` restent notés ici pour qu'on n'ait pas
- * à les rechercher si la question revient : ce sont l'identifiant de la fiche,
- * relevé dans sa page publique, et le modèle de carrousel d'avis.
+ * **Le widget officiel de Trustpilot.** Il réglait tout : il sert les avis
+ * depuis Trustpilot, avec la marque, la note et la mention de vérification. Il
+ * a été posé puis retiré, sur décision de Rémy : il apporte un script tiers, sa
+ * propre mise en forme et sa marque au milieu de la page. La fiche est
+ * revendiquée et l'identifiant de l'unité est `60cc5d274404620001728cbd`, avec
+ * le gabarit de carrousel `53aa8912dec7e10d38f59f36`, si la question revient.
  *
  * **Amazon n'a pas d'équivalent.** Aucun widget d'avis pour un site tiers : les
  * seuls modules intégrables sont des liens et bannières d'affiliation, et l'API
- * Product Advertising ne renvoie plus le texte des avis. Le lien est la seule
- * intégration possible, et c'est déjà ce que fait la page de vente du livre.
+ * Product Advertising ne renvoie plus le texte des avis depuis 2020.
+ *
+ * **Un simple lien vers les deux fiches.** Posé, puis retiré aussi, sur décision
+ * de Rémy.
+ *
+ * Reste donc la voie longue, et c'est la bonne : demander leur accord aux
+ * personnes concernées, et écrire leurs mots ici comme le reste du contenu.
  */
-export const trustpilot = {
-  unite: "60cc5d274404620001728cbd",
-  gabarit: "53aa8912dec7e10d38f59f36",
-  profil: "https://fr.trustpilot.com/review/funnels.club",
-} as const;
-
-export const temoignagesOffres: readonly TemoignageEcrit[] = [];
-
-export const temoignagesLivre: readonly TemoignageEcrit[] = [];
 
 /**
  * Les témoignages vidéo, hébergés chez Wistia.
@@ -787,6 +736,6 @@ export const legales = [
  * corriger en guillemets français, c'est modifier un document légal au jugé.
  */
 export const avertissements = [
-  "Funnels Club est une société de formation en marketing, pas une opportunité de gain garanti. Les résultats présentés sont exceptionnels et ne sont pas typiques ; ils dépendent de votre travail, de vos compétences et du marché. Nous ne garantissons aucun revenu et ne sommes pas un système pour \"devenir riche\". En progressant, vous acceptez que votre succès reste votre entière responsabilité.",
+  'Funnels Club est une société de formation en marketing, pas une opportunité de gain garanti. Les résultats présentés sont exceptionnels et ne sont pas typiques ; ils dépendent de votre travail, de vos compétences et du marché. Nous ne garantissons aucun revenu et ne sommes pas un système pour "devenir riche". En progressant, vous acceptez que votre succès reste votre entière responsabilité.',
   "Nous utilisons des cookies pour améliorer, promouvoir et protéger nos services. En continuant à utiliser ce site, vous acceptez notre politique de confidentialité et nos conditions d'utilisation. Ce site ne fait pas partie du site Facebook ou de Facebook, Inc. Ce site n'est PAS approuvé par Facebook de quelque manière que ce soit. FACEBOOK est une marque déposée de FACEBOOK, Inc.",
 ] as const;

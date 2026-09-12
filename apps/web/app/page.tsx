@@ -1,11 +1,10 @@
-import { BlocTemoignages } from "@/components/bloc-temoignages";
 import { CourbeVivante } from "@/components/courbe-vivante";
 import { FondResultats } from "@/components/fond-resultats";
 import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { CarrouselTemoignages } from "@/components/carrousel-temoignages";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { LogoFunnels } from "@/components/logo-funnels";
-import { AvisLivre, SectionLivre } from "@/components/section-livre";
+import { SectionLivre } from "@/components/section-livre";
 import { SurtitreOffre } from "@/components/surtitre-offre";
 import { TexteRoulant } from "@/components/texte-roulant";
 import { TitreRoulant } from "@/components/titre-roulant";
@@ -17,8 +16,6 @@ import {
   identite,
   liens,
   offres,
-  temoignagesOffres,
-  trustpilot,
   titreOffres,
   titreResultats,
   video,
@@ -135,7 +132,6 @@ export default function Accueil() {
               restent dans la bande en `-z-10` : elles dérivent derrière le
               titre sans jamais le recouvrir. */}
           <ParticulesHero />
-
         </div>
 
         {/* Le raccord entre l'image et la page.
@@ -330,40 +326,6 @@ export default function Accueil() {
             </article>
           ))}
         </div>
-
-        {/* Les avis, sous les deux offres.
-
-            **Un lien, et pas un widget.** Le widget officiel de Trustpilot a
-            été posé puis retiré, sur décision de Rémy. Il affichait les vrais
-            avis avec leur source, ce qui était la façon licite de les montrer,
-            mais il apporte un script tiers, sa propre mise en forme et sa
-            marque au milieu de la page.
-
-            Reste ce qui ne coûte rien et ne triche pas : un lien vers la fiche,
-            dont le texte dit où il mène et ce qu'on y trouve. Recopier les avis
-            ici en retirant la source n'est toujours pas une option, pour les
-            raisons écrites dans `site.ts`.
-
-            Le bloc de citations attend, lui, les témoignages que Rémy aura
-            recueillis directement. */}
-        <p className="mt-10 text-center">
-          <a
-            href={trustpilot.profil}
-            target="_blank"
-            rel="noreferrer"
-            className="group/roule inline-flex items-center gap-2 rounded-md text-sm font-semibold text-primary underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-          >
-            <TexteRoulant>
-              Lire les avis vérifiés des membres de Funnels Club
-            </TexteRoulant>
-          </a>
-        </p>
-
-        <BlocTemoignages
-          temoignages={temoignagesOffres}
-          attendu="les témoignages écrits que Rémy aura recueillis lui-même, avec l'accord des personnes citées"
-          className="mt-6"
-        />
       </Section>
 
       {/* ---------------------------------------------------------------
@@ -429,7 +391,6 @@ export default function Accueil() {
             temps, sinon on ne fait que déplacer l'écart. */}
         <Section className="[&>div]:pt-4 sm:[&>div]:pt-6">
           <SectionLivre />
-          <AvisLivre />
         </Section>
       </FondResultats>
 

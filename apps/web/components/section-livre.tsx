@@ -1,8 +1,7 @@
-import { BlocTemoignages } from "@/components/bloc-temoignages";
 import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { TexteRoulant } from "@/components/texte-roulant";
 import { TitreRoulant } from "@/components/titre-roulant";
-import { liens, livre, temoignagesLivre } from "@/contenu/site";
+import { livre } from "@/contenu/site";
 import { ArrowRight } from "lucide-react";
 
 /**
@@ -180,47 +179,5 @@ export function SectionLivre() {
         </div>
       </div>
     </div>
-  );
-}
-
-/**
- * Les avis des lecteurs, sous la carte du livre.
- *
- * Séparé de `SectionLivre` et non imbriqué dedans : la carte est un objet clos,
- * et y glisser une grille de citations la ferait déborder de son propre cadre.
- * Les deux se posent l'un sous l'autre dans la même section.
- */
-export function AvisLivre() {
-  return (
-    <>
-      {/* Le lien vers les avis vérifiés.
-
-          Amazon n'offre aucun widget d'avis, contrairement à Trustpilot :
-          recopier les siens ici poserait les mêmes problèmes, en pire, puisque
-          rien ne dirait d'où ils viennent. Le lien est donc la seule intégration
-          honnête, et c'est déjà ce que fait la page de vente du livre.
-
-          Le texte du lien dit où il mène et ce qu'on y trouve : c'est lui que
-          les robots lisent pour décrire la page d'arrivée, et « cliquez ici »
-          ne décrirait rien. */}
-      <p className="mt-8 text-center">
-        <a
-          href={liens.avisLivre}
-          target="_blank"
-          rel="noreferrer"
-          className="group/roule inline-flex items-center gap-2 rounded-md text-sm font-semibold text-(--livre-texte) underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--livre-texte)"
-        >
-          <TexteRoulant>
-            Lire les avis vérifiés des lecteurs sur Amazon
-          </TexteRoulant>
-        </a>
-      </p>
-
-      <BlocTemoignages
-        temoignages={temoignagesLivre}
-        attendu="les avis de lecteurs que Rémy aura recueillis lui-même, avec l'accord des personnes citées"
-        className="mt-6"
-      />
-    </>
   );
 }
