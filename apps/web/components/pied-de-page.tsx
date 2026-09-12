@@ -103,7 +103,7 @@ export function PiedDePage() {
             boxShadow:
               "var(--ombre-verre), 0 18px 50px -30px rgba(0,0,0,0.35)",
           }}
-          className="rounded-md border border-border bg-card px-6 py-10 sm:px-10 sm:py-14 lg:px-14"
+          className="rounded-md border border-border bg-card px-6 py-8 sm:px-10 sm:py-10 lg:px-12"
         >
           {/* Le nom, en haut à gauche.
 
@@ -119,10 +119,26 @@ export function PiedDePage() {
             `aria-label` sur le lien : le nom est découpé en deux composants qui
             portent chacun leur texte de lecteur d'écran, et sans lui la
             destination s'annoncerait en deux morceaux. */}
+          {/* Deux colonnes à partir de `lg` : la navigation à gauche, les trois
+              cartes d'offre à droite.
+
+              **Les cartes tiennent toute la hauteur du pied de page**, sur
+              décision de Rémy, et c'est ce qui l'empêche de mesurer trois
+              kilomètres. Empilées sous les colonnes de liens, elles ajoutaient
+              leur hauteur à celle de la navigation ; à côté, elles occupent une
+              place qui existait déjà. La grille étire la colonne de droite sur
+              la hauteur de la ligne, et `flex-1` sur chaque carte la partage en
+              trois.
+
+              Sous `lg`, tout redevient une seule colonne et les cartes passent
+              sous les liens : à cette largeur il n'y a pas de place à côté, et
+              les étirer n'aurait plus de sens. */}
+          <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,20rem)] lg:gap-10">
+            <div>
           <Link
             href="/"
             aria-label={`${identite.nom}, retour à l'accueil`}
-            className="titre inline-flex flex-wrap items-baseline gap-x-[0.25em] text-3xl text-foreground sm:text-4xl"
+            className="titre inline-flex flex-wrap items-baseline gap-x-[0.25em] text-2xl text-foreground sm:text-3xl"
           >
             <KineticText
               as="span"
@@ -151,7 +167,7 @@ export function PiedDePage() {
             Deux colonnes de front sur téléphone : trois libellés de cette
             longueur sur 375 px donneraient des colonnes de cent pixels, où
             « Consulting privé avec Rémy » tiendrait sur quatre lignes. */}
-          <div className="mt-12 grid grid-cols-2 gap-x-6 gap-y-10 sm:mt-14 sm:grid-cols-3 lg:grid-cols-[repeat(3,minmax(0,1fr))_minmax(0,1.3fr)] lg:gap-x-10">
+          <div className="mt-8 grid grid-cols-2 gap-x-6 gap-y-8 sm:mt-10 sm:grid-cols-3 lg:gap-x-8">
             {colonnesPiedDePage.map((colonne) => (
               <nav key={colonne.titre} aria-label={colonne.titre}>
                 {/* Un titre de colonne n'est pas un titre de document : il ne
@@ -161,7 +177,7 @@ export function PiedDePage() {
                   {colonne.titre}
                 </p>
 
-                <ul className="mt-5 space-y-3.5">
+                <ul className="mt-4 space-y-2.5">
                   {colonne.entrees.map((entree) => (
                     <li key={entree.href}>
                       <Link
@@ -186,6 +202,18 @@ export function PiedDePage() {
               </nav>
             ))}
 
+          </div>
+
+          {/* La rangée basse de la carte : les réseaux, et eux seuls.
+
+            Les mentions y étaient, à droite. Rémy les a descendues sous la
+            carte, contre le copyright : elles y sont plus discrètes et
+            alignées sur le texte légal, qui est de la même nature. */}
+              <div className="mt-10 flex flex-col gap-8 sm:flex-row sm:items-center sm:justify-between">
+                <Reseaux rond />
+              </div>
+            </div>
+
             {/* L'appel à l'action.
 
               La référence met ici un formulaire d'inscription à sa lettre. On
@@ -200,7 +228,7 @@ export function PiedDePage() {
 
               La phrase est la promesse de funnels.club, reprise au mot près, et
               le libellé du bouton est celui du hero. Rien n'est écrit ici. */}
-            <div className="col-span-2 flex flex-col gap-3 sm:col-span-3 lg:col-span-1">
+            <div className="mt-10 flex flex-col gap-3 lg:mt-0">
               {/* La colonne est devenue une carte, sur demande de Rémy : le
                   fond du deck, un relief, et une inclinaison qui suit la
                   souris. Tout est dans `CarteFunnelsClub` ; ce qu'elle porte
@@ -212,8 +240,9 @@ export function PiedDePage() {
                   descend en revanche jusqu'au bas de la rangée, `h-full`, ce
                   qui est le « de haut en bas » demandé. */}
               <CarteOffre
+                className="lg:flex-1"
                 marque={
-                  <LogoFunnels className="inline-grid size-[0.95em] align-[-0.13em]" />
+                  <LogoFunnels className="mr-[0.28em] inline-grid size-[0.95em] align-[-0.13em]" />
                 }
                 nom="Funnels Club"
                 texte={identite.promesse}
@@ -222,11 +251,12 @@ export function PiedDePage() {
               />
 
               <CarteOffre
+                className="lg:flex-1"
                 teinte="or"
                 marque={
                   <LogoFunnels
                     lettre="C"
-                    className="inline-grid size-[0.95em] align-[-0.13em]"
+                    className="mr-[0.28em] inline-grid size-[0.95em] align-[-0.13em]"
                   />
                 }
                 nom="Consulting privé"
@@ -236,6 +266,7 @@ export function PiedDePage() {
               />
 
               <CarteOffre
+                className="lg:flex-1"
                 teinte="rouge"
                 /* La couverture du livre tient la place du logo : c'est la seule
                    des trois offres qui soit un objet, et elle a son image. Elle
@@ -250,7 +281,7 @@ export function PiedDePage() {
                     width={640}
                     height={640}
                     loading="lazy"
-                    className="size-[0.95em] shrink-0 rounded-[22%] object-cover align-[-0.13em]"
+                    className="mr-[0.28em] inline-block size-[0.95em] rounded-[22%] object-cover align-[-0.13em]"
                   />
                 }
                 nom={livre.nom}
@@ -259,15 +290,6 @@ export function PiedDePage() {
                 action={livre.action}
               />
             </div>
-          </div>
-
-          {/* La rangée basse de la carte : les réseaux, et eux seuls.
-
-            Les mentions y étaient, à droite. Rémy les a descendues sous la
-            carte, contre le copyright : elles y sont plus discrètes et
-            alignées sur le texte légal, qui est de la même nature. */}
-          <div className="mt-16 flex flex-col gap-8 sm:mt-20 sm:flex-row sm:items-center sm:justify-between">
-            <Reseaux rond />
           </div>
         </div>
 
@@ -282,7 +304,7 @@ export function PiedDePage() {
           un rembourrage à eux. Ils en avaient un, plus grand, et leur bloc de
           texte démarrait en retrait du bord de la carte : le regard voyait deux
           alignements là où il n'en faut qu'un. */}
-        <div className="pt-10 pb-10">
+        <div className="pt-8 pb-8">
           {/* Pas de filet de séparation.
 
             Il y en avait un, et il ne servait à rien : la carte a déjà son

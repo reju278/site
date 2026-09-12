@@ -77,6 +77,34 @@ const TEINTES = {
   },
 } as const;
 
+/**
+ * Le fond du bouton, une couleur par teinte.
+ *
+ * Il est écrit à part et non dans `TEINTES` parce que ce n'est pas la même
+ * chose : les halos sont un fond dilué à quelques pour cent, le bouton est un
+ * aplat qui porte du texte. Le premier ne se mesure pas, le second doit tenir
+ * ses 4,5:1 sous son libellé, et c'est pour ça que les trois valeurs ne sont pas
+ * les teintes des halos mais leurs versions sombres.
+ */
+const FONDS_BOUTON = {
+  bleu: "var(--primary)",
+  or: "var(--or)",
+  rouge: "var(--livre)",
+} as const;
+
+/**
+ * L'encre du bouton, et elle ne suit pas le thème.
+ *
+ * Deux des trois fonds sont sombres et portent du blanc ; l'or est clair et
+ * porte une encre sombre. Ce qui décide n'est pas la couleur mais l'écart : un
+ * blanc sur l'or ne tiendrait que 2,3:1, une encre sombre y tient 7,5:1.
+ */
+const ENCRES_BOUTON = {
+  bleu: "#ffffff",
+  or: "var(--or-encre)",
+  rouge: "#ffffff",
+} as const;
+
 export function CarteOffre({
   teinte = "bleu",
   marque,
@@ -183,7 +211,7 @@ export function CarteOffre({
           transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
         } as React.CSSProperties}
         className={cn(
-          "group relative flex flex-col rounded-md p-6 sm:p-7",
+          "group relative flex h-full flex-col rounded-md p-5",
           "[transform-style:preserve-3d] [will-change:transform]",
           // Sous le pointeur, la carte suit vite et se soulève : l'ombre
           // grandit avec l'angle, sinon l'objet tourne sans jamais quitter la
@@ -249,21 +277,31 @@ export function CarteOffre({
             image qu'on incline et un objet : le texte et le fond ne se
             déplacent pas de la même quantité quand la carte tourne, et c'est
             exactement ce que l'œil lit comme de la profondeur. */}
-        <div className="relative flex flex-col [transform:translateZ(28px)]">
-          {/* `text-xl` et non `text-2xl` : les trois cartes sont maintenant
-              empilées dans une colonne étroite, et deux des trois noms,
-              « Consulting privé » et « Digital Selfmade », passaient à la ligne
-              au milieu. Un nom d'offre coupé en deux se lit comme deux offres.
+        <div className="relative flex h-full flex-col [transform:translateZ(28px)]">
+          {/* `text-xl` et non `text-2xl` : les trois cartes sont empilées dans
+              une colonne étroite, et deux des trois noms, « Consulting privé »
+              et « Digital Selfmade », passaient à la ligne au milieu. Un nom
+              d'offre coupé en deux se lit comme deux offres.
 
-              `items-start` plutôt que `items-center` pour la même raison : sur
-              un nom de deux lignes, une tuile centrée verticalement flotte au
-              milieu du bloc au lieu de tenir la première ligne. */}
-          <p className="titre flex items-start gap-[0.28em] text-xl text-foreground">
+              **Ce titre n'est pas un conteneur `flex`, et c'est la réparation
+              d'un défaut d'alignement.** Il l'était, et la tuile portait un
+              `vertical-align` qui n'avait aucun effet : dans un conteneur
+              `flex`, `vertical-align` est simplement ignoré, et l'alignement
+              retombait sur `align-items`, qui cale sur le haut de la ligne et
+              non sur la hauteur de capitale. La tuile flottait donc d'un ou deux
+              pixels au-dessus des lettres.
+
+              En ligne, `vertical-align` reprend son travail : la marque se cale
+              sur la ligne de base du nom, exactement comme sur les cartes
+              d'offres de l'accueil. L'écart passe par un `mr` en `em` porté par
+              la marque elle-même, et non par un `gap`, qui n'existe que dans une
+              grille ou un `flex`. Voir la règle dans `AGENTS.md`. */}
+          <p className="titre text-xl text-foreground">
             {marque}
             {nom}
           </p>
 
-          <p className="mt-2 text-sm text-pretty text-muted-foreground">
+          <p className="mt-1.5 text-sm leading-snug text-pretty text-muted-foreground">
             {texte}
           </p>
 
@@ -271,15 +309,31 @@ export function CarteOffre({
               actions alignées du projet, et ici elle a une seconde raison,
               c'est ce qui fait que la carte se remplit de haut en bas au lieu
               de laisser un vide sous son texte. */}
-          <div className="mt-auto pt-6">
+          <div className="mt-auto pt-5">
+            {/* Le fond du bouton est passé en style et non en classe : les
+                trois couleurs viennent de variables, et une classe Tailwind
+                composée à la volée ne serait pas générée. Le blanc du texte est
+                écrit en dur et c'est juste : les trois fonds sont des aplats
+                sombres qui portent leur propre contraste, et un jeton de thème
+                y basculerait en encre sombre sur fond sombre.
+
+                L'assombrissement au survol passe par un voile plutôt que par une
+                seconde couleur : trois teintes donneraient trois valeurs de
+                survol à tenir d'accord. */}
             <a
               href={href}
               target="_blank"
               rel="noreferrer"
-              className="group/roule inline-flex h-11 items-center gap-2 rounded-md bg-primary px-5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              style={{
+                backgroundColor: FONDS_BOUTON[teinte],
+                color: ENCRES_BOUTON[teinte],
+              }}
+              className="group/roule relative inline-flex h-10 items-center gap-2 overflow-hidden rounded-md px-5 text-sm font-semibold transition-colors before:absolute before:inset-0 before:bg-black/0 before:transition-colors hover:before:bg-black/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
             >
-              <TexteRoulant>{action}</TexteRoulant>
-              <ArrowRight aria-hidden className="size-4 shrink-0" />
+              <span className="relative">
+                <TexteRoulant>{action}</TexteRoulant>
+              </span>
+              <ArrowRight aria-hidden className="relative size-4 shrink-0" />
             </a>
           </div>
         </div>

@@ -620,7 +620,14 @@ deux largeurs, 375 px et grand écran. Un titre juste en large peut être
 catastrophique sur un téléphone.
 
 **Un signe posé dans une ligne de texte s'aligne sur la hauteur de capitale**,
-et par `vertical-align`, pas par `translate-y`. Une translation déplace le
+et par `vertical-align`, pas par `translate-y`.
+
+**Et le conteneur ne doit pas être un `flex`.** Dans un conteneur `flex`,
+`vertical-align` est simplement ignoré : l'alignement retombe sur `align-items`,
+qui cale sur le haut ou le centre de la ligne et non sur la hauteur de capitale,
+et la tuile flotte d'un ou deux pixels au-dessus des lettres. Rien ne le
+signale, la propriété est là et n'agit pas. Le titre reste donc un bloc de texte
+ordinaire, et l'écart se fait au `margin` en `em`, pas au `gap`. Une translation déplace le
 dessin sans rien dire à la ligne : le réglage est juste à un seul corps et se
 refait à chaque changement de taille. `vertical-align` s'exprime en `em` par
 rapport à la ligne de base, donc il tient à toutes les tailles.

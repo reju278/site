@@ -612,6 +612,21 @@ summary {
      dilué dans un fond, à quelques pour cent. La règle du projet, une section
      peut avoir sa couleur si l'objet qu'elle montre en a une, vaut ici deux fois
      plutôt qu'une. */
+  /* L'or du consulting, celui de son bouton dans le pied de page.
+
+     Il ne change pas d'un thème à l'autre, pour la même raison que `--livre` :
+     un bouton porte son propre fond, donc son contraste ne dépend pas de la
+     page mais de son texte.
+
+     **Il est clair, et c'est son encre qui change en conséquence**, sur décision
+     de Rémy. Un or sombre comme `amber-700` se lit sous du blanc mais ressemble
+     à du brun ; un or franc ne peut pas porter du blanc, qui n'y tiendrait que
+     2,3:1. Il porte donc une encre sombre, et le couple tient 7,5:1, très
+     au-dessus du seuil. C'est l'inverse du bleu et du rouge, qui sont sombres et
+     portent du blanc : ce qui compte n'est pas la couleur, c'est l'écart. */
+  --or: #d4a017;
+  --or-encre: #1f1a05;
+
   --halo-or-a: rgba(180, 134, 6, 0.12);
   --halo-or-b: rgba(234, 179, 8, 0.1);
   --halo-or-c: rgba(180, 134, 6, 0.06);
