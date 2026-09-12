@@ -3844,7 +3844,18 @@ export const avis: readonly Avis[] = [
       },
     ],
   },
-  /* **C'est le même Corentin que `/resultats/corentin`, un an et demi après.**
+  /* **Le mastermind n'est plus proposé : il est en pause, et le consulting
+     privé en tête-à-tête l'a remplacé.** L'article garde son sujet, parce que
+     c'est bien dans le mastermind que Corentin a obtenu ce qu'il raconte et
+     qu'une page d'avis raconte ce qui s'est passé. Mais elle le dit dès le
+     chapô et y consacre sa dernière section : laisser croire qu'on peut encore
+     rejoindre ce programme serait vendre ce qui n'existe plus, et c'est le
+     genre d'erreur qu'une page d'avis fait vivre des années.
+
+     Le jour où le mastermind rouvre, c'est ici et dans la dernière section que
+     ça se corrige.
+
+     **C'est le même Corentin que `/resultats/corentin`, un an et demi après.**
      Son premier entretien se terminait sur « qui sait, dans six mois on en
      reparle » : voici la suite. Deux pages et non une seule, parce qu'elles ne
      portent pas sur la même chose : la première raconte Funnels Club et le
@@ -3867,7 +3878,7 @@ export const avis: readonly Avis[] = [
     afficheAlt:
       "Corentin en entretien vidéo avec Rémy Jupille, chacun depuis son bureau",
     chapo:
-      "Corentin avait raconté son lancement dans un premier entretien. Un an et demi plus tard, il accompagne les entreprises d'énergies renouvelables, tourne entre vingt et trente mille euros par mois, et explique pourquoi il n'est pas satisfait de ce rythme.",
+      "Corentin avait raconté son lancement dans un premier entretien ; un an et demi plus tard, il tourne entre vingt et trente mille euros par mois et explique pourquoi il n'en est pas satisfait. Le mastermind dont il parle est aujourd'hui en pause : c'est le consulting privé en tête-à-tête qui l'a remplacé.",
     sections: [
       {
         titre: "Un an et demi plus tard : où en est son activité de conseil",
@@ -3940,6 +3951,14 @@ export const avis: readonly Avis[] = [
             "On a besoin de quelqu'un qui nous dit : non, arrête de mettre ton clignotant, reste sur ta route tout droit et continue.",
           qui: "Corentin",
         },
+      },
+      {
+        titre:
+          "Le mastermind est en pause, et c'est le consulting privé qui l'a remplacé",
+        paragraphes: [
+          "Un point à savoir avant de chercher à rejoindre ce dont parle Corentin : ==le mastermind n'est plus proposé.== Il est en pause. Ce qui a pris sa place, c'est l'accompagnement en tête-à-tête, le consulting privé avec Rémy.",
+          "Ce que Corentin décrit reste valable, parce que ce qu'il met en avant n'est pas le format mais la présence de quelqu'un qui a déjà franchi les étapes et qui tient la barre quand l'envie de tout changer revient. C'est précisément ce que raconte [Lilian, qui a pris ce consulting en tête-à-tête](/resultats/lilian). Si vous voulez en parler, [l'appel découverte est gratuit](https://www.funnels.club/appel?el=site).",
+        ],
       },
     ],
     transcription: [
