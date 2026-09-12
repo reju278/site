@@ -1,30 +1,115 @@
 import { EnTete } from "@/components/en-tete";
 import { PiedDePage } from "@/components/pied-de-page";
-import { SITE, identite } from "@/contenu/site";
+import { GTM, SITE, identite } from "@/contenu/site";
 import { Toaster } from "@repo/ui/components/sonner";
 import { ThemeProvider } from "@repo/ui/components/theme-provider";
 import type { Metadata } from "next";
-import { Instrument_Serif, Nunito_Sans } from "next/font/google";
+import { Fraunces } from "next/font/google";
+import localFont from "next/font/local";
+import Script from "next/script";
 import "./globals.css";
 
 // Deux fontes, deux rôles, et aucun chevauchement.
 //
-// Instrument Serif est celle des titres de funnels.club, vérifiée dans leur
-// feuille de style et non supposée. Elle vient d'ailleurs que passionfroot,
-// et c'est voulu : la mise en page est empruntée, la voix typographique reste
-// celle de la marque.
+// Deux polices, deux rôles, et aucun chevauchement. La mise en page est
+// empruntée à passionfroot et à calendly.com ; la voix typographique ne vient
+// ni de l'un ni de l'autre.
 //
-// Nunito Sans, pour le texte, est celle de passionfroot, à l'identique.
-const nunito = Nunito_Sans({
-  subsets: ["latin"],
+// Source Sans Pro porte le texte, sur décision de Rémy. Elle remplace Nunito
+// Sans, qui était celle de passionfroot reprise à l'identique.
+//
+// **Elle est servie depuis le dépôt et non par `next/font/google`**, et ce
+// n'est pas un choix esthétique : Google Fonts a retiré Source Sans Pro de son
+// catalogue quand Adobe l'a renommée Source Sans 3, et `next/font/google` ne
+// propose donc plus que la 3. Rémy veut la Pro.
+//
+// Les fichiers viennent de la distribution officielle d'Adobe, sous licence
+// SIL Open Font 1.1, que cette licence autorise expressément à héberger. Le
+// texte de la licence est livré à côté, dans `polices/LICENSE.txt`, parce que
+// l'OFL impose qu'il accompagne les fichiers.
+//
+// Elle porte le **texte**. Les titres sont en Fraunces, voir plus bas.
+//
+// Sept coupes, et chacune a son emploi : 400 et son italique pour le texte
+// courant, 600 et son italique pour les libellés et les boutons, 700 et son
+// italique pour les titres et le mot accentué du hero, 900 pour le nom appuyé
+// du pied de page.
+//
+// Les italiques sont livrées et non synthétisées. `titre-fort` pose
+// `font-synthesis: none`, ce qui interdit au navigateur de pencher lui-même un
+// romain : sans le fichier italique de la bonne graisse, le mot « expertise »
+// s'afficherait tout simplement droit.
+//
+// La variable garde son nom, `--font-nunito` : elle est lue par `@theme` dans
+// `globals.css` et par les composants, et la renommer demanderait une passe
+// complète pour un gain nul.
+const nunito = localFont({
+  src: [
+    {
+      path: "./polices/source-sans-pro-400.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "./polices/source-sans-pro-400-italique.woff2",
+      weight: "400",
+      style: "italic",
+    },
+    {
+      path: "./polices/source-sans-pro-600.woff2",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "./polices/source-sans-pro-600-italique.woff2",
+      weight: "600",
+      style: "italic",
+    },
+    {
+      path: "./polices/source-sans-pro-700.woff2",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "./polices/source-sans-pro-700-italique.woff2",
+      weight: "700",
+      style: "italic",
+    },
+    {
+      path: "./polices/source-sans-pro-900.woff2",
+      weight: "900",
+      style: "normal",
+    },
+  ],
   variable: "--font-nunito",
   display: "swap",
 });
 
-const instrumentSerif = Instrument_Serif({
+/**
+ * Fraunces porte les titres, sur décision de Rémy après un banc d'essai
+ * comparant six serifs (`labo/polices-titres.html`).
+ *
+ * Elle est **variable** et ses axes sont ce qui la rend intéressante ici :
+ *
+ * - `SOFT` arrondit les angles du dessin. C'est l'axe qui produit exactement
+ *   ce que Rémy cherchait, « du serif mais plus arrondi », et il est réglé à
+ *   50 dans `globals.css`. Sans lui, Fraunces est une serif anguleuse assez
+ *   ordinaire.
+ * - `WONK` bascule certaines lettres sur des formes plus fantaisistes. Il est
+ *   laissé à zéro : sur un site qui vend un accompagnement, la fantaisie
+ *   typographique se paie en crédibilité.
+ * - `opsz` adapte le dessin au corps, les navigateurs l'appliquent d'eux-mêmes.
+ *   C'est ce qui évite qu'un titre à 60 px et un titre de carte à 30 px
+ *   paraissent dessinés par deux mains différentes.
+ *
+ * Les axes doivent être déclarés ici pour être **présents dans le fichier** ;
+ * leurs valeurs se règlent en CSS. Les déclarer sans les régler ne sert à
+ * rien, les régler sans les déclarer non plus.
+ */
+const fraunces = Fraunces({
   subsets: ["latin"],
-  weight: "400",
   style: ["normal", "italic"],
+  axes: ["SOFT", "WONK", "opsz"],
   variable: "--font-titre",
   display: "swap",
 });
@@ -53,9 +138,37 @@ export default function RootLayout({
     <html
       lang="fr"
       suppressHydrationWarning
-      className={`${nunito.variable} ${instrumentSerif.variable}`}
+      className={`${nunito.variable} ${fraunces.variable}`}
     >
       <body className="font-sans antialiased">
+        {/* Google Tag Manager.
+
+            `afterInteractive` place le script juste après l'hydratation : GTM
+            recommande le haut du `head`, mais un script bloquant y retarde le
+            premier rendu, que Google chronomètre par ailleurs. C'est la
+            stratégie que Next emploie lui-même pour cette balise.
+
+            Le `noscript` doit rester le premier élément du `body` : c'est le
+            seul relevé possible quand JavaScript est coupé, et il ne sert à
+            rien s'il arrive après le contenu. Son `title` n'est pas décoratif,
+            un lecteur d'écran annonce sinon un cadre anonyme. */}
+        <noscript>
+          <iframe
+            src={`https://www.googletagmanager.com/ns.html?id=${GTM}`}
+            title="Google Tag Manager"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          />
+        </noscript>
+        <Script id="gtm" strategy="afterInteractive">
+          {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','${GTM}');`}
+        </Script>
+
         <ThemeProvider>
           <div className="flex min-h-svh flex-col">
             <EnTete />
