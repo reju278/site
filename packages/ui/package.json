@@ -14,8 +14,15 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@number-flow/react": "^0.6.2",
+    "@visx/curve": "4.0.1-alpha.0",
+    "@visx/event": "4.0.1-alpha.0",
+    "@visx/responsive": "4.0.1-alpha.0",
+    "@visx/scale": "4.0.1-alpha.0",
+    "@visx/shape": "4.0.1-alpha.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "d3-array": "^3.2.4",
     "embla-carousel-react": "^8.6.0",
     "lucide-react": "^1.42.0",
     "motion": "^13.2.0",
@@ -31,6 +38,7 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@tailwindcss/postcss": "^4.3.3",
+    "@types/d3-array": "^3.2.2",
     "@types/node": "26.4.1",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.5",
