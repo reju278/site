@@ -1267,6 +1267,28 @@ première page cesse d'être publique.
 
 ---
 
+## Ne jamais construire dans le dossier que sert le serveur de Rémy
+
+`next dev` et `next build` écrivent tous les deux dans `apps/web/.next`. Lancer
+un build de vérification pendant que le serveur de développement tourne lui
+remplace ses morceaux sous les pieds : il sert des fragments périmés, **les
+images et des bouts de page cassent**, et rien ne le signale, puisque les deux
+commandes réussissent. C'est arrivé, et ça s'est cherché longtemps dans le code
+des images avant qu'on pense au dossier.
+
+D'où `distDir: process.env.NEXT_DIST_DIR || ".next"` dans `next.config.mjs`. Un
+build de vérification s'écrit donc :
+
+```sh
+NEXT_DIST_DIR=.next-verif pnpm turbo run build
+```
+
+Vercel ne pose pas cette variable, donc rien ne change pour lui.
+
+**Et vérifier se fait de préférence sur le serveur de Rémy**, sur le 3000, plutôt
+qu'en lançant un serveur de production à côté : c'est ce qu'il regarde, et une
+page servie par deux processus différents peut diverger sans qu'on le voie.
+
 ## Vérifications avant de conclure
 
 ```sh

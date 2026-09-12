@@ -2,6 +2,21 @@
 export default {
   transpilePackages: ["@repo/ui"],
 
+  /* Le dossier de sortie se déplace par variable d'environnement.
+   *
+   * `next dev` et `next build` écrivent tous les deux dans `.next`. Lancer un
+   * build de vérification pendant que le serveur de développement tourne lui
+   * remplace ses morceaux sous les pieds : il se met à servir des fragments
+   * périmés, les images et des bouts de page cassent, et **rien ne le signale**
+   * puisque les deux commandes réussissent. C'est arrivé, et ça s'est cherché
+   * longtemps ailleurs.
+   *
+   * `NEXT_DIST_DIR=.next-verif pnpm build` construit donc à côté, sans toucher
+   * à ce que sert le serveur de Rémy. La valeur par défaut ne change rien pour
+   * Vercel, qui ne pose pas cette variable.
+   */
+  distDir: process.env.NEXT_DIST_DIR || ".next",
+
   /* La politique de confidentialité vit à `/confidentialites`, au pluriel.
    *
    * Ce n'est pas une préférence de style : **c'est l'adresse que Rémy a déjà
