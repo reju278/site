@@ -293,10 +293,6 @@ export default function Accueil() {
                 />
               )}
 
-              {/* La marque n'accompagne que l'offre qui en a une. Le
-                  consulting n'est pas un produit distinct, c'est Rémy en
-                  direct : lui coller une tuile inventée serait fabriquer une
-                  identité qui n'existe pas. */}
               {/* La marque est **dans** le titre, et dimensionnée en `em`.
 
                   C'est ce qui la rend proportionnelle : `em` se résout sur la
@@ -307,24 +303,29 @@ export default function Accueil() {
                   Elle est `aria-hidden`, donc le nom accessible du titre reste
                   « Funnels Club » et non « image, Funnels Club ».
 
-                  Le consulting n'en a pas : ce n'est pas un produit distinct,
-                  c'est Rémy en direct, et lui inventer une tuile fabriquerait
-                  une identité qui n'existe pas. */}
+                  **Les deux offres en portent une**, sur décision de Rémy : la
+                  même tuile, avec un C pour le consulting. Le consulting n'en
+                  avait pas, au motif que ce n'est pas un produit distinct mais
+                  Rémy en direct, et qu'une tuile inventée fabriquerait une
+                  identité qui n'existe pas. Ce n'est plus une tuile inventée :
+                  c'est la marque de la maison déclinée, tracé pour tracé, et
+                  les deux cartes se lisent comme une paire au lieu d'une carte
+                  signée et d'une carte nue. */}
               {/* `h3` et non `h2` : le titre de la section occupe désormais
                   le `h2`, et deux niveaux ne peuvent pas cohabiter sur le même
                   rang sans casser le plan que les robots lisent. */}
               <h3 className="titre text-3xl text-balance text-card-foreground">
-                {offre.id === "funnels-club" && (
-                  <LogoFunnels // L'alignement passe par `vertical-align` et non par une
-                    // translation. Une translation déplace le dessin sans
-                    // rien dire à la ligne, donc le réglage se refait à
-                    // chaque changement de corps. `vertical-align` s'exprime
-                    // en `em` par rapport à la ligne de base : la tuile est
-                    // centrée sur la hauteur de capitale et y reste à
-                    // n'importe quelle taille.
-                    className="mr-[0.28em] inline-grid size-[0.95em] align-[-0.13em]"
-                  />
-                )}
+                <LogoFunnels
+                  lettre={offre.id === "funnels-club" ? "F" : "C"}
+                  // L'alignement passe par `vertical-align` et non par une
+                  // translation. Une translation déplace le dessin sans
+                  // rien dire à la ligne, donc le réglage se refait à
+                  // chaque changement de corps. `vertical-align` s'exprime
+                  // en `em` par rapport à la ligne de base : la tuile est
+                  // centrée sur la hauteur de capitale et y reste à
+                  // n'importe quelle taille.
+                  className="mr-[0.28em] inline-grid size-[0.95em] align-[-0.13em]"
+                />
                 {offre.nom}
               </h3>
 
