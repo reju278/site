@@ -123,6 +123,239 @@ export type Avis = {
 
 export const avis: readonly Avis[] = [
   {
+    id: "j0vbkt570k",
+    slug: "christian-joyce",
+    titre:
+      "Avis Funnels Club : Christian Joyce, 160 000 € en quatre mois en vendant sa méthode de nettoyage",
+    titrePage: "Avis Funnels Club : Christian Joyce, 160 000 € en 4 mois",
+    description:
+      "À 22 ans, Christian Joyce dirige une société de nettoyage en Belgique. Il raconte comment il en a tiré une formation en ligne et généré 160 000 € en quatre mois.",
+    afficheAlt:
+      "Christian Joyce en entretien vidéo avec Rémy Jupille, chacun depuis son bureau",
+    chapo:
+      "Christian Joyce a 22 ans et une société de nettoyage en Belgique. Dans cet entretien avec Rémy Jupille, il raconte comment il a transformé son métier en formation en ligne, et pourquoi il n'a rien essayé d'autre avant.",
+    sections: [
+      {
+        titre:
+          "Une société de nettoyage, et l'envie d'un levier qui se duplique",
+        paragraphes: [
+          "Christian a d'abord une entreprise de nettoyage en Belgique, avec près d'une dizaine d'employés : voitures, canapés, façades, terrasses, piscines. Un métier de terrain, où il faut des ouvriers, des contrats, et quelqu'un pour régler les problèmes sur place.",
+          "Ce qu'il cherchait n'était pas un autre métier, mais ==un levier qui n'a pas besoin de bras pour grandir==. Il voulait monétiser ce qu'il savait déjà faire, et il a monté un programme qui aide à lancer une activité de nettoyage et à atteindre trois à cinq mille euros par mois. Il précise la condition, et elle lui tient à cœur : celui qui accepte de se retrousser les manches y arrive.",
+        ],
+        citation: {
+          texte:
+            "Je souhaitais monétiser cette connaissance-là, et aussi avoir ce levier scalable du online.",
+          qui: "Christian",
+        },
+      },
+      {
+        titre: "Pourquoi il a choisi Funnels Club plutôt qu'un autre programme",
+        paragraphes: [
+          "Christian n'avait aucun problème avec la technique. Son blocage était ailleurs : il ne voulait pas patauger, tester des choses au hasard et perdre des mois. Il a donc pris le temps de regarder toutes les personnes qui proposent un accompagnement au business en ligne avant de choisir.",
+          "Ce qui l'a décidé tient en trois choses qu'il énumère lui-même : l'ancienneté sur le marché, la qualité du webinaire, et celle des vidéos. Il a regardé le webinaire deux ou trois fois avant de réserver son appel, précisément pour vérifier ce qu'il achetait. Si vous hésitez de la même façon, [la vidéo de formation est en accès libre](https://www.funnels.club/course-2025?el=site).",
+        ],
+        citation: {
+          texte:
+            "J'avais juste envie de me dire : j'investis dans un programme, j'ai envie que ce soit qualitatif derrière et que ça performe.",
+          qui: "Christian",
+        },
+      },
+      {
+        titre: "Trois semaines pour tout mettre en place",
+        paragraphes: [
+          "Il démarre le programme le 31 janvier. Il regarde les vidéos une par une, assimile la partie théorique, puis passe à la mise en pratique. ==En deux à trois semaines, tout est en place.==",
+          "Il insiste sur la mécanique du programme, et c'est ce qui explique sa vitesse : chaque vidéo a une raison d'être et des devoirs qui vont avec. On regarde, puis on fait. Il n'y a pas eu, chez lui, de phase où rien ne marchait.",
+        ],
+        citation: {
+          texte:
+            "Chaque vidéo est là pour une raison, et a des devoirs entre guillemets qui vont avec. Donc après chaque vidéo, il faut faire quelque chose.",
+          qui: "Christian",
+        },
+      },
+      {
+        titre: "Ses résultats : 160 000 € générés en quatre mois",
+        paragraphes: [
+          "De la mi-février à la mi-juin, Christian annonce ==un peu plus de 160 000 euros générés==, encaissés sur Stripe, uniquement sur le programme de formation au nettoyage.",
+          "Le déclic a mis une semaine à venir, et pour une raison simple : ça a marché dès le lancement. Il était parti quelques jours à la mer, et les ventes tombaient pendant qu'il ne faisait rien. C'est ce contraste avec son autre métier qui l'a sidéré : d'un côté des ouvriers à recruter et des chantiers à régler, de l'autre des automatisations qui livrent la formation toutes seules.",
+        ],
+        citation: {
+          texte:
+            "Dès le premier jour, c'était sept cents euros par jour minimum, et ça s'est enchaîné comme ça. Chaque fin de journée, c'était un truc de fou.",
+          qui: "Christian",
+        },
+      },
+      {
+        titre:
+          "Le doute sur sa niche : est-ce que ça marche dans le nettoyage ?",
+        paragraphes: [
+          "Rémy lui pose la question que beaucoup se posent : vendre une formation dans un domaine où presque personne ne le fait. Christian reconnaît qu'il avait ce doute, et qu'il l'a gardé pendant qu'il appliquait la formation. Sur YouTube, en français, il est à peu près le seul à parler de business de nettoyage.",
+          "Ce qui l'a aidé, ce sont les exemples du programme, pris dans des domaines qui n'ont rien à voir les uns avec les autres. Voir la même mécanique marcher ailleurs est ce qui rend croyable qu'elle marche chez soi. C'est le même constat que font [les autres membres dans leurs propres domaines](/resultats).",
+        ],
+        citation: {
+          texte:
+            "Le marché est énorme, et il y aura toujours moyen d'aller chercher un petit pourcentage de clients intéressés par ce que tu proposes.",
+          qui: "Christian",
+        },
+      },
+      {
+        titre: "Ce qu'il retient de la formation",
+        paragraphes: [
+          "Quand Rémy lui demande ce qui l'a le plus aidé, Christian refuse de choisir : il a suivi la formation étape par étape, vidéo après vidéo, et c'est l'ensemble qui l'a mené où il voulait. Il la décrit comme intemporelle, et y revient encore aujourd'hui pour améliorer un point ou se remettre dans la tête de ses clients.",
+          "Il a aussi remarqué que le programme continue de bouger : au moment de l'entretien, il venait d'y retrouver de nouvelles parties sur l'intelligence artificielle et sur le contenu.",
+        ],
+        citation: {
+          texte:
+            "C'est un plan de route, c'est un GPS : tu veux aller à tel endroit, voilà, suis là, tourne à gauche, tourne à droite.",
+          qui: "Christian",
+        },
+      },
+      {
+        titre: "Son avis pour ceux qui hésitent encore",
+        paragraphes: [
+          "Christian a hésité lui aussi, et il est direct sur ce qu'il en pense : celui qui hésite n'a pas peur du programme, il a peur de lui-même. Sa réponse ne cherche pas à rassurer, elle déplace la question.",
+          "Il ajoute que son propre passé d'entrepreneur l'a aidé à passer à l'action, et que quelqu'un qui n'a jamais entrepris a d'autant plus besoin d'être guidé. Si c'est votre cas, [l'appel découverte est gratuit](https://www.funnels.club/appel?el=site).",
+        ],
+        citation: {
+          texte:
+            "Si elle hésite, c'est une peur, c'est sa confiance en elle-même. Il faut juste passer à l'action, se faire confiance et faire confiance au programme.",
+          qui: "Christian",
+        },
+      },
+    ],
+    transcription: [
+      {
+        qui: "Rémy",
+        texte:
+          "Salut Christian, ça fait plaisir de t'avoir aujourd'hui, merci d'avoir accepté l'invitation pour l'interview. Est-ce que tu peux te présenter rapidement, dire un peu ce que tu fais, les résultats que tu as eus si ça ne te dérange pas, le parcours que tu as fait, à qui tu t'adresses, quel est ton business ?",
+      },
+      {
+        qui: "Christian",
+        texte:
+          "Je suis Christian Joyce, vingt-deux ans. Mon business de base, j'ai un business de nettoyage en Belgique, avec une dizaine d'employés, un peu moins d'une dizaine actuellement, qui font du nettoyage : nettoyage de voiture, de canapé, de façade, de terrasse, piscine, tout ça. Et j'ai rajouté un second business en ligne, en passant par Funnels Club, parce qu'en fait je souhaitais monétiser cette connaissance-là et aussi avoir ce levier scalable du online. J'ai mis en place un programme qui aide les personnes à lancer leur activité de nettoyage et à gagner trois mille, cinq mille euros par mois. C'est le target que je leur propose dès le début, parce que c'est une promesse possible et faisable pour toute personne qui est prête à mettre les moyens, et quand je dis les moyens, c'est de se retrousser les manches physiquement. Si elle accepte ça, d'aller faire du nettoyage le mois prochain, elle a fait son argent.",
+      },
+      {
+        qui: "Christian",
+        texte:
+          "J'ai commencé le trente et un janvier, je démarre le programme, je regarde les vidéos une par une, j'ai terminé en deux semaines, trois semaines, tout mis en place. J'ai assimilé la partie théorie, parce qu'il y a pas mal de choses à connaître : même si j'avais quelques bases, c'était hyper intéressant, j'ai appris beaucoup de choses. Et il y a la partie pratique, où là c'est implémenter, maintenant. Il m'a fallu trois semaines à peu près. Entre la mi-février et aujourd'hui, mi-juin, c'est un peu plus de cent soixante mille euros générés sur Stripe, uniquement sur Stripe, du programme de formation au nettoyage, grâce à ton programme, sur les trois, quatre mois derrière. Donc un très bon retour sur investissement.",
+      },
+      {
+        qui: "Christian",
+        texte:
+          "Même si je t'avoue, quand j'ai discuté avec Pierre, j'hésitais, je me disais : est-ce que j'y vais, est-ce que je n'y vais pas. Le fait de regarder ton webinaire une deuxième fois m'a permis de voir sa qualité, en me disant : s'il a un webinaire aussi calé, si les vidéos sont bien faites, sur YouTube elles sont propres, et tu sens que tu envoies une bonne énergie, donc je passe à l'action avec toi. Et je suis plutôt content.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Avant que tu nous rejoignes, tu avais déjà essayé des choses, des stratégies, ou c'était vraiment un projet tout neuf où tu ne savais pas trop dans quelle direction aller ?",
+      },
+      {
+        qui: "Christian",
+        texte:
+          "C'était un projet tout neuf. J'avais ma boîte de nettoyage, je n'avais pas envie de venir patauger, d'essayer un truc, de tester si ça marche ou pas. Je n'avais aucun problème avec la technique, l'informatique, tout ça, aucun problème. C'était vraiment : je veux me lancer là-dedans, je veux performer, je veux que ça rapporte vraiment, donc autant m'entourer et chercher une bonne formation. Je t'avoue, j'ai pris le temps de regarder toute autre personne qui propose des accompagnements liés au online, et c'est ton produit qui m'a le plus convenu, qui m'a le plus attiré, ta personne qui m'a convenu. Je me disais : je vais me lancer, il faut que je me fasse former et suivre. Donc je n'ai rien essayé avant ça, je suis juste passé par ton programme. C'est juste ça que j'avais à faire de toute manière, ça ne sert à rien de se balader et de chercher des informations pour rien.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Mais pourquoi Funnels Club en particulier, justement, puisque tu dis que tu as regardé à gauche et à droite ? C'était quoi, le truc qui t'a le plus attiré ?",
+      },
+      {
+        qui: "Christian",
+        texte:
+          "Premièrement, peut-être le fait que ça fait longtemps que tu es sur le marché, donc confiance en toi : ça fait longtemps que tu es là, tu ne bouges pas, tu as ta position, tu es tranquille, tu fais ton petit chemin au calme. Le webinaire très calé, les vidéos très calées. Et en fait, j'avais juste envie de me dire : j'investis dans un programme, j'ai envie que ce soit qualitatif derrière et que ça performe. En englobant toute la confiance que tu renvoies, l'aura positive, le webinaire très bien fait, je me suis dit : j'ai envie de faire ce qu'il fait, la même chose. Si j'arrive à faire ce qu'il fait sur mon secteur, sur ma niche, je vais performer.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Par rapport à ta niche justement : beaucoup de personnes doutent, elles voient que ça marche dans un domaine spécifique mais elles ont des doutes sur le leur. Est-ce que toi aussi tu avais ce doute, sachant qu'il n'y a pas beaucoup d'acteurs sur ton marché ?",
+      },
+      {
+        qui: "Christian",
+        texte:
+          "J'avais un doute, je t'avoue que j'avais un doute, même en suivant la formation. J'appliquais tout, mais j'avais un doute dans ma tête : est-ce que ça marcherait, pourquoi ça marcherait. Mais c'est dans la tête, il faut croire en soi, prendre son produit et se dire que le marché est énorme, et qu'il y aura toujours moyen d'aller chercher un petit pourcentage de clients intéressés par ce que tu proposes. Que ce soit moi dans le secteur du nettoyage : si on cherche, je suis le seul acteur qui va parler de nettoyage. Tu écris business de nettoyage sur YouTube, il y a quelques autres acteurs, mais pas sur le marché français. Je suis le seul pour l'instant. En le faisant, j'avais vraiment peur au fond, mais il faut croire en soi, il faut croire en ce qu'on a envie, et c'est comme ça que j'ai pu y arriver.",
+      },
+      {
+        qui: "Christian",
+        texte:
+          "Mais c'est surtout parce que ce que tu proposes est duplicable. Quand on regarde le programme au complet, tu prends des exemples par rapport à ton business à toi, par rapport au régime, il y a plein d'exemples différents, donc ça aide à se dire : si ça marchait pour ça, en vrai moi c'est pareil. Quelqu'un qui veut faire autre chose, ça fonctionnera aussi, parce que dans le programme tu abordes d'autres domaines. Avec les replays, ça permet vraiment de regarder et de se dire : en fait ça marche aussi pour lui, lui il fait un truc qui n'a complètement rien à voir, et ça va performer.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "C'est clair que quand tu regardes l'ensemble des membres, il y a vraiment tous les profils.",
+      },
+      {
+        qui: "Christian",
+        texte:
+          "Il y a toutes les tranches d'âge. Je vois du quarante ans, trente-cinq ans, quarante-cinq, cinquante, soixante, et il a fait son truc et ça performe.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Et par rapport à la niche, c'est quoi qui t'a permis d'avoir le déclic ? Parce qu'au final, on n'est jamais vraiment sûr tant qu'on n'a pas quelqu'un qui a payé.",
+      },
+      {
+        qui: "Christian",
+        texte:
+          "Le déclic, il m'a fallu une semaine, parce que dès que j'ai lancé, ça a marché direct. Je n'ai pas eu de moment où ça ne marchait pas. Je pense surtout que j'ai respecté ce que tu as fait dans le programme, étape par étape. Pour la petite histoire : quand j'ai terminé de tout faire, je me suis pris une semaine de pause, je suis parti à la mer en mode je ne fais rien. Le premier jour où je lance, les ventes tombaient, tombaient, tombaient, et ça me choquait. Parce que moi, dans mon business de nettoyage, j'ai besoin d'ouvriers et d'hommes pour aller travailler, de regrouper des personnes, de signer des contrats, il y a des problématiques sur le terrain, il faut les régler. Et là, à l'inverse, les automatisations sont faites, la personne reçoit son mail, elle a la formation, elle applique. Dès le premier jour, c'était sept cents euros par jour minimum, et ça s'est enchaîné comme ça. Il m'a fallu le temps de me dire : mais c'est un truc de fou. Chaque fin de journée, mille euros aujourd'hui, mille quatre aujourd'hui. Il m'a fallu ça, et après j'étais en mode : en fait, le business en ligne, c'est puissant.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Félicitations pour ça, ce sont de super résultats, et c'est parce que tu as bien appliqué les choses tout de suite. Et par rapport à la formation, est-ce qu'il y a quelque chose en particulier qui t'a plu ou qui t'a aidé spécifiquement ?",
+      },
+      {
+        qui: "Christian",
+        texte:
+          "En fait, je ne pourrais même pas te dire un truc en particulier, parce que la formation, je l'ai suivie étape par étape, vidéo après vidéo. Chaque vidéo est là pour une raison, et a des devoirs entre guillemets qui vont avec : après chaque vidéo, il faut faire quelque chose, donc tu appliques. Ce n'est pas qu'il y a un truc en particulier qui m'a aidé, c'est toute la formation qui m'a aidé dans le total, et j'ai tout aimé, pour être franc avec toi. Encore maintenant, je regarde des parties en me disant : il faudrait que j'améliore un truc. Je regarde à nouveau pour me remettre à la place de mon client, répondre encore aux questions, je refais les devoirs pour me mettre dans le bon état d'esprit.",
+      },
+      {
+        qui: "Christian",
+        texte:
+          "Je trouve qu'elle est limite intemporelle, tu peux tout faire avec : tu expliques plusieurs choses, les tunnels de vente, les webinaires à l'intérieur, tout ce qui est high ticket, il y a le tunnel de captation aussi. Donc pour tout type de business, tout type de stratégie, il y a tout ce qu'il faut. Il n'y a pas un truc en particulier qui est bien mieux, c'est tout qui est bon. Il faut juste la respecter, c'est tout.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Tout à l'heure tu disais que tu as mis pas mal de temps à réserver un appel, que tu as regardé le webinaire plusieurs fois. Qu'est-ce que tu dirais à une personne qui hésite, soit à réserver un appel, soit à aller plus loin ?",
+      },
+      {
+        qui: "Christian",
+        texte:
+          "Je pense que la meilleure chose que je peux dire à cette personne, c'est que si elle hésite, c'est une peur : c'est elle qui a peur d'elle, c'est sa confiance en elle-même. Parce que la confiance au programme, il faut y aller les yeux fermés. Une personne qui a peur, elle a peur, et elle ne doit pas écouter sa peur, elle doit passer au-delà, parce que de la peur, on en aura toujours. Il faut passer à l'action, se faire confiance et faire confiance au programme, parce qu'il est juste bien fait. Les résultats viennent de là, c'est grâce à ça. C'est un plan de route, c'est un GPS : tu veux aller à tel endroit, voilà, suis là, tourne à gauche, tourne à droite. Il y a tout ce qu'il faut, et ça donne envie de faire soi-même un produit d'aussi bonne qualité pour ses propres clients.",
+      },
+      {
+        qui: "Christian",
+        texte:
+          "Il ne faut même pas hésiter, de mon point de vue, il faut juste le faire. C'est vrai que moi-même j'ai hésité, et vu que j'avais déjà entrepris dans le passé, ça m'a aidé à passer à l'action. Mais une personne qui n'a jamais entrepris, je lui dirais : totale confiance, vas-y.",
+      },
+      {
+        qui: "Christian",
+        texte:
+          "Et ça s'améliore. Encore il y a une semaine, je m'étais reconnecté, j'ai vu que tu avais changé le branding, que tu avais rajouté des choses sur l'intelligence artificielle. J'ai regardé et je me suis dit : c'est un truc de fou. Tu as rajouté récemment les contenus, la viralité. C'est tout ce qui me manquait, et les améliorations vont toujours de pair. Ça se voit que la formation est faite pour rester, faite pour durer et faite pour être qualitative.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "On essaie d'écouter le plus possible les demandes, et l'objectif est toujours de vous permettre d'aller un peu plus vite et de faciliter les choses.",
+      },
+      {
+        qui: "Christian",
+        texte:
+          "Je le construis même de manière à ce que, limite, je le donne à ma mère et elle le fait, sans avoir besoin d'aide technique. Parce que s'il y a une galère technique, tu as le portail d'assistance, tout est référencé : dès une question, tu as le contenu, tu as la vidéo. N'importe qui peut réussir, quel que soit l'âge, technique ou pas.",
+      },
+      {
+        qui: "Rémy",
+        texte:
+          "Merci beaucoup Christian, ça fait super plaisir. Je suis sûr que rien que ton parcours va être hyper inspirant pour plein de gens, donc merci de l'avoir partagé.",
+      },
+      {
+        qui: "Christian",
+        texte:
+          "De toute façon, on en refait un dans trois mois si tu veux, et je te dirai que j'ai fait un million. Le target, c'est d'aller chercher du deux cent mille par mois, et c'est possible, il faut juste réinvestir massivement. Cent pour cent possible.",
+      },
+    ],
+  },
+  {
     id: "rgio4y4o8f",
     slug: "roland-buffet",
     titre:
