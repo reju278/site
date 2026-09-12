@@ -224,6 +224,13 @@ bouton, un champ, une carte. Le rayon de ces jonctions est donc
 deux jonctions ne divergent jamais. Ce n'est pas une licence pour arrondir plus
 ailleurs : à l'intérieur de la page, tout reste à 5 px.
 
+**`--rayon-jonction` ne sert qu'aux deux lèvres**, celle du hero et celle de la
+bande. Il a longtemps servi aussi au cadre de la vidéo et aux cartes de
+témoignage : c'était une erreur de lecture de l'exception. Une vidéo et une
+carte sont des objets qu'on regarde de près, exactement ce que la règle des
+5 px décrit ; elles sont revenues à `rounded-md`, sur décision de Rémy. Une
+troisième jonction pleine largeur aurait droit au jeton ; rien d'autre.
+
 ### Thème clair et sombre : toujours les deux
 
 Chaque écran doit fonctionner dans les deux. Ce n'est pas une finition de fin de
@@ -375,6 +382,27 @@ d'offres ou de tarifs :
 Même principe pour les autres éléments répétés d'une carte à l'autre : un titre
 sur deux lignes ne doit pas décaler ce qui le suit dans la carte voisine.
 
+### Un raccord se juge aussi sur la matière, pas seulement sur la couleur
+
+La bande des résultats se raccorde à la page par le bas sans lèvre ni voile :
+c'est la progression elle-même qui finit sur `--background`. Elle ne le faisait
+pas. Le commentaire de `globals.css` l'affirmait déjà, mais la progression
+s'arrêtait sur `--bande-pale`, un lavande clair, contre le beige de la page :
+il restait une couture nette que personne n'avait vérifiée parce que le
+commentaire disait le contraire. **Un commentaire n'est pas une vérification.**
+
+Une fois la couleur corrigée, le trait était toujours là, et pour une autre
+raison : **le grain**. Il couvrait la bande d'`inset: 0` et s'arrêtait net à son
+bord. Sur la dernière ligne de pixels, la couleur était déjà celle de la page
+des deux côtés, mais texturée d'un côté et lisse de l'autre, et cette
+différence de matière dessinait exactement la ligne que la couleur ne dessinait
+plus. Le grain s'éteint donc au masque sur son dernier cinquième.
+
+La leçon vaut pour tout raccord : quand deux surfaces se touchent, il faut que
+**tout** se raccorde, la couleur, le grain, l'ombre, le flou. Une seule couche
+qui s'arrête franchement suffit à produire une ligne, et on la cherche
+longtemps dans la couleur.
+
 ### Le flou va derrière, jamais devant
 
 Ce qui passe **sous** une fenêtre se brouille ; la fenêtre elle-même reste opaque.
@@ -415,6 +443,56 @@ La première version comparait `scrollY` à 120 px. Ce seuil décrivait le hero 
 l'accueil et rien d'autre : en haut des cinq autres pages, qui n'ont pas de
 bande sombre, l'en-tête restait blanc sur beige, soit **1,17:1**. Un nombre nu
 qui décrit implicitement une page ne survit pas à la deuxième page.
+
+### Une section peut avoir sa couleur, si l'objet qu'elle montre en a une
+
+Le site est bleu, `--primary`. La section du livre est rouge, `--livre`, et
+c'est la seule exception : c'est le seul écran qui montre un **objet ayant déjà
+sa couleur**. La couverture de `Digital Selfmade` est d'un rouge franc, et
+poser un bouton bleu à côté aurait fait cohabiter deux couleurs dont aucune ne
+répond à l'autre.
+
+Le rouge n'est pas choisi, il est **relevé dans l'image** : #e40d3a, au
+compte-gouttes dans l'aplat de la couverture.
+
+**Deux jetons, pas un.** Un plein et un creux ne demandent pas la même chose au
+même rouge.
+
+- `--livre` porte le plein, donc du blanc dessus : 4,75:1, juste au-dessus du
+  seuil. Il ne change pas d'un thème à l'autre, parce qu'une couverture de livre
+  n'a pas deux couleurs selon l'heure.
+- `--livre-texte` porte le creux, donc le rouge sur la carte. En clair il
+  descend à #c4092f pour tenir 6,13:1 sur `--card` ; en sombre il **remonte** à
+  #ff5c7a, un rouge foncé sur #16161a étant illisible.
+
+Le jour où une autre section montrerait un objet ayant sa couleur, elle se
+décide et elle s'écrit ici. Ce n'est pas une permission d'ouvrir une palette.
+
+### Deux actions d'importance comparable font deux boutons, un plein et un creux
+
+C'est la paire de l'en-tête, « Découvrir » plein et « Connexion » creux, et elle
+vaut partout. Un lien souligné à côté d'un bouton de 56 px se lit comme une note
+de bas de page : il est légitime quand la seconde action est secondaire, il ment
+quand elle ne l'est pas. Acheter le livre et en télécharger le chapitre offert
+sont deux chemins comparables, et beaucoup prendront le second d'abord.
+
+Le creux a la **même hauteur et le même rayon** que le plein, sinon les deux se
+lisent comme deux objets voisins et non comme une paire. Sa bordure est en
+`currentColor` : elle ne peut donc pas diverger de son texte, et elle tient
+d'office ses 3:1 dès que le texte tient ses 4,5.
+
+`BoutonScintillant` prend sa couleur par la propriété `fond`, une valeur CSS,
+jamais une classe : le fond est écrit à deux endroits, le bouton et le masque
+qui rentre son liseré de `--cut`, et ces deux-là doivent être la même couleur
+au bit près, sinon le liseré change de teinte au lieu de scintiller.
+
+**Un libellé long ne se coupe pas tout seul sans qu'on le vérifie.**
+`whitespace-nowrap` sur un bouton posé dans une carte en `overflow-hidden`
+produit la pire panne qui soit : le texte sort du bouton, la carte le coupe en
+plein mot, et **la page ne déborde pas**, donc rien ne le signale. Un `nowrap`
+se borne toujours à la largeur où il tient, `sm:whitespace-nowrap` et pas
+davantage, et la hauteur se déclare en `min-h-*` pour que le bouton grandisse au
+lieu de rogner son propre texte.
 
 ### Pas de tiret cadratin
 

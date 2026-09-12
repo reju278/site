@@ -84,7 +84,7 @@ export function CarrouselTemoignages() {
                 bande, `--border` n'a rien à voir avec ce qu'il y a dessous.
                 L'ombre portée décolle la carte du dégradé, que le blanc pur
                 sinon touche sans transition. */}
-            <figure className="h-full overflow-hidden rounded-[var(--rayon-jonction)] bg-card ring-1 ring-white/15 shadow-xl shadow-black/20">
+            <figure className="h-full overflow-hidden rounded-md bg-card ring-1 ring-white/15 shadow-xl shadow-black/20">
               <LecteurVideo
                 id={temoignage.id}
                 titre={temoignage.nom}

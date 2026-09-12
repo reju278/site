@@ -360,6 +360,43 @@ html #cookiescript_bottompart:empty {
   --bande-pale: #5d6ca8;
 }
 
+/* ------------------------------------------------------------------
+   Le rouge du livre.
+
+   Ce n'est pas une couleur choisie : c'est **celle de la couverture**,
+   relevée au compte-gouttes dans l'aplat de `Digital Selfmade`
+   (#e40d3a, #e6103d, #dc0a36 selon l'endroit). La section du livre est le
+   seul écran du site qui montre un objet ayant déjà sa couleur, et lui
+   appliquer le bleu du reste du site ferait cohabiter deux rouges, celui de
+   la couverture et rien pour lui répondre.
+
+   **Deux jetons et pas un seul**, parce qu'un plein et un creux ne demandent
+   pas la même chose au même rouge.
+
+   `--livre` porte le plein, donc du blanc par-dessus : #e40d3a y tient
+   4,75:1, juste au-dessus du seuil. C'est le rouge de la couverture au pixel
+   près, et il passe, donc on ne le fonce pas pour se donner de la marge.
+
+   `--livre-texte` porte le creux, donc le rouge lui-même sur la carte. Là,
+   #e40d3a ne tient que 4,75:1 sur du blanc et le creux demande aussi une
+   bordure lisible : le ton est descendu à #c4092f, qui donne 6,13:1 sur
+   `--card` en clair. En sombre, il faut au contraire remonter, un rouge foncé
+   sur #16161a étant illisible : #ff5c7a donne 6,07:1.
+
+   Le plein, lui, ne change pas d'un thème à l'autre. Le blanc dessus tient ses
+   4,75:1 dans les deux cas, et une couverture de livre n'a pas deux couleurs
+   selon l'heure.
+   ------------------------------------------------------------------ */
+:root {
+  --livre: #e40d3a;
+  --livre-texte: #c4092f;
+}
+
+.dark {
+  --livre: #e40d3a;
+  --livre-texte: #ff5c7a;
+}
+
 /* L'ordre des couches compte : les foyers sont déclarés avant la progression
    verticale, donc ils se peignent **au-dessus** d'elle. Chacun s'éteint bien
    avant son bord pour qu'aucun ne dessine de cercle net, et leurs rayons
@@ -387,7 +424,7 @@ html #cookiescript_bottompart:empty {
     ),
     radial-gradient(
       150% 95% at 46% 112%,
-      var(--bande-pale) 0%,
+      var(--background) 0%,
       transparent 62%
     ),
     linear-gradient(
@@ -396,8 +433,9 @@ html #cookiescript_bottompart:empty {
       var(--bande-indigo) 24%,
       var(--bande-bleu) 48%,
       var(--bande-bleuet) 70%,
-      var(--bande-lavande) 87%,
-      var(--bande-pale) 100%
+      var(--bande-lavande) 84%,
+      var(--bande-pale) 93%,
+      var(--background) 100%
     );
 }
 
@@ -421,5 +459,19 @@ html #cookiescript_bottompart:empty {
   pointer-events: none;
   opacity: 0.13;
   mix-blend-mode: overlay;
+
+  /* Le grain s'éteint avant le bas, sinon il rate la jonction.
+
+     La progression finit sur `--background` et se raccorde donc à la page sans
+     couture ; le grain, lui, s'arrêtait net au bord de la bande. Sur la
+     dernière ligne de pixels, la couleur était déjà celle de la page mais
+     texturée d'un côté et lisse de l'autre, et cette différence de matière
+     dessinait exactement le trait horizontal que la couleur ne dessinait plus.
+
+     Le masque le fait disparaître sur le dernier cinquième, c'est-à-dire dans
+     la même zone où la couleur finit sa course. Les deux écritures s'écrivent :
+     Safari n'a levé son préfixe qu'en 15.4. */
+  -webkit-mask-image: linear-gradient(to bottom, black 78%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 78%, transparent 100%);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='b'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23b)'/%3E%3C/svg%3E");
 }

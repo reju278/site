@@ -12,8 +12,15 @@ import { cn } from "@repo/ui/lib/utils";
  * **En bas, rien.** Il y avait un voile en dégradé posé par-dessus la bande :
  * il devait rattraper de force l'écart entre le lavande où finissait la
  * texture et le beige de la page, et ça se voyait comme une brume. C'est la
- * texture elle-même qui finit maintenant sur `--background`, donc la jonction
- * n'a plus rien à rattraper. Voir `globals.css`.
+ * texture elle-même qui finit sur `--background`, donc la jonction n'a plus
+ * rien à rattraper.
+ *
+ * Ce paragraphe a longtemps décrit une intention et non le code : la
+ * progression s'arrêtait sur `--bande-pale`, et la couture était bien là. Elle
+ * finit vraiment sur la couleur de page depuis, **et le grain s'éteint au
+ * masque avant le bord** : il s'arrêtait net, si bien que la dernière ligne de
+ * pixels était de la bonne couleur mais texturée d'un côté et lisse de
+ * l'autre, ce qui suffisait à dessiner le trait. Voir `globals.css`.
  *
  * Une seconde lèvre arrondie en bas aurait enfermé la bande dans un cadre, et
  * le regard s'y serait arrêté au lieu de continuer vers la suite.

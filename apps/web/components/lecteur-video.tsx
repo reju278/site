@@ -86,7 +86,7 @@ export function LecteurVideo({
         // hero de la page : deux rayons différents au même endroit se lisent
         // comme une erreur d'assemblage. Le bouton et la pastille de durée,
         // eux, restent à 5 px, ce sont des objets qu'on regarde de près.
-        "relative isolate aspect-16/9 overflow-hidden rounded-[var(--rayon-jonction)] bg-black",
+        "relative isolate aspect-16/9 overflow-hidden rounded-md bg-black",
         className,
       )}
     >

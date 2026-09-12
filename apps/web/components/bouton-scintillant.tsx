@@ -10,7 +10,15 @@ import type { CSSProperties } from "react";
  * un onglet, le menu contextuel et le survol qui montre la destination.
  *
  * Plutôt que de retoucher le fichier de registre, qui doit rester alignable sur
- * ses mises à jour, on compose ici une ancre avec les mêmes animations. Elles
+ * ses mises à jour, on compose ici une ancre avec les mêmes animations.
+ *
+ * **La couleur passe par `--fond` et non par une classe.** Le fond est écrit à
+ * deux endroits, le bouton lui-même et le masque qui rentre le cône lumineux de
+ * `--cut` : ces deux-là doivent être exactement la même couleur, sinon le
+ * liseré du bord change de teinte au lieu de scintiller. Une variable garantit
+ * qu'ils ne peuvent pas diverger, là où deux classes passées de l'extérieur le
+ * permettraient. Le défaut reste `--primary`, donc tous les appels existants ne
+ * bougent pas. Elles
  * viennent de `@theme` (`--animate-shimmer-slide`, `--animate-spin-around`),
  * donc du thème du projet, et `globals.css` les neutralise déjà sous
  * `prefers-reduced-motion` puisque ce sont des animations CSS ordinaires.
@@ -19,12 +27,15 @@ export function BoutonScintillant({
   href,
   externe = true,
   vitesse = "3s",
+  /** Le fond du bouton, en valeur CSS. Un jeton, jamais une couleur écrite. */
+  fond = "var(--primary)",
   className,
   children,
 }: {
   href: string;
   externe?: boolean;
   vitesse?: string;
+  fond?: string;
   className?: string;
   children: React.ReactNode;
 }) {
@@ -40,6 +51,7 @@ export function BoutonScintillant({
           // Le liseré scintillant est laissé dépasser d'un cheveu du fond, et
           // c'est cette bande de un pixel qui fait tout l'effet.
           "--cut": "1px",
+          "--fond": fond,
         } as CSSProperties
       }
       className={cn(
@@ -48,7 +60,7 @@ export function BoutonScintillant({
         // que les liens secondaires. 56 px de haut, bien au-delà des 40 px de
         // cible tactile que demande le projet.
         "group relative z-0 inline-flex h-14 cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-md px-8 text-base font-semibold whitespace-nowrap",
-        "bg-primary text-primary-foreground",
+        "bg-(--fond) text-primary-foreground",
         "transform-gpu transition-transform duration-300 ease-out hover:scale-[1.03] active:scale-100 active:translate-y-px",
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
         className,
@@ -70,7 +82,7 @@ export function BoutonScintillant({
           le liseré du bord. */}
       <span
         aria-hidden
-        className="absolute inset-(--cut) -z-20 rounded-md bg-primary"
+        className="absolute inset-(--cut) -z-20 rounded-md bg-(--fond)"
       />
 
       {/* Le renfoncement lumineux du bas, qui donne le relief. */}
