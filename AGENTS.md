@@ -832,6 +832,25 @@ téléphone tenu à la main.
   thèmes. Le panneau navigateur émule le téléphone avec `resize_window`, il n'y
   a pas d'excuse à ne pas regarder.
 
+### Un pourcentage identique ne donne pas la même image à deux largeurs
+
+La vidéo du hero chevauche le bas de l'image, et le chevauchement est écrit une
+fois, en proportion de la hauteur du cadre : `--video-h`. Il valait la moitié
+partout, et c'était vérifié, 50 % mesurés sur téléphone comme sur grand écran.
+
+**Rémy l'a quand même trouvée « posée sous l'image » sur son iPhone, et il avait
+raison.** Une moitié de vidéo de 432 px laisse 216 px de montagne de chaque côté
+d'elle : on voit un cadre posé dans un paysage. La même moitié sur 375 px n'en
+laisse que 94 pour une vidéo de 188, et il n'en reste presque rien à regarder.
+Le rapport est le même, l'image ne l'est pas.
+
+Le chevauchement passe donc aux trois quarts en dessous de `sm`. C'est toujours
+une proportion et non des pixels, donc ça vaut pour tous les téléphones.
+
+La leçon dépasse ce cas : **une valeur relative qui tient à une largeur ne tient
+pas forcément à l'autre**, parce que ce qu'on regarde n'est pas le rapport, c'est
+ce qui reste autour.
+
 ### Le débordement horizontal se mesure, il ne se regarde pas
 
 Rémy a décrit « une bande sur la droite » sur son iPhone. C'était **23 px de

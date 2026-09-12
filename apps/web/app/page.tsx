@@ -134,7 +134,22 @@ export default function Accueil() {
           // est le défaut sûr : c'est cette absence qui le rendait blanc sur
           // beige en haut des pages sans hero.
           data-bande-sombre
-          className="absolute inset-x-0 top-0 bottom-[calc(var(--video-h)/2)] -z-10 overflow-hidden"
+          /* **Le quart sur téléphone, la moitié à partir de `sm`**, sur
+             demande de Rémy : la vidéo lui paraissait posée sous l'image plutôt
+             que dedans.
+
+             Le chevauchement valait bien 50 % aux deux largeurs, mesuré, et
+             c'est justement le problème : un pourcentage identique ne donne pas
+             la même image. Sur un grand écran, la moitié d'une vidéo de 432 px
+             fait 216 px de montagne de chaque côté d'elle, et on voit la vidéo
+             posée dans le paysage. Sur 375 px, la même moitié ne fait que 94 px
+             pour une vidéo de 188, et il n'en reste presque rien : le cadre
+             paraît accroché sous l'image.
+
+             À un quart, la montagne redescend derrière les trois premiers quarts
+             de la vidéo. C'est une proportion et non une valeur en pixels, donc
+             elle tient à toutes les tailles de téléphone. */
+          className="absolute inset-x-0 top-0 bottom-[calc(var(--video-h)/4)] -z-10 overflow-hidden sm:bottom-[calc(var(--video-h)/2)]"
         >
           <picture>
             <source media="(min-width: 768px)" srcSet="/fond-hero.jpg" />
