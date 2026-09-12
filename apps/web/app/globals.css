@@ -157,48 +157,6 @@
   font-family: var(--font-signature), cursive;
   font-weight: 400;
   line-height: 1.6;
-
-  /* Le nom s'écrit de gauche à droite quand il entre dans la vue, comme une
-     main qui signe. Demandé par Rémy.
-
-     **C'est un masque et non une animation de tracé.** Dessiner un trait
-     demanderait le contour du nom en SVG, donc une image à fabriquer et à
-     refaire à chaque changement de fonte. Un masque tiré sur du texte donne le
-     même effet sur une anglaise, dont les lettres sont liées : on voit le nom
-     apparaître au rythme d'un stylo, pas des lettres qui surgissent.
-
-     La progression est **linéaire**, contrairement à tout le reste du site : une
-     main qui signe ne ralentit pas en arrivant à la fin du nom.
-
-     Les deux écritures s'écrivent, Safari n'ayant levé son préfixe qu'en 15.4.
-     `mask-position` est explicite : sans elle, un masque de largeur nulle se
-     centre, et le nom se révèle par le milieu. */
-  -webkit-mask-image: linear-gradient(#000, #000);
-  mask-image: linear-gradient(#000, #000);
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: left center;
-  mask-position: left center;
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  transition:
-    -webkit-mask-size 1200ms linear,
-    mask-size 1200ms linear;
-}
-
-/* Le même principe que le surlignage, et la même précaution : l'état écrit est
-   le défaut, l'état vierge l'exception. Un nom qui ne s'écrirait jamais, faute
-   de script ou sous mouvement réduit, resterait sinon invisible, et c'est une
-   signature. La contre-règle sans script est dans `layout.tsx`. */
-@media (prefers-reduced-motion: no-preference) {
-  [data-apparition]:not([data-vu]) .signature {
-    -webkit-mask-size: 0% 100%;
-    mask-size: 0% 100%;
-  }
-
-  [data-apparition] .signature {
-    transition-delay: 400ms;
-  }
 }
 
 @utility titre-fort {

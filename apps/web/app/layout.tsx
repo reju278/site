@@ -203,7 +203,7 @@ export default function RootLayout({
             perdu est un niveau du plan en moins ; une lettre perdue, c'est la
             moitié de la page d'accueil. */}
         <noscript>
-          <style>{`[data-titre-roulant] span{transform:none}[data-apparition]{opacity:1;transform:none}[data-apparition] .surlignage{background-size:100% 100%}[data-apparition] .signature{-webkit-mask-size:100% 100%;mask-size:100% 100%}`}</style>
+          <style>{`[data-titre-roulant] span{transform:none}[data-apparition]{opacity:1;transform:none}[data-apparition] .surlignage{background-size:100% 100%}`}</style>
         </noscript>
         <Script id="gtm" strategy="afterInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
