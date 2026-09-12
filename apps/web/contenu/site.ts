@@ -646,6 +646,20 @@ export const legales = [
   { libelle: "Mentions", href: "/mentions" },
 ] as const;
 
-/** Repris du pied de page de remy-jupille.com, au mot près. */
-export const avertissement =
-  "Ce site ne fait pas partie du site Facebook ou de Facebook, Inc. Ce site n'est PAS approuvé par Facebook de quelque manière que ce soit. FACEBOOK est une marque déposée de FACEBOOK, Inc.";
+/**
+ * Les avertissements du pied de page, fournis par Rémy et repris au mot près.
+ *
+ * Deux paragraphes et non un : le premier porte l'avertissement sur les
+ * résultats, qui est ce qui engage réellement une société de formation ; le
+ * second porte les cookies et la mention Facebook. Les séparer n'est pas une
+ * coquetterie de mise en page, c'est ce qui rend le premier lisible au lieu de
+ * le noyer dans un bloc de quatre-vingts mots.
+ *
+ * **Ils ne se réécrivent pas.** Ce sont des textes qui engagent la société, et
+ * les guillemets droits autour de « devenir riche » sont ceux de Rémy : les
+ * corriger en guillemets français, c'est modifier un document légal au jugé.
+ */
+export const avertissements = [
+  "Funnels Club est une société de formation en marketing, pas une opportunité de gain garanti. Les résultats présentés sont exceptionnels et ne sont pas typiques ; ils dépendent de votre travail, de vos compétences et du marché. Nous ne garantissons aucun revenu et ne sommes pas un système pour \"devenir riche\". En progressant, vous acceptez que votre succès reste votre entière responsabilité.",
+  "Nous utilisons des cookies pour améliorer, promouvoir et protéger nos services. En continuant à utiliser ce site, vous acceptez notre politique de confidentialité et nos conditions d'utilisation. Ce site ne fait pas partie du site Facebook ou de Facebook, Inc. Ce site n'est PAS approuvé par Facebook de quelque manière que ce soit. FACEBOOK est une marque déposée de FACEBOOK, Inc.",
+] as const;

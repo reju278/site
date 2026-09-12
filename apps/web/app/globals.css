@@ -319,6 +319,30 @@ html #cookiescript_bottompart:empty {
   --maquette-texte-attenue: #9a9aa8;
 }
 
+/* Le curseur de désignation, sur tout ce qui se clique.
+
+   Les navigateurs donnent au `<button>` le curseur de flèche, et plusieurs
+   composants de registre posent `cursor-default` par-dessus. Résultat : sur la
+   moitié des commandes du site, rien ne signalait qu'on pouvait cliquer, et
+   c'est le seul retour qu'on ait avant d'appuyer.
+
+   La règle est écrite ici une fois plutôt que classe par classe, pour deux
+   raisons. D'abord, une classe oubliée sur un bouton ne se voit pas : le
+   bouton marche, il a juste l'air inerte. Ensuite, un `shadcn add` remet son
+   `cursor-default` à chaque mise à jour, et le code de registre ne se corrige
+   pas à la main : cette règle passe devant, par la spécificité d'un sélecteur
+   d'élément combiné à `:not()`, et elle survit donc aux réinstallations.
+
+   `:disabled` et `aria-disabled` sont exclus : sur une commande hors service,
+   la flèche est le bon signe, elle dit que rien ne se passera. */
+button:not(:disabled):not([aria-disabled="true"]),
+[role="button"]:not([aria-disabled="true"]),
+a[href],
+label[for],
+summary {
+  cursor: pointer;
+}
+
 /* La texture de la bande des témoignages.
 
    La première version empilait cinq petits foyers, dont un teal. Résultat :
@@ -328,36 +352,48 @@ html #cookiescript_bottompart:empty {
    et seulement deux ou trois foyers énormes et très diffus posés dessus pour
    casser la régularité. C'est ce qui est refait ici.
 
+   **Le bleu est celui d'origine, éclairci d'un cran, sur décision de Rémy.**
+   Une version d'ardoise désaturée a été essayée et écartée : ce n'était pas
+   « plus clair », c'était une autre couleur. Les teintes et les saturations
+   sont donc exactement celles d'avant ; seule la luminosité monte de cinq
+   points, en HLS, ce qui est la seule façon d'éclaircir sans déplacer la
+   teinte.
+
+   Éclaircir coûte du contraste, et c'est là qu'il faut regarder plutôt que de
+   monter à l'œil : `bleu` passe de 6,6 à 5,5 pour du blanc. Il reste au-dessus
+   du seuil, mais la marge n'est plus grande, et un cran de plus le ferait
+   passer dessous.
+
    **La bande a deux zones, et ce n'est pas décoratif.**
 
    La zone haute porte le texte : `nuit`, `indigo` et `bleu` tiennent
-   respectivement 14,9, 11,1 et 6,6 pour du blanc, tous au-dessus du seuil de
-   4,5. La zone basse est claire, `bleuet` à 3,4 et `lavande` à 2,1, donc elle
-   ne peut **rien** porter. Ce n'est pas un hasard de cadrage : c'est la zone
-   où la bande s'éteint vers la couleur de page, et le composant y réserve son
-   rembourrage bas. Du texte ne doit jamais y descendre.
+   respectivement 13,2, 9,7 et 5,5 pour du blanc, tous au-dessus du seuil de
+   4,5. La zone basse est claire, `bleuet` à 2,8 et `lavande` à 1,8, donc elle
+   ne peut **rien** porter directement. Ce n'est pas un hasard de cadrage :
+   c'est la zone où la bande s'éteint vers la couleur de page. Ce qui doit s'y
+   poser porte sa propre surface opaque, voir `AGENTS.md`.
 
-   La limite est utile à connaître pour la suite : la couleur la plus claire
-   qui tienne encore 4,5 pour du blanc est autour de #4a6ecd, à 4,77.
+   La limite est utile à connaître pour la suite : `bleu`, à 5,5, est le dernier
+   palier où du blanc tient de lui-même, et il n'a plus qu'un point de marge.
 
    En thème sombre, la progression s'arrête bien avant le clair : une bande qui
    virerait au lavande pâle au milieu d'une page sombre éblouirait. */
 :root {
-  --bande-nuit: #141f63;
-  --bande-indigo: #22308f;
-  --bande-bleu: #2f56bf;
-  --bande-bleuet: #6f86dd;
-  --bande-lavande: #a8aee6;
-  --bande-pale: #cdd0ef;
+  --bande-nuit: #182678;
+  --bande-indigo: #2737a4;
+  --bande-bleu: #3962ce;
+  --bande-bleuet: #8497e2;
+  --bande-lavande: #bcc0ec;
+  --bande-pale: #e0e2f5;
 }
 
 .dark {
-  --bande-nuit: #0a1038;
-  --bande-indigo: #131c56;
-  --bande-bleu: #1e3179;
-  --bande-bleuet: #34478f;
-  --bande-lavande: #4a5a9c;
-  --bande-pale: #5d6ca8;
+  --bande-nuit: #0e164e;
+  --bande-indigo: #18236b;
+  --bande-bleu: #23398d;
+  --bande-bleuet: #3b50a2;
+  --bande-lavande: #5264ad;
+  --bande-pale: #6e7bb1;
 }
 
 /* Un rang qui défile sans montrer sa barre.

@@ -7,13 +7,12 @@ import { SectionLivre } from "@/components/section-livre";
 import { SurtitreOffre } from "@/components/surtitre-offre";
 import { KineticText } from "@repo/ui/components/kinetic-text";
 import { ParticulesHero } from "@/components/particules-hero";
-import { Emplacement, Section, TitreSection } from "@/components/section";
+import { Section, TitreSection } from "@/components/section";
 import {
   SITE,
   identite,
   liens,
   offres,
-  sections,
   titreOffres,
   titreResultats,
   video,
@@ -378,11 +377,13 @@ export default function Accueil() {
         <SectionLivre />
       </Section>
 
-      {/* Ce qui attend encore le texte de Rémy, sur le fond de page. */}
-      <Section>
-        <Emplacement attendu={sections.aPropos.attendu} />
-        <Emplacement attendu={sections.appel.attendu} className="mt-4" />
-      </Section>
+      {/* Rien entre le livre et le pied de page.
+
+          Il y avait là deux emplacements en attente, « qui vous êtes » et la
+          phrase de clôture. Rémy les a retirés : la page se termine sur le
+          livre. Les textes attendus restent décrits dans `sections` de
+          `site.ts`, donc le jour où ils existent, la section se remonte sans
+          avoir à retrouver ce qu'elle devait dire. */}
     </>
   );
 }

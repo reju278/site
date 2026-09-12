@@ -71,6 +71,15 @@ L'ordre compte :
 2. [reui.io](https://reui.io) : la couche au-dessus, les compositions qu'on écrirait sinon à la main.
 3. [bklit.com](https://bklit.com) : les graphiques, et eux seuls.
 
+**ReUI demande désormais une clé de licence.** Le registre répond
+`{"error":"Authentication required"}` sur toutes ses adresses, y compris la
+variante `radix-nova`. Les trois composants déjà dans `packages/ui/src/components/reui/`
+ont été installés avant ce changement et restent utilisables ; **on ne peut plus
+en ajouter** tant que Rémy n'a pas de clé. Ce n'est donc plus la deuxième étape
+de la visite aux registres, c'est une porte fermée : il faut le savoir avant
+d'aller y chercher quelque chose. La règle ci-dessous vaut pour le jour où la
+clé existe.
+
 **ReUI s'installe en variante `radix-nova`, jamais par l'URL courte.**
 `https://reui.io/r/<nom>.json` redirige vers une version bâtie sur Base UI, qui
 ferait doublon avec `radix-ui`, déjà là. L'adresse à utiliser est
@@ -189,6 +198,13 @@ et les deux tailles d'écran.
 
 - **`sitemap.ts` et `robots.ts`** dans `apps/web/app/`. Next les génère ; toute
   page publique nouvelle doit apparaître dans le premier.
+- **Le pied de page se met à jour en même temps que les pages.** Il tient la
+  carte du site : ses trois colonnes viennent de `colonnesPiedDePage` dans
+  `site.ts` et reprennent les menus de l'en-tête entrée pour entrée. Créer une
+  page publique, en renommer une, en déplacer une ou en supprimer une **oblige**
+  à passer par ce tableau, au même titre que par `sitemap.ts`. Un pied de page
+  qui pointe vers une page disparue rend un 404 à Google et à un visiteur qui
+  arrivait au bout de la page, et c'est la pire des deux fins.
 - **`metadataBase`** est déclaré une fois dans `layout.tsx` pour que les URL
   d'`openGraph` soient absolues. Sans lui, les aperçus de partage sont vides.
 - **Une image `openGraph`** de 1200 sur 630. C'est ce qui s'affiche quand
@@ -230,6 +246,52 @@ témoignage : c'était une erreur de lecture de l'exception. Une vidéo et une
 carte sont des objets qu'on regarde de près, exactement ce que la règle des
 5 px décrit ; elles sont revenues à `rounded-md`, sur décision de Rémy. Une
 troisième jonction pleine largeur aurait droit au jeton ; rien d'autre.
+
+### Les commandes rondes du lecteur de témoignages
+
+`rounded-full` est réservé aux photos de profil. Il a maintenant une seconde
+famille, décidée par Rémy sur deux références qu'il a fournies, le lecteur de
+functionhealth.com et le pied de page du même site :
+
+- le **disque de lecture** au centre d'une affiche de témoignage,
+- les **deux flèches** du carrousel, qui sont rondes dans le fichier de registre
+  shadcn lui-même et qu'on ne corrige donc pas,
+- les **pastilles de réseaux** du pied de page.
+
+Ces trois-là sont des commandes rondes qui forment un même vocabulaire. Rien
+d'autre n'a le droit d'être rond, et une quatrième famille se décide et s'écrit
+ici.
+
+### Le flou du disque de lecture est la troisième exception
+
+Après les capsules de l'en-tête et la carte de cookies, le disque de lecture
+porte un `backdrop-blur`. Décidé par Rémy, qui veut le lecteur de sa référence.
+
+Le flou y est chez lui : ce qui passe dessous est justement l'image, et c'est
+elle qu'on brouille. Mais **le flou n'apporte aucun contraste** : il ne change
+pas la luminosité moyenne de ce qu'il brouille. C'est le fond du disque qui
+porte le seuil, et il est à 45 % de noir, pas moins. Un signe posé sur une photo
+se mesure au pire cas, image entièrement blanche dessous : à 45 %, le triangle
+blanc tient 3,35:1 ; à 35 %, il tombe à 2,46 et disparaît sur un visage en
+pleine lumière. Le disque de la référence est plus clair que le nôtre pour
+exactement cette raison.
+
+### Tout ce qui se clique porte le curseur de désignation
+
+Les navigateurs donnent au `<button>` le curseur de flèche, et plusieurs
+composants de registre posent `cursor-default` par-dessus. Sur la moitié des
+commandes du site, rien ne signalait qu'on pouvait cliquer, et c'est le seul
+retour qu'on ait avant d'appuyer.
+
+La règle est écrite **une fois** dans `globals.css`, sur `button`, `[role=button]`,
+`a[href]`, `label[for]` et `summary`, et non classe par classe. Deux raisons : une
+classe oubliée sur un bouton ne se voit pas, le bouton marche et a juste l'air
+inerte ; et un `shadcn add` remet son `cursor-default` à chaque mise à jour,
+alors que le code de registre ne se corrige pas à la main. Un sélecteur
+d'élément combiné à `:not()` passe devant et survit aux réinstallations.
+
+`:disabled` et `aria-disabled` sont exclus : sur une commande hors service, la
+flèche est le bon signe, elle dit que rien ne se passera.
 
 ### Thème clair et sombre : toujours les deux
 
@@ -548,6 +610,36 @@ plein mot, et **la page ne déborde pas**, donc rien ne le signale. Un `nowrap`
 se borne toujours à la largeur où il tient, `sm:whitespace-nowrap` et pas
 davantage, et la hauteur se déclare en `min-h-*` pour que le bouton grandisse au
 lieu de rogner son propre texte.
+
+### Le pied de page est une carte, et ce qui est légal en sort
+
+La forme vient du pied de page de functionhealth.com, fournie par Rémy : une
+grande carte à ombre détachée des bords, le nom en haut à gauche, les colonnes
+de liens en dessous, puis une rangée basse avec les réseaux à gauche et les
+mentions à droite. Le copyright et les avertissements se posent **sous** la
+carte, en petit.
+
+**C'est ce découpage qui fait le travail, pas l'ombre.** Un pied de page
+classique met les mentions, les liens et l'avertissement sur le même rang, et
+le regard ne sait plus ce qu'il doit lire. Ici la carte contient ce qui sert à
+naviguer ; ce qui est dessous n'est plus de la navigation, et la mise en page le
+dit avant qu'on ait lu un mot. Les mentions restent **dans** la carte parce que
+ce sont des pages du site, donc de la navigation ; l'avertissement est un texte
+qu'on ne clique pas.
+
+Il n'y a **pas de filet** entre la carte et les avertissements. La carte a déjà
+son bord, son ombre et sa couleur : un trait de plus au même endroit ne sépare
+pas mieux, il ajoute une ligne à regarder.
+
+La dernière colonne ne porte **pas de formulaire**, contrairement à la
+référence. Le site n'a ni base ni envoi d'emails, et un champ qui ressemble à
+une inscription sans en être une est pire que pas de champ. Elle porte l'appel
+vers Funnels Club, qui est ce que le pied de page a de plus utile à proposer à
+quelqu'un arrivé jusqu'en bas.
+
+Le rayon de la carte est `--rayon-jonction` et non 5 px : elle fait presque
+toute la largeur de l'écran, c'est exactement le cas que l'exception d'échelle
+décrit.
 
 ### Pas de tiret cadratin
 

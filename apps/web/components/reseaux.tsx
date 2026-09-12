@@ -32,9 +32,21 @@ const GLYPHES = {
   facebook: siFacebook.path,
 } as const;
 
-export function Reseaux({ className }: { className?: string }) {
+/**
+ * `rond` habille chaque réseau en pastille circulaire sur `--accent`, comme
+ * dans le pied de page de functionhealth.com, repris sur demande de Rémy. Le
+ * `rounded-full` est l'exception consignée dans `AGENTS.md` ; la pastille est
+ * aussi ce qui porte la cible tactile, une icône nue n'ayant pas de surface.
+ */
+export function Reseaux({
+  className,
+  rond = false,
+}: {
+  className?: string;
+  rond?: boolean;
+}) {
   return (
-    <div className={cn("flex flex-wrap items-center gap-1", className)}>
+    <div className={cn("flex flex-wrap items-center gap-2", className)}>
       {reseaux.map((reseau) => (
         <a
           key={reseau.href}
@@ -47,8 +59,22 @@ export function Reseaux({ className }: { className?: string }) {
           aria-label={reseau.nom}
           title={reseau.nom}
           className={cn(
-            "flex h-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground",
-            reseau.glyphe ? "w-9" : "px-3 text-sm font-semibold"
+            "flex items-center justify-center text-muted-foreground transition-colors hover:text-foreground",
+            rond
+              ? // 40 px : la cible tactile minimale du projet. Le fond est
+                // posé en permanence et non au survol, parce que sur un
+                // téléphone il n'y a pas de survol et que la pastille est ce
+                // qui montre où appuyer.
+                "h-10 rounded-full bg-accent hover:bg-accent/70"
+              : "h-9 rounded-md hover:bg-accent",
+            // LinkedIn n'a pas de glyphe : sa pastille s'allonge autour de son
+            // nom écrit, mais garde le même fond et le même rayon que les
+            // autres, sinon elle se lirait comme un objet d'une autre nature.
+            reseau.glyphe
+              ? rond
+                ? "w-10"
+                : "w-9"
+              : "px-4 text-sm font-semibold",
           )}
         >
           {reseau.glyphe ? (

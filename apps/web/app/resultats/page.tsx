@@ -36,7 +36,6 @@ export default function Resultats() {
                 titre={temoignage.nom}
                 secondes={temoignage.secondes}
                 affiche={`/temoignages/${temoignage.id}.jpg`}
-                libelle="Voir"
               />
 
               <p className="mt-4 text-base font-semibold text-foreground">

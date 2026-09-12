@@ -61,8 +61,7 @@ export function LecteurVideo({
   secondes,
   affiche,
   afficheMobile,
-  libelle = "Voir la vidéo",
-  recadre = false,
+  legende,
   className,
 }: {
   id: string;
@@ -71,30 +70,17 @@ export function LecteurVideo({
   affiche: string;
   /** Une seconde source, plus légère, pour les écrans étroits. */
   afficheMobile?: string;
-  libelle?: string;
   /**
-   * Recadre le cadre en 2,4/1 et demande au lecteur d'en faire autant.
+   * Un bloc posé en bas de l'affiche, sur un voile qui garantit son contraste.
    *
-   * Réservé aux vidéos dont l'enregistrement porte ses propres bandes noires,
-   * les appels à deux des témoignages. Sur une vidéo cadrée plein écran, ça
-   * mangerait le haut et le bas de l'image.
+   * Il est rendu **dans** le bouton, donc il ne doit contenir que du contenu
+   * de phrase, des `span`, et aucun élément interactif : un bouton dans un
+   * bouton est du HTML invalide et donnerait deux cibles au clavier.
    */
-  recadre?: boolean;
+  legende?: React.ReactNode;
   className?: string;
 }) {
   const [lance, setLance] = useState(false);
-
-  /* `fitStrategy=cover` demande au lecteur de remplir le cadre en rognant,
-     plutôt que d'y faire tenir l'image en ajoutant des bandes. Sans lui, une
-     vidéo 16/9 posée dans un cadre en 2,4/1 rétrécirait pour tenir en hauteur
-     et se retrouverait avec des bandes sur les côtés : on aurait déplacé le
-     problème d'un quart de tour.
-
-     C'est la seule façon d'enlever les bandes **à la lecture aussi**. Recadrer
-     l'affiche seule ferait sauter le cadre au moment du clic. */
-  const options = recadre
-    ? new URLSearchParams({ ...Object.fromEntries(OPTIONS), fitStrategy: "cover" })
-    : OPTIONS;
 
   return (
     <div
@@ -104,10 +90,10 @@ export function LecteurVideo({
         // laisserait voir la couleur du thème tout autour de l'image.
         // Le rayon est celui du reste du site, 5 px : une vidéo est un objet
         // qu'on regarde de près, pas une jonction pleine largeur.
-        "relative isolate overflow-hidden rounded-md bg-black",
-        // Le rapport du cadre. 2,4/1 pour les enregistrements qui portent
-        // leurs bandes noires, 16/9 partout ailleurs.
-        recadre ? "aspect-[2.4/1]" : "aspect-16/9",
+        // Le rapport est toujours 16/9, celui dans lequel Wistia sert ses
+        // vidéos. Un cadre de 2,4/1 a été essayé pour masquer les bandes
+        // noires des enregistrements ; Rémy a tranché pour le 16/9.
+        "relative isolate aspect-16/9 overflow-hidden rounded-md bg-black",
         className,
       )}
     >
@@ -125,7 +111,7 @@ export function LecteurVideo({
         //
         // Le prix est un rognage de moins d'un pour cent de l'image.
         <iframe
-          src={`https://fast.wistia.net/embed/iframe/${id}?${options}`}
+          src={`https://fast.wistia.net/embed/iframe/${id}?${OPTIONS}`}
           title={titre}
           allow="autoplay; fullscreen"
           allowFullScreen
@@ -158,9 +144,22 @@ export function LecteurVideo({
             />
           </picture>
 
+          {/* Le voile global a disparu, sur décision de Rémy : il ternissait
+              l'affiche, et c'est elle qu'on est venu regarder.
+
+              Il portait un vrai rôle et il a fallu le remplacer, pas
+              seulement le retirer. Il assombrissait toute l'image pour que le
+              libellé blanc de la pilule tienne son contraste où qu'il tombe ;
+              sans lui, c'est **la pilule qui doit le porter seule**, donc son
+              fond passe de blanc translucide à noir à 55 %. Un texte sur une
+              photo se mesure au pire cas, image entièrement blanche dessous :
+              à 55 %, le blanc tient 4,76:1 ; à 50 %, il tombe à 3,98 et passe
+              sous le seuil.
+
+              Il ne reste qu'un voile au survol, comme réponse au geste. */}
           <span
             aria-hidden
-            className="absolute inset-0 bg-black/30 transition-colors duration-300 group-hover:bg-black/20"
+            className="absolute inset-0 transition-colors duration-300 group-hover:bg-black/15"
           />
 
           {/* Ce n'est pas un vrai bouton : toute l'affiche est cliquable, et
@@ -170,18 +169,88 @@ export function LecteurVideo({
             aria-hidden
             className="absolute inset-0 flex items-center justify-center"
           >
-            <span className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-white/20 px-5 text-sm font-semibold text-white ring-1 ring-white/45 ring-inset backdrop-blur-md transition-colors duration-300 group-hover:bg-white/30">
-              {libelle}
-              <Play className="size-4 fill-current" />
+            {/* Le disque.
+
+                Il est la seule marque de lecture du site : la pilule portant
+                « Voir la vidéo » a été retirée, sur décision de Rémy, y compris
+                sur la vidéo du hero. Un disque de lecture se comprend sans
+                qu'on l'écrive.
+
+                `rounded-full` est une exception à la règle des 5 px, consignée
+                dans `AGENTS.md` avec les autres commandes rondes du site.
+
+                **Il est clair et non foncé**, sur décision de Rémy, et c'est ce
+                qui décide de la couleur du triangle. Un disque clair ne peut
+                pas porter un triangle blanc : c'est l'erreur de la référence,
+                invisible dès que l'image est lumineuse. Le triangle est donc en
+                `--bande-nuit`, le bleu nuit du site.
+
+                Le blanc est à 60 % et pas moins, et ce nombre est mesuré. Un
+                signe posé sur une photo se mesure au pire cas, et ici il y en a
+                **deux**, opposés : sur une image entièrement noire le disque
+                s'assombrit et le triangle y tient 5,2:1 ; sur une image
+                entièrement blanche, 14,9:1. À 50 %, le premier cas tombe à 3,8
+                et passe sous le seuil d'un texte.
+
+                **Pas de filet**, et pas de changement d'échelle au survol : les
+                deux dessinaient un bord au moment précis où le disque bouge, et
+                sur une surface floutée ce bord se voit. La réponse au geste est
+                la couleur, qui passe au bleu du site, et rien d'autre.
+
+                Le flou est la troisième exception du projet à « le flou va
+                derrière, jamais devant ». Il est ici chez lui : ce qui passe
+                dessous est justement l'image. Mais il n'apporte **aucun**
+                contraste, un flou ne changeant pas la luminosité moyenne de ce
+                qu'il brouille : il s'ajoute à la densité du fond, il ne la
+                remplace pas. */}
+            <span className="flex size-20 items-center justify-center rounded-full bg-white/60 backdrop-blur-md transition-colors duration-300 group-hover:bg-primary sm:size-24">
+              {/* Le triangle est décalé d'un cheveu : son centre optique n'est
+                  pas son centre géométrique, et centré au pixel il paraît collé
+                  à gauche.
+
+                  Au survol, le disque passe au bleu plein : le triangle passe
+                  donc au blanc, qui y tient 5,6:1, là où le bleu nuit sur le
+                  bleu du site ne vaudrait que 2,7:1. La couleur du signe suit
+                  celle de son fond, sinon le survol rendrait le bouton moins
+                  lisible qu'au repos. */}
+              <Play className="ml-[4px] size-8 fill-[var(--bande-nuit)] text-[var(--bande-nuit)] transition-colors duration-300 group-hover:fill-white group-hover:text-white sm:size-9" />
             </span>
           </span>
 
-          <span
-            aria-hidden
-            className="absolute right-3 bottom-3 rounded-md bg-black/70 px-2 py-1 text-xs font-semibold text-white tabular-nums"
-          >
-            {duree(secondes)}
-          </span>
+          {/* La légende, sur son voile.
+
+              Le voile n'est pas décoratif : un texte posé sur une photo se
+              mesure au pire cas, image entièrement blanche dessous. À 70 % de
+              noir, le blanc y tient 8,5:1, et c'est ce qui garantit le seuil,
+              pas le hasard du cadrage.
+
+              `aria-hidden` : le nom et la durée sont déjà dans l'`aria-label`
+              du bouton, et les répéter ferait tout annoncer deux fois. */}
+          {legende ? (
+            <span
+              aria-hidden
+              className="absolute inset-x-0 bottom-0 block bg-gradient-to-t from-black/95 via-black/70 to-transparent px-4 pt-20 pb-4 text-left sm:px-6 sm:pb-5"
+            >
+              {legende}
+            </span>
+          ) : null}
+
+          {/* La durée ne s'affiche que si rien d'autre n'occupe le bas.
+
+              Sur une carte de témoignage, la légende y est déjà et la référence
+              n'en porte pas. Sur le hero, le coin est libre et l'information
+              vaut d'être lue : on décide de lancer une vidéo de seize minutes
+              autrement qu'une de trente secondes. Dans les deux cas elle reste
+              annoncée par l'`aria-label` du bouton, donc rien n'est perdu pour
+              qui ne voit pas l'écran. */}
+          {legende ? null : (
+            <span
+              aria-hidden
+              className="absolute right-3 bottom-3 rounded-md bg-black/70 px-2 py-1 text-xs font-semibold text-white tabular-nums"
+            >
+              {duree(secondes)}
+            </span>
+          )}
         </button>
       )}
     </div>
