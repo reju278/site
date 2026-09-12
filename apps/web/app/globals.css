@@ -13,6 +13,9 @@
   --font-sans:
     var(--font-nunito), ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  /* Les titres sont en Fraunces. La pile de repli est bien une pile serif :
+     si le réseau lâche, les titres doivent rester des titres. */
   --font-serif:
     var(--font-titre), ui-serif, Georgia, Cambria, "Times New Roman", Times,
     serif;
@@ -20,17 +23,26 @@
 
 /* Le titre du site.
 
-   Instrument Serif n'a qu'une graisse, 400 : la demander en gras produirait un
-   faux gras baveux. Ce qui donne la présence ici, c'est le corps, pas
-   l'épaisseur. Un display à ce corps a besoin d'un interlignage plus serré que
-   le défaut, et d'une chasse à peine ouverte pour que les capitales ne se
-   collent pas. Les valeurs vont ensemble : les séparer, c'est les voir diverger
-   d'un écran à l'autre. */
+   Fraunces, en graisse 600 et `SOFT` à 50 : ce sont exactement les réglages du
+   banc d'essai que Rémy a validé, et ils vont ensemble. La graisse seule
+   donnerait une serif anguleuse ; `SOFT` seul donnerait des formes rondes mais
+   maigres. C'est le couple qui produit le « serif arrondi et pas fin ».
+
+   `WONK` reste à zéro. C'est l'axe fantaisiste de Fraunces, celui qui bascule
+   certaines lettres sur des formes décoratives : sur un site qui vend un
+   accompagnement, cette fantaisie se paierait en crédibilité.
+
+   L'approche est négative, -0,015 em. Une serif à grand corps a besoin qu'on
+   resserre ses capitales ; c'est le réglage du banc d'essai, pas une valeur
+   trouvée au jugé. */
 @utility titre {
   font-family: var(--font-serif);
-  font-weight: 400;
-  line-height: 1.08;
-  letter-spacing: 0.005em;
+  font-weight: 600;
+  font-variation-settings:
+    "SOFT" 50,
+    "WONK" 0;
+  line-height: 1.12;
+  letter-spacing: -0.015em;
 }
 
 /* `text-balance` n'entre pas dans l'utilitaire `titre`.
@@ -44,17 +56,370 @@
 
 /* Le mot accentué dans un titre.
 
-   Instrument Serif n'existe qu'en une seule graisse, 400. Demander un gras
-   produirait un faux gras : le navigateur épaissit le tracé lui-même,
-   uniformément, ce qui écrase justement le contraste entre pleins et déliés qui
-   fait le caractère de cette fonte. À grande taille, cela se voit.
-
-   L'accent passe donc par l'italique, qui est un dessin réel livré avec la
-   fonte, et non une déformation. `font-synthesis: none` interdit explicitement
-   au navigateur de fabriquer ce qu'il n'a pas. */
+   L'accent passe par l'italique, qui est un dessin réel livré avec Playfair
+   Display, et non une déformation. `font-synthesis: none` reste posé : il
+   interdit au navigateur de fabriquer lui-même ce qu'il ne trouverait pas dans
+   la fonte, ce qui écraserait le contraste entre pleins et déliés qui fait le
+   caractère de cette famille. La garde ne coûte rien et survit à un changement
+   de police. */
 @utility titre-fort {
-  font-weight: 400;
   font-style: italic;
   font-synthesis: none;
 }
 
+/* ------------------------------------------------------------------
+   La carte de cookies de CookieScript.
+
+   Elle est posée par une balise de Google Tag Manager, pas par ce dépôt : son
+   HTML nous échappe et peut changer sans prévenir. On ne la reconstruit donc
+   pas, on la rhabille, en ne touchant qu'à ce qui se voit et en laissant
+   intacts sa mécanique, ses libellés et ce qu'elle dépose.
+
+   Les sélecteurs sont préfixés de `html` à dessein. Leur feuille est injectée
+   par JavaScript, donc *après* la nôtre : à spécificité égale, c'est la
+   dernière déclarée qui l'emporte, et la nôtre perdrait. Le `html` nous fait
+   passer devant sans avoir à couvrir le fichier de `!important`.
+   ------------------------------------------------------------------ */
+
+/* Une carte verticale ancrée en bas à gauche : l'icône, le texte, puis le
+   bouton.
+
+   L'habillage est celui des capsules de l'en-tête, repris à l'identique sur
+   décision de Rémy : fond de carte à 85 %, flou de 12 px derrière, filet
+   intérieur d'un pixel en `--border`, rayon de 12 px et la même ombre portée.
+   Les deux règles d'`AGENTS.md` levées pour l'en-tête, le rayon et le flou
+   devant, le sont donc ici aussi, et l'exception y est consignée.
+
+   `opacity` revient à 1. CookieScript la met à 0.9 sur l'élément entier, texte
+   compris : la page transparaissait *à travers les mots*, et un texte atténué à
+   90 % sur un fond quelconque ne tient aucun seuil de contraste. La
+   translucidité appartient au fond, pas au contenu.
+
+   Le rayon du flou est écrit en toutes lettres : `blur(var(--x))` est
+   silencieusement jeté par le compilateur CSS.
+
+   `width` la borne à la largeur de l'écran moins ses gouttières, pour qu'un
+   téléphone étroit ne la fasse jamais déborder. */
+html #cookiescript_injected {
+  position: fixed;
+  inset: auto auto 1rem 1rem;
+  width: calc(100vw - 2rem);
+  max-width: 20rem;
+  margin: 0;
+  box-sizing: border-box;
+  padding: 1rem;
+
+  font-family: var(--font-sans);
+  color: var(--card-foreground);
+
+  opacity: 1;
+  background-color: color-mix(in oklab, var(--card) 85%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: none;
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 1px var(--border) inset,
+    0 2px 8px rgb(0 0 0 / 0.06);
+}
+
+html #cookiescript_toppart {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+html #cookiescript_leftpart,
+html #cookiescript_rightpart {
+  padding: 0;
+  margin: 0;
+}
+
+/* Le biscuit.
+
+   C'est l'icône `cookie` de Lucide, la bibliothèque d'icônes déjà employée
+   partout ailleurs dans le site : on ne dessine pas la sienne quand celle du
+   jeu en place existe. Elle arrive en masque et non en image, ce qui la fait
+   prendre la couleur du texte : une icône posée en `background-image` serait
+   figée dans une couleur et disparaîtrait dans l'un des deux thèmes.
+
+   Le trait du SVG est noir plutôt qu'en `currentColor` : dans un masque, seule
+   l'opacité compte, et `currentColor` n'y est pas résolu. La couleur, elle,
+   vient de `background-color`.
+
+   L'icône ne dit rien que le texte ne dise déjà : elle est décorative, et
+   `::before` la garde hors de l'arbre d'accessibilité, ce qui est le
+   `alt=""` de l'image de contenu. */
+html #cookiescript_leftpart::before {
+  content: "";
+  display: block;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-bottom: 0.625rem;
+  background-color: var(--muted-foreground);
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5'/%3E%3Cpath d='M8.5 8.5v.01'/%3E%3Cpath d='M16 15.5v.01'/%3E%3Cpath d='M12 12v.01'/%3E%3Cpath d='M11 17v.01'/%3E%3Cpath d='M7 14v.01'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5'/%3E%3Cpath d='M8.5 8.5v.01'/%3E%3Cpath d='M16 15.5v.01'/%3E%3Cpath d='M12 12v.01'/%3E%3Cpath d='M11 17v.01'/%3E%3Cpath d='M7 14v.01'/%3E%3C/svg%3E");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+}
+
+html #cookiescript_description,
+html #cookiescript_description span {
+  padding: 0;
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  text-align: left;
+  text-wrap: pretty;
+  color: var(--muted-foreground);
+}
+
+html #cookiescript_buttons {
+  display: flex;
+  padding: 0;
+  margin: 0;
+  gap: 0.5rem;
+}
+
+/* Le bouton « Découvrir » de l'en-tête : 34 px de haut, rayon de 5 px,
+   `px-3.5`, `text-sm` en 600, et la même transition de couleur sur 300 ms. Les
+   majuscules forcées et l'interlettrage de CookieScript sautent, le reste du
+   site n'en emploie pas.
+
+   34 px et non 40 : la règle des 40 px vise les cibles carrées, celles d'une
+   icône seule. Un bouton de texte garde la hauteur du système, et sa largeur
+   porte déjà la cible. Ici elle occupe toute celle de la carte. */
+html #cookiescript_accept {
+  display: inline-flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: 34px;
+  min-height: 0;
+  padding-inline: 0.875rem;
+
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+  text-transform: none;
+  letter-spacing: normal;
+
+  color: var(--primary-foreground);
+  background-color: var(--primary);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color 300ms ease;
+}
+
+/* Le survol de l'en-tête, `hover:bg-primary/90`. Sans cette règle, celle de
+   CookieScript reprend la main et le bouton vire au jaune de leur palette. */
+html #cookiescript_accept:hover {
+  background-color: color-mix(in oklab, var(--primary) 90%, transparent);
+}
+
+/* La croix disparaît, sur décision de Rémy. Elle doublait « Fermer », qui dit
+   la même chose en toutes lettres et offre une bien plus grande cible. Aucune
+   action ne se perd : c'est le même geste, écrit au lieu d'être dessiné. */
+html #cookiescript_injected .cookiescript_pre_header,
+html #cookiescript_close {
+  display: none;
+}
+
+/* Le conteneur du bas ne sert que si CookieScript y met sa signature ou ses
+   réglages. Vide, il ne doit pas creuser un blanc sous le bouton. */
+html #cookiescript_bottompart:empty {
+  display: none;
+}
+
+/* Un mot appuyé dans un titre.
+
+   Il y avait ici un contour opaque, et c'était un contournement : Instrument
+   Serif n'existait qu'en graisse 400, donc un `font-weight` n'avait aucun
+   effet et il fallait épaissir le tracé autrement.
+
+   Fraunces est variable et monte jusqu'à 900, donc la graisse demandée est
+   dessinée et non fabriquée. Elle est nécessaire ici et pas seulement
+   confortable : les titres sont en 600, donc un « Rémy » en 600 serait
+   exactement aussi épais que « Jupille » et les deux mots se confondraient.
+
+   La règle vise les lettres et non le conteneur parce que `KineticText` place
+   chaque lettre dans son propre `span`. */
+.mot-appuye > span[aria-hidden] {
+  font-weight: 900;
+}
+
+/* La barre de progression des piliers, sur l'accueil.
+
+   Elle se joue en `transform` et non en `width` : une largeur animée fait
+   recalculer la mise en page à chaque image, un `scaleX` reste sur le
+   compositeur. `transform-origin` la fait croître depuis la gauche, sinon elle
+   s'étirerait depuis son centre.
+
+   `forwards` la laisse pleine à la fin plutôt que de la faire disparaître d'un
+   coup juste avant le passage au pilier suivant.
+
+   Sous `prefers-reduced-motion`, la règle globale ramène la durée à 0,01 ms :
+   la barre se remplit instantanément et ne bouge plus. C'est voulu, et
+   l'avance automatique est coupée en JavaScript au même moment, parce qu'une
+   animation pilotée par minuterie ne s'arrête pas avec du CSS. */
+@keyframes barre-de-progression {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Le rayon de la jonction entre une bande pleine largeur et la page.
+
+   C'est une exception assumée au rayon de 5 px du projet, et la seule de son
+   espèce. Elle ne contredit pas la règle, elle change d'échelle : 5 px sert à
+   adoucir l'angle d'un objet qu'on regarde de près, un bouton, un champ, une
+   carte. Ici l'objet fait toute la largeur de l'écran, et 5 px sur 1400 px de
+   large ne se voit tout simplement pas.
+
+   La valeur est écrite une fois ici plutôt que dans la classe, parce qu'une
+   seconde jonction devra avoir exactement le même rayon, et que deux nombres
+   écrits à deux endroits finissent toujours par diverger. */
+:root {
+  --rayon-jonction: 1.75rem;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --rayon-jonction: 2.5rem;
+  }
+}
+
+/* Les couleurs de la maquette de l'espace membre.
+
+   Elles ne suivent **pas** le thème, et c'est la seule chose de ce dépôt dans
+   ce cas. La règle du projet interdit les couleurs en dur parce qu'une couleur
+   figée devient illisible dans l'autre thème. Ici l'objet n'est pas une surface
+   du site : c'est la reproduction d'un logiciel qui est sombre. Le faire virer
+   au clair en thème clair montrerait un produit qui n'existe pas, exactement
+   comme repeindre une photographie.
+
+   Les valeurs sont donc déclarées une fois, hors de tout bloc de thème, et
+   nommées plutôt qu'écrites dans les classes : une couleur éparpillée dans le
+   balisage ne se retrouve plus le jour où il faut la changer. */
+:root {
+  --maquette-fond: #131317;
+  --maquette-surface: #1c1c21;
+  --maquette-surface-haute: #26262d;
+  --maquette-filet: #2f2f38;
+  --maquette-texte: #f2f2f5;
+  --maquette-texte-attenue: #9a9aa8;
+}
+
+/* La texture de la bande des témoignages.
+
+   La première version empilait cinq petits foyers, dont un teal. Résultat :
+   des taches visibles et une zone sale au milieu. En regardant de près la
+   bande de calendly.com, ce n'est pas ça : c'est d'abord une **progression
+   verticale** franche, indigo profond en haut vers lavande très clair en bas,
+   et seulement deux ou trois foyers énormes et très diffus posés dessus pour
+   casser la régularité. C'est ce qui est refait ici.
+
+   **La bande a deux zones, et ce n'est pas décoratif.**
+
+   La zone haute porte le texte : `nuit`, `indigo` et `bleu` tiennent
+   respectivement 14,9, 11,1 et 6,6 pour du blanc, tous au-dessus du seuil de
+   4,5. La zone basse est claire, `bleuet` à 3,4 et `lavande` à 2,1, donc elle
+   ne peut **rien** porter. Ce n'est pas un hasard de cadrage : c'est la zone
+   où la bande s'éteint vers la couleur de page, et le composant y réserve son
+   rembourrage bas. Du texte ne doit jamais y descendre.
+
+   La limite est utile à connaître pour la suite : la couleur la plus claire
+   qui tienne encore 4,5 pour du blanc est autour de #4a6ecd, à 4,77.
+
+   En thème sombre, la progression s'arrête bien avant le clair : une bande qui
+   virerait au lavande pâle au milieu d'une page sombre éblouirait. */
+:root {
+  --bande-nuit: #141f63;
+  --bande-indigo: #22308f;
+  --bande-bleu: #2f56bf;
+  --bande-bleuet: #6f86dd;
+  --bande-lavande: #a8aee6;
+  --bande-pale: #cdd0ef;
+}
+
+.dark {
+  --bande-nuit: #0a1038;
+  --bande-indigo: #131c56;
+  --bande-bleu: #1e3179;
+  --bande-bleuet: #34478f;
+  --bande-lavande: #4a5a9c;
+  --bande-pale: #5d6ca8;
+}
+
+/* L'ordre des couches compte : les foyers sont déclarés avant la progression
+   verticale, donc ils se peignent **au-dessus** d'elle. Chacun s'éteint bien
+   avant son bord pour qu'aucun ne dessine de cercle net, et leurs rayons
+   dépassent la largeur de la bande, ce qui garantit qu'on n'en voit jamais la
+   courbure.
+
+   **La progression finit sur `--background`, la couleur de la page.** C'est ce
+   qui remplace le voile de raccord qu'il y avait auparavant, et c'est la seule
+   façon d'obtenir un raccord naturel : la bande finissait sur un lavande, la
+   page est en beige très clair, et un voile posé par-dessus devait rattraper
+   l'écart de force, ce qui se voyait comme une brume.
+
+   Le dernier foyer est de la même couleur de page, et il est décalé sous la
+   bande : il fait mordre la page dans la texture de façon irrégulière, au lieu
+   d'une ligne horizontale parfaitement droite. C'est ce détail qui fait que la
+   jonction ne se lit plus. */
+.texture-bande {
+  background-color: var(--bande-nuit);
+  background-image:
+    radial-gradient(130% 85% at 82% 4%, var(--bande-bleu) 0%, transparent 58%),
+    radial-gradient(
+      115% 75% at 8% 30%,
+      var(--bande-indigo) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      150% 95% at 46% 112%,
+      var(--bande-pale) 0%,
+      transparent 62%
+    ),
+    linear-gradient(
+      180deg,
+      var(--bande-nuit) 0%,
+      var(--bande-indigo) 24%,
+      var(--bande-bleu) 48%,
+      var(--bande-bleuet) 70%,
+      var(--bande-lavande) 87%,
+      var(--bande-pale) 100%
+    );
+}
+
+/* Le grain.
+
+   Sans lui, la bande reste trop lisse : les dégradés CSS sont mathématiquement
+   parfaits, et cette perfection se voit. Sur de grands aplats dégradés, les
+   écrans 8 bits produisent des bandes de quantification bien visibles ; le
+   bruit les casse et donne la matière.
+
+   Il vient d'un `feTurbulence` SVG en URI de données, donc calculé par le
+   navigateur : aucun fichier à télécharger. `overlay` assombrit les zones
+   sombres et éclaircit les claires, là où un voile gris aplatirait tout.
+
+   L'opacité reste basse. Le grain doit se sentir, pas se voir : au-delà, la
+   bande a l'air sale plutôt que texturée. */
+.grain-bande::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.13;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='b'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23b)'/%3E%3C/svg%3E");
+}
