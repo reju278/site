@@ -466,6 +466,70 @@ dessins**, onze illustrations pleines. Les nôtres sont des tracés Lucide. Le
 relief vient de la tuile et non du glyphe, donc l'écart se voit peu, mais le
 combler demande des dessins, pas du code.
 
+### Le menu « Ressources » se lit en colonnes, et ses tuiles sont des marques
+
+Rémy l'a dicté colonne par colonne : le livre, les résultats et sa chaîne
+principale à gauche ; les deux podcasts et le blog à droite. La grille remplit
+donc **les colonnes avant les lignes**, `grid-flow-col` et un nombre de rangées
+calculé, et l'ordre du tableau de `site.ts` est celui qu'on lit à l'écran. Écrire
+cet ordre en remplissage par lignes aurait demandé d'entrelacer le tableau,
+c'est-à-dire d'y ranger une mise en page.
+
+Deux conséquences mécaniques, toutes deux rencontrées :
+
+- **La rangée des réseaux sort de la liste.** Un `col-span-2` dans une grille qui
+  coule en colonnes ne s'ajoute pas sous les entrées, il s'insère au milieu du
+  peigne.
+- **Le menu « Programmes » ne change pas.** Deux entrées donnent une rangée, donc
+  les deux colonnes côte à côte qu'il avait déjà.
+
+**Les tuiles portent des couleurs, et chacune se justifie.** Elles étaient toutes
+en `--primary`. Sur demande de Rémy : le rouge de YouTube sur les chaînes, le
+vert sur la flèche des résultats, le blog inchangé. Ce ne sont pas des couleurs
+de plus dans la palette. `--youtube` est **une marque citée** et ne colore que
+son propre glyphe ; `--icone-resultats` est le vert de la courbe vivante, déjà
+là, et il signifie la même chose qu'elle, une ligne qui monte. Il **change de
+valeur selon le thème**, #059669 en clair et #10b981 en sombre : le vert franc ne
+tient que 2,45:1 sur la page claire, en dessous des 3:1 d'un glyphe.
+
+**Les glyphes de marque ne viennent pas de Lucide**, qui a retiré ses icônes de
+marque à partir de sa version 1, mais de `simple-icons`, comme la rangée des
+réseaux. Un écran de télévision générique ne dit pas « YouTube ».
+
+**Digital Selfmade porte la couverture du livre, dans la tuile et non à sa
+place.** Trois corrections de Rémy ont mené là : un `BookOpen` sur un rose choisi
+à l'œil, puis « le vrai icône et la vraie couleur », puis « la petite icône comme
+dans le footer », puis « laisse-la dans un petit carré pour qu'elle ressorte ».
+C'est donc exactement la tuile du pied de page, le même fichier, et c'est le
+**cadre** qui la fait ressortir au milieu des autres, pas son absence.
+
+**Une entrée dont le logo annonce une plateforme mène à cette plateforme.**
+Esprits Maverick affichait Ausha ; depuis qu'il porte le logo YouTube, il mène à
+la chaîne. Le pied de page, lui, reste sur Ausha, où sont les épisodes.
+
+### La rangée du bas du menu s'appelle « Autres réseaux » et s'écrit en toutes lettres
+
+Sur demande de Rémy. Deux choses, qui tiennent ensemble : les noms s'écrivent au
+lieu de se déchiffrer, donc LinkedIn cesse d'avoir l'air de l'exception qu'il
+était faute de glyphe ; et **YouTube sort de la rangée**, parce que les trois
+chaînes ont leur entrée juste au-dessus et qu'un sixième lien YouTube renverrait
+à la même maison sans dire laquelle.
+
+Le pied de page garde ses pastilles rondes et son YouTube : il n'a pas d'entrées
+de chaînes au-dessus, et c'est là que la rangée de signes est à sa place.
+
+### Tous les boutons Funnels Club mènent à la page d'appel
+
+« Découvrir » dans l'en-tête, « Découvrir » dans le pied de page, le bouton du
+hero et l'entrée du menu : tous vers `www.funnels.club/appel`, sur décision de
+Rémy. Ils visaient avant `/` et `/direct`.
+
+Ils restent **trois noms dans `liens` et non un seul**, `decouvrir`,
+`funnelsClub` et `appel`, chacun disant à quel endroit du site il sert : le jour
+où l'un doit repartir ailleurs, il suffit de changer sa ligne au lieu de
+retrouver lequel des boutons était lequel. La valeur est écrite une fois dans
+`APPEL` pour qu'ils ne puissent pas diverger par accident.
+
 ### Les commandes rondes du lecteur de témoignages
 
 `rounded-full` est réservé aux photos de profil. Il a maintenant une seconde

@@ -635,6 +635,30 @@ summary {
   --halo-rouge-b: rgba(255, 92, 122, 0.08);
   --halo-rouge-c: rgba(228, 13, 58, 0.05);
 
+  /* Le rouge de YouTube, celui des trois entrées de chaînes du menu.
+
+     #ff0000 est la valeur de marque, celle que publie `simple-icons` avec le
+     tracé qu'on affiche. Elle ne change pas d'un thème à l'autre, pour la même
+     raison que `--livre` : une marque n'a pas deux couleurs selon l'heure. Elle tient 3,86:1 sur la page claire et 4,51:1 sur
+     la sombre, au-dessus des 3:1 que demande un glyphe.
+
+     **Elle ne colore rien d'autre que ces trois glyphes.** Ce n'est pas une
+     couleur de la palette du site, c'est une marque citée. */
+  --youtube: #ff0000;
+
+  /* Le vert de la flèche des résultats dans le menu, sur demande de Rémy :
+     « pour le résultat, la flèche, tu la fais verte ».
+
+     **C'est `--courbe` et pas un vert de plus** : le site a déjà un vert, celui
+     de la courbe vivante, et c'est le même geste qui est signifié, une ligne qui
+     monte. En ajouter un second ferait deux verts qui ne se répondent pas.
+
+     **Mais il descend en thème clair, et il le fallait.** #10b981 ne tient que
+     2,45:1 sur la page claire, en dessous des 3:1 d'un glyphe ; #059669 y tient
+     3,64:1. En sombre, c'est l'inverse, le vert franc tient 7,11:1 et le foncé
+     s'éteindrait. C'est exactement la mécanique de `--livre-texte`. */
+  --icone-resultats: #059669;
+
   /* Le vert de la courbe, `emerald-500`, celui du deck. Rien d'autre ne le
      porte. */
   --courbe: #10b981;
@@ -720,6 +744,9 @@ summary {
 
   --courbe: #10b981;
   --courbe-morte: #f87171;
+  /* Voir le commentaire de `--icone-resultats` : le vert franc en sombre,
+     le vert foncé en clair. */
+  --icone-resultats: #10b981;
   --erreur-texte: #f87171;
   --surlignage-jaune: #facc15;
 }

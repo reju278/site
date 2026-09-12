@@ -95,6 +95,13 @@ export function estExterne(href: string): boolean {
   }
 }
 
+/**
+ * La page vers laquelle mènent tous les boutons Funnels Club du site.
+ *
+ * Écrite une fois et non trois : voir le commentaire dans `liens`.
+ */
+const APPEL = avecTag("https://www.funnels.club/appel");
+
 export const liens = {
   // Toujours l'hôte `www`. Le domaine nu redirige en 301 vers
   // `www.funnels.club` **en perdant la requête** : `funnels.club/appel?el=site`
@@ -102,9 +109,24 @@ export const liens = {
   // silencieuse que décrit `avecTag` : le lien marche, la page s'affiche, et la
   // vente est attribuée ailleurs. Sur `www`, la réponse est un 200 direct et la
   // balise survit.
-  decouvrir: avecTag("https://www.funnels.club/"),
-  funnelsClub: avecTag("https://www.funnels.club/direct"),
-  appel: avecTag("https://www.funnels.club/appel"),
+  //
+  // **Les trois entrées de Funnels Club mènent au même endroit**, sur décision
+  // de Rémy : « pour tous les boutons liés à Funnels.Club, le bouton Découvrir,
+  // que ce soit dans le header, en bas dans le footer, ou le lien vers le
+  // programme, il serait bien de les rediriger vers funnels.club/appel ».
+  //
+  // Elles restent **trois noms et non un seul**, et ce n'est pas une
+  // redondance : chacune dit à quel endroit du site elle sert, donc le jour où
+  // l'une d'elles doit repartir ailleurs, la page d'accueil par exemple, il
+  // suffit de changer sa ligne ici au lieu de retrouver lequel des quatre
+  // boutons du site était lequel. La valeur est écrite une fois dans `APPEL`
+  // pour qu'elles ne puissent pas diverger par accident.
+  //
+  // Ce qu'elles visaient avant : `/` pour « Découvrir », `/direct` pour le
+  // bouton du hero.
+  decouvrir: APPEL,
+  funnelsClub: APPEL,
+  appel: APPEL,
   // La vidéo de formation gratuite, celle qui explique le tunnel de vente.
   // Fournie par Rémy, et servie sur `www` comme les autres : sans le
   // sous-domaine, la redirection perd la balise de provenance.
@@ -185,6 +207,17 @@ export const podcastMaverick = {
   nom: "Esprits Maverick",
   flux: "https://feed.ausha.co/BqnN8S1MnvMr",
   site: "https://podcast.ausha.co/maverick",
+  /* La chaîne YouTube du podcast, sur remarque de Rémy : « pour Esprit
+     Maverick, c'est aussi une chaîne YouTube ». L'adresse est relevée sur la
+     chaîne elle-même, `UCjPxzaZXn0t8edQ21_8bv1Q`, dont le nom d'usage est
+     `@mavericklepodcast` et le titre « Esprits Maverick ».
+
+     **Les deux adresses coexistent, et elles ne servent pas au même endroit** :
+     le menu de l'en-tête mène à la chaîne, puisque c'est son logo qu'il affiche
+     et qu'une icône YouTube au-dessus d'un lien Ausha serait un mensonge ; la
+     colonne « Podcasts » du pied de page reste sur Ausha, où sont tous les
+     épisodes, lecteur compris. */
+  youtube: "https://www.youtube.com/@mavericklepodcast",
 } as const;
 
 /**
@@ -474,11 +507,63 @@ export const menus: readonly {
   },
   {
     libelle: "Ressources",
+    /* **L'ordre est celui de Rémy, et il se lit en colonnes, pas en lignes.**
+       Il a dicté la colonne de gauche puis celle de droite : le livre, les
+       résultats et sa chaîne principale à gauche ; les deux podcasts et le blog
+       à droite. C'est le panneau qui s'adapte, `grid-flow-col` dans
+       `en-tete.tsx` : la grille remplit la première colonne avant de passer à
+       la seconde, donc l'ordre de ce tableau est celui qu'on lit à l'écran.
+
+       **Les deux chaînes YouTube sont deux chaînes, pas deux liens vers la
+       même.** Leurs noms sont relevés sur YouTube et non approchés : « Funnels
+       Club - Rémy Jupille » pour la principale, « Profit, liberté, no stress »
+       pour celle du podcast. Voir le commentaire de `liens`, où la confusion
+       est déjà signalée.
+
+       **Le podcast a perdu son entrée ici** : `/podcast`, la page qui liste
+       tous les épisodes, n'est plus dans ce menu puisque la ligne « Profit,
+       liberté, no stress » mène désormais à la chaîne YouTube. La page reste
+       atteignable par la colonne « Podcasts » du pied de page, donc elle n'est
+       pas orpheline, mais c'est un chemin de moins. **À confirmer par Rémy.** */
     entrees: [
+      /* Le livre en tête, sur décision de Rémy, et avec sa tuile rose : voir
+         `TUILES_PLEINES` dans `en-tete.tsx`. C'est la seule entrée du menu qui
+         ne soit ni une page du site ni une chaîne, et le fond plein est ce qui
+         la fait ressortir dans une colonne de tuiles de verre. */
+      {
+        libelle: "Digital Selfmade",
+        href: liens.livre,
+        texte: "Le livre",
+        externe: true,
+      },
       {
         libelle: "Résultats",
         href: "/resultats",
         texte: "Ce que les membres ont obtenu",
+      },
+      /* **Libellés et descriptifs à valider par Rémy.** Les deux lignes qui
+         suivent sont nouvelles : le nom de la chaîne est celui de YouTube, le
+         descriptif est de l'agent. */
+      {
+        libelle: "Rémy Jupille sur YouTube",
+        href: liens.youtubeFunnels,
+        texte: "La chaîne principale",
+        externe: true,
+      },
+      {
+        libelle: "Profit, liberté, no stress",
+        href: liens.youtube,
+        texte: "La chaîne YouTube du podcast",
+        externe: true,
+      },
+      {
+        libelle: "Esprits Maverick",
+        href: podcastMaverick.youtube,
+        /* Raccourci : la ligne est coupée à une ligne, `line-clamp-1`, et
+           « La chaîne du podcast coanimé avec Nassim Sheikh Ali » finissait aux
+           points de suspension au milieu du nom de Nassim. */
+        texte: "Coanimé avec Nassim Sheikh Ali",
+        externe: true,
       },
       /* « Blog » et non « Digital Selfmade », sur décision de Rémy : deux
          entrées du même menu portaient le même nom, la lettre et le livre, et
@@ -488,23 +573,6 @@ export const menus: readonly {
         libelle: "Blog",
         href: "/articles",
         texte: "Tous les articles",
-      },
-      {
-        libelle: "Profit, liberté, no stress",
-        href: "/podcast",
-        texte: "Le podcast, tous les épisodes",
-      },
-      {
-        libelle: "Esprits Maverick",
-        href: podcastMaverick.site,
-        texte: "Le podcast coanimé avec Nassim Sheikh Ali",
-        externe: true,
-      },
-      {
-        libelle: "Digital Selfmade",
-        href: liens.livre,
-        texte: "Le livre",
-        externe: true,
       },
     ],
   },

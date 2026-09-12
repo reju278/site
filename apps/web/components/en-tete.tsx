@@ -8,6 +8,7 @@ import {
   estExterne,
   identite,
   liens,
+  livre,
   menus,
   navigation,
   podcastMaverick,
@@ -30,6 +31,7 @@ import {
 } from "@repo/ui/components/sheet";
 import { HAUTEUR_ENTETE } from "@/lib/entete";
 import { cn } from "@repo/ui/lib/utils";
+import { siYoutube } from "simple-icons";
 import {
   ArrowLeft,
   ArrowUpRight,
@@ -93,7 +95,78 @@ const ICONES: Record<string, LucideIcon> = {
   [podcastMaverick.site]: Radio,
   "/resultats": TrendingUp,
   "/articles": Newspaper,
+  /* `/podcast` n'est plus dans le menu depuis que « Profit, liberté, no
+     stress » mène à la chaîne YouTube, mais l'entrée reste : la page existe
+     toujours, elle est dans le pied de page, et le jour où elle revient ici
+     elle retrouve son micro. */
   "/podcast": Mic,
+};
+
+/**
+ * Les entrées qui portent une image plutôt qu'un pictogramme.
+ *
+ * Une seule, Digital Selfmade, et elle a demandé deux corrections de Rémy. La
+ * première version posait le `BookOpen` de Lucide sur un rose choisi à l'œil ;
+ * il a demandé « le vrai icône de Digital Selfmade et la vraie couleur », puis
+ * a tranché : « tu mets la petite icône comme dans le footer, là ».
+ *
+ * **C'est donc exactement la tuile du pied de page**, et pas une image de plus :
+ * la couverture du livre, recadrée en carré aux angles arrondis, à côté de la
+ * marque de Funnels Club et de celle du consulting. Le fichier est celui que
+ * sert déjà le pied de page, donc il est en cache quand on ouvre le menu, et
+ * `livre.visuel` reste l'unique endroit où son adresse est écrite.
+ *
+ * Elle n'a **ni fond ni filet** : l'image remplit le carré, sa couleur est celle
+ * de la couverture, et c'est ce qui la fait ressortir au milieu de cinq tuiles
+ * de verre. Un fond posé derrière une image opaque ne se verrait nulle part.
+ *
+ * Comme `LETTRES_MARQUE`, elle **remplace** la tuile de verre au lieu de se
+ * poser dedans. Deux reliefs emboîtés ne font pas un objet, ils font une
+ * bordure de trop.
+ */
+const IMAGES: Record<string, { fichier: string }> = {
+  [liens.livre]: { fichier: livre.visuel.large },
+};
+
+/**
+ * Les entrées dont le glyphe est une marque et non un tracé Lucide.
+ *
+ * Les trois chaînes YouTube, et pour la raison déjà consignée dans
+ * `reseaux.tsx` : **Lucide a retiré toutes ses icônes de marque à partir de sa
+ * version 1**, il ne lui reste que des formes génériques, et un écran de
+ * télévision générique ne dit pas « YouTube ». Le chemin vient de
+ * `simple-icons`, le jeu de référence, distribué en CC0, et c'est déjà celui
+ * que porte la rangée des réseaux en pied de ce même panneau.
+ *
+ * Esprits Maverick en fait partie depuis que Rémy l'a signalé : « pour Esprit
+ * Maverick, c'est aussi une chaîne YouTube ». Son entrée mène donc à la chaîne
+ * et non à Ausha, faute de quoi le logo annoncerait une destination qui n'est
+ * pas la sienne.
+ */
+const GLYPHES_MARQUE: Record<string, string> = {
+  [liens.youtube]: siYoutube.path,
+  [liens.youtubeFunnels]: siYoutube.path,
+  [podcastMaverick.youtube]: siYoutube.path,
+};
+
+/**
+ * La couleur du glyphe, quand elle n'est pas celle du site.
+ *
+ * Les tuiles portaient toutes leur pictogramme en `--primary`, le bleu du site.
+ * Rémy a demandé de les colorer : le rouge de YouTube sur les trois chaînes, le
+ * vert sur la flèche des résultats, et le blog inchangé pour l'instant.
+ *
+ * **Ce ne sont pas des couleurs de plus dans la palette.** `--youtube` est une
+ * marque citée et ne colore que son propre glyphe ; `--icone-resultats` est le
+ * vert de la courbe vivante, déjà là, et il signifie la même chose qu'elle, une
+ * ligne qui monte. Les deux sont mesurées dans `globals.css`, et le vert change
+ * de valeur selon le thème pour tenir son seuil dans les deux.
+ */
+const TEINTES: Record<string, string> = {
+  [liens.youtube]: "var(--youtube)",
+  [liens.youtubeFunnels]: "var(--youtube)",
+  [podcastMaverick.youtube]: "var(--youtube)",
+  "/resultats": "var(--icone-resultats)",
 };
 
 /**
@@ -356,13 +429,35 @@ export function EnTete() {
                         à droite sur un portable à 900 px, où le menu existe
                         encore.
 
-                        Une entrée seule sur sa dernière ligne n'est pas un
-                        défaut ici : la grille se remplit de gauche à droite, et
-                        c'est ce que fait leur menu à onze entrées. */}
-                    <ul className="grid w-[44rem] max-w-[calc(100vw-5rem)] grid-cols-2 gap-x-1.5 gap-y-3">
+                        **La grille se remplit en colonnes et non en lignes**,
+                        `grid-flow-col`, depuis que Rémy a dicté le menu des
+                        ressources colonne par colonne : le livre, les résultats
+                        et sa chaîne à gauche, les deux podcasts et le blog à
+                        droite. En remplissage par lignes, cet ordre-là aurait
+                        demandé d'entrelacer le tableau de `site.ts`, c'est-à-dire
+                        d'y écrire une mise en page.
+
+                        Le nombre de rangées se calcule, il ne s'écrit pas : sans
+                        `gridTemplateRows` explicite, `grid-flow-col` met tout
+                        sur une seule ligne. La moitié haute arrondie donne une
+                        colonne de gauche complète, et c'est elle qu'on lit en
+                        premier. Le menu « Programmes », qui n'a que deux
+                        entrées, retombe sur une rangée, donc sur les deux
+                        colonnes côte à côte qu'il avait déjà. */}
+                    <ul
+                      style={{
+                        gridTemplateRows: `repeat(${Math.ceil(
+                          menu.entrees.length / 2,
+                        )}, minmax(0, auto))`,
+                      }}
+                      className="grid w-[44rem] max-w-[calc(100vw-5rem)] grid-flow-col grid-cols-2 gap-x-1.5 gap-y-3"
+                    >
                       {menu.entrees.map((entree) => {
                         const Icone = ICONES[entree.href] ?? Newspaper;
                         const lettre = LETTRES_MARQUE[entree.href];
+                        const image = IMAGES[entree.href];
+                        const marque = GLYPHES_MARQUE[entree.href];
+                        const teinte = TEINTES[entree.href];
                         const externe =
                           entree.externe || estExterne(entree.href);
 
@@ -403,7 +498,48 @@ export function EnTete() {
                                     tuile, pas du glyphe, donc l'écart se voit
                                     peu ; le combler demande des dessins, pas du
                                     code. */}
-                                {lettre ? (
+                                {image ? (
+                                  /* `object-cover` et non `contain` : c'est un
+                                     recadrage, celui du pied de page, et pas
+                                     une couverture rapetissée dans un carré,
+                                     qui laisserait deux bandes vides.
+
+                                     `alt` vide et assumé : « Digital Selfmade »
+                                     est écrit juste à droite, et faire annoncer
+                                     l'image le répéterait. `width` et `height`
+                                     sont ceux du fichier et non ceux de
+                                     l'écran : ce sont eux qui réservent la
+                                     place. */
+                                  /* **La couverture est posée dans la tuile de
+                                     verre, pas à sa place**, sur correction de
+                                     Rémy : « laisse l'icône du livre dans un
+                                     petit carré également pour qu'il ressorte ».
+                                     L'image seule était un rectangle
+                                     photographique au milieu de cinq tuiles
+                                     encadrées, et c'est le cadre qui la fait
+                                     ressortir, pas son absence.
+
+                                     Le rembourrage est plus court que celui des
+                                     glyphes, 5 px contre 10 : un pictogramme est
+                                     un tracé qui respire, une couverture est une
+                                     image, et la rapetisser de moitié dans un
+                                     carré de 44 px la rendrait illisible. */
+                                  <span
+                                    aria-hidden
+                                    style={{ boxShadow: "var(--ombre-verre)" }}
+                                    className="grid size-11 shrink-0 place-items-center overflow-hidden rounded-[10px] bg-[color-mix(in_srgb,currentColor_4%,transparent)] p-1.25 outline outline-[color-mix(in_srgb,currentColor_8%,transparent)] -outline-offset-1"
+                                  >
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img
+                                      src={image.fichier}
+                                      alt=""
+                                      width={640}
+                                      height={640}
+                                      loading="lazy"
+                                      className="size-full rounded-[6px] object-cover"
+                                    />
+                                  </span>
+                                ) : lettre ? (
                                   /* Les deux programmes portent la marque et
                                      non un pictogramme, sur demande de Rémy :
                                      la même tuile que les cartes de l'accueil,
@@ -420,10 +556,31 @@ export function EnTete() {
                                 ) : (
                                   <span
                                     aria-hidden
-                                    style={{ boxShadow: "var(--ombre-verre)" }}
+                                    /* La teinte est posée en `color` et non en
+                                       classe : le glyphe est rempli en
+                                       `currentColor`, donc une seule propriété
+                                       suffit. Le fond et le filet de la tuile
+                                       prennent la couleur du glyphe avec lui,
+                                       et c'est voulu : une tuile YouTube sur un
+                                       voile rouge très dilué se lit comme un
+                                       objet, pas comme un glyphe posé sur du
+                                       gris. */
+                                    style={{
+                                      boxShadow: "var(--ombre-verre)",
+                                      ...(teinte ? { color: teinte } : {}),
+                                    }}
                                     className="grid size-11 shrink-0 place-items-center overflow-hidden rounded-[10px] bg-[color-mix(in_srgb,currentColor_4%,transparent)] p-2.5 text-primary outline outline-[color-mix(in_srgb,currentColor_8%,transparent)] -outline-offset-1"
                                   >
-                                    <Icone className="size-full" />
+                                    {marque ? (
+                                      <svg
+                                        viewBox="0 0 24 24"
+                                        className="size-full fill-current"
+                                      >
+                                        <path d={marque} />
+                                      </svg>
+                                    ) : (
+                                      <Icone className="size-full" />
+                                    )}
                                   </span>
                                 )}
 
@@ -488,17 +645,23 @@ export function EnTete() {
                         );
                       })}
 
-                      {/* Les réseaux, en pied de la seule liste des
-                          ressources : ce sont des lieux où l'on suit Rémy, pas
-                          des programmes. Ils tiennent les deux colonnes, une
-                          rangée de pictogrammes n'ayant pas à se plier au
-                          peigne des entrées. */}
-                      {menu.libelle === "Ressources" ? (
-                        <li className="col-span-2 mt-1 border-t border-border px-2.5 pt-3">
-                          <Reseaux />
-                        </li>
-                      ) : null}
                     </ul>
+
+                    {/* Les réseaux, en pied de la seule liste des ressources :
+                        ce sont des lieux où l'on suit Rémy, pas des programmes.
+
+                        **Ils sont sortis de la liste**, et c'est le remplissage
+                        en colonnes qui l'impose : un `col-span-2` dans une
+                        grille qui coule en colonnes ne s'ajoute pas sous les
+                        entrées, il s'insère au milieu du peigne. Hors de la
+                        liste, la rangée est simplement ce qu'elle est, un pied
+                        de panneau, et elle n'a plus à être un élément de liste
+                        pour tenir sa largeur. */}
+                    {menu.libelle === "Ressources" ? (
+                      <div className="mt-3 border-t border-border px-2.5 pt-3">
+                        <Reseaux autres titre="Autres réseaux" />
+                      </div>
+                    ) : null}
                   </NavigationMenuContent>
                 </NavigationMenuItem>
               ))}
@@ -656,7 +819,11 @@ export function EnTete() {
                       </a>
                     ))}
                     {menu.libelle === "Ressources" ? (
-                      <Reseaux className="mt-2 border-t border-border px-1 pt-3" />
+                      <Reseaux
+                        autres
+                        titre="Autres réseaux"
+                        className="mt-2 border-t border-border px-1 pt-3"
+                      />
                     ) : null}
                   </div>
                 ))}
