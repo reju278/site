@@ -32,6 +32,10 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# Le modèle, lui, est versionné : il ne contient que des noms de variables, et
+# c'est le seul endroit où l'on peut lire ce dont le site a besoin. `.env*`
+# l'attrapait, d'où cette exception.
+!.env.example
 
 # vercel
 .vercel

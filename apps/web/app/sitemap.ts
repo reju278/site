@@ -1,5 +1,6 @@
 import { TOUT } from "@/app/articles/page";
 import { PAR_PAGE, adressePage } from "@/components/grille-articles";
+import { avis } from "@/contenu/avis";
 import { SITE } from "@/contenu/site";
 import { lireArticles } from "@/lib/flux";
 import type { MetadataRoute } from "next";
@@ -39,6 +40,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     { url: SITE, lastModified: modifie, priority: 1 },
     { url: `${SITE}/resultats`, lastModified: modifie, priority: 0.8 },
+
+    /* Les avis, une page par témoignage. Elles sont comptées et non écrites à
+       la main, pour la même raison que les pages du blog : leur liste vit dans
+       `avis.ts`, et la recopier ici la condamnerait à diverger. Elles pèsent
+       moins que leur sommaire, qui reste la porte d'entrée du sujet. */
+    ...avis.map((a) => ({
+      url: `${SITE}/resultats/${a.slug}`,
+      lastModified: modifie,
+      priority: 0.6,
+    })),
     { url: `${SITE}/articles`, lastModified: modifie, priority: 0.7 },
     { url: `${SITE}/podcast`, lastModified: modifie, priority: 0.7 },
     ...suite,

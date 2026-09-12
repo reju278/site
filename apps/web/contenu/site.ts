@@ -1107,37 +1107,44 @@ export const temoignages: readonly {
   nom: string;
   resultat?: string;
   secondes: number;
+  /** La date de mise en ligne chez Wistia, pour le `VideoObject` des avis.
+      Relevée dans le média, jamais approchée : une date fausse déclarée à
+      Google est pire qu'une date absente. */
+  publie: string;
 }[] = [
   {
     id: "j0vbkt570k",
     nom: "Christian Joyce",
     resultat: "De 0 € à 160 K€ en 5 mois",
     secondes: 988,
+    publie: "2023-11-01",
   },
   {
     id: "rgio4y4o8f",
     nom: "Roland Buffet",
     resultat: "De 0 € à 109 778 € en 6 mois",
     secondes: 715,
+    publie: "2024-04-30",
   },
   {
     id: "2vtsinplyx",
     nom: "Augustin Passy",
     resultat: "Trois fois son chiffre d'affaires",
     secondes: 485,
+    publie: "2024-08-09",
   },
-  { id: "2xege6bt0u", nom: "Yannick et Sylvie", secondes: 1514 },
-  { id: "vtfaka0m80", nom: "Olga", secondes: 1365 },
-  { id: "fbtr4dqoji", nom: "Sandrine", secondes: 1321 },
-  { id: "s3npr5izhy", nom: "Tatiana", secondes: 1248 },
-  { id: "tvy3jbhml9", nom: "Charlotte", secondes: 1229 },
-  { id: "b5taio9plc", nom: "François", secondes: 1192 },
-  { id: "rtil6qeznq", nom: "Jeremy", secondes: 852 },
-  { id: "ive07co9xm", nom: "Cédric", secondes: 781 },
-  { id: "iy3jgcijgu", nom: "Corentin", secondes: 728 },
-  { id: "abj3v8v8ek", nom: "Matthieu", secondes: 718 },
-  { id: "4lkp9f6lm4", nom: "Valérie", secondes: 687 },
-  { id: "brvvtbkmfo", nom: "Joël", secondes: 527 },
+  { id: "2xege6bt0u", nom: "Yannick et Sylvie", secondes: 1514, publie: "2025-01-24" },
+  { id: "vtfaka0m80", nom: "Olga", secondes: 1365, publie: "2024-09-14" },
+  { id: "fbtr4dqoji", nom: "Sandrine", secondes: 1321, publie: "2025-02-17" },
+  { id: "s3npr5izhy", nom: "Tatiana", secondes: 1248, publie: "2025-06-19" },
+  { id: "tvy3jbhml9", nom: "Charlotte", secondes: 1229, publie: "2025-01-14" },
+  { id: "b5taio9plc", nom: "François", secondes: 1192, publie: "2025-06-02" },
+  { id: "rtil6qeznq", nom: "Jeremy", secondes: 852, publie: "2025-03-22" },
+  { id: "ive07co9xm", nom: "Cédric", secondes: 781, publie: "2024-09-17" },
+  { id: "iy3jgcijgu", nom: "Corentin", secondes: 728, publie: "2025-07-05" },
+  { id: "abj3v8v8ek", nom: "Matthieu", secondes: 718, publie: "2024-09-19" },
+  { id: "4lkp9f6lm4", nom: "Valérie", secondes: 687, publie: "2024-01-07" },
+  { id: "brvvtbkmfo", nom: "Joël", secondes: 527, publie: "2024-09-13" },
 ];
 
 export const legales = [
