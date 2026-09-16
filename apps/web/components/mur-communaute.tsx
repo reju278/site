@@ -1,8 +1,10 @@
 import { Apparition } from "@/components/apparition";
 import { MurDepliable } from "@/components/mur-depliable";
+import { ReponsesPost } from "@/components/reponses-post";
 import { murCommunaute } from "@/contenu/communaute";
 import { TitreRoulant } from "@/components/titre-roulant";
 import { insecables } from "@/lib/typographie";
+import { anonymiser } from "@/lib/anonymat";
 import { prenom } from "@/lib/prenom";
 import { titreResultats } from "@/contenu/site";
 import Image from "next/image";
@@ -113,6 +115,33 @@ function surligner(texte: string, passages: readonly string[]) {
 }
 
 export function MurCommunaute() {
+  /* **Les deux premiers posts ouvrent les deux colonnes**, dans l'ordre du
+     fichier, sur décision de Rémy : François en haut à gauche, Judith en haut à
+     droite. Ce sont les deux récits les plus longs et les plus forts, et ce sont
+     eux qu'on doit voir avant de faire défiler.
+
+     Les suivants vont dans la colonne la plus courte. La hauteur est estimée au
+     nombre de paragraphes : c'est grossier, mais c'est la seule mesure dont on
+     dispose côté serveur, et ça suffit à ne pas empiler les deux plus longs du
+     même côté. Une alternance un sur deux, elle, ne regarde pas les hauteurs. */
+  const gauche: (typeof murCommunaute)[number][] = [];
+  const droite: (typeof murCommunaute)[number][] = [];
+  let poidsGauche = 0;
+  let poidsDroite = 0;
+
+  murCommunaute.forEach((avis, rang) => {
+    const aGauche = rang === 0 || (rang !== 1 && poidsGauche <= poidsDroite);
+    if (aGauche) {
+      gauche.push(avis);
+      poidsGauche += avis.paragraphes.length;
+    } else {
+      droite.push(avis);
+      poidsDroite += avis.paragraphes.length;
+    }
+  });
+
+  const colonnes = [gauche, droite];
+
   return (
     /* Leurs 71,6 px sur 35,8, arrondis à l'échelle du projet. */
     <div className="px-5 py-16 sm:py-20">
@@ -145,16 +174,37 @@ export function MurCommunaute() {
         </p>
       </div>
 
-      {/* Le mur. `columns` et non `grid` : chaque carte garde sa hauteur, et
-          c'est ce décalage qui fait le mur. `break-inside-avoid` empêche une
-          carte d'être coupée en deux d'une colonne à l'autre, ce qui est le
-          seul vrai piège de cette mise en page.
+      {/* Le mur, en **deux colonnes réelles** et non en `columns` CSS.
+
+          C'est la réparation d'un vrai défaut, et il ne se voyait qu'une fois le
+          repli en place : `columns` doit répartir son contenu dans une boîte de
+          hauteur bornée, donc une carte plus haute que cette boîte est
+          **coupée**, et la suite du post de Lilian se retrouvait en haut de la
+          colonne voisine. `break-inside-avoid` n'y peut rien : le navigateur
+          n'a pas le choix. Nos cartes portent des posts entiers, dont un de
+          quarante-cinq paragraphes ; elles dépassent forcément.
+
+          Deux colonnes posées à la main règlent le problème : chaque colonne
+          est un flux ordinaire, une carte n'y est jamais scindée, et le décalage
+          entre les deux vient de ce qu'elles ne portent pas les mêmes hauteurs.
+
+          La répartition est **gloutonne et non alternée** : on pose chaque carte
+          dans la colonne la plus courte, mesurée en paragraphes. Une alternance
+          un sur deux mettrait les deux plus longs posts du même côté et
+          donnerait une colonne deux fois plus haute que l'autre.
 
           Les cartes sont rendues ici, côté serveur, et passées en enfants à
           `MurDepliable`, qui ne tient que l'état ouvert ou fermé : les douze
           posts entiers ne partent pas dans le paquet JavaScript. */}
-      <MurDepliable premieres={6}>
-        {murCommunaute.map((avis) => (
+      {/* Le mur est replié en hauteur et fondu par le bas, pas tronqué dans sa
+          liste : voir `MurDepliable`. La hauteur est passée ici parce que
+          c'est le mur qui sait ce qu'il montre, pas le composant qui le
+          replie. */}
+      <div className="mt-12">
+      <MurDepliable hauteur="max-h-[42rem] sm:max-h-[48rem]">
+        {colonnes.map((colonne, i) => (
+          <div key={i} className="flex flex-1 flex-col gap-4">
+            {colonne.map((avis) => (
           /* **La carte n'est pas un lien**, sur demande de Rémy. Elle
              renvoyait au post d'origine ; le groupe étant privé, un visiteur
              non membre atterrissait sur la page de connexion de Circle,
@@ -165,10 +215,7 @@ export function MurCommunaute() {
              attend dans `globals.css` pour tirer le trait de surligneur quand
              la carte entre dans la vue. Sans elle, le fond reste plein, ce qui
              est le bon repli mais pas l'effet demandé. */
-          <Apparition
-            key={avis.nom + avis.titre}
-            className="mb-4 break-inside-avoid"
-          >
+          <Apparition key={avis.nom + avis.titre}>
           <figure
             style={{ backgroundColor: FOND }}
             className="relief-verre flex flex-col gap-4 rounded-[25px] px-[18px] py-5"
@@ -221,8 +268,15 @@ export function MurCommunaute() {
 
                 `p` et non un `h3` : le mur porte déjà son `h2`, et douze titres
                 de carte dans le plan annonceraient douze sujets. */}
+            {/* Les guillemets sont posés ici et non dans la donnée, sur
+                demande de Rémy : à les écrire dans le contenu, on finit avec des
+                titres qui en ont et d'autres qui n'en ont pas. Ce sont les
+                guillemets français, avec leurs espaces insécables : une espace
+                ordinaire y autorise un retour à la ligne, et le guillemet se
+                retrouve seul en fin de ligne. C'est la même règle que pour les
+                citations des articles d'avis. */}
             <p className="titre text-lg text-balance text-foreground">
-              {insecables(avis.titre)}
+              {insecables(`« ${anonymiser(avis.titre)} »`)}
             </p>
 
             {/* Le post entier et non un extrait, sur demande de Rémy.
@@ -230,24 +284,26 @@ export function MurCommunaute() {
                 `blockquote` avec ses paragraphes : c'est la parole de quelqu'un
                 d'autre, et c'est cet élément qui le dit à un lecteur d'écran.
 
-                Les guillemets français ouvrent le premier paragraphe et ferment
-                le dernier, comme en typographie, et non chacun d'eux. */}
+                **Le corps ne porte plus de guillemets** : ils sont passés sur
+                le titre, qui est lui aussi une phrase de la personne. Les poser
+                aux deux endroits aurait ouvert une citation dans une
+                citation. */}
             <blockquote className="space-y-3 text-sm leading-relaxed text-pretty text-foreground/85">
               {avis.paragraphes.map((paragraphe, i) => (
                 <p key={paragraphe}>
-                  {surligner(
-                    (i === 0 ? "« " : "") +
-                      paragraphe +
-                      (i === avis.paragraphes.length - 1 ? " »" : ""),
-                    avis.surligne,
-                  )}
+                  {surligner(anonymiser(paragraphe), avis.surligne)}
                 </p>
               ))}
             </blockquote>
+
+            <ReponsesPost reponses={avis.reponses} />
           </figure>
           </Apparition>
+            ))}
+          </div>
         ))}
       </MurDepliable>
+      </div>
     </div>
   );
 }
