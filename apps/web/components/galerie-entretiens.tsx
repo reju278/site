@@ -108,7 +108,32 @@ export function GalerieEntretiens() {
                    qu'un bouton centre son texte par défaut. */
                 <button
                   type="button"
-                  className="relief-verre group/carte group/roule flex h-full w-full flex-col overflow-hidden rounded-md border border-border bg-card text-left transition-colors hover:border-ring focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                  /* **Au survol, la carte se soulève, elle ne se cerne pas.**
+                     Le motif du site colore la bordure en `ring` ; Rémy ne veut
+                     pas de ce cadre coloré ici. Une ombre portée et deux pixels
+                     de montée disent la même chose sans dessiner de trait : la
+                     carte répond au clic qu'on s'apprête à faire.
+
+                     L'ombre est de la famille de celles du projet, très diffuse
+                     et décalée vers le bas, donc lue comme de la profondeur et
+                     non comme un contour. Elle est **portée** et ne se dispute
+                     pas la place du relief de verre, qui est intérieur.
+
+                     La translation est verticale : elle n'élargit pas la boîte,
+                     donc rien à couper, contrairement à ce que la règle du
+                     dépôt impose aux rotations.
+
+                     **La propriété animée est `translate` et non `transform`.**
+                     Tailwind v4 pose les translations sur la propriété
+                     `translate` du CSS, pas sur `transform` : écrite
+                     `transition-[transform,…]`, la montée se produisait d'un
+                     coup, sans transition, et `getComputedStyle` rendait
+                     `transform: none`. Mesuré, pas supposé.
+
+                     On n'anime pas tout : au survol, la couleur de fond de la
+                     pilule change aussi, et `transition-all` ferait traîner ce
+                     qui doit être net. */
+                  className="relief-verre group/carte group/roule flex h-full w-full flex-col overflow-hidden rounded-md border border-border bg-card text-left transition-[translate,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-24px_rgba(0,0,0,0.45)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                 >
                   {/* L'affiche, **recadrée sur la bande d'image réelle**.
 
@@ -268,7 +293,11 @@ export function GalerieEntretiens() {
                   {autre ? (
                     <a
                       href={`#${ancreEntretien(autre.id)}`}
-                      className="relief-verre group/roule mx-auto mb-10 flex max-w-3xl items-center gap-4 rounded-md border border-border bg-card p-5 transition-colors hover:border-ring focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                      /* Même traitement que la carte : une ombre plutôt qu'un
+                         cadre coloré. Les deux vivent dans la même page, et
+                         deux façons de répondre au survol s'y liraient comme
+                         deux familles d'objets. */
+                      className="relief-verre group/roule mx-auto mb-10 flex max-w-3xl items-center gap-4 rounded-md border border-border bg-card p-5 transition-[translate,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-24px_rgba(0,0,0,0.45)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                     >
                       <span className="min-w-0 flex-1">
                         <span className="block text-xs font-semibold tracking-wide text-muted-foreground uppercase">
