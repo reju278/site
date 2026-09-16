@@ -1,13 +1,14 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { HUB } from "@/lib/hub";
+import { dansUnTunnel } from "@/lib/tunnels";
 
 /**
- * Ce qui n'a pas le droit d'apparaître sur le hub : l'en-tête et le pied de page.
+ * Ce qui n'a pas le droit d'apparaître dans un tunnel : l'en-tête et le pied
+ * de page du site.
  *
- * Le hub est une page de publicité payante, et sa règle est qu'on n'en sort
- * que par le bouton d'appel. Or l'en-tête et le pied de page sont posés par
+ * Un tunnel est une page où l'on arrive par un lien qu'on a reçu, et sa règle
+ * est qu'on n'en sort que par le bouton d'appel. Or l'en-tête et le pied de page sont posés par
  * `layout.tsx` sur **toutes** les pages du site : sans ce filtre, ils
  * offriraient au visiteur une trentaine de portes de sortie, menu déroulant
  * compris.
@@ -26,12 +27,12 @@ import { HUB } from "@/lib/hub";
  * rien au rendu des pages existantes.
  *
  * **Il n'y a pas de clignotement.** `usePathname` est renseigné dès le rendu
- * serveur d'un composant client, donc le HTML servi pour `/hub` ne contient ni
+ * serveur d'un composant client, donc le HTML servi pour un tunnel ne contient ni
  * en-tête ni pied de page. Ils ne sont pas cachés en CSS, ils ne sont pas là :
  * leurs liens ne sont donc pas non plus atteignables au clavier.
  */
-export function HorsHub({ children }: { children: React.ReactNode }) {
+export function HorsTunnel({ children }: { children: React.ReactNode }) {
   const chemin = usePathname();
-  if (chemin === HUB || chemin?.startsWith(`${HUB}/`)) return null;
+  if (dansUnTunnel(chemin)) return null;
   return <>{children}</>;
 }

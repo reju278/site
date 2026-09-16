@@ -1,5 +1,5 @@
 import { EnTete } from "@/components/en-tete";
-import { HorsHub } from "@/components/hors-hub";
+import { HorsTunnel } from "@/components/hors-tunnel";
 import { PiedDePage } from "@/components/pied-de-page";
 import { GTM, SITE, identite } from "@/contenu/site";
 import { Toaster } from "@repo/ui/components/sonner";
@@ -237,13 +237,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               bouton d'appel. Voir `components/hors-hub.tsx`. Rien ne change
               pour les autres pages. */}
           <div className="flex min-h-svh flex-col">
-            <HorsHub>
+            <HorsTunnel>
               <EnTete />
-            </HorsHub>
+            </HorsTunnel>
             <main className="flex-1">{children}</main>
-            <HorsHub>
+            <HorsTunnel>
               <PiedDePage />
-            </HorsHub>
+            </HorsTunnel>
           </div>
           <Toaster />
         </ThemeProvider>
