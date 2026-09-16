@@ -275,10 +275,18 @@ export function GalerieEntretiens() {
                     angles droits et vient remplir l'encoche. C'est le défaut
                     que la page d'avis a déjà connu, et il est écrit là-bas.
 
-                    Le rayon est `--rayon-jonction` : la jonction fait toute la
-                    largeur de la fenêtre, c'est le cas que l'exception d'échelle
-                    du projet décrit. */}
-                <div className="relative -mt-20 rounded-t-[var(--rayon-jonction)] border-t border-border bg-background px-5 pt-10 pb-10 sm:-mt-24 sm:px-8 sm:pt-12">
+                    **Le rayon est celui du projet, 5 px, et non
+                    `--rayon-jonction`.** L'exception d'échelle vise une bande
+                    qui fait toute la largeur de l'écran, où 5 px sur 1400 ne se
+                    verraient pas. Ici la jonction fait 896 px, dans une fenêtre
+                    dont les angles sont eux-mêmes à 5 px : un arc de 40 px y
+                    devenait le premier objet qu'on voyait, et il ne
+                    correspondait à aucun autre angle de la fenêtre. C'est
+                    exactement la correction déjà faite sur le panneau des menus
+                    de l'en-tête, dont les rayons ont été rentrés pour la même
+                    raison. Mesuré : la fenêtre et les cartes sont à 5 px, la
+                    jonction était à 40. */}
+                <div className="relative -mt-20 rounded-t-md border-t border-border bg-background px-5 pt-10 pb-10 sm:-mt-24 sm:px-8 sm:pt-12">
                   {/* Le bandeau vers l'autre entretien de la même personne.
 
                       Trois membres ont témoigné deux fois, à un an et demi
