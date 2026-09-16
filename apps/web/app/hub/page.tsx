@@ -1,8 +1,10 @@
 import { LecteurVideo } from "@/components/lecteur-video";
+import { MessageRemy } from "@/components/message-remy";
+import { SectionTunnel } from "@/components/section-tunnel";
 import { ParticulesHero } from "@/components/particules-hero";
 import { TexteRoulant } from "@/components/texte-roulant";
-import { formationHub } from "@/contenu/hub";
-import { video } from "@/contenu/site";
+import { formationHub, suiteMessageHub } from "@/contenu/hub";
+import { messageRemy, sectionTunnel, video } from "@/contenu/site";
 import { HUB_RESULTATS, SORTIE, controlerLeHub } from "@/lib/hub";
 import { KineticText } from "@repo/ui/components/kinetic-text";
 import type { Metadata } from "next";
@@ -53,6 +55,17 @@ export default function FormationHub() {
       formationHub.resume,
       "Voir les résultats",
       "Réserver un appel",
+      "Découvrir les témoignages",
+      /* Les deux sections reprises de l'accueil passent au contrôle comme le
+         reste : elles n'ont pas été écrites pour une page de publicité, et
+         c'est exactement pour ça qu'il faut les relire. */
+      ...sectionTunnel.titre.map((s) => s.texte),
+      sectionTunnel.sousTitre,
+      messageRemy.titre,
+      messageRemy.amorceVoies,
+      messageRemy.amorceErreurs,
+      messageRemy.logique,
+      ...suiteMessageHub,
     ],
     "la page de formation du hub",
   );
@@ -73,7 +86,16 @@ export default function FormationHub() {
          jonction entre l'image et la page. Une hauteur écrite en dur donnerait
          un cadre qui n'est plus en 16/9, et Wistia y ajouterait des bandes
          noires sur les côtés. Repris de l'accueil au caractère près. */
-      className="relative isolate px-5 pt-28 sm:pt-52"
+      /* **Le bloc est remonté**, sur demande de Rémy : les deux boutons
+         doivent être visibles sans défiler. L'accueil du site pose `pt-52`
+         au-dessus de son hero, mais il a une page entière en dessous et
+         personne n'a besoin d'y voir un bouton tout de suite. Ici la vidéo est
+         la page, et ce qu'on décide après elle est ce qui compte.
+
+         `pt-24` dégage encore l'en-tête flottant, qui fait 66 px plus ses
+         20 px de décalage : en dessous de 88 px, les capsules recouvriraient le
+         titre. */
+      className="relative isolate px-5 pt-24 sm:pt-28"
       style={
         {
           "--video-h": "calc(min(100vw - 2.5rem, 48rem) * 9 / 16)",
@@ -144,14 +166,21 @@ export default function FormationHub() {
           {/* Le sous-titre est celui du hub et non `identite.resume`, qui
               annonce « jusqu'à 6 ou 7 chiffres par an ». Voir `contenu/hub.ts`.
               Le contrôle ci-dessus le refuserait de toute façon au build. */}
-          <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-pretty text-white/85 sm:text-xl">
+          <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-pretty text-white/85 sm:text-xl">
             {formationHub.resume}
           </p>
         </div>
 
         {/* Le rapport 16/9 est porté par `LecteurVideo` : c'est lui qui fait
             remplir le cadre exactement, sans bande noire. */}
-        <div className="mx-auto mt-8 max-w-3xl sm:mt-10">
+        {/* `id="video"` : la conclusion de la lettre, plus bas, renvoie à
+            `#video` plutôt que de quitter la page. Sans l'ancre, ce lien
+            tomberait dans le vide. `scroll-mt` la dégage de l'en-tête flottant,
+            qui la recouvrirait sinon. */}
+        <div
+          id="video"
+          className="mx-auto mt-6 max-w-3xl scroll-mt-[66px] sm:mt-8"
+        >
           <LecteurVideo
             id={video.id}
             titre={video.titre}
@@ -186,7 +215,7 @@ export default function FormationHub() {
 
           `flex-col` puis `sm:flex-row` : deux boutons de 56 px côte à côte
           sur 375 px coupent leurs libellés en trois lignes. */}
-      <div className="mx-auto flex max-w-3xl flex-col items-stretch justify-center gap-3 px-5 pt-8 pb-16 sm:flex-row sm:items-center sm:pt-10 sm:pb-20">
+      <div className="mx-auto flex max-w-3xl flex-col items-stretch justify-center gap-3 px-5 pt-6 pb-16 sm:flex-row sm:items-center sm:pt-8 sm:pb-20">
         <Link
           href={HUB_RESULTATS}
           className="group/roule inline-flex min-h-14 items-center justify-center gap-2 rounded-md bg-primary px-8 py-3 text-base font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
@@ -203,6 +232,46 @@ export default function FormationHub() {
           <TexteRoulant>Réserver un appel</TexteRoulant>
         </a>
       </div>
+      {/* Les deux sections reprises de l'accueil du site, sur demande de
+          Rémy : le constat avec son graphique, puis la lettre. Elles viennent
+          après la vidéo, pour qui veut comprendre avant de décider.
+
+          Elles sont importées et non recopiées : ce sont les mêmes composants
+          que l'accueil, donc elles suivront ses corrections. Seul un paragraphe
+          de la lettre est remplacé, celui qui annonce un montant. */}
+      <SectionTunnel />
+
+      <MessageRemy suite={suiteMessageHub} />
+
+      {/* Le dernier appel, tout en bas, sur demande de Rémy : « un lien pour à
+          nouveau découvrir les témoignages ».
+
+          Il est en bas et non ailleurs, et c'est ce qui le distingue de la
+          règle du sommaire des entretiens, qui n'en porte aucun : là-bas, le
+          visiteur n'a encore rien lu et on lui demanderait de décider avant de
+          savoir. Ici il a vu la vidéo et lu la lettre.
+
+          C'est la paire du projet, un plein et un creux, à la même hauteur et
+          au même rayon. */}
+      <section className="px-5 pb-20 sm:pb-28">
+        <div className="mx-auto flex max-w-3xl flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+          <Link
+            href={HUB_RESULTATS}
+            className="group/roule inline-flex min-h-14 items-center justify-center gap-2 rounded-md bg-primary px-8 py-3 text-base font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          >
+            <TexteRoulant>Découvrir les témoignages</TexteRoulant>
+          </Link>
+
+          <a
+            href={SORTIE}
+            target="_blank"
+            rel="noreferrer"
+            className="group/roule inline-flex min-h-14 items-center justify-center gap-2 rounded-md border border-current px-8 py-3 text-base font-semibold text-foreground transition-colors hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          >
+            <TexteRoulant>Réserver un appel</TexteRoulant>
+          </a>
+        </div>
+      </section>
     </>
   );
 }

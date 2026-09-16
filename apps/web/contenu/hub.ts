@@ -636,3 +636,21 @@ export const formationHub = {
   libelleMenu: "La formation gratuite",
   ligneMenu: "La vidéo qui explique la mécanique, en entier",
 };
+
+/**
+ * La reprise de la lettre de Rémy, dans sa version de hub.
+ *
+ * Un seul paragraphe change sur toute la lettre, et c'est le dernier avant la
+ * conclusion : il annonçait des clients « capables de payer jusqu'à plusieurs
+ * milliers d'euros pour obtenir vos conseils ». C'est un montant, donc une
+ * promesse de revenus sur une page de publicité, et le contrôle de
+ * `lib/hub.ts` le refuse au build.
+ *
+ * **Seule la fin de la phrase change.** Ce qui n'est pas publiable, c'est le
+ * montant, pas l'idée que le tunnel s'adapte à un domaine et amène des clients
+ * qualifiés. C'est la même règle que pour le sous-titre de la formation : on
+ * retire le chiffre, on ne dénature pas la phrase.
+ */
+export const suiteMessageHub: readonly string[] = [
+  "Ce qui est sûr, c'est que, peu importe le domaine dans lequel vous souhaitez monétiser votre expertise, ce tunnel de vente pourra s'adapter pour vous apporter des clients qualifiés, vraiment intéressés par vos conseils.",
+];

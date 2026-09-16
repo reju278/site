@@ -31,7 +31,23 @@ import { TitreRoulant } from "@/components/titre-roulant";
  * **La signature est une vraie fonte manuscrite**, demandée par Rémy. Elle ne
  * sert qu'ici ; voir l'utilitaire `signature` dans `globals.css`.
  */
-export function MessageRemy() {
+export function MessageRemy({
+  /**
+   * Les paragraphes de la reprise, juste avant la conclusion.
+   *
+   * **Ils se remplacent, et c'est le hub qui le demande.** L'un d'eux annonce
+   * des clients « capables de payer jusqu'à plusieurs milliers d'euros » : sur
+   * une page de publicité, c'est une promesse de revenus, et les règles de Meta
+   * la refusent. Le site, lui, ne change pas d'un mot.
+   *
+   * Une propriété facultative plutôt qu'une copie de ce composant : la lettre
+   * fait quatre cents lignes, et deux versions auraient divergé au premier
+   * ajustement.
+   */
+  suite = messageRemy.suite,
+}: {
+  suite?: readonly string[];
+} = {}) {
   return (
     <section className="pb-20 sm:pb-28">
       {/* La mesure du texte est plus étroite que celle de la page, mais le
@@ -274,7 +290,7 @@ export function MessageRemy() {
               </p>
             </Apparition>
 
-            {messageRemy.suite.map((paragraphe) => (
+            {suite.map((paragraphe) => (
               <Apparition key={paragraphe}>
                 <p>{paragraphe}</p>
               </Apparition>
