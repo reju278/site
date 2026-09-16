@@ -443,8 +443,29 @@ du logo Funnels Club, qui est à 22 % de son côté.
 
 **Ce sont donc trois rayons de plus que 5 px**, et ils ne s'étendent à rien
 d'autre. La règle des 5 px décrit un objet qu'on regarde de près ; un panneau de
-menu est une surface flottante, de la même famille que les capsules. Une
-quatrième valeur ne s'ajoute pas sans se décider ici.
+menu est une surface flottante, de la même famille que les capsules.
+
+**Et un quatrième, sur la page d'immersion : 25 px.** Les trois cartes d'avis du
+hero sont relevées sur la carte `hero_review__card` de TrendTrack, fournie par
+Rémy avec sa feuille de style et sa consigne : « exactement à la lettre, aucune
+interprétation ». Leur rayon y vaut 25,06 px, et il n'a pas été rentré comme les
+trois du panneau : une carte de 348 px porte cet arrondi sans qu'il devienne le
+premier objet qu'on voit, ce qui n'était pas vrai du panneau de 864.
+
+Deux choses se sont apprises sur ce relevé, et elles valent pour le prochain :
+
+- **Le liseré lumineux d'une carte de verre n'est pas une bordure.** Leur
+  `border-width` vaut zéro ; ce qu'on prend pour un filet, ce sont les trois
+  ombres **intérieures** de `--sh-glass`. Poser une bordure aurait cerné la
+  carte là où ces ombres la creusent, et personne n'aurait su dire pourquoi le
+  rendu diffère. Le jeton est déjà chez nous, `--ombre-verre`, et l'utilitaire
+  `relief-verre` le pose.
+- **Leur carte finit par un chiffre et sa légende**, pas par une phrase. Nos
+  accroches sont des phrases : elles se **coupent** en deux dans
+  `contenu/immersion.ts`, aux mots près, et ne se réécrivent jamais. Un résultat
+  reformulé pour tenir dans une maquette est un résultat inventé.
+
+Une cinquième valeur ne s'ajoute pas sans se décider ici.
 
 **Le relief est leur `--sh-glass`**, trois ombres intérieures : un filet en haut,
 un halo très large, un halo court. C'est ce triplé qui fait qu'une tuile a l'air

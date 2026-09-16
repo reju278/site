@@ -73,6 +73,14 @@ export const plateformeImmersion = {
  * `temoignages`, retrouvée par l'identifiant Wistia. Elle est donc déjà relue,
  * et chaque chiffre qu'elle porte est prononcé dans l'entretien.
  *
+ * **`chiffre` et `legende` ne sont pas écrits, ils sont coupés.** La carte
+ * relevée chez TrendTrack finit par un résultat en gros et sa légende en
+ * petit ; nos accroches sont des phrases. Les deux champs sont donc la même
+ * accroche que porte `temoignages`, coupée en deux aux mots près : « 109 778 € »
+ * et « en six mois » sortent de « 109 778 € en six mois en formant les
+ * entreprises du bâtiment ». Aucun mot n'est ajouté, aucun chiffre recalculé.
+ * Si Rémy veut couper ailleurs, c'est ici que ça se décide.
+ *
  * **Pas de champ qui désigne une page de `/resultats`.** La carte renvoie au
  * lecteur de la personne, plus bas sur cette page, par `ancreEntretien` et son
  * identifiant Wistia : c'est la règle du tunnel, on n'en sort pas. Une seconde
@@ -86,6 +94,8 @@ export const temoignagesImmersion = [
     citation:
       "C'est incroyable comme c'est mathématique [...]. Je suis épaté par leur capacité à accompagner.",
     portrait: "/immersion/temoignage-roland-buffet.jpg",
+    chiffre: "109 778 €",
+    legende: "en six mois",
   },
   {
     id: "4lkp9f6lm4",
@@ -94,6 +104,8 @@ export const temoignagesImmersion = [
     citation:
       "C'est l'explosion, j'ai presque doublé mon nombre de client.",
     portrait: "/immersion/temoignage-valerie-di-falco.jpg",
+    chiffre: "Quinze clients",
+    legende: "par mois",
   },
   {
     id: "j0vbkt570k",
@@ -102,6 +114,8 @@ export const temoignagesImmersion = [
     citation:
       "Grâce à Rémy, j'ai pu réaliser plus de 160'000€ en commençant de zéro.",
     portrait: "/immersion/temoignage-christian-joyce.jpg",
+    chiffre: "160 000 €",
+    legende: "en quatre mois",
   },
 ] as const;
 

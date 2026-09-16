@@ -1,103 +1,133 @@
 import { ancreEntretien, temoignagesImmersion } from "@/contenu/immersion";
-import { temoignages } from "@/contenu/site";
 import { insecables } from "@/lib/typographie";
 import Image from "next/image";
 
 /**
- * Les trois cartes de témoignage court, sous la vidéo de la plateforme.
+ * Les trois cartes de témoignage court, dans le hero.
  *
- * **L'organisation est relevée sur trendtrack.io**, sur demande de Rémy, à
- * partir de leur rangée d'avis : portrait rond à gauche, nom et métier
- * empilés à sa droite, la citation en dessous, et une ligne basse qui porte le
- * résultat en gros avec sa légende en petit. C'est cette dernière ligne qui
- * fait le travail : elle donne à trois citations de longueurs différentes un
- * même point de chute, et c'est ce qui les fait lire comme une rangée plutôt
- * que comme trois blocs voisins.
+ * **Le dessin est relevé sur trendtrack.io, pas approché**, sur demande de
+ * Rémy, qui a fourni la carte `hero_review__card` et sa feuille de style. Les
+ * valeurs viennent de là :
  *
- * **Ce qui n'est pas repris d'eux, c'est le dessin.** Leurs cartes sont des
- * panneaux de verre sur fond noir, avec le relief à trois ombres de leur
- * `--sh-glass`. Ici ce sont les cartes du site : `bg-card`, filet en
- * `border-border`, rayon de 5 px, et les deux thèmes. Le flou va derrière, et
- * une carte posée dans le flux d'une page n'a rien derrière elle à brouiller.
+ * - **Fond blanc à quatre pour cent**, leur `color(srgb 1 1 1 / 0.04)`.
+ * - **Aucune bordure.** Leur `border-width` vaut zéro, et c'était le piège de
+ *   ce relevé : le liseré lumineux qu'on voit sur leur carte n'est pas un
+ *   filet, ce sont trois ombres **intérieures**. Une bordure aurait cerné la
+ *   carte là où ces ombres la creusent, et le rendu n'aurait pas été le même.
+ * - **Rayon de 25 px**, leur `border-radius: 25.06px`.
+ * - **Rembourrage de 20 px sur 18**, leurs 19,69 et 17,90.
+ * - **`justify-between`**, qui pousse la ligne du résultat en bas.
+ * - **La citation à 0,9375 em** et en demi-gras, comme leur `p_wrap`.
+ * - **Le métier sur une ligne**, leur `u-text-clamp-1`.
  *
- * **Le gros chiffre n'est pas écrit à la main.** Il vient de l'accroche déjà
- * relue dans `temoignages`, retrouvée par l'identifiant Wistia : la même phrase
- * que porte la carte de `/resultats` et l'affiche du carrousel d'accueil. Une
- * seconde écriture ici aurait divergé à la première correction, et ces lignes
- * annoncent les revenus de personnes réelles.
+ * **Le relief est déjà chez nous.** Leur `--sh-glass` est le jeton
+ * `--ombre-verre` de `globals.css`, posé par l'utilitaire `relief-verre` : un
+ * filet en haut, un halo très large, un halo court. `AGENTS.md` le décrit déjà,
+ * pour le panneau des menus relevé chez eux. On ne le réécrit donc pas.
  *
- * Deux règles de grille appliquées telles quelles : `h-full` sur la carte pour
- * qu'elle occupe sa cellule, et `mt-auto` sur la ligne basse pour qu'elle
- * tombe au même endroit dans les trois. Sans elles, le résultat suivrait sa
- * citation et se retrouverait dix pixels plus haut d'une carte à l'autre.
+ * **Le rayon de 25 px est une quatrième exception à la règle des 5 px**, et
+ * elle est écrite dans `AGENTS.md` comme les trois du panneau de menu. Elle ne
+ * s'étend à rien d'autre.
+ *
+ * **La seule adaptation est la couleur, et elle était obligatoire.** Leur site
+ * n'a qu'un thème sombre : le fond de leur carte est un blanc à quatre pour
+ * cent, qui ne se verrait pas sur notre page claire. Il passe donc par
+ * `color-mix(in srgb, currentColor 4%, transparent)`, qui donne du clair sur le
+ * sombre et du sombre sur le clair sans qu'on écrive deux valeurs. C'est déjà
+ * l'adaptation faite pour leur panneau de menus, et elle est dans `AGENTS.md`.
+ *
+ * Les cartes se posent sur la couleur de page, sous la jonction, et non sur la
+ * photographie : la vidéo reste à cheval sur la jonction, les trois clients
+ * viennent en dessous d'elle. Un blanc en dur y serait invisible en thème
+ * clair.
+ *
+ * **Ce qui n'a pas pu être repris, et pourquoi.** Leur carte porte une pastille
+ * de logo d'entreprise en bas à droite du portrait. Roland, Valérie et
+ * Christian n'ont pas de logo dans ce dépôt, et en fabriquer un serait inventer
+ * la marque de quelqu'un. La pastille est donc absente tant que les trois
+ * fichiers n'existent pas.
  */
 export function CartesTemoignage() {
   return (
-    <ul className="mt-10 grid grid-cols-1 gap-4 sm:mt-12 sm:grid-cols-2 lg:grid-cols-3">
-      {temoignagesImmersion.map((personne) => {
-        /* L'accroche vient de `temoignages`, jamais d'ici. Si l'identifiant
-           n'y est plus, la ligne basse disparaît au lieu d'afficher un vide :
-           une carte sans résultat reste une carte, une carte avec une ligne
-           vide est un défaut. */
-        const resultat = temoignages.find((t) => t.id === personne.id)
-          ?.description;
-
-        return (
-          <li key={personne.id} className="h-full">
-            {/* **La carte mène au lecteur de la personne, plus bas sur cette
-                page, et non à `/resultats`.** C'est la règle du tunnel : cette
-                page est fermée, et un lien vers le site rendrait au visiteur
-                l'en-tête complet et ses trente portes de sortie. Les trois
-                personnes citées ici ont toutes leur entretien dans la section
-                des avis, donc l'ancre existe ; `ancreEntretien` est la seule
-                écriture de son nom, partagée avec le pied de page. */}
-            <a
-              href={`#${ancreEntretien(personne.id)}`}
-              /* La carte entière est la cible, donc pas de bouton à
-                 l'intérieur : ce serait dessiner une cible dans une cible.
-                 Et c'est un lien et non un bouton, parce que ça navigue. */
-              className="group flex h-full flex-col rounded-md border border-border bg-card p-6 transition-colors hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-            >
+    <ul /* Pas de marge haute : l'écart avec la vidéo est tenu par le
+         rembourrage de la section, à un seul endroit. Les deux s'ajoutaient. */
+      className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {temoignagesImmersion.map((personne) => (
+        <li key={personne.id} className="h-full">
+          {/* La carte entière est la cible, donc pas de bouton à l'intérieur :
+              ce serait dessiner une cible dans une cible. Et c'est un lien, pas
+              un bouton, parce que ça navigue : vers le lecteur de la personne,
+              plus bas sur cette page, jamais vers le site. */}
+          <a
+            href={`#${ancreEntretien(personne.id)}`}
+            style={{
+              /* Leur `color(srgb 1 1 1 / 0.04)`, rendu aux deux thèmes.
+                 `color-mix` sur `currentColor` donne du clair sur le sombre et
+                 du sombre sur le clair sans qu'on écrive deux valeurs : c'est
+                 déjà l'adaptation faite pour le panneau des menus relevé chez
+                 eux, et elle est écrite dans `AGENTS.md`. */
+              backgroundColor:
+                "color-mix(in srgb, currentColor 4%, transparent)",
+            }}
+            className="relief-verre flex h-full flex-col justify-between rounded-[25px] px-[18px] py-5 text-foreground transition-colors hover:brightness-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          >
+            <div className="flex flex-col gap-4">
               <div className="flex items-center gap-3">
-                {/* `rounded-full` sur une photo de profil : c'est la seule
-                    exception que la règle des 5 px autorise. */}
+                {/* `rounded-full` sur une photo de profil : la seule exception
+                    que la règle des 5 px autorise depuis toujours. */}
                 <Image
                   src={personne.portrait}
                   alt={`Portrait de ${personne.nom}`}
-                  width={96}
-                  height={96}
+                  width={176}
+                  height={176}
                   loading="lazy"
-                  className="size-12 shrink-0 rounded-full object-cover"
+                  className="size-11 shrink-0 rounded-full object-cover"
                 />
+
                 <div className="min-w-0">
-                  <p className="font-semibold text-foreground">
-                    {personne.nom}
-                  </p>
-                  {/* Une ligne, comme leur `u-text-clamp-1` : dans une rangée
-                      de trois, un métier qui passe à deux lignes décale la
-                      citation de sa voisine et le peigne est perdu. */}
+                  <p className="font-medium">{personne.nom}</p>
+                  {/* Une seule ligne, comme leur `u-text-clamp-1` : dans une
+                      rangée de trois, un métier qui passe à deux lignes décale
+                      la citation de sa voisine et le peigne est perdu.
+                      `text-white/50`, leur `text-a50`. */}
                   <p className="line-clamp-1 text-sm text-muted-foreground">
                     {personne.metier}
                   </p>
                 </div>
               </div>
 
-              {/* Les guillemets français sont dans le contenu, et `insecables` y
-                  pose l'espace insécable qui va avec : sans elle, un « peut
-                  finir seul en bout de ligne. */}
-              <blockquote className="mt-5 text-pretty text-foreground/90">
+              {/* Les guillemets français sont dans le contenu, et `insecables`
+                  y pose l'espace qui va avec : sans elle, un « peut finir seul
+                  en bout de ligne. */}
+              <blockquote className="text-[0.9375em] leading-relaxed font-medium text-pretty">
                 {insecables(`« ${personne.citation} »`)}
               </blockquote>
+            </div>
 
-              {resultat ? (
-                <p className="mt-auto pt-6 text-sm text-muted-foreground">
-                  {insecables(resultat)}
-                </p>
-              ) : null}
-            </a>
-          </li>
-        );
-      })}
+            {/* La ligne du résultat, leur `hero_review__data` : le chiffre en
+                gros, sa légende en petit et atténuée, sur la même ligne et
+                calés sur la même base.
+
+                **Le `pt-6` n'est pas un `mt-*`.** Le bloc est déjà poussé en
+                bas par `justify-between` ; une marge haute automatique entrerait
+                en conflit avec elle, et c'est la règle que le dépôt écrit déjà
+                pour `mt-auto`.
+
+                Le chiffre et sa légende viennent de l'accroche déjà relue dans
+                `temoignages`, coupée en deux dans `contenu/immersion.ts` et
+                jamais réécrite : ce sont les mots de Rémy, et chaque chiffre
+                qu'ils portent est prononcé dans l'entretien. */}
+            <p className="flex items-baseline gap-2 pt-6">
+              <span className="titre text-2xl tracking-tight sm:text-3xl">
+                {insecables(personne.chiffre)}
+              </span>
+              <span className="text-sm text-muted-foreground">
+                {insecables(personne.legende)}
+              </span>
+            </p>
+          </a>
+        </li>
+      ))}
     </ul>
   );
 }

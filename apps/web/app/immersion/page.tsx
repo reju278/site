@@ -1,6 +1,9 @@
 import { CartesTemoignage } from "@/components/cartes-temoignage";
+import { FondResultats } from "@/components/fond-resultats";
 import { LecteurVideo } from "@/components/lecteur-video";
+import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { ParticulesHero } from "@/components/particules-hero";
+import { PastillePreuve, PilulesArguments } from "@/components/pilules-hero";
 import { TexteRoulant } from "@/components/texte-roulant";
 import { TitreRoulant } from "@/components/titre-roulant";
 import { RangeeEquipe } from "@/components/rangee-equipe";
@@ -17,7 +20,7 @@ import {
 } from "@/contenu/immersion";
 import { temoignages } from "@/contenu/site";
 import { insecables } from "@/lib/typographie";
-import { CheckCircle2, ExternalLink } from "lucide-react";
+
 import type { Metadata } from "next";
 
 /**
@@ -73,10 +76,19 @@ export default function Immersion() {
         className="relative isolate px-5 pt-24 sm:pt-28"
         style={
           {
+            /* **La largeur s'écrit une seule fois**, et il le fallait : elle
+               sert au cadre de la vidéo et à sa hauteur, d'où `--jonction` est
+               calculée. Écrite deux fois, elle aurait divergé au premier
+               agrandissement, et la lèvre aurait dessiné sa jonction en travers
+               de la vidéo. C'est la panne que `AGENTS.md` décrit déjà.
+
+               Élargie de 48 à 56 rem sur demande de Rémy : la vidéo était trop
+               petite pour la page. */
+            "--largeur-video": "min(100vw - 2.5rem, 56rem)",
             /* La hauteur exacte du cadre en 16/9, d'où part la jonction. Une
                hauteur en dur donnerait un cadre qui n'est plus en 16/9, et
                Wistia y ajouterait des bandes noires sur les côtés. */
-            "--video-h": "calc(min(100vw - 2.5rem, 48rem) * 9 / 16)",
+            "--video-h": "calc(var(--largeur-video) * 9 / 16)",
           } as React.CSSProperties
         }
       >
@@ -121,6 +133,19 @@ export default function Immersion() {
 
         <div className="mx-auto max-w-6xl">
           <div className="mx-auto max-w-3xl text-center">
+            {/* La pastille de preuve, au-dessus du titre, sur demande de
+                Rémy : la même que celle de l'accueil, reprise et non
+                réécrite. Son chiffre est le sien.
+
+                **C'est une allégation chiffrée**, et elle est donc à prouver
+                si on la porte un jour sur une page de publicité : c'est pour
+                cette raison qu'elle a été retirée du hub, et c'est écrit dans
+                `AGENTS.md`. Ici elle est celle de l'accueil, donc elle suit le
+                même sort. */}
+            <div className="mb-6 sm:mb-8">
+              <PastillePreuve />
+            </div>
+
             {/* Le titre est celui de Rémy, relevé sur la page source. La page
                 source n'a pas de titre d'accueil : elle commence par un logo
                 puis par cette phrase. En inventer une ici reviendrait à écrire
@@ -129,37 +154,30 @@ export default function Immersion() {
               {insecables(plateformeImmersion.titre)}
             </h1>
 
-            {/* Les trois points de la page source, avec leur coche. Une liste
-                et non trois paragraphes : c'est une énumération, et un lecteur
-                d'écran l'annonce comme telle. En blanc et non en jeton de
-                thème : ils se posent sur une photographie, sombre dans les deux
-                thèmes, et un jeton y serait noir en thème clair. */}
-            <ul className="mx-auto mt-6 flex max-w-2xl flex-col items-center gap-2 sm:flex-row sm:justify-center sm:gap-6">
-              {plateformeImmersion.points.map((point) => (
-                <li
-                  key={point}
-                  className="flex items-center gap-2 text-white/90"
-                >
-                  <CheckCircle2 aria-hidden className="size-5 shrink-0" />
-                  <span className="font-medium">{point}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Le rapport 16/9 est porté par `LecteurVideo` : c'est lui qui fait
-              remplir le cadre exactement, sans bande noire. */}
-          <div className="mx-auto mt-6 max-w-3xl sm:mt-8">
-            <LecteurVideo
-              id={plateformeImmersion.video.id}
-              titre={plateformeImmersion.video.titre}
-              secondes={plateformeImmersion.video.secondes}
-              affiche={`/temoignages/${plateformeImmersion.video.id}.jpg`}
-              afficheAlt="La plateforme de formation de Funnels Club"
-            />
+            {/* Les trois arguments, en gélules de verre à point vert, sur
+                demande de Rémy : le même verre que la pastille au-dessus et que
+                les capsules de l'en-tête. */}
+            <div className="mt-6">
+              <PilulesArguments points={plateformeImmersion.points} />
+            </div>
           </div>
         </div>
       </section>
+
+      {/* **Les trois témoignages sont sous la vidéo et sous la jonction**, donc
+          sur la couleur de page et non sur la photographie. C'est ce que Rémy
+          décrit : la vidéo à cheval entre l'image et le bloc clair, les trois
+          clients en dessous d'elle.
+
+          Les avoir posés dans le hero était une mauvaise lecture de sa demande
+          précédente, et ça déplaçait la jonction hors de la vidéo. */}
+      {/* Resserré sur demande de Rémy : il y avait 104 px entre le bas de la
+          vidéo et les cartes, la marge de la grille s'ajoutant au rembourrage
+          de la section sans que l'une sache l'autre. La marge est retirée de la
+          grille, et l'écart est celui de la section, une seule valeur. */}
+      <SectionImmersion className="[&>div]:py-10 sm:[&>div]:py-12">
+        <CartesTemoignage />
+      </SectionImmersion>
 
       {/* Les quatre ancres, **sur téléphone seulement.** Au-dessus de `sm`,
           elles sont dans la capsule de droite de l'en-tête, comme le menu du
@@ -192,15 +210,24 @@ export default function Immersion() {
         ))}
       </nav>
 
-      {/* Les trois témoignages courts, juste sous le hero. */}
-      <SectionImmersion>
-        <CartesTemoignage />
-      </SectionImmersion>
+      {/* STRATÉGIE : le modèle, sa fiche et son schéma, sur la bande bleutée.
 
-      {/* STRATÉGIE : le modèle, sa fiche et son schéma.
+          Elle est avant le coaching, comme sur la page source.
 
-          Elle est avant le coaching, comme sur la page source. */}
-      <SectionImmersion id="strategie" className="scroll-mt-24">
+          **`FondResultats` est repris de l'accueil**, sur demande de Rémy : le
+          fond du deck publicitaire, ses trois halos et son grain, avec sa lèvre
+          en haut et son fondu en bas. C'est le même composant, donc la section
+          suivra ses corrections.
+
+          Le rembourrage haut est augmenté : la lèvre de `FondResultats` fait
+          80 px et mangerait le titre. C'est ce que fait l'accueil au même
+          endroit, et c'est pour ça que `Section` y accepte un
+          `[&>div]:pt-*`. */}
+      <FondResultats>
+      <SectionImmersion
+        id="strategie"
+        className="scroll-mt-24 [&>div]:pt-24 sm:[&>div]:pt-28"
+      >
         <div className="mx-auto max-w-3xl text-center">
           <TitreRoulant
             as="h2"
@@ -219,19 +246,41 @@ export default function Immersion() {
           />
         </div>
 
-        {/* Les deux liens sous la vidéo, comme sur la page source. */}
-        <ul className="mx-auto mt-6 grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-2">
-          {modeleImmersion.ressources.map((ressource) => (
-            <li key={ressource.href}>
-              <LienFiche
-                href={ressource.href}
-                libelle={ressource.libelle}
-                action={ressource.action}
-              />
-            </li>
-          ))}
-        </ul>
+        {/* **La paire du site, un plein et un creux**, sur demande de Rémy :
+            on ne dessine pas un troisième bouton. Ce sont deux ressources
+            d'importance comparable, exactement le cas que la règle décrit, et
+            elles ont la même hauteur et le même rayon.
+
+            Le plein est `BoutonScintillant`, qui prend sa couleur par la
+            propriété `fond` et jamais par une classe : le fond est écrit à deux
+            endroits, le bouton et le masque qui rentre son liseré, et les deux
+            doivent être la même couleur au bit près.
+
+            Le creux porte sa bordure en `currentColor`, donc elle ne peut pas
+            diverger de son texte. Ici il se pose sur la couleur de page et non
+            sur une photographie : son encre est le jeton `--foreground`, pas le
+            blanc en dur du hero.
+
+            `min-h-14` et pas de `whitespace-nowrap` : « Cliquez ici pour
+            accéder à la fiche » demande plus que la largeur d'un téléphone, et
+            un libellé qui refuse de passer à la ligne élargit le document
+            entier. C'est la panne que `AGENTS.md` décrit. */}
+        <div className="mx-auto mt-6 flex max-w-3xl flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+          <BoutonScintillant href={modeleImmersion.ressources[0].href}>
+            <TexteRoulant>{modeleImmersion.ressources[0].libelle}</TexteRoulant>
+          </BoutonScintillant>
+
+          <a
+            href={modeleImmersion.ressources[1].href}
+            target="_blank"
+            rel="noreferrer"
+            className="group/roule inline-flex min-h-14 items-center justify-center gap-2 rounded-md border border-current px-8 py-3 text-base font-semibold text-foreground transition-colors hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          >
+            <TexteRoulant>{modeleImmersion.ressources[1].libelle}</TexteRoulant>
+          </a>
+        </div>
       </SectionImmersion>
+      </FondResultats>
 
       {/* COACHING : les deux extraits. */}
       <SectionImmersion id="coaching" className="scroll-mt-24">
@@ -374,43 +423,5 @@ function SectionImmersion({
     <section className={className} {...props}>
       <div className="mx-auto max-w-6xl px-5 py-9 sm:py-12">{children}</div>
     </section>
-  );
-}
-
-/**
- * Un lien vers une fiche ou un tableau, hors du site.
- *
- * Le libellé porte ce qu'on ouvre et la ligne dessous ce qu'on y fait : c'est
- * ce que demande la règle des liens, jamais « cliquez ici » seul. Le texte
- * complet est dans le lien, donc l'`aria-label` est inutile.
- *
- * `rel="noreferrer"` sur tout lien sortant, et la balise de provenance est déjà
- * posée dans le contenu par `avecTag`, jamais ici.
- */
-function LienFiche({
-  href,
-  libelle,
-  action,
-}: {
-  href: string;
-  libelle: string;
-  action: string;
-}) {
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noreferrer"
-      className="group/roule flex min-h-14 items-center justify-between gap-3 rounded-md border border-border bg-card px-5 py-3 transition-colors hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-    >
-      <span>
-        <span className="block font-medium text-foreground">{libelle}</span>
-        <span className="block text-sm text-muted-foreground">{action}</span>
-      </span>
-      <ExternalLink
-        aria-hidden
-        className="size-4 shrink-0 text-muted-foreground"
-      />
-    </a>
   );
 }
