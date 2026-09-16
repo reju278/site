@@ -73,6 +73,11 @@ export const plateformeImmersion = {
  * `temoignages`, retrouvée par l'identifiant Wistia. Elle est donc déjà relue,
  * et chaque chiffre qu'elle porte est prononcé dans l'entretien.
  *
+ * **`chiffre` s'écrit en chiffres**, sur demande de Rémy : « 15 clients » et
+ * non « Quinze clients ». C'est la seule retouche à la coupe : l'accroche de
+ * `temoignages` écrit le nombre en lettres, ce qui se lit bien dans une phrase
+ * et mal dans un chiffre affiché en gros.
+ *
  * **`chiffre` et `legende` ne sont pas écrits, ils sont coupés.** La carte
  * relevée chez TrendTrack finit par un résultat en gros et sa légende en
  * petit ; nos accroches sont des phrases. Les deux champs sont donc la même
@@ -104,7 +109,7 @@ export const temoignagesImmersion = [
     citation:
       "C'est l'explosion, j'ai presque doublé mon nombre de client.",
     portrait: "/immersion/temoignage-valerie-di-falco.jpg",
-    chiffre: "Quinze clients",
+    chiffre: "15 clients",
     legende: "par mois",
   },
   {
@@ -133,7 +138,12 @@ export const temoignagesImmersion = [
  * sur le site, et l'exception se justifie ici.
  */
 export const modeleImmersion = {
-  titre: "Extrait de formation : présentation du modèle de Funnels Club",
+  /* **Le titre de la page source est coupé en deux**, sur demande de Rémy :
+     « Extrait de formation » devient une étiquette en pilule, et ce qui suit
+     devient le titre. Aucun mot n'est ajouté ni retiré, seul le deux-points
+     disparaît avec la coupe. */
+  etiquette: "Extrait de formation",
+  titre: "Présentation du modèle de Funnels.Club",
   video: {
     id: "wgtwixbfof",
     /* Le titre de l'iframe décrit la vidéo et non le lecteur. */

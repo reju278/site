@@ -1,4 +1,9 @@
-import { ancreEntretien, temoignagesImmersion } from "@/contenu/immersion";
+import { Apparition } from "@/components/apparition";
+import { ContenuEntretien } from "@/components/contenu-entretien";
+import { ModaleAvis } from "@/components/modale-avis";
+import { temoignagesImmersion } from "@/contenu/immersion";
+import { avisDe } from "@/contenu/avis";
+import { sansNoms } from "@/lib/anonymat";
 import { insecables } from "@/lib/typographie";
 import { prenom } from "@/lib/prenom";
 import Image from "next/image";
@@ -53,14 +58,40 @@ export function CartesTemoignage() {
     <ul /* Pas de marge haute : l'écart avec la vidéo est tenu par le
          rembourrage de la section, à un seul endroit. Les deux s'ajoutaient. */
       className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {temoignagesImmersion.map((personne) => (
+      {temoignagesImmersion.map((personne, rang) => {
+        const article = avisDe(personne.id);
+
+        return (
         <li key={personne.id} className="h-full">
-          {/* La carte entière est la cible, donc pas de bouton à l'intérieur :
-              ce serait dessiner une cible dans une cible. Et c'est un lien, pas
-              un bouton, parce que ça navigue : vers le lecteur de la personne,
-              plus bas sur cette page, jamais vers le site. */}
-          <a
-            href={`#${ancreEntretien(personne.id)}`}
+          {/* **Elles montent à l'entrée dans la vue**, comme les cartes du mur
+              et les titres de section, sur demande de Rémy.
+
+              Le décalage est de quatre-vingts millisecondes par carte : elles
+              se suivent au lieu d'arriver ensemble, ce qui se lit comme une
+              rangée qui se pose plutôt que comme un bloc qui apparaît. Trois
+              cartes d'un coup, c'est un clignotement.
+
+              `h-full` sur l'`Apparition` : sans lui, le conteneur qu'elle
+              ajoute casserait l'égalisation des hauteurs de la grille, et les
+              lignes du résultat cesseraient de s'aligner. */}
+          <Apparition delai={rang * 80} className="h-full">
+          {/* **La carte ouvre l'entretien dans une fenêtre**, sur demande de
+              Rémy, comme les cartes de la galerie. Elle renvoyait à l'ancre du
+              lecteur, plus bas : on arrivait sur la bonne carte mais il fallait
+              cliquer une seconde fois.
+
+              Le contenu vient de `ContenuEntretien`, le même composant que la
+              galerie : le texte n'existe qu'une fois en code.
+
+              Un `button` et non un lien : ça n'emmène nulle part, ça ouvre une
+              fenêtre. Et la carte entière est la cible, donc pas de bouton à
+              l'intérieur, ce serait une cible dans une cible. */}
+          <ModaleAvis
+            titre={`Entretien avec ${prenom(personne.nom)}`}
+            description={article ? sansNoms(article.chapo) : personne.citation}
+            declencheur={
+          <button
+            type="button"
             style={{
               /* Leur `color(srgb 1 1 1 / 0.04)`, rendu aux deux thèmes.
                  `color-mix` sur `currentColor` donne du clair sur le sombre et
@@ -126,9 +157,15 @@ export function CartesTemoignage() {
                 {insecables(personne.legende)}
               </span>
             </p>
-          </a>
+          </button>
+            }
+          >
+            <ContenuEntretien id={personne.id} />
+          </ModaleAvis>
+          </Apparition>
         </li>
-      ))}
+        );
+      })}
     </ul>
   );
 }

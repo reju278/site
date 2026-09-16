@@ -415,12 +415,21 @@ bouton, un champ, une carte. Le rayon de ces jonctions est donc
 deux jonctions ne divergent jamais. Ce n'est pas une licence pour arrondir plus
 ailleurs : à l'intérieur de la page, tout reste à 5 px.
 
-**`--rayon-jonction` ne sert qu'aux deux lèvres**, celle du hero et celle de la
-bande. Il a longtemps servi aussi au cadre de la vidéo et aux cartes de
+**`--rayon-jonction` sert aux deux lèvres et à deux panneaux.** Les lèvres,
+celle du hero et celle de la bande ; la carte du pied de page ; et, depuis la
+page d'immersion, **la fenêtre des entretiens et sa jonction interne**, sur
+décision de Rémy. J'avais d'abord ramené cette jonction à 5 px pour l'accorder
+aux angles de la fenêtre ; il a tranché dans l'autre sens, et c'est la fenêtre
+qui prend le grand rayon. Le raisonnement est celui du pied de page : un panneau
+qui fait presque toute la largeur de l'écran est l'objet qu'on regarde, pas un
+bouton qu'on vise.
+
+Il a longtemps servi aussi au cadre de la vidéo et aux cartes de
 témoignage : c'était une erreur de lecture de l'exception. Une vidéo et une
 carte sont des objets qu'on regarde de près, exactement ce que la règle des
 5 px décrit ; elles sont revenues à `rounded-md`, sur décision de Rémy. Une
-troisième jonction pleine largeur aurait droit au jeton ; rien d'autre.
+surface neuve qui fait toute la largeur de son cadre aurait droit au jeton ;
+rien d'autre, et elle s'ajoute à la liste ci-dessus.
 
 ### Le menu déroulant est relevé sur TrendTrack, cotes comprises
 
@@ -1065,6 +1074,18 @@ l'a trouvé, pas le regard.
 `dark:`.** Et on vérifie la couleur calculée dans les deux thèmes plutôt que de
 regarder une capture.
 
+**Le même piège vaut entre un fond et un dégradé.** `ScrollProgress` de MagicUI
+pose `bg-linear-to-r` avec trois teintes, c'est-à-dire une `background-image` ;
+`bg-primary` pose une `background-color`. Deux propriétés différentes, donc
+aucun conflit aux yeux de `cn()` : les deux survivent et l'image l'emporte. Il
+faut `bg-none` pour que le bleu se voie.
+
+**Et un troisième, dans la même famille : Tailwind v4 pose les translations sur
+la propriété `translate` et non sur `transform`.** Une transition écrite
+`transition-[transform,…]` n'anime donc rien, la montée se produit d'un coup, et
+`getComputedStyle` rend `transform: none`. Ça ne lève aucune erreur. C'est
+`transition-[translate,…]` qu'il faut.
+
 ### Un carrousel centré ne peut pas avoir à la fois une grande carte et des voisins entiers
 
 C'est de la géométrie, pas du goût, et ça évite d'y revenir. Dans un carrousel
@@ -1154,8 +1175,17 @@ trois qui se justifie le mieux : ce panneau **sort** d'une capsule en verre, il
 lui est accroché, et un panneau opaque accroché à une capsule translucide se lit
 comme deux objets étrangers posés l'un sous l'autre.
 
-Ces trois exceptions couvrent tout ce qui a le droit de flouter par-devant. Une
-quatrième ne s'ajoute pas parce qu'elle irait bien : elle se décide, et elle
+**Quatrième exception : le disque de lecture**, décrit plus haut.
+
+**Cinquième : le bouton « Fermer » de la fenêtre des entretiens.** Une pilule de
+verre, centrée sous le panneau, sur demande de Rémy. Elle se justifie comme les
+capsules : ce bouton flotte au-dessus du contenu de la page, déjà flouté par le
+voile du dialogue, et c'est le verre qui le fait tenir sur un fond dont on ne
+sait rien. Il est **sous** le panneau et non au-dessus : on ferme une fenêtre
+quand on a fini de lire, et on finit de lire en bas.
+
+Ces cinq exceptions couvrent tout ce qui a le droit de flouter par-devant. Une
+sixième ne s'ajoute pas parce qu'elle irait bien : elle se décide, et elle
 s'écrit ici.
 
 ### L'habillage de l'en-tête suit la page, jamais le défilement

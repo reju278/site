@@ -2,11 +2,13 @@
 
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
   DialogTrigger,
 } from "@repo/ui/components/dialog";
+import { X } from "lucide-react";
 import { useState } from "react";
 
 /**
@@ -67,21 +69,25 @@ export function ModaleAvis({
       <DialogTrigger asChild>{declencheur}</DialogTrigger>
 
       <DialogContent
-        /* **La fenêtre défile, la page derrière ne défile plus.** Radix bloque
-           le défilement du corps ; sans `overflow-y-auto` ici, un article de
-           trois mille mots serait simplement coupé.
+        /* **La croix part, un bouton « Retour » la remplace**, sur demande de
+           Rémy, et il est **en dehors du panneau** : centré, au-dessus de lui.
 
-           `max-h-[90dvh]` et non `90vh` : sur un téléphone, `vh` ignore la
-           barre d'adresse, et le bas de la fenêtre passait sous elle. `dvh`
-           suit la hauteur réellement visible.
+           `DialogContent` cesse donc d'être le panneau pour devenir le cadre
+           qui porte les deux : le panneau, puis le bouton. Il perd son fond, son
+           filet, son ombre et son rembourrage, qui appartiennent maintenant au
+           panneau, et il ne rogne rien, sans quoi le bouton posé au-dessus
+           serait coupé.
+
+           **`max-h-[82dvh]` et non 90.** La fenêtre était centrée sur 90 % de la
+           hauteur visible : il ne restait que 5 % en dessous, soit une
+           quarantaine de pixels sur un téléphone, pour un bouton qui en fait
+           trente-six plus son écart. À 82, il reste 9 %, et le bouton tient.
+           `dvh` et non `vh` : sur un téléphone, `vh` ignore la barre d'adresse.
 
            `sm:max-w-4xl`, élargi sur demande de Rémy. La mesure du texte, elle,
-           est bornée plus bas par le bloc de l'article : une fenêtre large avec
-           des lignes de cent quarante caractères ne se lirait pas.
-
-           `p-0` et `gap-0` : l'en-tête de la fenêtre porte le fond du deck
-           jusqu'à ses bords, donc aucun rembourrage ne doit l'en écarter. */
-        className="max-h-[90dvh] gap-0 overflow-y-auto p-0 sm:max-w-4xl"
+           est bornée plus bas par le bloc de l'article. */
+        showCloseButton={false}
+        className="max-h-none max-w-[calc(100%-2rem)] gap-3 border-0 bg-transparent p-0 shadow-none sm:max-w-4xl"
       >
         {/* Le titre et la description, pour la fenêtre elle-même. Le contenu
             porte son propre titre visible, donc ceux-ci ne sont lus que par les
@@ -89,31 +95,79 @@ export function ModaleAvis({
         <DialogTitle className="sr-only">{titre}</DialogTitle>
         <DialogDescription className="sr-only">{description}</DialogDescription>
 
-        {/* **Un lien d'ancre ferme la fenêtre avant de sauter.**
+        {/* Le panneau. C'est lui qui porte le rayon, le fond et le rognage.
 
-            C'est la réparation d'un vrai défaut, trouvé en cliquant : les
-            articles se citent entre eux, et `versImmersion` transforme ces
-            renvois en ancres vers le lecteur de la personne, plus bas sur la
-            page. Sans ce gestionnaire, le navigateur sautait bien à l'ancre,
-            mais **derrière la fenêtre restée ouverte** : on ne voyait rien
-            bouger, et le seul effet visible était la barre de défilement de la
-            page qui se déplaçait sous le voile.
+            **La fenêtre ne défile plus elle-même.** Sa barre de défilement
+            courait sur l'angle arrondi de quarante pixels, qui la coupait en
+            haut et en bas : c'est le défaut que Rémy a vu. Le rayon et le
+            rognage vivent donc ici, et le défilement sur le bloc intérieur qui,
+            lui, n'a pas d'angles.
 
-            Le clic est écouté ici, sur le conteneur, et non posé sur chaque
-            lien : les liens sont rendus par le serveur, à l'intérieur de
-            `TexteLie`, et leur passer un gestionnaire demanderait de rendre
-            tout l'article côté client. Un seul écouteur au-dessus règle le cas,
-            y compris pour les liens qu'on ajoutera plus tard.
+            **Le rayon est `--rayon-jonction`, celui de l'accueil**, sur décision
+            de Rémy. C'est une quatrième famille pour ce jeton, après les deux
+            lèvres de l'accueil et la carte du pied de page, et elle est écrite
+            dans `AGENTS.md`. Le raisonnement est celui de la carte du pied de
+            page : le panneau fait presque toute la largeur de l'écran, et c'est
+            l'objet qu'on regarde, pas un bouton qu'on vise. */}
+        <div className="overflow-hidden rounded-[var(--rayon-jonction)] border border-border bg-background shadow-lg">
+          {/* **Un lien d'ancre ferme la fenêtre avant de sauter.**
 
-            On ne bloque rien : on ferme, et le navigateur fait le saut. */}
-        <div
-          onClick={(evenement) => {
-            const cible = (evenement.target as HTMLElement).closest("a");
-            if (cible?.getAttribute("href")?.startsWith("#")) setOuverte(false);
-          }}
-        >
-          {children}
+              C'est la réparation d'un vrai défaut, trouvé en cliquant : les
+              articles se citent entre eux, et `versImmersion` transforme ces
+              renvois en ancres vers le lecteur de la personne, plus bas sur la
+              page. Sans ce gestionnaire, le navigateur sautait bien à l'ancre,
+              mais **derrière la fenêtre restée ouverte** : on ne voyait rien
+              bouger, et le seul effet visible était la barre de défilement de la
+              page qui se déplaçait sous le voile.
+
+              Le clic est écouté ici, sur le conteneur, et non posé sur chaque
+              lien : les liens sont rendus par le serveur, à l'intérieur de
+              `TexteLie`, et leur passer un gestionnaire demanderait de rendre
+              tout l'article côté client. Un seul écouteur au-dessus règle le
+              cas, y compris pour les liens qu'on ajoutera plus tard.
+
+              On ne bloque rien : on ferme, et le navigateur fait le saut. */}
+          <div
+            className="max-h-[82dvh] overflow-y-auto"
+            onClick={(evenement) => {
+              const cible = (evenement.target as HTMLElement).closest("a");
+              if (cible?.getAttribute("href")?.startsWith("#")) {
+                setOuverte(false);
+              }
+            }}
+          >
+            {children}
+          </div>
         </div>
+
+        {/* Le bouton de fermeture, en pilule de verre, centré **sous** le
+            panneau, sur demande de Rémy : il était au-dessus et s'appelait
+            « Retour ».
+
+            Sa place est celle où l'on arrive : on ferme une fenêtre quand on a
+            fini de lire, et on finit de lire en bas. Au-dessus, il fallait
+            remonter tout l'article pour l'atteindre.
+
+            **C'est une cinquième exception au « flou va derrière, jamais
+            devant »**, et elle est écrite dans `AGENTS.md`. Elle se justifie
+            comme les capsules de l'en-tête : ce bouton flotte au-dessus du
+            contenu de la page, flouté par le voile, et c'est le verre qui le
+            fait tenir sur un fond dont on ne sait rien.
+
+            `rounded-full` : une pilule n'a pas d'angle, donc la règle des 5 px
+            ne la concerne pas. C'est la forme des gélules du hero.
+
+            `min-h-9` et non `h-9` : un libellé qui passerait à deux lignes
+            serait rogné par une hauteur fixe. */}
+        <DialogClose asChild>
+          <button
+            type="button"
+            className="group/roule mx-auto inline-flex min-h-9 items-center gap-2 rounded-full bg-card/85 px-4 text-sm font-semibold text-foreground shadow-[0_2px_8px_rgba(0,0,0,0.10)] ring-1 ring-border ring-inset backdrop-blur-md transition-colors hover:bg-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          >
+            <X aria-hidden className="size-4 shrink-0" />
+            Fermer
+          </button>
+        </DialogClose>
       </DialogContent>
     </Dialog>
   );

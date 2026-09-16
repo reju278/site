@@ -254,13 +254,31 @@ export default function Immersion() {
       <FondResultats>
       <SectionImmersion
         id="strategie"
-        className="scroll-mt-24 [&>div]:pt-24 sm:[&>div]:pt-28"
+        /* **Plus d'air au-dessus**, sur demande de Rémy. La lèvre de
+           `FondResultats` fait déjà 80 px, et l'étiquette qui ouvre maintenant
+           la section a besoin de respirer sous elle : à `pt-24`, elle semblait
+           collée au raccord. */
+        className="scroll-mt-24 [&>div]:pt-32 sm:[&>div]:pt-40"
       >
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
+          {/* L'étiquette, en pilule, sur demande de Rémy. Elle porte la moitié
+              du titre de la page source, « Extrait de formation », et dit la
+              nature de ce qui suit avant qu'on lise le titre.
+
+              **Fond plein et non verre.** Le flou par-devant a ses cinq
+              exceptions, écrites dans `AGENTS.md`, et une étiquette posée dans
+              le flux d'une page n'a rien derrière elle à brouiller.
+
+              `rounded-full` : une pilule n'a pas d'angle, la règle des 5 px ne
+              la concerne pas. */}
+          <p className="rounded-full border border-border bg-card px-4 py-1.5 text-xs font-semibold tracking-[0.14em] text-muted-foreground uppercase">
+            {modeleImmersion.etiquette}
+          </p>
+
           <TitreRoulant
             as="h2"
             segments={[{ texte: modeleImmersion.titre }]}
-            className="titre text-3xl text-balance text-foreground sm:text-4xl"
+            className="titre mt-5 text-3xl text-balance text-foreground sm:text-4xl"
           />
         </div>
 

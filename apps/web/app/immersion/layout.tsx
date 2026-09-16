@@ -1,6 +1,7 @@
 import { BarreAppelHub } from "@/components/appel-hub";
 import { EnTeteImmersion } from "@/components/en-tete-immersion";
 import { PiedImmersion } from "@/components/pied-immersion";
+import { ScrollProgress } from "@repo/ui/components/scroll-progress";
 import { ancreEntretien, entretiensImmersion } from "@/contenu/immersion";
 import { temoignages } from "@/contenu/site";
 import { prenom } from "@/lib/prenom";
@@ -64,6 +65,26 @@ export default function LayoutImmersion({
        page. Il n'existe pas au-dessus de `sm`, où la barre n'existe pas non
        plus. Repris du gabarit du hub. */
     <div className="pb-24 sm:pb-0">
+      {/* La barre de progression, épinglée tout en haut, sur demande de Rémy.
+
+          **Le bleu remplace le dégradé du registre, et `bg-none` est
+          indispensable.** Le composant pose `bg-linear-to-r` avec trois teintes,
+          c'est-à-dire une `background-image` ; `bg-primary` pose une
+          `background-color`. Ce sont deux propriétés différentes, donc
+          `tailwind-merge` ne les voit pas comme un conflit : les deux survivent
+          et l'image l'emporte. C'est exactement le piège que `AGENTS.md` décrit
+          pour les classes préfixées. `bg-none` retire l'image, et le bleu se
+          voit.
+
+          `h-1` et non `h-px` : Rémy la veut plus épaisse. Un filet d'un pixel ne
+          se remarque pas sur un écran de portable.
+
+          **Elle mesure le défilement de la page, pas celui d'une fenêtre.**
+          Quand une fenêtre d'entretien est ouverte, le corps ne défile plus et
+          la barre reste donc immobile ; le voile du dialogue, portalisé après
+          elle, la recouvre. */}
+      <ScrollProgress className="h-1 bg-none bg-primary" />
+
       <EnTeteImmersion />
       {children}
       <PiedImmersion entretiens={entretiens} />
