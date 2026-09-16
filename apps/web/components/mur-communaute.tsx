@@ -239,11 +239,16 @@ export function MurCommunaute() {
                 une signature en tête. */}
             <figcaption className="flex items-center gap-3">
               {avis.portrait ? (
+                /* **La largeur déclarée est celle de l'affichage, pas celle du
+                   fichier.** `next/image` choisit la variante qu'il sert à
+                   partir d'elle : avec les 200 px du fichier, il servait du
+                   384 px pour un rond de 40, soit huit fois trop. 96 couvre le
+                   double densité et rien de plus. */
                 <Image
                   src={avis.portrait}
                   alt={`Portrait de ${prenom(avis.nom)}`}
-                  width={200}
-                  height={200}
+                  width={96}
+                  height={96}
                   loading="lazy"
                   className="size-11 shrink-0 rounded-full object-cover"
                 />

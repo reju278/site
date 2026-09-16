@@ -8,6 +8,7 @@ import { temoignages } from "@/contenu/site";
 import { prenom } from "@/lib/prenom";
 import { insecables } from "@/lib/typographie";
 import { ArrowRight, Play } from "lucide-react";
+import Image from "next/image";
 
 
 /**
@@ -122,14 +123,25 @@ export function GalerieEntretiens() {
                       L'image avance légèrement au survol de la carte : c'est ce
                       qui la fait répondre au clic qu'on s'apprête à faire. */}
                   <span className="relative block aspect-32/9 overflow-hidden bg-black">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                    {/* **Servie par `next/image` et non en `img` brute.**
+
+                        Les vingt-deux affiches pesaient 756 Ko à elles seules,
+                        le premier poste de la page, parce qu'une `img` simple
+                        sert le fichier tel quel : 640 px de large pour une
+                        carte qui en fait 440, en JPEG là où le navigateur
+                        accepte de l'AVIF.
+
+                        `fill` et non une largeur : le cadre porte déjà le
+                        rapport 32/9, et c'est lui qui décide. `sizes` dit la
+                        largeur réelle d'une carte, sans quoi Next sert la plus
+                        grande variante par précaution. */}
+                    <Image
                       src={`/temoignages/${id}.jpg`}
                       alt=""
-                      width={1280}
-                      height={720}
+                      fill
+                      sizes="(min-width: 640px) 440px, 100vw"
                       loading="lazy"
-                      className="size-full object-cover transition-transform duration-500 group-hover/carte:scale-[1.03]"
+                      className="object-cover transition-transform duration-500 group-hover/carte:scale-[1.03]"
                     />
 
                     {/* La durée, en bas à droite.

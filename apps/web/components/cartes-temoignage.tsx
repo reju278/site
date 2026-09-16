@@ -110,8 +110,8 @@ export function CartesTemoignage() {
                 <Image
                   src={personne.portrait}
                   alt={`Portrait de ${prenom(personne.nom)}`}
-                  width={176}
-                  height={176}
+                  width={96}
+                  height={96}
                   loading="lazy"
                   className="size-11 shrink-0 rounded-full object-cover"
                 />

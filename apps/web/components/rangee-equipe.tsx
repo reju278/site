@@ -47,8 +47,8 @@ export function RangeeEquipe() {
               <Image
                 src={membre.photo}
                 alt={`Portrait de ${prenom(membre.nom)}`}
-                width={500}
-                height={500}
+                width={128}
+                height={128}
                 loading="lazy"
                 className="size-14 shrink-0 rounded-full object-cover"
               />
