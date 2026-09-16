@@ -203,11 +203,21 @@ export function PiedHub({
               </nav>
             </div>
 
-            {/* La carte d'appel, seule. `h-full` pour qu'elle descende jusqu'au
-                bas de la rangée, comme les trois du site. */}
-            <div className="mt-10 flex flex-col lg:mt-0">
+            {/* La carte d'appel, seule, **et à sa hauteur naturelle**.
+
+                Le pied de page du site étire ses trois cartes sur toute la
+                hauteur de la rangée, `flex-1` sur chacune : à trois, cela les
+                partage et chacune reste compacte. Seule, la même règle donnait
+                une carte haute comme toute la colonne de liens, soit une grande
+                surface presque vide au milieu du pied de page. Elle se cale
+                donc en haut à droite et s'arrête à son contenu, ce que Rémy a
+                demandé : « c'est pas grave si elle est en haut à droite, mais
+                il faut qu'elle soit cohérente ».
+
+                `items-start` est ce qui l'empêche de s'étirer : dans une grille,
+                une cellule prend par défaut toute la hauteur de sa rangée. */}
+            <div className="mt-10 flex flex-col items-stretch self-start lg:mt-0">
               <CarteOffre
-                className="lg:flex-1"
                 marque={
                   <LogoFunnels className="mr-[0.28em] inline-grid size-[0.95em] align-[-0.13em]" />
                 }
