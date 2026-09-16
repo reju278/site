@@ -1,6 +1,5 @@
 import { Apparition } from "@/components/apparition";
 import { MurDepliable } from "@/components/mur-depliable";
-import { ReponsesPost } from "@/components/reponses-post";
 import { murCommunaute } from "@/contenu/communaute";
 import { TitreRoulant } from "@/components/titre-roulant";
 import { insecables } from "@/lib/typographie";
@@ -197,11 +196,18 @@ export function MurCommunaute() {
           `MurDepliable`, qui ne tient que l'état ouvert ou fermé : les douze
           posts entiers ne partent pas dans le paquet JavaScript. */}
       {/* Le mur est replié en hauteur et fondu par le bas, pas tronqué dans sa
-          liste : voir `MurDepliable`. La hauteur est passée ici parce que
-          c'est le mur qui sait ce qu'il montre, pas le composant qui le
-          replie. */}
+          liste : voir `MurDepliable`. La hauteur et le pas sont passés ici
+          parce que c'est le mur qui sait ce qu'il montre, pas le composant qui
+          le replie.
+
+          **Le pas est mesuré.** Le mur déplié fait dix-sept mille pixels ; à
+          neuf cents pixels par clic, il fallait trente-neuf clics pour en voir
+          le bout, soit un post par clic. À mille huit cents, il en faut une
+          dizaine, et chaque clic découvre quatre ou cinq posts. C'est ce que
+          Rémy demande : plusieurs appuis, pas une page qui s'ouvre d'un
+          coup. */}
       <div className="mt-12">
-      <MurDepliable hauteur="max-h-[42rem] sm:max-h-[48rem]">
+      <MurDepliable hauteur={760} pas={1800}>
         {colonnes.map((colonne, i) => (
           <div key={i} className="flex flex-1 flex-col gap-4">
             {colonne.map((avis) => (
@@ -302,8 +308,6 @@ export function MurCommunaute() {
                 </p>
               ))}
             </blockquote>
-
-            <ReponsesPost reponses={avis.reponses} />
           </figure>
           </Apparition>
             ))}

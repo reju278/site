@@ -1,19 +1,16 @@
 import { ArticleAvis } from "@/components/article-avis";
-import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { ModaleAvis } from "@/components/modale-avis";
 import { TexteRoulant } from "@/components/texte-roulant";
-import { avisDe } from "@/contenu/avis";
+import { avis, avisDe } from "@/contenu/avis";
 import { AppelHubArticle } from "@/components/appel-hub";
-import { appelHub } from "@/contenu/hub";
 import { ancreEntretien, entretiensImmersion } from "@/contenu/immersion";
 import { temoignages } from "@/contenu/site";
-import { SORTIE } from "@/lib/hub";
 import { sansNoms } from "@/lib/anonymat";
 import { prenom } from "@/lib/prenom";
 import { versImmersion } from "@/lib/tunnel-liens";
 import { insecables } from "@/lib/typographie";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Play } from "lucide-react";
 
 /**
  * Le texte d'un article, prêt pour le tunnel.
@@ -30,6 +27,18 @@ import { ArrowRight } from "lucide-react";
  * qui liste ce qui reste.
  */
 const pourLeTunnel = (t: string) => sansNoms(versImmersion(t));
+
+/**
+ * La durée d'un entretien, en minutes et secondes.
+ *
+ * Elle répond à la question qu'on se pose avant de cliquer : combien de temps
+ * ça prend. Reprise du sommaire du hub.
+ */
+function dureeLisible(secondes: number): string {
+  const m = Math.floor(secondes / 60);
+  const s = secondes % 60;
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
 
 /**
  * La galerie des entretiens : les cartes de `/resultats`, mais qui ouvrent
@@ -74,6 +83,19 @@ export function GalerieEntretiens() {
 
         const nom = prenom(temoignage.nom);
 
+        /* L'autre entretien de la même personne, s'il est lui aussi sur cette
+           page. `avis.ts` en compte vingt-deux, la page en montre vingt-deux :
+           le test reste, parce qu'une liste plus courte le rendrait nécessaire
+           du jour au lendemain, et sans lui on pointerait vers une ancre qui
+           n'existe pas. */
+        const autre = article.autreEntretien
+          ? avis.find(
+              (a) =>
+                a.slug === article.autreEntretien!.slug &&
+                (entretiensImmersion as readonly string[]).includes(a.id),
+            )
+          : undefined;
+
         return (
           <li key={id} id={ancreEntretien(id)} className="scroll-mt-24">
             <ModaleAvis
@@ -88,93 +110,199 @@ export function GalerieEntretiens() {
                   type="button"
                   className="relief-verre group/carte group/roule flex h-full w-full flex-col overflow-hidden rounded-md border border-border bg-card text-left transition-colors hover:border-ring focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                 >
-                  {/* L'affiche porte les bandes noires de l'enregistrement : ce
-                      sont des appels à deux. Voir `AGENTS.md`. */}
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={`/temoignages/${id}.jpg`}
-                    alt=""
-                    width={1280}
-                    height={720}
-                    loading="lazy"
-                    className="aspect-video w-full object-cover"
-                  />
+                  {/* L'affiche, **recadrée sur la bande d'image réelle**.
 
-                  <div className="flex flex-1 flex-col p-5">
+                      Les entretiens sont des appels à deux, et l'enregistrement
+                      porte ses propres bandes noires : en 16/9, la moitié de la
+                      vignette était du noir, et la carte avait l'air cassée
+                      plutôt que sobre. C'est le défaut que Rémy a signalé, et
+                      c'est la même réparation que sur le sommaire du hub.
+
+                      **Le rapport est mesuré, pas choisi.** Les affiches ont été
+                      relevées en lisant leur luminance ligne par ligne : le
+                      contenu occupe les lignes 90 à 269 d'une image de 360,
+                      c'est-à-dire la moitié centrale au pixel près. 640 sur 180
+                      donne 32/9, seule valeur qui les découvre sans laisser de
+                      noir.
+
+                      L'image avance légèrement au survol de la carte : c'est ce
+                      qui la fait répondre au clic qu'on s'apprête à faire. */}
+                  <span className="relative block aspect-32/9 overflow-hidden bg-black">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={`/temoignages/${id}.jpg`}
+                      alt=""
+                      width={1280}
+                      height={720}
+                      loading="lazy"
+                      className="size-full object-cover transition-transform duration-500 group-hover/carte:scale-[1.03]"
+                    />
+
+                    {/* La durée, en bas à droite.
+
+                        **Elle dit que c'est une vidéo**, ce que la carte ne
+                        disait nulle part, et surtout combien de temps ça prend,
+                        qui est la question qu'on se pose avant de cliquer.
+
+                        Fond noir à 70 % et non un jeton de thème : il se pose
+                        sur une photographie, dont on ne sait pas si elle est
+                        claire ou sombre à cet endroit. Au pire cas, image
+                        entièrement blanche dessous, le blanc y tient 8,6:1. */}
+                    <span className="pointer-events-none absolute right-2 bottom-2 flex items-center gap-1 rounded-sm bg-black/70 px-1.5 py-0.5 text-[0.6875rem] font-semibold text-white tabular-nums">
+                      <Play aria-hidden className="size-2.5 fill-current" />
+                      {dureeLisible(temoignage.secondes)}
+                    </span>
+                  </span>
+
+                  <span className="flex flex-1 flex-col p-5">
                     <span className="block text-base font-semibold text-card-foreground">
                       {nom}
                     </span>
                     <span className="mt-1 block text-sm text-pretty text-muted-foreground">
                       {insecables(temoignage.description)}
                     </span>
-                    <span className="mt-auto flex items-center gap-1.5 pt-4 text-sm font-medium text-primary">
-                      <TexteRoulant>Voir son entretien</TexteRoulant>
-                      <ArrowRight
-                        aria-hidden
-                        className="size-4 transition-transform group-hover/carte:translate-x-0.5"
-                      />
+
+                    {/* L'action, **en pilule**, sur demande de Rémy : le libellé
+                        bleu d'avant ne se distinguait pas d'une phrase et ne
+                        mettait rien en valeur.
+
+                        Elle ne prend pas toute la largeur, contrairement à la
+                        barre du hub : une pilule se lit comme un objet posé là,
+                        une barre pleine comme un second bouton, et la carte
+                        entière est déjà cliquable.
+
+                        `rounded-full` est ici légitime : la règle des 5 px parle
+                        d'angles arrondis, et une pilule n'a pas d'angle. C'est
+                        la forme des gélules du hero, déjà dans la page.
+
+                        **L'espace au-dessus est un `pt-5` et non un `mt-*`** :
+                        `mt-auto` pousse le bloc au bas de la carte, et une marge
+                        haute entrerait en conflit avec lui.
+
+                        `min-h-9` et non `h-9` : un libellé qui passerait à deux
+                        lignes serait rogné par une hauteur fixe. */}
+                    <span className="mt-auto pt-5">
+                      <span className="inline-flex min-h-9 items-center gap-1.5 rounded-full bg-accent px-4 text-sm font-semibold text-foreground transition-colors group-hover/carte:bg-primary group-hover/carte:text-primary-foreground">
+                        <TexteRoulant>Voir son entretien</TexteRoulant>
+                        <ArrowRight
+                          aria-hidden
+                          className="size-4 shrink-0 transition-transform group-hover/carte:translate-x-0.5"
+                        />
+                      </span>
                     </span>
-                  </div>
+                  </span>
                 </button>
               }
             >
-              {/* Le contenu de la fenêtre, rendu par le serveur. */}
-              <div className="px-5 pt-10 pb-8 sm:px-8 sm:pt-12">
-                {/* Le titre de l'article, celui de `/resultats/<nom>`.
+              {/* Le contenu de la fenêtre, rendu par le serveur.
 
-                    `p` et non un `h1` : la fenêtre s'ouvre par-dessus une page
-                    qui a déjà le sien, et deux `h1` dans un document cassent le
-                    plan. Le nom accessible de la fenêtre est porté par
-                    `DialogTitle`, en `sr-only`. */}
-                <p className="titre text-2xl text-balance text-foreground sm:text-3xl">
-                  {insecables(sansNoms(article.titre))}
-                </p>
-
-                <p className="mt-4 text-base leading-relaxed text-pretty text-muted-foreground">
-                  {sansNoms(article.chapo)}
-                </p>
-
-                {/* La vidéo, au centre, comme sur la page. Le lecteur n'appelle
-                    Wistia qu'au clic, et il est démonté à la fermeture de la
-                    fenêtre, ce qui coupe le son. */}
-                <div className="mt-8">
-                  <LecteurVideo
-                    id={temoignage.id}
-                    titre={`Entretien avec ${nom}`}
-                    secondes={temoignage.secondes}
-                    affiche={`/temoignages/${id}.jpg`}
-                    afficheAlt={sansNoms(article.afficheAlt)}
+                  **Il reprend la forme d'une page d'avis**, sur demande de
+                  Rémy : un en-tête coloré qui porte le titre et la vidéo, puis
+                  le bloc du texte qui remonte par-dessus avec sa jonction
+                  arrondie. C'est ce que fait `/resultats/<nom>`, et c'est cette
+                  séparation qui donne à la fenêtre l'air d'une page plutôt que
+                  d'une boîte. */}
+              <div className="relative">
+                {/* L'en-tête, sur le fond du deck : le même que les en-têtes de
+                    pages du site, ses trois halos et son grain. Il n'a pas de
+                    fondu par le bas, contrairement à `EnTetePage` : ici c'est
+                    le bloc de l'article qui vient mordre dedans, et un fondu
+                    sous une arête dessinée ne servirait à rien. */}
+                <div className="relative isolate px-5 pt-10 pb-28 sm:px-8 sm:pt-12 sm:pb-32">
+                  <div
+                    aria-hidden
+                    className="fond-resultats grain-resultats pointer-events-none absolute inset-0 -z-10"
                   />
+
+                  <div className="mx-auto max-w-3xl text-center">
+                    {/* `p` et non un `h1` : la fenêtre s'ouvre par-dessus une
+                        page qui a déjà le sien, et deux `h1` dans un document
+                        cassent le plan. Le nom accessible de la fenêtre est
+                        porté par `DialogTitle`, en `sr-only`. */}
+                    <p className="titre text-2xl text-balance text-foreground sm:text-3xl">
+                      {insecables(sansNoms(article.titre))}
+                    </p>
+
+                    <p className="mt-4 text-base leading-relaxed text-pretty text-muted-foreground">
+                      {sansNoms(article.chapo)}
+                    </p>
+                  </div>
+
+                  {/* La vidéo, dans l'en-tête et plus large que le texte : une
+                      vidéo se regarde, un texte se lit, et les deux n'ont pas
+                      la même bonne mesure. C'est ce que fait la page. */}
+                  <div className="mx-auto mt-8 max-w-3xl">
+                    <LecteurVideo
+                      id={temoignage.id}
+                      titre={`Entretien avec ${nom}`}
+                      secondes={temoignage.secondes}
+                      affiche={`/temoignages/${id}.jpg`}
+                      afficheAlt={sansNoms(article.afficheAlt)}
+                    />
+                  </div>
                 </div>
 
-                {/* L'appel, juste sous l'entretien : quelqu'un qui vient de voir
-                    un membre raconter ses résultats est exactement là où la
-                    question se pose. C'est la place qu'il a sur la page. */}
-                <div className="mt-6 flex justify-center">
-                  <BoutonScintillant href={SORTIE}>
-                    {appelHub.libelle}
-                    <ArrowRight aria-hidden className="size-4 shrink-0" />
-                  </BoutonScintillant>
+                {/* Le bloc de l'article, qui remonte sur l'en-tête.
+
+                    **L'arrondi et le filet sont portés par le bloc lui-même** et
+                    non par une lèvre posée par-dessus : posés sur une lèvre, la
+                    courbe se dessine mais le panneau opaque derrière garde ses
+                    angles droits et vient remplir l'encoche. C'est le défaut
+                    que la page d'avis a déjà connu, et il est écrit là-bas.
+
+                    Le rayon est `--rayon-jonction` : la jonction fait toute la
+                    largeur de la fenêtre, c'est le cas que l'exception d'échelle
+                    du projet décrit. */}
+                <div className="relative -mt-20 rounded-t-[var(--rayon-jonction)] border-t border-border bg-background px-5 pt-10 pb-10 sm:-mt-24 sm:px-8 sm:pt-12">
+                  {/* Le bandeau vers l'autre entretien de la même personne.
+
+                      Trois membres ont témoigné deux fois, à un an et demi
+                      d'écart, et les deux récits sont sur la page. Quelqu'un
+                      qui ouvre l'un doit voir l'autre sans le chercher : c'est
+                      la règle de `/resultats`.
+
+                      Il mène à l'ancre du lecteur de l'autre entretien, et le
+                      clic ferme la fenêtre avant de sauter : voir `ModaleAvis`.
+                      Il ne s'affiche que si cet autre entretien est bien sur la
+                      page, sinon ce serait une cible qui ne mène nulle part. */}
+                  {autre ? (
+                    <a
+                      href={`#${ancreEntretien(autre.id)}`}
+                      className="relief-verre group/roule mx-auto mb-10 flex max-w-3xl items-center gap-4 rounded-md border border-border bg-card p-5 transition-colors hover:border-ring focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                    >
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                          L&apos;autre entretien
+                        </span>
+                        <span className="mt-1 block text-base text-pretty text-card-foreground">
+                          {sansNoms(article.autreEntretien!.libelle)}
+                        </span>
+                      </span>
+                      <ArrowRight
+                        aria-hidden
+                        className="size-5 shrink-0 text-primary"
+                      />
+                    </a>
+                  ) : null}
+
+                  {/* L'article.
+
+                      `max-w-3xl` : une ligne de texte courant se lit entre
+                      soixante et quatre-vingts caractères, et la fenêtre est
+                      plus large que ça depuis qu'elle a été élargie.
+
+                      **Il porte l'appel du milieu**, et lui seul. Celui qui
+                      était sous la vidéo a été retiré sur demande de Rémy : à
+                      cet endroit, il coupait l'en-tête du texte sans qu'on ait
+                      rien lu. Ici, le lecteur a parcouru la moitié du récit. */}
+                  <article className="mx-auto max-w-3xl">
+                    <ArticleAvis
+                      article={article}
+                      texte={pourLeTunnel}
+                      appel={<AppelHubArticle />}
+                    />
+                  </article>
                 </div>
-
-                {/* L'article.
-
-                    **Il porte l'appel du milieu**, comme la page : sa place
-                    n'est pas décorative, c'est le moment où quelqu'un qui a lu
-                    la moitié du parcours se demande ce que ça donnerait pour
-                    lui. `AppelHubArticle` est celui du tunnel, qui ne propose
-                    que l'appel : celui du site propose aussi la formation
-                    gratuite, qui vit sur un autre domaine et serait une sortie.
-
-                    La fenêtre borne déjà la mesure du texte, donc pas de
-                    `max-w-*` ici. */}
-                <article className="mt-12">
-                  <ArticleAvis
-                    article={article}
-                    texte={pourLeTunnel}
-                    appel={<AppelHubArticle />}
-                  />
-                </article>
               </div>
             </ModaleAvis>
           </li>

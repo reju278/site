@@ -32,6 +32,11 @@ import { useState } from "react";
  * que `LecteurVideo` fait avec sa propriété `actif` dans le carrousel : plus
  * radical qu'un appel à l'API de Wistia, et il ne dépend d'aucun script tiers.
  *
+ * **Le voile porte le flou de six pixels du projet.** Le composant de registre
+ * arrive sans, alors que `sheet.tsx` l'a : c'est exactement ce que `AGENTS.md`
+ * annonce, un `shadcn add` qui écrase ce qui est à nous. Rendu dans
+ * `packages/ui/src/components/dialog.tsx`.
+ *
  * **Le titre et la description sont obligatoires**, même invisibles. Radix
  * avertit en console quand une fenêtre n'a pas de `DialogTitle`, et surtout un
  * lecteur d'écran annoncerait une fenêtre sans dire laquelle. Ils sont donc
@@ -70,10 +75,13 @@ export function ModaleAvis({
            barre d'adresse, et le bas de la fenêtre passait sous elle. `dvh`
            suit la hauteur réellement visible.
 
-           `sm:max-w-3xl` : c'est la mesure d'un texte qui se lit, la même que
-           l'article de `/resultats`. Une fenêtre pleine largeur donnerait des
-           lignes de cent quarante caractères. */
-        className="max-h-[90dvh] gap-0 overflow-y-auto p-0 sm:max-w-3xl"
+           `sm:max-w-4xl`, élargi sur demande de Rémy. La mesure du texte, elle,
+           est bornée plus bas par le bloc de l'article : une fenêtre large avec
+           des lignes de cent quarante caractères ne se lirait pas.
+
+           `p-0` et `gap-0` : l'en-tête de la fenêtre porte le fond du deck
+           jusqu'à ses bords, donc aucun rembourrage ne doit l'en écarter. */
+        className="max-h-[90dvh] gap-0 overflow-y-auto p-0 sm:max-w-4xl"
       >
         {/* Le titre et la description, pour la fenêtre elle-même. Le contenu
             porte son propre titre visible, donc ceux-ci ne sont lus que par les

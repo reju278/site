@@ -176,6 +176,24 @@ export const coachingImmersion = {
 /**
  * Les entretiens, dans l'ordre de la page source.
  *
+ * **Les vingt-deux et non les quatorze de la page source**, sur décision de
+ * Rémy. Cinq manquaient simplement, sa page ClickFunnels étant en retard ; les
+ * trois autres sont des **seconds entretiens**, enregistrés un an et demi après
+ * le premier.
+ *
+ * **Ces trois-là parlent du mastermind de bout en bout**, huit à neuf fois
+ * chacun, et le disent dès leur chapô. Le mastermind est en pause, remplacé par
+ * le consulting privé : la règle du dépôt veut qu'une page d'avis ne laisse pas
+ * croire qu'on peut encore rejoindre un programme arrêté. Le risque a été posé
+ * à Rémy, qui a tranché pour les garder ; ce sont aussi les résultats les plus
+ * forts de la liste. Le jour où le mastermind rouvre, la question disparaît.
+ *
+ * **Sébastien fait doublon avec l'extrait de coaching de la page.** Ce sont deux
+ * médias Wistia distincts, 438 et 456 secondes, mais c'est le même moment : il
+ * prend le micro pendant un coaching de groupe pour annoncer son meilleur mois,
+ * et son propre chapô le dit. À trancher par Rémy : garder les deux, ou retirer
+ * l'un des deux.
+ *
  * **On ne nomme que les identifiants.** Le nom, l'accroche, la durée et
  * l'affiche sont lus dans `temoignages` ; le lien vers l'entretien complet est
  * lu dans `avis`. C'est ce qui garantit qu'une correction faite là-bas se voit
@@ -183,20 +201,32 @@ export const coachingImmersion = {
  * deux pages du même site.
  */
 export const entretiensImmersion = [
-  "rgio4y4o8f",
-  "j0vbkt570k",
-  "f2ie1v99b8",
-  "gcfo8miafe",
-  "2vtsinplyx",
-  "4lkp9f6lm4",
-  "brvvtbkmfo",
-  "vtfaka0m80",
-  "abj3v8v8ek",
-  "ive07co9xm",
-  "tvy3jbhml9",
-  "2xege6bt0u",
-  "s3npr5izhy",
-  "b5taio9plc",
+  /* Les quatorze de la page source, dans son ordre, avec les seconds entretiens
+     glissés juste après le premier de la même personne. */
+  "rgio4y4o8f", // Roland
+  "i8j0mw0ddt", // Roland, un an et demi après
+  "j0vbkt570k", // Christian
+  "f2ie1v99b8", // Patrick
+  "gcfo8miafe", // Guy
+  "2vtsinplyx", // Augustin
+  "4lkp9f6lm4", // Valérie
+  "brvvtbkmfo", // Joël
+  "vtfaka0m80", // Olga
+  "abj3v8v8ek", // Mathieu
+  "ive07co9xm", // Cédric
+  "tvy3jbhml9", // Charlotte
+  "2xege6bt0u", // Yannick et Sylvie
+  "s3npr5izhy", // Tatiana
+  "b5taio9plc", // François
+  "755btwnbr4", // François, neuf mois après
+
+  /* Ceux que la page source ne montrait pas : elle était en retard. */
+  "fbtr4dqoji", // Sandrine
+  "rtil6qeznq", // Jérémy
+  "iy3jgcijgu", // Corentin
+  "1db8el08jl", // Corentin, un an et demi après
+  "9a6g6hsyzp", // Lilian
+  "8de9q4ed4l", // Sébastien
 ] as const;
 
 /**

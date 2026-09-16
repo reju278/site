@@ -51,6 +51,17 @@ import { useEffect, useRef, useState } from "react";
  * hauteur et fondre le bas. C'est ce qui lui permet de servir n'importe quelle
  * mise en page qu'on voudrait replier.
  *
+ * **Le mur se dévoile par paliers**, sur demande de Rémy : chaque clic découvre
+ * quelques posts de plus, et le bouton revient tant qu'il en reste. Tout ouvrir
+ * d'un coup donnait une page de dix mille pixels qu'on ne parcourt pas, on la
+ * subit. Le fondu et le bouton restent donc en place entre deux clics, et
+ * disparaissent ensemble quand le dernier post est visible.
+ *
+ * **La fin se mesure, elle ne se compte pas.** On compare la hauteur du contenu
+ * à celle de la fenêtre de lecture : quand le contenu tient, c'est fini. Compter
+ * les cartes obligerait à savoir combien il en reste, donc à connaître leur
+ * répartition entre les deux colonnes, qui dépend de la largeur.
+ *
  * **Le bouton flotte au-dessus du fondu**, comme le leur : posé après le mur,
  * il aurait laissé une bande vide entre les cartes effacées et lui. Il porte un
  * fond plein, et ce n'est pas décoratif : un bouton translucide posé sur des
@@ -68,41 +79,59 @@ import { useEffect, useRef, useState } from "react";
 export function MurDepliable({
   children,
   hauteur,
+  pas,
 }: {
   children: React.ReactNode;
-  /** La hauteur du mur replié, en classes Tailwind arbitraires. */
-  hauteur: string;
+  /** La hauteur du mur avant le premier clic, en pixels. */
+  hauteur: number;
+  /** Ce que chaque clic découvre en plus, en pixels. */
+  pas: number;
 }) {
-  const [deplie, setDeplie] = useState(false);
+  const [palier, setPalier] = useState(0);
+  const [complet, setComplet] = useState(false);
   const cadre = useRef<HTMLDivElement>(null);
+
+  const limite = hauteur + palier * pas;
 
   useEffect(() => {
     const el = cadre.current;
     if (!el) return;
 
-    const marquer = () => {
-      const bas = el.getBoundingClientRect().bottom;
+    const mesurer = () => {
+      /* **La fin se mesure sur la mise en page, pas sur le défilement.**
+         `scrollHeight` dépassait `clientHeight` de dix pixels exactement, et le
+         bouton ne disparaissait jamais : c'est la translation qu'`Apparition`
+         applique aux cartes qui ne sont pas encore entrées dans la vue.
+         Celle-ci ne change pas la hauteur du bloc mais compte dans le
+         défilement, et la dernière carte du mur, par définition jamais vue,
+         la portait toujours.
+
+         La hauteur de la plus haute colonne, elle, est celle de la mise en
+         page : elle ignore les transformations et ne bouge pas avec
+         l'animation. */
+      const contenu = Math.max(
+        ...[...el.children].map((c) => c.getBoundingClientRect().height),
+      );
+      const fini = limite >= contenu;
+      setComplet(fini);
+
       for (const carte of el.querySelectorAll<HTMLElement>("[data-carte]")) {
-        /* **Le critère est le bas de la carte et non son haut.** Une carte à
-           cheval sur la ligne montre son début et cache sa fin : or le
-           dépliant des réponses est son dernier élément, donc il est sous la
-           coupe alors que la carte paraît visible. Mesuré avec le premier
-           critère, il restait deux `summary` atteignables pour zéro pixel
-           visible. */
-        const rognee = !deplie && carte.getBoundingClientRect().bottom > bas;
+        const rognee =
+          !fini && carte.getBoundingClientRect().bottom > el.getBoundingClientRect().bottom;
         carte.toggleAttribute("inert", rognee);
       }
     };
 
-    marquer();
+    mesurer();
 
     /* La ligne de coupe bouge avec la largeur : les colonnes se réorganisent,
        et une carte sous la coupe en large peut être au-dessus sur un
        téléphone. */
-    const observateur = new ResizeObserver(marquer);
+    const observateur = new ResizeObserver(mesurer);
     observateur.observe(el);
     return () => observateur.disconnect();
-  }, [deplie]);
+  }, [limite]);
+
 
   return (
     <div className="relative">
@@ -110,12 +139,13 @@ export function MurDepliable({
         ref={cadre}
         className={cn(
           "mx-auto flex max-w-4xl flex-col gap-4 sm:flex-row sm:items-start",
-          !deplie && `overflow-hidden ${hauteur}`,
+          !complet && "overflow-hidden",
         )}
         style={
-          deplie
+          complet
             ? undefined
             : {
+                maxHeight: `${limite}px`,
                 /* Le fondu du bas. Il commence aux deux tiers : plus haut, on
                    perdrait des cartes entières ; plus bas, la coupe
                    redeviendrait une ligne. Les deux écritures s'écrivent,
@@ -130,7 +160,7 @@ export function MurDepliable({
         {children}
       </div>
 
-      {deplie ? null : (
+      {complet ? null : (
         /* Le bouton flotte sur le fondu, comme le leur. `inset-x-0` et non une
            translation : un centrage par `left: 50%` puis `translateX(-50%)`
            élargit la boîte de l'élément, et la règle du dépôt veut qu'un bloc
@@ -140,10 +170,10 @@ export function MurDepliable({
               la page. C'est aussi ce qui fait que la barre d'espace l'active. */}
           <button
             type="button"
-            onClick={() => setDeplie(true)}
+            onClick={() => setPalier((p) => p + 1)}
             className="group/roule inline-flex min-h-12 items-center justify-center gap-2 rounded-md border border-border bg-background px-6 text-sm font-semibold text-foreground shadow-[0_10px_30px_-12px_rgba(0,0,0,0.45)] transition-colors hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
-            <TexteRoulant>Voir plus de témoignages</TexteRoulant>
+            <TexteRoulant>Voir plus de posts de la communauté</TexteRoulant>
             <ChevronDown aria-hidden className="size-4 shrink-0" />
           </button>
         </div>
