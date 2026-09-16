@@ -3,7 +3,7 @@
 import { TexteRoulant } from "@/components/texte-roulant";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@repo/ui/lib/utils";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * Le mur, replié sur ses premières cartes, avec son bouton « voir plus ».
@@ -28,10 +28,23 @@ import { useState } from "react";
  * le bas de la colonne. Les deux écritures du masque s'écrivent : Safari n'a
  * levé son préfixe qu'en 15.4.
  *
- * **Le fondu ne cache rien d'atteignable.** Les cartes du mur ne contiennent
- * aucun lien ni bouton depuis que Rémy a retiré le renvoi vers Circle : rogner
- * le bas ne piège donc pas le clavier. Le jour où une carte redevient
- * cliquable, ce repli devra redevenir un retrait.
+ * **Ce qui est sous la coupe sort du parcours au clavier**, et c'est une
+ * correction. Le commentaire d'origine disait que rogner ne piégeait personne,
+ * les cartes ne contenant plus rien de cliquable. C'était vrai le jour où il a
+ * été écrit et faux le lendemain : les réponses des membres y ont ajouté un
+ * dépliant par carte. Mesuré plutôt que supposé, dix-huit `summary` se
+ * trouvaient sous la coupe, tous atteignables à la tabulation, et le navigateur
+ * faisait défiler le bloc rogné pour aller les chercher. C'est le piège de
+ * tabulation classique.
+ *
+ * Toute carte dont le bas dépasse la ligne reçoit donc `inert`, ce qui la
+ * retire du clavier et des lecteurs d'écran sans rien changer à ce qu'on voit.
+ * Son texte reste lisible à l'écran ; c'est son dépliant, tout en bas et hors
+ * champ, qui cesse d'être atteignable.
+ *
+ * **La mesure se refait au redimensionnement.** La ligne de coupe dépend de la
+ * largeur, puisque les colonnes se réorganisent : une carte sous la coupe en
+ * large peut être au-dessus sur un téléphone.
  *
  * **Il ne connaît pas la répartition en colonnes.** Le mur lui passe deux
  * colonnes déjà constituées ; lui ne fait que les poser côte à côte, borner la
@@ -61,10 +74,40 @@ export function MurDepliable({
   hauteur: string;
 }) {
   const [deplie, setDeplie] = useState(false);
+  const cadre = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = cadre.current;
+    if (!el) return;
+
+    const marquer = () => {
+      const bas = el.getBoundingClientRect().bottom;
+      for (const carte of el.querySelectorAll<HTMLElement>("[data-carte]")) {
+        /* **Le critère est le bas de la carte et non son haut.** Une carte à
+           cheval sur la ligne montre son début et cache sa fin : or le
+           dépliant des réponses est son dernier élément, donc il est sous la
+           coupe alors que la carte paraît visible. Mesuré avec le premier
+           critère, il restait deux `summary` atteignables pour zéro pixel
+           visible. */
+        const rognee = !deplie && carte.getBoundingClientRect().bottom > bas;
+        carte.toggleAttribute("inert", rognee);
+      }
+    };
+
+    marquer();
+
+    /* La ligne de coupe bouge avec la largeur : les colonnes se réorganisent,
+       et une carte sous la coupe en large peut être au-dessus sur un
+       téléphone. */
+    const observateur = new ResizeObserver(marquer);
+    observateur.observe(el);
+    return () => observateur.disconnect();
+  }, [deplie]);
 
   return (
     <div className="relative">
       <div
+        ref={cadre}
         className={cn(
           "mx-auto flex max-w-4xl flex-col gap-4 sm:flex-row sm:items-start",
           !deplie && `overflow-hidden ${hauteur}`,

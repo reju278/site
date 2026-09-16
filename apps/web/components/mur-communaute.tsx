@@ -217,6 +217,13 @@ export function MurCommunaute() {
              est le bon repli mais pas l'effet demandé. */
           <Apparition key={avis.nom + avis.titre}>
           <figure
+            /* Lu par `MurDepliable`, qui pose `inert` sur les cartes
+               entièrement sous la ligne de coupe : sans ça, leurs dépliants de
+               réponses restent atteignables à la tabulation alors qu'on ne les
+               voit pas. Le repère est sur la carte et non sur l'`Apparition`
+               qui l'enveloppe, celle-ci ne transmettant pas les attributs
+               qu'on lui passe. */
+            data-carte
             style={{ backgroundColor: FOND }}
             className="relief-verre flex flex-col gap-4 rounded-[25px] px-[18px] py-5"
           >
