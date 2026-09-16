@@ -1332,6 +1332,93 @@ deux phrases, un séparateur `Nom — Titre` un point médian `Nom · Titre`.
 
 ---
 
+## Le hub de retargeting : `/hub`, fermé, non indexé, sans un montant
+
+`/hub` et `/hub/<nom>` reprennent `/resultats` et ses entretiens **au dessin
+près**, sur demande de Rémy. C'est la page d'arrivée de ses publicités de
+reciblage, et tout ce qui l'en distingue vient de deux contraintes : les règles
+publicitaires de Meta, et le fait qu'on n'en sorte pas.
+
+**Meta examine la page d'arrivée, pas seulement l'annonce.** Une annonce propre
+qui pointe vers une page de chiffres se fait refuser à l'examen, et les refus
+répétés se paient sur le compte publicitaire. Ce qui déclenche le refus n'est
+pas le témoignage : c'est le témoignage **centré sur l'argent gagné plutôt que
+sur le problème résolu**. Dix-huit des vingt-deux articles portaient un montant
+dans leur `h1`.
+
+**On retire, on ne réécrit pas.** Un paragraphe, une citation ou un tour de
+parole qui porte un montant est retiré en entier du hub ; il n'est jamais
+reformulé. Ce sont les mots de vraies personnes, et changer ce que quelqu'un a
+dit pour le rendre publiable est une faute d'un autre ordre qu'une page refusée.
+Seuls les en-têtes, qui ne peuvent pas disparaître sans laisser une page sans
+titre, ont une version propre au hub dans `contenu/hub.ts`. **Elle est écrite
+par l'agent, ce que ce fichier interdit partout ailleurs**, sur consigne
+explicite de Rémy, et elle est donc à valider par lui.
+
+**Le contrôle est mécanique et il jette.** `controlerLeHub` relit tout ce que
+chaque page s'apprête à servir et casse le build si un montant a survécu. Il
+a déjà attrapé une fuite que le serveur de développement ne montrait pas, le
+libellé du bandeau « l'autre entretien ». Corollaire : **on ne contrôle que ce
+qu'on affiche**. La valeur qui décide du rendu et celle qui part au contrôle
+sont la même variable, sinon le contrôle se met à refuser du texte qui n'est
+nulle part.
+
+**Le mot « euro » compte autant que le symbole.** La moitié des montants sont
+écrits en lettres, parce que les transcriptions rendent ce que les gens disent.
+Une expression qui ne cherchait que des chiffres annonçait deux paragraphes à
+retirer ; il y en avait soixante-cinq.
+
+### Ce que le texte ne dit pas : treize affiches portent le montant dans l'image
+
+**C'est le défaut le plus grave, et aucun contrôle sur des chaînes de caractères
+ne pouvait le voir.** Treize des vingt-deux affiches de témoignage portent le
+résultat incrusté en blanc sur la vignette : « De 0€ à 109 778€ en 6 mois »,
+« Il faisait 0€ en ligne, aujourd'hui il génère 50 000 à 70 000€/mois ». Meta lit
+le texte des images, et c'est même le premier endroit où il le cherche.
+
+Ces treize entretiens sont donc **écartés du hub**, pas corrigés : recadrer ou
+flouter abîmerait l'image sans la rendre honnête, et Wistia n'expose qu'une
+affiche par vidéo. La réparation est une réexportation des vidéos sans leur
+carton de titre, et elle n'appartient pas au code. `affichesConformes` est une
+**liste blanche** : une affiche ajoutée demain est absente du hub par défaut au
+lieu d'y entrer sans être regardée.
+
+### Rien ne sort du hub, sauf l'appel et les mentions légales
+
+`versHub` réécrit les liens de contenu : les avis restent dans le hub, l'appel
+est conservé avec sa balise Hyros, **et tout le reste est déshabillé**, le
+libellé restant en texte. C'est une liste blanche pour la même raison
+qu'ailleurs : une adresse qu'on n'avait pas prévue ne peut pas passer.
+
+**Les trois liens légaux sont l'exception, et elle est assumée.** Une page
+commerciale européenne sans accès à ses CGV et à sa politique de confidentialité
+est moins conforme, pas plus, et leur absence est un signal de méfiance connu à
+l'examen des pages d'arrivée.
+
+**L'en-tête et le pied de page s'effacent par `HorsHub`**, un composant client
+posé dans `layout.tsx`. Un second layout racine par groupe de routes serait plus
+étanche, mais demanderait de déplacer toutes les pages existantes : Rémy a
+demandé qu'on ne touche à rien d'actuel. Conséquence connue et acceptée : le
+pied de page reste **rendu côté serveur puis jeté**, donc son texte figure dans
+la charge utile de la page sans être ni visible ni cliquable.
+
+**La barre d'appel fixe en bas d'écran ne vit que sur téléphone**, demandée par
+Rémy. Fond plein et non `background/95` : à cinq pour cent de transparence, le
+bouton posé sous la vidéo transparaissait et on lisait deux fois le même
+libellé. Et `pb-[env(safe-area-inset-bottom)]`, sans quoi elle passe sous la
+barre de gestes des iPhone récents.
+
+### Ce qui reste à faire, et qui n'est pas du code
+
+- **Les treize affiches à réexporter** sans leur carton de titre. Chacune
+  retirée de `affichesEcartees` et ajoutée à `affichesConformes` ramène son
+  entretien dans le hub.
+- **Relire `contenu/hub.ts`**, dont tout le texte est écrit par l'agent.
+- **La vidéo elle-même** porte les mêmes annonces à l'oral. L'examen d'une page
+  d'arrivée ne la regarde pas, mais le visiteur si.
+
+---
+
 ## Pas de backend, et c'est un choix
 
 Il n'y a **aucune base de données** dans ce dépôt. Les pages sont rendues au

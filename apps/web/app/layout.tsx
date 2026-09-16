@@ -1,4 +1,5 @@
 import { EnTete } from "@/components/en-tete";
+import { HorsHub } from "@/components/hors-hub";
 import { PiedDePage } from "@/components/pied-de-page";
 import { GTM, SITE, identite } from "@/contenu/site";
 import { Toaster } from "@repo/ui/components/sonner";
@@ -231,10 +232,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             partagé reste un fournisseur générique, et c'est le site qui dit ce
             qu'il veut. */}
         <ThemeProvider defaultTheme="dark">
+          {/* L'en-tête et le pied de page s'effacent sur le hub, et sur lui
+              seul : c'est une page de publicité dont on ne sort que par le
+              bouton d'appel. Voir `components/hors-hub.tsx`. Rien ne change
+              pour les autres pages. */}
           <div className="flex min-h-svh flex-col">
-            <EnTete />
+            <HorsHub>
+              <EnTete />
+            </HorsHub>
             <main className="flex-1">{children}</main>
-            <PiedDePage />
+            <HorsHub>
+              <PiedDePage />
+            </HorsHub>
           </div>
           <Toaster />
         </ThemeProvider>
