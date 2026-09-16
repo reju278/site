@@ -1551,6 +1551,121 @@ garantie.
 
 ---
 
+## Un tunnel n'est pas une page du site
+
+`/hub` et `/immersion` sont des **tunnels** : on y arrive par un lien qu'on a
+reçu, et la règle est qu'on n'en sort que par l'appel. La liste des racines vit
+dans `lib/tunnels.ts`, et `HorsTunnel` la lit pour retirer l'en-tête et le pied
+de page du site, qui offriraient sinon une trentaine de portes de sortie.
+
+Un tunnel porte donc les siens, son `robots: { index: false }` dans son
+gabarit, et il n'apparaît ni dans `sitemap.ts`, ni dans les menus, ni dans le
+pied de page.
+
+**Les liens du contenu se réécrivent, et par liste blanche.** `versHub` et
+`versImmersion` listent ce qui reste : l'appel avec sa balise, les renvois qui
+restent dans le tunnel, et le reste est déshabillé, le libellé gardé en texte.
+Une liste noire se fait contourner par la première adresse qu'on n'avait pas
+prévue ; une liste blanche ne peut pas. Ça se vérifie en comptant les liens
+rendus, pas en relisant le code : sur les quatorze fenêtres d'`/immersion`, zéro
+sortie.
+
+**Ce qui est vrai d'un tunnel se vérifie dans le DOM rendu et non dans le
+HTML.** L'en-tête du site y est rendu côté serveur puis jeté : son texte figure
+dans la charge utile sans être ni visible ni cliquable. Chercher « Programmes »
+dans la source donne donc une occurrence sur une page qui n'en montre aucune.
+
+## Le même texte à deux endroits n'est écrit qu'une fois
+
+Le corps d'un article d'avis est rendu par `ArticleAvis`, sur `/resultats/<nom>`
+comme dans la fenêtre d'`/immersion`. Ce sont les mots et les chiffres de vraies
+personnes : deux écritures du même entretien, c'est une version fausse tôt ou
+tard.
+
+Ce qui change d'un endroit à l'autre passe en propriété, jamais en copie : le
+transformateur de texte, l'encart d'appel, le pli de la transcription.
+
+**Un transformateur s'applique à tout le texte, pas aux paragraphes seuls.** La
+première version d'`ArticleAvis` ne réécrivait que les paragraphes : les noms de
+famille restaient dans les titres de section et dans les citations. Un
+caviardage qui oublie un endroit sur trois ne caviarde rien.
+
+**Une bascule de ce genre se prouve.** L'article de `/resultats/christian-joyce`
+a été relevé avant et après, et comparé : identique à l'octet près, HTML
+compris. C'est la seule façon de refactorer un texte publié sans y croire sur
+parole.
+
+## Ce qu'un caviardage doit savoir de ce qu'il traverse
+
+`lib/anonymat.ts` coupe les noms de famille et retire les adresses. Les deux
+passes sont **séparées**, et il le fallait : les articles portent des liens
+écrits `[libellé](adresse)`, et l'expression qui efface les adresses les
+viderait de leur destination, à commencer par celle de l'appel. Les posts du
+groupe reçoivent les deux passes, les articles une seule.
+
+**La table des noms est écrite et non devinée.** Couper au premier espace marche
+pour « Nathalie Rossa Tisseau », donne « BUFFET » pour « BUFFET Roland », perd
+Élisabeth dans « Laurent et Élisabeth. » et prend une particule pour un prénom
+dans « Sarah de Azevedo ». Les cas ambigus se tranchent à la main.
+
+**Le caviardage se fait à l'affichage, jamais dans la donnée.** Un fichier déjà
+caviardé ne se vérifie plus contre sa source.
+
+## Ce que la communauté écrit se cite, ne se résume pas
+
+Le mur d'`/immersion` publie des posts du groupe Circle. Ils sont **recopiés en
+entier** : un extrait oblige à choisir la phrase qui vend le mieux, ce qui est
+une façon d'écrire à la place de quelqu'un sans en avoir l'air. Le titre de
+chaque carte et les passages surlignés sont des sous-chaînes exactes, vérifiées
+par comparaison contre la source.
+
+**Ni étoiles, ni note.** Personne n'a noté Funnels Club : ce sont des posts, pas
+des avis notés. En afficher serait faire dire à quelqu'un ce qu'il n'a pas dit,
+et sur une page commerciale européenne une note affichée est une allégation qui
+doit correspondre à des avis réels et vérifiables. C'est la même règle que pour
+la note du livre.
+
+**Le métier vient du `headline` du profil Circle et de nulle part ailleurs.**
+Trois membres n'en ont pas : leur carte n'affiche rien. Deviner « coach » à la
+lecture d'un post, c'est inventer un métier à quelqu'un.
+
+**Ces gens ont écrit dans un groupe privé.** Prénom seul, noms cités retirés,
+aucun lien vers Circle, qui mènerait de toute façon un visiteur non membre sur
+une page de connexion. Chaque personne reste à valider par Rémy.
+
+Deux choses à savoir sur l'API Circle : la **v2 refuse le jeton**, c'est la v1
+qui répond, en `Authorization: Token` ; et la **v1 ignore la pagination de ses
+commentaires**, elle rend les cinq cents mêmes à chaque page. Le filtre
+`post_id` fonctionne, et c'est par lui qu'on récupère les réponses d'un post.
+
+## Trois pannes muettes de mise en page, rencontrées le même jour
+
+Elles ne lèvent aucune erreur, ne se voient pas au build et ne se trouvent qu'en
+mesurant.
+
+- **`nth-child` n'accepte pas de `var()`.** `:nth-child(n + var(--x))` est un
+  sélecteur invalide, jeté en silence : le mur s'affichait entier avec un bouton
+  qui ne servait à rien. C'est la même famille que le rayon de flou écrit en
+  variable.
+- **`columns` coupe une carte plus haute que sa boîte.** Le repli borne la
+  hauteur du mur ; une carte qui dépasse cette hauteur est scindée, et sa suite
+  passe en haut de la colonne voisine. `break-inside-avoid` n'y peut rien, le
+  navigateur n'a pas le choix. Deux colonnes posées à la main règlent le cas,
+  avec une répartition gloutonne et non alternée, sinon les deux plus longues
+  tombent du même côté.
+- **Un bloc rogné en hauteur doit retirer du clavier ce qu'il rogne.** Un
+  commentaire affirmait que rogner ne piégeait personne, les cartes ne
+  contenant rien de cliquable. C'était vrai le jour où il a été écrit et faux le
+  lendemain. `inert` sur toute carte dont le **bas** dépasse la ligne : une carte
+  à cheval montre son début et cache sa fin, or ce qui se clique est en bas.
+
+Et une quatrième, à deux composants qui ne se connaissent pas : sur téléphone,
+la barre d'appel fixe et la fenêtre des entretiens portent toutes deux `z-50`,
+donc la barre recouvrait le bas de la fenêtre et y répétait le même bouton.
+`body:has([role="dialog"][data-state="open"])` l'efface, avec `[data-state]` et
+pas seulement `[role]` : Radix garde le nœud pendant l'animation de fermeture.
+
+
 ## Pas de backend, et c'est un choix
 
 Il n'y a **aucune base de données** dans ce dépôt. Les pages sont rendues au
