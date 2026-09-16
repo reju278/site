@@ -1423,6 +1423,52 @@ serait plus étanche mais demanderait de déplacer toutes les pages existantes.
 Conséquence connue : le pied de page reste rendu côté serveur puis jeté, donc
 son texte figure dans la charge utile sans être ni visible ni cliquable.
 
+### Le hub ne publie pas les transcriptions
+
+Elles restent sur `/resultats/<nom>`, où elles font tout leur travail : mille
+mots de plus sur le bon sujet, et l'accessibilité d'une vidéo pour qui ne peut
+pas l'écouter. **Sur le hub, ni l'un ni l'autre ne s'applique** : la page est
+interdite d'index, donc aucun moteur ne les lira, et mille mots de parole non
+relue sur une page de publicité sont autant d'occasions de retomber sur un
+montant ou sur une promesse qu'aucun contrôle n'attrape. Décidé par Rémy.
+
+`AvisHub` ne porte donc plus le champ du tout : une donnée qu'on ne montre pas
+n'a pas à traverser la fonction, et la retirer du type est ce qui garantit
+qu'elle ne réapparaîtra pas par distraction dans une page future.
+
+### Cinq passages de la lettre changent sur le hub, et aucun ailleurs
+
+La relecture de la lettre avec les règles publicitaires en main a sorti cinq
+passages, tous validés par Rémy. Le site principal n'est pas touché : sa lettre
+reste mot pour mot celle qu'il a écrite.
+
+- **« des résultats réguliers et prévisibles »** était le passage le plus exposé
+  de toute la page, plus que les montants qu'on avait retirés : Meta vise
+  explicitement les offres promettant un résultat prévisible ou garanti. La
+  phrase parle désormais de la méthode, « simple et répétable », et non du
+  résultat.
+- **« sur lequel toute une vie peut reposer »** est une promesse de vie.
+- **« plus de 1 000 business »** n'est pas une promesse de gain, mais c'est une
+  allégation chiffrée à prouver, et elle tombe sous la règle du dépôt sur les
+  textes qui comptent leurs éléments.
+- **Deux absolus invérifiables**, « les sites internet ne fonctionnent plus » et
+  « vous n'obtiendrez jamais aucun client » : le droit de la consommation traite
+  une affirmation catégorique comme une allégation à prouver.
+- **« très bien vivre de vos connaissances »**, en première phrase, orientait
+  toute la lettre vers le revenu.
+
+**Aucun de ces cinq passages n'a d'unité monétaire**, donc `controlerLeHub` ne
+les voit pas et ne les verra jamais. C'est la limite du contrôle mécanique, et
+elle est structurelle : il cherche une unité, pas une intention. Ce qui ressemble
+à une promesse se relit à la main.
+
+**`MessageRemy` prend une couture unique**, `contenu`, plutôt qu'une propriété
+par passage : six propriétés facultatives auraient fait six endroits à tenir
+d'accord, et la septième correction aurait ajouté la septième. `messageRemy`
+étant déclaré `as const`, le type de chaque champ est la phrase elle-même : le
+type `Elargi` élargit les littéraux en gardant la forme de l'objet, donc un
+champ mal nommé reste une erreur de compilation.
+
 ### Ce que le hub a en propre
 
 **Son en-tête** reprend les capsules du site, avec **Funnels.Club et son logo**

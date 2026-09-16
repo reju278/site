@@ -124,10 +124,16 @@ export function versHub(texte: string): string {
   });
 }
 
-/** Un avis tel que le hub le sert. */
+/**
+ * Un avis tel que le hub le sert.
+ *
+ * **Sans sa transcription** : le hub ne la publie pas, sur décision de Rémy, et
+ * une donnée qu'on ne montre pas n'a pas à traverser la fonction. La retirer du
+ * type est ce qui garantit qu'elle ne réapparaîtra pas par distraction dans une
+ * page future.
+ */
 export type AvisHub = Omit<Avis, "sections" | "transcription"> & {
   sections: SectionAvis[];
-  transcription: Avis["transcription"];
 };
 
 /**
@@ -175,9 +181,6 @@ export function avisHub(slug: string): AvisHub | null {
     ...entetes,
     chapo: versHub(entetes.chapo),
     sections,
-    transcription: article.transcription.filter(
-      (tour) => !porteUnMontant(tour.texte),
-    ),
   };
 }
 

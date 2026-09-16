@@ -31,22 +31,48 @@ import { TitreRoulant } from "@/components/titre-roulant";
  * **La signature est une vraie fonte manuscrite**, demandée par Rémy. Elle ne
  * sert qu'ici ; voir l'utilitaire `signature` dans `globals.css`.
  */
+/**
+ * Le contenu de la lettre, avec ses chaînes élargies.
+ *
+ * `messageRemy` est déclaré `as const` : le type de chaque champ est la phrase
+ * elle-même, pas `string`. Une version de remplacement ne pouvait donc pas être
+ * écrite, TypeScript refusant « simple » là où il attend « réguliers ». Ce
+ * type-ci élargit récursivement les littéraux tout en gardant la forme exacte
+ * de l'objet, donc un champ oublié ou mal nommé reste une erreur de
+ * compilation.
+ */
+type Elargi<T> = T extends string
+  ? string
+  : T extends readonly (infer U)[]
+    ? readonly Elargi<U>[]
+    : T extends object
+      ? { readonly [K in keyof T]: Elargi<T[K]> }
+      : T;
+
+export type ContenuMessage = Elargi<typeof messageRemy>;
+
 export function MessageRemy({
   /**
-   * Les paragraphes de la reprise, juste avant la conclusion.
+   * Le texte de la lettre.
    *
-   * **Ils se remplacent, et c'est le hub qui le demande.** L'un d'eux annonce
-   * des clients « capables de payer jusqu'à plusieurs milliers d'euros » : sur
-   * une page de publicité, c'est une promesse de revenus, et les règles de Meta
-   * la refusent. Le site, lui, ne change pas d'un mot.
+   * **Il se remplace en entier, et c'est le hub qui le demande.** Plusieurs
+   * passages écrits pour le site ne sont pas publiables sur une page de
+   * publicité : une promesse de résultats « réguliers et prévisibles », un
+   * montant, deux affirmations absolues. Voir `messageRemyHub` dans
+   * `contenu/hub.ts`, qui dit lesquels et pourquoi.
    *
-   * Une propriété facultative plutôt qu'une copie de ce composant : la lettre
-   * fait quatre cents lignes, et deux versions auraient divergé au premier
+   * **Une seule couture plutôt qu'une propriété par passage.** Six propriétés
+   * facultatives auraient fait six endroits à tenir d'accord, et la septième
+   * correction aurait ajouté la septième. Ici le composant ne connaît qu'un
+   * objet, et c'est l'appelant qui décide lequel.
+   *
+   * Et surtout : pas de copie de ce composant. La lettre fait quatre cents
+   * lignes de mise en page, et deux versions auraient divergé au premier
    * ajustement.
    */
-  suite = messageRemy.suite,
+  contenu = messageRemy,
 }: {
-  suite?: readonly string[];
+  contenu?: ContenuMessage;
 } = {}) {
   return (
     <section className="pb-20 sm:pb-28">
@@ -74,7 +100,7 @@ export function MessageRemy({
           <Apparition className="flex items-center gap-4">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={messageRemy.portrait}
+              src={contenu.portrait}
               alt=""
               width={160}
               height={160}
@@ -83,7 +109,7 @@ export function MessageRemy({
             />
 
             <TitreRoulant
-              segments={[{ texte: messageRemy.titre }]}
+              segments={[{ texte: contenu.titre }]}
               className="titre text-3xl text-balance text-foreground sm:text-4xl"
             />
           </Apparition>
@@ -109,7 +135,7 @@ export function MessageRemy({
               très au-dessus du seuil. */}
           <div className="mt-10 space-y-6 text-base leading-relaxed text-pretty text-foreground/85 sm:mt-12 sm:text-lg">
             <Apparition>
-              <p>{messageRemy.amorceVoies}</p>
+              <p>{contenu.amorceVoies}</p>
             </Apparition>
 
             {/* Les trois voies, numérotées.
@@ -124,7 +150,7 @@ export function MessageRemy({
                 ni avec son nombre d'éléments. */}
             <Apparition>
               <ol className="list-decimal space-y-3 pl-5 marker:font-semibold marker:text-foreground">
-                {messageRemy.voies.map((voie) => (
+                {contenu.voies.map((voie) => (
                   <li key={voie.titre}>
                     {/* Surlignées en jaune, comme les erreurs le sont en
                         rouge, sur décision de Rémy. Les deux couleurs disent
@@ -149,7 +175,7 @@ export function MessageRemy({
             </Apparition>
 
             <Apparition>
-              <p>{messageRemy.amorceErreurs}</p>
+              <p>{contenu.amorceErreurs}</p>
             </Apparition>
 
             {/* Les trois erreurs.
@@ -179,7 +205,7 @@ export function MessageRemy({
                 que le texte garde son contraste, qui reste celui de
                 `foreground` sur la page. La valeur est montée depuis 18 %, où la
                 teinte se perdait sur le fond sombre. */}
-            {messageRemy.erreurs.map((erreur) => (
+            {contenu.erreurs.map((erreur) => (
               <Apparition key={erreur.titre}>
                 <p>
                   <mark
@@ -199,7 +225,7 @@ export function MessageRemy({
             ))}
 
             <Apparition>
-              <p>{messageRemy.logique}</p>
+              <p>{contenu.logique}</p>
             </Apparition>
 
             {/* Le paragraphe d'expérience, et ses deux marques.
@@ -215,12 +241,12 @@ export function MessageRemy({
                 qu'à en avoir deux qui divergent. */}
             <Apparition>
               <p>
-                {messageRemy.experience.avant}
+                {contenu.experience.avant}
                 <span className="font-semibold">
-                  {messageRemy.experience.tunnel}
+                  {contenu.experience.tunnel}
                 </span>
-                {messageRemy.experience.milieu}
-                {messageRemy.experience.metiers.map((metier) => (
+                {contenu.experience.milieu}
+                {contenu.experience.metiers.map((metier) => (
                   <span key={metier.mot}>
                     {metier.avant}
                     <mark
@@ -236,7 +262,7 @@ export function MessageRemy({
                     </mark>
                   </span>
                 ))}
-                {messageRemy.experience.apres}
+                {contenu.experience.apres}
               </p>
             </Apparition>
 
@@ -247,30 +273,30 @@ export function MessageRemy({
                 deux dans ce même bloc. */}
             <Apparition>
               <p>
-                {messageRemy.valeurs.avant}
+                {contenu.valeurs.avant}
                 <span className="underline decoration-2 underline-offset-4">
-                  {messageRemy.valeurs.souligne}
+                  {contenu.valeurs.souligne}
                 </span>
-                {messageRemy.valeurs.milieu}
+                {contenu.valeurs.milieu}
                 <span className="underline decoration-2 underline-offset-4">
-                  {messageRemy.valeurs.souligneBis}
+                  {contenu.valeurs.souligneBis}
                 </span>
-                {messageRemy.valeurs.liaison}
+                {contenu.valeurs.liaison}
                 <span className="underline decoration-2 underline-offset-4">
-                  {messageRemy.valeurs.souligneTer}
+                  {contenu.valeurs.souligneTer}
                 </span>
-                {messageRemy.valeurs.apres}
+                {contenu.valeurs.apres}
               </p>
             </Apparition>
 
             <Apparition>
               <p>
-                {messageRemy.deploiement.avant}
+                {contenu.deploiement.avant}
                 <span className="underline decoration-2 underline-offset-4">
-                  {messageRemy.deploiement.souligne}
+                  {contenu.deploiement.souligne}
                 </span>
-                {messageRemy.deploiement.milieu}
-                {messageRemy.deploiement.thematiques.map((thematique, i) => (
+                {contenu.deploiement.milieu}
+                {contenu.deploiement.thematiques.map((thematique, i) => (
                   <span key={thematique}>
                     {i > 0 ? ", " : null}
                     <mark
@@ -286,11 +312,11 @@ export function MessageRemy({
                     </mark>
                   </span>
                 ))}
-                {messageRemy.deploiement.apres}
+                {contenu.deploiement.apres}
               </p>
             </Apparition>
 
-            {suite.map((paragraphe) => (
+            {contenu.suite.map((paragraphe) => (
               <Apparition key={paragraphe}>
                 <p>{paragraphe}</p>
               </Apparition>
@@ -312,23 +338,23 @@ export function MessageRemy({
                 qui est déjà dans `liens.appel`, et son `rel="noreferrer"`. */}
             <Apparition>
               <p>
-                {messageRemy.conclusion.avant}
+                {contenu.conclusion.avant}
               <a
                 href="#video"
                 className="font-semibold text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
               >
-                {messageRemy.conclusion.lienVideo}
+                {contenu.conclusion.lienVideo}
               </a>
-              {messageRemy.conclusion.milieu}
+              {contenu.conclusion.milieu}
               <a
                 href={liens.appel}
                 target="_blank"
                 rel="noreferrer"
                 className="font-semibold text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
               >
-                {messageRemy.conclusion.lienAppel}
+                {contenu.conclusion.lienAppel}
               </a>
-                {messageRemy.conclusion.apres}
+                {contenu.conclusion.apres}
               </p>
             </Apparition>
           </div>
@@ -356,11 +382,11 @@ export function MessageRemy({
                 c'est la dernière ligne de la lettre, elle appartient au corps.
                 Seule la signature en sort. */}
             <p className="text-base text-foreground sm:text-lg">
-              {messageRemy.salutation}
+              {contenu.salutation}
             </p>
             <div className="flex justify-end">
               <p className="signature mt-2 origin-bottom-right -rotate-3 pr-2 text-5xl text-foreground sm:text-6xl">
-                {messageRemy.signature}
+                {contenu.signature}
               </p>
             </div>
           </Apparition>

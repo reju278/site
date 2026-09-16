@@ -1,3 +1,6 @@
+import type { ContenuMessage } from "@/components/message-remy";
+import { messageRemy } from "@/contenu/site";
+
 /**
  * Le texte propre au hub de retargeting.
  *
@@ -638,19 +641,75 @@ export const formationHub = {
 };
 
 /**
- * La reprise de la lettre de Rémy, dans sa version de hub.
+ * La lettre de Rémy, dans sa version de hub.
  *
- * Un seul paragraphe change sur toute la lettre, et c'est le dernier avant la
- * conclusion : il annonçait des clients « capables de payer jusqu'à plusieurs
- * milliers d'euros pour obtenir vos conseils ». C'est un montant, donc une
- * promesse de revenus sur une page de publicité, et le contrôle de
- * `lib/hub.ts` le refuse au build.
+ * **Cinq passages changent, et aucun autre.** Ils ont été relevés en relisant
+ * la lettre avec les règles publicitaires en main, puis soumis à Rémy, qui a
+ * demandé de les corriger. Le site principal, lui, n'est pas touché : sa lettre
+ * reste mot pour mot celle qu'il a écrite.
  *
- * **Seule la fin de la phrase change.** Ce qui n'est pas publiable, c'est le
- * montant, pas l'idée que le tunnel s'adapte à un domaine et amène des clients
- * qualifiés. C'est la même règle que pour le sous-titre de la formation : on
- * retire le chiffre, on ne dénature pas la phrase.
+ * 1. **« des résultats réguliers et prévisibles »** était le passage le plus
+ *    exposé de toute la page, plus que les montants qu'on avait retirés : Meta
+ *    vise explicitement les offres qui promettent un résultat prévisible ou
+ *    garanti. La phrase parle désormais de la méthode et non du résultat.
+ * 2. **« sur lequel toute une vie peut reposer »** est une promesse de vie,
+ *    invérifiable par construction.
+ * 3. **« plus de 1 000 business »** n'est pas une promesse de gain, mais c'est
+ *    une allégation chiffrée qu'il faudrait pouvoir prouver, et elle vieillit
+ *    au premier client suivant. C'est aussi la règle du dépôt sur les textes
+ *    qui comptent leurs éléments.
+ * 4. **Deux absolus invérifiables**, « les sites internet ne fonctionnent
+ *    plus » et « vous n'obtiendrez jamais aucun client ». Le droit de la
+ *    consommation traite une affirmation catégorique comme une allégation à
+ *    prouver ; la version adoucie garde la force du propos.
+ * 5. **« très bien vivre de vos connaissances »**, en première phrase,
+ *    orientait toute la lettre vers le revenu. « vivre » suffit à dire la même
+ *    chose.
+ *
+ * Le montant de `suite` était déjà corrigé avant cette passe : des clients
+ * « capables de payer jusqu'à plusieurs milliers d'euros » est une promesse de
+ * revenus, et le contrôle de `lib/hub.ts` la rejetait au build.
+ *
+ * **L'objet est construit par étalement plutôt que recopié.** La lettre a une
+ * quinzaine de champs et le site continuera de la retoucher : une copie
+ * complète divergerait en silence, alors qu'ici tout ce qui n'est pas nommé
+ * suit l'original.
  */
-export const suiteMessageHub: readonly string[] = [
-  "Ce qui est sûr, c'est que, peu importe le domaine dans lequel vous souhaitez monétiser votre expertise, ce tunnel de vente pourra s'adapter pour vous apporter des clients qualifiés, vraiment intéressés par vos conseils.",
-];
+export const messageRemyHub: ContenuMessage = {
+  ...messageRemy,
+
+  amorceVoies:
+    "Si vous voulez vivre de vos connaissances ou de vos compétences en ligne, vous avez aujourd'hui trois façons de le faire.",
+
+  erreurs: [
+    {
+      ...messageRemy.erreurs[0]!,
+      texte:
+        "Aujourd'hui, les sites internet ne suffisent plus (sauf si c'est une vitrine dont vous avez besoin). Si votre objectif est d'obtenir des clients, c'est un tunnel de vente qu'il vous faut à la place.",
+    },
+    messageRemy.erreurs[1]!,
+    {
+      ...messageRemy.erreurs[2]!,
+      texte:
+        "Sans le bon tunnel, peu importe les efforts que vous ferez pour amener du trafic vers vos offres : vous aurez beaucoup de mal à transformer ce trafic en clients.",
+    },
+  ],
+
+  valeurs: {
+    ...messageRemy.valeurs,
+    souligneBis: "simple",
+    liaison: " et ",
+    souligneTer: "répétable",
+    apres:
+      ". On ne cherche pas à faire un coup. On veut un business qui se construit dans la durée, sur des étapes qu'on peut refaire. Parce que quoi de plus stressant qu'un chiffre d'affaires en montagnes russes ?",
+  },
+
+  deploiement: {
+    ...messageRemy.deploiement,
+    souligne: "des centaines de business",
+  },
+
+  suite: [
+    "Ce qui est sûr, c'est que, peu importe le domaine dans lequel vous souhaitez monétiser votre expertise, ce tunnel de vente pourra s'adapter pour vous apporter des clients qualifiés, vraiment intéressés par vos conseils.",
+  ],
+};

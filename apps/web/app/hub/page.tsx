@@ -3,7 +3,7 @@ import { MessageRemy } from "@/components/message-remy";
 import { SectionTunnel } from "@/components/section-tunnel";
 import { ParticulesHero } from "@/components/particules-hero";
 import { TexteRoulant } from "@/components/texte-roulant";
-import { formationHub, suiteMessageHub } from "@/contenu/hub";
+import { formationHub, messageRemyHub } from "@/contenu/hub";
 import { messageRemy, sectionTunnel, video } from "@/contenu/site";
 import { HUB_RESULTATS, SORTIE, controlerLeHub } from "@/lib/hub";
 import { KineticText } from "@repo/ui/components/kinetic-text";
@@ -65,7 +65,9 @@ export default function FormationHub() {
       messageRemy.amorceVoies,
       messageRemy.amorceErreurs,
       messageRemy.logique,
-      ...suiteMessageHub,
+      ...messageRemyHub.suite,
+      messageRemyHub.valeurs.apres,
+      messageRemyHub.deploiement.souligne,
     ],
     "la page de formation du hub",
   );
@@ -241,7 +243,7 @@ export default function FormationHub() {
           de la lettre est remplacé, celui qui annonce un montant. */}
       <SectionTunnel />
 
-      <MessageRemy suite={suiteMessageHub} />
+      <MessageRemy contenu={messageRemyHub} />
 
       {/* Le dernier appel, tout en bas, sur demande de Rémy : « un lien pour à
           nouveau découvrir les témoignages ».

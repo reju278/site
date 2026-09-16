@@ -7,7 +7,7 @@ import { afficheHub, appelHub, titresHub } from "@/contenu/hub";
 import { temoignages } from "@/contenu/site";
 import { HUB, SORTIE, avisHub, avisServis, controlerLeHub } from "@/lib/hub";
 import { insecables } from "@/lib/typographie";
-import { ArrowRight, ChevronRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -26,7 +26,12 @@ import { notFound } from "next/navigation";
  * - l'encart du milieu ne propose plus que l'appel, la formation gratuite
  *   vivant sur un autre domaine ;
  * - les deux cartes d'offres de fin d'article sont retirées : elles mènent
- *   ailleurs, et la page a déjà son appel.
+ *   ailleurs, et la page a déjà son appel ;
+ * - **la transcription n'est pas publiée**, sur décision de Rémy : elle ne sert
+ *   ni au référencement, la page étant interdite d'index, ni à un lecteur
+ *   d'écran qui trouverait la même vidéo sur `/resultats`, et mille mots de
+ *   parole non relue sur une page de publicité sont autant d'occasions de
+ *   retomber sur une promesse.
  *
  * **Pas de données structurées.** `VideoObject` et `BreadcrumbList` existent
  * pour être lus par un moteur ; les déclarer sur une page interdite d'index
@@ -114,7 +119,6 @@ export default async function PageAvisHub({
         ...s.paragraphes,
         ...(s.citation ? [s.citation.texte] : []),
       ]),
-      ...article.transcription.map((t) => t.texte),
       ...voisins.map((v) => titresHub[v.slug]?.titre ?? ""),
       ...(autre ? [autre.libelle] : []),
       appelHub.titre,
@@ -226,26 +230,19 @@ export default async function PageAvisHub({
               </section>
             ))}
 
-            <details className="group/pli mt-16 border-t border-border pt-8">
-              <summary className="flex cursor-pointer list-none items-center gap-2 text-base font-semibold text-foreground marker:hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring [&::-webkit-details-marker]:hidden">
-                <ChevronRight
-                  aria-hidden
-                  className="size-4 shrink-0 transition-transform group-open/pli:rotate-90"
-                />
-                Lire la transcription de l&apos;entretien
-              </summary>
+            {/* **Pas de transcription sur le hub**, sur décision de Rémy.
 
-              <div className="mt-6 space-y-4 text-base leading-relaxed text-pretty text-foreground/75">
-                {article.transcription.map((tour, i) => (
-                  <p key={`${i}-${tour.qui}`}>
-                    <span className="font-semibold text-foreground">
-                      {tour.qui} :
-                    </span>{" "}
-                    {tour.texte}
-                  </p>
-                ))}
-              </div>
-            </details>
+                Elle existe sur `/resultats/<nom>`, où elle fait tout son
+                travail : mille mots de plus sur le bon sujet, dans les mots de
+                la personne, et l'accessibilité d'une vidéo pour qui ne peut pas
+                l'écouter. Ici, aucun des deux ne s'applique. La page est
+                interdite d'index, donc le référencement ne la lira jamais ; et
+                c'est une page de publicité, où mille mots de parole non relue
+                multiplient les occasions de retomber sur un montant ou sur une
+                promesse qu'aucun contrôle n'attrape.
+
+                C'est le même raisonnement que pour les affiches : ce qui ne
+                sert à rien sur cette page-ci et peut coûter cher n'y est pas. */}
 
             {voisins.length > 0 ? (
               <section className="mt-16 border-t border-border pt-10">
