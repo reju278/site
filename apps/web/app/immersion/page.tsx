@@ -161,6 +161,33 @@ export default function Immersion() {
               <PilulesArguments points={plateformeImmersion.points} />
             </div>
           </div>
+
+          {/* La vidéo, **à cheval sur la jonction** : sa moitié haute sur la
+              photographie, sa moitié basse sur la couleur de page. C'est le
+              hero du hub et de l'accueil, et c'est de là que part `--jonction`.
+
+              Le rapport 16/9 est porté par `LecteurVideo` : c'est lui qui fait
+              remplir le cadre exactement, sans bande noire.
+
+              La largeur vient de `--largeur-video`, écrite une seule fois sur
+              la section : c'est elle qui sert aussi à `--video-h`, donc à la
+              jonction. Deux écritures divergeraient au premier agrandissement,
+              et la lèvre dessinerait sa ligne en travers de la vidéo. */}
+          <div className="mx-auto mt-6 w-[var(--largeur-video)] sm:mt-8">
+            <LecteurVideo
+              id={plateformeImmersion.video.id}
+              titre={plateformeImmersion.video.titre}
+              secondes={plateformeImmersion.video.secondes}
+              affiche={`/temoignages/${plateformeImmersion.video.id}.jpg`}
+              afficheAlt="La plateforme de formation de Funnels Club"
+              /* Une ombre portée pour détacher la vidéo, sur demande de Rémy.
+                 Très diffuse et décalée vers le bas, donc elle se lit comme de
+                 la profondeur et non comme un contour. Elle est **portée** et
+                 non intérieure : elle ne se dispute pas la place du relief de
+                 verre. */
+              className="shadow-[0_30px_70px_-25px_rgba(0,0,0,0.55)]"
+            />
+          </div>
         </div>
       </section>
 
