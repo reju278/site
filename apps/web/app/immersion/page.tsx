@@ -1,6 +1,7 @@
 import { CartesTemoignage } from "@/components/cartes-temoignage";
 import { FondResultats } from "@/components/fond-resultats";
 import { LecteurVideo } from "@/components/lecteur-video";
+import { MurCommunaute } from "@/components/mur-communaute";
 import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { ParticulesHero } from "@/components/particules-hero";
 import { PastillePreuve, PilulesArguments } from "@/components/pilules-hero";
@@ -20,6 +21,7 @@ import {
 } from "@/contenu/immersion";
 import { temoignages } from "@/contenu/site";
 import { insecables } from "@/lib/typographie";
+import { prenom } from "@/lib/prenom";
 
 import type { Metadata } from "next";
 
@@ -385,13 +387,14 @@ export default function Immersion() {
                     ce que fait la page source, en moins lourd. */}
                 <LecteurVideo
                   id={id}
-                  titre={`Entretien avec ${temoignage.nom}`}
+                  titre={`Entretien avec ${prenom(temoignage.nom)}`}
                   secondes={temoignage.secondes}
                   affiche={`/temoignages/${id}.jpg`}
                 />
 
+                {/* Le prénom seul, sur décision de Rémy. Voir `lib/prenom.ts`. */}
                 <p className="mt-3 text-base font-semibold text-foreground">
-                  {temoignage.nom}
+                  {prenom(temoignage.nom)}
                 </p>
                 <p className="mt-1 text-sm text-pretty text-muted-foreground">
                   {insecables(temoignage.description)}
@@ -401,6 +404,14 @@ export default function Immersion() {
           })}
         </ul>
       </SectionImmersion>
+
+      {/* LE MUR DE LA COMMUNAUTÉ, entre les entretiens et l'équipe.
+
+          Sa place se déduit du parcours : on regarde d'abord les entretiens,
+          qui sont des récits complets, puis ce que les membres écrivent au
+          quotidien, puis qui les accompagne. L'inverse montrerait des citations
+          de gens qu'on n'a pas encore vus. */}
+      <MurCommunaute />
 
       {/* L'ÉQUIPE.
 

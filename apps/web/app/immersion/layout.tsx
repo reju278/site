@@ -3,6 +3,7 @@ import { EnTeteImmersion } from "@/components/en-tete-immersion";
 import { PiedImmersion } from "@/components/pied-immersion";
 import { ancreEntretien, entretiensImmersion } from "@/contenu/immersion";
 import { temoignages } from "@/contenu/site";
+import { prenom } from "@/lib/prenom";
 import type { Metadata } from "next";
 
 /**
@@ -53,7 +54,7 @@ export default function LayoutImmersion({
   const entretiens = entretiensImmersion.flatMap((id) => {
     const temoignage = temoignages.find((t) => t.id === id);
     return temoignage
-      ? [{ ancre: ancreEntretien(id), nom: temoignage.nom }]
+      ? [{ ancre: ancreEntretien(id), nom: prenom(temoignage.nom) }]
       : [];
   });
 

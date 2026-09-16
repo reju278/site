@@ -1,5 +1,6 @@
 import { ancreEntretien, temoignagesImmersion } from "@/contenu/immersion";
 import { insecables } from "@/lib/typographie";
+import { prenom } from "@/lib/prenom";
 import Image from "next/image";
 
 /**
@@ -77,7 +78,7 @@ export function CartesTemoignage() {
                     que la règle des 5 px autorise depuis toujours. */}
                 <Image
                   src={personne.portrait}
-                  alt={`Portrait de ${personne.nom}`}
+                  alt={`Portrait de ${prenom(personne.nom)}`}
                   width={176}
                   height={176}
                   loading="lazy"
@@ -85,7 +86,7 @@ export function CartesTemoignage() {
                 />
 
                 <div className="min-w-0">
-                  <p className="font-medium">{personne.nom}</p>
+                  <p className="font-medium">{prenom(personne.nom)}</p>
                   {/* Une seule ligne, comme leur `u-text-clamp-1` : dans une
                       rangée de trois, un métier qui passe à deux lignes décale
                       la citation de sa voisine et le peigne est perdu.

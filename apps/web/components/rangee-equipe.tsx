@@ -1,5 +1,6 @@
 import { Emplacement } from "@/components/section";
 import { equipeImmersion } from "@/contenu/immersion";
+import { prenom } from "@/lib/prenom";
 import Image from "next/image";
 
 /**
@@ -45,7 +46,7 @@ export function RangeeEquipe() {
                  page saute au chargement. */
               <Image
                 src={membre.photo}
-                alt={`Portrait de ${membre.nom}`}
+                alt={`Portrait de ${prenom(membre.nom)}`}
                 width={500}
                 height={500}
                 loading="lazy"
@@ -58,13 +59,14 @@ export function RangeeEquipe() {
                 aria-hidden
                 className="flex size-14 shrink-0 items-center justify-center rounded-full bg-accent text-lg font-semibold text-muted-foreground"
               >
-                {membre.nom.slice(0, 1)}
+                {prenom(membre.nom).slice(0, 1)}
               </span>
             )}
 
             <div className="min-w-0">
+              {/* Le prénom seul, sur décision de Rémy. Voir `lib/prenom.ts`. */}
               <p className="text-base font-semibold text-foreground">
-                {membre.nom}
+                {prenom(membre.nom)}
               </p>
               {/* Pas de ligne vide quand le rôle manque : une carte sans rôle
                   reste une carte, une carte avec une ligne vide est un défaut

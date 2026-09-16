@@ -225,18 +225,32 @@ export const avisImmersion = {
  * la section y était masquée, et il la remet avec l'équipe d'aujourd'hui.
  * Maxime Legros et Kylian Baude en sortent.
  *
- * **Fabri n'a ni photo ni rôle ici, et rien n'est inventé pour lui.** La page
- * source ne le montrait pas, donc ni son portrait ni l'intitulé de son poste
- * n'existent dans ce dépôt. Sa carte porte donc ses initiales et un emplacement
- * visible sous la rangée, comme le veut la règle : une section sans texte dit
- * ce qu'elle attend, elle n'affiche pas une phrase plausible.
+ * **Fabri Keutcha a son portrait, pris sur Calendly**, sur indication de Rémy :
+ * c'est son avatar de `fabri@funnels.club` dans l'organisation Funnels Club,
+ * donc une photo qu'il a lui-même posée, et non un visage trouvé ailleurs.
+ *
+ * **Son rôle, lui, reste vide, et rien n'est inventé pour le remplir.**
+ * Calendly ne porte pas d'intitulé de poste, et la page source ne le montrait
+ * pas. Un emplacement visible sous la rangée le dit, comme le veut la règle :
+ * une section sans texte dit ce qu'elle attend, elle n'affiche pas une phrase
+ * plausible. « Coach », « closer » ou « responsable » seraient tous
+ * vraisemblables, et c'est précisément le problème.
  *
  * Les photos sont servies par nous et non par ClickFunnels : une page qui
  * charge ses portraits sur un CDN tiers fait payer à chaque visiteur une
  * résolution DNS et une poignée de main de plus, pour des fichiers qui ne
  * changent jamais. Elles sont carrées, ramenées à 500 px et compressées.
  */
-export const equipeImmersion = {
+export const equipeImmersion: {
+  titre: string;
+  /** `photo` et `role` sont nullables **exprès** : c'est ce qui garde vivante
+      la carte à initiales de `RangeeEquipe`. Sans cette annotation, `as const`
+      fige le type sur les cinq valeurs du jour, la branche « sans portrait »
+      devient inatteignable, et la personne suivante qui arrive sans photo
+      casserait la compilation au lieu d'afficher son initiale. */
+  membres: readonly { nom: string; role: string | null; photo: string | null }[];
+  manquant: string;
+} = {
   titre: "L'équipe Funnels Club",
   membres: [
     {
@@ -250,9 +264,9 @@ export const equipeImmersion = {
       photo: "/immersion/equipe-geoffrey-bonniot.jpg",
     },
     {
-      nom: "Fabri",
+      nom: "Fabri Keutcha",
       role: null,
-      photo: null,
+      photo: "/immersion/equipe-fabri-keutcha.jpg",
     },
     {
       nom: "Ludivine Ludovic",
@@ -267,5 +281,5 @@ export const equipeImmersion = {
   ],
   /* Ce que la section attend encore, affiché à l'écran tant que ça manque. */
   manquant:
-    "le nom complet de Fabri, l'intitulé de son poste et son portrait, au format carré comme les autres.",
-} as const;
+    "l'intitulé du poste de Fabri Keutcha. Son portrait vient de Calendly, le reste de la rangée est complet.",
+};
