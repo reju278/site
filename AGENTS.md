@@ -1334,88 +1334,153 @@ deux phrases, un séparateur `Nom — Titre` un point médian `Nom · Titre`.
 
 ## Le hub de retargeting : `/hub`, fermé, non indexé, sans un montant
 
-`/hub` et `/hub/<nom>` reprennent `/resultats` et ses entretiens **au dessin
-près**, sur demande de Rémy. C'est la page d'arrivée de ses publicités de
-reciblage, et tout ce qui l'en distingue vient de deux contraintes : les règles
-publicitaires de Meta, et le fait qu'on n'en sorte pas.
+Le hub est la page d'arrivée des publicités de reciblage. Trois routes :
+`/hub` porte **la formation gratuite**, `/hub/resultats` le sommaire des
+entretiens, `/hub/<nom>` chacun d'eux. Le dessin est celui du site au pixel
+près ; tout ce qui l'en distingue vient de deux contraintes, les règles
+publicitaires de Meta et le fait qu'on n'en sorte pas.
 
-**Meta examine la page d'arrivée, pas seulement l'annonce.** Une annonce propre
-qui pointe vers une page de chiffres se fait refuser à l'examen, et les refus
-répétés se paient sur le compte publicitaire. Ce qui déclenche le refus n'est
-pas le témoignage : c'est le témoignage **centré sur l'argent gagné plutôt que
-sur le problème résolu**. Dix-huit des vingt-deux articles portaient un montant
-dans leur `h1`.
+**L'accueil du hub est la formation et non le sommaire**, sur décision de Rémy :
+un visiteur de reciblage a souvent déjà vu cette vidéo, et c'est par elle qu'on
+le reprend. Les entretiens viennent après.
+
+### La conformité est mécanique, jamais surveillée
+
+**Meta examine la page d'arrivée, pas seulement l'annonce.** Ce qui déclenche le
+refus n'est pas le témoignage, c'est le témoignage **centré sur l'argent gagné
+plutôt que sur le problème résolu**. Dix-huit des vingt-deux articles portaient
+un montant dans leur `h1`.
 
 **On retire, on ne réécrit pas.** Un paragraphe, une citation ou un tour de
-parole qui porte un montant est retiré en entier du hub ; il n'est jamais
-reformulé. Ce sont les mots de vraies personnes, et changer ce que quelqu'un a
-dit pour le rendre publiable est une faute d'un autre ordre qu'une page refusée.
-Seuls les en-têtes, qui ne peuvent pas disparaître sans laisser une page sans
-titre, ont une version propre au hub dans `contenu/hub.ts`. **Elle est écrite
-par l'agent, ce que ce fichier interdit partout ailleurs**, sur consigne
-explicite de Rémy, et elle est donc à valider par lui.
+parole qui porte un montant est retiré en entier ; il n'est jamais reformulé.
+Ce sont les mots de vraies personnes. Seuls les en-têtes, qui ne peuvent pas
+disparaître sans laisser une page sans titre, ont une version propre au hub dans
+`contenu/hub.ts`. **Elle est écrite par l'agent, ce que ce fichier interdit
+partout ailleurs**, sur consigne explicite de Rémy, et elle est à valider par
+lui.
 
-**Le contrôle est mécanique et il jette.** `controlerLeHub` relit tout ce que
-chaque page s'apprête à servir et casse le build si un montant a survécu. Il
-a déjà attrapé une fuite que le serveur de développement ne montrait pas, le
-libellé du bandeau « l'autre entretien ». Corollaire : **on ne contrôle que ce
-qu'on affiche**. La valeur qui décide du rendu et celle qui part au contrôle
-sont la même variable, sinon le contrôle se met à refuser du texte qui n'est
-nulle part.
+**Ce qui se reformule ne se dénature pas.** Le sous-titre de la formation
+annonçait « du lancement jusqu'à 6 ou 7 chiffres par an ». Une première
+correction l'avait remplacé par une description de ce que la vidéo contient ;
+Rémy l'a refusée. Ce qui n'est pas publiable, c'est la destination chiffrée, pas
+la promesse d'accompagnement : **seule la fin de la phrase change**.
+
+**Le contrôle jette au build.** `controlerLeHub` relit tout ce que chaque page
+s'apprête à servir, `controlerLesPassages` vérifie que les passages désignés
+existent encore dans `avis.ts`. Ils ont déjà attrapé trois fuites que le serveur
+de développement ne montrait pas : le libellé du bandeau « l'autre entretien »,
+et deux titres de section d'Olga et de Sandrine. Corollaire : **on ne contrôle
+que ce qu'on affiche**, la valeur qui décide du rendu et celle qui part au
+contrôle étant la même variable.
 
 **Le mot « euro » compte autant que le symbole.** La moitié des montants sont
-écrits en lettres, parce que les transcriptions rendent ce que les gens disent.
-Une expression qui ne cherchait que des chiffres annonçait deux paragraphes à
-retirer ; il y en avait soixante-cinq.
+écrits en lettres. Une expression qui ne cherchait que des chiffres annonçait
+deux paragraphes à retirer ; il y en avait soixante-cinq.
 
-### Ce que le texte ne dit pas : treize affiches portent le montant dans l'image
+**Et un motif malin vaut moins qu'une liste écrite.** Les résultats relatifs,
+« leur chiffre a triplé », échappent au filtre. Un motif « chiffre » près de
+« triplé » attrapait aussi « doubler la publicité ne doublait pas le chiffre »,
+qui dit exactement le contraire. `passagesRetires` les liste donc un par un,
+avec leur raison : une règle qui retire du texte juste ne se voit pas non plus.
 
-**C'est le défaut le plus grave, et aucun contrôle sur des chaînes de caractères
-ne pouvait le voir.** Treize des vingt-deux affiches de témoignage portent le
-résultat incrusté en blanc sur la vignette : « De 0€ à 109 778€ en 6 mois »,
-« Il faisait 0€ en ligne, aujourd'hui il génère 50 000 à 70 000€/mois ». Meta lit
-le texte des images, et c'est même le premier endroit où il le cherche.
+### Le piège que le texte ne montre pas : treize affiches sur vingt-deux
 
-Ces treize entretiens sont donc **écartés du hub**, pas corrigés : recadrer ou
-flouter abîmerait l'image sans la rendre honnête, et Wistia n'expose qu'une
-affiche par vidéo. La réparation est une réexportation des vidéos sans leur
-carton de titre, et elle n'appartient pas au code. `affichesConformes` est une
-**liste blanche** : une affiche ajoutée demain est absente du hub par défaut au
-lieu d'y entrer sans être regardée.
+**Treize affiches portent le résultat incrusté dans l'image**, et aucun contrôle
+sur des chaînes de caractères ne pouvait les voir. Meta lit le texte des images,
+et c'est même le premier endroit où il le cherche.
+
+**Elles ne sont pas un seul et même problème**, et c'est ce qu'un relevé à l'œil
+avait manqué. La luminance lue ligne par ligne sur les vingt-deux fichiers
+sépare deux familles : **huit** portent leur phrase dans la bande noire
+au-dessus de l'image, **cinq** sont des captures plein cadre où la phrase est
+posée sur les visages.
+
+Les huit ont donc une affiche à elles dans `public/temoignages-hub`, fabriquée
+en deux temps avec `sips` : recadrage sur la bande d'image, puis remise aux
+cotes d'origine sur du noir pur. Le résultat est **l'affiche d'origine dont les
+bandes ont été repeintes** : mêmes cotes, même cadrage, rien de déformé, et plus
+une lettre. Les cinq autres restent écartées ; leur réparation est une
+réexportation des vidéos, pas du code.
+
+**Tout passe par `afficheHub`**, la vignette du sommaire comme le lecteur de
+l'article : si la carte prenait la version nettoyée et le lecteur l'originale,
+la phrase reparaîtrait à l'endroit précis où l'on regarde la page.
 
 ### Rien ne sort du hub, sauf l'appel et les mentions légales
 
 `versHub` réécrit les liens de contenu : les avis restent dans le hub, l'appel
 est conservé avec sa balise Hyros, **et tout le reste est déshabillé**, le
-libellé restant en texte. C'est une liste blanche pour la même raison
-qu'ailleurs : une adresse qu'on n'avait pas prévue ne peut pas passer.
+libellé restant en texte. Liste blanche, pour la même raison qu'ailleurs : une
+adresse qu'on n'avait pas prévue ne peut pas passer.
 
 **Les trois liens légaux sont l'exception, et elle est assumée.** Une page
-commerciale européenne sans accès à ses CGV et à sa politique de confidentialité
-est moins conforme, pas plus, et leur absence est un signal de méfiance connu à
-l'examen des pages d'arrivée.
+commerciale européenne sans accès à ses conditions et à sa politique de
+confidentialité est moins conforme, pas plus.
 
-**L'en-tête et le pied de page s'effacent par `HorsHub`**, un composant client
-posé dans `layout.tsx`. Un second layout racine par groupe de routes serait plus
-étanche, mais demanderait de déplacer toutes les pages existantes : Rémy a
-demandé qu'on ne touche à rien d'actuel. Conséquence connue et acceptée : le
-pied de page reste **rendu côté serveur puis jeté**, donc son texte figure dans
-la charge utile de la page sans être ni visible ni cliquable.
+**L'en-tête et le pied de page du site s'effacent par `HorsHub`**, un composant
+client posé dans `layout.tsx`. Un second layout racine par groupe de routes
+serait plus étanche mais demanderait de déplacer toutes les pages existantes.
+Conséquence connue : le pied de page reste rendu côté serveur puis jeté, donc
+son texte figure dans la charge utile sans être ni visible ni cliquable.
 
-**La barre d'appel fixe en bas d'écran ne vit que sur téléphone**, demandée par
-Rémy. Fond plein et non `background/95` : à cinq pour cent de transparence, le
-bouton posé sous la vidéo transparaissait et on lisait deux fois le même
-libellé. Et `pb-[env(safe-area-inset-bottom)]`, sans quoi elle passe sous la
-barre de gestes des iPhone récents.
+### Ce que le hub a en propre
+
+**Son en-tête** reprend les capsules du site, avec **Funnels.Club et son logo**
+à gauche, sans italique : un nom de marque se pose droit, là où le logo du site
+reprend un mot penché du hero. À droite, un menu de **deux entrées seulement**,
+la formation en tête avec le logo Funnels.Club et les résultats avec la flèche
+verte du menu du site. Dix-sept noms dans un panneau demandaient de choisir
+avant de savoir. Le déclencheur s'appelle « Menu » : à 375 px, les deux capsules
+et la bascule de thème occupaient 366 des 375 pixels disponibles.
+
+Il observe `data-bande-sombre` comme celui du site, parce que la page de
+formation pose une image sombre sous lui et que les autres non.
+
+**Son pied de page** est celui du site, avec une seule carte d'offre, l'appel,
+et les entretiens à la place des colonnes de liens. Pas de rangée de réseaux :
+cinq pastilles sont cinq portes de sortie.
+
+**La barre d'appel fixe** ne vit que sur téléphone. Fond plein et non
+`background/95` : à cinq pour cent de transparence, le bouton posé sous la vidéo
+transparaissait et on lisait deux fois le même libellé.
+
+### Les vignettes, et ce qu'une mesure apprend
+
+Les affiches du sommaire sont recadrées en **32/9**, et ce rapport est mesuré et
+non choisi : sur sept des neuf affiches d'origine, le contenu occupe exactement
+les lignes 90 à 269 sur 360, soit la moitié centrale au pixel près. 640 sur 180
+donne 32/9, seule valeur qui les découvre sans laisser de noir. Un 2,4/1,
+essayé d'abord, laissait encore quarante-trois pixels noirs en haut et en bas.
+**Le lecteur de l'article, lui, reste en 16/9** : Rémy avait tranché là-dessus.
+
+L'action de la carte n'est **ni un lien de texte, ni un bouton cerné**. Le
+premier ne se distinguait pas d'une phrase ; le second dessinait une cible dans
+une cible, la carte entière étant déjà cliquable. C'est une barre pleine et
+discrète qui prend la couleur d'action au survol. Son espace au-dessus est un
+`pt-*` et non un `mt-*`, qui entrerait en conflit avec le `mt-auto`.
+
+### Deux pannes silencieuses rencontrées sur ce hub
+
+**`--jonction` n'existe que sous `[data-hero]`.** La page de formation reprend
+le hero de l'accueil ; sans cet attribut, la variable n'est pas définie,
+`calc(var(--jonction) - 96px)` devient invalide et la lèvre blanche perd son
+ancrage : elle remonte et se pose en travers du titre. Rien n'échoue, un CSS
+invalide est simplement ignoré.
+
+**Un bouton posé sur une photographie ne prend pas de jeton de thème.** Les deux
+liens de la formation étaient dans le hero : à 375 px, la vidéo est plus courte,
+tout remonte, et le creux se retrouvait en encre presque noire sur un paysage
+sombre. Régler la marge aurait marché à une largeur et pas à l'autre. Ils sont
+donc **sortis du hero**, dans un bloc qui suit, où la couleur de page est
+garantie.
 
 ### Ce qui reste à faire, et qui n'est pas du code
 
-- **Les treize affiches à réexporter** sans leur carton de titre. Chacune
-  retirée de `affichesEcartees` et ajoutée à `affichesConformes` ramène son
-  entretien dans le hub.
+- **Les cinq affiches à réexporter** sans leur carton de titre. Chaque ligne
+  déplacée d'`affichesEcartees` vers `affichesConformes` ramène son entretien.
 - **Relire `contenu/hub.ts`**, dont tout le texte est écrit par l'agent.
-- **La vidéo elle-même** porte les mêmes annonces à l'oral. L'examen d'une page
-  d'arrivée ne la regarde pas, mais le visiteur si.
+- **La vidéo elle-même** porte les mêmes annonces à l'oral.
+
 
 ---
 

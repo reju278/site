@@ -885,6 +885,26 @@ html {
     0 12px 40px rgba(0, 0, 0, 0.18);
 }
 
+/* ------------------------------------------------------------------
+   Le panneau du menu du hub se cale à droite.
+
+   Le composant de registre rend son `viewport` dans un enveloppeur qu'il
+   positionne lui-même, `absolute top-full left-0`, et il ne laisse passer
+   aucune classe jusqu'à lui : `data-slot` désigne le panneau, pas
+   l'enveloppeur. Ce calage à gauche est juste dans l'en-tête du site, dont le
+   menu part de la capsule de gauche. Le hub n'a qu'un menu et il est à droite :
+   le panneau démarrait donc au bord gauche de sa capsule et sortait de l'écran
+   par la droite, de cent pixels sur un téléphone.
+
+   `:has()` est la seule prise sur cet enveloppeur sans toucher au fichier de
+   registre, que le projet s'interdit de corriger à la main. La règle est
+   bornée à `[data-menu-hub]` : l'en-tête du site garde son calage à gauche.
+   ------------------------------------------------------------------ */
+[data-menu-hub] div:has(> [data-slot="navigation-menu-viewport"]) {
+  right: 0;
+  left: auto;
+}
+
 /* Le fond et ses trois foyers.
 
    Ils sont déclarés dans le même ordre que dans le deck, et à ses positions.

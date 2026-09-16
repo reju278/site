@@ -1,126 +1,208 @@
-import { Section } from "@/components/section";
+import { LecteurVideo } from "@/components/lecteur-video";
+import { ParticulesHero } from "@/components/particules-hero";
 import { TexteRoulant } from "@/components/texte-roulant";
-import { sommaireHub } from "@/contenu/hub";
-import { temoignages } from "@/contenu/site";
-import { HUB, avisServis, controlerLeHub } from "@/lib/hub";
-import { titresHub } from "@/contenu/hub";
-import { insecables } from "@/lib/typographie";
-import { ArrowRight } from "lucide-react";
+import { formationHub } from "@/contenu/hub";
+import { video } from "@/contenu/site";
+import { HUB_RESULTATS, SORTIE, controlerLeHub } from "@/lib/hub";
+import { KineticText } from "@repo/ui/components/kinetic-text";
 import type { Metadata } from "next";
 import Link from "next/link";
 
 /**
- * Le sommaire du hub : la grille des entretiens, sans un montant dessus.
+ * L'accueil du hub : la formation gratuite.
  *
- * C'est la page `/resultats` au dessin près, et volontairement : Rémy a demandé
- * que tout reste exactement identique. Trois choses seulement changent, et
- * toutes les trois pour la même raison, la conformité aux règles publicitaires
- * de Meta et le fait qu'on ne sorte pas du hub :
+ * **C'est la page que la publicité montre en premier**, sur décision de Rémy.
+ * Quelqu'un qui arrive par une publicité de reciblage a souvent déjà vu cette
+ * vidéo ; la retrouver à l'identique est ce qui fait qu'il se reconnaît, et le
+ * sommaire des entretiens vient après, à `/hub/resultats`.
  *
- * - le titre, le chapô et la ligne de chaque carte viennent de `contenu/hub.ts`
- *   et non de `site.ts`, où ils annoncent des montants ;
- * - les cartes mènent à `/hub/<nom>` et non à `/resultats/<nom>` ;
- * - un avertissement ferme la page, posé par le cadre du hub.
+ * C'est le hero de l'accueil repris tel quel, sur demande de Rémy : la même
+ * image de fond, le même voile, les mêmes particules, le même titre avec son
+ * mot accentué, le même sous-titre et la même vidéo. Quelqu'un qui arrive par
+ * une publicité de reciblage a souvent déjà vu cette vidéo ; la retrouver à
+ * l'identique est ce qui fait qu'il se reconnaît.
  *
- * **Pas de `Carte` facultative ici**, contrairement à `/resultats`. Le hub ne
- * liste que les entretiens qui ont leur article **et** leur version de hub :
- * une carte qui ne mène nulle part est un cul-de-sac sur une page payante.
+ * **Trois différences, et toutes viennent de ce qu'est le hub.**
+ *
+ * Il n'y a **ni pastille de preuve ni boutons au-dessus de la vidéo**. Sur
+ * l'accueil, la paire de boutons est posée entre le sous-titre et la vidéo,
+ * parce que la page continue en dessous ; ici la vidéo est la page, et deux
+ * appels au-dessus d'elle inviteraient à partir avant de l'avoir regardée.
+ *
+ * Les **deux liens sont donc sous la vidéo**, sur demande de Rémy : voir les
+ * résultats, ou réserver un appel. C'est la paire du projet, un plein et un
+ * creux, à la même hauteur et au même rayon.
+ *
+ * **Le plein mène au sommaire des entretiens et non à l'extérieur.** Sur
+ * l'accueil du site, il mène à la formation de Funnels Club ; ici on y est
+ * déjà, et la suite du parcours est de voir qui l'a suivie.
  */
 
 export const metadata: Metadata = {
-  title: sommaireHub.titre,
-  description: sommaireHub.description,
+  title: formationHub.titrePage,
+  description: formationHub.description,
 };
 
-export default function SommaireHub() {
-  /* Les entretiens que le hub sert. L'ordre est celui de `temoignages`, qui
-     est celui de la page Résultats : le hub en est le même sommaire, il n'a
-     aucune raison de les ranger autrement. `avisServis` décide seul de qui
-     entre, affiche comprise. */
-  const entrees = temoignages.flatMap((temoignage) => {
-    const article = avisServis.find((a) => a.id === temoignage.id);
-    const entetes = article ? titresHub[article.slug] : undefined;
-    if (!article || !entetes) return [];
-    return [{ temoignage, slug: article.slug, entetes }];
-  });
-
-  /* Le contrôle, avant le rendu et non après.
-     Il relit tout ce que cette page s'apprête à écrire, y compris les lignes
-     des cartes : elles viennent de `contenu/hub.ts`, mais c'est précisément le
-     genre d'endroit qu'on oublie de nettoyer, puisqu'il est ailleurs que dans
-     le fichier des articles. Voir `lib/hub.ts`. */
+export default function FormationHub() {
+  /* Le contrôle tourne ici comme sur les autres pages du hub : cette page-ci
+     est la plus exposée, c'est celle que la publicité montre en premier. */
   controlerLeHub(
     [
-      sommaireHub.titre,
-      sommaireHub.chapo,
-      sommaireHub.description,
-      ...entrees.map((e) => e.entetes.carte),
-      ...entrees.map((e) => e.temoignage.nom),
+      formationHub.titrePage,
+      formationHub.description,
+      formationHub.resume,
+      "Voir les résultats",
+      "Réserver un appel",
     ],
-    "le sommaire du hub",
+    "la page de formation du hub",
   );
 
   return (
     <>
-      {/* Les cotes sont celles d'`EnTetePage`, reprises telles quelles : le hub
-          doit démarrer exactement comme une page intérieure du site. Le
-          composant lui-même n'est pas employé, parce que son `data-entete-page`
-          déclenche dans `globals.css` une règle d'espacement qui vise la
-          première `section` voisine, et que la grille du hub n'est pas montée
-          de la même façon. */}
-      <section className="px-5 pt-32 pb-10 sm:pt-40 sm:pb-12">
-        <div className="mx-auto max-w-6xl text-center">
-          <h1 className="titre text-4xl text-balance text-foreground sm:text-5xl lg:text-6xl">
-            {insecables(sommaireHub.titre)}
+    <section
+      /* **`data-hero` n'est pas décoratif**, et l'oublier a produit le défaut
+         que Rémy a signalé : « il y a un bloc au milieu ». `--jonction`, la
+         ligne où l'image cède la place à la page, n'est déclarée dans
+         `globals.css` que sous `[data-hero]`. Sans l'attribut, la variable
+         n'existe pas, `calc(var(--jonction) - 96px)` devient invalide, et la
+         lèvre blanche perd son ancrage : elle remonte en haut de la section et
+         se pose en travers du titre. Rien n'échoue, le CSS invalide est
+         simplement ignoré. */
+      data-hero
+      /* `--video-h` : la hauteur exacte du cadre vidéo en 16/9, d'où part la
+         jonction entre l'image et la page. Une hauteur écrite en dur donnerait
+         un cadre qui n'est plus en 16/9, et Wistia y ajouterait des bandes
+         noires sur les côtés. Repris de l'accueil au caractère près. */
+      className="relative isolate px-5 pt-28 sm:pt-52"
+      style={
+        {
+          "--video-h": "calc(min(100vw - 2.5rem, 48rem) * 9 / 16)",
+        } as React.CSSProperties
+      }
+    >
+      {/* Le fond. Deux fichiers, un par largeur : servir 1920 px à un écran de
+          375 fait payer six fois le poids pour rien. Le voile assombri garantit
+          le contraste du texte dans les deux thèmes.
+
+          `data-bande-sombre` est le repère que l'en-tête observe pour savoir
+          qu'il surplombe une image : sans lui, il s'habillerait pour un fond de
+          page et deviendrait blanc sur sombre. C'est la seule page du hub qui
+          en déclare un. */}
+      <div
+        data-bande-sombre
+        className="absolute inset-x-0 top-0 bottom-[calc(var(--jonction)-88px)] -z-10 overflow-hidden"
+      >
+        <picture>
+          <source media="(min-width: 768px)" srcSet="/fond-hero.jpg" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/fond-hero-mobile.jpg"
+            alt=""
+            width={1920}
+            height={1097}
+            fetchPriority="high"
+            className="size-full object-cover"
+          />
+        </picture>
+        <div aria-hidden className="absolute inset-0 bg-black/55" />
+        <ParticulesHero />
+      </div>
+
+      {/* La lèvre : la page qui monte par-dessus l'image, ses deux angles hauts
+          arrondis. Elle est **en dehors** du conteneur de l'image, et c'est la
+          réparation d'un vrai défaut : ce conteneur est rogné sur un pixel
+          fractionnaire, et le lissage de cette arête dessinait un trait clair
+          sur toute la largeur. Dehors, la lèvre couvre l'arête au lieu de
+          s'aligner dessus. Repris de l'accueil. */}
+      <div
+        aria-hidden
+        className="absolute inset-x-0 -z-10 h-24 rounded-t-[var(--rayon-jonction)] bg-background"
+        style={{ bottom: "calc(var(--jonction) - 96px)" }}
+      />
+
+      <div className="mx-auto max-w-6xl">
+        <div className="mx-auto max-w-3xl text-center">
+          <h1 className="titre text-4xl text-balance text-white sm:text-5xl lg:text-6xl">
+            Vivez de votre{" "}
+            {/* `as="span"` et `inline-flex` : le composant pose un conteneur
+                flex, qui casserait la ligne s'il gardait son affichage par
+                défaut. `font-[600]` n'est pas décoratif : `KineticText` pose
+                `font-[300]`, que `cn()` ne voit pas comme un conflit avec
+                `titre-fort`, et le mot rendrait visiblement plus maigre que ce
+                qui l'entoure. */}
+            <KineticText
+              as="span"
+              text="expertise"
+              style={
+                { "--hover-padding": "calc(1em / 40)" } as React.CSSProperties
+              }
+              className="titre-fort inline-flex font-[600] tracking-tight"
+            />{" "}
+            en ligne.
           </h1>
 
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-pretty text-muted-foreground">
-            {insecables(sommaireHub.chapo)}
+          {/* Le sous-titre est celui du hub et non `identite.resume`, qui
+              annonce « jusqu'à 6 ou 7 chiffres par an ». Voir `contenu/hub.ts`.
+              Le contrôle ci-dessus le refuserait de toute façon au build. */}
+          <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-pretty text-white/85 sm:text-xl">
+            {formationHub.resume}
           </p>
         </div>
-      </section>
 
-      <Section className="[&>div]:pt-0">
-        {/* Deux par ligne, grille resserrée en `max-w-4xl` et recentrée : c'est
-            la grille de `/resultats` à l'identique. */}
-        <ul className="mx-auto grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2">
-          {entrees.map(({ temoignage, slug, entetes }) => (
-            <li key={temoignage.id}>
-              <Link
-                href={`${HUB}/${slug}`}
-                className="relief-verre group/carte group/roule flex h-full flex-col overflow-hidden rounded-md border border-border bg-card transition-colors hover:border-ring focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={`/temoignages/${temoignage.id}.jpg`}
-                  alt=""
-                  width={1280}
-                  height={720}
-                  loading="lazy"
-                  className="aspect-video w-full object-cover"
-                />
+        {/* Le rapport 16/9 est porté par `LecteurVideo` : c'est lui qui fait
+            remplir le cadre exactement, sans bande noire. */}
+        <div className="mx-auto mt-8 max-w-3xl sm:mt-10">
+          <LecteurVideo
+            id={video.id}
+            titre={video.titre}
+            secondes={video.secondes}
+            affiche="/affiche-video.jpg"
+            afficheMobile="/affiche-video-mobile.jpg"
+          />
+        </div>
 
-                <div className="flex flex-1 flex-col p-5">
-                  <p className="text-base font-semibold text-card-foreground">
-                    {temoignage.nom}
-                  </p>
-                  <p className="mt-1 text-sm text-pretty text-muted-foreground">
-                    {insecables(entetes.carte)}
-                  </p>
+      </div>
+    </section>
 
-                  <span className="mt-auto flex items-center gap-1.5 pt-4 text-sm font-medium text-primary">
-                    <TexteRoulant>Lire son parcours</TexteRoulant>
-                    <ArrowRight
-                      aria-hidden
-                      className="size-4 transition-transform group-hover/carte:translate-x-0.5"
-                    />
-                  </span>
-                </div>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </Section>
+      {/* Les deux liens, **sous la vidéo** et non au-dessus, sur demande de
+          Rémy : ici la vidéo est la page, et deux appels posés avant elle
+          inviteraient à partir sans l'avoir regardée.
+
+          **Ils sont en dehors du hero, et il le fallait.** Placés dedans, ils
+          tombaient encore sur la photographie à 375 px de large : la vidéo y
+          est plus courte, donc tout remonte, et le creux se retrouvait en encre
+          de thème, c'est-à-dire presque noire en thème clair, sur un paysage
+          sombre. Sortis dans un bloc qui suit, ils se posent sur la couleur de
+          page quelle que soit la largeur, et leurs jetons redeviennent justes.
+
+          Régler la marge aurait marché à une largeur et pas à l'autre : c'est
+          exactement ce que dit la règle du projet sur les valeurs relatives.
+
+          Ils sont sous la jonction, donc sur la couleur de page et non sur
+          l'image : leurs couleurs sont celles des jetons, pas le blanc en dur
+          du hero. C'est la paire du projet, un plein et un creux, même
+          hauteur et même rayon, la bordure du creux en `currentColor` pour
+          qu'elle ne puisse pas diverger de son texte.
+
+          `flex-col` puis `sm:flex-row` : deux boutons de 56 px côte à côte
+          sur 375 px coupent leurs libellés en trois lignes. */}
+      <div className="mx-auto flex max-w-3xl flex-col items-stretch justify-center gap-3 px-5 pt-8 pb-16 sm:flex-row sm:items-center sm:pt-10 sm:pb-20">
+        <Link
+          href={HUB_RESULTATS}
+          className="group/roule inline-flex min-h-14 items-center justify-center gap-2 rounded-md bg-primary px-8 py-3 text-base font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        >
+          <TexteRoulant>Voir les résultats</TexteRoulant>
+        </Link>
+
+        <a
+          href={SORTIE}
+          target="_blank"
+          rel="noreferrer"
+          className="group/roule inline-flex min-h-14 items-center justify-center gap-2 rounded-md border border-current px-8 py-3 text-base font-semibold text-foreground transition-colors hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        >
+          <TexteRoulant>Réserver un appel</TexteRoulant>
+        </a>
+      </div>
     </>
   );
 }

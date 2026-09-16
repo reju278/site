@@ -1,4 +1,8 @@
 import { BarreAppelHub, PiedHub } from "@/components/appel-hub";
+import { EnTeteHub } from "@/components/en-tete-hub";
+import { titresHub } from "@/contenu/hub";
+import { temoignages } from "@/contenu/site";
+import { avisServis } from "@/lib/hub";
 import type { Metadata } from "next";
 
 /**
@@ -34,13 +38,32 @@ export const metadata: Metadata = {
 export default function LayoutHub({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  /* L'ordre est celui d'`avisServis`, donc celui d'`avis.ts` : le menu liste
+     les entretiens dans le même ordre que le sommaire, sans quoi on chercherait
+     dans le menu une entrée qu'on vient de voir ailleurs. */
+  const entretiens = avisServis.flatMap((article) => {
+    const temoignage = temoignages.find((t) => t.id === article.id);
+    const entetes = titresHub[article.slug];
+    if (!temoignage || !entetes) return [];
+    return [
+      { slug: article.slug, nom: temoignage.nom, ligne: entetes.carte },
+    ];
+  });
+
   return (
     /* Le rembourrage bas ne vaut que sur téléphone, et il est du même ordre que
        la barre fixe : sans lui, elle couvrirait les derniers mots de la page.
        Il n'existe pas au-dessus de `sm`, où la barre n'existe pas non plus. */
     <div className="pb-24 sm:pb-0">
+      {/* La liste est calculée ici, dans un composant serveur, et **passée en
+          propriété** à l'en-tête, qui est un composant client. Si celui-ci
+          allait la chercher lui-même, il importerait `avis.ts`, donc cinq mille
+          lignes de transcriptions partiraient dans le paquet JavaScript de
+          chaque page du hub. Une page de publicité se charge vite ou ne se
+          charge pas. */}
+      <EnTeteHub />
       {children}
-      <PiedHub />
+      <PiedHub entretiens={entretiens} />
       <BarreAppelHub />
     </div>
   );

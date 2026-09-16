@@ -1,6 +1,13 @@
 import { avis, type Avis, type SectionAvis } from "@/contenu/avis";
 import { liens } from "@/contenu/site";
-import { affichesConformes, sectionsHub, titresHub } from "@/contenu/hub";
+import {
+  affichesConformes,
+  affichesRecadrees,
+  passagesRetires,
+  sectionsHub,
+  surlignagesHub,
+  titresHub,
+} from "@/contenu/hub";
 
 /**
  * La mécanique du hub de retargeting.
@@ -39,8 +46,26 @@ import { affichesConformes, sectionsHub, titresHub } from "@/contenu/hub";
  * parce qu'un oubli ne se voit pas.
  */
 
-/** La racine du hub. Écrite une fois : elle apparaît dans trois fichiers. */
+/**
+ * La racine du hub, et le sommaire des entretiens.
+ *
+ * **Les deux ne sont plus la même page**, sur décision de Rémy : `/hub` porte
+ * désormais la formation gratuite, parce que c'est elle qu'un visiteur de
+ * reciblage a déjà vue et que c'est par elle qu'on le reprend. Le sommaire des
+ * entretiens est descendu d'un cran, sous `/hub/resultats`.
+ *
+ * Les deux sont écrites une fois : elles apparaissent dans les pages, dans le
+ * menu, dans le pied de page et dans la réécriture des liens de contenu, et
+ * cinq copies d'une adresse finissent toujours par diverger.
+ *
+ * **Les entretiens restent à `/hub/<nom>`** et ne descendent pas sous
+ * `/hub/resultats/<nom>` : en Next, un segment fixe l'emporte sur un segment
+ * dynamique voisin, donc `/hub/resultats` est servi par sa page et non par
+ * `[avis]`. Les déplacer n'aurait rien apporté et aurait allongé chaque
+ * adresse.
+ */
 export const HUB = "/hub";
+export const HUB_RESULTATS = `${HUB}/resultats`;
 
 /**
  * Ce qui compte comme un montant.
@@ -91,7 +116,7 @@ const LIEN = /\[([^\]]+)\]\(([^)]+)\)/g;
 export function versHub(texte: string): string {
   return texte.replace(LIEN, (entier, libelle: string, href: string) => {
     if (href === SORTIE) return entier;
-    if (href === "/resultats") return `[${libelle}](${HUB})`;
+    if (href === "/resultats") return `[${libelle}](${HUB_RESULTATS})`;
     if (href.startsWith("/resultats/")) {
       return `[${libelle}](${HUB}/${href.slice("/resultats/".length)})`;
     }
@@ -119,11 +144,17 @@ export function avisHub(slug: string): AvisHub | null {
   const entetes = titresHub[article.slug];
   if (!entetes) return null;
 
+  const retires = passagesRetires
+    .filter((r) => r.slug === article.slug)
+    .map((r) => r.fragment);
+
   const sections = article.sections
     .map((section) => {
       const paragraphes = section.paragraphes
         .filter((p) => !porteUnMontant(p))
-        .map(versHub);
+        .filter((p) => !retires.some((f) => p.includes(f)))
+        .map(versHub)
+        .map((p) => surligner(p, surlignagesHub[article.slug] ?? []));
 
       const citation =
         section.citation && !porteUnMontant(section.citation.texte)
@@ -187,5 +218,88 @@ export function controlerLeHub(textes: readonly string[], ou: string): void {
  * en laisser passer un.
  */
 export const avisServis = avis.filter(
-  (a) => titresHub[a.slug] && affichesConformes.includes(a.id),
+  (a) =>
+    titresHub[a.slug] &&
+    (affichesConformes.includes(a.id) || affichesRecadrees.includes(a.id)),
 );
+
+/**
+ * Pose le surlignage `==…==` sur les passages désignés d'un paragraphe.
+ *
+ * **Une seule passe, et elle protège ce qui existe.** Les paragraphes portent
+ * déjà des `==…==` et des `[libellé](adresse)` écrits dans `avis.ts` : marquer
+ * naïvement un passage qui traverse l'un ou l'autre produirait des marques
+ * imbriquées, que l'expression de `TexteLie` ne sait pas lire. Un passage qui
+ * chevauche une marque existante est donc laissé tel quel, et le contrôle le
+ * dira.
+ *
+ * Le passage doit se trouver **une fois et une seule**. Deux occurrences, et on
+ * ne saurait pas laquelle marquer ; zéro, et le surlignage disparaîtrait en
+ * silence le jour où quelqu'un retouche la phrase.
+ */
+export function surligner(
+  texte: string,
+  passages: readonly string[],
+): string {
+  let sortie = texte;
+
+  for (const passage of passages) {
+    const debut = sortie.indexOf(passage);
+    if (debut === -1) continue;
+    if (sortie.indexOf(passage, debut + 1) !== -1) continue;
+
+    /* Le passage ne doit traverser ni une marque de surlignage ni un lien. */
+    const avant = sortie.slice(0, debut);
+    const dansUneMarque =
+      (avant.match(/==/g) ?? []).length % 2 === 1 ||
+      avant.lastIndexOf("[") > avant.lastIndexOf(")");
+    if (dansUneMarque) continue;
+
+    sortie = `${avant}==${passage}==${sortie.slice(debut + passage.length)}`;
+  }
+
+  return sortie;
+}
+
+/**
+ * Le contrôle des passages désignés : chacun doit exister, une fois et une
+ * seule, dans l'article qui le déclare.
+ *
+ * Sans lui, une retouche d'`avis.ts` ferait disparaître un surlignage ou un
+ * retrait sans que rien ne le signale : la page resterait juste, simplement
+ * plus fade, ou avec une phrase qu'on croyait retirée. Il tourne au build,
+ * comme `controlerLeHub`.
+ */
+export function controlerLesPassages(): void {
+  const fautes: string[] = [];
+
+  const compter = (slug: string, fragment: string) => {
+    const article = avis.find((a) => a.slug === slug);
+    if (!article) return `avis « ${slug} » introuvable`;
+    const corpus = article.sections.flatMap((s) => s.paragraphes);
+    const n = corpus.filter((p) => p.includes(fragment)).length;
+    if (n === 0) return `introuvable dans « ${slug} » : « ${fragment} »`;
+    if (n > 1) return `trouvé ${n} fois dans « ${slug} » : « ${fragment} »`;
+    return null;
+  };
+
+  for (const retire of passagesRetires) {
+    const faute = compter(retire.slug, retire.fragment);
+    if (faute) fautes.push(faute);
+  }
+
+  for (const [slug, passages] of Object.entries(surlignagesHub)) {
+    for (const passage of passages) {
+      const faute = compter(slug, passage);
+      if (faute) fautes.push(faute);
+    }
+  }
+
+  if (fautes.length > 0) {
+    throw new Error(
+      "Les passages désignés dans contenu/hub.ts ne correspondent plus au " +
+        "contenu d'avis.ts :\n" +
+        fautes.map((f) => `  · ${f}`).join("\n"),
+    );
+  }
+}

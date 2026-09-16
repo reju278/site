@@ -16,6 +16,15 @@
 # next.js
 /.next/
 /out/
+# Le dossier des builds de vérification.
+#
+# `AGENTS.md` demande de construire dans `NEXT_DIST_DIR=.next-verif` plutôt que
+# dans `.next`, que sert le serveur de développement de Rémy. Ce dossier
+# n'était ignoré nulle part : un `git add -A` lancé juste après une
+# vérification y aurait versé plusieurs milliers de fichiers de build, et
+# `eslint .` les analysait, ce qui noyait le rapport sous des milliers
+# d'avertissements venus de code compilé.
+/.next-verif/
 
 # production
 /build

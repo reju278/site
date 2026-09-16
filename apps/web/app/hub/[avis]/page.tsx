@@ -3,7 +3,7 @@ import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { Section } from "@/components/section";
 import { TexteLie } from "@/components/texte-lie";
-import { appelHub, titresHub } from "@/contenu/hub";
+import { afficheHub, appelHub, titresHub } from "@/contenu/hub";
 import { temoignages } from "@/contenu/site";
 import { HUB, SORTIE, avisHub, avisServis, controlerLeHub } from "@/lib/hub";
 import { insecables } from "@/lib/typographie";
@@ -71,7 +71,12 @@ export default async function PageAvisHub({
   const temoignage = temoignages.find((t) => t.id === article.id);
   if (!temoignage) notFound();
 
-  const affiche = `/temoignages/${temoignage.id}.jpg`;
+  /* **L'affiche nettoyée et non l'originale**, quand il y en a une. Elle
+     porte les mêmes cotes et le même cadrage, seules ses bandes noires ont été
+     repeintes : le lecteur ne change donc ni de rapport ni de mise en page.
+     Le sommaire passe par la même fonction, sans quoi la phrase reparaîtrait
+     sur la page où l'on regarde vraiment la vidéo. */
+  const affiche = afficheHub(temoignage.id);
 
   /* Les trois avis qui suivent, en bouclant, et **seulement ceux qui ont leur
      version de hub** : un voisin sans entrée mènerait à un 404. */

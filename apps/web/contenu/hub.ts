@@ -362,6 +362,20 @@ export const sectionsHub: Record<string, string> = {
     "Ce qu'il croyait impossible : vendre cher des cours de guitare",
   "Ses résultats sur un an : de 4 000 € à un mois de rentrée à 17 000 €":
     "Ses résultats sur un an",
+
+  /* Ces deux-là ne sont pas des promesses de gain, et c'est précisément
+     pourquoi ils étaient passés inaperçus : « deux cents euros de plus »
+     décrit un plafond subi, et « qu'elle ne mesure pas en euros » dit le
+     contraire d'un résultat chiffré. Le contrôle ne fait pas la différence, et
+     il a raison de ne pas la faire : il cherche une unité monétaire, pas une
+     intention, et c'est ce qui le rend fiable. Ils se reformulent sans rien
+     perdre de leur sens. */
+  "Le plafond de verre : beaucoup d'efforts pour un gain minime":
+    "Le plafond de verre : beaucoup d'efforts pour un gain minime",
+  "Le plafond de verre : beaucoup d'efforts pour deux cents euros de plus":
+    "Le plafond de verre : beaucoup d'efforts pour un gain minime",
+  "Ce qui a changé pour elle, et qu'elle ne mesure pas en euros":
+    "Ce qui a changé pour elle, et qui ne se compte pas",
 };
 
 /**
@@ -407,52 +421,40 @@ export const appelHub = {
 export const avertissementHub =
   "Les personnes qui témoignent sur cette page sont des clients de Funnels Club et ont accepté d'être filmées. Leur parcours leur est propre : il dépend de leur métier, de leur expérience et du travail qu'elles y ont consacré, et ne préjuge en rien de ce qu'une autre personne obtiendrait. Rien sur cette page ne constitue une promesse ni une garantie de résultat.";
 
-/**
- * Les mentions légales, seules adresses internes autorisées hors du hub.
- *
- * **C'est une entorse assumée à la règle « rien ne sort du hub ».** Une page
- * commerciale sans accès à ses conditions et à sa politique de confidentialité
- * est moins conforme, pas plus : c'est une obligation légale en Europe, et
- * l'absence de ces liens est un motif de méfiance connu à l'examen des pages
- * d'arrivée. Elles ne sont pas une échappatoire pour autant : elles ne mènent
- * qu'à des documents, et ces pages portent déjà `robots: { index: false }`.
- */
-export const legalHub = [
-  { libelle: "Mentions légales", href: "/mentions" },
-  { libelle: "Confidentialité", href: "/confidentialites" },
-  { libelle: "CGV", href: "/cgv" },
-] as const;
 
 /**
- * Les entretiens dont **l'affiche** ne porte aucune allégation.
+ * Les affiches, et ce qu'il a fallu en faire.
  *
  * **C'est le point le plus important de ce fichier, et il ne se voyait pas.**
  * Nettoyer le texte ne suffit pas : treize des vingt-deux affiches de
- * témoignage portent le résultat **incrusté dans l'image**, en gros et en
- * blanc. « De 0€ à 109 778€ en 6 mois », « Il faisait 0€ en ligne, aujourd'hui
- * il génère 50 000 à 70 000€/mois », « 15 clients à 1300€ en 6 jours ». Aucun
- * contrôle sur les chaînes de caractères ne pouvait les attraper, puisque ce
- * ne sont pas des chaînes de caractères.
+ * témoignage portent le résultat **incrusté dans l'image**, en blanc et en
+ * gros. « De 0€ à 109 778€ en 6 mois », « 15 clients à 1300€ en 6 jours ».
+ * Aucun contrôle sur des chaînes de caractères ne pouvait les attraper,
+ * puisque ce ne sont pas des chaînes de caractères. Meta lit le texte des
+ * images, et c'est même le premier endroit où il le cherche.
  *
- * Meta lit le texte des images, et c'est même le premier endroit où il le
- * cherche. Une page dont tous les mots sont propres et dont les vignettes
- * annoncent des revenus est exactement ce que la politique vise : la page
- * entière est jugée à son élément le plus agressif.
+ * **Les treize ne sont pas un seul et même problème**, et c'est ce qu'un relevé
+ * à l'œil avait manqué. Les affiches sont des appels à deux : l'enregistrement
+ * porte ses propres bandes noires, et l'image utile n'occupe que la moitié
+ * centrale, lignes 90 à 269 sur 360. La luminance lue ligne par ligne sur les
+ * vingt-deux fichiers a séparé deux familles :
  *
- * **Les treize autres sont donc écartées du hub**, pas corrigées. Recadrer ou
- * flouter l'incrustation abîmerait l'image sans la rendre honnête, et
- * l'affiche vient de Wistia, qui n'en expose qu'une par vidéo : il n'y a pas
- * d'autre vignette à prendre. La réparation est une réexportation des vidéos
- * sans leur carton de titre, et elle n'appartient pas au code.
+ * - **huit** portent leur phrase **dans la bande noire**, au-dessus de l'image.
+ *   Elle se retire par recadrage, sans toucher à un pixel de l'image ;
+ * - **cinq** sont des captures plein cadre où la phrase est posée **sur les
+ *   visages**. Aucun recadrage ne l'enlève.
  *
- * **Chaque ligne se retire le jour où l'affiche est refaite**, et l'entretien
- * revient dans le hub tout seul. C'est une liste blanche et non une liste
- * noire, pour la même raison qu'ailleurs dans ce dépôt : une affiche ajoutée
- * demain est absente du hub par défaut, au lieu d'y entrer sans être regardée.
+ * Les huit premières ont donc une affiche à elles dans `public/temoignages-hub`,
+ * fabriquée en deux temps : recadrage sur la bande d'image, puis remise aux
+ * cotes d'origine sur du noir pur. Le résultat est **l'affiche d'origine dont
+ * les bandes ont été repeintes en noir** : mêmes cotes, même cadrage, même
+ * rapport 16/9, rien de déformé ni de rogné, et plus une lettre.
  *
- * Relevé à l'œil, affiche par affiche, le 16 septembre 2026. **À revérifier
- * si les vidéos sont réexportées.**
+ * C'est ce qui permet de servir dix-sept entretiens au lieu de neuf, sur
+ * demande de Rémy.
  */
+
+/** Les affiches utilisables telles quelles : aucune incrustation. */
 export const affichesConformes: readonly string[] = [
   "j0vbkt570k", // christian-joyce
   "2vtsinplyx", // augustin-passy
@@ -466,24 +468,171 @@ export const affichesConformes: readonly string[] = [
 ];
 
 /**
- * Les entretiens écartés du hub, et ce que leur affiche annonce.
+ * Les affiches dont la phrase vivait dans la bande noire, et qui ont donc une
+ * version nettoyée dans `public/temoignages-hub`.
  *
- * Cette liste ne sert à rien au rendu : elle est là pour que la décision soit
- * lisible sans avoir à rouvrir vingt-deux images, et pour que celui qui refera
- * les affiches sache ce qu'il doit enlever.
+ * Le commentaire dit ce que portait chacune : c'est ce qui permet de vérifier
+ * qu'on a bien retiré ce qu'on croyait retirer, sans rouvrir les fichiers.
+ */
+export const affichesRecadrees: readonly string[] = [
+  "rgio4y4o8f", // roland-buffet · « De 0€ à 109,778€ en 6 mois »
+  "vtfaka0m80", // olga · « 10177€ en 13 jours, dont 1124€ en une seule journée »
+  "fbtr4dqoji", // sandrine · « 30 ventes à 750€ sur une période de 3 mois »
+  "tvy3jbhml9", // charlotte · « …et générer 6335€ dès son premier lancement »
+  "rtil6qeznq", // jeremy · « De 0€ à 10 000€ à côté d'un travail »
+  "abj3v8v8ek", // matthieu · « Doubler son chiffre d'affaires en 1 mois et demi »
+  "4lkp9f6lm4", // valerie · « 15 clients à 1300€ en 6 jours »
+  "brvvtbkmfo", // joel · « Vendre une offre digitale à 2800€ »
+];
+
+/**
+ * L'adresse de l'affiche à servir pour un entretien.
+ *
+ * **Une seule fonction, et tout passe par elle** : la vignette du sommaire, le
+ * lecteur de l'article, les aperçus de partage. Si la carte prenait la version
+ * nettoyée et le lecteur l'originale, la phrase réapparaîtrait au moment
+ * précis où l'on regarde la page, et personne ne s'en apercevrait avant un
+ * refus de Meta.
+ */
+export const afficheHub = (id: string) =>
+  affichesRecadrees.includes(id)
+    ? `/temoignages-hub/${id}.jpg`
+    : `/temoignages/${id}.jpg`;
+
+/**
+ * Les cinq entretiens qui restent écartés, et ce que leur affiche annonce.
+ *
+ * Ce sont des captures plein cadre : la phrase est posée sur l'image, pas dans
+ * une bande noire, donc aucun recadrage ne l'enlève. La réparation est une
+ * réexportation de la vidéo sans son carton de titre, et elle n'appartient pas
+ * au code. Chaque ligne déplacée vers `affichesConformes` ramène son entretien
+ * dans le hub, sans autre changement.
+ *
+ * Relevé le 16 septembre 2026. **À revérifier si les vidéos sont réexportées.**
  */
 export const affichesEcartees: Record<string, string> = {
-  "roland-buffet": "De 0€ à 109,778€ en 6 mois",
-  olga: "10177€ en 13 jours, dont 1124€ en une seule journée",
-  sandrine: "30 ventes à 750€ sur une période de 3 mois",
-  charlotte: "Digitaliser son activité présentielle et générer 6335€ dès son premier lancement",
-  jeremy: "De 0€ à 10 000€ à côté d'un travail",
-  matthieu: "Doubler son chiffre d'affaires en 1 mois et demi",
-  valerie: "15 clients à 1300€ en 6 jours",
-  joel: "Vendre une offre digitale à 2800€",
-  "corentin-mastermind": "De 0 à 30 000€/mois en moins de 18 mois (en partant de zéro)",
-  "patrick-pinot": "De 0€ à 24 000€ en un mois, et pourquoi faire confiance au process change tout",
+  "corentin-mastermind":
+    "De 0 à 30 000€/mois en moins de 18 mois (en partant de zéro)",
+  "patrick-pinot":
+    "De 0€ à 24 000€ en un mois, et pourquoi faire confiance au process change tout",
   "guy-anastaze": "De zéro en ligne à un contrat de 120 000 €",
-  "roland-buffet-mastermind": "Il faisait 0€ en ligne, aujourd'hui il génère 50 000 à 70 000€/mois",
-  "francois-mastermind": "De 3 500€ à 17 000€ par mois : 5x plus de chiffres, 10x moins de clients",
+  "roland-buffet-mastermind":
+    "Il faisait 0€ en ligne, aujourd'hui il génère 50 000 à 70 000€/mois",
+  "francois-mastermind":
+    "De 3 500€ à 17 000€ par mois : 5x plus de chiffres, 10x moins de clients",
+};
+
+/**
+ * Les paragraphes retirés du hub en plus de ceux qui portent un montant.
+ *
+ * Le filtre de `lib/hub.ts` cherche le symbole et le mot « euro ». Il laisse
+ * donc passer les résultats **relatifs** : « leur chiffre a triplé » est la
+ * même promesse de gain que « 22 000 € », simplement sans le nombre.
+ *
+ * **C'est une liste et non un motif**, et c'est délibéré. Un motif du genre
+ * « chiffre » près de « triplé » attrapait aussi « doubler la publicité ne
+ * doublait pas le chiffre », qui dit exactement le contraire d'une promesse.
+ * Une règle qui retire du texte juste ne se voit pas non plus : la page est
+ * simplement plus pauvre, et personne ne sait pourquoi. Chaque retrait est donc
+ * écrit, avec sa raison.
+ *
+ * La clé est un fragment distinctif du paragraphe ; le contrôle vérifie qu'il
+ * s'y trouve, une fois et une seule.
+ */
+export const passagesRetires: readonly {
+  slug: string;
+  fragment: string;
+  raison: string;
+}[] = [
+  {
+    slug: "yannick-et-sylvie",
+    fragment: "leur chiffre a triplé",
+    raison:
+      "Résultat relatif : un chiffre d'affaires multiplié est une promesse de gain au même titre qu'un montant.",
+  },
+];
+
+/**
+ * Les passages surlignés, en plus de ceux qu'`avis.ts` porte déjà.
+ *
+ * Demandé par Rémy : mettre en avant, comme sur le site, les points qui
+ * parlent à quelqu'un qui hésite. Le site surligne déjà, avec la syntaxe
+ * `==…==` de `TexteLie`, mais très inégalement une fois les montants retirés :
+ * Tatiana et Corentin en gardaient trois ou quatre, Augustin plus aucun.
+ *
+ * **Ce sont des passages existants, désignés, jamais du texte ajouté.** Le
+ * surlignage marque une phrase déjà écrite ; il ne l'écrit pas. C'est la seule
+ * façon d'obéir à la règle du dépôt sur un contenu qui est la parole de vraies
+ * personnes.
+ *
+ * **Ce qui est choisi : le problème, pas le résultat.** Un surlignage attire
+ * l'œil, donc il décide de ce qu'on retient d'une page. Sur une page de
+ * publicité, marquer un résultat reviendrait à remettre en gras exactement ce
+ * que le reste du travail a retiré. Ce qui est marqué, ce sont les blocages, les
+ * bascules et les phrases où quelqu'un se reconnaît.
+ *
+ * La clé est le texte exact, tel qu'il figure dans `avis.ts`. Le contrôle jette
+ * si un passage ne s'y trouve pas, ou s'y trouve deux fois : sans lui, une
+ * retouche du contenu ferait disparaître le surlignage sans rien signaler.
+ */
+export const surlignagesHub: Record<string, readonly string[]> = {
+  "christian-joyce": [
+    "Il n'y a pas eu, chez lui, de phase où rien ne marchait.",
+    "celui qui hésite n'a pas peur du programme, il a peur de lui-même",
+  ],
+  "augustin-passy": [
+    "pour passer la barre, il fallait changer de modèle, pas forcer sur le même",
+    "la simplification, et l'étape par étape",
+    "Le plafond horaire qui le bloquait n'est plus là",
+  ],
+  "yannick-et-sylvie": [
+    "cela ne changeait rien au chiffre, et beaucoup à leur charge de travail",
+    "la seule dépense qu'on ne voit jamais passer : celle qu'on ne fait pas",
+  ],
+  cedric: ["le programme ne fait rien à votre place"],
+  sebastien: [
+    "on ne comprend pas vraiment ce qui y est dit tant qu'on n'est pas passé par l'expérience",
+    "il ne laisse plus l'autre mener l'appel",
+  ],
+};
+
+/**
+ * La page de formation gratuite du hub.
+ *
+ * Elle reprend le hero de l'accueil, dont le titre et le résumé viennent
+ * d'`identite` et ne sont pas réécrits : c'est la même promesse, et la
+ * reformuler pour le hub reviendrait à en avoir deux.
+ *
+ * Seuls le titre d'onglet et la description sont propres à cette page, un
+ * `title` s'affichant dans une liste de résultats et une `description` devant
+ * décrire la page et non le site. Ils sont sans effet sur le référencement,
+ * le hub étant interdit d'index, mais ils s'affichent dans l'onglet et dans un
+ * aperçu de partage.
+ */
+export const formationHub = {
+  titrePage: "La formation gratuite",
+  description:
+    "La vidéo de formation gratuite de Funnels Club, en entier : la mécanique du tunnel de vente, expliquée étape par étape par Rémy Jupille.",
+  /**
+   * Le sous-titre, **réécrit pour le hub**.
+   *
+   * Celui du site, `identite.resume`, annonce « du lancement jusqu'à 6 ou
+   * 7 chiffres par an ». C'est une promesse de revenus chiffrée, posée en gros
+   * sous le titre d'une page de publicité : exactement ce que les règles de
+   * Meta refusent, et le contrôle de `lib/hub.ts` le rejette d'ailleurs au
+   * build, le mot « chiffres » étant ici une unité monétaire déguisée.
+   *
+   * **C'est la phrase d'origine, moins son chiffre**, et rien d'autre. Une
+   * première version la remplaçait par une description de ce que la vidéo
+   * contient : Rémy l'a trouvée dénaturée, et il a raison. L'originale dit ce
+   * que Funnels Club fait pour quelqu'un, « nous vous accompagnons… du
+   * lancement jusqu'à… », et c'est cette orientation qui compte. Ce qui n'est
+   * pas publiable, c'est la destination chiffrée, pas la promesse
+   * d'accompagnement : seule la fin de la phrase change.
+   */
+  resume:
+    "Nous vous accompagnons à travers toutes les étapes de votre business de formation, du lancement jusqu'à son développement.",
+  /** L'entrée en tête du menu, mise en avant. */
+  libelleMenu: "La formation gratuite",
+  ligneMenu: "La vidéo qui explique la mécanique, en entier",
 };
