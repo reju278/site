@@ -1,5 +1,6 @@
 import { CartesTemoignage } from "@/components/cartes-temoignage";
 import { FondResultats } from "@/components/fond-resultats";
+import { GalerieEntretiens } from "@/components/galerie-entretiens";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { MurCommunaute } from "@/components/mur-communaute";
 import { BoutonScintillant } from "@/components/bouton-scintillant";
@@ -19,9 +20,7 @@ import {
   plateformeImmersion,
   modeleImmersion,
 } from "@/contenu/immersion";
-import { temoignages } from "@/contenu/site";
 import { insecables } from "@/lib/typographie";
-import { prenom } from "@/lib/prenom";
 
 import type { Metadata } from "next";
 
@@ -364,45 +363,10 @@ export default function Immersion() {
           </p>
         </div>
 
-        <ul className="mx-auto mt-10 grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-2">
-          {entretiensImmersion.map((id) => {
-            /* Le nom, l'accroche et la durée sont lus dans `temoignages`,
-               jamais réécrits ici. Un entretien retiré de là disparaît d'ici
-               sans laisser de carte vide. */
-            const temoignage = temoignages.find((t) => t.id === id);
-            if (!temoignage) return null;
-
-            return (
-              <li key={id} id={ancreEntretien(id)} className="scroll-mt-24">
-                {/* **L'entretien se regarde ici, il ne mène nulle part.**
-                    C'est la différence avec `/resultats`, dont les cartes sont
-                    des liens vers la page de chacun : cette page-ci est un
-                    tunnel, et sa règle est qu'on n'en sort pas. Envoyer vers
-                    `/resultats/<nom>` rendrait au visiteur l'en-tête du site et
-                    ses trente portes de sortie.
-
-                    Ça ne coûte rien : `LecteurVideo` ne sert qu'une affiche
-                    tant que personne n'a cliqué, et l'iframe Wistia, avec ses
-                    505 Ko de JavaScript, n'arrive qu'à la lecture. C'est aussi
-                    ce que fait la page source, en moins lourd. */}
-                <LecteurVideo
-                  id={id}
-                  titre={`Entretien avec ${prenom(temoignage.nom)}`}
-                  secondes={temoignage.secondes}
-                  affiche={`/temoignages/${id}.jpg`}
-                />
-
-                {/* Le prénom seul, sur décision de Rémy. Voir `lib/prenom.ts`. */}
-                <p className="mt-3 text-base font-semibold text-foreground">
-                  {prenom(temoignage.nom)}
-                </p>
-                <p className="mt-1 text-sm text-pretty text-muted-foreground">
-                  {insecables(temoignage.description)}
-                </p>
-              </li>
-            );
-          })}
-        </ul>
+        {/* La galerie : les cartes du sommaire des résultats, qui ouvrent
+            l'entretien dans une fenêtre au lieu de mener à une page. Voir
+            `GalerieEntretiens`. */}
+        <GalerieEntretiens />
       </SectionImmersion>
 
       {/* LE MUR DE LA COMMUNAUTÉ, entre les entretiens et l'équipe.

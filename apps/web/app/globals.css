@@ -1092,3 +1092,25 @@ html {
 [data-entete-page] + section > div {
   padding-top: 0;
 }
+
+/* ------------------------------------------------------------------
+   La barre d'appel fixe s'efface quand une fenêtre est ouverte.
+
+   **C'est la réparation d'un défaut vu à 375 px**, et il ne se voyait qu'une
+   fois la fenêtre des entretiens en place : la barre et la fenêtre portent
+   toutes deux `z-50`, la barre recouvrait donc le bas de la fenêtre, et elle y
+   répétait mot pour mot le bouton d'appel que la fenêtre porte déjà. Deux fois
+   le même geste au même endroit, dont l'un par-dessus l'autre.
+
+   `:has()` plutôt qu'un état React : la barre et la fenêtre ne se connaissent
+   pas, elles vivent dans deux composants que rien ne relie. Remonter un état
+   jusqu'au gabarit pour ça reviendrait à câbler tout le tunnel pour une ligne
+   de style.
+
+   `[data-state="open"]` et pas seulement `[role="dialog"]` : Radix garde le
+   nœud dans le DOM pendant l'animation de fermeture. Sans l'état, la barre
+   resterait absente une fraction de seconde après la fermeture, et on la
+   verrait revenir. */
+body:has([role="dialog"][data-state="open"]) [data-barre-appel] {
+  display: none;
+}

@@ -31,6 +31,12 @@
  * « Christophe & Dominique Crapez » soit traité avant « Dominique BERTON ».
  */
 const NOMS: readonly (readonly [string, string])[] = [
+  ["Christian Joyce", "Christian"],
+  ["Mathieu Tison", "Mathieu"],
+  ["Augustin Passy", "Augustin"],
+  ["Patrick Pinot", "Patrick"],
+  ["Roland Buffet", "Roland"],
+  ["Guy Anastaze", "Guy"],
   ["Dominique BERTON & Michel ROUSSET", "Dominique & Michel"],
   ["Marlyse et Richard de Villeneuve", "Marlyse et Richard"],
   ["Christophe & Dominique Crapez", "Christophe & Dominique"],
@@ -94,20 +100,36 @@ const NOMS: readonly (readonly [string, string])[] = [
   ["Linn 🦋", "Linn"],
 ];
 
-/** Le texte d'un membre, prêt à l'affichage. */
-export function anonymiser(texte: string): string {
+/**
+ * Les noms de famille en moins.
+ *
+ * **Séparée du retrait des adresses**, et il le fallait : les articles d'avis
+ * portent des liens écrits `[libellé](adresse)`, et une expression qui efface
+ * les adresses les viderait de leur destination. Les deux passes ne servent donc
+ * pas les mêmes textes : les posts du groupe reçoivent les deux, les articles
+ * d'avis n'en reçoivent qu'une, leurs liens étant traités par `versImmersion`.
+ */
+export function sansNoms(texte: string): string {
   let sortie = texte;
-
   for (const [complet, court] of NOMS) {
     sortie = sortie.split(complet).join(court);
   }
+  return sortie;
+}
 
+/** Les adresses en moins. À ne pas appliquer à un texte qui porte des liens. */
+export function sansAdresses(texte: string): string {
   /* Les adresses partent avec la ponctuation collée mais pas celle de la phrase :
      `[^\s)]` s'arrête à l'espace et à la parenthèse fermante, et la virgule ou
      le point final qui suit reste, sans quoi la phrase perdrait sa ponctuation. */
-  sortie = sortie.replace(/https?:\/\/[^\s)]+/g, "");
+  const sortie = texte.replace(/https?:\/\/[^\s)]+/g, "");
 
   /* Le retrait d'une adresse laisse deux espaces, et parfois une espace avant
      une virgule. On recolle, sinon le caviardage se voit plus que le lien. */
   return sortie.replace(/[ \t]{2,}/g, " ").replace(/\s+([,.;:!?])/g, "$1").trim();
+}
+
+/** Le texte d'un post du groupe, prêt à l'affichage : ni noms, ni adresses. */
+export function anonymiser(texte: string): string {
+  return sansAdresses(sansNoms(texte));
 }

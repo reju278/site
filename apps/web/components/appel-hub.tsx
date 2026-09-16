@@ -38,7 +38,13 @@ import Link from "next/link";
  */
 export function BarreAppelHub() {
   return (
-    <div className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-background pb-[env(safe-area-inset-bottom)] sm:hidden">
+    /* `data-barre-appel` est lu par `globals.css`, qui efface la barre quand une
+       fenêtre est ouverte : sur téléphone, elle passait par-dessus la fenêtre
+       des entretiens et y répétait le même bouton d'appel. */
+    <div
+      data-barre-appel
+      className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-background pb-[env(safe-area-inset-bottom)] sm:hidden"
+    >
       <div className="px-5 py-3">
         {/* `min-h-*` et pas de `whitespace-nowrap` : « Réserver mon appel
             gratuit » demande plus que la largeur d'un téléphone de 375 px, et

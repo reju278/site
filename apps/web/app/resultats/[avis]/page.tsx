@@ -1,9 +1,9 @@
 import { AppelFormation } from "@/components/appel-formation";
+import { ArticleAvis } from "@/components/article-avis";
 import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { AppelOffres } from "@/components/appel-offres";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { Section } from "@/components/section";
-import { TexteLie } from "@/components/texte-lie";
 import { avis } from "@/contenu/avis";
 import { SITE, liens, temoignages } from "@/contenu/site";
 import { insecables } from "@/lib/typographie";
@@ -313,58 +313,15 @@ export default async function PageAvis({
             se lit entre soixante et quatre-vingts caractères, et à la largeur
             d'une carte elle en porterait le double. */}
         <article className="mx-auto max-w-3xl">
-          {article.sections.map((section, i) => (
-            <section key={section.titre} className="mt-12 first:mt-0">
-              <h2 className="titre text-2xl text-balance text-foreground sm:text-3xl">
-                {section.titre}
-              </h2>
+          {/* Le corps de l'article vit dans `ArticleAvis`, partagé avec la
+              fenêtre des entretiens de `/immersion` : Rémy a demandé que la
+              fenêtre montre exactement le même texte, et deux écritures du même
+              entretien finissent toujours par diverger.
 
-              <div className="mt-5 space-y-5 text-base leading-relaxed text-pretty text-foreground/85 sm:text-lg">
-                {section.paragraphes.map((paragraphe) => (
-                  <p key={paragraphe}>
-                    <TexteLie>{paragraphe}</TexteLie>
-                  </p>
-                ))}
-              </div>
+              La page ne réécrit pas ses liens, d'où l'absence de `lien` : c'est
+              le tunnel qui en a besoin, pas elle. */}
+          <ArticleAvis article={article} appel={<AppelFormation />} />
 
-              {/* La citation.
-
-                  `blockquote` et non un paragraphe en italique : c'est
-                  l'élément d'une citation, et c'est lui qui dit à un lecteur
-                  d'écran que ces mots sont ceux de quelqu'un d'autre.
-
-                  **Les guillemets sont posés ici et non dans le texte**, sur
-                  demande de Rémy : à l'écrire dans la donnée, on finit avec des
-                  citations qui en ont et d'autres qui n'en ont pas. Ce sont les
-                  guillemets français, avec leurs espaces insécables : une espace
-                  ordinaire y autorise un retour à la ligne, et le guillemet se
-                  retrouve seul en fin de ligne. */}
-              {/* Le filet de la citation est en `foreground` et non en
-                  `primary`, sur décision de Rémy : le bleu du site sert aux
-                  actions, et une citation n'en est pas une. Un trait neutre
-                  marque le retrait sans promettre un clic. */}
-              {section.citation ? (
-                <figure className="mt-6 border-l-2 border-foreground pl-5">
-                  <blockquote className="text-lg leading-relaxed text-pretty text-foreground sm:text-xl">
-                    {`«\u00a0${section.citation.texte}\u00a0»`}
-                  </blockquote>
-                  <figcaption className="mt-2 text-sm text-muted-foreground">
-                    <cite className="not-italic">{section.citation.qui}</cite>
-                  </figcaption>
-                </figure>
-              ) : null}
-
-              {/* L'appel à l'action, à la moitié de l'article.
-
-                  Sa place est calculée et non écrite dans le contenu : un
-                  article de cinq sections et un de huit ne coupent pas au même
-                  endroit, et un numéro posé à la main dans `avis.ts` serait faux
-                  au premier remaniement. */}
-              {i === Math.floor(article.sections.length / 2) - 1 ? (
-                <AppelFormation />
-              ) : null}
-            </section>
-          ))}
           {/* La transcription, repliée sous l'article.
 
               `details` et `summary` natifs : aucun JavaScript, le texte est dans
