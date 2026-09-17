@@ -64,7 +64,15 @@ export const plateformeImmersion = {
      coupure. Le tableau reste un tableau pour que le jour où un titre demande
      deux lignes, il suffise d'ajouter un second segment. */
   titre: ["Immersion Funnels Club"],
-  points: ["Votre espace privé", "Fiche de cours", "Groupe d'entraide"],
+  /* Dictées par Rémy, et elles sont quatre depuis : « Groupe d'entraide » sort,
+     « Coaching » et « IA Funnels.Club » entrent. La rangée passe à la ligne
+     toute seule quand elle ne tient plus, donc rien à régler pour un quatrième. */
+  points: [
+    "Espace privé",
+    "Fiche de cours",
+    "Coaching",
+    "IA Funnels.Club",
+  ],
   video: {
     id: "xs24rsgnuy",
     /* Le titre de l'iframe décrit la vidéo et non le lecteur. */

@@ -186,7 +186,26 @@ export function LecteurVideo({
           title={titre}
           allow="autoplay; fullscreen"
           allowFullScreen
-          className="absolute -inset-[3px] size-[calc(100%+6px)] border-0"
+          /* **Le lecteur servi d'emblée porte son propre arrondi, et ne
+             déborde pas.**
+
+             Le débordement de trois pixels ci-dessus rentre un liseré clair que
+             le lecteur peint lui-même : il n'a de sens que derrière un cadre qui
+             rogne vraiment. Or ce cadre-ci est incliné en 3D, et **un
+             `overflow: hidden` ne rogne pas une iframe dans un sous-arbre
+             composité à part** : les quatre angles carrés du lecteur
+             dépassaient de l'arrondi, ce que Rémy a vu comme « des trucs blancs
+             sur les quatre coins ».
+
+             L'iframe se rogne donc elle-même, au même rayon que le cadre, et
+             cesse de déborder : sans débordement, il n'y a plus rien qui puisse
+             sortir des angles. */
+          className={cn(
+            "absolute border-0",
+            natif
+              ? "inset-0 size-full rounded-md"
+              : "-inset-[3px] size-[calc(100%+6px)]",
+          )}
         />
       ) : (
         <button
