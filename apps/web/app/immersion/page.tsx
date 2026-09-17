@@ -122,7 +122,12 @@ export default function Immersion() {
             un fond de page et deviendrait clair sur sombre. */}
         <div
           data-bande-sombre
-          className="absolute inset-x-0 top-0 bottom-[calc(var(--jonction)-88px)] -z-10 overflow-hidden"
+          /* `bg-[var(--fond-hero)]` : la photographie porte sa propre
+             transparence dans son tiers haut, donc sans fond opaque elle
+             laissait paraître la couleur de page au travers. En thème clair,
+             cela donnait un gris moyen sous le voile, et tout ce qui est posé
+             dessus y perdait son relief. Voir le jeton dans `globals.css`. */
+          className="absolute inset-x-0 top-0 bottom-[calc(var(--jonction)-88px)] -z-10 overflow-hidden bg-[var(--fond-hero)]"
         >
           <picture>
             <source media="(min-width: 768px)" srcSet="/fond-hero.jpg" />

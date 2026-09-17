@@ -151,7 +151,9 @@ export function PilulesArguments({
         return (
           <li
             key={point.texte}
-            style={{ "--teinte": teinte } as React.CSSProperties}
+            style={
+              { "--teinte": teinte, "--grossissement": "1.04" } as React.CSSProperties
+            }
             /* **La gélule n'a plus son fond : il est passé sur le voile
                intérieur.** C'est ce qui laisse voir un cheveu de la lumière qui
                tourne derrière, tout autour du bord. Posé ici, le fond l'aurait
@@ -160,28 +162,12 @@ export function PilulesArguments({
                `z-0` et `overflow-hidden` : la lumière est un disque bien plus
                grand que la gélule, il faut un contexte d'empilement pour la
                ranger dessous et un rognage pour n'en montrer que le tour. */
-            className={cn(
-              "group/pilule relative z-0 flex items-center gap-2 overflow-hidden rounded-full border border-white/10 py-1.5 pr-4 pl-3",
-              /* **La gélule grossit un peu au survol**, sur demande de Rémy.
-
-                 **La propriété animée est `scale` et non `transform`.**
-                 Tailwind v4 pose les mises à l'échelle sur `scale` : écrite
-                 `transition-[transform]`, la gélule sauterait d'un coup à sa
-                 taille finale. C'est le piège que le dépôt a déjà rencontré sur
-                 les cartes de la galerie, avec `translate`.
-
-                 **Et le survol est rendu sous condition, pas seulement privé de
-                 transition.** La règle globale de mouvement réduit ramène les
-                 durées à 0,01 ms : la gélule grossirait quand même, d'un coup.
-                 Quelqu'un qui demande moins de mouvement ne demande pas un
-                 mouvement instantané, et c'est déjà la réparation faite pour le
-                 texte roulant. `anime` porte donc les deux.
-
-                 Quatre pour cent : sur une gélule de cent quarante pixels, cela
-                 fait six pixels, moins que l'espacement de la rangée. Rien ne
-                 se chevauche et le document ne s'élargit pas. */
-              anime && "transition-[scale] duration-300 hover:scale-[1.04]",
-            )}
+            /* `grossit-au-survol` : la règle est dans `globals.css`, partagée
+               avec les cartes d'avis qui suivent, et déjà gardée contre le
+               mouvement réduit. Quatre pour cent ici : sur une gélule de cent
+               quarante pixels, cela fait six pixels, moins que l'espacement de
+               la rangée. */
+            className="group/pilule grossit-au-survol relative z-0 flex items-center gap-2 overflow-hidden rounded-full border border-white/10 py-1.5 pr-4 pl-3"
           >
             {anime ? (
               /* **La lumière qui tourne**, reprise de `ShimmerButton` du

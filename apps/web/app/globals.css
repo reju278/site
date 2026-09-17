@@ -797,6 +797,26 @@ summary {
      Purement décoratif, donc aucun seuil de contraste à tenir : l'étincelle
      n'apporte aucune information que le libellé ne porte pas. */
   --etincelle: #9e7aff;
+
+  /* Le fond posé **sous** la photographie du hero d'immersion.
+
+     **Il ne change pas d'un thème à l'autre, et c'est tout l'objet.** Ce
+     fichier affirmait déjà que le hero est « sombre dans les deux thèmes », et
+     c'est ce qui justifie le blanc en dur des gélules et du titre. Ce n'était
+     pas vrai : le paysage porte sa propre transparence dans son tiers haut,
+     donc il laissait paraître la couleur de page au travers. En thème clair,
+     du blanc sous un voile noir à 55 % donne un gris moyen, et tout ce qui est
+     posé dessus, gélules de verre blanc, filets lumineux, titre blanc, y perdait
+     son relief. Rémy l'a décrit comme « plat », et il avait raison.
+
+     La photographie a donc un fond à elle, opaque et sombre, et l'affirmation
+     devient vraie. La valeur est celle du fond des résultats en thème sombre :
+     les noirs du site restent d'une seule famille.
+
+     Rien au-dessus de cette bande, elle part du premier pixel de la page : il
+     n'y a donc aucun raccord à soigner en haut, et la lèvre couvre celui du
+     bas. */
+  --fond-hero: #0b0e16;
   --or-encre: #1f1a05;
 
   --halo-or-a: rgba(180, 134, 6, 0.12);
@@ -1082,6 +1102,37 @@ html {
    que le fichier reste alignable sur une mise à jour. */
 :root:not(.dark) [data-rayons] * {
   mix-blend-mode: normal;
+}
+
+/* Un objet qui grossit un peu quand la souris passe dessus.
+
+   Il sert aux gélules du hero d'immersion et aux trois cartes d'avis qui les
+   suivent, sur demande de Rémy, et il est écrit **une fois** plutôt que deux
+   fois en classes utilitaires : deux écritures du même geste divergent à la
+   première correction, et c'est la règle du dépôt sur les valeurs partagées.
+
+   **L'ampleur se règle par élément**, `--grossissement`, parce qu'elle ne peut
+   pas être la même : quatre pour cent sur une gélule de cent quarante pixels
+   font six pixels, la même proportion sur une carte de trois cent cinquante en
+   ferait quatorze, et la carte cognerait sa voisine.
+
+   **La règle vit dans un `@media (prefers-reduced-motion: no-preference)`, et
+   pas seulement sans transition.** La règle globale du projet ramène les durées
+   à 0,01 ms : l'objet grossirait quand même, d'un coup. Quelqu'un qui demande
+   moins de mouvement ne demande pas un mouvement instantané. C'est la
+   réparation déjà faite pour le texte roulant.
+
+   **La propriété est `scale` et non `transform`.** Tailwind v4 pose les mises à
+   l'échelle sur `scale`, comme il pose les translations sur `translate` : une
+   transition écrite sur `transform` n'anime rien. */
+@media (prefers-reduced-motion: no-preference) {
+  .grossit-au-survol {
+    transition: scale 300ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  .grossit-au-survol:hover {
+    scale: var(--grossissement, 1.02);
+  }
 }
 
 /* Le corps d'un article de la lettre.

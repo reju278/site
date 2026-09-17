@@ -101,7 +101,16 @@ export function CartesTemoignage() {
               backgroundColor:
                 "color-mix(in srgb, currentColor 4%, transparent)",
             }}
-            className="relief-verre flex h-full flex-col justify-between rounded-[25px] px-[18px] py-5 text-left text-foreground transition-colors hover:brightness-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            /* `grossit-au-survol` : la même règle que les gélules du hero, dans
+               `globals.css`, sur demande de Rémy. Deux pour cent et non quatre :
+               une carte fait trois cent cinquante pixels, la proportion des
+               gélules lui en ferait gagner quatorze et elle cognerait sa
+               voisine.
+
+               Le `brightness` du survol reste, et les deux transitions sont
+               écrites séparément : celle de l'échelle vit dans `globals.css`
+               avec sa garde de mouvement réduit, celle de la couleur ici. */
+            className="relief-verre grossit-au-survol flex h-full flex-col justify-between rounded-[25px] px-[18px] py-5 text-left text-foreground transition-colors hover:brightness-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
             <div className="flex flex-col gap-4">
               <div className="flex items-center gap-3">

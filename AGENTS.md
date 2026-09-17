@@ -850,6 +850,31 @@ Le `> div` n'est pas une coquetterie : dans `Section`, le rembourrage vit sur le
 bloc intérieur et non sur la balise qui reçoit la classe. Un `className` nu
 n'écrase rien.
 
+### Une photographie transparente a besoin d'un fond à elle
+
+Ce fichier affirmait que le hero d'`/immersion` est « sombre dans les deux
+thèmes », et c'est ce qui justifie le blanc en dur de son titre, de ses gélules
+et de leurs filets lumineux. **Ce n'était pas vrai.** Les paysages du site
+portent leur propre transparence dans leur tiers haut : la photographie laissait
+donc paraître la couleur de page au travers. En thème clair, du blanc sous un
+voile noir à 55 % donne un gris moyen, et tout ce qui est posé dessus y perd son
+relief. Rémy l'a décrit comme « plat », et la mesure lui a donné raison : c'est
+le même écran, avec le même voile, qui rend deux fonds différents selon le thème.
+
+La bande porte donc `--fond-hero`, opaque et fixe d'un thème à l'autre, et
+l'affirmation devient vraie. Rien n'est au-dessus d'elle, elle part du premier
+pixel de la page : aucun raccord à soigner en haut, et la lèvre couvre celui du
+bas.
+
+**La leçon est générale : une couleur en dur posée sur une image se justifie par
+ce qu'il y a sous l'image, pas par l'image.** Tant que la photographie était
+transparente, « le fond est sombre » décrivait une intention et non un fait, et
+rien ne le signalait : la page s'affichait, elle était simplement terne d'un
+côté.
+
+Les heros de l'accueil et du hub n'ont pas reçu ce fond. Ils posent la même
+image et méritent le même examen, mais ils n'ont pas été mesurés.
+
 ### Une image rognée perd son fondu, et ça se voit
 
 Les deux paysages du site portent leur propre transparence, qui s'éteint dans
