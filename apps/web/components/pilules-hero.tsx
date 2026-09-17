@@ -216,12 +216,19 @@ export function PilulesArguments({
                    photographie au travers et ça se lisait comme une rainure
                    sombre. C'est le défaut que Rémy a signalé.
 
-                   `bg-white/6` est exactement le fond du voile intérieur : le
-                   fond de ce calque remplit l'anneau, la lumière se peint
-                   par-dessus puisqu'elle est son enfant, et l'anneau cesse
-                   d'exister à l'œil quand elle n'y est pas. Il lui manque le
-                   flou d'arrière-plan du voile, et sur un pixel ça ne se voit
-                   pas.
+                   **Il n'y a plus d'anneau du tout**, et c'est la seule
+                   réparation qui tienne. Le remplir du même blanc ne suffisait
+                   pas : il lui manquait le flou d'arrière-plan du voile, et un
+                   blanc à six pour cent posé sur une photographie nette n'a pas
+                   la couleur du même blanc posé sur la même photographie
+                   floutée. Un pixel suffit à voir la différence, contrairement
+                   à ce que j'avais écrit ici.
+
+                   Le voile couvre donc toute la gélule, d'un seul tenant, et la
+                   lumière passe **derrière lui**. Le verre étant très
+                   translucide, elle le traverse et fait le tour du bord comme
+                   avant ; ce qui disparaît, c'est la couture qu'il y avait
+                   entre trois traitements différents sur trois pixels.
 
                    **Ce qui a été essayé et jeté : rogner la lumière au filet
                    par un masque**, à la façon de `BorderBeam`. Le masque était
@@ -230,7 +237,7 @@ export function PilulesArguments({
                    masque ne gardait que cette bande, l'enfant ne pouvait pas y
                    aller, et l'effet disparaissait entièrement. Mesuré, pas
                    supposé. */
-                className="pointer-events-none absolute inset-0 -z-30 overflow-visible rounded-full bg-white/6 blur-[2px] @container-[size]"
+                className="pointer-events-none absolute inset-0 -z-30 overflow-visible blur-[2px] @container-[size]"
               >
                 <span className="animate-shimmer-slide absolute inset-0 aspect-square h-[100cqh]">
                   <span className="animate-spin-around absolute -inset-full [background:conic-gradient(from_calc(270deg-45deg),transparent_0,var(--teinte)_90deg,transparent_90deg)]" />
@@ -238,12 +245,12 @@ export function PilulesArguments({
               </span>
             ) : null}
 
-            {/* Le verre, rentré d'un pixel pour découvrir l'anneau où passe
-                la lumière. C'est le `backdrop` de leur bouton, au même endroit
-                et pour la même raison. */}
+            {/* Le verre, d'un seul tenant sur toute la gélule. Il était
+                rentré d'un pixel pour découvrir la lumière ; c'est ce pixel qui
+                faisait la rainure. */}
             <span
               aria-hidden
-              className="absolute inset-px -z-20 rounded-full bg-white/6 backdrop-blur-md"
+              className="absolute inset-0 -z-20 rounded-full bg-white/6 backdrop-blur-md"
             />
 
             {point.etincelles ? (

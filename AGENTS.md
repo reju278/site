@@ -1301,20 +1301,23 @@ n'y avait rien à installer.
 `button`, et une gélule ne se clique pas. Poser un bouton là aurait annoncé une
 action qui n'existe pas. La recette est reprise en trois `span` décoratifs.
 
-**Le voile de verre est rentré d'un pixel**, comme le `backdrop` de leur bouton,
-et c'est cet anneau d'un pixel qui laisse voir la lumière tout autour du bord.
+**Le voile de verre couvre toute la gélule d'un seul tenant, et la lumière passe
+derrière lui.** Le verre étant très translucide, elle le traverse et fait le tour
+du bord ; il n'y a aucun espace ménagé pour la laisser voir.
 
-**Mais un anneau transparent se voit aussi quand la lumière n'y est pas.** Il
-laissait paraître la photographie au travers, et les trois secondes où la
-lumière était ailleurs, il se lisait comme une rainure sombre. Rémy l'a signalé.
-L'anneau porte donc le fond du calque de lumière, `bg-white/6`, exactement celui
-du voile : la lumière se peint par-dessus puisqu'elle en est l'enfant, et
-l'anneau cesse d'exister à l'œil le reste du temps. Il lui manque le flou
-d'arrière-plan du voile, et sur un pixel cela ne se voit pas.
+**Il y en a eu un, et il a coûté trois tentatives.** Le `backdrop` du bouton de
+registre est rentré d'un pixel, et la première version a fait pareil : la lumière
+passait dans cet anneau. Mais un anneau ménagé pour un effet **existe aussi les
+trois secondes où l'effet est ailleurs**, et celui-là laissait voir la
+photographie au travers, ce qui se lisait comme une rainure sombre.
 
-**Un espace laissé pour qu'un effet passe existe aussi quand l'effet n'est pas
-là.** Ce qui découvre une animation se juge sur les trois secondes où elle est
-ailleurs, pas sur l'instant où elle passe.
+Le remplir du même blanc n'a pas suffi, et c'est la leçon qui mérite d'être
+écrite : **un blanc à six pour cent posé sur une photographie nette n'a pas la
+couleur du même blanc posé sur la même photographie floutée.** Un pixel suffit à
+voir la différence. Tant que l'anneau n'avait pas le `backdrop-blur` du voile, il
+restait plus sombre que ce qui l'entourait ; et le lui donner aurait fait deux
+couches de verre à l'intérieur pour une seule sur l'anneau, donc une couture
+inverse. La seule sortie était de supprimer l'anneau.
 
 **Ce qui a été essayé et jeté : rogner la lumière au filet par un masque**, à la
 façon de `BorderBeam`. Le masque était juste, mais `@container-[size]` pose
@@ -1322,6 +1325,7 @@ façon de `BorderBeam`. Le masque était juste, mais `@container-[size]` pose
 le masque ne gardait que cette bande, l'enfant ne pouvait pas y aller, et
 **l'effet disparaissait entièrement**. Rien n'échouait, rien ne s'affichait. La
 famille est connue dans ce fichier : une règle qui est là et n'agit pas.
+
 
 **Une seule teinte par gélule, et elle sert à tout.** Le point, l'étoile et la
 lumière la lisent dans `--teinte`, donc ils ne peuvent pas se désaccorder. Vert
