@@ -1,9 +1,6 @@
-"use client";
-
 import { pastilleHero } from "@/contenu/site";
 import { cn } from "@repo/ui/lib/utils";
 import { Sparkles } from "lucide-react";
-import { useEffect, useState } from "react";
 
 /**
  * Les gélules en verre du hero d'immersion.
@@ -115,25 +112,6 @@ export function PilulesArguments({
 }: {
   points: readonly { texte: string; etincelles?: boolean }[];
 }) {
-  /* **Les étincelles sont animées en JavaScript, donc la règle globale de
-     mouvement réduit ne les atteint pas.** `globals.css` ramène les durées
-     d'animation et de transition à 0,01 ms ; Motion anime par la Web Animations
-     API et un `setInterval`, que le CSS ne voit pas. C'est le même piège que le
-     canevas de `ParticulesHero` et que la bascule de thème, et il se répare
-     pareil : on décide ici de ne rien rendre. Quelqu'un qui demande moins de
-     mouvement obtient l'étoile fixe et le libellé, ce qui est exactement
-     l'information. */
-  const [anime, setAnime] = useState(false);
-
-  useEffect(() => {
-    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const appliquer = () => setAnime(!preference.matches);
-
-    appliquer();
-    preference.addEventListener("change", appliquer);
-    return () => preference.removeEventListener("change", appliquer);
-  }, []);
-
   return (
     /* `flex-wrap` et non `nowrap` : quatre gélules en une ligne tiennent en
        large et débordent à 375 px, et un débordement horizontal du document est
@@ -169,7 +147,7 @@ export function PilulesArguments({
                la rangée. */
             className="group/pilule grossit-au-survol relative z-0 flex items-center gap-2 overflow-hidden rounded-full border border-white/10 py-1.5 pr-4 pl-3"
           >
-            {anime ? (
+            {
               /* **La lumière qui tourne**, reprise de `ShimmerButton` du
                  registre MagicUI, sur demande de Rémy. La recette est la leur :
                  un dégradé conique qui tourne sur lui-même à l'intérieur d'une
@@ -223,15 +201,15 @@ export function PilulesArguments({
                    masque ne gardait que cette bande, l'enfant ne pouvait pas y
                    aller, et l'effet disparaissait entièrement. Mesuré, pas
                    supposé. */
-                className="pointer-events-none absolute inset-0 -z-30 overflow-visible blur-[2px] @container-[size]"
+                className="lumiere-tournante pointer-events-none absolute inset-0 -z-30 overflow-visible blur-[2px] @container-[size]"
               >
                 <span className="animate-shimmer-slide absolute inset-0 aspect-square h-[100cqh]">
                   <span className="animate-spin-around absolute -inset-full [background:conic-gradient(from_calc(270deg-45deg),transparent_0,var(--teinte)_90deg,transparent_90deg)]" />
                 </span>
               </span>
-            ) : null}
+            }
 
-            {anime ? (
+            {
               /* **La ligne nette, posée sur le filet lui-même.**
 
                  Le calque du dessus ne donne que le reflet diffus qui traverse
@@ -259,7 +237,7 @@ export function PilulesArguments({
               <span
                 aria-hidden
                 style={{ "--speed": "3s" } as React.CSSProperties}
-                className="pointer-events-none absolute -inset-px rounded-full p-px [mask-clip:content-box,border-box] [mask-composite:exclude] [mask-image:linear-gradient(#000_0_0),linear-gradient(#000_0_0)] [-webkit-mask-composite:xor]"
+                className="lumiere-tournante pointer-events-none absolute -inset-px rounded-full p-px [mask-clip:content-box,border-box] [mask-composite:exclude] [mask-image:linear-gradient(#000_0_0),linear-gradient(#000_0_0)] [-webkit-mask-composite:xor]"
               >
                 <span className="absolute inset-0 overflow-hidden rounded-full @container-[size]">
                   <span className="animate-shimmer-slide absolute inset-0 aspect-square h-[100cqh]">
@@ -267,7 +245,7 @@ export function PilulesArguments({
                   </span>
                 </span>
               </span>
-            ) : null}
+            }
 
             {/* Le verre, d'un seul tenant sur toute la gélule. Il était
                 rentré d'un pixel pour découvrir la lumière ; c'est ce pixel qui

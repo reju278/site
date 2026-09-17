@@ -1104,6 +1104,27 @@ html {
   mix-blend-mode: normal;
 }
 
+/* La lumière qui tourne sur le bord d'un objet.
+
+   Elle sert aux gélules du hero d'immersion et à l'étiquette « Extrait de
+   formation ». Cette classe ne fait qu'une chose, mais il fallait la faire :
+   **retirer la lumière quand on demande moins de mouvement.**
+
+   La règle globale du projet ramène `animation-duration` à 0,01 ms. Ici, cela
+   ne suffit pas : neutralisée, l'animation laisse **un quart de dégradé conique
+   figé en travers de l'objet**, c'est-à-dire une tache. Une animation arrêtée
+   n'est pas toujours une image acceptable, et c'est pour ça qu'on la retire au
+   lieu de la ralentir.
+
+   Elle est en CSS et non décidée en JavaScript, contrairement au canevas du
+   hero : ici le rendu ne dépend de rien d'autre, donc la feuille de style
+   suffit, et les composants qui s'en servent restent des composants serveur. */
+@media (prefers-reduced-motion: reduce) {
+  .lumiere-tournante {
+    display: none;
+  }
+}
+
 /* Un objet qui grossit un peu quand la souris passe dessus.
 
    Il sert aux gélules du hero d'immersion et aux trois cartes d'avis qui les
