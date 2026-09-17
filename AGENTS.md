@@ -1189,6 +1189,40 @@ dessin sans rien dire à la ligne : le réglage est juste à un seul corps et se
 refait à chaque changement de taille. `vertical-align` s'exprime en `em` par
 rapport à la ligne de base, donc il tient à toutes les tailles.
 
+### Le geste d'inclinaison est écrit une fois, et sa lueur se décide par carte
+
+Les cartes d'offres de l'accueil s'inclinent sous le pointeur depuis longtemps.
+Rémy a demandé le même geste sur les cartes d'entretien d'`/immersion`, en citant
+celles-là : il est donc **sorti dans `CarteInclinable`** plutôt que recopié. La
+formule des angles, le signe inversé de l'axe X, les deux durées de transition et
+la pose de la lueur avant son allumage sont des réglages trouvés une fois, qui
+n'ont aucune raison d'exister en deux exemplaires.
+
+**`carte-offre.tsx` garde encore sa propre copie**, et c'est une dette assumée :
+la porter au composant partagé touche l'accueil, que Rémy n'a pas demandé à
+modifier. Le jour où on y revient, c'est le même geste qu'on retire.
+
+**La couleur de la lueur n'est pas la même aux deux endroits, et les deux se
+tiennent.** Sur les cartes d'offres elle est blanche, sur décision de Rémy : le
+fond y a déjà ses trois halos, et un halo coloré de plus teinte la carte. Sur les
+cartes d'entretien elle est **bleutée en thème clair**, sur sa demande : elles
+sont posées sur `bg-card`, une surface neutre, que le reflet éclaire sans rien
+salir. Ce qui teinte une carte déjà colorée éclaire une carte qui ne l'est pas.
+
+**L'intensité se règle par thème, et c'est contre l'intuition** : sur un fond
+presque noir, un reflet à trente pour cent est déjà une lampe, là où sur un fond
+presque blanc il s'efface. Le réglage tient dans une variable et non dans deux
+dégradés écrits côte à côte.
+
+**La lueur passe au-dessus du contenu, pas dessous**, et c'est une correction.
+Dessous, elle n'éclairait que les marges : le fond de la carte et l'affiche sont
+opaques et la cachaient là où il y a justement quelque chose à regarder. Elle
+porte donc `pointer-events-none`, sans quoi elle prendrait le clic.
+
+**Et un seul geste par objet.** La carte montait aussi de deux pixels au survol
+et son affiche zoomait : trois mouvements pour un même objet se contrarient.
+L'inclinaison les remplace tous, et elle porte déjà son ombre.
+
 ### Dans une grille, les actions s'alignent entre elles
 
 Deux cartes côte à côte n'ont jamais des textes de même longueur. Si le bouton

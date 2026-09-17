@@ -1,3 +1,4 @@
+import { CarteInclinable } from "@/components/carte-inclinable";
 import { ContenuEntretien } from "@/components/contenu-entretien";
 import { ModaleAvis } from "@/components/modale-avis";
 import { TexteRoulant } from "@/components/texte-roulant";
@@ -68,6 +69,20 @@ export function GalerieEntretiens() {
 
         return (
           <li key={id} id={ancreEntretien(id)} className="scroll-mt-24">
+            {/* **La carte s'incline sous le pointeur**, sur demande de Rémy, qui
+                a cité les cartes 3D de l'accueil. C'est le même geste, sorti en
+                composant plutôt que recopié : voir `CarteInclinable`.
+
+                La lueur est bleutée en thème clair, sur sa demande. C'est
+                l'inverse de ce qu'il avait tranché pour les cartes d'offres, et
+                les deux se tiennent : là-bas la carte a déjà ses couleurs et un
+                halo coloré la teinte ; ici elle est posée sur `bg-card`, une
+                surface neutre, que le reflet éclaire sans rien salir.
+
+                **Le survol qui soulevait la carte est retiré.** Deux gestes pour
+                un seul objet, l'un qui monte et l'autre qui tourne, se
+                contrariaient : l'inclinaison porte déjà son ombre. */}
+            <CarteInclinable teinte="bleute" className="h-full">
             <ModaleAvis
               titre={`Entretien avec ${nom}`}
               description={sansNoms(article.chapo)}
@@ -103,7 +118,7 @@ export function GalerieEntretiens() {
                      On n'anime pas tout : au survol, la couleur de fond de la
                      pilule change aussi, et `transition-all` ferait traîner ce
                      qui doit être net. */
-                  className="relief-verre group/carte group/roule flex h-full w-full flex-col overflow-hidden rounded-md border border-border bg-card text-left transition-[translate,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-24px_rgba(0,0,0,0.45)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                  className="relief-verre group/carte group/roule flex h-full w-full flex-col overflow-hidden rounded-md border border-border bg-card text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                 >
                   {/* L'affiche, **recadrée sur la bande d'image réelle**.
 
@@ -120,8 +135,8 @@ export function GalerieEntretiens() {
                       donne 32/9, seule valeur qui les découvre sans laisser de
                       noir.
 
-                      L'image avance légèrement au survol de la carte : c'est ce
-                      qui la fait répondre au clic qu'on s'apprête à faire. */}
+                      L'image ne bouge plus : voir la note sur le zoom
+                      ci-dessous. */}
                   <span className="relative block aspect-32/9 overflow-hidden bg-black">
                     {/* **Servie par `next/image` et non en `img` brute.**
 
@@ -141,7 +156,11 @@ export function GalerieEntretiens() {
                       fill
                       sizes="(min-width: 640px) 440px, 100vw"
                       loading="lazy"
-                      className="object-cover transition-transform duration-500 group-hover/carte:scale-[1.03]"
+                      /* **Plus de zoom au survol**, sur demande de Rémy : la
+                         carte s'incline désormais, et deux mouvements pour un
+                         seul objet se contrarient. L'image reste fixe, c'est la
+                         carte qui bouge. */
+                      className="object-cover"
                     />
 
                     {/* La durée, en bas à droite.
@@ -161,7 +180,10 @@ export function GalerieEntretiens() {
                   </span>
 
                   <span className="flex flex-1 flex-col p-5">
-                    <span className="block text-base font-semibold text-card-foreground">
+                    {/* Le prénom dans la fonte des titres et un cran plus
+                        gros, sur demande de Rémy : c'est le nom de quelqu'un,
+                        et c'est ce qu'on lit en premier sur la carte. */}
+                    <span className="titre block text-lg text-card-foreground sm:text-xl">
                       {nom}
                     </span>
                     <span className="mt-1 block text-sm text-pretty text-muted-foreground">
@@ -203,6 +225,7 @@ export function GalerieEntretiens() {
               {/* Le contenu, partagé avec les cartes du hero. */}
               <ContenuEntretien id={id} />
             </ModaleAvis>
+            </CarteInclinable>
           </li>
         );
       })}
