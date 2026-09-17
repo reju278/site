@@ -1,41 +1,27 @@
 "use client";
 
 import { InteractiveGridPattern } from "@repo/ui/components/interactive-grid-pattern";
+import { cn } from "@repo/ui/lib/utils";
 
 /**
- * Le quadrillage de cases arrondies posé derrière une section.
+ * Le quadrillage de cases posé derrière les extraits de coaching.
  *
- * C'est `InteractiveGridPattern` de MagicUI, demandé par Rémy pour les sections
- * du modèle, des extraits de coaching et des entretiens. Ce fichier existe parce
- * que le composant de registre arrive avec trois choses qu'on ne garde pas, et
- * qu'il vaut mieux les corriger une fois ici que trois fois dans la page.
+ * **C'est la démonstration de MagicUI, reprise à la lettre**, sur demande de
+ * Rémy, qui a fourni son code : les propriétés par défaut du composant, et ces
+ * deux lignes de classes et pas d'autres. Le masque est un disque de 400 px au
+ * centre, donc le quadrillage n'apparaît qu'au milieu de la section et s'éteint
+ * bien avant d'en atteindre les bords ; l'inclinaison et la double hauteur sont
+ * ce qui lui donne sa fuite.
  *
- * **Ses couleurs sont en dur.** `border-gray-400/30` et `stroke-gray-400/30` ne
- * répondent à aucun thème, et le dépôt l'interdit : le filet passe en
- * `stroke-border`, et le cadre extérieur saute, puisque la section a déjà ses
- * bords.
+ * **Une première version l'avait adapté** : cases arrondies à 5 px, filet en
+ * `stroke-border`, survol au bleu du site, cases carrées forcées par
+ * `preserveAspectRatio`, et le tout derrière trois sections. Rémy a tranché pour
+ * la démonstration telle quelle et pour cette section seule. Ses gris en dur
+ * restent donc, et c'est cohérent avec la règle du dépôt sur le code de
+ * registre : on ne le retouche pas.
  *
- * **Ses cases sont carrées.** Rémy les veut arrondies : `rx` est une propriété
- * CSS sur un `rect`, donc elle se pose de l'extérieur sans toucher au fichier de
- * registre. Cinq pixels, comme tout le reste du site.
- *
- * **Son survol peint du gris.** Il passe au bleu du site. La classe de survol
- * est écrite ici plutôt que par-dessus la leur : elles ne visent pas le même
- * état, donc les deux coexistent et c'est la nôtre qui gagne au survol.
- *
- * **Le quadrillage s'efface vers les bords.** Un masque radial l'éteint avant
- * qu'il rencontre le bord de la section : sans lui, il s'arrêterait net et
- * dessinerait un rectangle, c'est-à-dire exactement la couture que ce dépôt
- * traque partout ailleurs.
- *
- * **`preserveAspectRatio` garde les cases carrées.** Le composant dimensionne
- * son SVG en attributs puis le CSS l'étire à la section : sans cette ligne, les
- * cases deviennent des rectangles dès que la section n'a pas les proportions du
- * quadrillage.
- *
- * **Les cases restent les seules choses cliquables de ce calque.** Le conteneur
- * ne prend pas les événements, sinon il couvrirait la section entière et
- * prendrait les clics du texte qui est au-dessus.
+ * **Le conteneur ne prend pas les événements, les cases oui.** Sans cela, le
+ * calque couvrirait la section et prendrait les clics du contenu au-dessus.
  */
 export function FondCases() {
   return (
@@ -44,12 +30,11 @@ export function FondCases() {
       className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
     >
       <InteractiveGridPattern
-        width={80}
-        height={80}
-        squares={[18, 12]}
-        preserveAspectRatio="xMidYMid slice"
-        className="pointer-events-auto inset-0 size-full border-0 [mask-image:radial-gradient(ellipse_at_center,#000_35%,transparent_75%)]"
-        squaresClassName="fill-transparent stroke-border [rx:5px] hover:fill-primary/15"
+        className={cn(
+          "pointer-events-auto",
+          "[mask-image:radial-gradient(400px_circle_at_center,white,transparent)]",
+          "inset-x-0 inset-y-[-30%] h-[200%] skew-y-12",
+        )}
       />
     </div>
   );

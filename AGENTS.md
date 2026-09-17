@@ -737,33 +737,27 @@ bleu nuit sur du beige, la coupure se lisait toute seule. Ce fond-ci est à un
 cheveu de la couleur de page, `#fbfcff` contre `#fcfbf8` : sans filet, l'arrondi
 ne se verrait pas.
 
-### Le quadrillage de cases, et son prix
+### Le quadrillage de cases : la démonstration telle quelle, et son prix
 
-`InteractiveGridPattern` de MagicUI, derrière les sections du modèle, du
-coaching et des entretiens, sur demande de Rémy. **Facultatif, comme les
-rayons** : posé partout, il cesserait d'être un accent pour devenir le fond de
-la page.
+`InteractiveGridPattern` de MagicUI, derrière la **seule** section des extraits
+de coaching, sur demande de Rémy, qui a fourni le code de leur démonstration et
+tranché : « je veux que ce soit cela précisément ». Propriétés par défaut,
+masque en disque de 400 px au centre, `inset-y-[-30%] h-[200%] skew-y-12`, et
+rien d'autre.
 
-Trois choses du fichier de registre sont rattrapées **de l'extérieur**, pour
-qu'il reste alignable : ses couleurs en dur, `gray-400/30`, qui ne répondent à
-aucun thème et passent en `stroke-border` ; ses cases carrées, que Rémy veut
-arrondies, `rx` étant une propriété CSS sur un `rect` ; et son survol gris, qui
-passe au bleu du site. La classe de survol coexiste avec la leur au lieu de
-l'écraser : elles ne visent pas le même état.
+**Une première version l'avait adapté**, et c'est ce qui a été refusé : cases
+arrondies à 5 px, filet en `stroke-border`, survol au bleu du site, cases
+carrées forcées par `preserveAspectRatio`, le tout derrière trois sections. Ses
+gris en dur restent donc, et c'est cohérent avec la règle du dépôt : **le code
+de registre ne se retouche pas**, et un gris neutre à trente pour cent se voit
+sur les deux thèmes.
 
-**`preserveAspectRatio` n'est pas un détail.** Le composant dimensionne son SVG
-en attributs puis le CSS l'étire à la section : sans cette ligne, les cases
-deviennent des rectangles dès que la section n'a pas les proportions du
-quadrillage. Rien ne le signale.
+**Il reste facultatif, et il faut qu'il le reste.** Sur les six sections, il
+cesserait d'être un accent pour devenir le fond de la page.
 
-**Le quadrillage s'éteint au masque avant d'atteindre le bord**, sinon il
-s'arrête net et dessine un rectangle, c'est-à-dire la couture que ce fichier
-traque partout ailleurs.
-
-**Et il faut connaître son prix : 216 `rect` par section, 648 sur la page**,
-chacun portant deux gestionnaires de souris. C'est ce qui décide du nombre de
-cases, et c'est pourquoi il n'y en a pas sur les six sections. Le jour où la
-page devient lourde, c'est le premier endroit où regarder.
+**Et il faut connaître son prix : 576 `rect`**, chacun portant deux
+gestionnaires de souris. C'est la raison de plus de n'en mettre qu'un. Le jour
+où la page devient lourde, c'est le premier endroit où regarder.
 
 ### Les rayons de lumière du fond des résultats, et pourquoi ils sont facultatifs
 

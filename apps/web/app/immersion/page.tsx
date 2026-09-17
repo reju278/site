@@ -290,7 +290,6 @@ export default function Immersion() {
           Ils sont facultatifs, et ne servent qu'ici : voir la propriété. */}
       <FondResultats rayons>
       <SectionImmersion
-        cases
         id="strategie"
         /* **Plus d'air au-dessus**, sur demande de Rémy. La lèvre de
            `FondResultats` fait déjà 80 px, et l'étiquette qui ouvre maintenant
@@ -423,7 +422,7 @@ export default function Immersion() {
           lien qu'on vient de recevoir.
 
           La carte est celle de `/resultats`, au détail près. */}
-      <SectionImmersion cases id="avis" className="scroll-mt-24">
+      <SectionImmersion id="avis" className="scroll-mt-24">
         <div className="mx-auto max-w-3xl text-center">
           <TitreRoulant
             as="h2"
@@ -497,9 +496,10 @@ function SectionImmersion({
   /**
    * Pose le quadrillage de cases derrière la section.
    *
-   * **Facultatif, et il faut qu'il le reste.** Rémy l'a demandé pour trois
-   * sections sur six ; partout, il cesserait d'être un accent pour devenir le
-   * fond de la page.
+   * **Facultatif, et il faut qu'il le reste.** Rémy l'a demandé pour la seule
+   * section des extraits de coaching. Il l'avait d'abord voulu sur trois, puis
+   * a tranché pour celle-là : partout, il cesserait d'être un accent pour
+   * devenir le fond de la page.
    */
   cases?: boolean;
 }) {
