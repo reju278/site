@@ -1,5 +1,5 @@
 import { CartesTemoignage } from "@/components/cartes-temoignage";
-import { FondCases } from "@/components/fond-cases";
+import { ExtraitsCoaching } from "@/components/extraits-coaching";
 import { FondResultats } from "@/components/fond-resultats";
 import { GalerieEntretiens } from "@/components/galerie-entretiens";
 import { LecteurVideo } from "@/components/lecteur-video";
@@ -382,7 +382,7 @@ export default function Immersion() {
       </FondResultats>
 
       {/* COACHING : les deux extraits. */}
-      <SectionImmersion cases id="coaching" className="scroll-mt-24">
+      <SectionImmersion id="coaching" className="scroll-mt-24">
         <div className="mx-auto max-w-3xl text-center">
           <TitreRoulant
             as="h2"
@@ -394,21 +394,9 @@ export default function Immersion() {
           </p>
         </div>
 
-        <ul className="mx-auto mt-10 grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2">
-          {coachingImmersion.extraits.map((extrait) => (
-            <li key={extrait.id}>
-              <LecteurVideo
-                id={extrait.id}
-                titre={extrait.titre}
-                secondes={extrait.secondes}
-                affiche={`/temoignages/${extrait.id}.jpg`}
-              />
-              <p className="mt-3 text-sm text-pretty text-muted-foreground">
-                {insecables(extrait.titre)}
-              </p>
-            </li>
-          ))}
-        </ul>
+        {/* Un seul extrait à la fois, dans une fenêtre Safari qu'on feuillette,
+            sur demande de Rémy. Les deux étaient côte à côte. */}
+        <ExtraitsCoaching extraits={coachingImmersion.extraits} />
 
       </SectionImmersion>
 
@@ -490,25 +478,10 @@ export default function Immersion() {
 function SectionImmersion({
   className,
   children,
-  cases = false,
   ...props
-}: React.ComponentProps<"section"> & {
-  /**
-   * Pose le quadrillage de cases derrière la section.
-   *
-   * **Facultatif, et il faut qu'il le reste.** Rémy l'a demandé pour la seule
-   * section des extraits de coaching. Il l'avait d'abord voulu sur trois, puis
-   * a tranché pour celle-là : partout, il cesserait d'être un accent pour
-   * devenir le fond de la page.
-   */
-  cases?: boolean;
-}) {
+}: React.ComponentProps<"section">) {
   return (
-    /* `relative` dès qu'il y a un quadrillage : c'est lui qui donne son cadre à
-       la couche posée en dessous. Sans quadrillage, la section reste ce qu'elle
-       était, pour ne rien changer aux cinq autres. */
-    <section className={cn(cases && "relative isolate", className)} {...props}>
-      {cases ? <FondCases /> : null}
+    <section className={className} {...props}>
       <div className="mx-auto max-w-6xl px-5 py-9 sm:py-12">{children}</div>
     </section>
   );

@@ -105,6 +105,15 @@ export function ContenuEntretien({ id }: { id: string }) {
                     secondes={temoignage.secondes}
                     affiche={`/temoignages/${id}.jpg`}
                     afficheAlt={sansNoms(article.afficheAlt)}
+                    /* **Le lecteur de Wistia, servi d'emblée**, sur demande de
+                       Rémy : plus aucune affiche cliquable sur cette page.
+
+                       Ici le prix est le plus faible de la page : la fenêtre ne
+                       monte son contenu qu'à l'ouverture, donc une seule iframe
+                       existe à la fois et elle est démontée à la fermeture. Ce
+                       sont les vingt-cinq lecteurs qui auraient été
+                       impensables, pas celui-là. */
+                    natif
                   />
                 </div>
               </div>

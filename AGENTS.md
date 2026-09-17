@@ -737,27 +737,52 @@ bleu nuit sur du beige, la coupure se lisait toute seule. Ce fond-ci est à un
 cheveu de la couleur de page, `#fbfcff` contre `#fcfbf8` : sans filet, l'arrondi
 ne se verrait pas.
 
-### Le quadrillage de cases : la démonstration telle quelle, et son prix
+### Sur `/immersion`, c'est le lecteur de Wistia qui est servi, et c'est un choix payé
 
-`InteractiveGridPattern` de MagicUI, derrière la **seule** section des extraits
-de coaching, sur demande de Rémy, qui a fourni le code de leur démonstration et
-tranché : « je veux que ce soit cela précisément ». Propriétés par défaut,
-masque en disque de 400 px au centre, `inset-y-[-30%] h-[200%] skew-y-12`, et
-rien d'autre.
+Le site habille l'état qu'on regarde vraiment, une affiche et un bouton à nous,
+et ne charge l'iframe qu'au clic : environ 505 Ko de JavaScript tiers et un
+contact avec Wistia évités tant que personne n'a rien demandé.
 
-**Une première version l'avait adapté**, et c'est ce qui a été refusé : cases
-arrondies à 5 px, filet en `stroke-border`, survol au bleu du site, cases
-carrées forcées par `preserveAspectRatio`, le tout derrière trois sections. Ses
-gris en dur restent donc, et c'est cohérent avec la règle du dépôt : **le code
-de registre ne se retouche pas**, et un gris neutre à trente pour cent se voit
-sur les deux thèmes.
+**Rémy a demandé l'inverse pour toute la page d'immersion** : le lecteur de
+Wistia partout, avec son affiche et son bouton. `LecteurVideo` a donc une
+propriété `natif`, fausse par défaut, et cette page la pose sur ses quatre
+lecteurs. Les options perdent au passage la lecture automatique : elle n'avait
+de sens que derrière un clic, et il n'y a plus de clic préalable.
 
-**Il reste facultatif, et il faut qu'il le reste.** Sur les six sections, il
-cesserait d'être un accent pour devenir le fond de la page.
+**Le prix se chiffre, et il faut le connaître avant d'étendre ce choix.** Trois
+iframes se chargent à l'ouverture de la page, le hero, le modèle et l'extrait de
+coaching, soit environ un mégaoctet et demi de JavaScript tiers. La quatrième,
+celle des entretiens, ne coûte rien : la fenêtre ne monte son contenu qu'à
+l'ouverture et le démonte à la fermeture, donc une seule existe à la fois.
 
-**Et il faut connaître son prix : 576 `rect`**, chacun portant deux
-gestionnaires de souris. C'est la raison de plus de n'en mettre qu'un. Le jour
-où la page devient lourde, c'est le premier endroit où regarder.
+**C'est exactement ce qui interdit de généraliser.** Une page qui alignerait ses
+vingt-deux entretiens en lecteurs natifs chargerait onze mégaoctets. Le reste du
+site garde donc l'affiche cliquable, et `natif` reste une exception qui se
+décide écran par écran.
+
+### La fenêtre Safari des extraits de coaching
+
+`Safari` de MagicUI, avec le semis de points de `DotPattern` derrière, sur
+demande de Rémy, qui a fourni les deux. Les deux extraits étaient côte à côte ;
+il n'y en a plus qu'un à la fois, et deux flèches pour passer de l'un à l'autre.
+
+**La `key` sur le lecteur n'est pas décorative** : elle le fait remonter quand on
+change d'extrait, donc l'iframe précédente est démontée et le son coupé. C'est
+le même mécanisme que la fenêtre des entretiens.
+
+**Le composant de registre n'accepte qu'une image ou une vidéo**, jamais des
+enfants : il n'y a aucun moyen de lui passer notre lecteur. Celui-ci est donc
+posé par-dessus, dans le rectangle de l'écran, et **les quatre pourcentages de ce
+rectangle sont recopiés de leur fichier**. C'est une copie, et elle se
+surveille : le jour où la fenêtre change de dessin, le lecteur se décalera dans
+le cadre sans que rien ne le signale. C'était le prix à payer pour ne pas
+retoucher un fichier de registre.
+
+**Le lecteur y perd son rapport 16/9**, `aspect-auto` : l'écran de Safari est en
+12/7, et un cadre en 16/9 y laisserait deux bandes. C'est le cadre qui décide.
+
+**Le semis prend l'encre du thème.** Il arrive en `text-neutral-400/80`, une
+couleur en dur que ce fichier interdit ; il passe en `text-border`.
 
 ### Les rayons de lumière du fond des résultats, et pourquoi ils sont facultatifs
 
