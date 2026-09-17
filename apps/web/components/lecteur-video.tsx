@@ -164,10 +164,29 @@ export function LecteurVideo({
         // Le rapport est toujours 16/9, celui dans lequel Wistia sert ses
         // vidéos. Un cadre de 2,4/1 a été essayé pour masquer les bandes
         // noires des enregistrements ; Rémy a tranché pour le 16/9.
-        "relative isolate aspect-16/9 overflow-hidden rounded-md bg-black",
+        "relative isolate aspect-16/9 rounded-md",
         className,
       )}
     >
+      {/* **Le rognage vit dans un enfant, et pas sur le cadre lui-même.**
+
+          C'est la réparation d'un vrai défaut, et il a demandé trois essais.
+          Sur la page d'immersion, le cadre porte une rotation 3D : il devient
+          alors son propre calque de composition, et **un `overflow: hidden`
+          posé là ne rogne plus l'iframe qu'il contient**. Les quatre angles
+          carrés du lecteur dépassaient de l'arrondi, puis, une fois l'iframe
+          arrondie elle-même, c'est le filet clair qu'elle peint qui suivait la
+          courbe.
+
+          Un enfant qui ne porte, lui, aucune transformation rogne normalement.
+          Le cadre garde donc la rotation et l'ombre, cet enfant garde le fond,
+          le rayon et le rognage, et le débordement de trois pixels de l'iframe
+          redevient ce qu'il a toujours été : un filet rentré sous un bord qui
+          coupe vraiment.
+
+          Le rayon est écrit aux deux endroits : dehors pour que l'ombre portée
+          suive la forme, dedans pour rogner. */}
+      <div className="absolute inset-0 overflow-hidden rounded-md bg-black">
       {natif || lance ? (
         // L'iframe déborde de trois pixels de chaque côté, et `overflow-hidden`
         // coupe ce qui dépasse.
@@ -186,28 +205,11 @@ export function LecteurVideo({
           title={titre}
           allow="autoplay; fullscreen"
           allowFullScreen
-          /* **Le lecteur servi d'emblée porte son propre arrondi, et ne
-             déborde pas.**
-
-             Le débordement de trois pixels ci-dessus rentre un liseré clair que
-             le lecteur peint lui-même : il n'a de sens que derrière un cadre qui
-             rogne vraiment. Or ce cadre-ci est incliné en 3D, et **un
-             `overflow: hidden` ne rogne pas une iframe dans un sous-arbre
-             composité à part** : les quatre angles carrés du lecteur
-             dépassaient de l'arrondi, ce que Rémy a vu comme « des trucs blancs
-             sur les quatre coins ».
-
-             L'iframe se rogne donc elle-même, au même rayon que le cadre, et
-             cesse de déborder : sans débordement, il n'y a plus rien qui puisse
-             sortir des angles. */
-          className={cn(
-            "absolute border-0",
-            natif
-              ? "inset-0 size-full rounded-md"
-              : "-inset-[3px] size-[calc(100%+6px)]",
-          )}
+          className="absolute -inset-[3px] size-[calc(100%+6px)] border-0"
         />
-      ) : (
+      ) : null}
+
+      {!natif && !lance ? (
         <button
           type="button"
           onClick={() => setLance(true)}
@@ -355,7 +357,8 @@ export function LecteurVideo({
             </span>
           )}
         </button>
-      )}
+      ) : null}
+      </div>
     </div>
   );
 }

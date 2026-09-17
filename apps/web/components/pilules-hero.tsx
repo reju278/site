@@ -1,5 +1,10 @@
+"use client";
+
 import { pastilleHero } from "@/contenu/site";
+import { SparklesText } from "@repo/ui/components/sparkles-text";
 import { cn } from "@repo/ui/lib/utils";
+import { Sparkles } from "lucide-react";
+import { useEffect, useState } from "react";
 
 /**
  * Les gélules en verre du hero d'immersion.
@@ -106,14 +111,56 @@ export function PastillePreuve() {
  * trois points verts fixes, ce qui est exactement ce qu'il faut, le point
  * n'ayant jamais porté d'information à lui seul.
  */
-export function PilulesArguments({ points }: { points: readonly string[] }) {
+export function PilulesArguments({
+  points,
+}: {
+  points: readonly { texte: string; etincelles?: boolean }[];
+}) {
+  /* **Les étincelles sont animées en JavaScript, donc la règle globale de
+     mouvement réduit ne les atteint pas.** `globals.css` ramène les durées
+     d'animation et de transition à 0,01 ms ; Motion anime par la Web Animations
+     API et un `setInterval`, que le CSS ne voit pas. C'est le même piège que le
+     canevas de `ParticulesHero` et que la bascule de thème, et il se répare
+     pareil : on décide ici de ne rien rendre. Quelqu'un qui demande moins de
+     mouvement obtient l'étoile fixe et le libellé, ce qui est exactement
+     l'information. */
+  const [anime, setAnime] = useState(false);
+
+  useEffect(() => {
+    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const appliquer = () => setAnime(!preference.matches);
+
+    appliquer();
+    preference.addEventListener("change", appliquer);
+    return () => preference.removeEventListener("change", appliquer);
+  }, []);
+
   return (
     /* `flex-wrap` et non `nowrap` : trois gélules en une ligne tiennent en
        large et débordent à 375 px, et un débordement horizontal du document est
        exactement ce que la règle du dépôt interdit. */
     <ul className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
       {points.map((point, i) => (
-        <li key={point} className={cn(VERRE, "gap-2 py-1.5 pr-4 pl-3")}>
+        <li key={point.texte} className={cn(VERRE, "gap-2 py-1.5 pr-4 pl-3")}>
+          {point.etincelles ? (
+            /* **Une étoile à la place du point**, sur demande de Rémy, et
+               seulement sur celle-ci : le point vert dit « ça marche », l'étoile
+               dit autre chose.
+
+               L'or est `--or`, déjà dans la palette : c'est celui des étoiles de
+               la note du livre. Il ne change pas d'un thème à l'autre, et c'est
+               ce qu'il faut ici, la gélule étant posée sur une photographie
+               sombre dans les deux thèmes. `--etoile`, qui s'assombrit en thème
+               clair, aurait disparu dessus.
+
+               `aria-hidden` : elle ne porte rien à elle seule, exactement comme
+               le point vert des trois autres. */
+            <Sparkles
+              aria-hidden
+              className="size-3.5 shrink-0"
+              style={{ color: "var(--or)" }}
+            />
+          ) : (
           <span aria-hidden className="relative flex size-2 shrink-0">
             {/* L'onde : un disque qui grandit et s'efface sous le point.
                 `animate-ping` est l'animation de Tailwind, donc déjà
@@ -133,10 +180,31 @@ export function PilulesArguments({ points }: { points: readonly string[] }) {
               style={{ backgroundColor: "var(--icone-resultats)" }}
             />
           </span>
+          )}
 
-          <span className="text-xs font-medium text-white sm:text-sm">
-            {point}
-          </span>
+          {point.etincelles && anime ? (
+            /* `[&_strong]:font-medium` : le composant de registre enveloppe son
+               contenu dans un `strong`, dont la graisse vient du navigateur et
+               passerait devant la nôtre. On ne corrige pas un fichier de
+               registre, on le rattrape de l'extérieur.
+
+               Six étincelles et non dix : la gélule fait une centaine de pixels
+               de large, dix s'y marchent dessus.
+
+               L'or et le blanc, et pas les violet et rose du registre : ce sont
+               les deux seules teintes déjà présentes à cet endroit. */
+            <SparklesText
+              className="text-xs font-medium text-white [&_strong]:font-medium sm:text-sm"
+              sparklesCount={6}
+              colors={{ first: "var(--or)", second: "#ffffff" }}
+            >
+              {point.texte}
+            </SparklesText>
+          ) : (
+            <span className="text-xs font-medium text-white sm:text-sm">
+              {point.texte}
+            </span>
+          )}
         </li>
       ))}
     </ul>

@@ -68,10 +68,14 @@ export const plateformeImmersion = {
      « Coaching » et « IA Funnels.Club » entrent. La rangée passe à la ligne
      toute seule quand elle ne tient plus, donc rien à régler pour un quatrième. */
   points: [
-    "Espace privé",
-    "Fiche de cours",
-    "Coaching",
-    "IA Funnels.Club",
+    { texte: "Espace privé" },
+    { texte: "Fiche de cours" },
+    { texte: "Coaching" },
+    /* **C'est le contenu qui dit laquelle scintille, pas le composant.**
+       Reconnaître « IA » dans un libellé aurait marché jusqu'au jour où Rémy
+       en renomme une, et personne n'aurait su pourquoi les étincelles ont
+       disparu. */
+    { texte: "IA Funnels.Club", etincelles: true },
   ],
   video: {
     id: "xs24rsgnuy",
