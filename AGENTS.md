@@ -1288,10 +1288,27 @@ même rouge.
 Le jour où une autre section montrerait un objet ayant sa couleur, elle se
 décide et elle s'écrit ici. Ce n'est pas une permission d'ouvrir une palette.
 
-### Le violet des étincelles, et la seule ligne de registre qu'on ait modifiée
+### Les gélules du hero d'immersion : une lumière qui tourne, et un violet qui dit « IA »
 
-La gélule « IA Funnels.Club » du hero d'immersion porte une étoile à la place du
-point vert, et des étincelles autour de son libellé, sur demande de Rémy.
+Les quatre gélules du hero d'immersion portent une lumière qui fait le tour de
+leur bord, sur demande de Rémy. **La recette est celle de `ShimmerButton`**, le
+composant MagicUI dont le bouton scintillant du site se sert déjà : un dégradé
+conique qui tourne sur lui-même dans une boîte qui glisse d'un bord à l'autre.
+Ses deux animations et leurs images-clés sont donc déjà dans `packages/ui`, il
+n'y avait rien à installer.
+
+**Ce n'est pas le composant lui-même, et ça ne pouvait pas l'être** : c'est un
+`button`, et une gélule ne se clique pas. Poser un bouton là aurait annoncé une
+action qui n'existe pas. La recette est reprise en trois `span` décoratifs.
+
+**Le fond de verre est passé sur un voile intérieur**, rentré d'un pixel. C'est
+lui qui découvre le cheveu de lumière tout autour du bord ; posé sur la gélule
+elle-même, il l'aurait entièrement couverte. C'est exactement ce que fait le
+`backdrop` de leur bouton, au même endroit et pour la même raison.
+
+**Une seule teinte par gélule, et elle sert à tout.** Le point, l'étoile et la
+lumière la lisent dans `--teinte`, donc ils ne peuvent pas se désaccorder. Vert
+`--icone-resultats` sur trois, violet `--etincelle` sur la quatrième.
 
 **`--etincelle` est un jeton de plus, et il se justifie comme `--livre`.** Le
 site est bleu ; ce violet dit « IA » et ne dit que ça, à un seul endroit. Il **ne
@@ -1301,33 +1318,27 @@ valeur qui s'assombrirait en thème clair y disparaîtrait. C'est exactement le
 sort qu'aurait connu `--etoile`, qui vaut #9a7200 en clair. Un deuxième emploi de
 ce violet se décide et s'écrit ici.
 
-**C'est le contenu qui dit quelle gélule scintille**, un champ `etincelles` dans
-`contenu/immersion.ts`, et non le composant qui reconnaîtrait « IA » dans un
+**C'est le contenu qui dit quelle gélule porte l'étoile**, un champ `etincelles`
+dans `contenu/immersion.ts`, et non le composant qui reconnaîtrait « IA » dans un
 libellé. Un motif sur du texte aurait marché jusqu'au premier renommage, et
-personne n'aurait su pourquoi les étincelles ont disparu.
+personne n'aurait su pourquoi la gélule a changé d'allure.
 
-**Les étincelles sont animées en JavaScript, donc la règle globale de mouvement
-réduit ne les atteint pas.** `globals.css` ramène les durées d'animation et de
-transition à 0,01 ms ; Motion anime par la Web Animations API et un
-`setInterval`, que le CSS ne voit pas. Elles ne sont donc pas rendues du tout
-quand la préférence est posée, comme le canevas de `ParticulesHero` et pour la
-même raison. C'est la troisième fois que ce piège se présente : **une animation
-qui ne passe pas par le CSS se coupe à la main.**
+**Deux effets, deux raisons de les couper sous mouvement réduit**, et aucune des
+deux n'est celle qu'on croit :
 
-**Et une modification de fichier de registre, la première du dépôt.**
-`@magicui/sparkles-text` n'expose ni la fréquence ni la taille de ses étincelles.
-La taille se rentre de l'extérieur, `[&_svg]:size-3`, parce qu'elle dépend de
-l'endroit où on pose le composant. La fréquence, non : elle est écrite dans le
-`transition` de son animation. Rémy les veut discrètes, donc espacées, et sans
-temps mort chacune se rallume toutes les huit dixièmes de seconde, ce qui fait
-scintiller la gélule en continu.
+- **La lumière est en CSS**, donc la règle globale la neutraliserait toute
+  seule. Mais neutralisée, il resterait **un quart de dégradé conique figé en
+  travers de la gélule**. On ne la ralentit pas, on ne la rend pas : une
+  animation arrêtée n'est pas toujours une image acceptable.
+- **Le grossissement au survol** est une transition, donc ramené à 0,01 ms par
+  la même règle : la gélule grossirait quand même, d'un coup. C'est la
+  réparation déjà faite pour le texte roulant, et elle vaut ici. Les classes de
+  survol ne sont posées que si la préférence ne demande rien.
 
-`sparkles-text.tsx` reçoit donc **une propriété `repeatDelay`, et rien d'autre**.
-Elle vaut zéro par défaut, donc le comportement d'origine est intact et le
-fichier reste alignable sur une mise à jour. La règle « le code de registre reste
-tel quel » n'est pas levée pour autant : elle existe pour qu'on ne le retouche
-pas au jugé, et une propriété ajoutée avec sa valeur par défaut est ce qui s'en
-approche le plus. Toute autre modification se décide et s'écrit ici.
+**Et la mise à l'échelle s'anime sur `scale`, pas sur `transform`.** Tailwind v4
+pose les échelles sur la propriété `scale`, comme il pose les translations sur
+`translate` : `transition-[transform]` n'anime rien et la gélule saute. C'est la
+troisième fois que ce piège se présente dans ce dépôt.
 
 ### Deux actions d'importance comparable font deux boutons, un plein et un creux
 

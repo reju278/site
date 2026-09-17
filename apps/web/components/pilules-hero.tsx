@@ -1,7 +1,6 @@
 "use client";
 
 import { pastilleHero } from "@/contenu/site";
-import { SparklesText } from "@repo/ui/components/sparkles-text";
 import { cn } from "@repo/ui/lib/utils";
 import { Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -136,92 +135,133 @@ export function PilulesArguments({
   }, []);
 
   return (
-    /* `flex-wrap` et non `nowrap` : trois gélules en une ligne tiennent en
+    /* `flex-wrap` et non `nowrap` : quatre gélules en une ligne tiennent en
        large et débordent à 375 px, et un débordement horizontal du document est
        exactement ce que la règle du dépôt interdit. */
     <ul className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-      {points.map((point, i) => (
-        <li key={point.texte} className={cn(VERRE, "gap-2 py-1.5 pr-4 pl-3")}>
-          {point.etincelles ? (
-            /* **Une étoile à la place du point**, sur demande de Rémy, et
-               seulement sur celle-ci : le point vert dit « ça marche », l'étoile
-               dit autre chose.
+      {points.map((point, i) => {
+        /* La teinte de la gélule : le vert qui dit « ça marche » partout, le
+           violet qui dit « IA » sur celle-là. Elle sert au point, à l'étoile
+           **et** à la lumière qui tourne sur le bord, donc les trois ne peuvent
+           pas se désaccorder. */
+        const teinte = point.etincelles
+          ? "var(--etincelle)"
+          : "var(--icone-resultats)";
 
-               Le violet est `--etincelle`, décidé et écrit dans `globals.css`.
-               Il ne change pas d'un thème à l'autre, et c'est ce qu'il faut
-               ici, la gélule étant posée sur une photographie sombre dans les
-               deux thèmes. `--etoile`, qui s'assombrit en thème clair, aurait
-               disparu dessus.
+        return (
+          <li
+            key={point.texte}
+            style={{ "--teinte": teinte } as React.CSSProperties}
+            /* **La gélule n'a plus son fond : il est passé sur le voile
+               intérieur.** C'est ce qui laisse voir un cheveu de la lumière qui
+               tourne derrière, tout autour du bord. Posé ici, le fond l'aurait
+               entièrement couverte.
 
-               `aria-hidden` : elle ne porte rien à elle seule, exactement comme
-               le point vert des trois autres. */
-            <Sparkles
+               `z-0` et `overflow-hidden` : la lumière est un disque bien plus
+               grand que la gélule, il faut un contexte d'empilement pour la
+               ranger dessous et un rognage pour n'en montrer que le tour. */
+            className={cn(
+              "group/pilule relative z-0 flex items-center gap-2 overflow-hidden rounded-full border border-white/10 py-1.5 pr-4 pl-3",
+              /* **La gélule grossit un peu au survol**, sur demande de Rémy.
+
+                 **La propriété animée est `scale` et non `transform`.**
+                 Tailwind v4 pose les mises à l'échelle sur `scale` : écrite
+                 `transition-[transform]`, la gélule sauterait d'un coup à sa
+                 taille finale. C'est le piège que le dépôt a déjà rencontré sur
+                 les cartes de la galerie, avec `translate`.
+
+                 **Et le survol est rendu sous condition, pas seulement privé de
+                 transition.** La règle globale de mouvement réduit ramène les
+                 durées à 0,01 ms : la gélule grossirait quand même, d'un coup.
+                 Quelqu'un qui demande moins de mouvement ne demande pas un
+                 mouvement instantané, et c'est déjà la réparation faite pour le
+                 texte roulant. `anime` porte donc les deux.
+
+                 Quatre pour cent : sur une gélule de cent quarante pixels, cela
+                 fait six pixels, moins que l'espacement de la rangée. Rien ne
+                 se chevauche et le document ne s'élargit pas. */
+              anime && "transition-[scale] duration-300 hover:scale-[1.04]",
+            )}
+          >
+            {anime ? (
+              /* **La lumière qui tourne**, reprise de `ShimmerButton` du
+                 registre MagicUI, sur demande de Rémy. La recette est la leur :
+                 un dégradé conique qui tourne sur lui-même à l'intérieur d'une
+                 boîte qui glisse d'un bord à l'autre. Les deux animations et
+                 leurs images-clés existent déjà dans `packages/ui`, puisque le
+                 bouton scintillant du site les utilise.
+
+                 Ce n'est pas le composant lui-même : c'est un `button`, et une
+                 gélule ne se clique pas. Poser un bouton là aurait annoncé une
+                 action qui n'existe pas.
+
+                 **Trois secondes et un flou de deux pixels** : le tour de
+                 gélule fait quatre cents pixels, une lumière nette et rapide y
+                 serait un gyrophare. Rémy l'a demandée discrète.
+
+                 **Elle n'est pas rendue sous mouvement réduit.** Elle est en
+                 CSS, donc la règle globale la neutraliserait ; mais neutralisée,
+                 il resterait un quart de dégradé conique figé en travers de la
+                 gélule. On la retire donc, comme les étincelles. */
+              <span
+                aria-hidden
+                style={{ "--speed": "3s" } as React.CSSProperties}
+                className="pointer-events-none absolute inset-0 -z-30 overflow-visible blur-[2px] @container-[size]"
+              >
+                <span className="animate-shimmer-slide absolute inset-0 aspect-square h-[100cqh]">
+                  <span className="animate-spin-around absolute -inset-full [background:conic-gradient(from_calc(270deg-45deg),transparent_0,var(--teinte)_90deg,transparent_90deg)]" />
+                </span>
+              </span>
+            ) : null}
+
+            {/* Le verre, rentré d'un pixel pour découvrir le liseré lumineux.
+                C'est le `backdrop` de leur bouton, au même endroit et pour la
+                même raison. */}
+            <span
               aria-hidden
-              className="size-3.5 shrink-0"
-              style={{ color: "var(--etincelle)" }}
+              className="absolute inset-px -z-20 rounded-full bg-white/6 backdrop-blur-md"
             />
-          ) : (
-          <span aria-hidden className="relative flex size-2 shrink-0">
-            {/* L'onde : un disque qui grandit et s'efface sous le point.
-                `animate-ping` est l'animation de Tailwind, donc déjà
-                neutralisée par la règle de mouvement réduit du projet. */}
-            <span
-              className="absolute inline-flex size-full animate-ping rounded-full opacity-75"
-              style={{
-                backgroundColor: "var(--icone-resultats)",
-                /* Le décalage d'un tiers de cycle. `animate-ping` dure une
-                   seconde chez Tailwind. */
-                animationDelay: `${i * 0.33}s`,
-              }}
-            />
-            {/* Le point net, par-dessus l'onde. */}
-            <span
-              className="relative inline-flex size-full rounded-full"
-              style={{ backgroundColor: "var(--icone-resultats)" }}
-            />
-          </span>
-          )}
 
-          {point.etincelles && anime ? (
-            /* **Discrètes et violettes**, sur demande de Rémy, et les trois
-               réglages vont ensemble : peu d'étoiles, petites, et qui se
-               rallument rarement.
+            {point.etincelles ? (
+              /* **Une étoile à la place du point**, sur demande de Rémy, et
+                 seulement sur celle-ci : le point vert dit « ça marche »,
+                 l'étoile dit autre chose.
 
-               `sparklesCount={3}` : la gélule fait une centaine de pixels de
-               large. À six elles se marchaient dessus, à dix, le défaut du
-               registre, elles font un feu d'artifice.
+                 `aria-hidden` : elle ne porte rien à elle seule, exactement
+                 comme le point vert des trois autres. */
+              <Sparkles
+                aria-hidden
+                className="size-3.5 shrink-0"
+                style={{ color: "var(--teinte)" }}
+              />
+            ) : (
+              <span aria-hidden className="relative flex size-2 shrink-0">
+                {/* L'onde : un disque qui grandit et s'efface sous le point.
+                    `animate-ping` est l'animation de Tailwind, donc déjà
+                    neutralisée par la règle de mouvement réduit du projet. */}
+                <span
+                  className="absolute inline-flex size-full animate-ping rounded-full opacity-75"
+                  style={{
+                    backgroundColor: "var(--teinte)",
+                    /* Le décalage d'un tiers de cycle. `animate-ping` dure une
+                       seconde chez Tailwind. */
+                    animationDelay: `${i * 0.33}s`,
+                  }}
+                />
+                {/* Le point net, par-dessus l'onde. */}
+                <span
+                  className="relative inline-flex size-full rounded-full"
+                  style={{ backgroundColor: "var(--teinte)" }}
+                />
+              </span>
+            )}
 
-               `repeatDelay={3}` : une étincelle brille huit dixièmes de seconde
-               puis attend trois secondes. Sans ce temps mort, chacune se
-               rallume aussitôt et la gélule scintille en continu, ce qui est
-               l'inverse de discret. C'est la seule chose que le registre ne
-               réglait pas, et elle y a été ajoutée : voir `AGENTS.md`.
-
-               `[&_svg]:size-3` : les étoiles du registre font 21 px, presque la
-               hauteur du libellé. Rentrées de l'extérieur plutôt que dans leur
-               fichier, la taille étant du ressort de l'endroit où on les pose.
-
-               `[&_strong]:font-medium` : le composant enveloppe son contenu
-               dans un `strong`, dont la graisse vient du navigateur et passerait
-               devant la nôtre.
-
-               Les deux teintes sont le même violet : le registre en tire une au
-               hasard, donc deux valeurs identiques donnent une couleur unie. */
-            <SparklesText
-              className="text-xs font-medium text-white [&_strong]:font-medium [&_svg]:size-3 sm:text-sm"
-              sparklesCount={3}
-              repeatDelay={3}
-              colors={{ first: "var(--etincelle)", second: "var(--etincelle)" }}
-            >
-              {point.texte}
-            </SparklesText>
-          ) : (
             <span className="text-xs font-medium text-white sm:text-sm">
               {point.texte}
             </span>
-          )}
-        </li>
-      ))}
+          </li>
+        );
+      })}
     </ul>
   );
 }
