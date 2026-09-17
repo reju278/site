@@ -101,7 +101,7 @@ export function CartesTemoignage() {
               backgroundColor:
                 "color-mix(in srgb, currentColor 4%, transparent)",
             }}
-            className="relief-verre flex h-full flex-col justify-between rounded-[25px] px-[18px] py-5 text-foreground transition-colors hover:brightness-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            className="relief-verre flex h-full flex-col justify-between rounded-[25px] px-[18px] py-5 text-left text-foreground transition-colors hover:brightness-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
             <div className="flex flex-col gap-4">
               <div className="flex items-center gap-3">

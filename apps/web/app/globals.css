@@ -374,6 +374,90 @@ html #cookiescript_bottompart:empty {
   }
 }
 
+/* La vidéo du hero d'immersion, inclinée vers l'avant puis redressée au
+   défilement.
+
+   **C'est un relevé sur wistia.com**, sur demande de Rémy, et les valeurs
+   viennent de leur carte `VideoStage__Card` lue dans le navigateur, pas
+   approchées à l'œil :
+
+   - **`rotateX(16deg) scale(0.92)` au repos**, plus rien à l'arrivée ;
+   - **`perspective: 1200px`** sur le conteneur, et non sur la carte : une
+     perspective posée sur l'élément qui tourne se déforme avec lui ;
+   - **origine à `center 80%`**, donc la carte pivote sur son tiers bas et se
+     couche vers l'arrière au lieu de basculer autour de son milieu.
+
+   **Rien de tout ça n'est du JavaScript.** C'est une animation pilotée par le
+   défilement : le navigateur avance la ligne de temps lui-même, sur le
+   compositeur, sans écouteur de défilement et sans image calculée en JS.
+
+   **La plage, elle, ne se recopie pas, et c'est le seul écart assumé.** Chez
+   eux la carte est sous la ligne de flottaison : `view()` et la plage `entry`
+   suffisent, l'animation se joue pendant que la carte entre dans l'écran. La
+   nôtre est posée autrement, sur demande de Rémy : le hero fait une hauteur
+   d'écran plus un tiers de vidéo, donc **on en voit les deux tiers** au
+   chargement et le dernier tiers passe sous le bas de la fenêtre. Rémy a
+   d'abord demandé la moitié, puis les deux tiers : montrer davantage de vidéo
+   la fait remonter, et le titre, qui lui est collé, remonte avec elle.
+
+   **La distance de défilement se calcule, elle ne se règle pas.** Le centre de
+   la vidéo est à `100svh - --video-h / 6` au repos ; il atteint le milieu de
+   l'écran, `50svh`, après exactement `50svh - --video-h / 6`. La vidéo se
+   redresse donc pile au moment où elle se centre, à toutes les largeurs, sans
+   qu'on ait à ajuster quoi que ce soit. Une distance exprimée en hauteur de
+   vidéo, essayée d'abord, était juste sur un écran large et deux fois trop
+   courte sur un téléphone, où la vidéo est petite devant la fenêtre.
+
+   `svh` et non `dvh` : la hauteur dynamique change quand la barre d'adresse
+   d'un téléphone se rétracte, et la plage se serait déplacée en cours de
+   défilement.
+
+   **Rien de tout ça n'existe en dessous de `sm`**, sur décision de Rémy, et le
+   gabarit suit : le hero n'y prend pas une hauteur d'écran, la vidéo n'y est
+   pas coupée, elle ne bascule pas. Sur 375 px, une vidéo de 188 px de haut est
+   trop petite devant la fenêtre pour qu'une inclinaison se lise, et la couper
+   aux deux tiers aurait laissé un écran presque vide au-dessus d'elle. Les
+   deux réglages se coupent au même endroit, `40rem`, qui est le `sm` du
+   projet : ils décrivent une seule mise en page et ne peuvent pas diverger.
+
+   **Le mouvement réduit demande sa propre règle.** La règle globale du projet
+   ramène `animation-duration` à 0,01 ms, ce qui neutralise toute animation
+   minutée. Une animation pilotée par le défilement **ignore sa durée** : c'est
+   la ligne de temps qui avance. Sans le `animation: none` ci-dessous, elle
+   aurait basculé la vidéo malgré la demande. C'est la même famille de panne
+   muette que les autres du dépôt : rien n'échoue, la règle est là et n'agit
+   pas.
+
+   **Le `@supports` n'est pas une précaution de style.** Un navigateur qui ne
+   connaît pas `animation-timeline` jette cette seule ligne et garde le reste :
+   l'animation retomberait sur la ligne de temps du document, de durée nulle,
+   et `both` figerait la vidéo sur une image de l'animation. Les deux
+   déclarations tiennent donc ensemble ou pas du tout. */
+@supports (animation-timeline: scroll()) {
+  @media (min-width: 40rem) and (prefers-reduced-motion: no-preference) {
+    .scene-video {
+      perspective: 1200px;
+    }
+
+    .video-bascule {
+      transform-origin: center 80%;
+      animation: bascule-video linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 calc(50svh - var(--video-h) / 6);
+    }
+  }
+}
+
+@keyframes bascule-video {
+  from {
+    transform: rotateX(16deg) scale(0.92);
+  }
+
+  to {
+    transform: none;
+  }
+}
+
 /* La ligne où l'image du hero cède la place à la page, mesurée depuis le bas
    de la section.
 

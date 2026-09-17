@@ -828,6 +828,70 @@ pas ; le masque retire des pixels, donc il vaut dans les deux thèmes et quoi
 qu'on mette derrière. Les deux écritures s'écrivent, `mask-image` et
 `-webkit-mask-image` : Safari n'a levé son préfixe qu'en 15.4.
 
+### La vidéo du hero d'immersion est relevée sur wistia.com, et son cadrage est calculé
+
+Rémy a demandé « exactement le même effet » que la carte vidéo de wistia.com :
+inclinée vers l'avant au repos, redressée à plat quand on défile. Les valeurs
+sont **lues dans leur feuille de style**, pas approchées : `rotateX(16deg)
+scale(0.92)`, `perspective: 1200px` sur le conteneur, origine à `center 80%`.
+
+**C'est une animation pilotée par le défilement, sans JavaScript.** Le
+navigateur avance lui-même la ligne de temps, sur le compositeur : ni écouteur
+de défilement, ni image calculée en JS. C'est la première du projet.
+
+Trois choses se sont apprises, et elles valent pour la prochaine :
+
+- **`prefers-reduced-motion` ne l'attrape pas toute seule.** La règle globale
+  du projet ramène `animation-duration` à 0,01 ms, ce qui suffit à neutraliser
+  une animation minutée. Une animation pilotée par le défilement **ignore sa
+  durée** : c'est la ligne de temps qui avance. Sans une règle explicite, elle
+  aurait basculé la vidéo malgré la demande. Rien n'échoue, la règle est là et
+  n'agit pas : c'est la même famille de panne muette que `nth-child` avec une
+  variable ou le rayon de flou écrit en jeton.
+- **`animation-timeline` et `animation` tiennent ensemble ou pas du tout.** Un
+  navigateur qui ne connaît pas la première jette cette seule ligne et garde la
+  seconde : l'animation retombe sur la ligne de temps du document, de durée
+  nulle, et `both` fige l'élément sur une image de l'animation. D'où le
+  `@supports`, qui n'est pas une précaution de style.
+- **Une plage relevée ailleurs ne se recopie pas.** La leur est `view()` sur
+  `entry`, ce qui n'a de sens que parce que leur carte est sous la ligne de
+  flottaison : l'animation se joue pendant qu'elle entre dans l'écran. La nôtre
+  est en haut de page, donc `entry` serait terminée avant d'avoir commencé.
+
+**Le cadrage se calcule, il ne se règle pas.** Le hero fait une hauteur d'écran
+plus un tiers de vidéo, donc on en voit les deux tiers au chargement, décidé par
+Rémy après avoir essayé la moitié. Le centre de la vidéo est alors à
+`100svh - --video-h / 6`, et il atteint le milieu de l'écran après exactement
+`50svh - --video-h / 6` : c'est la plage de l'animation, et c'est pour ça que la
+vidéo se redresse pile au moment où elle se centre, à toutes les largeurs.
+Mesuré : un pixel d'écart. Une distance exprimée en hauteur de vidéo, essayée
+d'abord, était juste sur un écran large et deux fois trop courte sur un
+téléphone.
+
+`svh` et non `dvh` : la hauteur dynamique change quand la barre d'adresse d'un
+téléphone se rétracte, et la plage se serait déplacée en cours de défilement.
+
+**Plus la vidéo est grande, moins il y a de vide sous le titre**, et c'est ce
+qui a décidé de sa largeur. Le haut de la vidéo se pose à
+`100svh - 2 × --video-h / 3` : l'agrandir la fait remonter. Elle est passée de
+56 à 76 rem pour cette raison, pas pour le confort de lecture, et `76rem` est
+la largeur maximale relevée sur leur conteneur.
+
+**Rien de tout ça n'existe en dessous de `sm`**, sur décision de Rémy. Sur
+375 px, une vidéo de 188 px de haut est trop petite devant la fenêtre pour
+qu'une inclinaison se lise, et la couper aux deux tiers laisserait un écran
+presque vide au-dessus d'elle. Le gabarit et l'animation se coupent **au même
+endroit**, `40rem` : ils décrivent une seule mise en page et ne peuvent pas
+diverger.
+
+### Une carte qui est un bouton centre son texte
+
+Les trois cartes d'avis du hero d'immersion et celles de la galerie sont des
+`button`, puisqu'elles ouvrent une fenêtre au lieu de mener à une page. Un
+bouton centre son texte par défaut, et aucun héritage ne le dit : il leur faut
+`text-left`, sans quoi le nom, le métier, la citation et le résultat se
+retrouvent centrés. La galerie le portait déjà, les cartes du hero non.
+
 ### Le mouvement réduit est un contrat, pas une option
 
 `globals.css` neutralise transitions et animations sous

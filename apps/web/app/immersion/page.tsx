@@ -5,7 +5,7 @@ import { LecteurVideo } from "@/components/lecteur-video";
 import { MurCommunaute } from "@/components/mur-communaute";
 import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { ParticulesHero } from "@/components/particules-hero";
-import { PastillePreuve, PilulesArguments } from "@/components/pilules-hero";
+import { PilulesArguments } from "@/components/pilules-hero";
 import { TexteRoulant } from "@/components/texte-roulant";
 import { TitreRoulant } from "@/components/titre-roulant";
 import { RangeeEquipe } from "@/components/rangee-equipe";
@@ -74,7 +74,7 @@ export default function Immersion() {
       <section
         id="programme"
         data-hero
-        className="relative isolate px-5 pt-24 sm:pt-28"
+        className="relative isolate flex flex-col px-5 pt-24 sm:min-h-[calc(100svh+var(--video-h)/3)] sm:pt-28"
         style={
           {
             /* **La largeur s'écrit une seule fois**, et il le fallait : elle
@@ -83,9 +83,13 @@ export default function Immersion() {
                agrandissement, et la lèvre aurait dessiné sa jonction en travers
                de la vidéo. C'est la panne que `AGENTS.md` décrit déjà.
 
-               Élargie de 48 à 56 rem sur demande de Rémy : la vidéo était trop
-               petite pour la page. */
-            "--largeur-video": "min(100vw - 2.5rem, 56rem)",
+               Élargie de 48 à 56 rem, puis à 76 sur demande de Rémy. Le
+               second élargissement n'est pas une question de goût : depuis que
+               le hero fait une hauteur d'écran, le haut de la vidéo se pose à
+               `100svh - --video-h / 2`, donc **plus la vidéo est grande, plus
+               elle remonte** et moins il reste de vide entre elle et le titre.
+               À 56 rem, il restait plus de trois cents pixels d'écart. */
+            "--largeur-video": "min(100vw - 2.5rem, 76rem)",
             /* La hauteur exacte du cadre en 16/9, d'où part la jonction. Une
                hauteur en dur donnerait un cadre qui n'est plus en 16/9, et
                Wistia y ajouterait des bandes noires sur les côtés. */
@@ -132,21 +136,8 @@ export default function Immersion() {
           style={{ bottom: "calc(var(--jonction) - 96px)" }}
         />
 
-        <div className="mx-auto max-w-6xl">
-          <div className="mx-auto max-w-3xl text-center">
-            {/* La pastille de preuve, au-dessus du titre, sur demande de
-                Rémy : la même que celle de l'accueil, reprise et non
-                réécrite. Son chiffre est le sien.
-
-                **C'est une allégation chiffrée**, et elle est donc à prouver
-                si on la porte un jour sur une page de publicité : c'est pour
-                cette raison qu'elle a été retirée du hub, et c'est écrit dans
-                `AGENTS.md`. Ici elle est celle de l'accueil, donc elle suit le
-                même sort. */}
-            <div className="mb-6 sm:mb-8">
-              <PastillePreuve />
-            </div>
-
+        <div className="mx-auto flex w-full max-w-[var(--largeur-video)] flex-1 flex-col">
+          <div className="mx-auto mt-auto max-w-3xl text-center">
             {/* Le titre est celui de Rémy, relevé sur la page source. La page
                 source n'a pas de titre d'accueil : elle commence par un logo
                 puis par cette phrase. En inventer une ici reviendrait à écrire
@@ -174,7 +165,7 @@ export default function Immersion() {
               la section : c'est elle qui sert aussi à `--video-h`, donc à la
               jonction. Deux écritures divergeraient au premier agrandissement,
               et la lèvre dessinerait sa ligne en travers de la vidéo. */}
-          <div className="mx-auto mt-6 w-[var(--largeur-video)] sm:mt-8">
+          <div className="scene-video mt-8 w-full sm:mt-10">
             <LecteurVideo
               id={plateformeImmersion.video.id}
               titre={plateformeImmersion.video.titre}
@@ -186,7 +177,13 @@ export default function Immersion() {
                  la profondeur et non comme un contour. Elle est **portée** et
                  non intérieure : elle ne se dispute pas la place du relief de
                  verre. */
-              className="shadow-[0_30px_70px_-25px_rgba(0,0,0,0.55)]"
+              /* **Inclinée vers l'avant, puis redressée au défilement**, sur
+                 demande de Rémy et relevée sur wistia.com. La recette vit dans
+                 `globals.css`, avec la perspective posée sur le conteneur
+                 juste au-dessus : les deux classes vont ensemble, une carte qui
+                 tourne sans perspective au-dessus d'elle s'aplatit au lieu de
+                 se coucher. */
+              className="video-bascule shadow-[0_30px_70px_-25px_rgba(0,0,0,0.55)]"
             />
           </div>
         </div>
