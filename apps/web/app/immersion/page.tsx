@@ -74,7 +74,10 @@ export default function Immersion() {
       <section
         id="programme"
         data-hero
-        className="relative isolate flex flex-col px-5 pt-24 sm:min-h-[calc(100svh+var(--video-h)/3)] sm:pt-28"
+        /* Le rembourrage haut dégage la barre de navigation, qui flotte
+           au-dessus. Il est plus court qu'avant : le titre est monté, et
+           quatre-vingt-seize pixels laissaient un vide que Rémy a signalé. */
+        className="relative isolate flex flex-col px-5 pt-20 sm:min-h-[calc(100svh+var(--video-h)/3)] sm:pt-24"
         style={
           {
             /* **La largeur s'écrit une seule fois**, et il le fallait : elle
@@ -117,7 +120,22 @@ export default function Immersion() {
               width={1920}
               height={1097}
               fetchPriority="high"
-              className="size-full object-cover"
+              /* **Cadrée par le bas**, sur demande de Rémy : le pied de
+                 l'image est le vrai pied de l'image.
+
+                 Depuis que le hero fait une hauteur d'écran, le cadre est plus
+                 large que haut par rapport au paysage : `cover` le met donc à
+                 l'échelle sur la largeur et rogne en hauteur. Centré, il
+                 mangeait une cinquantaine de pixels en bas comme en haut, et
+                 le chemin du premier plan se terminait dans le vide.
+
+                 **Ce qui est rogné passe entièrement en haut, et c'est sans
+                 conséquence ici.** `AGENTS.md` prévient qu'un cadrage par le
+                 bas supprime la transparence que ces paysages portent dans leur
+                 tiers haut, et qu'il faut alors refaire le raccord au masque.
+                 Le cas ne se pose pas : ce bord-là est au tout premier pixel de
+                 la page, il n'a rien au-dessus avec quoi se raccorder. */
+              className="size-full object-cover object-bottom"
             />
           </picture>
           <div aria-hidden className="absolute inset-0 bg-black/55" />
@@ -137,14 +155,33 @@ export default function Immersion() {
         />
 
         <div className="mx-auto flex w-full max-w-[var(--largeur-video)] flex-1 flex-col">
-          <div className="mx-auto mt-auto max-w-3xl text-center">
+          {/* **`my-auto` : le bloc de texte se centre dans ce qui reste
+              au-dessus de la vidéo.** Deux marges automatiques absorbent tout
+              l'espace libre de la colonne à parts égales, donc le titre tombe
+              au milieu et la vidéo se retrouve d'elle-même au bas de la
+              colonne, sans avoir besoin d'une marge automatique à son tour.
+              Une troisième marge automatique aurait partagé l'espace en trois
+              et décentré le titre vers le haut. */}
+          <div className="mx-auto my-auto max-w-3xl text-center">
             {/* Le titre est celui de Rémy, relevé sur la page source. La page
                 source n'a pas de titre d'accueil : elle commence par un logo
                 puis par cette phrase. En inventer une ici reviendrait à écrire
                 du texte, ce que le dépôt interdit. */}
-            <h1 className="titre text-4xl text-balance text-white sm:text-5xl lg:text-6xl">
-              {insecables(plateformeImmersion.titre)}
-            </h1>
+            {/* **Le titre roule mot à mot comme ceux des sections**, sur
+                demande de Rémy. C'est le même composant, donc le même effet et
+                les mêmes réparations : le masque par mot, qui est ce qui le
+                fait tenir sur plusieurs lignes, et la contre-règle sans
+                JavaScript posée une seule fois dans `layout.tsx`.
+
+                **Les deux lignes deviennent deux segments**, ce qui est
+                exactement ce à quoi ils servent : un segment occupe sa ligne,
+                donc la coupure est la même à toutes les largeurs et c'est Rémy
+                qui décide où sa phrase se coupe, pas la fenêtre. */}
+            <TitreRoulant
+              as="h1"
+              segments={plateformeImmersion.titre.map((texte) => ({ texte }))}
+              className="titre text-4xl text-balance text-white sm:text-5xl lg:text-6xl"
+            />
 
             {/* Les trois arguments, en gélules de verre à point vert, sur
                 demande de Rémy : le même verre que la pastille au-dessus et que
@@ -165,13 +202,16 @@ export default function Immersion() {
               la section : c'est elle qui sert aussi à `--video-h`, donc à la
               jonction. Deux écritures divergeraient au premier agrandissement,
               et la lèvre dessinerait sa ligne en travers de la vidéo. */}
-          <div className="scene-video mt-8 w-full sm:mt-10">
+                    <div className="scene-video mt-8 w-full sm:mt-10">
             <LecteurVideo
               id={plateformeImmersion.video.id}
               titre={plateformeImmersion.video.titre}
               secondes={plateformeImmersion.video.secondes}
               affiche={`/temoignages/${plateformeImmersion.video.id}.jpg`}
               afficheAlt="La plateforme de formation de Funnels Club"
+              /* L'affiche du haut de page : c'est elle que le navigateur
+                 chronomètre, et elle pèse maintenant 147 Ko en 1280 px. */
+              prioritaire
               /* Une ombre portée pour détacher la vidéo, sur demande de Rémy.
                  Très diffuse et décalée vers le bas, donc elle se lit comme de
                  la profondeur et non comme un contour. Elle est **portée** et
@@ -289,39 +329,19 @@ export default function Immersion() {
           />
         </div>
 
-        {/* **La paire du site, un plein et un creux**, sur demande de Rémy :
-            on ne dessine pas un troisième bouton. Ce sont deux ressources
-            d'importance comparable, exactement le cas que la règle décrit, et
-            elles ont la même hauteur et le même rayon.
+        {/* **Les deux ressources ne sont plus affichées**, sur demande de
+            Rémy : cette page ne porte aucun lien sortant, et ces deux boutons
+            n'existaient que pour en sortir, l'un vers la fiche modèle et
+            l'autre vers le tableau Miro.
 
-            Le plein est `BoutonScintillant`, qui prend sa couleur par la
-            propriété `fond` et jamais par une classe : le fond est écrit à deux
-            endroits, le bouton et le masque qui rentre son liseré, et les deux
-            doivent être la même couleur au bit près.
+            Ils sont retirés plutôt que déshabillés. La règle des tunnels veut
+            qu'un lien de contenu perde son adresse et garde son libellé en
+            texte, mais elle parle d'un lien au milieu d'une phrase : là, la
+            phrase reste lisible sans lui. Un bouton, lui, n'est qu'un geste :
+            déshabillé, il reste une cible qui ne fait rien.
 
-            Le creux porte sa bordure en `currentColor`, donc elle ne peut pas
-            diverger de son texte. Ici il se pose sur la couleur de page et non
-            sur une photographie : son encre est le jeton `--foreground`, pas le
-            blanc en dur du hero.
-
-            `min-h-14` et pas de `whitespace-nowrap` : « Cliquez ici pour
-            accéder à la fiche » demande plus que la largeur d'un téléphone, et
-            un libellé qui refuse de passer à la ligne élargit le document
-            entier. C'est la panne que `AGENTS.md` décrit. */}
-        <div className="mx-auto mt-6 flex max-w-3xl flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
-          <BoutonScintillant href={modeleImmersion.ressources[0].href}>
-            <TexteRoulant>{modeleImmersion.ressources[0].libelle}</TexteRoulant>
-          </BoutonScintillant>
-
-          <a
-            href={modeleImmersion.ressources[1].href}
-            target="_blank"
-            rel="noreferrer"
-            className="group/roule inline-flex min-h-14 items-center justify-center gap-2 rounded-md border border-current px-8 py-3 text-base font-semibold text-foreground transition-colors hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-          >
-            <TexteRoulant>{modeleImmersion.ressources[1].libelle}</TexteRoulant>
-          </a>
-        </div>
+            `modeleImmersion.ressources` n'est pas touché : c'est du contenu de
+            Rémy, et il revient le jour où ces deux adresses ont leur place. */}
       </SectionImmersion>
       </FondResultats>
 

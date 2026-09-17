@@ -80,6 +80,7 @@ export function LecteurVideo({
   afficheMobile,
   legende,
   actif = true,
+  prioritaire = false,
   afficheAlt,
   className,
 }: {
@@ -115,6 +116,19 @@ export function LecteurVideo({
    * image du document, elle mérite d'être décrite.
    */
   afficheAlt?: string;
+  /**
+   * L'affiche est celle du haut de page : elle se charge tout de suite et en
+   * priorité, au lieu d'attendre comme les autres.
+   *
+   * C'est la règle du dépôt sur les images, et elle n'est pas décorative : le
+   * navigateur ne mesure pas n'importe quelle image, il mesure **celle-là**,
+   * la plus grande de la première vue. Différée, elle arrive après les
+   * scripts, et le chiffre qu'on rend à Google est celui de son arrivée.
+   *
+   * `false` partout ailleurs : sur une page qui aligne vingt-deux affiches,
+   * toutes prioritaires revient à n'en prioriser aucune.
+   */
+  prioritaire?: boolean;
   className?: string;
 }) {
   const [lance, setLance] = useState(false);
@@ -180,7 +194,8 @@ export function LecteurVideo({
               alt={afficheAlt ?? ""}
               width={1280}
               height={720}
-              loading="lazy"
+              loading={prioritaire ? "eager" : "lazy"}
+              fetchPriority={prioritaire ? "high" : undefined}
               className="size-full scale-100 object-cover transition-transform duration-500 ease-out group-hover:scale-105"
             />
           </picture>

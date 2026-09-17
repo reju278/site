@@ -400,13 +400,16 @@ html #cookiescript_bottompart:empty {
    d'abord demandé la moitié, puis les deux tiers : montrer davantage de vidéo
    la fait remonter, et le titre, qui lui est collé, remonte avec elle.
 
-   **La distance de défilement se calcule, elle ne se règle pas.** Le centre de
-   la vidéo est à `100svh - --video-h / 6` au repos ; il atteint le milieu de
-   l'écran, `50svh`, après exactement `50svh - --video-h / 6`. La vidéo se
-   redresse donc pile au moment où elle se centre, à toutes les largeurs, sans
-   qu'on ait à ajuster quoi que ce soit. Une distance exprimée en hauteur de
-   vidéo, essayée d'abord, était juste sur un écran large et deux fois trop
-   courte sur un téléphone, où la vidéo est petite devant la fenêtre.
+   **La distance de défilement se calcule, elle ne se règle pas.** Le tiers du
+   bas dépasse sous la fenêtre au repos : il faut donc exactement
+   `--video-h / 3` de défilement pour que la vidéo soit entièrement visible, et
+   24 px de plus pour qu'elle ne soit pas collée au bord. C'est là qu'elle finit
+   de se redresser.
+
+   **Elle se redressait d'abord au milieu de l'écran, et c'était trop tard.**
+   Rémy l'a signalé, et la mesure lui donnait raison : à plat, le haut de la
+   vidéo tombait à 107 px, c'est-à-dire sous l'en-tête. Ce qu'on regarde quand
+   une vidéo se pose, ce n'est pas son centre, c'est son bas.
 
    `svh` et non `dvh` : la hauteur dynamique change quand la barre d'adresse
    d'un téléphone se rétracte, et la plage se serait déplacée en cours de
@@ -443,7 +446,7 @@ html #cookiescript_bottompart:empty {
       transform-origin: center 80%;
       animation: bascule-video linear both;
       animation-timeline: scroll(root block);
-      animation-range: 0 calc(50svh - var(--video-h) / 6);
+      animation-range: 0 calc(var(--video-h) / 3 + 24px);
     }
   }
 }

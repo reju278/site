@@ -1,4 +1,3 @@
-import { AppelHubArticle } from "@/components/appel-hub";
 import { ArticleAvis } from "@/components/article-avis";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { avis, avisDe } from "@/contenu/avis";
@@ -175,7 +174,7 @@ export function ContenuEntretien({ id }: { id: string }) {
                   <ArticleAvis
                     article={article}
                     texte={pourLeTunnel}
-                    appel={<AppelHubArticle />}
+                    appel={null}
                   />
                 </article>
               </div>

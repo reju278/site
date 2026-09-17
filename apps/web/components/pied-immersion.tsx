@@ -1,12 +1,7 @@
-import { BoutonScintillant } from "@/components/bouton-scintillant";
-import { CarteOffre } from "@/components/carte-offre";
 import { LogoFunnels } from "@/components/logo-funnels";
 import { TexteRoulant } from "@/components/texte-roulant";
 import { appelHub, avertissementHub } from "@/contenu/hub";
-import { identite, legales } from "@/contenu/site";
-import { SORTIE } from "@/lib/hub";
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { identite } from "@/contenu/site";
 
 /**
  * Le pied de page de la page d'immersion.
@@ -64,7 +59,7 @@ export function PiedImmersion({
           }}
           className="rounded-md border border-border bg-card px-6 py-8 sm:px-10 sm:py-10 lg:px-12"
         >
-          <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,20rem)] lg:gap-10">
+          <div>
             <div>
               {/* La marque, droite et non penchée : un nom de marque se pose
                   droit. `href="#haut"` et non `/`, qui serait une sortie. */}
@@ -117,30 +112,6 @@ export function PiedImmersion({
                 </ul>
               </nav>
 
-              {/* Le même appel que la barre fixe du téléphone, et le même
-                  libellé : deux formulations pour un même geste feraient
-                  croire à deux gestes. `min-h-*` et pas de `nowrap` : le
-                  libellé demande plus que la largeur d'un téléphone. */}
-              <div className="mt-6 max-w-xs">
-                <BoutonScintillant href={SORTIE} className="flex w-full">
-                  {appelHub.libelle}
-                  <ArrowRight aria-hidden className="size-4 shrink-0" />
-                </BoutonScintillant>
-              </div>
-            </div>
-
-            {/* `self-start` empêche la carte de s'étirer : dans une grille, une
-                cellule prend par défaut toute la hauteur de sa rangée. */}
-            <div className="mt-10 flex flex-col items-stretch self-start lg:mt-0">
-              <CarteOffre
-                marque={
-                  <LogoFunnels className="mr-[0.28em] inline-grid size-[0.95em] align-[-0.13em]" />
-                }
-                nom="Funnels Club"
-                texte={identite.promesse}
-                href={SORTIE}
-                action="Réserver votre appel"
-              />
             </div>
           </div>
         </div>
@@ -154,21 +125,6 @@ export function PiedImmersion({
         <div className="pt-8 pb-8">
           <div className="flex flex-col gap-4 text-xs leading-relaxed text-muted-foreground">
             <p className="max-w-5xl text-pretty">{avertissementHub}</p>
-
-            <nav aria-label="Mentions légales" className="pt-2">
-              <ul className="flex flex-wrap gap-x-5 gap-y-1">
-                {legales.map((entree) => (
-                  <li key={entree.href}>
-                    <Link
-                      href={entree.href}
-                      className="group/roule inline-block rounded-md transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-                    >
-                      <TexteRoulant>{entree.libelle}</TexteRoulant>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
 
             <p>
               © {annee} {identite.societe}

@@ -5,6 +5,7 @@ import { LogoFunnels } from "@/components/logo-funnels";
 import { ancresImmersion } from "@/contenu/immersion";
 import { HAUTEUR_ENTETE } from "@/lib/entete";
 import { cn } from "@repo/ui/lib/utils";
+import { Menu, X } from "lucide-react";
 import { useLayoutEffect, useState } from "react";
 
 /**
@@ -70,6 +71,7 @@ const ENTREE_SUR_PAGE =
 
 export function EnTeteImmersion() {
   const [surImage, setSurImage] = useState(false);
+  const [ouvert, setOuvert] = useState(false);
 
   useLayoutEffect(() => {
     const bande = document.querySelector("[data-bande-sombre]");
@@ -97,7 +99,17 @@ export function EnTeteImmersion() {
 
   return (
     <header className="pointer-events-none fixed inset-x-0 top-2 z-50 px-3 lg:top-5 lg:px-5">
-      <div className="pointer-events-auto mx-auto flex max-w-[1320px] items-center justify-between gap-3">
+      {/* **Une seule capsule, centrée**, sur demande de Rémy : le nom, les
+          ancres et la bascule de thème sont fusionnés. Elles étaient deux,
+          poussées aux deux bords par un `justify-between`.
+
+          Ce n'est pas qu'une affaire de goût : depuis que le hero fait une
+          hauteur d'écran, l'en-tête flotte au-dessus d'un paysage, et deux
+          objets aux coins opposés découpaient l'image en trois. Un bloc unique
+          au milieu se lit comme un objet posé sur la photographie.
+
+          Le `max-w` tombe donc, la capsule se dimensionne sur son contenu. */}
+      <div className="pointer-events-auto flex items-center justify-center">
         {/* La marque est Funnels.Club et non Rémy Jupille, comme sur le hub :
             c'est la porte d'entrée d'un programme, pas la vitrine de la
             personne. Et sans italique : un nom de marque se pose droit, là où
@@ -109,7 +121,8 @@ export function EnTeteImmersion() {
             sur un écran étroit.
 
             `href="#haut"` et non `/` : l'accueil du site serait une sortie. */}
-        <div className={capsule}>
+        <div className={cn(capsule, "flex-col items-stretch gap-0")}>
+          <div className="flex items-center gap-2">
           <div className="flex h-9 items-center justify-center px-2">
             <a
               href="#haut"
@@ -122,15 +135,17 @@ export function EnTeteImmersion() {
               Funnels.Club
             </a>
           </div>
-        </div>
 
-        <div className={capsule}>
-          {/* Les quatre ancres sont cachées sous `sm`, où elles occuperaient
-              toute la largeur : à 375 px, les deux capsules et la bascule de
-              thème prennent déjà presque les 375 pixels. C'est la même mesure
-              qui a fait nommer « Menu » le déclencheur du hub. La page reste
-              parcourable en défilant, et c'est ce que fait quelqu'un sur un
-              téléphone. */}
+          {/* **Les ancres sont toujours là**, sur demande de Rémy. Elles se
+              dépliaient au survol de la capsule ; il a préféré les voir. Ce
+              qui tombe avec le repli : le `group`, la grille qui s'animait de
+              `0fr` à `1fr`, le décalage d'apparition et la compensation
+              d'espacement, qui n'existaient que pour lui.
+
+              Elles restent cachées sous `sm`, où elles occuperaient toute la
+              largeur : à 375 px, la capsule et la bascule de thème prennent
+              déjà presque les 375 pixels. C'est le bouton juste à côté qui les
+              ouvre là-bas. */}
           <nav
             aria-label="Les sections de la page"
             className="hidden items-center gap-1 sm:flex"
@@ -143,6 +158,105 @@ export function EnTeteImmersion() {
           </nav>
 
           <BasculeTheme surImage={surImage} />
+
+          {/* **Le déclencheur du menu, à droite de la bascule de thème**, sur
+              demande de Rémy, et sur téléphone seulement : au-dessus de `sm`,
+              les quatre ancres sont déjà dans la rangée et un bouton pour les
+              ouvrir n'aurait rien à ouvrir.
+
+              `size-10 sm:size-9`, exactement comme la bascule : 40 px au doigt,
+              36 px à la souris. La règle du dépôt sur les cibles tactiles vaut
+              pour celui-ci comme pour l'autre, et les deux voisins doivent de
+              toute façon avoir la même taille.
+
+              Une icône seule porte son `aria-label`, et `aria-expanded` dit
+              l'état : sans lui, un lecteur d'écran annonce un bouton sans
+              jamais dire qu'il vient d'ouvrir quelque chose. */}
+          <button
+            type="button"
+            onClick={() => setOuvert((o) => !o)}
+            aria-expanded={ouvert}
+            aria-controls="menu-immersion"
+            aria-label={ouvert ? "Fermer le menu" : "Ouvrir le menu"}
+            className={cn(
+              "flex size-10 items-center justify-center rounded-md transition-colors duration-300 sm:hidden",
+              surImage
+                ? "text-white hover:bg-white/15"
+                : "text-foreground hover:bg-accent",
+            )}
+          >
+            {ouvert ? (
+              <X aria-hidden className="size-4" />
+            ) : (
+              <Menu aria-hidden className="size-4" />
+            )}
+          </button>
+          </div>
+
+          {/* Le panneau qui pousse la capsule vers le bas.
+
+              **La hauteur s'anime de `0fr` à `1fr`**, et non d'un `max-height`
+              choisi au jugé. Une grille d'une seule rangée mesure son contenu
+              toute seule : la capsule s'ouvre donc exactement à la hauteur des
+              quatre ancres, et resterait juste si on en ajoutait une
+              cinquième. Un `max-height` trop court couperait la dernière, trop
+              grand ferait traîner la fin de l'animation dans le vide.
+
+              C'est le rognage qui vit dans l'enfant : une grille ne peut pas
+              couper son propre contenu.
+
+              **`inert` quand c'est fermé**, et ce n'est pas une politesse : le
+              panneau reste dans le DOM à hauteur nulle, donc ses quatre liens
+              restent atteignables à la tabulation. On tabulerait dans un menu
+              invisible. C'est exactement la panne que `AGENTS.md` décrit pour
+              le mur de la communauté, et elle se répare pareil. Il règle au
+              passage le doublon de repère : les deux `nav` porteraient sinon le
+              même nom.
+
+              **La propriété animée est `translate` et non `transform`.**
+              Tailwind v4 pose les translations sur `translate` : écrite
+              autrement, la descente se ferait d'un coup. C'est le piège que le
+              dépôt a déjà rencontré sur les cartes de la galerie. */}
+          <div
+            id="menu-immersion"
+            className={cn(
+              "grid transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] sm:hidden",
+              ouvert ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+            )}
+          >
+            <div className="overflow-hidden" inert={!ouvert}>
+              <nav
+                aria-label="Les sections de la page"
+                className="flex flex-col gap-1 pt-2"
+              >
+                {ancresImmersion.map((ancre, rang) => (
+                  <a
+                    key={ancre.id}
+                    href={`#${ancre.id}`}
+                    onClick={() => setOuvert(false)}
+                    /* Les entrées tombent l'une après l'autre plutôt que
+                       d'apparaître ensemble : c'est ce qui donne la goutte
+                       d'eau que Rémy décrit, une rangée qui se pose au lieu
+                       d'un bloc qui s'allume. Le retard ne vaut qu'à
+                       l'ouverture ; à la fermeture, tout part ensemble, sinon
+                       la dernière entrée s'attarderait après le repli. */
+                    style={{
+                      transitionDelay: ouvert ? `${120 + rang * 60}ms` : "0ms",
+                    }}
+                    className={cn(
+                      entree,
+                      "min-h-10 justify-center transition-[opacity,translate,background-color] duration-300",
+                      ouvert
+                        ? "translate-y-0 opacity-100"
+                        : "-translate-y-1 opacity-0",
+                    )}
+                  >
+                    {ancre.libelle}
+                  </a>
+                ))}
+              </nav>
+            </div>
+          </div>
         </div>
       </div>
     </header>

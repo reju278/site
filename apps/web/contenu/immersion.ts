@@ -53,9 +53,17 @@ export const ancresImmersion = [
   { id: "equipe", libelle: "Équipe" },
 ] as const;
 
-/** « Présentation de la plateforme de formation », et ses trois points. */
+/** Le titre d'accueil de la page, et ses trois points. */
 export const plateformeImmersion = {
-  titre: "Présentation de la plateforme de formation",
+  /* Dicté par Rémy, en remplacement de « Présentation de la plateforme de
+     formation », qui était relevé sur la page source, puis de deux essais plus
+     longs qu'il a écartés.
+
+     Un seul segment, donc une seule ligne : « Immersion Funnels Club » tient
+     partout, y compris à 375 px, et n'a plus besoin qu'on décide de sa
+     coupure. Le tableau reste un tableau pour que le jour où un titre demande
+     deux lignes, il suffise d'ajouter un second segment. */
+  titre: ["Immersion Funnels Club"],
   points: ["Votre espace privé", "Fiche de cours", "Groupe d'entraide"],
   video: {
     id: "xs24rsgnuy",

@@ -205,9 +205,23 @@ export function TitreRoulant({
         ));
 
         return segments.length > 1 ? (
-          <span key={s} className="block">
-            {corps}
-          </span>
+          /* **L'espace entre deux segments est rendu mais pas affiché.**
+
+             Un segment occupe sa ligne, donc l'espace qui les séparait à
+             l'écran n'a plus lieu d'être dessiné. Mais il existait aussi dans
+             le texte, et le retirer a recollé les segments dans le
+             `textContent` : « De vraies personnes.De vrais résultats. » C'est
+             ce que lit un lecteur d'écran, ce que copie quelqu'un qui
+             sélectionne le titre, et ce que voit un robot d'indexation.
+
+             `sr-only` est en position absolue, donc il ne peut pas décaler la
+             ligne : le rendu ne bouge pas d'un pixel, et le texte redevient du
+             français. C'est le même piège que l'espace en fin de bloc masqué
+             décrit plus haut, à l'échelle du segment. */
+          <Fragment key={s}>
+            {s > 0 ? <span className="sr-only"> </span> : null}
+            <span className="block">{corps}</span>
+          </Fragment>
         ) : (
           <Fragment key={s}>{corps}</Fragment>
         );
