@@ -77,7 +77,7 @@ export default function Immersion() {
         /* Le rembourrage haut dégage la barre de navigation, qui flotte
            au-dessus. Il est plus court qu'avant : le titre est monté, et
            quatre-vingt-seize pixels laissaient un vide que Rémy a signalé. */
-        className="relative isolate flex flex-col px-5 pt-20 sm:min-h-[calc(100svh+var(--video-h)/3)] sm:pt-24"
+        className="relative isolate flex flex-col px-5 pt-20 sm:min-h-[calc(100svh+var(--part-cachee))] sm:pt-24"
         style={
           {
             /* **La largeur s'écrit une seule fois**, et il le fallait : elle
@@ -97,6 +97,19 @@ export default function Immersion() {
                hauteur en dur donnerait un cadre qui n'est plus en 16/9, et
                Wistia y ajouterait des bandes noires sur les côtés. */
             "--video-h": "calc(var(--largeur-video) * 9 / 16)",
+            /* **Ce qui dépasse sous le bas de la fenêtre au repos**, écrit une
+               seule fois. Deux endroits s'en servent et ils doivent dire la
+               même chose : la hauteur du hero ici, et la distance de
+               défilement au bout de laquelle la vidéo se redresse, dans
+               `globals.css`. Écrite deux fois, elle aurait divergé à la
+               première correction, et la vidéo aurait fini de se redresser
+               avant ou après le moment où elle se pose.
+
+               Elle valait un tiers de la vidéo. Rémy l'a trouvée trop basse :
+               plus elle dépasse, plus la vidéo descend, et plus l'écart avec
+               le titre s'ouvre. À un sixième, la vidéo remonte de cent quatorze
+               pixels sur un écran de 1440 et l'écart tombe de moitié. */
+            "--part-cachee": "calc(var(--video-h) / 6)",
           } as React.CSSProperties
         }
       >
@@ -155,14 +168,15 @@ export default function Immersion() {
         />
 
         <div className="mx-auto flex w-full max-w-[var(--largeur-video)] flex-1 flex-col">
-          {/* **`my-auto` : le bloc de texte se centre dans ce qui reste
-              au-dessus de la vidéo.** Deux marges automatiques absorbent tout
-              l'espace libre de la colonne à parts égales, donc le titre tombe
-              au milieu et la vidéo se retrouve d'elle-même au bas de la
-              colonne, sans avoir besoin d'une marge automatique à son tour.
-              Une troisième marge automatique aurait partagé l'espace en trois
-              et décentré le titre vers le haut. */}
-          <div className="mx-auto my-auto max-w-3xl text-center">
+          {/* **`mt-auto` et non `my-auto` : tout l'espace libre passe
+              au-dessus du titre**, sur demande de Rémy, qui le veut « vraiment
+              juste au-dessus » de la vidéo. Centré, le bloc flottait au milieu
+              du vide et laissait un écart de cent trente pixels sous les
+              gélules ; collé, il ne reste que la marge haute de la vidéo.
+
+              Une seule marge automatique suffit à poser la vidéo au bas de la
+              colonne : elle absorbe tout ce qui reste. */}
+          <div className="mx-auto mt-auto max-w-3xl text-center">
             {/* Le titre est celui de Rémy, relevé sur la page source. La page
                 source n'a pas de titre d'accueil : elle commence par un logo
                 puis par cette phrase. En inventer une ici reviendrait à écrire
@@ -209,9 +223,11 @@ export default function Immersion() {
               secondes={plateformeImmersion.video.secondes}
               affiche={`/temoignages/${plateformeImmersion.video.id}.jpg`}
               afficheAlt="La plateforme de formation de Funnels Club"
-              /* L'affiche du haut de page : c'est elle que le navigateur
-                 chronomètre, et elle pèse maintenant 147 Ko en 1280 px. */
-              prioritaire
+              /* **Le lecteur de Wistia, servi d'emblée**, sur demande de Rémy,
+                 et pour cette vidéo seulement : son affiche et son bouton à
+                 lui, pas les nôtres. Le prix est écrit sur la propriété, une
+                 iframe qui se charge avant qu'on ait rien demandé. */
+              natif
               /* Une ombre portée pour détacher la vidéo, sur demande de Rémy.
                  Très diffuse et décalée vers le bas, donc elle se lit comme de
                  la profondeur et non comme un contour. Elle est **portée** et

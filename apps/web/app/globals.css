@@ -381,7 +381,7 @@ html #cookiescript_bottompart:empty {
    viennent de leur carte `VideoStage__Card` lue dans le navigateur, pas
    approchées à l'œil :
 
-   - **`rotateX(16deg) scale(0.92)` au repos**, plus rien à l'arrivée ;
+   - **`rotateX(11.8deg) scale(0.94)` au repos**, plus rien à l'arrivée ;
    - **`perspective: 1200px`** sur le conteneur, et non sur la carte : une
      perspective posée sur l'élément qui tourne se déforme avec lui ;
    - **origine à `center 80%`**, donc la carte pivote sur son tiers bas et se
@@ -390,6 +390,20 @@ html #cookiescript_bottompart:empty {
    **Rien de tout ça n'est du JavaScript.** C'est une animation pilotée par le
    défilement : le navigateur avance la ligne de temps lui-même, sur le
    compositeur, sans écouteur de défilement et sans image calculée en JS.
+
+   **L'inclinaison de départ n'est pas celle de leur image-clé, et c'est un
+   relevé et non un réglage.** Leur `@keyframes` dit bien `rotateX(16deg)
+   scale(0.92)`, mais personne ne voit jamais cet état chez eux : leur carte
+   est sous la ligne de flottaison, donc leur ligne de temps est **déjà à 26 %
+   au chargement**, mesuré dans le navigateur. Ce qu'un visiteur de wistia.com
+   regarde au repos, c'est 16 × 0,739 et 0,92 + 0,08 × 0,261, soit 11,8 degrés
+   et 0,94. La nôtre part de zéro, puisqu'elle est en haut de page : recopier
+   leur image-clé revenait à montrer une inclinaison que leur page ne montre
+   pas. Rémy l'a vu à l'œil avant que je le vérifie.
+
+   Le gain est double : le repos ressemble enfin au leur, et la vidéo bouge
+   moins entre son état incliné et son état à plat, donc l'écart sous les
+   gélules varie moins.
 
    **La plage, elle, ne se recopie pas, et c'est le seul écart assumé.** Chez
    eux la carte est sous la ligne de flottaison : `view()` et la plage `entry`
@@ -400,11 +414,17 @@ html #cookiescript_bottompart:empty {
    d'abord demandé la moitié, puis les deux tiers : montrer davantage de vidéo
    la fait remonter, et le titre, qui lui est collé, remonte avec elle.
 
-   **La distance de défilement se calcule, elle ne se règle pas.** Le tiers du
-   bas dépasse sous la fenêtre au repos : il faut donc exactement
-   `--video-h / 3` de défilement pour que la vidéo soit entièrement visible, et
-   24 px de plus pour qu'elle ne soit pas collée au bord. C'est là qu'elle finit
-   de se redresser.
+   **La distance de défilement se calcule, elle ne se règle pas.**
+   `--part-cachee` dit ce qui dépasse sous la fenêtre au repos : il faut donc
+   exactement cette distance de défilement pour que la vidéo soit entièrement
+   visible, et 24 px de plus pour qu'elle ne soit pas collée au bord. C'est là
+   qu'elle finit de se redresser.
+
+   **La variable est partagée avec la hauteur du hero, et c'est le point.** Ce
+   sont les deux faces d'une même mesure : de combien la vidéo dépasse, et de
+   combien il faut défiler pour la rattraper. Écrites séparément, elles se
+   seraient désaccordées au premier réglage, et la vidéo aurait fini de se
+   redresser avant ou après le moment où elle se pose.
 
    **Elle se redressait d'abord au milieu de l'écran, et c'était trop tard.**
    Rémy l'a signalé, et la mesure lui donnait raison : à plat, le haut de la
@@ -446,14 +466,14 @@ html #cookiescript_bottompart:empty {
       transform-origin: center 80%;
       animation: bascule-video linear both;
       animation-timeline: scroll(root block);
-      animation-range: 0 calc(var(--video-h) / 3 + 24px);
+      animation-range: 0 calc(var(--part-cachee) + 24px);
     }
   }
 }
 
 @keyframes bascule-video {
   from {
-    transform: rotateX(16deg) scale(0.92);
+    transform: rotateX(11.8deg) scale(0.94);
   }
 
   to {

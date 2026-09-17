@@ -65,6 +65,21 @@ const OPTIONS = new URLSearchParams({
   smallPlayButton: "true",
 });
 
+/* Les mêmes options, **sans la lecture automatique**.
+ *
+ * Elles servent au mode `natif`, où le lecteur de Wistia est servi d'emblée au
+ * lieu d'attendre un clic : il n'y a plus de clic préalable, donc plus rien qui
+ * autorise la lecture. Un lecteur qui démarre tout seul à l'ouverture d'une
+ * page est exactement ce que le reste du site évite.
+ *
+ * Copiées et non réécrites : deux listes à tenir d'accord divergent au premier
+ * réglage, et celle-ci existe uniquement pour retirer une ligne de l'autre. */
+const OPTIONS_NATIF = (() => {
+  const o = new URLSearchParams(OPTIONS);
+  o.delete("autoPlay");
+  return o;
+})();
+
 /** « 981 » devient « 16:21 ». */
 export function duree(secondes: number): string {
   const m = Math.floor(secondes / 60);
@@ -80,7 +95,7 @@ export function LecteurVideo({
   afficheMobile,
   legende,
   actif = true,
-  prioritaire = false,
+  natif = false,
   afficheAlt,
   className,
 }: {
@@ -117,18 +132,19 @@ export function LecteurVideo({
    */
   afficheAlt?: string;
   /**
-   * L'affiche est celle du haut de page : elle se charge tout de suite et en
-   * priorité, au lieu d'attendre comme les autres.
+   * Sert le lecteur de Wistia tout de suite, avec son affiche et son bouton à
+   * lui, au lieu de notre affiche cliquable.
    *
-   * C'est la règle du dépôt sur les images, et elle n'est pas décorative : le
-   * navigateur ne mesure pas n'importe quelle image, il mesure **celle-là**,
-   * la plus grande de la première vue. Différée, elle arrive après les
-   * scripts, et le chiffre qu'on rend à Google est celui de son arrivée.
+   * **C'est l'inverse du choix par défaut du site, et il faut le savoir.** Notre
+   * affiche existe pour que rien ne parte chez Wistia tant que personne n'a
+   * demandé à regarder : une iframe charge environ 505 Ko de JavaScript et
+   * prend contact avec un tiers à l'ouverture de la page, qu'on joue ou non.
    *
-   * `false` partout ailleurs : sur une page qui aligne vingt-deux affiches,
-   * toutes prioritaires revient à n'en prioriser aucune.
+   * Réservé à la vidéo du haut de `/immersion`, sur demande de Rémy, qui veut
+   * l'affiche de Wistia. Une page qui en aligne vingt-deux ne peut pas se le
+   * permettre.
    */
-  prioritaire?: boolean;
+  natif?: boolean;
   className?: string;
 }) {
   const [lance, setLance] = useState(false);
@@ -152,7 +168,7 @@ export function LecteurVideo({
         className,
       )}
     >
-      {lance ? (
+      {natif || lance ? (
         // L'iframe déborde de trois pixels de chaque côté, et `overflow-hidden`
         // coupe ce qui dépasse.
         //
@@ -166,7 +182,7 @@ export function LecteurVideo({
         //
         // Le prix est un rognage de moins d'un pour cent de l'image.
         <iframe
-          src={`https://fast.wistia.net/embed/iframe/${id}?${OPTIONS}`}
+          src={`https://fast.wistia.net/embed/iframe/${id}?${natif ? OPTIONS_NATIF : OPTIONS}`}
           title={titre}
           allow="autoplay; fullscreen"
           allowFullScreen
@@ -194,8 +210,7 @@ export function LecteurVideo({
               alt={afficheAlt ?? ""}
               width={1280}
               height={720}
-              loading={prioritaire ? "eager" : "lazy"}
-              fetchPriority={prioritaire ? "high" : undefined}
+              loading="lazy"
               className="size-full scale-100 object-cover transition-transform duration-500 ease-out group-hover:scale-105"
             />
           </picture>
