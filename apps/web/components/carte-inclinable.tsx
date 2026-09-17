@@ -174,13 +174,26 @@ export function CarteInclinable({
           <span
             className={cn(
               "absolute inset-0 opacity-0 transition-opacity duration-300 group-data-[survol]/incline:opacity-100",
+              /* **Plus large et plus faible que sur les cartes d'offres**, sur
+                 demande de Rémy : « vraiment, que ce soit subtil ».
+
+                 Les deux réglages vont ensemble. Élargir la tache sans baisser
+                 son intensité donne une lampe plus grosse, pas un reflet plus
+                 doux ; la baisser sans l'élargir donne une tache faible mais
+                 toujours cernée. C'est la combinaison qui la fait lire comme
+                 une clarté plutôt que comme un halo posé.
+
+                 Et elle est **au-dessus du contenu** depuis la correction
+                 précédente, donc elle passe aussi sur le texte : une valeur qui
+                 conviendrait derrière une affiche le voilerait. */
+              teinte === "bleute" && "[--portee:340px]",
               teinte === "blanc"
                 ? "[--lueur:255_255_255] [--reflet:0.3] dark:[--reflet:0.14]"
-                : "[--lueur:96_150_255] [--reflet:0.22] dark:[--lueur:255_255_255] dark:[--reflet:0.14]",
+                : "[--lueur:96_150_255] [--reflet:0.1] dark:[--lueur:255_255_255] dark:[--reflet:0.07]",
             )}
             style={{
               background:
-                "radial-gradient(220px circle at var(--lueur-x, 50%) var(--lueur-y, 50%), rgb(var(--lueur) / var(--reflet)), rgb(var(--lueur) / 0) 70%)",
+                "radial-gradient(var(--portee, 220px) circle at var(--lueur-x, 50%) var(--lueur-y, 50%), rgb(var(--lueur) / var(--reflet)), rgb(var(--lueur) / 0) 80%)",
             }}
           />
         </span>
