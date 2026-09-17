@@ -304,7 +304,9 @@ export default function Immersion() {
           80 px et mangerait le titre. C'est ce que fait l'accueil au même
           endroit, et c'est pour ça que `Section` y accepte un
           `[&>div]:pt-*`. */}
-      <FondResultats>
+      {/* `rayons` : les rayons de lumière que Rémy a demandés sur ce fond-là.
+          Ils sont facultatifs, et ne servent qu'ici : voir la propriété. */}
+      <FondResultats rayons>
       <SectionImmersion
         id="strategie"
         /* **Plus d'air au-dessus**, sur demande de Rémy. La lèvre de

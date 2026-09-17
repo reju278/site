@@ -750,6 +750,10 @@ summary {
   --halo-a: rgba(4, 94, 230, 0.1);
   --halo-b: rgba(75, 147, 255, 0.09);
   --halo-c: rgba(4, 94, 230, 0.055);
+  /* Les rayons de lumière de la section du modèle, quatrième membre de la
+     famille des halos et réglé comme eux : plus discret en clair, où le fond
+     est presque blanc, et plus franc en sombre. */
+  --halo-rayons: rgba(4, 94, 230, 0.1);
 
   /* Les mêmes trois foyers, en or et en rouge, pour les cartes du pied de page.
 
@@ -915,6 +919,7 @@ summary {
   --halo-a: rgba(4, 94, 230, 0.22);
   --halo-b: rgba(75, 147, 255, 0.14);
   --halo-c: rgba(4, 94, 230, 0.1);
+  --halo-rayons: rgba(75, 147, 255, 0.18);
 
   /* Comme le bleu, l'or et le rouge remontent en opacité pour le thème sombre :
      sur un fond presque noir, une teinte à dix pour cent ne se voit pas du tout,
@@ -1056,6 +1061,27 @@ html {
     opacity: 0.022;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
   }
+}
+
+/* Les rayons de lumière du fond des résultats, et la seule chose qu'il a fallu
+   leur reprendre.
+
+   Le composant de registre peint ses rayons en `mix-blend-mode: screen`. C'est
+   juste sur un fond sombre, où éclaircir fait apparaître la lumière ; sur notre
+   thème clair, le fond de la section est #fbfcff, et éclaircir du presque blanc
+   ne donne rien du tout. Les rayons y étaient **entièrement invisibles**, ce
+   qu'aucune erreur ne signale.
+
+   En clair, ils peignent donc leur bleu normalement. C'est la même adaptation
+   que celle du verre relevé chez TrendTrack, et pour la même raison : une
+   recette écrite pour un site qui n'a qu'un thème sombre ne se transpose pas
+   telle quelle sur un site qui en a deux.
+
+   La règle vise l'intérieur d'un composant de registre, ce que le dépôt ne fait
+   qu'à contrecœur ; elle est ici plutôt que dans son fichier, précisément pour
+   que le fichier reste alignable sur une mise à jour. */
+:root:not(.dark) [data-rayons] * {
+  mix-blend-mode: normal;
 }
 
 /* Le corps d'un article de la lettre.

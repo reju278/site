@@ -245,6 +245,44 @@ export function PilulesArguments({
               </span>
             ) : null}
 
+            {anime ? (
+              /* **La ligne nette, posée sur le filet lui-même.**
+
+                 Le calque du dessus ne donne que le reflet diffus qui traverse
+                 le verre ; Rémy veut aussi voir passer la ligne. Celle-ci est
+                 donc **au-dessus** du verre, et un masque la rogne sur la seule
+                 bande d'un pixel du bord.
+
+                 **Le masque est la recette éprouvée, pas celle du registre.**
+                 Deux couches opaques, l'une rognée sur la boîte de contenu et
+                 l'autre sur la boîte entière, soustraites l'une de l'autre : il
+                 ne reste que l'anneau du rembourrage. La variante de
+                 `BorderBeam`, avec une première couche transparente et une
+                 intersection, ne donne rien du tout ici.
+
+                 **Et le conteneur de mesure est un enfant, pas ce calque-ci.**
+                 `@container-[size]` pose `contain: paint`, qui interdit de
+                 peindre hors de sa propre boîte. Posé sur l'élément masqué, il
+                 empêchait la lumière d'atteindre la bande que le masque garde,
+                 et l'effet disparaissait entièrement, sans rien signaler.
+                 Mesuré. Il est donc à l'intérieur, sur une boîte qui couvre
+                 l'anneau.
+
+                 `-inset-px` : l'anneau se pose sur le filet de la gélule et non
+                 un pixel en dedans, sinon on lirait deux lignes. */
+              <span
+                aria-hidden
+                style={{ "--speed": "3s" } as React.CSSProperties}
+                className="pointer-events-none absolute -inset-px rounded-full p-px [mask-clip:content-box,border-box] [mask-composite:exclude] [mask-image:linear-gradient(#000_0_0),linear-gradient(#000_0_0)] [-webkit-mask-composite:xor]"
+              >
+                <span className="absolute inset-0 overflow-hidden rounded-full @container-[size]">
+                  <span className="animate-shimmer-slide absolute inset-0 aspect-square h-[100cqh]">
+                    <span className="animate-spin-around absolute -inset-full [background:conic-gradient(from_calc(270deg-45deg),transparent_0,var(--teinte)_90deg,transparent_90deg)]" />
+                  </span>
+                </span>
+              </span>
+            ) : null}
+
             {/* Le verre, d'un seul tenant sur toute la gélule. Il était
                 rentré d'un pixel pour découvrir la lumière ; c'est ce pixel qui
                 faisait la rainure. */}

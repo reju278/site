@@ -737,6 +737,42 @@ bleu nuit sur du beige, la coupure se lisait toute seule. Ce fond-ci est à un
 cheveu de la couleur de page, `#fbfcff` contre `#fcfbf8` : sans filet, l'arrondi
 ne se verrait pas.
 
+### Les rayons de lumière du fond des résultats, et pourquoi ils sont facultatifs
+
+`LightRays` de MagicUI, posé sur le fond du deck, sur demande de Rémy et
+**seulement dans la section du modèle d'`/immersion`**. Le fond sert à quatre
+endroits ; les allumer partout ferait bouger trois écrans qu'il n'a pas
+regardés, et un fond qui s'anime sous un en-tête de page n'a pas le même sens
+qu'un fond qui s'anime derrière une vidéo. D'où la propriété `rayons`, fausse
+par défaut.
+
+**Leur teinte est un quatrième halo.** `--halo-rayons` entre dans la famille de
+`--halo-a`, `b` et `c` et se règle comme eux : discret sur la page claire, où le
+fond est presque blanc, plus franc sur la sombre. Un bleu en dur aurait été trop
+pâle d'un côté et trop terne de l'autre.
+
+**Ils portent le même masque que le fond qu'ils éclairent.** Celui-ci s'éteint
+par le bas sur son dernier tiers ; des rayons qui s'arrêteraient net y
+dessineraient exactement la ligne que ce fondu existe pour supprimer. C'est la
+règle du raccord déjà écrite plus haut : quand deux surfaces se touchent, tout
+se raccorde, la couleur, le grain et ce qu'on pose dessus.
+
+**Le mélange « screen » a dû être repris pour le thème clair.** Le composant
+peint ses rayons en `mix-blend-mode: screen`, ce qui est juste sur un fond
+sombre : éclaircir y fait apparaître la lumière. Sur #fbfcff, éclaircir du
+presque blanc ne donne rien, et les rayons y étaient **entièrement invisibles**,
+ce qu'aucune erreur ne signale. En clair, ils peignent donc leur bleu
+normalement, par une règle de `globals.css` visant `[data-rayons]` plutôt que par
+une retouche de leur fichier, qui reste ainsi alignable. C'est la même
+adaptation que celle du verre relevé chez TrendTrack, et la même leçon : une
+recette écrite pour un site qui n'a qu'un thème sombre ne se transpose pas telle
+quelle.
+
+**Et ils ne sont pas rendus sous mouvement réduit.** Ils sont animés par Motion,
+donc en JavaScript, hors de portée de la règle globale ; et leur classe de départ
+est `opacity-0`, donc un rayon non animé est un rayon invisible. Il n'y a rien à
+figer, seulement à ne pas rendre.
+
 ### La courbe vivante, et ce qu'elle a le droit de dire
 
 C'est le « Live Line » du registre Bklit, porté du deck. Le tracé est dessiné

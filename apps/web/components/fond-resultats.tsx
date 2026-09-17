@@ -1,3 +1,4 @@
+import { RayonsFond } from "@/components/rayons-fond";
 import { cn } from "@repo/ui/lib/utils";
 
 /**
@@ -29,9 +30,21 @@ import { cn } from "@repo/ui/lib/utils";
 export function FondResultats({
   children,
   className,
+  rayons = false,
 }: {
   children: React.ReactNode;
   className?: string;
+  /**
+   * Ajoute les rayons de lumière par-dessus le fond.
+   *
+   * **Facultatif, et il faut qu'il le reste.** Ce fond sert à quatre endroits :
+   * la page des résultats, l'en-tête des pages intérieures, sous le pied de
+   * page et la section du modèle d'`/immersion`. Rémy les a demandés pour
+   * celle-là. Les allumer partout ferait bouger trois écrans qu'il n'a pas
+   * regardés, et un fond qui s'anime sous un en-tête de page n'a pas le même
+   * sens qu'un fond qui s'anime derrière une vidéo.
+   */
+  rayons?: boolean;
 }) {
   return (
     <div className={cn("relative isolate", className)}>
@@ -75,6 +88,11 @@ export function FondResultats({
             "linear-gradient(to bottom, #000 0%, #000 50%, transparent 92%)",
         }}
       />
+
+      {/* Les rayons, posés **entre le fond et la lèvre** : la lèvre les
+          recouvre comme elle recouvre le fond, donc la coupure du haut reste
+          nette et l'arrondi garde son filet. */}
+      {rayons ? <RayonsFond /> : null}
 
       {/* La lèvre : la page qui descend sur la section.
 
