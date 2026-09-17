@@ -100,11 +100,18 @@ export function GalerieEntretiens() {
                        elles flottent sur une photographie, et c'est un verre.
                        Ici, le semis de points court derrière la section : à 4 %
                        d'opacité, on le voyait **au travers de la carte**, ce que
-                       Rémy a signalé. Le même mélange, appliqué sur `--card` au
-                       lieu du vide, donne exactement la même teinte et rend la
-                       carte opaque. */
+                       Rémy a signalé. Le même mélange, appliqué sur une couleur
+                       au lieu du vide, rend la carte opaque sans rien changer à
+                       sa teinte.
+
+                       **Et la couleur est celle de la page, pas celle des
+                       cartes.** Mélangé à `--card`, qui est un blanc pur, le gris
+                       tirait plus froid que ce qu'on voyait à travers ; sur
+                       `--background`, qui est le blanc cassé de la page, on
+                       retrouve exactement la teinte d'avant. Rémy a vu la
+                       différence. */
                     backgroundColor:
-                      "color-mix(in srgb, currentColor 4%, var(--card))",
+                      "color-mix(in srgb, currentColor 4%, var(--background))",
                   }}
                   /* **Au survol, la carte se soulève, elle ne se cerne pas.**
                      Le motif du site colore la bordure en `ring` ; Rémy ne veut

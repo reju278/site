@@ -9,7 +9,66 @@ import {
   DialogTrigger,
 } from "@repo/ui/components/dialog";
 import { X } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { flushSync } from "react-dom";
+
+/**
+ * Le nom que la carte et le panneau partagent le temps de la bascule.
+ *
+ * **Un seul nom pour les vingt-deux cartes, et il le faut.** Deux éléments
+ * rendus en même temps ne peuvent pas porter le même nom de transition : le
+ * navigateur abandonne l'animation et n'en dit rien. Il n'est donc jamais posé
+ * dans le JSX, mais sur le seul élément concerné, juste avant la capture, et
+ * retiré aussitôt après. Une fenêtre étant ouverte à la fois, un nom suffit.
+ */
+const NOM_BASCULE = "carte-entretien";
+
+/**
+ * Enveloppe un changement d'état dans une transition de vue.
+ *
+ * **La transition n'existe que si le navigateur la connaît et si personne n'a
+ * demandé moins de mouvement.** Dans les deux cas contraires, l'état change
+ * normalement : la fenêtre s'ouvre et se ferme comme avant, sans rien de cassé.
+ *
+ * `flushSync` n'est pas une précaution : le navigateur capture l'état d'arrivée
+ * dès que la fonction rend la main. Une mise à jour React différée, qui est le
+ * cas normal, arriverait après la capture, et la transition animerait deux fois
+ * la même image.
+ */
+function basculer(sens: "ouvre" | "ferme", changer: () => void) {
+  const racine = document.documentElement;
+  const possible =
+    typeof document.startViewTransition === "function" &&
+    !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (!possible) {
+    changer();
+    return;
+  }
+
+  /* Le sens est lu par `globals.css` pour choisir de quel côté la carte pivote.
+     Il est posé sur la racine parce que les pseudo-éléments de transition
+     n'appartiennent à aucun élément de la page : ils sont les enfants de
+     `:root`, et c'est le seul endroit d'où on peut les atteindre. */
+  racine.dataset.bascule = sens;
+  const transition = document.startViewTransition(() => {
+    flushSync(changer);
+  });
+
+  /* **La transition peut être refusée, et ce n'est pas un cas d'école.** Un
+     navigateur la jette si le document est caché, si une autre est déjà en
+     cours, ou si deux éléments portent le même nom. Dans tous ces cas, le
+     changement d'état a **déjà eu lieu** : `flushSync` s'est exécuté avant le
+     refus, donc la fenêtre s'ouvre normalement et il ne manque que l'animation.
+
+     Le `catch` n'avale donc rien d'utile, il évite seulement une promesse
+     rejetée sans preneur dans la console. */
+  void transition.finished
+    .catch(() => {})
+    .finally(() => {
+      delete racine.dataset.bascule;
+    });
+}
 
 /**
  * L'entretien d'un membre, ouvert dans une fenêtre au milieu de la page.
@@ -60,13 +119,62 @@ export function ModaleAvis({
   children: React.ReactNode;
 }) {
   const [ouverte, setOuverte] = useState(false);
+  const carte = useRef<HTMLDivElement>(null);
+
+  /**
+   * **La carte se retourne et devient la fenêtre**, sur demande de Rémy.
+   *
+   * Le navigateur fait tout le travail : il photographie la carte, laisse React
+   * remplacer le DOM, photographie le panneau, puis anime la première image vers
+   * la seconde. Comme les deux portent le même nom, il les traite comme un seul
+   * objet qui change de place, de taille et de contenu : c'est ce qui donne la
+   * carte qui vient au milieu de l'écran. Le demi-tour, lui, est ajouté en CSS.
+   *
+   * **Rien de tout cela ne pèse sur la page** : aucune bibliothèque, aucune
+   * mesure en JavaScript, aucune image calculée. C'est la même mécanique que la
+   * bascule de thème du site.
+   *
+   * **Le nom se pose et se retire dans la même fonction.** À l'ouverture, la
+   * carte le porte pour la photo de départ et le rend avant la photo d'arrivée,
+   * que le panneau prend. À la fermeture, l'inverse.
+   */
+  const changer = (veutOuvrir: boolean) => {
+    const el = carte.current;
+    if (!el) {
+      setOuverte(veutOuvrir);
+      return;
+    }
+
+    if (veutOuvrir) el.style.viewTransitionName = NOM_BASCULE;
+
+    basculer(veutOuvrir ? "ouvre" : "ferme", () => {
+      setOuverte(veutOuvrir);
+      el.style.viewTransitionName = veutOuvrir ? "" : NOM_BASCULE;
+    });
+
+    if (!veutOuvrir) {
+      /* La carte reprend son nom le temps de l'arrivée, puis le rend : laissé
+         en place, il se heurterait aux vingt et un autres à la bascule
+         suivante. */
+      void Promise.resolve().then(() => {
+        window.setTimeout(() => {
+          el.style.viewTransitionName = "";
+        }, 700);
+      });
+    }
+  };
 
   return (
-    <Dialog open={ouverte} onOpenChange={setOuverte}>
+    <Dialog open={ouverte} onOpenChange={changer}>
       {/* `asChild` : le déclencheur est la carte entière, et on ne veut pas
           d'un bouton dans un bouton. Radix pose alors ses attributs sur
           l'élément qu'on lui donne. */}
-      <DialogTrigger asChild>{declencheur}</DialogTrigger>
+      {/* Le `div` n'est pas une couche de plus pour rien : c'est lui qui porte
+          le nom de transition. Posé sur la carte elle-même, qui est un bouton
+          inclinable en 3D, il aurait photographié un objet déjà tourné. */}
+      <div ref={carte}>
+        <DialogTrigger asChild>{declencheur}</DialogTrigger>
+      </div>
 
       <DialogContent
         /* **La croix part, un bouton « Retour » la remplace**, sur demande de
@@ -109,7 +217,10 @@ export function ModaleAvis({
             dans `AGENTS.md`. Le raisonnement est celui de la carte du pied de
             page : le panneau fait presque toute la largeur de l'écran, et c'est
             l'objet qu'on regarde, pas un bouton qu'on vise. */}
-        <div className="overflow-hidden rounded-[var(--rayon-jonction)] border border-border bg-background shadow-lg">
+        <div
+          style={{ viewTransitionName: NOM_BASCULE }}
+          className="overflow-hidden rounded-[var(--rayon-jonction)] border border-border bg-background shadow-lg"
+        >
           {/* **Un lien d'ancre ferme la fenêtre avant de sauter.**
 
               C'est la réparation d'un vrai défaut, trouvé en cliquant : les

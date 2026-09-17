@@ -1167,6 +1167,116 @@ html {
   }
 }
 
+/* La carte d'entretien qui se retourne et devient la fenêtre.
+
+   Demandée par Rémy : « on voit la carte se retourner et afficher le pop-up,
+   comme si le pop-up était derrière la carte ».
+
+   **Tout le déplacement est fait par le navigateur.** La carte et le panneau
+   portent le même nom de transition, donc il les traite comme un seul objet qui
+   change de place, de taille et de contenu, et il anime le passage de l'un à
+   l'autre. C'est `::view-transition-group` qui s'en charge, et on ne lui écrit
+   rien. Ce qui est écrit ici, c'est **le demi-tour**, que le navigateur ne
+   devine pas.
+
+   **La perspective est sur le groupe, pas sur les images.** Posée sur les images
+   elles-mêmes, le point de fuite suivrait l'objet qui tourne, et le demi-tour se
+   lirait comme un écrasement. C'est la règle déjà écrite pour les cartes
+   inclinables, au même endroit dans la chaîne.
+
+   **Les deux faces se cachent le dos.** Sans `backface-visibility`, on voit
+   l'image de départ à l'envers pendant la seconde moitié du mouvement, par
+   transparence à travers celle d'arrivée.
+
+   **Le sens s'inverse à la fermeture**, sur demande de Rémy, et il se lit dans
+   `data-bascule`, posé sur la racine par `ModaleAvis` le temps du mouvement.
+   Sans lui, refermer rejouerait le même demi-tour dans le même sens, et la
+   fenêtre repartirait comme elle est venue au lieu de revenir.
+
+   **Rien de tout ça ne se voit si le navigateur ne connaît pas l'API**, ou si
+   quelqu'un a demandé moins de mouvement : `ModaleAvis` change alors l'état sans
+   transition, et la fenêtre s'ouvre comme avant. */
+::view-transition-group(carte-entretien) {
+  animation-duration: 520ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  perspective: 1400px;
+}
+
+::view-transition-old(carte-entretien),
+::view-transition-new(carte-entretien) {
+  animation-duration: 520ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  backface-visibility: hidden;
+  /* Les deux faces occupent toute la boîte : sans cela, le navigateur les
+     ajuste par leur rapport d'origine et la carte se déforme en chemin. */
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+/* À l'ouverture : la carte présente sa face, pivote et disparaît ; le panneau
+   arrive de l'autre côté. */
+[data-bascule="ouvre"]::view-transition-old(carte-entretien) {
+  animation-name: bascule-face-part;
+}
+
+[data-bascule="ouvre"]::view-transition-new(carte-entretien) {
+  animation-name: bascule-face-arrive;
+}
+
+/* À la fermeture : le même mouvement, dans l'autre sens. */
+[data-bascule="ferme"]::view-transition-old(carte-entretien) {
+  animation-name: bascule-face-part-retour;
+}
+
+[data-bascule="ferme"]::view-transition-new(carte-entretien) {
+  animation-name: bascule-face-arrive-retour;
+}
+
+@keyframes bascule-face-part {
+  to {
+    opacity: 0;
+    transform: rotateY(90deg);
+  }
+}
+
+@keyframes bascule-face-arrive {
+  from {
+    opacity: 0;
+    transform: rotateY(-90deg);
+  }
+}
+
+@keyframes bascule-face-part-retour {
+  to {
+    opacity: 0;
+    transform: rotateY(-90deg);
+  }
+}
+
+@keyframes bascule-face-arrive-retour {
+  from {
+    opacity: 0;
+    transform: rotateY(90deg);
+  }
+}
+
+/* **Radix anime déjà l'ouverture de sa fenêtre, et les deux se gênent.**
+
+   Son entrée met le panneau à l'échelle et le fait apparaître ; or la photo
+   d'arrivée est prise juste après le changement de DOM, donc au tout début de
+   cette animation, c'est-à-dire sur un panneau encore réduit et translucide. Le
+   demi-tour arrivait alors sur une image fantôme, puis le panneau refaisait son
+   entrée par-dessus.
+
+   Ses animations sont donc coupées le temps de la bascule, et seulement là : en
+   dehors, la fenêtre s'ouvre comme partout ailleurs sur le site. Le sélecteur
+   passe devant les classes de Tailwind par sa seule spécificité, sans `!important`. */
+[data-bascule] [data-slot="dialog-content"],
+[data-bascule] [data-slot="dialog-overlay"] {
+  animation-name: none;
+}
+
 /* Un objet qui grossit un peu quand la souris passe dessus.
 
    Il sert aux gélules du hero d'immersion et aux trois cartes d'avis qui les
