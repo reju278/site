@@ -56,12 +56,21 @@ export function CarteInclinable({
    * c'est ce que Rémy avait tranché pour les cartes d'offres, où un halo coloré
    * teintait une carte qui avait déjà ses couleurs.
    *
-   * **`bleute` existe sur sa demande pour les cartes d'entretien.** Elles sont
-   * posées sur `bg-card`, une surface neutre, et il y veut le bleu du site en
-   * thème clair. Les deux choix cohabitent donc, et ils ne se contredisent pas :
-   * ce qui teinte une carte déjà colorée éclaire une carte qui ne l'est pas.
+   * **`doux` existe pour les cartes d'entretien**, et il a fallu trois essais.
+   * Bleu d'abord, refusé par Rémy : sur une carte presque blanche, un halo de
+   * couleur se lit comme une tache. Gris ensuite, plus juste mais plat. Ce qu'il
+   * décrit est autre chose : « qu'on ait cette sensation qu'on joue avec la
+   * lumière, l'ambiance, les reflets ».
+   *
+   * **Une seule tache ne pouvait pas y arriver.** Sur une surface claire, un
+   * reflet ne peut pas éclaircir : il n'y a plus de place au-dessus. `doux` pose
+   * donc **deux** taches, une claire sous le pointeur et une sombre au point
+   * opposé. Ensemble elles font basculer la carte du clair au sombre selon
+   * l'endroit qu'on vise, et c'est ce que l'œil lit comme une surface qui prend
+   * la lumière. Les deux intensités s'inversent d'un thème à l'autre : l'ombre
+   * porte l'effet sur fond clair, la clarté sur fond sombre.
    */
-  teinte?: "blanc" | "bleute";
+  teinte?: "blanc" | "doux";
 }) {
   const carte = useRef<HTMLDivElement>(null);
 
@@ -186,14 +195,33 @@ export function CarteInclinable({
                  Et elle est **au-dessus du contenu** depuis la correction
                  précédente, donc elle passe aussi sur le texte : une valeur qui
                  conviendrait derrière une affiche le voilerait. */
-              teinte === "bleute" && "[--portee:340px]",
+              teinte === "doux" && "[--portee:340px]",
               teinte === "blanc"
                 ? "[--lueur:255_255_255] [--reflet:0.3] dark:[--reflet:0.14]"
-                : "[--lueur:96_150_255] [--reflet:0.1] dark:[--lueur:255_255_255] dark:[--reflet:0.07]",
+                : /* L'éclat est rentré en thème clair, sur demande de Rémy :
+                     à un demi, le blanc lavait le haut de la carte au lieu de
+                     l'éclairer. C'est l'ombre qui porte l'effet de ce côté, la
+                     clarté n'a qu'à l'accompagner. */
+                  "[--eclat:0.22] [--ombre:0.055] dark:[--eclat:0.1] dark:[--ombre:0.22]",
             )}
             style={{
               background:
-                "radial-gradient(var(--portee, 220px) circle at var(--lueur-x, 50%) var(--lueur-y, 50%), rgb(var(--lueur) / var(--reflet)), rgb(var(--lueur) / 0) 80%)",
+                teinte === "doux"
+                  ? /* **Deux taches, pas une, et c'est ce qui fait la lumière.**
+                       La première est claire et suit le pointeur ; la seconde est
+                       sombre et suit le point **opposé**, `calc(100% - x)`.
+                       Ensemble elles font basculer la carte du clair au sombre
+                       selon l'endroit qu'on vise, ce que l'œil lit comme une
+                       surface qui prend la lumière.
+
+                       Une seule tache claire ne pouvait pas y arriver en thème
+                       clair : sur une carte presque blanche, il n'y a pas de
+                       place au-dessus, un blanc de plus ne se voit pas. C'est
+                       l'ombre qui porte l'effet de ce côté, et la clarté de
+                       l'autre : les deux intensités s'inversent d'un thème à
+                       l'autre. */
+                    "radial-gradient(var(--portee, 220px) circle at var(--lueur-x, 50%) var(--lueur-y, 50%), rgb(255 255 255 / var(--eclat)), transparent 70%), radial-gradient(var(--portee, 220px) circle at calc(100% - var(--lueur-x, 50%)) calc(100% - var(--lueur-y, 50%)), rgb(0 0 0 / var(--ombre)), transparent 70%)"
+                  : "radial-gradient(var(--portee, 220px) circle at var(--lueur-x, 50%) var(--lueur-y, 50%), rgb(var(--lueur) / var(--reflet)), rgb(var(--lueur) / 0) 80%)",
             }}
           />
         </span>

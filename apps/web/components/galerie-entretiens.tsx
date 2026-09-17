@@ -73,16 +73,15 @@ export function GalerieEntretiens() {
                 a cité les cartes 3D de l'accueil. C'est le même geste, sorti en
                 composant plutôt que recopié : voir `CarteInclinable`.
 
-                La lueur est bleutée en thème clair, sur sa demande. C'est
-                l'inverse de ce qu'il avait tranché pour les cartes d'offres, et
-                les deux se tiennent : là-bas la carte a déjà ses couleurs et un
-                halo coloré la teinte ; ici elle est posée sur `bg-card`, une
-                surface neutre, que le reflet éclaire sans rien salir.
+                La lueur est un gris très faible en thème clair et du blanc
+                en sombre, sur sa demande : voir la propriété `teinte`, qui
+                explique pourquoi un reflet ne peut pas éclaircir une surface
+                déjà claire.
 
                 **Le survol qui soulevait la carte est retiré.** Deux gestes pour
                 un seul objet, l'un qui monte et l'autre qui tourne, se
                 contrariaient : l'inclinaison porte déjà son ombre. */}
-            <CarteInclinable teinte="bleute" className="h-full">
+            <CarteInclinable teinte="doux" rayon="rounded-[25px]" className="h-full">
             <ModaleAvis
               titre={`Entretien avec ${nom}`}
               description={sansNoms(article.chapo)}
@@ -93,6 +92,13 @@ export function GalerieEntretiens() {
                    qu'un bouton centre son texte par défaut. */
                 <button
                   type="button"
+                  style={{
+                    /* Le fond des cartes du hero, au caractère près : leur
+                       `color(srgb 1 1 1 / 0.04)` relevé chez TrendTrack, rendu
+                       aux deux thèmes par `color-mix` sur `currentColor`. */
+                    backgroundColor:
+                      "color-mix(in srgb, currentColor 4%, transparent)",
+                  }}
                   /* **Au survol, la carte se soulève, elle ne se cerne pas.**
                      Le motif du site colore la bordure en `ring` ; Rémy ne veut
                      pas de ce cadre coloré ici. Une ombre portée et deux pixels
@@ -118,7 +124,16 @@ export function GalerieEntretiens() {
                      On n'anime pas tout : au survol, la couleur de fond de la
                      pilule change aussi, et `transition-all` ferait traîner ce
                      qui doit être net. */
-                  className="relief-verre group/carte group/roule flex h-full w-full flex-col overflow-hidden rounded-md border border-border bg-card text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                  /* **Le dessin des trois cartes du hero**, sur demande de
+                     Rémy : le fond de verre, le rayon de 25 px et **aucune
+                     bordure**.
+
+                     L'absence de bordure n'est pas un oubli : le liseré qu'on
+                     voit sur ces cartes n'est pas un filet, ce sont les trois
+                     ombres **intérieures** de `relief-verre`. En ajouter un
+                     cernerait la carte là où ces ombres la creusent, et c'est le
+                     piège que `AGENTS.md` décrit déjà pour le relevé du hero. */
+                  className="relief-verre group/carte group/roule flex h-full w-full flex-col overflow-hidden rounded-[25px] text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                 >
                   {/* L'affiche, **recadrée sur la bande d'image réelle**.
 

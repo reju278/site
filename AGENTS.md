@@ -461,6 +461,17 @@ interprétation ». Leur rayon y vaut 25,06 px, et il n'a pas été rentré comm
 trois du panneau : une carte de 348 px porte cet arrondi sans qu'il devienne le
 premier objet qu'on voit, ce qui n'était pas vrai du panneau de 864.
 
+**Les vingt-deux cartes d'entretien l'ont rejoint**, sur décision de Rémy, avec
+le reste du dessin : le fond de verre en `color-mix`, le relief intérieur, et
+**aucune bordure**. C'est la même famille d'objets, des cartes d'avis sur la même
+page, et deux dessins différents pour la même chose se lisaient comme une
+inattention. Elles ont perdu au passage leur `rounded-md`, leur `border-border`
+et leur `bg-card`.
+
+L'absence de bordure est le piège du relevé, déjà décrit plus bas : le liseré
+qu'on croit voir n'est pas un filet, ce sont les ombres **intérieures** de
+`relief-verre`. En ajouter un cerne la carte là où ces ombres la creusent.
+
 Deux choses se sont apprises sur ce relevé, et elles valent pour le prochain :
 
 - **Le liseré lumineux d'une carte de verre n'est pas une bordure.** Leur
@@ -1213,6 +1224,15 @@ salir. Ce qui teinte une carte déjà colorée éclaire une carte qui ne l'est p
 presque noir, un reflet à trente pour cent est déjà une lampe, là où sur un fond
 presque blanc il s'efface. Le réglage tient dans une variable et non dans deux
 dégradés écrits côte à côte.
+
+**Et sur les cartes d'entretien, ce n'est pas seulement la force qui change d'un
+thème à l'autre, c'est le sens.** Rémy voulait « la sensation qu'on joue avec la
+lumière ». Une seule tache claire ne pouvait pas y arriver sur une carte presque
+blanche : **il n'y a pas de place au-dessus du blanc.** La lueur y est donc
+double, une tache claire sous le pointeur et une tache sombre au point opposé,
+`calc(100% - x)`. Ensemble elles font basculer la carte du clair au sombre selon
+l'endroit qu'on vise, ce que l'œil lit comme une surface qui prend la lumière.
+L'ombre porte l'effet sur fond clair, la clarté sur fond sombre.
 
 **La lueur passe au-dessus du contenu, pas dessous**, et c'est une correction.
 Dessous, elle n'éclairait que les marges : le fond de la carte et l'affiche sont
