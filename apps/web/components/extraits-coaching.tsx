@@ -1,5 +1,4 @@
 import { LecteurVideo } from "@/components/lecteur-video";
-import { insecables } from "@/lib/typographie";
 import { DotPattern } from "@repo/ui/components/dot-pattern";
 import { Safari } from "@repo/ui/components/safari";
 import { cn } from "@repo/ui/lib/utils";
@@ -68,7 +67,20 @@ export function ExtraitsCoaching({
       <div className="relative mx-auto max-w-5xl px-1">
         <Safari url="funnels.club" mode="simple" />
 
-        <div className="absolute z-20 overflow-hidden" style={ECRAN}>
+        {/* **`rounded-b-[11px]` : l'écran suit l'arrondi de la fenêtre.**
+
+            Le châssis a les angles bas arrondis ; un écran rectangulaire y
+            dépassait par les deux coins, ce que Rémy a vu. Onze pixels est la
+            valeur que leur propre fichier applique à son image, recopiée comme
+            les quatre pourcentages ci-dessus.
+
+            `[&>div]:rounded-none` : le cadre du lecteur rogne à 5 px, le rayon
+            du site. Ici c'est la fenêtre qui décide de la forme, et deux
+            arrondis concentriques de rayons différents se voient. */}
+        <div
+          className="absolute z-20 overflow-hidden rounded-b-[11px]"
+          style={ECRAN}
+        >
           <LecteurVideo
             id={extrait.id}
             titre={extrait.titre}
@@ -77,14 +89,11 @@ export function ExtraitsCoaching({
             /* Le lecteur de Wistia, servi d'emblée : plus aucune affiche
                cliquable sur cette page. */
             natif
-            className="aspect-auto size-full rounded-none"
+            className="aspect-auto size-full rounded-none [&>div]:rounded-none"
           />
         </div>
       </div>
 
-      <p className="mx-auto mt-4 max-w-2xl text-center text-sm text-pretty text-muted-foreground">
-        {insecables(extrait.titre)}
-      </p>
     </div>
   );
 }

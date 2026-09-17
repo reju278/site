@@ -381,6 +381,27 @@ export default function Immersion() {
       </SectionImmersion>
       </FondResultats>
 
+      {/* **La séparation entre le modèle et l'extrait de coaching**, sur demande
+          de Rémy.
+
+          Un filet qui s'éteint à ses deux bouts, et rien au milieu. Le fond des
+          résultats se termine juste au-dessus par un fondu qui ne laisse aucune
+          arête : c'est voulu, et c'est écrit dans `AGENTS.md`, mais les deux
+          sections finissaient par se toucher sans qu'on sache où l'une
+          s'arrêtait.
+
+          **Il s'éteint au lieu de s'arrêter**, pour la même raison que tout le
+          reste de cette page : un trait qui bute sur ses extrémités dessine deux
+          points, et on les voit. Et il est plus étroit que la page, pour se lire
+          comme une respiration et non comme une bordure de section.
+
+          `aria-hidden` : c'est une figure, elle ne dit rien qu'un lecteur
+          d'écran ait besoin d'entendre. Le changement de sujet est déjà porté
+          par les deux `h2` qui l'encadrent. */}
+      <div aria-hidden className="mx-auto max-w-3xl px-5 pt-4">
+        <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+      </div>
+
       {/* COACHING : les deux extraits. */}
       <SectionImmersion id="coaching" className="scroll-mt-24">
         {/* **Un simple libellé en italique**, sur demande de Rémy, et le
