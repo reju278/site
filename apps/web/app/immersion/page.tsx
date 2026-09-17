@@ -1,4 +1,5 @@
 import { CartesTemoignage } from "@/components/cartes-temoignage";
+import { FondCases } from "@/components/fond-cases";
 import { FondResultats } from "@/components/fond-resultats";
 import { GalerieEntretiens } from "@/components/galerie-entretiens";
 import { LecteurVideo } from "@/components/lecteur-video";
@@ -26,6 +27,7 @@ import {
 } from "@/contenu/immersion";
 import { insecables } from "@/lib/typographie";
 
+import { cn } from "@repo/ui/lib/utils";
 import type { Metadata } from "next";
 
 /**
@@ -288,6 +290,7 @@ export default function Immersion() {
           Ils sont facultatifs, et ne servent qu'ici : voir la propriété. */}
       <FondResultats rayons>
       <SectionImmersion
+        cases
         id="strategie"
         /* **Plus d'air au-dessus**, sur demande de Rémy. La lèvre de
            `FondResultats` fait déjà 80 px, et l'étiquette qui ouvre maintenant
@@ -380,7 +383,7 @@ export default function Immersion() {
       </FondResultats>
 
       {/* COACHING : les deux extraits. */}
-      <SectionImmersion id="coaching" className="scroll-mt-24">
+      <SectionImmersion cases id="coaching" className="scroll-mt-24">
         <div className="mx-auto max-w-3xl text-center">
           <TitreRoulant
             as="h2"
@@ -420,7 +423,7 @@ export default function Immersion() {
           lien qu'on vient de recevoir.
 
           La carte est celle de `/resultats`, au détail près. */}
-      <SectionImmersion id="avis" className="scroll-mt-24">
+      <SectionImmersion cases id="avis" className="scroll-mt-24">
         <div className="mx-auto max-w-3xl text-center">
           <TitreRoulant
             as="h2"
@@ -488,10 +491,24 @@ export default function Immersion() {
 function SectionImmersion({
   className,
   children,
+  cases = false,
   ...props
-}: React.ComponentProps<"section">) {
+}: React.ComponentProps<"section"> & {
+  /**
+   * Pose le quadrillage de cases derrière la section.
+   *
+   * **Facultatif, et il faut qu'il le reste.** Rémy l'a demandé pour trois
+   * sections sur six ; partout, il cesserait d'être un accent pour devenir le
+   * fond de la page.
+   */
+  cases?: boolean;
+}) {
   return (
-    <section className={className} {...props}>
+    /* `relative` dès qu'il y a un quadrillage : c'est lui qui donne son cadre à
+       la couche posée en dessous. Sans quadrillage, la section reste ce qu'elle
+       était, pour ne rien changer aux cinq autres. */
+    <section className={cn(cases && "relative isolate", className)} {...props}>
+      {cases ? <FondCases /> : null}
       <div className="mx-auto max-w-6xl px-5 py-9 sm:py-12">{children}</div>
     </section>
   );

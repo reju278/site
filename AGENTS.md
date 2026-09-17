@@ -737,6 +737,34 @@ bleu nuit sur du beige, la coupure se lisait toute seule. Ce fond-ci est à un
 cheveu de la couleur de page, `#fbfcff` contre `#fcfbf8` : sans filet, l'arrondi
 ne se verrait pas.
 
+### Le quadrillage de cases, et son prix
+
+`InteractiveGridPattern` de MagicUI, derrière les sections du modèle, du
+coaching et des entretiens, sur demande de Rémy. **Facultatif, comme les
+rayons** : posé partout, il cesserait d'être un accent pour devenir le fond de
+la page.
+
+Trois choses du fichier de registre sont rattrapées **de l'extérieur**, pour
+qu'il reste alignable : ses couleurs en dur, `gray-400/30`, qui ne répondent à
+aucun thème et passent en `stroke-border` ; ses cases carrées, que Rémy veut
+arrondies, `rx` étant une propriété CSS sur un `rect` ; et son survol gris, qui
+passe au bleu du site. La classe de survol coexiste avec la leur au lieu de
+l'écraser : elles ne visent pas le même état.
+
+**`preserveAspectRatio` n'est pas un détail.** Le composant dimensionne son SVG
+en attributs puis le CSS l'étire à la section : sans cette ligne, les cases
+deviennent des rectangles dès que la section n'a pas les proportions du
+quadrillage. Rien ne le signale.
+
+**Le quadrillage s'éteint au masque avant d'atteindre le bord**, sinon il
+s'arrête net et dessine un rectangle, c'est-à-dire la couture que ce fichier
+traque partout ailleurs.
+
+**Et il faut connaître son prix : 216 `rect` par section, 648 sur la page**,
+chacun portant deux gestionnaires de souris. C'est ce qui décide du nombre de
+cases, et c'est pourquoi il n'y en a pas sur les six sections. Le jour où la
+page devient lourde, c'est le premier endroit où regarder.
+
 ### Les rayons de lumière du fond des résultats, et pourquoi ils sont facultatifs
 
 `LightRays` de MagicUI, posé sur le fond du deck, sur demande de Rémy et
