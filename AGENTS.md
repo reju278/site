@@ -1200,45 +1200,6 @@ dessin sans rien dire à la ligne : le réglage est juste à un seul corps et se
 refait à chaque changement de taille. `vertical-align` s'exprime en `em` par
 rapport à la ligne de base, donc il tient à toutes les tailles.
 
-### La carte qui se retourne et devient la fenêtre
-
-Sur demande de Rémy : « on voit la carte se retourner et afficher le pop-up,
-comme si le pop-up était derrière la carte ». C'est l'**API de transition de
-vue** du navigateur, comme la bascule de thème du site : aucune bibliothèque,
-aucune mesure en JavaScript, aucune image calculée.
-
-**Le navigateur fait tout le déplacement.** La carte et le panneau portent le
-même `view-transition-name` : il les traite comme un seul objet qui change de
-place, de taille et de contenu. Ce qu'on écrit en CSS, c'est le demi-tour, qu'il
-ne devine pas, et le sens de ce demi-tour, qui s'inverse à la fermeture.
-
-**Un seul nom pour les vingt-deux cartes, et il le faut.** Deux éléments rendus
-en même temps ne peuvent pas porter le même nom : le navigateur abandonne
-l'animation et **n'en dit rien**. Il n'est donc jamais posé dans le JSX, mais sur
-le seul élément concerné, juste avant la capture, et retiré aussitôt après.
-
-**`flushSync` n'est pas une précaution.** Le navigateur capture l'état d'arrivée
-dès que la fonction rend la main ; une mise à jour React différée, qui est le cas
-normal, arriverait après la capture et la transition animerait deux fois la même
-image.
-
-**Les animations de Radix sont coupées le temps de la bascule.** Son entrée met
-le panneau à l'échelle et le fait apparaître ; or la photo d'arrivée est prise au
-tout début de cette animation, donc sur un panneau encore réduit et translucide.
-
-**Une transition refusée n'est pas une panne.** Le navigateur la jette si le
-document est caché, si une autre est en cours, ou sur un doublon de nom. Dans
-tous ces cas le changement d'état a **déjà eu lieu** : la fenêtre s'ouvre
-normalement, il ne manque que l'animation. C'est aussi la seule dégradation d'un
-navigateur qui ne connaît pas l'API, et celle qu'obtient quelqu'un qui demande
-moins de mouvement.
-
-**Corollaire pour la vérification : un document caché ne fait jamais de
-transition de vue.** Le panneau navigateur de l'agent garde son onglet en
-`visibilityState: "hidden"`, donc l'effet y est systématiquement abandonné, avec
-un `InvalidStateError` sur `ready`. Ce n'est pas un défaut du code, et ça ne se
-vérifie que dans un vrai navigateur au premier plan.
-
 ### Le geste d'inclinaison est écrit une fois, et sa lueur se décide par carte
 
 Les cartes d'offres de l'accueil s'inclinent sous le pointeur depuis longtemps.
