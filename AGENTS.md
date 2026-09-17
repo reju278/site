@@ -1301,20 +1301,27 @@ n'y avait rien à installer.
 `button`, et une gélule ne se clique pas. Poser un bouton là aurait annoncé une
 action qui n'existe pas. La recette est reprise en trois `span` décoratifs.
 
-**La lumière est rognée au filet par un masque à deux couches**, et c'est la
-seconde version. La première laissait un creux d'un pixel entre le filet et le
-verre, à la façon du `backdrop` de leur bouton : la lumière y passait bien, mais
-le reste du temps ce creux se lisait comme une rainure sombre, et Rémy l'a
-signalé. `mask-clip: padding-box, border-box` avec `mask-composite: intersect`
-ne garde que la bande de la bordure : la lumière ne peut apparaître que là,
-exactement sur le filet, et le verre remplit de nouveau toute la gélule. C'est
-la recette de `BorderBeam`, un autre composant du même registre, reprise sans
-l'installer.
+**Le voile de verre est rentré d'un pixel**, comme le `backdrop` de leur bouton,
+et c'est cet anneau d'un pixel qui laisse voir la lumière tout autour du bord.
 
-**La leçon vaut au-delà de ce cas : un espace laissé pour qu'un effet passe
-existe aussi quand l'effet n'est pas là.** Ce qui découvre une animation doit se
-juger sur les trois secondes où elle est ailleurs, pas sur l'instant où elle
-passe.
+**Mais un anneau transparent se voit aussi quand la lumière n'y est pas.** Il
+laissait paraître la photographie au travers, et les trois secondes où la
+lumière était ailleurs, il se lisait comme une rainure sombre. Rémy l'a signalé.
+L'anneau porte donc le fond du calque de lumière, `bg-white/6`, exactement celui
+du voile : la lumière se peint par-dessus puisqu'elle en est l'enfant, et
+l'anneau cesse d'exister à l'œil le reste du temps. Il lui manque le flou
+d'arrière-plan du voile, et sur un pixel cela ne se voit pas.
+
+**Un espace laissé pour qu'un effet passe existe aussi quand l'effet n'est pas
+là.** Ce qui découvre une animation se juge sur les trois secondes où elle est
+ailleurs, pas sur l'instant où elle passe.
+
+**Ce qui a été essayé et jeté : rogner la lumière au filet par un masque**, à la
+façon de `BorderBeam`. Le masque était juste, mais `@container-[size]` pose
+`contain: paint`, qui interdit à l'enfant de peindre dans la bande de bordure :
+le masque ne gardait que cette bande, l'enfant ne pouvait pas y aller, et
+**l'effet disparaissait entièrement**. Rien n'échouait, rien ne s'affichait. La
+famille est connue dans ce fichier : une règle qui est là et n'agit pas.
 
 **Une seule teinte par gélule, et elle sert à tout.** Le point, l'étoile et la
 lumière la lisent dans `--teinte`, donc ils ne peuvent pas se désaccorder. Vert

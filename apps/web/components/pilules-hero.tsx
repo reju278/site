@@ -206,23 +206,31 @@ export function PilulesArguments({
               <span
                 aria-hidden
                 style={{ "--speed": "3s" } as React.CSSProperties}
-                /* **Le masque à deux couches rogne tout sauf le filet.**
-                   `mask-clip: padding-box, border-box` donne deux zones, la
-                   première transparente, la seconde opaque ; `mask-intersect`
-                   ne garde que leur différence, c'est-à-dire la bande de la
-                   bordure et rien d'autre. La lumière ne peut donc apparaître
-                   que là, exactement sur le filet.
+                /* **L'anneau porte le même verre que la gélule, et c'est ce
+                   qui bouche le creux.**
 
-                   C'est la recette de `BorderBeam`, un autre composant du même
-                   registre. Elle remplace le creux d'un pixel qu'on laissait
-                   entre le filet et le verre : la lumière y passait bien, mais
-                   le reste du temps ce creux se lisait comme une rainure
-                   sombre, ce que Rémy a signalé.
+                   La lumière passe dans un anneau d'un pixel laissé entre le
+                   filet et le verre : c'est ce qui la rend visible tout autour
+                   du bord. Mais cet anneau était transparent, donc les trois
+                   secondes où la lumière est ailleurs, on voyait la
+                   photographie au travers et ça se lisait comme une rainure
+                   sombre. C'est le défaut que Rémy a signalé.
 
-                   `-inset-px` : la bande du masque se pose sur le filet de la
-                   gélule et non un pixel en dedans, sinon on verrait deux
-                   lignes, la grise et la colorée. */
-                className="pointer-events-none absolute -inset-px overflow-hidden rounded-full border border-transparent blur-[1px] mask-[linear-gradient(transparent,transparent),linear-gradient(#000,#000)] mask-intersect [mask-clip:padding-box,border-box] @container-[size]"
+                   `bg-white/6` est exactement le fond du voile intérieur : le
+                   fond de ce calque remplit l'anneau, la lumière se peint
+                   par-dessus puisqu'elle est son enfant, et l'anneau cesse
+                   d'exister à l'œil quand elle n'y est pas. Il lui manque le
+                   flou d'arrière-plan du voile, et sur un pixel ça ne se voit
+                   pas.
+
+                   **Ce qui a été essayé et jeté : rogner la lumière au filet
+                   par un masque**, à la façon de `BorderBeam`. Le masque était
+                   juste, mais `@container-[size]` pose `contain: paint`, qui
+                   empêche l'enfant de peindre dans la bande de bordure : le
+                   masque ne gardait que cette bande, l'enfant ne pouvait pas y
+                   aller, et l'effet disparaissait entièrement. Mesuré, pas
+                   supposé. */
+                className="pointer-events-none absolute inset-0 -z-30 overflow-visible rounded-full bg-white/6 blur-[2px] @container-[size]"
               >
                 <span className="animate-shimmer-slide absolute inset-0 aspect-square h-[100cqh]">
                   <span className="animate-spin-around absolute -inset-full [background:conic-gradient(from_calc(270deg-45deg),transparent_0,var(--teinte)_90deg,transparent_90deg)]" />
@@ -230,13 +238,12 @@ export function PilulesArguments({
               </span>
             ) : null}
 
-            {/* Le verre, qui remplit toute la gélule. Il était rentré d'un
-                pixel pour laisser passer la lumière : c'est ce pixel qui
-                dessinait la rainure. La lumière se pose maintenant sur le filet
-                lui-même, donc il n'y a plus rien à dégager. */}
+            {/* Le verre, rentré d'un pixel pour découvrir l'anneau où passe
+                la lumière. C'est le `backdrop` de leur bouton, au même endroit
+                et pour la même raison. */}
             <span
               aria-hidden
-              className="absolute inset-0 -z-20 rounded-full bg-white/6 backdrop-blur-md"
+              className="absolute inset-px -z-20 rounded-full bg-white/6 backdrop-blur-md"
             />
 
             {point.etincelles ? (
