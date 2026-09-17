@@ -206,7 +206,23 @@ export function PilulesArguments({
               <span
                 aria-hidden
                 style={{ "--speed": "3s" } as React.CSSProperties}
-                className="pointer-events-none absolute inset-0 -z-30 overflow-visible blur-[2px] @container-[size]"
+                /* **Le masque à deux couches rogne tout sauf le filet.**
+                   `mask-clip: padding-box, border-box` donne deux zones, la
+                   première transparente, la seconde opaque ; `mask-intersect`
+                   ne garde que leur différence, c'est-à-dire la bande de la
+                   bordure et rien d'autre. La lumière ne peut donc apparaître
+                   que là, exactement sur le filet.
+
+                   C'est la recette de `BorderBeam`, un autre composant du même
+                   registre. Elle remplace le creux d'un pixel qu'on laissait
+                   entre le filet et le verre : la lumière y passait bien, mais
+                   le reste du temps ce creux se lisait comme une rainure
+                   sombre, ce que Rémy a signalé.
+
+                   `-inset-px` : la bande du masque se pose sur le filet de la
+                   gélule et non un pixel en dedans, sinon on verrait deux
+                   lignes, la grise et la colorée. */
+                className="pointer-events-none absolute -inset-px overflow-hidden rounded-full border border-transparent blur-[1px] mask-[linear-gradient(transparent,transparent),linear-gradient(#000,#000)] mask-intersect [mask-clip:padding-box,border-box] @container-[size]"
               >
                 <span className="animate-shimmer-slide absolute inset-0 aspect-square h-[100cqh]">
                   <span className="animate-spin-around absolute -inset-full [background:conic-gradient(from_calc(270deg-45deg),transparent_0,var(--teinte)_90deg,transparent_90deg)]" />
@@ -214,12 +230,13 @@ export function PilulesArguments({
               </span>
             ) : null}
 
-            {/* Le verre, rentré d'un pixel pour découvrir le liseré lumineux.
-                C'est le `backdrop` de leur bouton, au même endroit et pour la
-                même raison. */}
+            {/* Le verre, qui remplit toute la gélule. Il était rentré d'un
+                pixel pour laisser passer la lumière : c'est ce pixel qui
+                dessinait la rainure. La lumière se pose maintenant sur le filet
+                lui-même, donc il n'y a plus rien à dégager. */}
             <span
               aria-hidden
-              className="absolute inset-px -z-20 rounded-full bg-white/6 backdrop-blur-md"
+              className="absolute inset-0 -z-20 rounded-full bg-white/6 backdrop-blur-md"
             />
 
             {point.etincelles ? (

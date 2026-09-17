@@ -1301,10 +1301,20 @@ n'y avait rien à installer.
 `button`, et une gélule ne se clique pas. Poser un bouton là aurait annoncé une
 action qui n'existe pas. La recette est reprise en trois `span` décoratifs.
 
-**Le fond de verre est passé sur un voile intérieur**, rentré d'un pixel. C'est
-lui qui découvre le cheveu de lumière tout autour du bord ; posé sur la gélule
-elle-même, il l'aurait entièrement couverte. C'est exactement ce que fait le
-`backdrop` de leur bouton, au même endroit et pour la même raison.
+**La lumière est rognée au filet par un masque à deux couches**, et c'est la
+seconde version. La première laissait un creux d'un pixel entre le filet et le
+verre, à la façon du `backdrop` de leur bouton : la lumière y passait bien, mais
+le reste du temps ce creux se lisait comme une rainure sombre, et Rémy l'a
+signalé. `mask-clip: padding-box, border-box` avec `mask-composite: intersect`
+ne garde que la bande de la bordure : la lumière ne peut apparaître que là,
+exactement sur le filet, et le verre remplit de nouveau toute la gélule. C'est
+la recette de `BorderBeam`, un autre composant du même registre, reprise sans
+l'installer.
+
+**La leçon vaut au-delà de ce cas : un espace laissé pour qu'un effet passe
+existe aussi quand l'effet n'est pas là.** Ce qui découvre une animation doit se
+juger sur les trois secondes où elle est ailleurs, pas sur l'instant où elle
+passe.
 
 **Une seule teinte par gélule, et elle sert à tout.** Le point, l'étoile et la
 lumière la lisent dans `--teinte`, donc ils ne peuvent pas se désaccorder. Vert
