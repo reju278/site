@@ -403,14 +403,15 @@ export default function Immersion() {
         <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />
       </div>
 
-      {/* **Le semis de points court sur trois sections**, du coaching au mur
-          de la communauté, sur demande de Rémy. Il était derrière la seule
-          fenêtre Safari.
+      {/* **Le semis de points court sur deux sections**, le coaching et les
+          entretiens, sur demande de Rémy. Il était derrière la seule fenêtre
+          Safari, puis il allait jusqu'au mur de la communauté ; Rémy l'a arrêté
+          **juste avant** celui-ci, qui garde donc son fond nu.
 
-          **Une seule couche pour les trois**, et pas une par section : posé
-          trois fois, le semis se serait réaligné à chaque fois, et les
-          raccords se seraient vus en travers de la page. Ici la grille est
-          continue d'un bout à l'autre.
+          **Une seule couche pour les deux**, et pas une par section : posé deux
+          fois, le semis se serait réaligné à chaque fois, et le raccord se
+          serait vu en travers de la page. Ici la grille est continue d'un bout
+          à l'autre.
 
           **Le masque croise deux fondus.** L'horizontal est ce que Rémy décrit,
           des points au centre et un peu sur les côtés, qui s'éteignent avant le
@@ -483,6 +484,7 @@ export default function Immersion() {
             `GalerieEntretiens`. */}
         <GalerieEntretiens />
       </SectionImmersion>
+      </div>
 
       {/* LE MUR DE LA COMMUNAUTÉ, entre les entretiens et l'équipe.
 
@@ -491,7 +493,6 @@ export default function Immersion() {
           quotidien, puis qui les accompagne. L'inverse montrerait des citations
           de gens qu'on n'a pas encore vus. */}
       <MurCommunaute />
-      </div>
 
       {/* L'ÉQUIPE.
 
