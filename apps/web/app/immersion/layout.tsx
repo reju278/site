@@ -61,7 +61,38 @@ export default function LayoutImmersion({
     /* Plus de rembourrage bas : il réservait la place de la barre d'appel fixe
        du téléphone, qui est partie avec les liens sortants. Laissé en place, il
        aurait fait quatre-vingt-seize pixels de vide sous le pied de page. */
-    <div>
+    <div
+      /* **Les mesures de la vidéo vivent ici et non sur le hero.**
+
+         Elles y étaient tant qu'une seule vidéo s'en servait. Rémy en veut deux
+         de la même largeur, celle du haut et celle du modèle, et une largeur
+         recopiée dans la seconde section aurait divergé de la première au
+         premier réglage. C'est la règle du dépôt sur les valeurs partagées, et
+         le hero l'appliquait déjà entre le cadre et la jonction.
+
+         `--jonction`, elle, reste déclarée sous `[data-hero]` dans
+         `globals.css` : elle ne concerne que le raccord du haut de page, et
+         elle lit `--video-h` par héritage. */
+      style={
+        {
+          /* Élargie de 48 à 56 rem, puis à 76 sur demande de Rémy. Le second
+             élargissement n'est pas une question de goût : depuis que le hero
+             fait une hauteur d'écran, le haut de la vidéo se pose à
+             `100svh - 2 × --video-h / 3`, donc **plus la vidéo est grande, plus
+             elle remonte** et moins il reste de vide entre elle et le titre. */
+          "--largeur-video": "min(100vw - 2.5rem, 76rem)",
+          /* La hauteur exacte du cadre en 16/9, d'où part la jonction. Une
+             hauteur en dur donnerait un cadre qui n'est plus en 16/9, et Wistia
+             y ajouterait des bandes noires sur les côtés. */
+          "--video-h": "calc(var(--largeur-video) * 9 / 16)",
+          /* Ce qui dépasse sous le bas de la fenêtre au repos. Deux endroits
+             s'en servent et doivent dire la même chose : la hauteur du hero et
+             la distance de défilement au bout de laquelle la vidéo se redresse,
+             dans `globals.css`. */
+          "--part-cachee": "calc(var(--video-h) / 6)",
+        } as React.CSSProperties
+      }
+    >
       <EnTeteImmersion />
       {children}
       <PiedImmersion entretiens={entretiens} />

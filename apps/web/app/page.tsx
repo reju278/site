@@ -145,7 +145,13 @@ export default function Accueil() {
 
              La ligne elle-même vit dans `--jonction`, écrite une fois dans
              `globals.css`. */
-          className="absolute inset-x-0 top-0 bottom-[calc(var(--jonction)-88px)] -z-10 overflow-hidden"
+          /* `bg-[var(--fond-hero)]` : voir le jeton dans `globals.css`. La
+             photographie porte sa propre transparence dans son tiers haut, donc
+             sans fond opaque elle laisse paraître la couleur de page. En thème
+             clair, du blanc sous un voile noir à 55 % donne un gris moyen : le
+             paysage disparaît, et le blanc en dur posé dessus perd son
+             contraste. */
+          className="absolute inset-x-0 top-0 bottom-[calc(var(--jonction)-88px)] -z-10 overflow-hidden bg-[var(--fond-hero)]"
         >
           <picture>
             <source media="(min-width: 768px)" srcSet="/fond-hero.jpg" />

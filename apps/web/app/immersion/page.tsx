@@ -78,40 +78,6 @@ export default function Immersion() {
            au-dessus. Il est plus court qu'avant : le titre est monté, et
            quatre-vingt-seize pixels laissaient un vide que Rémy a signalé. */
         className="relative isolate flex flex-col px-5 pt-20 sm:min-h-[calc(100svh+var(--part-cachee))] sm:pt-24"
-        style={
-          {
-            /* **La largeur s'écrit une seule fois**, et il le fallait : elle
-               sert au cadre de la vidéo et à sa hauteur, d'où `--jonction` est
-               calculée. Écrite deux fois, elle aurait divergé au premier
-               agrandissement, et la lèvre aurait dessiné sa jonction en travers
-               de la vidéo. C'est la panne que `AGENTS.md` décrit déjà.
-
-               Élargie de 48 à 56 rem, puis à 76 sur demande de Rémy. Le
-               second élargissement n'est pas une question de goût : depuis que
-               le hero fait une hauteur d'écran, le haut de la vidéo se pose à
-               `100svh - --video-h / 2`, donc **plus la vidéo est grande, plus
-               elle remonte** et moins il reste de vide entre elle et le titre.
-               À 56 rem, il restait plus de trois cents pixels d'écart. */
-            "--largeur-video": "min(100vw - 2.5rem, 76rem)",
-            /* La hauteur exacte du cadre en 16/9, d'où part la jonction. Une
-               hauteur en dur donnerait un cadre qui n'est plus en 16/9, et
-               Wistia y ajouterait des bandes noires sur les côtés. */
-            "--video-h": "calc(var(--largeur-video) * 9 / 16)",
-            /* **Ce qui dépasse sous le bas de la fenêtre au repos**, écrit une
-               seule fois. Deux endroits s'en servent et ils doivent dire la
-               même chose : la hauteur du hero ici, et la distance de
-               défilement au bout de laquelle la vidéo se redresse, dans
-               `globals.css`. Écrite deux fois, elle aurait divergé à la
-               première correction, et la vidéo aurait fini de se redresser
-               avant ou après le moment où elle se pose.
-
-               Elle valait un tiers de la vidéo. Rémy l'a trouvée trop basse :
-               plus elle dépasse, plus la vidéo descend, et plus l'écart avec
-               le titre s'ouvre. À un sixième, la vidéo remonte de cent quatorze
-               pixels sur un écran de 1440 et l'écart tombe de moitié. */
-            "--part-cachee": "calc(var(--video-h) / 6)",
-          } as React.CSSProperties
-        }
       >
         {/* Deux fichiers, un par largeur : servir 1920 px à un écran de 375 en
             fait payer six fois le poids pour rien. Le voile assombri garantit
@@ -318,7 +284,20 @@ export default function Immersion() {
            `FondResultats` fait déjà 80 px, et l'étiquette qui ouvre maintenant
            la section a besoin de respirer sous elle : à `pt-24`, elle semblait
            collée au raccord. */
-        className="scroll-mt-24 [&>div]:pt-32 sm:[&>div]:pt-40"
+        /* **Le conteneur de la section s'élargit à la vidéo.**
+
+           `SectionImmersion` borne son contenu à `max-w-6xl`, soit 1152 px,
+           rembourrage compris. La vidéo du modèle en fait 1216 depuis qu'elle a
+           la largeur de celle du haut : plus large que son conteneur, elle
+           cessait d'être centrée, `mx-auto` n'ayant plus d'espace à répartir.
+           Elle se calait à gauche et débordait le document de 32 px à droite,
+           ce que la règle du dépôt interdit. C'est le décentrage que Rémy a vu.
+
+           La borne devient donc la largeur de la vidéo plus son rembourrage.
+           Sur écran étroit, `--largeur-video` vaut déjà `100vw - 2.5rem`, donc
+           le compte tombe juste sans rien ajouter. Le titre, lui, garde son
+           `max-w-3xl` : il est borné à l'intérieur. */
+        className="scroll-mt-24 [&>div]:max-w-[calc(var(--largeur-video)+2.5rem)] [&>div]:pt-32 sm:[&>div]:pt-40"
       >
         <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
           {/* L'étiquette, en pilule, sur demande de Rémy. Elle porte la moitié
@@ -342,13 +321,26 @@ export default function Immersion() {
           />
         </div>
 
-        <div className="mx-auto mt-8 max-w-3xl">
+        {/* **La même largeur que la vidéo du haut**, sur demande de Rémy, et
+            par la même variable : deux largeurs écrites séparément auraient
+            cessé d'être égales au premier réglage. */}
+        <div className="mx-auto mt-8 w-[var(--largeur-video)]">
           <LecteurVideo
             id={modeleImmersion.video.id}
             titre={modeleImmersion.video.titre}
             secondes={modeleImmersion.video.secondes}
             affiche={`/temoignages/${modeleImmersion.video.id}.jpg`}
             afficheAlt="Le modèle de Funnels Club"
+            /* **Le lecteur de Wistia, servi d'emblée**, comme la vidéo du haut
+               de page et sur la même demande de Rémy : son affiche et son bouton
+               à lui, pas les nôtres.
+
+               Le prix est celui écrit sur la propriété, et il double ici : deux
+               iframes se chargent maintenant à l'ouverture de la page sans que
+               personne ait rien demandé. C'est pour cette raison que les
+               vingt-deux entretiens de la galerie gardent, eux, l'affiche
+               cliquable : ils ne se montent qu'à l'ouverture de leur fenêtre. */
+            natif
           />
         </div>
 
