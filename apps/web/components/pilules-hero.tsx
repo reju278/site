@@ -87,6 +87,182 @@ export function PastillePreuve() {
 }
 
 /**
+ * Une gélule : le filet, le verre, la lumière qui en fait le tour, la pastille
+ * et le libellé.
+ *
+ * **Elle existe parce que le même objet sert à deux endroits**, les quatre
+ * arguments du hero et l'étiquette « Extrait de formation » de la section du
+ * modèle. Rémy a été explicite : « exactement le même design, tu m'inventes
+ * rien ». Une seconde écriture aurait divergé à la première correction, et il y
+ * en a eu six sur cet objet en une seule séance.
+ *
+ * **Ce qui change d'un endroit à l'autre passe en propriété, et rien d'autre.**
+ * La teinte, la pastille, le libellé, la balise. Les cotes, la typographie,
+ * l'espacement, le verre et la lumière sont écrits ici une fois.
+ *
+ * **`sur` dit ce qu'il y a dessous, et c'est la seule adaptation.** Le hero pose
+ * ses gélules sur une photographie sombre dans les deux thèmes : elles y portent
+ * le blanc en dur de passionfroot, filet, verre et encre. L'étiquette du modèle
+ * est posée sur la bande bleutée, **claire en thème clair** : le même blanc y
+ * serait du blanc sur blanc, c'est-à-dire illisible. Elle prend donc les jetons
+ * de thème, aux mêmes opacités et au même dessin. Rien d'autre ne bouge.
+ */
+export function Gelule({
+  as: Balise = "li",
+  teinte,
+  sur = "image",
+  pastille,
+  children,
+  className,
+}: {
+  as?: "li" | "p";
+  /** La couleur du point, de l'étoile et de la lumière. Une seule valeur. */
+  teinte: string;
+  /** Ce sur quoi la gélule est posée, qui décide de son encre. */
+  sur?: "image" | "page";
+  /** Le point, l'étoile, ce qui précède le libellé. */
+  pastille: React.ReactNode;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <Balise
+      style={
+        { "--teinte": teinte, "--grossissement": "1.04" } as React.CSSProperties
+      }
+      /* **Le fond n'est pas ici : il est sur le voile intérieur.** C'est ce qui
+         laisse passer la lumière, qui est derrière lui.
+
+         `z-0` et `overflow-hidden` : la lumière est un disque bien plus grand
+         que la gélule, il faut un contexte d'empilement pour la ranger dessous
+         et un rognage pour n'en montrer que le tour. */
+      className={cn(
+        "grossit-au-survol relative z-0 inline-flex items-center gap-2 overflow-hidden rounded-full border py-1.5 pr-4 pl-3",
+        sur === "image" ? "border-white/10" : "border-border",
+        className,
+      )}
+    >
+      {
+        /* **La lumière qui tourne**, reprise de `ShimmerButton` du registre
+           MagicUI, sur demande de Rémy. La recette est la leur : un dégradé
+           conique qui tourne sur lui-même dans une boîte qui glisse d'un bord à
+           l'autre. Les deux animations et leurs images-clés sont déjà dans
+           `packages/ui`, le bouton scintillant du site s'en sert.
+
+           Ce n'est pas le composant lui-même : c'est un `button`, et une gélule
+           ne se clique pas.
+
+           **Trois secondes et un flou de deux pixels** : le tour d'une gélule
+           fait quatre cents pixels, une lumière nette et rapide y serait un
+           gyrophare. Rémy l'a demandée discrète.
+
+           `lumiere-tournante` la retire sous mouvement réduit : neutralisée par
+           la règle globale, elle laisserait un quart de dégradé conique figé en
+           travers de la gélule. Voir `globals.css`. */
+        <span
+          aria-hidden
+          style={{ "--speed": "3s" } as React.CSSProperties}
+          className="lumiere-tournante pointer-events-none absolute inset-0 -z-30 overflow-visible blur-[2px] @container-[size]"
+        >
+          <span className="animate-shimmer-slide absolute inset-0 aspect-square h-[100cqh]">
+            <span className="animate-spin-around absolute -inset-full [background:conic-gradient(from_calc(270deg-45deg),transparent_0,var(--teinte)_90deg,transparent_90deg)]" />
+          </span>
+        </span>
+      }
+
+      {
+        /* **La ligne nette, posée sur le filet lui-même.**
+
+           Le calque du dessus ne donne que le reflet diffus qui traverse le
+           verre ; celle-ci est **au-dessus** du verre, et un masque la rogne sur
+           la seule bande d'un pixel du bord.
+
+           **Le masque est la recette éprouvée, pas celle du registre.** Deux
+           couches opaques, l'une rognée sur la boîte de contenu et l'autre sur
+           la boîte entière, soustraites : il ne reste que l'anneau du
+           rembourrage. La variante de `BorderBeam`, avec une première couche
+           transparente et une intersection, ne donne rien du tout ici.
+
+           **Et le conteneur de mesure est un enfant, pas ce calque-ci.**
+           `@container-[size]` pose `contain: paint`, qui interdit de peindre
+           hors de sa propre boîte : posé sur l'élément masqué, il empêchait la
+           lumière d'atteindre la bande que le masque garde, et l'effet
+           disparaissait entièrement, sans rien signaler. Mesuré.
+
+           `-inset-px` : l'anneau se pose sur le filet et non un pixel en dedans,
+           sinon on lirait deux lignes. */
+        <span
+          aria-hidden
+          style={{ "--speed": "3s" } as React.CSSProperties}
+          className="lumiere-tournante pointer-events-none absolute -inset-px rounded-full p-px [mask-clip:content-box,border-box] [mask-composite:exclude] [mask-image:linear-gradient(#000_0_0),linear-gradient(#000_0_0)] [-webkit-mask-composite:xor]"
+        >
+          <span className="absolute inset-0 overflow-hidden rounded-full @container-[size]">
+            <span className="animate-shimmer-slide absolute inset-0 aspect-square h-[100cqh]">
+              <span className="animate-spin-around absolute -inset-full [background:conic-gradient(from_calc(270deg-45deg),transparent_0,var(--teinte)_90deg,transparent_90deg)]" />
+            </span>
+          </span>
+        </span>
+      }
+
+      {/* Le verre, d'un seul tenant. Il était rentré d'un pixel pour découvrir
+          la lumière ; ce pixel se lisait comme une rainure sombre les trois
+          secondes où elle était ailleurs. */}
+      <span
+        aria-hidden
+        className={cn(
+          "absolute inset-0 -z-20 rounded-full backdrop-blur-md",
+          sur === "image" ? "bg-white/6" : "bg-foreground/5",
+        )}
+      />
+
+      {pastille}
+
+      <span
+        className={cn(
+          "text-xs font-medium sm:text-sm",
+          sur === "image" ? "text-white" : "text-foreground",
+        )}
+      >
+        {children}
+      </span>
+    </Balise>
+  );
+}
+
+/**
+ * Le point vert et son onde, la pastille des gélules qui ne portent pas
+ * d'étoile.
+ *
+ * L'onde est un disque qui grandit et s'efface sous le point, pas un
+ * clignotement : un point qui clignote demande qu'on le regarde, un point qui
+ * pulse dit qu'il est vivant et se laisse oublier.
+ *
+ * `animate-ping` est l'animation de Tailwind, donc déjà neutralisée par la règle
+ * de mouvement réduit du projet, et le point reste alors net et fixe, ce qui est
+ * exactement ce qu'il faut : il n'a jamais porté d'information à lui seul.
+ */
+export function PointGelule({ decalage = 0 }: { decalage?: number }) {
+  return (
+    <span aria-hidden className="relative flex size-2 shrink-0">
+      <span
+        className="absolute inline-flex size-full animate-ping rounded-full opacity-75"
+        style={{
+          backgroundColor: "var(--teinte)",
+          /* Le décalage d'un tiers de cycle. `animate-ping` dure une seconde
+             chez Tailwind. Trois points qui pulsent ensemble battent comme un
+             avertissement ; décalés, ils respirent. */
+          animationDelay: `${decalage * 0.33}s`,
+        }}
+      />
+      <span
+        className="relative inline-flex size-full rounded-full"
+        style={{ backgroundColor: "var(--teinte)" }}
+      />
+    </span>
+  );
+}
+
+/**
  * Les trois arguments, en gélules à point vert.
  *
  * **Le point est vert, et le vert est celui du site.** `--icone-resultats`, la
@@ -127,171 +303,27 @@ export function PilulesArguments({
           : "var(--icone-resultats)";
 
         return (
-          <li
-            key={point.texte}
-            style={
-              { "--teinte": teinte, "--grossissement": "1.04" } as React.CSSProperties
-            }
-            /* **La gélule n'a plus son fond : il est passé sur le voile
-               intérieur.** C'est ce qui laisse voir un cheveu de la lumière qui
-               tourne derrière, tout autour du bord. Posé ici, le fond l'aurait
-               entièrement couverte.
-
-               `z-0` et `overflow-hidden` : la lumière est un disque bien plus
-               grand que la gélule, il faut un contexte d'empilement pour la
-               ranger dessous et un rognage pour n'en montrer que le tour. */
-            /* `grossit-au-survol` : la règle est dans `globals.css`, partagée
-               avec les cartes d'avis qui suivent, et déjà gardée contre le
-               mouvement réduit. Quatre pour cent ici : sur une gélule de cent
-               quarante pixels, cela fait six pixels, moins que l'espacement de
-               la rangée. */
-            className="group/pilule grossit-au-survol relative z-0 flex items-center gap-2 overflow-hidden rounded-full border border-white/10 py-1.5 pr-4 pl-3"
-          >
-            {
-              /* **La lumière qui tourne**, reprise de `ShimmerButton` du
-                 registre MagicUI, sur demande de Rémy. La recette est la leur :
-                 un dégradé conique qui tourne sur lui-même à l'intérieur d'une
-                 boîte qui glisse d'un bord à l'autre. Les deux animations et
-                 leurs images-clés existent déjà dans `packages/ui`, puisque le
-                 bouton scintillant du site les utilise.
-
-                 Ce n'est pas le composant lui-même : c'est un `button`, et une
-                 gélule ne se clique pas. Poser un bouton là aurait annoncé une
-                 action qui n'existe pas.
-
-                 **Trois secondes et un flou de deux pixels** : le tour de
-                 gélule fait quatre cents pixels, une lumière nette et rapide y
-                 serait un gyrophare. Rémy l'a demandée discrète.
-
-                 **Elle n'est pas rendue sous mouvement réduit.** Elle est en
-                 CSS, donc la règle globale la neutraliserait ; mais neutralisée,
-                 il resterait un quart de dégradé conique figé en travers de la
-                 gélule. On la retire donc, comme les étincelles. */
-              <span
-                aria-hidden
-                style={{ "--speed": "3s" } as React.CSSProperties}
-                /* **L'anneau porte le même verre que la gélule, et c'est ce
-                   qui bouche le creux.**
-
-                   La lumière passe dans un anneau d'un pixel laissé entre le
-                   filet et le verre : c'est ce qui la rend visible tout autour
-                   du bord. Mais cet anneau était transparent, donc les trois
-                   secondes où la lumière est ailleurs, on voyait la
-                   photographie au travers et ça se lisait comme une rainure
-                   sombre. C'est le défaut que Rémy a signalé.
-
-                   **Il n'y a plus d'anneau du tout**, et c'est la seule
-                   réparation qui tienne. Le remplir du même blanc ne suffisait
-                   pas : il lui manquait le flou d'arrière-plan du voile, et un
-                   blanc à six pour cent posé sur une photographie nette n'a pas
-                   la couleur du même blanc posé sur la même photographie
-                   floutée. Un pixel suffit à voir la différence, contrairement
-                   à ce que j'avais écrit ici.
-
-                   Le voile couvre donc toute la gélule, d'un seul tenant, et la
-                   lumière passe **derrière lui**. Le verre étant très
-                   translucide, elle le traverse et fait le tour du bord comme
-                   avant ; ce qui disparaît, c'est la couture qu'il y avait
-                   entre trois traitements différents sur trois pixels.
-
-                   **Ce qui a été essayé et jeté : rogner la lumière au filet
-                   par un masque**, à la façon de `BorderBeam`. Le masque était
-                   juste, mais `@container-[size]` pose `contain: paint`, qui
-                   empêche l'enfant de peindre dans la bande de bordure : le
-                   masque ne gardait que cette bande, l'enfant ne pouvait pas y
-                   aller, et l'effet disparaissait entièrement. Mesuré, pas
-                   supposé. */
-                className="lumiere-tournante pointer-events-none absolute inset-0 -z-30 overflow-visible blur-[2px] @container-[size]"
-              >
-                <span className="animate-shimmer-slide absolute inset-0 aspect-square h-[100cqh]">
-                  <span className="animate-spin-around absolute -inset-full [background:conic-gradient(from_calc(270deg-45deg),transparent_0,var(--teinte)_90deg,transparent_90deg)]" />
-                </span>
-              </span>
-            }
-
-            {
-              /* **La ligne nette, posée sur le filet lui-même.**
-
-                 Le calque du dessus ne donne que le reflet diffus qui traverse
-                 le verre ; Rémy veut aussi voir passer la ligne. Celle-ci est
-                 donc **au-dessus** du verre, et un masque la rogne sur la seule
-                 bande d'un pixel du bord.
-
-                 **Le masque est la recette éprouvée, pas celle du registre.**
-                 Deux couches opaques, l'une rognée sur la boîte de contenu et
-                 l'autre sur la boîte entière, soustraites l'une de l'autre : il
-                 ne reste que l'anneau du rembourrage. La variante de
-                 `BorderBeam`, avec une première couche transparente et une
-                 intersection, ne donne rien du tout ici.
-
-                 **Et le conteneur de mesure est un enfant, pas ce calque-ci.**
-                 `@container-[size]` pose `contain: paint`, qui interdit de
-                 peindre hors de sa propre boîte. Posé sur l'élément masqué, il
-                 empêchait la lumière d'atteindre la bande que le masque garde,
-                 et l'effet disparaissait entièrement, sans rien signaler.
-                 Mesuré. Il est donc à l'intérieur, sur une boîte qui couvre
-                 l'anneau.
-
-                 `-inset-px` : l'anneau se pose sur le filet de la gélule et non
-                 un pixel en dedans, sinon on lirait deux lignes. */
-              <span
-                aria-hidden
-                style={{ "--speed": "3s" } as React.CSSProperties}
-                className="lumiere-tournante pointer-events-none absolute -inset-px rounded-full p-px [mask-clip:content-box,border-box] [mask-composite:exclude] [mask-image:linear-gradient(#000_0_0),linear-gradient(#000_0_0)] [-webkit-mask-composite:xor]"
-              >
-                <span className="absolute inset-0 overflow-hidden rounded-full @container-[size]">
-                  <span className="animate-shimmer-slide absolute inset-0 aspect-square h-[100cqh]">
-                    <span className="animate-spin-around absolute -inset-full [background:conic-gradient(from_calc(270deg-45deg),transparent_0,var(--teinte)_90deg,transparent_90deg)]" />
-                  </span>
-                </span>
-              </span>
-            }
-
-            {/* Le verre, d'un seul tenant sur toute la gélule. Il était
-                rentré d'un pixel pour découvrir la lumière ; c'est ce pixel qui
-                faisait la rainure. */}
-            <span
-              aria-hidden
-              className="absolute inset-0 -z-20 rounded-full bg-white/6 backdrop-blur-md"
-            />
-
-            {point.etincelles ? (
-              /* **Une étoile à la place du point**, sur demande de Rémy, et
-                 seulement sur celle-ci : le point vert dit « ça marche »,
-                 l'étoile dit autre chose.
-
-                 `aria-hidden` : elle ne porte rien à elle seule, exactement
-                 comme le point vert des trois autres. */
-              <Sparkles
-                aria-hidden
-                className="size-3.5 shrink-0"
-                style={{ color: "var(--teinte)" }}
-              />
-            ) : (
-              <span aria-hidden className="relative flex size-2 shrink-0">
-                {/* L'onde : un disque qui grandit et s'efface sous le point.
-                    `animate-ping` est l'animation de Tailwind, donc déjà
-                    neutralisée par la règle de mouvement réduit du projet. */}
-                <span
-                  className="absolute inline-flex size-full animate-ping rounded-full opacity-75"
-                  style={{
-                    backgroundColor: "var(--teinte)",
-                    /* Le décalage d'un tiers de cycle. `animate-ping` dure une
-                       seconde chez Tailwind. */
-                    animationDelay: `${i * 0.33}s`,
-                  }}
-                />
-                {/* Le point net, par-dessus l'onde. */}
-                <span
-                  className="relative inline-flex size-full rounded-full"
-                  style={{ backgroundColor: "var(--teinte)" }}
-                />
-              </span>
-            )}
-
-            <span className="text-xs font-medium text-white sm:text-sm">
+          <li key={point.texte}>
+            <Gelule
+              as="p"
+              teinte={teinte}
+              pastille={
+                point.etincelles ? (
+                  /* **Une étoile à la place du point**, sur demande de Rémy, et
+                     seulement sur celle-ci : le point vert dit « ça marche »,
+                     l'étoile dit autre chose. */
+                  <Sparkles
+                    aria-hidden
+                    className="size-3.5 shrink-0"
+                    style={{ color: "var(--teinte)" }}
+                  />
+                ) : (
+                  <PointGelule decalage={i} />
+                )
+              }
+            >
               {point.texte}
-            </span>
+            </Gelule>
           </li>
         );
       })}

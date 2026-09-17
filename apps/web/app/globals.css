@@ -471,6 +471,48 @@ html #cookiescript_bottompart:empty {
   }
 }
 
+/* La vidéo du modèle, qui grandit à mesure qu'on s'en approche.
+
+   Demandée par Rémy, et volontairement légère : elle ne fait pas un effet, elle
+   dit qu'il y a là une vidéo et qu'on peut cliquer dessus. Six pour cent d'écart
+   entre son arrivée et sa taille normale, pas davantage.
+
+   **Elle finit à sa taille normale, et ne la dépasse jamais.** La plage s'arrête
+   quand la vidéo a fini d'entrer dans l'écran : à ce moment elle vaut un, et
+   elle ne bouge plus. Un effet qui dépasserait puis reviendrait attirerait
+   l'œil sur lui-même au lieu de la vidéo, et élargirait le document au passage.
+
+   **`entry` est exactement « quand on s'en approche ».** La plage court du
+   premier pixel qui entre par le bas jusqu'à l'instant où la vidéo est
+   entièrement visible. En remontant la page elle se rejoue à l'envers, ce qui
+   est la nature d'une ligne de temps de défilement et non un défaut : on
+   s'éloigne, elle rapetisse.
+
+   Les deux gardes sont celles de la bascule du hero, et pour les mêmes raisons
+   écrites là-bas : `@supports`, parce qu'`animation-timeline` et `animation`
+   tiennent ensemble ou pas du tout ; et le mouvement réduit, parce qu'une
+   animation pilotée par le défilement **ignore sa durée** et passe donc à
+   travers la règle globale. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .video-approche {
+      animation: approche-video linear both;
+      animation-timeline: view();
+      animation-range: entry;
+    }
+  }
+}
+
+@keyframes approche-video {
+  from {
+    scale: 0.94;
+  }
+
+  to {
+    scale: 1;
+  }
+}
+
 @keyframes bascule-video {
   from {
     transform: rotateX(11.8deg) scale(0.94);

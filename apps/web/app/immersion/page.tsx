@@ -5,7 +5,11 @@ import { LecteurVideo } from "@/components/lecteur-video";
 import { MurCommunaute } from "@/components/mur-communaute";
 import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { ParticulesHero } from "@/components/particules-hero";
-import { PilulesArguments } from "@/components/pilules-hero";
+import {
+  Gelule,
+  PilulesArguments,
+  PointGelule,
+} from "@/components/pilules-hero";
 import { TexteRoulant } from "@/components/texte-roulant";
 import { TitreRoulant } from "@/components/titre-roulant";
 import { RangeeEquipe } from "@/components/rangee-equipe";
@@ -21,7 +25,6 @@ import {
   modeleImmersion,
 } from "@/contenu/immersion";
 import { insecables } from "@/lib/typographie";
-import { GraduationCap } from "lucide-react";
 
 import type { Metadata } from "next";
 
@@ -316,53 +319,19 @@ export default function Immersion() {
 
               `rounded-full` : une pilule n'a pas d'angle, la règle des 5 px ne
               la concerne pas. */}
-          <p
-            style={{ "--teinte": "var(--primary)" } as React.CSSProperties}
-            /* **La même lumière que les gélules du hero**, en bleu, sur demande
-               de Rémy.
-
-               **Le fond n'est pas le même verre, et il ne pouvait pas l'être.**
-               Les gélules flottent sur une photographie sombre dans les deux
-               thèmes, d'où leur blanc en dur. Celle-ci est posée sur la bande
-               bleutée, claire en thème clair : un blanc à six pour cent y serait
-               invisible. Elle garde donc ses jetons, `border-border` et
-               `bg-card`, et c'est l'opacité du fond qui laisse passer la
-               lumière.
-
-               `bg-card/75` et non un `backdrop-blur` : le flou par-devant a ses
-               cinq exceptions, écrites dans `AGENTS.md`, et une étiquette posée
-               dans le flux d'une page n'en est pas une sixième. La translucidité
-               suffit à laisser voir ce qui passe derrière. */
-            className="grossit-au-survol relative z-0 inline-flex items-center gap-2 overflow-hidden rounded-full border border-border px-4 py-1.5 text-xs font-semibold tracking-[0.14em] text-muted-foreground uppercase"
+          {/* **Exactement la gélule du hero**, sur demande de Rémy : même
+              composant, mêmes cotes, même typographie, même pastille, même
+              lumière. Seules changent la teinte, qui passe au bleu du site, et
+              l'encre, parce que le fond n'est pas le même : voir la propriété
+              `sur` du composant. */}
+          <Gelule
+            as="p"
+            sur="page"
+            teinte="var(--primary)"
+            pastille={<PointGelule />}
           >
-            <span
-              aria-hidden
-              style={{ "--speed": "3s" } as React.CSSProperties}
-              className="lumiere-tournante pointer-events-none absolute inset-0 -z-30 overflow-visible blur-[2px] @container-[size]"
-            >
-              <span className="animate-shimmer-slide absolute inset-0 aspect-square h-[100cqh]">
-                <span className="animate-spin-around absolute -inset-full [background:conic-gradient(from_calc(270deg-45deg),transparent_0,var(--teinte)_90deg,transparent_90deg)]" />
-              </span>
-            </span>
-
-            <span
-              aria-hidden
-              className="absolute inset-0 -z-20 rounded-full bg-card/75"
-            />
-
-            {/* L'icône de formation. `GraduationCap` et non un livre : le livre
-                est déjà la marque de `Digital Selfmade` ailleurs sur le site, et
-                ce qui suit est un extrait de cours, pas un ouvrage.
-
-                `aria-hidden` : elle ne porte rien que l'étiquette ne dise. */}
-            <GraduationCap
-              aria-hidden
-              className="size-3.5 shrink-0"
-              style={{ color: "var(--teinte)" }}
-            />
-
             {modeleImmersion.etiquette}
-          </p>
+          </Gelule>
 
           <TitreRoulant
             as="h2"
@@ -374,7 +343,7 @@ export default function Immersion() {
         {/* **La même largeur que la vidéo du haut**, sur demande de Rémy, et
             par la même variable : deux largeurs écrites séparément auraient
             cessé d'être égales au premier réglage. */}
-        <div className="mx-auto mt-8 w-[var(--largeur-video)]">
+        <div className="video-approche mx-auto mt-8 w-[var(--largeur-video)]">
           <LecteurVideo
             id={modeleImmersion.video.id}
             titre={modeleImmersion.video.titre}
