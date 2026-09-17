@@ -383,20 +383,27 @@ export default function Immersion() {
 
       {/* COACHING : les deux extraits. */}
       <SectionImmersion id="coaching" className="scroll-mt-24">
-        <div className="mx-auto max-w-3xl text-center">
-          <TitreRoulant
-            as="h2"
-            segments={[{ texte: coachingImmersion.titre }]}
-            className="titre text-3xl text-balance text-foreground sm:text-4xl"
-          />
-          <p className="mt-4 text-lg leading-relaxed text-pretty text-muted-foreground">
-            {insecables(coachingImmersion.texte)}
-          </p>
-        </div>
+        {/* **Un simple libellé en italique**, sur demande de Rémy, et le
+            sous-titre est retiré.
 
-        {/* Un seul extrait à la fois, dans une fenêtre Safari qu'on feuillette,
-            sur demande de Rémy. Les deux étaient côte à côte. */}
-        <ExtraitsCoaching extraits={coachingImmersion.extraits} />
+            **Il reste un `h2` malgré son allure de légende**, et ce n'est pas
+            une coquetterie : c'est le plan du document que les robots lisent, et
+            c'est la cible de l'ancre « Coaching » de l'en-tête. Une section
+            atteignable par un menu et qui n'a pas de titre est un trou dans ce
+            plan. Ce qui change, c'est sa mise en forme, pas son rang.
+
+            **Il a la taille des autres titres de section**, sur correction de
+            Rémy : je l'avais rentré à `text-xl`, ce qui le faisait lire comme
+            une légende alors que c'est le titre de la section.
+
+            Plus de `TitreRoulant`, en revanche. L'effet découpe le titre en mots
+            et enferme chacun dans un masque en `overflow-hidden` : une fonte
+            italique déborde son cadre, et les jambages se feraient couper. */}
+        <h2 className="titre text-center text-3xl text-balance text-foreground italic sm:text-4xl">
+          {coachingImmersion.titre}
+        </h2>
+
+        <ExtraitsCoaching extrait={coachingImmersion.extrait} />
 
       </SectionImmersion>
 

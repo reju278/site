@@ -186,23 +186,18 @@ export const modeleImmersion = {
 
 /** « Extraits de Coaching Funnels Club ». */
 export const coachingImmersion = {
-  /* « Funnels Club » a sauté, sur demande de Rémy : la fenêtre porte déjà
-     l'adresse de la marque, et le titre de la page la nomme. */
-  titre: "Extraits de coaching",
-  texte:
-    "Découvrez par vous-même, comment les coachings hebdomadaires répondront à toutes vos questions actuelles et futures pour développer votre business.",
-  extraits: [
-    {
-      id: "zqgsozxa89",
-      titre: "Sébastien partage ses résultats dans un coaching de groupe",
-      secondes: 456,
-    },
-    {
-      id: "5o8aqluqeg",
-      titre: "Pascal et la construction de son offre",
-      secondes: 537,
-    },
-  ],
+  /* « Funnels Club » a sauté, et le pluriel avec, sur demande de Rémy : il n'y a
+     plus qu'un extrait, et la fenêtre porte déjà l'adresse de la marque. */
+  titre: "Extrait de coaching",
+  /* **Un seul extrait, celui de Sébastien.** Celui de Pascal, « Pascal et la
+     construction de son offre », `5o8aqluqeg`, 537 secondes, a été retiré par
+     Rémy. Il est noté ici pour qu'on n'ait pas à le chercher dans l'historique
+     le jour où il revient. */
+  extrait: {
+    id: "zqgsozxa89",
+    titre: "Sébastien partage ses résultats dans un coaching de groupe",
+    secondes: 456,
+  },
 } as const;
 
 /**
