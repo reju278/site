@@ -93,11 +93,18 @@ export function GalerieEntretiens() {
                 <button
                   type="button"
                   style={{
-                    /* Le fond des cartes du hero, au caractère près : leur
-                       `color(srgb 1 1 1 / 0.04)` relevé chez TrendTrack, rendu
-                       aux deux thèmes par `color-mix` sur `currentColor`. */
+                    /* Le fond des cartes du hero, **posé sur la couleur de
+                       carte et non sur du vide**.
+
+                       Chez elles, `color-mix(… 4%, transparent)` est juste :
+                       elles flottent sur une photographie, et c'est un verre.
+                       Ici, le semis de points court derrière la section : à 4 %
+                       d'opacité, on le voyait **au travers de la carte**, ce que
+                       Rémy a signalé. Le même mélange, appliqué sur `--card` au
+                       lieu du vide, donne exactement la même teinte et rend la
+                       carte opaque. */
                     backgroundColor:
-                      "color-mix(in srgb, currentColor 4%, transparent)",
+                      "color-mix(in srgb, currentColor 4%, var(--card))",
                   }}
                   /* **Au survol, la carte se soulève, elle ne se cerne pas.**
                      Le motif du site colore la bordure en `ring` ; Rémy ne veut

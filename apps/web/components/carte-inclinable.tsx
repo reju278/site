@@ -149,6 +149,12 @@ export function CarteInclinable({
         }
         className={cn(
           "group/incline relative h-full",
+          /* **Le rayon est aussi sur la carte qui tourne, et pas seulement sur
+             la couche qui rogne la lueur.** C'est cet élément qui porte l'ombre
+             du survol : sans rayon, elle est dessinée en rectangle et déborde
+             des quatre angles arrondis. On la voyait sortir dans les coins,
+             ce que Rémy a signalé. */
+          rayon,
           "[transform-style:preserve-3d] [will-change:transform]",
           /* Sous le pointeur, la carte suit vite et se soulève : l'ombre grandit
              avec l'angle, sinon l'objet tourne sans jamais quitter la page. */
