@@ -201,6 +201,20 @@ export const coachingImmersion = {
 } as const;
 
 /**
+ * Les entretiens de la galerie, **dans l'ordre où Rémy les veut à l'écran**.
+ *
+ * Les huit premiers sont dictés par lui, et la grille étant à deux colonnes,
+ * les deux premiers sont la rangée du haut : Roland à gauche, Christian à
+ * droite. Le second entretien de Roland ferme la liste, pour qu'on ne voie pas
+ * deux fois le même visage dans la première rangée. Entre les deux, l'ordre lui
+ * est égal et c'est celui d'avant.
+ *
+ * **L'ordre est celui de l'affichage et de rien d'autre.** `ancreEntretien` et
+ * `versImmersion` lisent cette liste pour savoir qui est sur la page, pas pour
+ * savoir où : les renvois d'un article à l'autre ne bougent pas quand on
+ * réordonne.
+ */
+/**
  * Les entretiens, dans l'ordre de la page source.
  *
  * **Les vingt-deux et non les quatorze de la page source**, sur décision de
@@ -228,32 +242,28 @@ export const coachingImmersion = {
  * deux pages du même site.
  */
 export const entretiensImmersion = [
-  /* Les quatorze de la page source, dans son ordre, avec les seconds entretiens
-     glissés juste après le premier de la même personne. */
   "rgio4y4o8f", // Roland
-  "i8j0mw0ddt", // Roland, un an et demi après
   "j0vbkt570k", // Christian
   "f2ie1v99b8", // Patrick
-  "gcfo8miafe", // Guy
-  "2vtsinplyx", // Augustin
-  "4lkp9f6lm4", // Valérie
-  "brvvtbkmfo", // Joël
-  "vtfaka0m80", // Olga
-  "abj3v8v8ek", // Mathieu
-  "ive07co9xm", // Cédric
-  "tvy3jbhml9", // Charlotte
   "2xege6bt0u", // Yannick et Sylvie
-  "s3npr5izhy", // Tatiana
-  "b5taio9plc", // François
-  "755btwnbr4", // François, neuf mois après
-
-  /* Ceux que la page source ne montrait pas : elle était en retard. */
-  "fbtr4dqoji", // Sandrine
-  "rtil6qeznq", // Jérémy
+  "b5taio9plc", // François, premier entretien
   "iy3jgcijgu", // Corentin
-  "1db8el08jl", // Corentin, un an et demi après
-  "9a6g6hsyzp", // Lilian
-  "8de9q4ed4l", // Sébastien
+  "abj3v8v8ek", // Mathieu
+  "4lkp9f6lm4", // Valérie
+  "gcfo8miafe",
+  "2vtsinplyx",
+  "brvvtbkmfo",
+  "vtfaka0m80",
+  "ive07co9xm",
+  "tvy3jbhml9",
+  "s3npr5izhy",
+  "755btwnbr4",
+  "fbtr4dqoji",
+  "rtil6qeznq",
+  "1db8el08jl",
+  "9a6g6hsyzp",
+  "8de9q4ed4l",
+  "i8j0mw0ddt", // Roland, second entretien
 ] as const;
 
 /**
