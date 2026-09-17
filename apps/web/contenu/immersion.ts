@@ -186,7 +186,9 @@ export const modeleImmersion = {
 
 /** « Extraits de Coaching Funnels Club ». */
 export const coachingImmersion = {
-  titre: "Extraits de coaching Funnels Club",
+  /* « Funnels Club » a sauté, sur demande de Rémy : la fenêtre porte déjà
+     l'adresse de la marque, et le titre de la page la nomme. */
+  titre: "Extraits de coaching",
   texte:
     "Découvrez par vous-même, comment les coachings hebdomadaires répondront à toutes vos questions actuelles et futures pour développer votre business.",
   extraits: [

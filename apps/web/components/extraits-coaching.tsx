@@ -16,6 +16,9 @@ import { useState } from "react";
  * lecteur. On pose donc le lecteur nous-mêmes, au même endroit, et ces quatre
  * pourcentages sont ceux qu'il calcule, à la ligne près.
  *
+ * Son châssis est en `z-10`, d'où le `z-20` du lecteur : posé sans plan, il
+ * passait dessous et on ne voyait que l'écran gris de la fenêtre.
+ *
  * **C'est une copie, et elle se surveille.** Le jour où la fenêtre change de
  * dessin, ces valeurs deviennent fausses sans que rien ne le signale : le
  * lecteur se décalera dans le cadre. C'était le prix à payer pour ne pas
@@ -92,7 +95,13 @@ export function ExtraitsCoaching({
         <div id="extrait-coaching" className="relative min-w-0 flex-1">
           <Safari url="funnels.club" mode="simple" />
 
-          <div className="absolute overflow-hidden" style={ECRAN}>
+          {/* **`z-20` et pas seulement l'ordre du document.** Le châssis de
+              la fenêtre est un SVG posé en `z-10` par son fichier : sans plan
+              explicite, il se peint **par-dessus** le lecteur, et on ne voyait
+              que son écran gris. C'est le défaut que Rémy a signalé, et il ne
+              se voit que dans le rendu, l'iframe étant bien là, à la bonne
+              taille et visible. */}
+          <div className="absolute z-20 overflow-hidden" style={ECRAN}>
             <LecteurVideo
               key={extrait.id}
               id={extrait.id}
