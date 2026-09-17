@@ -1,5 +1,6 @@
 import { CartesTemoignage } from "@/components/cartes-temoignage";
 import { ExtraitsCoaching } from "@/components/extraits-coaching";
+import { DotPattern } from "@repo/ui/components/dot-pattern";
 import { FondResultats } from "@/components/fond-resultats";
 import { GalerieEntretiens } from "@/components/galerie-entretiens";
 import { LecteurVideo } from "@/components/lecteur-video";
@@ -402,6 +403,33 @@ export default function Immersion() {
         <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />
       </div>
 
+      {/* **Le semis de points court sur trois sections**, du coaching au mur
+          de la communauté, sur demande de Rémy. Il était derrière la seule
+          fenêtre Safari.
+
+          **Une seule couche pour les trois**, et pas une par section : posé
+          trois fois, le semis se serait réaligné à chaque fois, et les
+          raccords se seraient vus en travers de la page. Ici la grille est
+          continue d'un bout à l'autre.
+
+          **Le masque croise deux fondus.** L'horizontal est ce que Rémy décrit,
+          des points au centre et un peu sur les côtés, qui s'éteignent avant le
+          bord. Le vertical n'a pas été demandé mais il le fallait : sans lui, la
+          traversée commencerait et finirait sur une ligne de points nette en
+          travers de la page, c'est-à-dire la couture que tout le reste de cette
+          page s'applique à éviter. Il est court, six pour cent à chaque bout.
+
+          `isolate` : le semis est en `-z-10`, il lui faut un contexte
+          d'empilement à lui, sinon il passerait derrière le fond de page. */}
+      <div className="relative isolate">
+        <DotPattern
+          className={cn(
+            "-z-10 text-border",
+            "[mask-image:linear-gradient(to_right,transparent,#000_14%,#000_86%,transparent),linear-gradient(to_bottom,transparent,#000_6%,#000_94%,transparent)]",
+            "[mask-composite:intersect] [-webkit-mask-composite:source-in]",
+          )}
+        />
+
       {/* COACHING : les deux extraits. */}
       <SectionImmersion id="coaching" className="scroll-mt-24">
         {/* **Un simple libellé en italique**, sur demande de Rémy, et le
@@ -463,6 +491,7 @@ export default function Immersion() {
           quotidien, puis qui les accompagne. L'inverse montrerait des citations
           de gens qu'on n'a pas encore vus. */}
       <MurCommunaute />
+      </div>
 
       {/* L'ÉQUIPE.
 

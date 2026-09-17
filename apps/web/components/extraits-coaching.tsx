@@ -1,7 +1,5 @@
 import { LecteurVideo } from "@/components/lecteur-video";
-import { DotPattern } from "@repo/ui/components/dot-pattern";
 import { Safari } from "@repo/ui/components/safari";
-import { cn } from "@repo/ui/lib/utils";
 
 /**
  * **La géométrie de l'écran de la fenêtre Safari, recopiée de son fichier.**
@@ -42,10 +40,11 @@ const ECRAN = {
  * L'écran de Safari est en 12/7 ; un cadre en 16/9 y laisserait deux bandes.
  * C'est le cadre qui décide, et le lecteur s'y conforme, `aspect-auto`.
  *
- * **Le semis de points prend l'encre du thème.** Le composant arrive en
- * `text-neutral-400/80`, une couleur en dur que le dépôt interdit : il passe en
- * `text-border`, qui vaut des deux côtés. Son masque est celui de leur
- * démonstration, au pixel près, Rémy l'ayant redonné tel quel.
+ * **Le semis de points n'est plus ici.** Il était derrière cette seule fenêtre ;
+ * Rémy l'a étendu à toute la traversée, du coaching au mur de la communauté, et
+ * il vit donc maintenant dans `page.tsx`. Deux semis superposés, l'un dans
+ * l'autre et à des masques différents, se seraient additionnés en un
+ * moirage.
  */
 export function ExtraitsCoaching({
   extrait,
@@ -54,16 +53,6 @@ export function ExtraitsCoaching({
 }) {
   return (
     <div className="relative mt-10">
-      {/* Le semis, derrière la fenêtre. `-z-10` et non un simple ordre de
-          document : la fenêtre porte une ombre, et une couche posée dessous
-          sans plan la traverserait. */}
-      <DotPattern
-        className={cn(
-          "-z-10 text-border",
-          "[mask-image:radial-gradient(300px_circle_at_center,white,transparent)]",
-        )}
-      />
-
       <div className="relative mx-auto max-w-5xl px-1">
         <Safari url="funnels.club" mode="simple" />
 
