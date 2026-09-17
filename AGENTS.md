@@ -1288,6 +1288,47 @@ même rouge.
 Le jour où une autre section montrerait un objet ayant sa couleur, elle se
 décide et elle s'écrit ici. Ce n'est pas une permission d'ouvrir une palette.
 
+### Le violet des étincelles, et la seule ligne de registre qu'on ait modifiée
+
+La gélule « IA Funnels.Club » du hero d'immersion porte une étoile à la place du
+point vert, et des étincelles autour de son libellé, sur demande de Rémy.
+
+**`--etincelle` est un jeton de plus, et il se justifie comme `--livre`.** Le
+site est bleu ; ce violet dit « IA » et ne dit que ça, à un seul endroit. Il **ne
+change pas d'un thème à l'autre**, comme `--or` et pour la même raison : la
+gélule flotte sur la photographie du hero, sombre dans les deux thèmes, et une
+valeur qui s'assombrirait en thème clair y disparaîtrait. C'est exactement le
+sort qu'aurait connu `--etoile`, qui vaut #9a7200 en clair. Un deuxième emploi de
+ce violet se décide et s'écrit ici.
+
+**C'est le contenu qui dit quelle gélule scintille**, un champ `etincelles` dans
+`contenu/immersion.ts`, et non le composant qui reconnaîtrait « IA » dans un
+libellé. Un motif sur du texte aurait marché jusqu'au premier renommage, et
+personne n'aurait su pourquoi les étincelles ont disparu.
+
+**Les étincelles sont animées en JavaScript, donc la règle globale de mouvement
+réduit ne les atteint pas.** `globals.css` ramène les durées d'animation et de
+transition à 0,01 ms ; Motion anime par la Web Animations API et un
+`setInterval`, que le CSS ne voit pas. Elles ne sont donc pas rendues du tout
+quand la préférence est posée, comme le canevas de `ParticulesHero` et pour la
+même raison. C'est la troisième fois que ce piège se présente : **une animation
+qui ne passe pas par le CSS se coupe à la main.**
+
+**Et une modification de fichier de registre, la première du dépôt.**
+`@magicui/sparkles-text` n'expose ni la fréquence ni la taille de ses étincelles.
+La taille se rentre de l'extérieur, `[&_svg]:size-3`, parce qu'elle dépend de
+l'endroit où on pose le composant. La fréquence, non : elle est écrite dans le
+`transition` de son animation. Rémy les veut discrètes, donc espacées, et sans
+temps mort chacune se rallume toutes les huit dixièmes de seconde, ce qui fait
+scintiller la gélule en continu.
+
+`sparkles-text.tsx` reçoit donc **une propriété `repeatDelay`, et rien d'autre**.
+Elle vaut zéro par défaut, donc le comportement d'origine est intact et le
+fichier reste alignable sur une mise à jour. La règle « le code de registre reste
+tel quel » n'est pas levée pour autant : elle existe pour qu'on ne le retouche
+pas au jugé, et une propriété ajoutée avec sa valeur par défaut est ce qui s'en
+approche le plus. Toute autre modification se décide et s'écrit ici.
+
 ### Deux actions d'importance comparable font deux boutons, un plein et un creux
 
 C'est la paire de l'en-tête, « Découvrir » plein et « Connexion » creux, et elle

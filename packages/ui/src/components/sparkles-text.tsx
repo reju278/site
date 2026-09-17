@@ -20,7 +20,15 @@ interface Sparkle {
   lifespan: number
 }
 
-const Sparkle: React.FC<Sparkle> = ({ id, x, y, color, delay, scale }) => {
+const Sparkle: React.FC<Sparkle & { repeatDelay?: number }> = ({
+  id,
+  x,
+  y,
+  color,
+  delay,
+  scale,
+  repeatDelay = 0,
+}) => {
   return (
     <motion.svg
       key={id}
@@ -31,7 +39,7 @@ const Sparkle: React.FC<Sparkle> = ({ id, x, y, color, delay, scale }) => {
         scale: [0, scale, 0],
         rotate: [75, 120, 150],
       }}
-      transition={{ duration: 0.8, repeat: Infinity, delay }}
+      transition={{ duration: 0.8, repeat: Infinity, repeatDelay, delay }}
       width="21"
       height="21"
       viewBox="0 0 21 21"
@@ -87,6 +95,14 @@ interface SparklesTextProps {
     first: string
     second: string
   }
+
+  /**
+   * @default 0
+   * @type number
+   * @description
+   * Seconds of pause between two flashes of the same sparkle.
+   */
+  repeatDelay?: number
 }
 
 export const SparklesText: React.FC<SparklesTextProps> = ({
@@ -94,6 +110,7 @@ export const SparklesText: React.FC<SparklesTextProps> = ({
   colors = { first: "#9E7AFF", second: "#FE8BBB" },
   className,
   sparklesCount = 10,
+  repeatDelay = 0,
   ...props
 }) => {
   const [sparkles, setSparkles] = useState<Sparkle[]>([])
@@ -146,7 +163,7 @@ export const SparklesText: React.FC<SparklesTextProps> = ({
     >
       <span className="relative inline-block">
         {sparkles.map((sparkle) => (
-          <Sparkle key={sparkle.id} {...sparkle} />
+          <Sparkle key={sparkle.id} {...sparkle} repeatDelay={repeatDelay} />
         ))}
         <strong>{children}</strong>
       </span>

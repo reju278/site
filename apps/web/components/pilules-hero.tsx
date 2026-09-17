@@ -147,18 +147,18 @@ export function PilulesArguments({
                seulement sur celle-ci : le point vert dit « ça marche », l'étoile
                dit autre chose.
 
-               L'or est `--or`, déjà dans la palette : c'est celui des étoiles de
-               la note du livre. Il ne change pas d'un thème à l'autre, et c'est
-               ce qu'il faut ici, la gélule étant posée sur une photographie
-               sombre dans les deux thèmes. `--etoile`, qui s'assombrit en thème
-               clair, aurait disparu dessus.
+               Le violet est `--etincelle`, décidé et écrit dans `globals.css`.
+               Il ne change pas d'un thème à l'autre, et c'est ce qu'il faut
+               ici, la gélule étant posée sur une photographie sombre dans les
+               deux thèmes. `--etoile`, qui s'assombrit en thème clair, aurait
+               disparu dessus.
 
                `aria-hidden` : elle ne porte rien à elle seule, exactement comme
                le point vert des trois autres. */
             <Sparkles
               aria-hidden
               className="size-3.5 shrink-0"
-              style={{ color: "var(--or)" }}
+              style={{ color: "var(--etincelle)" }}
             />
           ) : (
           <span aria-hidden className="relative flex size-2 shrink-0">
@@ -183,20 +183,35 @@ export function PilulesArguments({
           )}
 
           {point.etincelles && anime ? (
-            /* `[&_strong]:font-medium` : le composant de registre enveloppe son
-               contenu dans un `strong`, dont la graisse vient du navigateur et
-               passerait devant la nôtre. On ne corrige pas un fichier de
-               registre, on le rattrape de l'extérieur.
+            /* **Discrètes et violettes**, sur demande de Rémy, et les trois
+               réglages vont ensemble : peu d'étoiles, petites, et qui se
+               rallument rarement.
 
-               Six étincelles et non dix : la gélule fait une centaine de pixels
-               de large, dix s'y marchent dessus.
+               `sparklesCount={3}` : la gélule fait une centaine de pixels de
+               large. À six elles se marchaient dessus, à dix, le défaut du
+               registre, elles font un feu d'artifice.
 
-               L'or et le blanc, et pas les violet et rose du registre : ce sont
-               les deux seules teintes déjà présentes à cet endroit. */
+               `repeatDelay={3}` : une étincelle brille huit dixièmes de seconde
+               puis attend trois secondes. Sans ce temps mort, chacune se
+               rallume aussitôt et la gélule scintille en continu, ce qui est
+               l'inverse de discret. C'est la seule chose que le registre ne
+               réglait pas, et elle y a été ajoutée : voir `AGENTS.md`.
+
+               `[&_svg]:size-3` : les étoiles du registre font 21 px, presque la
+               hauteur du libellé. Rentrées de l'extérieur plutôt que dans leur
+               fichier, la taille étant du ressort de l'endroit où on les pose.
+
+               `[&_strong]:font-medium` : le composant enveloppe son contenu
+               dans un `strong`, dont la graisse vient du navigateur et passerait
+               devant la nôtre.
+
+               Les deux teintes sont le même violet : le registre en tire une au
+               hasard, donc deux valeurs identiques donnent une couleur unie. */
             <SparklesText
-              className="text-xs font-medium text-white [&_strong]:font-medium sm:text-sm"
-              sparklesCount={6}
-              colors={{ first: "var(--or)", second: "#ffffff" }}
+              className="text-xs font-medium text-white [&_strong]:font-medium [&_svg]:size-3 sm:text-sm"
+              sparklesCount={3}
+              repeatDelay={3}
+              colors={{ first: "var(--etincelle)", second: "var(--etincelle)" }}
             >
               {point.texte}
             </SparklesText>
