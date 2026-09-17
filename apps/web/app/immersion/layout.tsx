@@ -35,6 +35,24 @@ import type { Metadata } from "next";
  * l'équipe et affiches d'entretien dans la recherche d'images.
  */
 export const metadata: Metadata = {
+  /**
+   * **Le canonique se déclare, sinon la page hérite de celui de l'accueil.**
+   *
+   * `layout.tsx` de la racine pose `alternates: { canonical: "/" }`, et
+   * `metadataBase` vaut `remy-jupille.com` : sans cette ligne, `/immersion`
+   * servait `<link rel="canonical" href="https://remy-jupille.com">`,
+   * c'est-à-dire qu'elle se déclarait être la page d'accueil du site. Relevé
+   * sur la page en ligne après déploiement.
+   *
+   * Sur une page interdite d'index, l'effet pratique est faible : personne ne
+   * vient l'indexer. Mais un canonique faux est pire qu'un canonique absent,
+   * c'est la règle du dépôt pour les dates et les chiffres, et elle vaut ici.
+   *
+   * L'adresse est absolue et non relative : relative, elle se résoudrait contre
+   * `metadataBase`, donc contre le mauvais domaine. C'est exactement ce qui
+   * produit le défaut qu'on répare.
+   */
+  alternates: { canonical: "https://go.funnels.club/immersion" },
   robots: {
     index: false,
     follow: false,
