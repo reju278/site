@@ -108,25 +108,50 @@ export function PastillePreuve() {
  * de thème, aux mêmes opacités et au même dessin. Rien d'autre ne bouge.
  */
 export function Gelule({
-  as: Balise = "li",
+  as = "li",
   teinte,
   sur = "image",
   pastille,
   children,
   className,
+  ...reste
 }: {
-  as?: "li" | "p";
+  /**
+   * `button` sert au bouton « Fermer » de la fenêtre des entretiens, sur demande
+   * de Rémy, qui veut exactement cette gélule. Les propriétés en trop sont
+   * passées telles quelles, faute de quoi `DialogClose asChild` ne pourrait pas
+   * y poser son gestionnaire de fermeture.
+   */
+  as?: "li" | "p" | "button";
   /** La couleur du point, de l'étoile et de la lumière. Une seule valeur. */
   teinte: string;
   /** Ce sur quoi la gélule est posée, qui décide de son encre. */
-  sur?: "image" | "page";
+  /**
+   * Ce sur quoi la gélule est posée, qui décide de son fond et de son encre.
+   *
+   * - `image` : la photographie du hero, sombre dans les deux thèmes. Blanc en
+   *   dur, comme les capsules de l'en-tête.
+   * - `page` : une surface de thème. Jetons de thème, fond presque transparent.
+   * - `voile` : **le voile d'une fenêtre ouverte.** Il est sombre dans les deux
+   *   thèmes, mais l'encre, elle, suit le thème : une gélule `page` y devenait
+   *   de l'encre sombre sur du sombre en thème clair, et on ne lisait plus rien.
+   *   Elle prend donc le verre du bouton de fermeture d'origine, `bg-card/85` et
+   *   son flou, c'est-à-dire une vraie surface sous le texte.
+   */
+  sur?: "image" | "page" | "voile";
   /** Le point, l'étoile, ce qui précède le libellé. */
   pastille: React.ReactNode;
   children: React.ReactNode;
   className?: string;
-}) {
+} & React.ComponentPropsWithoutRef<"button">) {
+  /* `ElementType` et non l'union des trois balises : TypeScript refuserait de
+     poser sur un `li` des attributs de `button`, alors que c'est justement le
+     but, chaque appelant ne passant que ce qui va à sa balise. */
+  const Balise = as as React.ElementType;
+
   return (
     <Balise
+      {...reste}
       style={
         { "--teinte": teinte, "--grossissement": "1.04" } as React.CSSProperties
       }
@@ -211,7 +236,13 @@ export function Gelule({
         aria-hidden
         className={cn(
           "absolute inset-0 -z-20 rounded-full backdrop-blur-md",
-          sur === "image" ? "bg-white/6" : "bg-foreground/5",
+          sur === "image" && "bg-white/6",
+          sur === "page" && "bg-foreground/5",
+          /* Une vraie surface sous le texte : le voile d'une fenêtre est sombre
+             dans les deux thèmes, et une gélule presque transparente y laissait
+             l'encre claire du thème clair se perdre. C'est le verre du bouton de
+             fermeture d'origine, repris tel quel. */
+          sur === "voile" && "bg-card/85",
         )}
       />
 
@@ -221,6 +252,7 @@ export function Gelule({
         className={cn(
           "text-xs font-medium sm:text-sm",
           sur === "image" ? "text-white" : "text-foreground",
+          sur === "voile" && "font-semibold",
         )}
       >
         {children}

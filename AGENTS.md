@@ -1200,6 +1200,64 @@ dessin sans rien dire à la ligne : le réglage est juste à un seul corps et se
 refait à chaque changement de taille. `vertical-align` s'exprime en `em` par
 rapport à la ligne de base, donc il tient à toutes les tailles.
 
+### Une seule fenêtre pour vingt-deux entretiens
+
+Il y en avait une par carte. Rémy a demandé des flèches pour passer d'un
+témoignage au suivant sans refermer, et une fenêtre par carte ne peut pas le
+faire : chacune ignore les autres, et passer de l'une à l'autre demanderait d'en
+fermer une et d'en ouvrir une autre, donc de faire clignoter le voile entre les
+deux. Il n'y a donc **qu'une** fenêtre, et c'est son contenu qui change.
+
+**La coupure serveur/client est le point délicat.** `GalerieEntretiens` reste un
+composant serveur : il prépare les données et **rend les vingt-deux articles**,
+qu'il passe déjà faits. `GalerieFenetre`, client, ne fait que choisir lequel
+montrer. C'est ce qui garde `avis.ts` et ses cinq cents kilooctets hors du paquet
+JavaScript, et ça n'a pas changé avec la refonte : un seul article est dans le
+DOM à la fois, donc **un seul lecteur Wistia peut exister**.
+
+**Une `key` sur le bloc de contenu**, et elle fait deux choses : elle démonte le
+lecteur du précédent, ce qui coupe son son, et elle remet le défilement en haut.
+Sans elle, on arrive au milieu de l'article suivant.
+
+**Un renvoi vers un autre entretien change la fenêtre au lieu de la fermer.** Les
+articles se citent entre eux, et `versImmersion` transforme ces renvois en ancres
+vers la carte. Tant qu'il y avait une fenêtre par carte, tout ce qu'on pouvait
+faire était fermer et laisser le navigateur sauter à la carte, qu'il fallait
+ensuite rouvrir. Les autres ancres, `#avis`, gardent l'ancien sort : il n'y a pas
+de fenêtre à ouvrir, on ferme et on ne bloque pas le saut.
+
+**Un état et non deux.** `index: number | null` plutôt qu'un booléen et un index
+séparés : un seul état ne peut pas se contredire, là où deux finissent par dire
+« fermée sur l'entretien 7 ».
+
+**La hauteur de la fenêtre est comptée, pas choisie.** Le bouton « Fermer » fait
+36 px, son écart au panneau 12, et on laisse 12 px au-dessus et en dessous : le
+panneau vaut la hauteur d'écran moins 72. Les proportions rondes, 82 % puis 90,
+ne valaient rien ici : ce qu'on doit loger sous le panneau est un bouton, et un
+bouton a une hauteur en pixels, pas en pourcentage d'écran.
+
+**Et une carte qui ouvre une fenêtre ne reçoit jamais son `pointerleave`.** La
+fenêtre la recouvre, donc le pointeur n'en sort pas : elle restait inclinée
+derrière le voile, et on la retrouvait de travers au milieu de vingt et une
+cartes à plat. `CarteInclinable` se remet donc à plat **au clic**, qui est le
+moment où l'on passe à autre chose.
+
+### La gélule sait sur quoi elle est posée, et c'est ce qui décide de son encre
+
+Trois surfaces, trois traitements, et la troisième vient d'une erreur. `image`
+est la photographie du hero, sombre dans les deux thèmes : blanc en dur. `page`
+est une surface de thème : jetons de thème, fond presque transparent. `voile` est
+le voile d'une fenêtre ouverte, et c'est le cas piégeux : **il est sombre dans
+les deux thèmes, mais l'encre, elle, suit le thème.** Une gélule `page` y devenait
+de l'encre sombre sur du sombre en thème clair, et on ne lisait plus rien. Elle
+prend donc une vraie surface sous le texte, `bg-card/85` et son flou, qui est le
+verre du bouton de fermeture d'origine.
+
+Le bouton « Fermer » de la fenêtre des entretiens est cette gélule, sur demande
+de Rémy, avec sa lumière qui tourne en `--destructive`. Pas le rouge du livre :
+celui-là est la couleur d'un objet, une couverture, et ce fichier interdit de
+l'étendre.
+
 ### Le geste d'inclinaison est écrit une fois, et sa lueur se décide par carte
 
 Les cartes d'offres de l'accueil s'inclinent sous le pointeur depuis longtemps.

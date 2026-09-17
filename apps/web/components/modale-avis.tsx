@@ -78,11 +78,18 @@ export function ModaleAvis({
            panneau, et il ne rogne rien, sans quoi le bouton posé au-dessus
            serait coupé.
 
-           **`max-h-[82dvh]` et non 90.** La fenêtre était centrée sur 90 % de la
-           hauteur visible : il ne restait que 5 % en dessous, soit une
-           quarantaine de pixels sur un téléphone, pour un bouton qui en fait
-           trente-six plus son écart. À 82, il reste 9 %, et le bouton tient.
-           `dvh` et non `vh` : sur un téléphone, `vh` ignore la barre d'adresse.
+           **La fenêtre prend toute la hauteur**, sur demande de Rémy, et la
+           marge qui reste est comptée et non choisie : le bouton « Fermer »
+           fait 36 px, son écart au panneau 12, et on laisse 12 px au-dessus et
+           en dessous de l'ensemble. Le panneau vaut donc la hauteur de l'écran
+           moins 72. Tout ce qui est repris là est de la place rendue à la
+           vidéo.
+
+           Les proportions rondes, 82 % puis 90, ne valaient rien ici : ce
+           qu'on doit loger sous le panneau est un bouton, et un bouton a une
+           hauteur en pixels, pas en pourcentage d'écran. Sur un téléphone,
+           9 % faisaient une quarantaine de pixels ; sur un grand écran, une
+           centaine, c'est-à-dire soixante de perdus.
 
            `sm:max-w-4xl`, élargi sur demande de Rémy. La mesure du texte, elle,
            est bornée plus bas par le bloc de l'article. */
@@ -128,7 +135,7 @@ export function ModaleAvis({
 
               On ne bloque rien : on ferme, et le navigateur fait le saut. */}
           <div
-            className="max-h-[82dvh] overflow-y-auto"
+            className="max-h-[calc(100dvh-4.5rem)] overflow-y-auto"
             onClick={(evenement) => {
               const cible = (evenement.target as HTMLElement).closest("a");
               if (cible?.getAttribute("href")?.startsWith("#")) {

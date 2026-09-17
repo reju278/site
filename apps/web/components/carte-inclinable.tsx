@@ -132,6 +132,15 @@ export function CarteInclinable({
       onPointerMove={suivre}
       onPointerEnter={entrer}
       onPointerLeave={sortir}
+      /* **Le clic remet la carte à plat**, et c'est une réparation.
+
+         Une carte d'entretien ouvre une fenêtre qui la recouvre : le pointeur
+         ne sort donc jamais d'elle, `pointerleave` ne se déclenche pas, et elle
+         restait inclinée derrière le voile. En refermant, on la retrouvait de
+         travers au milieu de vingt et une cartes à plat. Rémy l'a signalé.
+
+         Le clic est le bon moment : c'est lui qui fait passer à autre chose. */
+      onClick={sortir}
     >
       <div
         ref={carte}
