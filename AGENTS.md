@@ -2284,6 +2284,50 @@ reste dans `packages/ui` : il convient parfaitement à une surface de la taille
 d'une carte, ce pour quoi il est écrit. **La leçon vaut pour le prochain
 composant de registre posé sur une grande surface : compter ce qu'il dessine.**
 
+### Les vingt-deux articles se chargent à la demande
+
+Sur décision de Rémy, après la mesure. Ils étaient rendus par le serveur et
+passés à la fenêtre : **tout le monde les téléchargeait, qu'on en ouvre un ou
+aucun**. Relevé : 766 Ko de charge utile React sur une page de 1 Mo, pour du
+texte qu'on lit un à la fois.
+
+| | avant | après |
+|---|---|---|
+| HTML de la page | 1 025 Ko | **550 Ko** |
+| charge utile React | 766 Ko | **293 Ko** |
+| un entretien | — | **7 Ko** |
+
+**La route est figée au build**, `force-static` et `generateStaticParams` : ce
+sont vingt-deux fichiers écrits une fois et servis par le CDN, pas une API. Un
+identifiant absent d'`entretiensImmersion` rend un 404 : ce n'est pas une lecture
+publique d'`avis.ts`.
+
+**Les données partent brutes.** Le caviardage des noms et la réécriture des liens
+du tunnel restent à l'affichage, comme partout dans ce dépôt : les transformer
+dans la route obligerait à reproduire la façon dont `ArticleAvis` les applique,
+champ par champ, et deux écritures de la même règle finissent par diverger.
+Vérifié sur une fenêtre ouverte : huit sections, seize paragraphes, sept liens,
+**zéro sortant**.
+
+**Le préchargement au survol est ce qui garde le clic instantané.** Une fenêtre
+qui attend le réseau au moment du clic, c'est exactement le « ça lague » qu'on
+venait de corriger. La demande part au survol, au focus clavier et au premier
+contact du doigt ; le temps d'amener le pointeur jusqu'au clic, la réponse est
+là. Mesuré en local : ouverture en 41 ms, article arrivé 25 ms plus tard, et
+**aucun squelette à la réouverture** d'un entretien déjà lu, le cache étant un
+module partagé entre les trois cartes du hero et les vingt-deux de la galerie.
+
+**Un identifiant et non une fonction** pour le préchargement des cartes du hero :
+`CartesTemoignage` est un composant serveur, et une fonction ne traverse pas la
+frontière. Les gestionnaires vivent donc dans `ModaleAvis`, déjà côté client. Le
+build le dit sans ambiguïté quand on s'y trompe : « Event handlers cannot be
+passed to Client Component props ».
+
+**Le squelette a la forme de ce qu'il remplace**, en-tête coloré, titre, chapô,
+cadre de vidéo et bloc blanc : un rectangle de la bonne taille évite que la
+fenêtre saute quand le texte arrive. `aria-busy` dit qu'elle se remplit, sans
+inventer une phrase d'attente.
+
 ### Les animations s'arrêtent quand elles sortent de l'écran
 
 Sur demande de Rémy, et par deux mécanismes, parce qu'il en faut deux :

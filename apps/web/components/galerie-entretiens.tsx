@@ -1,4 +1,3 @@
-import { ContenuEntretien } from "@/components/contenu-entretien";
 import { GalerieFenetre, type EntretienGalerie } from "@/components/galerie-fenetre";
 import { avisDe } from "@/contenu/avis";
 import { ancreEntretien, entretiensImmersion } from "@/contenu/immersion";
@@ -62,7 +61,6 @@ export function GalerieEntretiens() {
         description: temoignage.description,
         secondes: temoignage.secondes,
         chapo: sansNoms(article.chapo),
-        contenu: <ContenuEntretien id={id} />,
       },
     ];
   });

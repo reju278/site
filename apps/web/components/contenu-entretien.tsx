@@ -1,13 +1,14 @@
+"use client";
+
 import { ArticleAvis } from "@/components/article-avis";
 import { LecteurVideo } from "@/components/lecteur-video";
-import { avis, avisDe } from "@/contenu/avis";
-import { ancreEntretien, entretiensImmersion } from "@/contenu/immersion";
-import { temoignages } from "@/contenu/site";
+import { ancreEntretien } from "@/contenu/immersion";
 import { sansNoms } from "@/lib/anonymat";
 import { prenom } from "@/lib/prenom";
 import { versImmersion } from "@/lib/tunnel-liens";
 import { insecables } from "@/lib/typographie";
 import { ArrowRight } from "lucide-react";
+import type { Entretien } from "@/lib/entretien";
 
 /**
  * Le texte d'un article, prêt pour le tunnel.
@@ -36,22 +37,9 @@ const pourLeTunnel = (t: string) => sansNoms(versImmersion(t));
  * Il ne connaît pas la fenêtre qui le porte : il rend un en-tête, une vidéo et
  * un article, et c'est `ModaleAvis` qui les encadre.
  */
-export function ContenuEntretien({ id }: { id: string }) {
-  const temoignage = temoignages.find((t) => t.id === id);
-  const article = avisDe(id);
-  if (!temoignage || !article) return null;
-
-  const nom = prenom(temoignage.nom);
-
-  /* L'autre entretien de la même personne, s'il est lui aussi sur cette page.
-     Sans ce test, on pointerait vers une ancre qui n'existe pas. */
-  const autre = article.autreEntretien
-    ? avis.find(
-        (a) =>
-          a.slug === article.autreEntretien!.slug &&
-          (entretiensImmersion as readonly string[]).includes(a.id),
-      )
-    : undefined;
+export function ContenuEntretien({ article }: { article: Entretien }) {
+  const nom = prenom(article.nom);
+  const autre = article.autre;
 
   return (
     <>
@@ -100,10 +88,10 @@ export function ContenuEntretien({ id }: { id: string }) {
                     la même bonne mesure. C'est ce que fait la page. */}
                 <div className="mx-auto mt-8 max-w-3xl">
                   <LecteurVideo
-                    id={temoignage.id}
+                    id={article.id}
                     titre={`Entretien avec ${nom}`}
-                    secondes={temoignage.secondes}
-                    affiche={`/temoignages/${id}.jpg`}
+                    secondes={article.secondes}
+                    affiche={`/temoignages/${article.id}.jpg`}
                     afficheAlt={sansNoms(article.afficheAlt)}
                     /* **Le lecteur de Wistia, servi d'emblée**, sur demande de
                        Rémy : plus aucune affiche cliquable sur cette page.
@@ -159,7 +147,7 @@ export function ContenuEntretien({ id }: { id: string }) {
                         L&apos;autre entretien
                       </span>
                       <span className="mt-1 block text-base text-pretty text-card-foreground">
-                        {sansNoms(article.autreEntretien!.libelle)}
+                        {sansNoms(autre.libelle)}
                       </span>
                     </span>
                     <ArrowRight

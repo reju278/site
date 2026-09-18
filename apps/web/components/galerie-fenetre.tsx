@@ -1,6 +1,10 @@
 "use client";
 
 import { CarteInclinable } from "@/components/carte-inclinable";
+import {
+  EntretienCharge,
+  prechargerEntretien,
+} from "@/components/entretien-charge";
 import { TexteRoulant } from "@/components/texte-roulant";
 import { Gelule } from "@/components/pilules-hero";
 import { insecables } from "@/lib/typographie";
@@ -23,7 +27,7 @@ function dureeLisible(secondes: number): string {
   return `${m}:${String(s).padStart(2, "0")}`;
 }
 
-/** Ce qu'une carte a besoin de savoir. Le contenu vient déjà rendu du serveur. */
+/** Ce qu'une carte a besoin de savoir. L'article, lui, se charge à l'ouverture. */
 export type EntretienGalerie = {
   id: string;
   ancre: string;
@@ -32,8 +36,6 @@ export type EntretienGalerie = {
   secondes: number;
   /** Le chapô, pour le nom accessible de la fenêtre. */
   chapo: string;
-  /** L'article, rendu par le serveur et passé tel quel. */
-  contenu: React.ReactNode;
 };
 
 /* Le verre du bouton « Fermer » et des deux flèches, écrit une fois. C'est la
@@ -91,6 +93,14 @@ export function GalerieFenetre({
               <button
                 type="button"
                 onClick={() => setIndex(n)}
+                /* **La demande part au survol, pas au clic.** Le temps d'amener
+                   le pointeur du bord de la carte jusqu'au clic, la réponse est
+                   déjà là : la fenêtre s'ouvre sur son texte et non sur un
+                   squelette. `onFocus` fait la même chose au clavier, et
+                   `onTouchStart` au doigt, où il n'y a pas de survol. */
+                onPointerEnter={() => prechargerEntretien(e.id)}
+                onFocus={() => prechargerEntretien(e.id)}
+                onTouchStart={() => prechargerEntretien(e.id)}
                 style={{
                   /* Le fond des cartes du hero, **posé sur la couleur de
                      carte et non sur du vide**.
@@ -363,7 +373,12 @@ export function GalerieFenetre({
                   setIndex(vise);
                 }}
               >
-                {courant?.contenu}
+                {/* **L'article se charge quand on l'ouvre**, et non plus rendu
+                    d'avance pour les vingt-deux : voir `EntretienCharge`. La
+                    `key` est déjà sur le bloc au-dessus, donc changer
+                    d'entretien démonte le précédent, coupe son lecteur et
+                    remet le défilement en haut. */}
+                {courant ? <EntretienCharge id={courant.id} /> : null}
               </div>
             </div>
           </div>

@@ -9,6 +9,7 @@ import {
   DialogTrigger,
 } from "@repo/ui/components/dialog";
 import { X } from "lucide-react";
+import { prechargerEntretien } from "@/components/entretien-charge";
 import { useState } from "react";
 
 /**
@@ -47,12 +48,23 @@ import { useState } from "react";
  */
 export function ModaleAvis({
   declencheur,
+  precharge,
   titre,
   description,
   children,
 }: {
   /** La carte de la galerie, qui ouvre la fenêtre. */
   declencheur: React.ReactNode;
+  /**
+   * L'entretien à demander dès le survol du déclencheur.
+   *
+   * **C'est un identifiant et non une fonction**, et ce n'était pas un choix :
+   * `CartesTemoignage` est un composant serveur, et une fonction ne traverse pas
+   * la frontière. Poser les gestionnaires là-bas faisait échouer le rendu au
+   * build, « Event handlers cannot be passed to Client Component props ». Ils
+   * vivent donc ici, où l'on est déjà côté client.
+   */
+  precharge?: string;
   /** Le nom accessible de la fenêtre. */
   titre: string;
   /** Ce que la fenêtre contient, pour un lecteur d'écran. */
@@ -66,7 +78,17 @@ export function ModaleAvis({
       {/* `asChild` : le déclencheur est la carte entière, et on ne veut pas
           d'un bouton dans un bouton. Radix pose alors ses attributs sur
           l'élément qu'on lui donne. */}
-      <DialogTrigger asChild>{declencheur}</DialogTrigger>
+      {/* Les trois gestionnaires couvrent les trois façons d'arriver sur une
+          carte : la souris, le clavier et le doigt. Le temps d'aller jusqu'au
+          clic, l'article est là. */}
+      <DialogTrigger
+        asChild
+        onPointerEnter={precharge ? () => prechargerEntretien(precharge) : undefined}
+        onFocus={precharge ? () => prechargerEntretien(precharge) : undefined}
+        onTouchStart={precharge ? () => prechargerEntretien(precharge) : undefined}
+      >
+        {declencheur}
+      </DialogTrigger>
 
       <DialogContent
         /* **La croix part, un bouton « Retour » la remplace**, sur demande de

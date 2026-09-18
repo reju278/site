@@ -1,5 +1,5 @@
 import { Apparition } from "@/components/apparition";
-import { ContenuEntretien } from "@/components/contenu-entretien";
+import { EntretienCharge } from "@/components/entretien-charge";
 import { ModaleAvis } from "@/components/modale-avis";
 import { temoignagesImmersion } from "@/contenu/immersion";
 import { avisDe } from "@/contenu/avis";
@@ -87,6 +87,7 @@ export function CartesTemoignage() {
               fenêtre. Et la carte entière est la cible, donc pas de bouton à
               l'intérieur, ce serait une cible dans une cible. */}
           <ModaleAvis
+            precharge={personne.id}
             titre={`Entretien avec ${prenom(personne.nom)}`}
             description={article ? sansNoms(article.chapo) : personne.citation}
             declencheur={
@@ -175,7 +176,9 @@ export function CartesTemoignage() {
           </button>
             }
           >
-            <ContenuEntretien id={personne.id} />
+            {/* Chargé à l'ouverture et non rendu d'avance : voir
+                `EntretienCharge`. */}
+            <EntretienCharge id={personne.id} />
           </ModaleAvis>
           </Apparition>
         </li>
