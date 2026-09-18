@@ -425,7 +425,13 @@ function Tache({
   return (
     <div
       className={cn(
-        "flex items-center gap-1 rounded-[12px] pr-1.5 transition-colors duration-200 sm:gap-2.5 sm:pr-2.5",
+        /* **22 px et non 12**, et c'est le même calcul que pour le
+           déclencheur : le cadre est à 28 px et son rembourrage à 6, donc une
+           pilule posée dedans doit valoir 22 pour que les deux courbes soient
+           parallèles. À 12, l'angle de la pilule et celui du cadre ne se
+           suivaient pas, et c'est exactement ce qu'on voit en premier sur un
+           coin. */
+        "flex items-center gap-1 rounded-[22px] pr-1.5 transition-colors duration-200 sm:gap-2.5 sm:pr-2.5",
         /* Le survol révèle la pilule, comme dans un menu d'Apple. **Et le
            clavier aussi** : `has-[:focus-visible]` la montre quand on atteint la
            case ou le lien à la tabulation, sans quoi on se déplacerait dans une
@@ -467,7 +473,7 @@ function Tache({
              `whitespace-nowrap`, qui ne s'écrit jamais sans borne : ici la borne
              est en bas plutôt qu'en haut, parce que c'est le petit écran qui
              manque de place. */
-          "titre flex min-w-0 flex-1 items-center gap-1.5 rounded-[12px] py-3 pr-2 pl-2 text-left text-xs leading-snug [&_mark]:px-1 min-[360px]:whitespace-nowrap sm:gap-3 sm:py-3 sm:pr-3.5 sm:pl-3.5 sm:text-base sm:[&_mark]:px-1.5",
+          "titre flex min-w-0 flex-1 items-center gap-1.5 rounded-[22px] py-3 pr-2 pl-2 text-left text-xs leading-snug [&_mark]:px-1 min-[360px]:whitespace-nowrap sm:gap-3 sm:py-3 sm:pr-3.5 sm:pl-3.5 sm:text-base sm:[&_mark]:px-1.5",
           "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring",
         )}
       >

@@ -832,8 +832,12 @@ sans filets, chaque tâche devenant une pilule qui ne se montre qu'au survol.
   témoignages dans lesquels vous pouvez vous identifier » demande plus de quatre
   cents pixels dans cette police : sur téléphone le texte s'enroule, faute de
   quoi la page déborderait, ce que ce dépôt a déjà payé une fois.
-- **Le rayon intérieur se calcule.** 18 px au cadre moins 6 px de rembourrage
-  font 12 px, et c'est à ce prix que les deux courbes restent concentriques.
+- **Le rayon intérieur se calcule, et il se recalcule quand l'extérieur
+  change.** Le cadre vaut 28 px et son rembourrage 6, donc toute pilule posée
+  dedans vaut 22. Elles étaient restées à 12, valeur juste du temps où le cadre
+  était à 18 : l'angle de la pilule et celui du cadre ne se suivaient plus, et
+  **c'est la première chose qu'on voit sur un coin**. Une valeur dérivée d'une
+  autre se met à jour avec elle, ou elle devient fausse en silence.
 - **Le survol n'est pas le seul déclencheur.** `has-[:focus-visible]` montre la
   même pilule quand on atteint la case ou le lien à la tabulation, sans quoi on
   se déplacerait dans une liste qui ne dit pas où on est.
