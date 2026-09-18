@@ -851,8 +851,17 @@ donc pendant une seconde on voyait au travers les uns des autres. C'est le
 le dix du bloc de texte : un portrait ne passe jamais devant les mots.
 
 **Une ombre portée légère les décolle**, sur sa demande, et ce n'est pas le
-`shadow-xl` du fichier d'origine : celui-là dessinait une carte blanche sous
-chaque visage, ce que Rémy avait fait retirer deux demandes plus tôt.
+`shadow-xl` du fichier d'origine.
+
+**Elle est sur l'image, jamais sur la boîte qui la place**, et il a fallu trois
+signalements de Rémy pour trouver d'où venait ce qu'il appelait « le truc blanc
+en dessous ». Ce n'était ni une carte, ni un fond, ni l'image : **le flottement
+déplace l'image à l'intérieur de sa boîte**, six pixels mesurés, et l'ombre posée
+sur la boîte restait en bas. Elle cernait donc le vide que l'image venait de
+libérer, ce qui dessine un croissant de couleur de page sous chaque visage. Rien
+n'échouait, et le coupable n'était pas là où on le cherchait : l'ombre était
+juste, c'est son porteur qui était faux. Une ombre appartient à l'objet qui la
+porte, pas à l'endroit où il est rangé.
 
 **Aucun portrait n'en recouvre un autre, et ça se mesure deux à deux à chaque
 largeur.** Les abscisses sont en pourcentage et les tailles en pixels : deux

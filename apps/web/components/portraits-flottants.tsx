@@ -152,7 +152,18 @@ const PLANS: Record<Plan, { rang: number; ampleur: number }> = {
   3: { rang: 1, ampleur: 0.35 },
 };
 
-/** L'ombre portée, légère : elle décolle le portrait sans dessiner une carte. */
+/**
+ * L'ombre portée, légère : elle décolle le portrait sans dessiner une carte.
+ *
+ * **Elle est sur l'image et non sur la boîte qui la place**, et c'est une
+ * correction. Le flottement fait monter l'image de quelques pixels **à
+ * l'intérieur** de sa boîte : l'ombre, posée sur la boîte, restait en bas et
+ * cernait le vide laissé par l'image, ce qui dessinait un liseré clair sous
+ * chaque visage. Rémy l'a décrit deux fois avant qu'on trouve d'où il venait,
+ * la première fois sur le `shadow-xl` d'origine, qui faisait la même chose en
+ * plus large. Une ombre appartient à l'objet qui la porte, pas à l'endroit où
+ * il est rangé.
+ */
 const OMBRE = "shadow-[0_8px_20px_-10px_rgba(0,0,0,0.35)]";
 
 const POSITIONS: {
@@ -291,7 +302,7 @@ export function PortraitsFlottants({
         const tirage = tirages[i];
         const ecart = ecarts?.[i];
 
-        const cadre = cn("absolute rounded-full", OMBRE, place.className);
+        const cadre = cn("absolute rounded-full", place.className);
         const pose = {
           top: place.top,
           left: place.left,
@@ -358,7 +369,7 @@ export function PortraitsFlottants({
               width={200}
               height={200}
               loading="lazy"
-              className="size-full rounded-full object-cover"
+              className={cn("size-full rounded-full object-cover", OMBRE)}
               animate={
                 tirage && !sansMouvement
                   ? {
