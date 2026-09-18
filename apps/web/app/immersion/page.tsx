@@ -1,6 +1,6 @@
 import { CartesTemoignage } from "@/components/cartes-temoignage";
+import { SemisPoints } from "@/components/semis-points";
 import { ExtraitsCoaching } from "@/components/extraits-coaching";
-import { DotPattern } from "@repo/ui/components/dot-pattern";
 import { FondResultats } from "@/components/fond-resultats";
 import { GalerieEntretiens } from "@/components/galerie-entretiens";
 import { LecteurVideo } from "@/components/lecteur-video";
@@ -17,7 +17,6 @@ import { TitreRoulant } from "@/components/titre-roulant";
 import { RangeeEquipe } from "@/components/rangee-equipe";
 import {
   ancreEntretien,
-  ancresImmersion,
   avisImmersion,
   coachingImmersion,
   entretiensImmersion,
@@ -172,7 +171,7 @@ export default function Immersion() {
             <TitreRoulant
               as="h1"
               segments={plateformeImmersion.titre.map((texte) => ({ texte }))}
-              className="titre text-4xl text-balance text-white sm:text-5xl lg:text-6xl"
+              className="titre text-[2rem] text-balance text-white sm:text-5xl lg:text-6xl"
             />
 
             {/* Les trois arguments, en gélules de verre à point vert, sur
@@ -243,36 +242,11 @@ export default function Immersion() {
         <CartesTemoignage />
       </SectionImmersion>
 
-      {/* Les quatre ancres, **sur téléphone seulement.** Au-dessus de `sm`,
-          elles sont dans la capsule de droite de l'en-tête, comme le menu du
-          hub ; en dessous, la capsule les cache, faute de place à 375 px. Les
-          montrer aux deux endroits donnerait deux fois la même rangée sur un
-          grand écran.
-
-          **Elles sont sous la jonction et non dans le hero.** Posées
-          dedans, elles tombaient sur la photographie à 375 px de large, où la
-          vidéo est plus courte et où tout remonte : leurs jetons de thème y
-          devenaient de l'encre presque noire sur un paysage sombre. Sorties,
-          elles se posent sur la couleur de page quelle que soit la largeur.
-          C'est la panne que le hub a déjà connue avec ses deux boutons.
-
-          `flex-wrap` : quatre libellés en une ligne tiennent en large et
-          débordent à 375 px, et un débordement horizontal du document est
-          exactement ce que la règle du dépôt interdit. */}
-      <nav
-        aria-label="Les sections de la page"
-        className="mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-2 px-5 pt-8 sm:hidden"
-      >
-        {ancresImmersion.map((ancre) => (
-          <a
-            key={ancre.id}
-            href={`#${ancre.id}`}
-            className="inline-flex min-h-10 items-center rounded-md border border-border px-4 text-sm font-medium text-foreground transition-colors hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-          >
-            {ancre.libelle}
-          </a>
-        ))}
-      </nav>
+      {/* **Il n'y a plus de rangée d'ancres sur téléphone**, sur demande de
+          Rémy : « ça n'a rien à faire là ». Elle doublait le menu de l'en-tête,
+          que la capsule cache à 375 px faute de place, et elle tombait entre le
+          hero et la stratégie, c'est-à-dire au premier endroit où l'on descend.
+          Les sections restent atteignables par le menu de l'en-tête. */}
 
       {/* STRATÉGIE : le modèle, sa fiche et son schéma, sur la bande bleutée.
 
@@ -339,7 +313,7 @@ export default function Immersion() {
           <TitreRoulant
             as="h2"
             segments={[{ texte: modeleImmersion.titre }]}
-            className="titre mt-5 text-3xl text-balance text-foreground sm:text-4xl"
+            className="titre mt-5 text-[1.625rem] text-balance text-foreground sm:text-4xl"
           />
         </div>
 
@@ -423,9 +397,12 @@ export default function Immersion() {
           `isolate` : le semis est en `-z-10`, il lui faut un contexte
           d'empilement à lui, sinon il passerait derrière le fond de page. */}
       <div className="relative isolate">
-        <DotPattern
+        {/* **Un motif CSS et non le `DotPattern` du registre**, et c'est une
+            mesure qui l'a décidé : leur composant dessine un cercle par point,
+            soit 21 252 nœuds sur les 23 550 de la page. Voir `SemisPoints`. */}
+        <SemisPoints
           className={cn(
-            "-z-10 text-border",
+            "pointer-events-none absolute inset-0 -z-10 text-border",
             "[mask-image:linear-gradient(to_right,transparent,#000_14%,#000_86%,transparent),linear-gradient(to_bottom,transparent,#000_6%,#000_94%,transparent)]",
             "[mask-composite:intersect] [-webkit-mask-composite:source-in]",
           )}
@@ -449,7 +426,7 @@ export default function Immersion() {
             Plus de `TitreRoulant`, en revanche. L'effet découpe le titre en mots
             et enferme chacun dans un masque en `overflow-hidden` : une fonte
             italique déborde son cadre, et les jambages se feraient couper. */}
-        <h2 className="titre text-center text-3xl text-balance text-foreground italic sm:text-4xl">
+        <h2 className="titre text-center text-[1.625rem] text-balance text-foreground italic sm:text-4xl">
           {coachingImmersion.titre}
         </h2>
 
@@ -472,7 +449,7 @@ export default function Immersion() {
           <TitreRoulant
             as="h2"
             segments={[{ texte: avisImmersion.titre }]}
-            className="titre text-3xl text-balance text-foreground sm:text-4xl"
+            className="titre text-[1.625rem] text-balance text-foreground sm:text-4xl"
           />
           <p className="mt-4 text-lg leading-relaxed text-pretty text-muted-foreground">
             {insecables(avisImmersion.sousTitre)}
@@ -509,7 +486,7 @@ export default function Immersion() {
           <TitreRoulant
             as="h2"
             segments={[{ texte: equipeImmersion.titre }]}
-            className="titre text-3xl text-balance text-foreground sm:text-4xl"
+            className="titre text-[1.625rem] text-balance text-foreground sm:text-4xl"
           />
         </div>
 

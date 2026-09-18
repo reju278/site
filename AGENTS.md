@@ -2253,6 +2253,78 @@ Vercel ne pose pas cette variable, donc rien ne change pour lui.
 qu'en lançant un serveur de production à côté : c'est ce qu'il regarde, et une
 page servie par deux processus différents peut diverger sans qu'on le voie.
 
+## La performance se mesure, et un seul composant peut coûter toute la page
+
+Rémy a demandé un audit : « ça lague à l'ouverture des pop-ups, du menu ». Tout
+est parti d'un relevé sur un **build de production servi en local**, jamais sur
+le serveur de développement, qui ne minifie pas et compile à la demande.
+
+**Le coupable était un seul composant, et il pesait quatre-vingt-dix pour cent
+du document.** `DotPattern` de MagicUI dessine **un `<circle>` par point** : sur
+la traversée du coaching aux entretiens, haute de quatre mille pixels, cela
+faisait **21 252 nœuds** sur les 23 550 de la page. Ce n'est pas un problème de
+poids mais de **lag** : chaque ouverture de fenêtre oblige le navigateur à
+recalculer style et disposition sur tout le document.
+
+Relevé avant et après, à l'image près :
+
+| | avant | après |
+|---|---|---|
+| nœuds DOM | 23 550 | **2 432** |
+| ouvrir une fenêtre d'entretien | 292 ms | **49 ms** |
+| ouvrir le menu des tâches | 201 ms | **36 ms** |
+
+Un geste est perçu comme instantané en dessous de cent millisecondes : on y est
+largement, alors qu'on en était au triple.
+
+**Le remplaçant est un dégradé radial répété**, `SemisPoints`, qui donne le même
+dessin pour **zéro nœud**. C'est un écart à la règle qui interdit de refaire à la
+main ce qu'un registre donne, et le chiffre est ce qui le justifie. Leur fichier
+reste dans `packages/ui` : il convient parfaitement à une surface de la taille
+d'une carte, ce pour quoi il est écrit. **La leçon vaut pour le prochain
+composant de registre posé sur une grande surface : compter ce qu'il dessine.**
+
+### Les animations s'arrêtent quand elles sortent de l'écran
+
+Sur demande de Rémy, et par deux mécanismes, parce qu'il en faut deux :
+
+- **Les animations CSS** se mettent en pause par `animation-play-state`, posé par
+  une règle globale sur `[data-hors-ecran]`, attribut que `AnimeSiVisible` pose
+  et retire. Une règle CSS attrape **tout** le sous-arbre, y compris les fichiers
+  de registre qu'on ne retouche pas. La pause garde l'image courante : rien ne
+  saute au retour, là où un démontage ferait repartir du début.
+- **Les animations de Motion** n'ont pas d'`animation-play-state` à suspendre :
+  elles tournent en JavaScript. Il faut couper la propriété animée
+  (`PortraitsFlottants`) ou démonter le composant (`RayonsFond`). Ces
+  cinq rayons coûtaient dix images par seconde, mesurées : 110 dans la section du
+  modèle contre 120 partout ailleurs.
+
+**L'attribut est retiré et non ajouté à l'entrée**, pour qu'une page servie sans
+JavaScript garde ses animations plutôt que de les perdre.
+
+### L'iframe de Wistia attend d'approcher de l'écran
+
+`natif` sert le lecteur de Wistia d'emblée, sur décision de Rémy, et rien ne
+change à l'écran : on ne déplace que le **moment** où l'iframe est créée. Les
+trois iframes de la page se chargeaient à l'ouverture ; elles arrivent maintenant
+trois cents pixels avant d'être visibles, donc prêtes quand on les atteint, et
+l'affiche tient la place entre-temps. Ce n'est pas le repli du reste du site, qui
+remplace l'iframe par une affiche cliquable : ici le lecteur apparaît sans clic.
+
+### Le dossier `.next-verif` sort du lint
+
+Next ignore `.next` d'office mais pas celui-là : le lint partait analyser le
+JavaScript compilé et rendait des centaines d'avertissements sur du code qui
+n'est pas le nôtre. C'est arrivé trois fois avant d'être écrit dans
+`apps/web/eslint.config.mjs`.
+
+### Le texte roule partout où l'on survole
+
+Le menu de l'en-tête, le bouton « Fermer » des fenêtres et la pilule des tâches
+ont rejoint les liens du pied de page et le bouton du mur, sur demande de Rémy.
+`TexteRoulant` demande `group/roule` sur ce qui porte le survol, faute de quoi il
+ne se déclenche que sur les lettres et non sur l'entrée entière.
+
 ## Vérifications avant de conclure
 
 ```sh

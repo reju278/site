@@ -151,7 +151,7 @@ export function MurCommunaute() {
         <TitreRoulant
           as="h2"
           segments={titreCommunaute}
-          className="titre text-3xl text-balance text-foreground sm:text-4xl"
+          className="titre text-[1.625rem] text-balance text-foreground sm:text-4xl"
         />
 
         {/* Leur `max-width: 60ch` : c'est la largeur de lecture, et elle se

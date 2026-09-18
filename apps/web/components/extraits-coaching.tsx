@@ -1,3 +1,4 @@
+import { AnimeSiVisible } from "@/components/anime-si-visible";
 import { LecteurVideo } from "@/components/lecteur-video";
 
 /**
@@ -50,6 +51,7 @@ export function ExtraitsCoaching({
 
       {/* Posé par-dessus le lecteur, donc `pointer-events-none` : sans ça, il
           prendrait le clic qui revient au bouton de lecture. */}
+      <AnimeSiVisible>
       <span
         aria-hidden
         className="pointer-events-none absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-black/45 px-2.5 py-1 text-[0.6875rem] font-semibold tracking-[0.18em] text-white/90 uppercase backdrop-blur-sm sm:top-4 sm:left-4"
@@ -60,6 +62,7 @@ export function ExtraitsCoaching({
         />
         Rec
       </span>
+      </AnimeSiVisible>
     </div>
   );
 }

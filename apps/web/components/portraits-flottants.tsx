@@ -249,6 +249,7 @@ export function PortraitsFlottants({
   const sansMouvement = useReducedMotion();
   const [tirages, setTirages] = useState<Tirage[]>([]);
   const [ecarts, setEcarts] = useState<Ecart[] | null>(null);
+  const [visible, setVisible] = useState(true);
   const section = useRef<HTMLElement>(null);
   const places = useRef<(HTMLElement | null)[]>([]);
 
@@ -309,6 +310,30 @@ export function PortraitsFlottants({
     relever();
     window.addEventListener("resize", relever);
     return () => window.removeEventListener("resize", relever);
+  }, []);
+
+  /* **Le flottement s'arrête quand la section sort de l'écran.**
+
+     Les quinze portraits sont animés par Motion, donc en JavaScript : leur
+     boucle tourne à chaque image, y compris à trois mille pixels au-dessus de
+     la fenêtre. La règle CSS qui met les autres animations en pause ne les
+     atteint pas, une animation pilotée en JS n'ayant pas d'`animation-play-state`
+     à suspendre. Il faut donc couper la propriété elle-même.
+
+     `visible` démarre à vrai : le premier rendu ne dépend pas d'un observateur,
+     et une page sans JavaScript garde des portraits en place. */
+  useEffect(() => {
+    const cadre = section.current;
+    if (!cadre) return;
+
+    const observateur = new IntersectionObserver(
+      (entrees) => {
+        for (const e of entrees) setVisible(e.isIntersecting);
+      },
+      { rootMargin: "200px" },
+    );
+    observateur.observe(cadre);
+    return () => observateur.disconnect();
   }, []);
 
   return (
@@ -394,7 +419,7 @@ export function PortraitsFlottants({
               loading="lazy"
               className={cn("size-full rounded-full object-cover", OMBRE)}
               animate={
-                tirage && !sansMouvement
+                tirage && !sansMouvement && visible
                   ? {
                       y: [0, tirage.montee * plan.ampleur, 0],
                       transition: {

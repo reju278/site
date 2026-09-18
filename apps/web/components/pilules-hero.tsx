@@ -1,3 +1,4 @@
+import { AnimeSiVisible } from "@/components/anime-si-visible";
 import { pastilleHero } from "@/contenu/site";
 import { cn } from "@repo/ui/lib/utils";
 import { Sparkles } from "lucide-react";
@@ -321,10 +322,13 @@ export function PilulesArguments({
   points: readonly { texte: string; etincelles?: boolean }[];
 }) {
   return (
-    /* `flex-wrap` et non `nowrap` : quatre gélules en une ligne tiennent en
-       large et débordent à 375 px, et un débordement horizontal du document est
-       exactement ce que la règle du dépôt interdit. */
-    <ul className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+    /* Les quatre gélules portent chacune deux dégradés coniques qui tournent
+       sans fin : hors de l'écran, ils tournent pour personne. */
+    <AnimeSiVisible>
+      {/* `flex-wrap` et non `nowrap` : quatre gélules en une ligne tiennent en
+          large et débordent à 375 px, et un débordement horizontal du document
+          est exactement ce que la règle du dépôt interdit. */}
+      <ul className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
       {points.map((point, i) => {
         /* La teinte de la gélule : le vert qui dit « ça marche » partout, le
            violet qui dit « IA » sur celle-là. Elle sert au point, à l'étoile
@@ -360,5 +364,6 @@ export function PilulesArguments({
         );
       })}
     </ul>
+    </AnimeSiVisible>
   );
 }

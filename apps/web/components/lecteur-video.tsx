@@ -2,7 +2,7 @@
 
 import { cn } from "@repo/ui/lib/utils";
 import { Play } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * Un lecteur vidéo Wistia, habillé par nous.
@@ -148,13 +148,50 @@ export function LecteurVideo({
   className?: string;
 }) {
   const [lance, setLance] = useState(false);
+  const [proche, setProche] = useState(false);
+  const cadre = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!actif) setLance(false);
   }, [actif]);
 
+  /* **En mode natif, l'iframe attend d'approcher de l'écran.**
+
+     Mesuré : la page d'immersion en pose trois, et les trois se chargeaient à
+     l'ouverture, chacune avec le JavaScript de Wistia et son contact avec un
+     tiers, pour deux vidéos que personne ne voit avant d'avoir beaucoup
+     défilé. Rien ne change à l'écran : c'est toujours le lecteur de Wistia qui
+     est servi, avec son affiche et son bouton, et `rootMargin` le fait arriver
+     trois cents pixels avant d'être visible, donc prêt quand on l'atteint.
+
+     Celle du hero est dans la fenêtre dès le départ : l'observateur la
+     déclenche à la première image, et l'affiche tient la place entre-temps.
+
+     **Ce n'est pas le repli du reste du site**, qui remplace l'iframe par une
+     affiche cliquable tant qu'on n'a rien demandé : ici, le lecteur de Wistia
+     apparaît sans clic, comme Rémy l'a demandé. On ne change que le moment où
+     l'iframe est créée. */
+  useEffect(() => {
+    if (!natif) return;
+    const el = cadre.current;
+    if (!el) return;
+
+    const observateur = new IntersectionObserver(
+      (entrees) => {
+        if (entrees.some((e) => e.isIntersecting)) {
+          setProche(true);
+          observateur.disconnect();
+        }
+      },
+      { rootMargin: "300px" },
+    );
+    observateur.observe(el);
+    return () => observateur.disconnect();
+  }, [natif]);
+
   return (
     <div
+      ref={cadre}
       className={cn(
         // Fond noir et non `bg-card` : le rapport 16/9 du cadre et celui de la
         // vidéo ne tombent jamais au pixel près, et le cheveu qui reste
@@ -187,7 +224,21 @@ export function LecteurVideo({
           Le rayon est écrit aux deux endroits : dehors pour que l'ombre portée
           suive la forme, dedans pour rogner. */}
       <div className="absolute inset-0 overflow-hidden rounded-md bg-black">
-      {natif || lance ? (
+      {/* **L'affiche tient la place tant que l'iframe n'est pas là**, en mode
+          natif : sans elle, on verrait un rectangle noir le temps que Wistia
+          réponde. Elle est déjà servie par nous, donc elle ne coûte rien de
+          plus. */}
+      {natif && !proche ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={affiche}
+          alt=""
+          aria-hidden
+          className="absolute inset-0 size-full object-cover"
+        />
+      ) : null}
+
+      {(natif && proche) || lance ? (
         // L'iframe déborde de trois pixels de chaque côté, et `overflow-hidden`
         // coupe ce qui dépasse.
         //

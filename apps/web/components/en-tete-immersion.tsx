@@ -2,6 +2,7 @@
 
 import { BasculeTheme } from "@/components/bascule-theme";
 import { LogoFunnels } from "@/components/logo-funnels";
+import { TexteRoulant } from "@/components/texte-roulant";
 import { ancresImmersion } from "@/contenu/immersion";
 import { HAUTEUR_ENTETE } from "@/lib/entete";
 import { cn } from "@repo/ui/lib/utils";
@@ -150,9 +151,18 @@ export function EnTeteImmersion() {
             aria-label="Les sections de la page"
             className="hidden items-center gap-1 sm:flex"
           >
+            {/* **Le libellé roule au survol**, sur demande de Rémy : le même
+                effet que les liens du pied de page et le bouton du mur. Il
+                demande `group/roule` sur ce qui porte le survol, faute de quoi
+                il ne se déclenche que sur les lettres et non sur l'entrée
+                entière, rembourrage compris. */}
             {ancresImmersion.map((ancre) => (
-              <a key={ancre.id} href={`#${ancre.id}`} className={entree}>
-                {ancre.libelle}
+              <a
+                key={ancre.id}
+                href={`#${ancre.id}`}
+                className={cn(entree, "group/roule")}
+              >
+                <TexteRoulant>{ancre.libelle}</TexteRoulant>
               </a>
             ))}
           </nav>
@@ -245,13 +255,13 @@ export function EnTeteImmersion() {
                     }}
                     className={cn(
                       entree,
-                      "min-h-10 justify-center transition-[opacity,translate,background-color] duration-300",
+                      "group/roule min-h-10 justify-center transition-[opacity,translate,background-color] duration-300",
                       ouvert
                         ? "translate-y-0 opacity-100"
                         : "-translate-y-1 opacity-0",
                     )}
                   >
-                    {ancre.libelle}
+                    <TexteRoulant>{ancre.libelle}</TexteRoulant>
                   </a>
                 ))}
               </nav>

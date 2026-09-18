@@ -2,6 +2,7 @@
 
 import { tachesImmersion } from "@/contenu/immersion";
 import { cn } from "@repo/ui/lib/utils";
+import { TexteRoulant } from "@/components/texte-roulant";
 import { surligner } from "@/lib/surligner";
 import {
   Accordion,
@@ -71,8 +72,17 @@ import { useEffect, useState } from "react";
 
 const CLE = "immersion-taches";
 
-/* Le verre, repris de `Gelule` en `sur="voile"`, au caractère près. */
-const VERRE = "border border-border bg-card/85 backdrop-blur-md";
+/**
+ * Le verre, repris de `Gelule` en `sur="voile"`, au caractère près.
+ *
+ * **`relief-verre` en plus**, sur demande de Rémy, qui voulait « un reflet pour
+ * mettre un peu plus en avant cette section ». Ce n'est pas un dégradé écrit
+ * pour l'occasion : c'est l'utilitaire du dépôt, les trois ombres **intérieures**
+ * relevées chez TrendTrack, un filet en haut et deux halos. Elles sont en
+ * `color-mix` sur `currentColor`, donc claires sur le thème sombre et sombres
+ * sur le clair : un reflet blanc en dur ne se serait pas vu sur la page claire.
+ */
+const VERRE = "relief-verre border border-border bg-card/85 backdrop-blur-md";
 
 export function TachesImmersion() {
   const [faites, setFaites] = useState<readonly string[]>([]);
@@ -309,7 +319,7 @@ export function TachesImmersion() {
               /* Le `gap-4` du fichier de registre est écrasé : sur téléphone,
                  seize pixels entre le libellé et l'avancement sont seize pixels
                  que le libellé n'a plus pour tenir sur une ligne. */
-              "titre items-center gap-1.5 py-2 pr-2 pl-2.5 text-[13px] leading-normal text-foreground min-[360px]:whitespace-nowrap transition-colors duration-200 hover:no-underline sm:gap-2.5 sm:py-2 sm:pr-3 sm:pl-4 sm:text-lg",
+              "titre group/roule items-center gap-1.5 py-2 pr-2 pl-2.5 text-[13px] leading-normal text-foreground min-[360px]:whitespace-nowrap transition-colors duration-200 hover:no-underline sm:gap-2.5 sm:py-2 sm:pr-3 sm:pl-4 sm:text-lg",
               "hover:bg-foreground/6",
               "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring",
               /* Concentrique au cadre : 28 px moins les 6 px de rembourrage.
@@ -319,8 +329,12 @@ export function TachesImmersion() {
           >
             {/* Le libellé est de Rémy, à sa troisième formulation : « 1 sur 3 »,
                 qui disait où on en est, puis « Liste des tâches à remplir », qui
-                nommait l'objet, puis celui-ci, qui dit à quoi ça sert. */}
-            À regarder avant votre rendez-vous
+                nommait l'objet, puis celui-ci, qui dit à quoi ça sert.
+
+                Il roule au survol comme les entrées du menu et le bouton
+                « Fermer », sur sa demande. `group/roule` est plus bas dans la
+                liste des classes. */}
+            <TexteRoulant>À regarder avant votre rendez-vous</TexteRoulant>
             <Avancement finies={finies} total={total} />
           </AccordionTrigger>
 

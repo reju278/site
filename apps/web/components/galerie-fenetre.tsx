@@ -388,10 +388,12 @@ export function GalerieFenetre({
               as="button"
               sur="voile"
               teinte="var(--destructive)"
-              className="mx-auto"
+              /* `group/roule` : le libellé roule au survol, comme les entrées
+                 du menu, sur demande de Rémy. */
+              className="group/roule mx-auto"
               pastille={<X aria-hidden className="size-4 shrink-0" />}
             >
-              Fermer
+              <TexteRoulant>Fermer</TexteRoulant>
             </Gelule>
           </DialogClose>
         </DialogContent>

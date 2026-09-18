@@ -1,7 +1,7 @@
 "use client";
 
 import { LightRays } from "@repo/ui/components/light-rays";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * Les rayons de lumière du fond bleu de la section du modèle.
@@ -28,6 +28,8 @@ import { useEffect, useState } from "react";
  */
 export function RayonsFond() {
   const [anime, setAnime] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const ancre = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -38,9 +40,40 @@ export function RayonsFond() {
     return () => preference.removeEventListener("change", appliquer);
   }, []);
 
-  if (!anime) return null;
+  /* **Les rayons ne sont montés que lorsque la section est en vue.**
+
+     Cinq rayons animés par Motion tournent à chaque image, et ils coûtent : la
+     section du modèle mesurait 110 images par seconde contre 120 partout
+     ailleurs. Hors de l'écran, c'était dix images par seconde payées pour rien.
+
+     On les démonte plutôt que de les mettre en pause : ils entrent en fondu
+     depuis `opacity-0`, donc un retour se voit comme une arrivée et non comme
+     un sursaut. La marge d'avance les fait revenir avant qu'on les atteigne.
+
+     L'ancre est un bloc vide de la taille du fond, puisque c'est le fond qu'on
+     veut observer et qu'il n'existe pas tant qu'on ne le rend pas. */
+  useEffect(() => {
+    const el = ancre.current;
+    if (!el) return;
+
+    const observateur = new IntersectionObserver(
+      (entrees) => {
+        for (const e of entrees) setVisible(e.isIntersecting);
+      },
+      { rootMargin: "250px" },
+    );
+    observateur.observe(el);
+    return () => observateur.disconnect();
+  }, []);
+
+  if (!anime) return <div ref={ancre} aria-hidden className="absolute inset-0 -z-10" />;
+
+  if (!visible)
+    return <div ref={ancre} aria-hidden className="absolute inset-0 -z-10" />;
 
   return (
+    <>
+    <div ref={ancre} aria-hidden className="absolute inset-0 -z-10" />
     <LightRays
       data-rayons
       /* La teinte vient de la famille des halos du fond, donc elle change avec
@@ -59,5 +92,6 @@ export function RayonsFond() {
           "linear-gradient(to bottom, #000 0%, #000 50%, transparent 92%)",
       }}
     />
+    </>
   );
 }

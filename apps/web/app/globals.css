@@ -1416,3 +1416,30 @@ body:has([role="dialog"][data-state="open"]) :is([data-barre-appel], [data-tache
     opacity: 1;
   }
 }
+
+/* Les animations s'arrêtent quand elles sortent de l'écran.
+
+   **Sur demande de Rémy, et c'est mesuré.** La page d'immersion fait quatre
+   mille pixels de haut et porte une vingtaine d'animations sans fin : la lumière
+   qui tourne autour des quatre gélules du hero, leurs pastilles qui battent, le
+   bouton scintillant du mur, la pastille d'enregistrement du coaching. Toutes
+   tournaient en permanence, y compris à trois mille pixels au-dessus de la
+   fenêtre, où personne ne les regarde. Ce n'est pas du temps de calcul perdu
+   pour rien : c'est de la batterie, et sur une machine modeste, ce sont des
+   images que le défilement n'a plus.
+
+   **C'est `animation-play-state` et non `display: none`.** Une animation en
+   pause garde son image courante : rien ne saute, rien ne se réinitialise, et
+   elle repart exactement où elle en était quand le bloc revient. Retirer
+   l'élément le ferait réapparaître au début.
+
+   L'attribut est posé par `AnimeSiVisible`, qui n'observe que l'entrée et la
+   sortie de son propre bloc. `!important` parce qu'il doit gagner sur les
+   utilitaires d'animation, qui sont eux-mêmes des déclarations de même poids.
+
+   **Les animations pilotées par le défilement ne sont pas concernées** : elles
+   n'avancent que quand on défile, donc quand le bloc est justement à l'écran. */
+[data-hors-ecran],
+[data-hors-ecran] * {
+  animation-play-state: paused !important;
+}
