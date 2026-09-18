@@ -2,7 +2,7 @@ import { cn } from "@repo/ui/lib/utils";
 import type { CSSProperties } from "react";
 
 /**
- * L'appel à l'action principal, en version lien.
+ * L'appel à l'action principal.
  *
  * `ShimmerButton` de MagicUI ne rend qu'un `<button>` et n'accepte pas
  * `asChild`. Or tous les appels principaux du site mènent ailleurs : ce sont
@@ -30,11 +30,28 @@ import type { CSSProperties } from "react";
  * viennent de `@theme` (`--animate-shimmer-slide`, `--animate-spin-around`),
  * donc du thème du projet, et `globals.css` les neutralise déjà sous
  * `prefers-reduced-motion` puisque ce sont des animations CSS ordinaires.
+ *
+ * **Il sait aussi être un vrai bouton**, et c'est une extension, pas un
+ * détournement. Tous les appels du site mènent ailleurs, donc ce composant
+ * n'était qu'une ancre ; le mur de la communauté a demandé le même dessin pour
+ * une commande qui **agit sur la page** au lieu d'y mener. La règle du dépôt est
+ * claire dans les deux sens : ce qui navigue est un lien, ce qui agit est un
+ * bouton. On passe donc `action` au lieu de `href`, et c'est la balise qui
+ * change, pas la recette. Recopier les trois `span` ailleurs aurait fait une
+ * seconde version de l'effet, qui aurait divergé au premier réglage.
+ *
+ * **Le rayon se passe en valeur CSS**, pour la même raison que le fond : il est
+ * écrit à trois endroits, le corps, le masque qui rentre le cône et le
+ * renfoncement du bas. Trois classes séparées auraient fini par diverger, et le
+ * liseré se serait dessiné en travers de l'angle. Le défaut est le 5 px du
+ * projet, donc aucun appel existant ne bouge.
  */
 export function BoutonScintillant({
   href,
+  action,
   externe = true,
   vitesse = "3s",
+  rayon = "var(--radius-md)",
   /** Le fond du bouton, en valeur CSS. Un jeton, jamais une couleur écrite. */
   fond = "var(--primary)",
   /**
@@ -47,19 +64,33 @@ export function BoutonScintillant({
   className,
   children,
 }: {
-  href: string;
+  /** L'adresse, pour la version lien. Exclusif d'`action`. */
+  href?: string;
+  /** Ce que le clic déclenche, pour la version bouton. Exclusif de `href`. */
+  action?: () => void;
   externe?: boolean;
   vitesse?: string;
+  /** Le rayon des angles, en valeur CSS. Le défaut est le 5 px du projet. */
+  rayon?: string;
   fond?: string;
   encre?: string;
   className?: string;
   children: React.ReactNode;
 }) {
+  /* La balise suit ce que fait la commande, jamais l'inverse : un `button` qui
+     navigue n'est pas suivi par les robots et perd le clic du milieu, et un `a`
+     sans destination n'est pas une commande. */
+  const Balise = action ? "button" : "a";
+
   return (
-    <a
-      href={href}
-      target={externe ? "_blank" : undefined}
-      rel={externe ? "noreferrer" : undefined}
+    <Balise
+      {...(action
+        ? { type: "button" as const, onClick: action }
+        : {
+            href,
+            target: externe ? "_blank" : undefined,
+            rel: externe ? "noreferrer" : undefined,
+          })}
       style={
         {
           "--spread": "90deg",
@@ -69,6 +100,7 @@ export function BoutonScintillant({
           "--cut": "1px",
           "--fond": fond,
           "--encre": encre,
+          "--rayon": rayon,
         } as CSSProperties
       }
       className={cn(
@@ -93,7 +125,7 @@ export function BoutonScintillant({
         // `min-h-14` est ce qui rend la coupure utilisable : sans lui, un
         // libellé passé sur deux lignes serait rogné par la hauteur fixe.
         // `px-6` en dessous de `sm` rend 16 px de plus à la ligne.
-        "group/roule group relative z-0 inline-flex min-h-14 cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-md px-6 py-2 text-center text-base font-semibold sm:px-8 sm:whitespace-nowrap",
+        "group/roule group relative z-0 inline-flex min-h-14 cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-[var(--rayon)] px-6 py-2 text-center text-base font-semibold sm:px-8 sm:whitespace-nowrap",
         "bg-(--fond) text-(--encre)",
         "transform-gpu transition-transform duration-300 ease-out hover:scale-[1.03] active:scale-100 active:translate-y-px",
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
@@ -116,14 +148,14 @@ export function BoutonScintillant({
           le liseré du bord. */}
       <span
         aria-hidden
-        className="absolute inset-(--cut) -z-20 rounded-md bg-(--fond)"
+        className="absolute inset-(--cut) -z-20 rounded-[var(--rayon)] bg-(--fond)"
       />
 
       {/* Le renfoncement lumineux du bas, qui donne le relief. */}
       <span
         aria-hidden
-        className="absolute inset-0 rounded-md shadow-[inset_0_-8px_10px_#ffffff1f] transition-shadow duration-300 group-hover:shadow-[inset_0_-6px_10px_#ffffff3f] group-active:shadow-[inset_0_-10px_10px_#ffffff3f]"
+        className="absolute inset-0 rounded-[var(--rayon)] shadow-[inset_0_-8px_10px_#ffffff1f] transition-shadow duration-300 group-hover:shadow-[inset_0_-6px_10px_#ffffff3f] group-active:shadow-[inset_0_-10px_10px_#ffffff3f]"
       />
-    </a>
+    </Balise>
   );
 }

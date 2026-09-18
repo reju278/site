@@ -208,7 +208,7 @@ export function MurCommunaute() {
           `MurDepliable` découvre la moitié de ce qui reste, donc le compte
           tient à toutes les largeurs. */}
       <div className="mt-12">
-      <MurDepliable hauteur={760} clics={2}>
+      <MurDepliable hauteur={760} posts={2} clics={2}>
         {colonnes.map((colonne, i) => (
           <div key={i} className="flex flex-1 flex-col gap-4">
             {colonne.map((avis) => (

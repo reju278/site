@@ -1,7 +1,6 @@
 import { LogoFunnels } from "@/components/logo-funnels";
 import { TexteRoulant } from "@/components/texte-roulant";
-import { appelHub, avertissementHub } from "@/contenu/hub";
-import { identite } from "@/contenu/site";
+import { appelHub } from "@/contenu/hub";
 
 /**
  * Le pied de page de la page d'immersion.
@@ -13,24 +12,26 @@ import { identite } from "@/contenu/site";
  * **Pas de rangée de réseaux.** Cinq pastilles sont cinq portes de sortie, et
  * c'est déjà la règle du hub.
  *
- * **L'avertissement et le libellé de l'appel sont ceux du hub**, repris et non
- * réécrits. Ils ne parlent pas du hub mais du programme et des personnes qui
- * témoignent : les redire ici en d'autres termes créerait deux versions d'un
- * texte qui engage la société, et c'est exactement ce qu'une seconde écriture
- * finit toujours par produire.
+ * **Le libellé de l'appel est celui du hub**, repris et non réécrit. Il ne
+ * parle pas du hub mais du programme : le redire ici en d'autres termes
+ * créerait deux versions d'un texte qui engage la société, et c'est exactement
+ * ce qu'une seconde écriture finit toujours par produire.
  *
- * **Les trois liens légaux sont la seule sortie tolérée**, comme sur le hub :
- * une page commerciale européenne sans accès à ses conditions et à sa politique
- * de confidentialité est moins conforme, pas plus. Ce sont des documents, et
- * ils portent déjà leur `robots: { index: false }`.
+ * **Le pied ne porte plus rien de légal**, sur décision de Rémy, et c'est la
+ * suite de ce qui a déjà retiré les trois liens légaux de cette page : il a
+ * demandé qu'aucun lien n'en sorte, puis que ce bas de page disparaisse. Sont
+ * partis avec lui l'avertissement sur les témoignages, qui disait que le
+ * parcours de chacun lui est propre et que rien n'est promis, et le copyright.
+ * C'est son appel : cette page est commerciale et européenne, et un
+ * avertissement de résultats y est ce qui répond à une réclamation, pas une
+ * décoration. Il est toujours écrit dans `contenu/hub.ts` et se remet en une
+ * ligne.
  */
 export function PiedImmersion({
   entretiens,
 }: {
   entretiens: readonly { ancre: string; nom: string }[];
 }) {
-  const annee = new Date().getFullYear();
-
   return (
     <footer className="relative isolate pb-5">
       {/* Le fond du deck. **Le fondu est en haut**, et c'est la position du
@@ -116,21 +117,6 @@ export function PiedImmersion({
           </div>
         </div>
 
-        {/* Sous la carte : l'avertissement, les mentions, le copyright.
-
-            Ferrés à gauche et alignés sur le bord de la carte, sans rembourrage
-            à eux : deux alignements voisins qui ne coïncident pas se voient
-            tout de suite. Pas de filet de séparation, la carte ayant déjà son
-            bord, son ombre et sa couleur. */}
-        <div className="pt-8 pb-8">
-          <div className="flex flex-col gap-4 text-xs leading-relaxed text-muted-foreground">
-            <p className="max-w-5xl text-pretty">{avertissementHub}</p>
-
-            <p>
-              © {annee} {identite.societe}
-            </p>
-          </div>
-        </div>
       </div>
     </footer>
   );

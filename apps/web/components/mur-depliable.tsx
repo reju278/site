@@ -1,5 +1,6 @@
 "use client";
 
+import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { TexteRoulant } from "@/components/texte-roulant";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@repo/ui/lib/utils";
@@ -76,10 +77,19 @@ import { useEffect, useRef, useState } from "react";
  * fond plein, et ce n'est pas décoratif : un bouton translucide posé sur des
  * demi-cartes en devient illisible.
  *
- * **Son rayon reste celui du projet, 5 px.** Le leur est une gélule. Rémy a
- * demandé deux fois de reprendre les boutons du site sans en dessiner d'autres,
- * et c'est cette consigne-là qui l'emporte : ce qui est repris d'eux ici, c'est
- * le fondu et la position, pas la forme du bouton.
+ * **C'est l'appel principal du site, repris tel quel**, sur demande de Rémy :
+ * « le même effet de style, tu copies, tu n'inventes pas ». Il porte donc
+ * `BoutonScintillant`, sa lumière qui tourne, son fond plein et son
+ * renfoncement, et non une deuxième version de la recette écrite ici. C'est ce
+ * qui a fait passer ce composant du lien seul au lien **ou** au bouton : cette
+ * commande agit sur la page au lieu d'y mener.
+ *
+ * **Son rayon est celui des posts, 25 px**, sur sa demande aussi. C'est une
+ * exception de plus à la règle des 5 px, et elle se tient : le bouton flotte au
+ * milieu des cartes du mur, à moitié posé dessus, et deux arrondis différents à
+ * cet endroit se lisent comme une pièce rapportée. Il ne s'étend à rien
+ * d'autre ; le reste des appels du site garde le 5 px, qui est le défaut du
+ * composant.
  *
  * **Il disparaît une fois ouvert**, et il n'y a pas de « voir moins ». Replier
  * un mur qu'on vient d'ouvrir ne sert personne, et un bouton qui change de
@@ -92,35 +102,49 @@ import { useEffect, useRef, useState } from "react";
  * préfixée et l'autre, et que deux valeurs qui doivent être identiques finissent
  * par diverger.
  */
-const FONDU = "linear-gradient(to bottom, #000 calc(100% - 240px), transparent 100%)";
+const BANDE = 240;
+const FONDU = `linear-gradient(to bottom, #000 calc(100% - ${BANDE}px), transparent 100%)`;
 
 export function MurDepliable({
   children,
   hauteur,
+  posts = 2,
   clics = 2,
 }: {
   children: React.ReactNode;
-  /** La hauteur du mur avant le premier clic, en pixels. */
+  /** La hauteur minimale du mur avant le premier clic, en pixels. */
   hauteur: number;
+  /** Le nombre de posts qui doivent se lire en entier avant le fondu. */
+  posts?: number;
   /** Le nombre d'appuis qui mènent au mur entier. */
   clics?: number;
 }) {
   const [palier, setPalier] = useState(0);
   const [contenu, setContenu] = useState(0);
+  const [plancher, setPlancher] = useState(0);
   const cadre = useRef<HTMLDivElement>(null);
   const flux = useRef<HTMLDivElement>(null);
+
+  /* **Le repli est un plancher et non une hauteur, et c'est une demande de
+     Rémy** : sur téléphone, sept cent soixante pixels ne laissaient qu'un post
+     et demi avant le fondu. Sept cent soixante conviennent en large, où les
+     deux colonnes en montrent un chacune, et pas à 375 px, où il n'y a plus
+     qu'une colonne. Le même nombre ne décrit donc pas la même page.
+
+     On mesure plutôt ce qu'on veut vraiment : que deux posts se lisent en
+     entier au-dessus de la bande de fondu. La hauteur repliée en découle, et
+     elle se refait avec la largeur. */
+  const base = Math.max(hauteur, plancher);
 
   /* Chaque palier découvre la même fraction de ce qui restait à voir au
      premier chargement : au dernier, la limite vaut exactement la hauteur du
      contenu. Tant qu'on n'a pas mesuré, on s'en tient à la hauteur repliée,
      qui est ce que le serveur a rendu. */
   const limite =
-    contenu > 0
-      ? hauteur + (palier * (contenu - hauteur)) / clics
-      : hauteur;
+    contenu > 0 ? base + (palier * (contenu - base)) / clics : base;
   /* Le pixel de tolérance n'est pas une précaution de style : les hauteurs
-     relevées sont fractionnaires, et `hauteur + clics * (contenu - hauteur) /
-     clics` ne retombe pas toujours au bit près sur `contenu`. Sans lui, le
+     relevées sont fractionnaires, et `base + clics * (contenu - base) / clics`
+     ne retombe pas toujours au bit près sur `contenu`. Sans lui, le
      dernier appui laisse le bouton en place devant un mur pourtant entier. */
   const complet = contenu > 0 && limite >= contenu - 1;
 
@@ -148,6 +172,18 @@ export function MurDepliable({
          elle ignore les translations de ses enfants. */
       const mesure = dedans.getBoundingClientRect().height;
       setContenu(mesure);
+
+      /* La hauteur qu'il faut au cadre pour que `posts` cartes tiennent en
+         entier au-dessus de la bande de fondu. On relève le bas de chaque
+         carte dans le flux, on prend le `posts`-ième le plus haut, et on ajoute
+         la bande. Toutes colonnes confondues : quand elles sont côte à côte,
+         deux cartes entières, c'est une par colonne. */
+      const hautDuFlux = dedans.getBoundingClientRect().top;
+      const bas = [...dedans.querySelectorAll<HTMLElement>("[data-carte]")]
+        .map((c) => c.getBoundingClientRect().bottom - hautDuFlux)
+        .sort((a, b) => a - b);
+      const deuxieme = bas[posts - 1];
+      if (deuxieme !== undefined) setPlancher(deuxieme + BANDE);
       const fini = limite >= mesure - 1;
 
       for (const carte of el.querySelectorAll<HTMLElement>("[data-carte]")) {
@@ -166,7 +202,7 @@ export function MurDepliable({
     observateur.observe(el);
     observateur.observe(dedans);
     return () => observateur.disconnect();
-  }, [limite]);
+  }, [limite, posts]);
 
 
   return (
@@ -216,16 +252,19 @@ export function MurDepliable({
            élargit la boîte de l'élément, et la règle du dépôt veut qu'un bloc
            qui porte une transformation soit coupé. Ici, rien à couper. */
         <div className="absolute inset-x-0 bottom-6 flex justify-center">
-          {/* Un `button` et non un lien : ça n'emmène nulle part, ça agit sur
-              la page. C'est aussi ce qui fait que la barre d'espace l'active. */}
-          <button
-            type="button"
-            onClick={() => setPalier((p) => p + 1)}
-            className="group/roule inline-flex min-h-12 items-center justify-center gap-2 rounded-md border border-border bg-background px-6 text-sm font-semibold text-foreground shadow-[0_10px_30px_-12px_rgba(0,0,0,0.45)] transition-colors hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          {/* `action` et non `href` : ça n'emmène nulle part, ça agit sur la
+              page. C'est aussi ce qui fait que la barre d'espace l'active.
+
+              L'ombre portée reste : le bouton se pose sur des demi-cartes, et
+              c'est elle qui le décolle du mur. */}
+          <BoutonScintillant
+            action={() => setPalier((p) => p + 1)}
+            rayon="25px"
+            className="shadow-[0_10px_30px_-12px_rgba(0,0,0,0.45)]"
           >
             <TexteRoulant>Voir plus de posts de la communauté</TexteRoulant>
             <ChevronDown aria-hidden className="size-4 shrink-0" />
-          </button>
+          </BoutonScintillant>
         </div>
       )}
     </div>

@@ -468,6 +468,13 @@ page, et deux dessins différents pour la même chose se lisaient comme une
 inattention. Elles ont perdu au passage leur `rounded-md`, leur `border-border`
 et leur `bg-card`.
 
+**Et le bouton « voir plus » du mur de la communauté porte ce même 25 px**, sur
+demande de Rémy. C'est un bouton, donc la règle des 5 px le vise ; mais il
+flotte au milieu des cartes du mur, à moitié posé dessus, et deux arrondis
+différents à cet endroit se lisent comme une pièce rapportée. Il ne s'étend à
+rien d'autre : le reste des appels du site garde le 5 px, qui est le défaut de
+`BoutonScintillant`.
+
 L'absence de bordure est le piège du relevé, déjà décrit plus bas : le liseré
 qu'on croit voir n'est pas un filet, ce sont les ombres **intérieures** de
 `relief-verre`. En ajouter un cerne la carte là où ces ombres la creusent.
@@ -2071,6 +2078,14 @@ valeurs qui décidaient de son repli. Aucune ne levait d'erreur.
   mille. Le dernier palier découvrait le double de ce qu'il promettait. La
   mesure vit donc sur un **bloc intérieur** qui porte le flux, le cadre ne
   gardant que la hauteur bornée, l'`overflow` et le masque.
+- **Une hauteur de repli en pixels ne décrit pas la même page à deux
+  largeurs.** Sept cent soixante pixels laissaient deux posts entiers en large,
+  où les colonnes sont côte à côte, et un post et demi à 375 px, où elles
+  s'empilent. Ce qu'on veut n'est pas une hauteur, c'est **un nombre de posts
+  lisibles avant le fondu** : le repli se mesure donc, et le nombre passé n'est
+  plus qu'un plancher. Le prix est connu et assumé : sur téléphone, deux posts
+  entiers font quatre mille quatre cents pixels, parce qu'un post de ce mur en
+  fait deux mille.
 - **Un pas en pixels ne tient aucune promesse de nombre de clics.** Rémy voulait
   deux appuis au maximum ; mille huit cents pixels par clic en demandaient dix
   sur un écran large et vingt sur un téléphone, pour la raison ci-dessus. Le
