@@ -77,6 +77,13 @@ import { useEffect, useRef, useState } from "react";
  * au hasard est donc multipliée par celle du plan. Sans ça, quinze portraits de
  * trois tailles bougent tous pareil et la profondeur se défait dès que ça bouge.
  *
+ * **Aucune gouttière à lui**, et c'est une correction. Il portait le `px-4` de
+ * leur fichier, qui s'ajoutait au `px-5` de la section : le titre et son chapô
+ * se retrouvaient rentrés de seize pixels de chaque côté par rapport à tout le
+ * reste de la page, cartes comprises. Sur un téléphone, où la gouttière ne fait
+ * que vingt pixels, ça la double sur ce seul bloc et ça se voit. Un composant
+ * posé dans une section n'ajoute pas sa propre marge : la section en a déjà une.
+ *
  * **Rien n'est aligné sur un arc**, sur sa demande aussi. Les places du haut
  * avaient toutes leur `top` dans la même bande étroite, ce qui dessinait une
  * couronne au-dessus du titre ; elles s'échelonnent maintenant sur toute la
@@ -275,6 +282,22 @@ export function PortraitsFlottants({
           const el = places.current[i];
           if (!el) return { x: 0, y: 0 };
           const r = el.getBoundingClientRect();
+
+          /* **Une place qui n'est pas rendue à cette largeur ne part de nulle
+             part**, et c'est une correction d'un vrai débordement. Un élément
+             en `display: none` rend un rectangle vide à l'origine du repère :
+             son écart au centre valait donc la moitié de la fenêtre, et Motion
+             figeait cette translation dans son état de départ. En élargissant
+             la fenêtre, les places réservées à `xl` apparaissaient avec cette
+             translation sur le dos, à cent dix pixels hors de l'écran, et la
+             page se mettait à défiler latéralement. Mesuré : 1 427 px de large
+             pour une fenêtre de 1 317.
+
+             Rien ne le signalait au chargement, puisque la page est juste à
+             chaque largeur prise séparément ; il fallait en changer, ce que
+             fait une rotation de téléphone. */
+          if (r.width === 0) return { x: 0, y: 0 };
+
           return {
             x: centreX - (r.left + r.width / 2),
             y: centreY - (r.top + r.height / 2),
@@ -292,7 +315,7 @@ export function PortraitsFlottants({
     <section
       ref={section}
       className={cn(
-        "relative mx-auto w-full max-w-7xl px-4 pt-44 pb-8 sm:pt-56 sm:pb-10",
+        "relative mx-auto w-full max-w-7xl pt-44 pb-8 sm:pt-56 sm:pb-10",
         className,
       )}
     >

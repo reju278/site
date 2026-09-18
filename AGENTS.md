@@ -960,6 +960,23 @@ sept à 820, quatre à 375.
 **Ils s'ouvrent depuis le centre quand la section entre dans la vue**, sur
 demande de Rémy. Leur fichier ne fait que les grossir sur place au chargement.
 
+**Une place qui n'est pas rendue à cette largeur ne part de nulle part**, et
+c'est un débordement corrigé, pas une précaution. Un élément en `display: none`
+rend un rectangle vide **à l'origine du repère** : son écart au centre valait
+donc la moitié de la fenêtre, et Motion figeait cette translation dans son état
+de départ. En chargeant la page en étroit puis en l'élargissant, les places
+réservées à `xl` apparaissaient avec cette translation sur le dos, cent dix
+pixels hors de l'écran, et le document se mettait à défiler latéralement :
+1 427 px de large pour une fenêtre de 1 317. Rien ne le signalait au chargement,
+puisque la page est juste à chaque largeur prise séparément ; il faut en
+**changer** pour le voir, ce que fait une rotation de téléphone.
+
+**Le composant n'a pas de gouttière à lui.** Il portait le `px-4` de leur
+fichier, qui s'ajoutait au `px-5` de la section : le titre et son chapô étaient
+rentrés de seize pixels par rapport à tout le reste de la page, cartes comprises.
+Sur un téléphone, où la gouttière vaut vingt pixels, ça la double sur ce seul
+bloc. Un composant posé dans une section n'ajoute pas sa propre marge.
+
 **Le point de départ se mesure, il ne se calcule pas.** Les portraits sont posés
 en pourcentage de la section, et `x` / `y` chez Motion s'expriment en pourcentage
 de l'élément lui-même : aucune écriture CSS ne dit « d'ici jusqu'au centre du
