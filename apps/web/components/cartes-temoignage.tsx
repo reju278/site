@@ -118,7 +118,7 @@ export function CartesTemoignage() {
                     que la règle des 5 px autorise depuis toujours. */}
                 <Image
                   src={personne.portrait}
-                  alt={`Portrait de ${prenom(personne.nom)}`}
+                  alt={`Portrait de ${personne.nom}`}
                   width={96}
                   height={96}
                   loading="lazy"
@@ -126,7 +126,13 @@ export function CartesTemoignage() {
                 />
 
                 <div className="min-w-0">
-                  <p className="font-medium">{prenom(personne.nom)}</p>
+                  {/* Le nom complet quand il existe, sur demande de Rémy, et
+                      les trois cartes du hero suivent les vingt-deux de la
+                      galerie : ce sont les mêmes entretiens, et deux façons de
+                      nommer les mêmes gens sur une seule page se lisent comme
+                      une inattention. Le titre de la vidéo garde le prénom,
+                      lui : il annonce une conversation, pas une fiche. */}
+                  <p className="font-medium">{personne.nom}</p>
                   {/* Une seule ligne, comme leur `u-text-clamp-1` : dans une
                       rangée de trois, un métier qui passe à deux lignes décale
                       la citation de sa voisine et le peigne est perdu.

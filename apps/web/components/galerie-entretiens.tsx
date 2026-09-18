@@ -4,7 +4,6 @@ import { avisDe } from "@/contenu/avis";
 import { ancreEntretien, entretiensImmersion } from "@/contenu/immersion";
 import { temoignages } from "@/contenu/site";
 import { sansNoms } from "@/lib/anonymat";
-import { prenom } from "@/lib/prenom";
 
 /**
  * La galerie des entretiens : les cartes de `/resultats`, mais qui ouvrent
@@ -37,9 +36,19 @@ import { prenom } from "@/lib/prenom";
  * travail. C'est déjà la règle du hub, dans `AGENTS.md`.
  */
 export function GalerieEntretiens() {
-  /* Le prénom, l'accroche, la durée et l'affiche sont lus dans `temoignages` et
+  /* Le nom, l'accroche, la durée et l'affiche sont lus dans `temoignages` et
      `avis.ts`, jamais réécrits ici. Un entretien retiré de là disparaît d'ici
-     sans laisser de carte vide. */
+     sans laisser de carte vide.
+
+     **Le nom de famille s'affiche quand il existe**, sur demande de Rémy, là où
+     la carte ne portait que le prénom. C'est une exception à `lib/prenom.ts`, et
+     elle se limite aux entretiens : ces personnes ont accepté d'être filmées et
+     leur nom complet est déjà publié sur `/resultats/<nom>`, alors que les
+     membres du mur ont écrit dans un groupe privé et gardent leur prénom seul.
+
+     Huit des vingt-deux en ont un dans les données, les autres n'ont jamais été
+     enregistrés qu'avec leur prénom : il n'y a donc rien à conditionner, le
+     champ porte déjà ce qu'on sait de chacun. */
   const entretiens = entretiensImmersion.flatMap<EntretienGalerie>((id) => {
     const temoignage = temoignages.find((t) => t.id === id);
     const article = avisDe(id);
@@ -49,7 +58,7 @@ export function GalerieEntretiens() {
       {
         id,
         ancre: ancreEntretien(id),
-        nom: prenom(temoignage.nom),
+        nom: temoignage.nom,
         description: temoignage.description,
         secondes: temoignage.secondes,
         chapo: sansNoms(article.chapo),

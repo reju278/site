@@ -836,6 +836,33 @@ en connaissance de cause ; le nom qu'on y lit est écrit en toutes lettres dans
 l'en-tête de la même page, et rien ne s'y clique. Le jour où la marque doit
 redevenir lisible, **c'est l'opacité qu'on retire, pas la taille**.
 
+### Le nom de famille s'affiche sur les cartes d'entretien, et nulle part ailleurs
+
+Sur demande de Rémy, et c'est une exception à `lib/prenom.ts`, pas son abandon.
+Les vingt-deux cartes de la galerie et les trois du hero portent le nom complet
+quand il existe ; le mur de la communauté et l'équipe gardent le prénom seul.
+
+**La ligne de partage est le consentement, pas le dessin de la carte.** Les
+personnes des entretiens ont accepté d'être filmées et leur nom complet est déjà
+publié sur `/resultats/<nom>` ; les membres du mur ont écrit dans un groupe privé
+et n'ont rien cédé.
+
+**Il n'y a rien à conditionner dans le code.** Huit des vingt-deux ont un nom de
+famille dans `temoignages`, les autres n'y ont jamais été enregistrés qu'avec
+leur prénom : afficher le champ tel quel donne exactement « quand c'est
+disponible ». Écrire un test là-dessus aurait inventé une règle pour une donnée
+qui la porte déjà.
+
+**Les trois cartes du hero suivent les vingt-deux**, bien que Rémy n'ait désigné
+qu'un endroit : ce sont les mêmes entretiens, et deux façons de nommer les mêmes
+gens sur une seule page se lisent comme une inattention.
+
+**Le texte des fenêtres, lui, reste caviardé** par `lib/anonymat.ts`. La carte
+dit donc « Roland Buffet » et l'article à l'intérieur dit « Roland ». Ce n'est
+pas une incohérence à réparer en douce : le caviardage porte sur les noms **que
+les gens citent dans leur récit**, ceux de tiers autant que le leur, et il se
+décide séparément.
+
 ### L'équipe est un rang de portraits, et les rôles ne s'affichent plus
 
 Deuxième forme de cette section, sur demande de Rémy. Elle était une carte par
