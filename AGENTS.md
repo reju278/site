@@ -811,6 +811,99 @@ retoucher un fichier de registre.
 **Le semis prend l'encre du thème.** Il arrive en `text-neutral-400/80`, une
 couleur en dur que ce fichier interdit ; il passe en `text-border`.
 
+### Les portraits qui flottent autour du titre du mur
+
+`AnimatedTestimonialGrid` de 21st.dev, fourni par Rémy. Ce qui en vient tel quel :
+la construction, des portraits en position absolue autour d'un contenu centré,
+le principe d'un tableau de positions écrit en dur, et la forme de leurs trois
+tirages au hasard.
+
+**Leur registre est fermé**, comme ReUI : `21st.dev/r/…` rend un 403
+`authentication_required`. Ce code vient donc d'un copier-coller de Rémy et non
+d'une installation, il **ne se réalignera jamais tout seul**, et c'est pour ça
+qu'il vit dans nos composants et non dans `packages/ui` à côté de fichiers qui,
+eux, se réinstallent.
+
+**On n'en garde que les portraits.** Leur composant rend aussi une pastille, un
+`h1`, un chapô et un bouton d'appel, et les trois derniers étaient impossibles
+ici : la page a déjà son `h1`, et un tunnel n'a aucun lien sortant. Le reste
+arrive en `children`, donc c'est toujours `TitreRoulant` qui rend le titre, avec
+son animation mot à mot.
+
+**Les positions ne sont plus les leurs**, après quatre demandes successives de
+Rémy : rien sous le titre, plus de visages, des tailles variées, une profondeur
+de champ. Leurs quinze places en portaient onze sur ordinateur, toutes de taille
+voisine, quatre d'entre elles sous le titre. Aucune de ces demandes ne pouvait se
+satisfaire en recopiant.
+
+**Trois plans, et quatre choses varient ensemble.** Taille, flou, opacité et
+amplitude du flottement. Une seule d'entre elles ne donne pas de la distance,
+elle donne un défaut d'affichage ; et l'amplitude compte autant que le reste,
+parce que quinze portraits qui bougent tous pareil défont la profondeur dès que
+ça bouge. C'est la parallaxe : ce qui est loin se déplace moins.
+
+**L'opacité passe par l'animation, jamais par une classe.** Motion écrit
+`opacity` en style, donc une classe `opacity-*` est écrasée à la première image.
+C'est la même famille de panne que les classes préfixées face à
+`tailwind-merge` : une règle qui est là et n'agit pas. Le flou, lui, reste en
+classe puisqu'il n'est pas animé.
+
+**Les portraits latéraux n'existent qu'à partir de `xl`, et c'est de la
+géométrie.** Le bloc de texte fait `max-w-3xl`, la section `max-w-7xl` : en
+dessous de 1280 px il ne reste aucun couloir de chaque côté, et un portrait posé
+à gauche tombe sur les mots. Ceux du haut n'ont pas ce problème et descendent
+jusqu'au téléphone, où tout doit tenir au-dessus du titre. Résultat mesuré aux
+quatre largeurs, zéro chevauchement : quinze visages à 1317 px, neuf à 1024,
+sept à 820, quatre à 375.
+
+**Ils s'ouvrent depuis le centre quand la section entre dans la vue**, sur
+demande de Rémy. Leur fichier ne fait que les grossir sur place au chargement.
+
+**Le point de départ se mesure, il ne se calcule pas.** Les portraits sont posés
+en pourcentage de la section, et `x` / `y` chez Motion s'expriment en pourcentage
+de l'élément lui-même : aucune écriture CSS ne dit « d'ici jusqu'au centre du
+parent ». On les rend donc une première fois inertes et invisibles, on relève
+leur écart au centre, et on ne les confie à Motion qu'ensuite. Le premier passage
+ne se voit pas.
+
+**Le ressort n'est plus le leur.** 260 de raideur pour 20 d'amortissement est
+juste pour un grossissement sur place ; sur une trajectoire de plusieurs centaines
+de pixels, il claque au lieu de s'ouvrir. Les retards, eux, restent les leurs,
+tirés entre zéro et une demi-seconde, ce qui fait que les portraits ne partent
+pas ensemble. Et l'ouverture ne joue **qu'une fois** : une explosion qui se rejoue
+à chaque passage cesse d'être un accueil et devient un tic.
+
+**Ronds et sans ombre**, sur demande de Rémy, là où leur fichier pose un carré
+arrondi et un `shadow-xl`. Ce sont des photos de profil, seule exception que ce
+fichier accorde à `rounded-full` ; et l'ombre dessinait une carte blanche sous
+chaque visage, donc un objet de plus à regarder là où il n'y a qu'un portrait.
+
+**Ce sont les membres du mur, dans l'ordre du mur, dédoublonnés.** Une même
+personne y revient plusieurs fois, et deux fois le même visage se lit comme une
+erreur. Leur `alt` est vide, et c'est décidé : ces visages sont une preuve et non
+une information, les mêmes personnes étant nommées et citées en entier juste en
+dessous. Quinze prénoms annoncés avant le titre ne seraient que du bruit.
+
+**Deux adaptations obligatoires**, et elles se reverront à chaque composant
+repris d'un registre animé :
+
+- **`framer-motion` devient `motion/react`.** C'est le même paquet sous son nom
+  actuel, et c'est celui que le dépôt a déjà dans `packages/ui`. Installer
+  l'ancien nom à côté aurait fait deux copies de la même bibliothèque. Au
+  passage, `motion` entre dans les dépendances d'`apps/web`, qui ne l'avait pas.
+- **Le hasard se tire après le rendu.** Leur fichier appelle `Math.random()` dans
+  le corps du composant, donc des deux côtés de l'hydratation et à chaque rendu.
+  Les valeurs se tirent une fois dans un `useEffect`, exactement comme
+  `LightRays` le fait pour ses rayons.
+
+**Sous mouvement réduit, les portraits restent et le mouvement part.** Ils sont
+animés en JavaScript, hors de portée de la règle de `globals.css` ; mais
+contrairement aux rayons de lumière, qu'on ne rend pas du tout, ce sont des
+personnes, et une personne qu'on efface n'est pas une animation neutralisée.
+
+**L'étiquette entre crochets de cette section est partie**, sur demande de Rémy,
+et son chapô est de lui.
+
 ### Les rayons de lumière du fond des résultats, et pourquoi ils sont facultatifs
 
 `LightRays` de MagicUI, posé sur le fond du deck, sur demande de Rémy et

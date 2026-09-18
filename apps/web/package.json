@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@repo/ui": "workspace:*",
+    "motion": "^13.2.0",
     "lucide-react": "^1.42.0",
     "next": "16.3.4",
     "next-themes": "^0.4.6",

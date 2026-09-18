@@ -1,5 +1,9 @@
 import { Apparition } from "@/components/apparition";
 import { MurDepliable } from "@/components/mur-depliable";
+import {
+  PLACES_PORTRAITS,
+  PortraitsFlottants,
+} from "@/components/portraits-flottants";
 import { murCommunaute } from "@/contenu/communaute";
 import { TitreRoulant } from "@/components/titre-roulant";
 import { insecables } from "@/lib/typographie";
@@ -141,24 +145,53 @@ export function MurCommunaute() {
 
   const colonnes = [gauche, droite];
 
-  return (
-    /* Leurs 71,6 px sur 35,8, arrondis à l'échelle du projet. */
-    <div className="px-5 py-16 sm:py-20">
-      {/* Leur `gap-16` entre l'étiquette, le titre et le chapô. */}
-      <div className="mx-auto flex max-w-3xl flex-col gap-4 text-center">
-        {/* L'étiquette entre crochets. Les crochets sont `aria-hidden` : ils
-            sont un signe de mise en page, et un lecteur d'écran annoncerait
-            « crochet ouvrant, communauté, crochet fermant ». */}
-        <p className="flex items-center justify-center gap-1.5 text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
-          <span aria-hidden style={{ color: "var(--icone-resultats)" }}>
-            [
-          </span>
-          Le groupe Funnels Club
-          <span aria-hidden style={{ color: "var(--icone-resultats)" }}>
-            ]
-          </span>
-        </p>
+  /* Les portraits qui entourent le titre : ceux des membres dont les posts sont
+     juste en dessous, pris dans l'ordre du mur, qui va du résultat le plus
+     exceptionnel au simple mot de gratitude. Dédoublonnés, parce qu'une même
+     personne peut y revenir plusieurs fois et qu'on ne veut pas deux fois le
+     même visage. */
+  const portraits: { src: string; alt: string }[] = [];
+  for (const avis of murCommunaute) {
+    if (!avis.portrait) continue;
+    if (portraits.some((p) => p.src === avis.portrait)) continue;
+    /* **`alt` vide, et c'est décidé.** Ces visages sont une preuve, pas une
+       information : les mêmes personnes sont nommées, portraiturées et citées
+       en entier dans le mur juste en dessous. Un prénom par portrait ferait
+       annoncer onze prénoms hors contexte avant même le titre de la section.
+       Un `alt` absent serait un défaut ; celui-ci est assumé. */
+    portraits.push({ src: avis.portrait, alt: "" });
+    if (portraits.length === PLACES_PORTRAITS) break;
+  }
 
+  return (
+    /* Leurs 71,6 px sur 35,8, arrondis à l'échelle du projet.
+
+       Le rembourrage vertical est celui de 21st.dev, `py-32 sm:py-40`, et il
+       est porté par `PortraitsFlottants` : c'est lui qui donne aux portraits la
+       place de se poser autour du titre sans lui passer dessus.
+
+       L'espace **autour** du bloc, lui, est à nous : sur demande de Rémy, le
+       haut et le bas ont été desserrés pour que les portraits ne touchent ni la
+       section précédente ni la première carte du mur. Il se pose ici et non sur
+       la section : le rembourrage de la section est ce qui place les portraits,
+       et l'augmenter les aurait écartés du titre au lieu d'écarter le bloc de
+       ses voisins. */
+    <div className="px-5 pt-16 pb-0 sm:pt-24">
+      <PortraitsFlottants
+        portraits={portraits}
+        /* Le bas de la section est resserré, sur demande de Rémy : depuis que
+           plus aucun portrait ne se pose sous le titre, le rembourrage de
+           21st.dev n'y dégage plus rien et ne fait qu'éloigner le premier
+           post. Le haut garde le leur, qui porte encore les portraits. */
+        className="pb-8 sm:pb-10"
+      >
+      {/* Leur `gap-16` entre le titre et le chapô.
+
+          **L'étiquette entre crochets est partie**, sur demande de Rémy. Elle
+          venait du relevé et annonçait la section ; le titre et son chapô le
+          font déjà, et trois lignes empilées au-dessus d'un mur de posts
+          faisaient une marche de plus avant d'arriver au sujet. */}
+      <div className="mx-auto flex max-w-3xl flex-col gap-4 text-center">
         <TitreRoulant
           as="h2"
           segments={titreResultats}
@@ -168,10 +201,10 @@ export function MurCommunaute() {
         {/* Leur `max-width: 60ch` : c'est la largeur de lecture, et elle se
             mesure en caractères parce qu'elle suit le corps du texte. */}
         <p className="mx-auto max-w-[60ch] text-pretty text-muted-foreground">
-          Ce que les membres écrivent dans le groupe, sans qu&apos;on le leur
-          demande. Les posts sont recopiés en entier, sans un mot changé.
+          Découvrez des posts extraits de la communauté de Funnels.Club
         </p>
       </div>
+      </PortraitsFlottants>
 
       {/* Le mur, en **deux colonnes réelles** et non en `columns` CSS.
 
