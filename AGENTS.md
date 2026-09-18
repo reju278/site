@@ -811,6 +811,60 @@ retoucher un fichier de registre.
 **Le semis prend l'encre du thème.** Il arrive en `text-neutral-400/80`, une
 couleur en dur que ce fichier interdit ; il passe en `text-border`.
 
+### Les trois tâches à cocher d'`/immersion`
+
+Sur demande de Rémy : trois tâches, une pilule fixe en bas de l'écran qui ouvre
+la liste d'un seul bloc, et une progression qui survit à la visite.
+
+**Le dessin a changé trois fois, et les trois corrections disent la même
+chose.** La première version reprenait les gélules du hero, verre et lumière qui
+tourne : « pas des trucs qui clignotent, une vraie checklist ». La deuxième
+alignait trois pilules sur ordinateur et ne dépliait que sur téléphone : il a
+demandé le panneau des deux côtés. **Une liste de tâches n'est pas un objet qui
+attire l'œil, c'est un objet qu'on consulte**, et un rang qui traverse un grand
+écran se lit comme une barre d'outils.
+
+**C'est la sixième exception à « le flou va derrière, jamais devant »**, demandée
+explicitement, et elle se justifie comme les capsules de l'en-tête : un objet qui
+flotte au-dessus d'un contenu dont on ne sait rien a besoin du verre pour tenir.
+Le verre et le rayon de 16 px sont ceux du panneau des menus.
+
+**La ligne n'est pas un bouton, elle en contient un.** La case se coche, le lien
+« Voir » navigue vers la section : deux gestes différents, et un lien à
+l'intérieur d'un bouton serait du HTML invalide. Les ancres sont celles du menu,
+donc des sections de la page : ce ne sont pas des sorties de tunnel. Le panneau
+se referme au clic, sinon il recouvrirait ce qu'on vient de demander à voir.
+
+**Le vert est celui de Rémy, #11b981, et le blanc n'y tient que 2,56:1.** Une
+première version posait #047857, mesuré à 5,48:1 ; il a tranché pour le sien en
+connaissant le chiffre. C'est écrit à côté du jeton `--tache-faite`, et ce qui
+répare sans changer sa couleur, le jour où il le voudra, c'est **l'encre** : la
+même encre foncée que le reste du site tient 6:1 sur ce vert.
+
+**La progression vit dans `localStorage`**, pas dans un cookie : le site n'a ni
+base ni compte, et ce stockage ne quitte pas l'appareil. Trois précautions qui
+n'en sont pas :
+
+- **Tout est enveloppé de `try`/`catch`.** En navigation privée ou avec les
+  données de site bloquées, l'accès lui-même lève.
+- **On ne lit rien au premier rendu.** Le serveur ne connaît pas ce stockage :
+  rendre les cases cochées dès le départ ferait diverger les deux HTML et
+  casserait l'hydratation. La liste apparaît décochée une image, puis se remplit.
+- **Une tâche disparue est ignorée**, pour qu'un vieil enregistrement ne
+  ressuscite pas une tâche retirée. Corollaire : **l'identifiant d'une tâche ne
+  se renomme pas**, c'est lui qui est rangé chez les visiteurs.
+
+**La barre s'efface quand une fenêtre d'entretien est ouverte**, par la règle de
+`globals.css` qui le faisait déjà pour la barre d'appel : le bouton « Fermer » de
+la fenêtre est en bas de l'écran, exactement là où ces pilules se posent. C'est
+la troisième fois que deux composants qui ne se connaissent pas se disputent ce
+coin d'écran.
+
+**Et il en reste un quatrième, non résolu : la carte de cookies.** Elle est
+`fixed` en bas à gauche et vaut `100vw - 2rem` sur téléphone, donc presque toute
+la largeur : elle passera sur la pilule des tâches. Elle n'apparaît pas en
+développement, donc ça ne se voit qu'en ligne, et ça se décide avec Rémy.
+
 ### Ce qu'il reste du pied de page d'immersion : la marque, et rien d'autre
 
 Le retrait s'est fait en cinq temps, tous décidés par Rémy, et c'est la suite qui

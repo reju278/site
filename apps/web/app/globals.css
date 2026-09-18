@@ -1375,6 +1375,44 @@ html {
    nœud dans le DOM pendant l'animation de fermeture. Sans l'état, la barre
    resterait absente une fraction de seconde après la fermeture, et on la
    verrait revenir. */
-body:has([role="dialog"][data-state="open"]) [data-barre-appel] {
+body:has([role="dialog"][data-state="open"]) :is([data-barre-appel], [data-taches]) {
   display: none;
+}
+
+/* Le vert d'une tâche faite, sur la page d'immersion.
+
+   **La valeur est celle que Rémy a donnée**, #11b981, c'est-à-dire à un chiffre
+   près le vert sombre d'`--icone-resultats`. Elle ne change pas d'un thème à
+   l'autre, comme `--livre` et pour la même raison : c'est une surface pleine
+   dont l'encre est fixe, du blanc, donc elle n'a aucun fond de page à suivre.
+
+   **Le blanc n'y tient que 2,56:1, et il faut le savoir.** Ce dépôt demande
+   4,5:1 pour du texte courant et 3:1 pour un glyphe : l'encre blanche d'une
+   tâche cochée est donc sous les deux seuils. Une première version posait
+   #047857, qui tenait 5,48:1 ; Rémy a tranché pour son vert à lui, en
+   connaissance de la mesure. Ce qui répare sans changer sa couleur, le jour où
+   il le voudra, c'est **l'encre** : la même encre foncée que le reste du site
+   tient 6:1 sur ce vert. */
+:root {
+  --tache-faite: #11b981;
+}
+
+/* La coche des tâches d'immersion, qui arrive en grossissant.
+
+   Un ressort court plutôt qu'un fondu : c'est une action qu'on vient de faire,
+   et le geste doit se sentir. La courbe dépasse légèrement 1 avant de retomber,
+   ce qui donne le petit rebond.
+
+   Neutralisée par la règle globale de mouvement réduit comme toutes les
+   animations CSS du projet : il n'y a rien à figer ici, une coche arrêtée est
+   une coche à sa taille. */
+@keyframes apparait-coche {
+  from {
+    scale: 0.2;
+    opacity: 0;
+  }
+  to {
+    scale: 1;
+    opacity: 1;
+  }
 }

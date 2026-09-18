@@ -372,3 +372,45 @@ export const titreCommunaute = [
   { texte: "La communauté" },
   { texte: "Funnels Club" },
 ] as const;
+
+/**
+ * Les trois tâches de la page, dictées par Rémy.
+ *
+ * **Trois et pas une de plus**, sur sa demande : une liste qu'on peut finir en
+ * une visite. Elles désignent ce qu'il y a à faire sur cette page et nulle part
+ * ailleurs, dans l'ordre où on les rencontre en descendant.
+ *
+ * **La troisième est la seule qu'il n'ait pas dictée telle quelle.** Il me
+ * décrivait la tâche, donc à la troisième personne : « regarder les témoignages
+ * dans lesquels ils peuvent s'identifier ». Elle est transposée au plus près
+ * pour s'adresser au lecteur comme les deux autres, et **elle reste à valider
+ * par lui** : c'est du texte affiché, et ce dépôt ne laisse pas l'agent en
+ * écrire.
+ *
+ * **L'identifiant ne se renomme pas.** C'est lui qui est rangé dans le
+ * navigateur des visiteurs : le changer remettrait à zéro la progression de tous
+ * ceux qui sont déjà passés.
+ *
+ * **L'ancre est une section de cette page et pas une adresse**, ce qui la rend
+ * impossible à transformer en sortie de tunnel par distraction. Ce sont les
+ * mêmes que celles du menu, `ancresImmersion`, et la même contrainte vaut :
+ * chacune doit désigner une section qui existe, sinon le bouton « Voir » est une
+ * cible qui ne mène nulle part.
+ */
+export const tachesImmersion = [
+  {
+    id: "video-presentation",
+    texte: "Regarder la vidéo de présentation de Funnels Club",
+    ancre: "programme",
+  },
+  {
+    id: "video-modele",
+    texte: "Regarder la vidéo de présentation du modèle de Funnels Club",
+    ancre: "strategie",
+  },
+  {
+    id: "temoignages",
+    texte: "Regarder les témoignages dans lesquels vous pouvez vous identifier",
+    ancre: "avis",
+  },
+] as const;

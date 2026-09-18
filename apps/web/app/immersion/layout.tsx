@@ -1,5 +1,6 @@
 import { EnTeteImmersion } from "@/components/en-tete-immersion";
 import { PiedImmersion } from "@/components/pied-immersion";
+import { TachesImmersion } from "@/components/taches-immersion";
 import type { Metadata } from "next";
 
 /**
@@ -100,6 +101,10 @@ export default function LayoutImmersion({
       <EnTeteImmersion />
       {children}
       <PiedImmersion />
+
+      {/* Les trois tâches, posées en bas de l'écran. Dans le gabarit et non
+          dans la page : elles doivent rester visibles quoi qu'on regarde. */}
+      <TachesImmersion />
     </div>
   );
 }
