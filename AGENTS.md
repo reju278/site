@@ -80,6 +80,15 @@ de la visite aux registres, c'est une porte fermée : il faut le savoir avant
 d'aller y chercher quelque chose. La règle ci-dessous vaut pour le jour où la
 clé existe.
 
+**21st.dev est fermé de la même façon**, relevé et non supposé : ses adresses de
+registre rendent un 403 `{"error":"authentication_required"}`, et la page d'un
+composant n'affiche que la commande `shadcn add` avec un `?api_key=$API_KEY_21ST`.
+Un composant de chez eux ne s'installe donc pas tant que Rémy n'a pas de clé, et
+**il ne se réécrit pas de mémoire** : on ne connaît ni son dessin ni son
+animation, et ce qu'on en produirait serait une invention portant le nom de
+quelqu'un d'autre. Ce qui débloque le cas sans clé, c'est le code que Rémy colle
+depuis la page du composant.
+
 **ReUI s'installe en variante `radix-nova`, jamais par l'URL courte.**
 `https://reui.io/r/<nom>.json` redirige vers une version bâtie sur Base UI, qui
 ferait doublon avec `radix-ui`, déjà là. L'adresse à utiliser est
