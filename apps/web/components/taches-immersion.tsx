@@ -494,10 +494,21 @@ function Tache({
         </span>
 
         {/* **Le passage important porte le trait de surligneur du site**, sur
-            demande de Rémy, et c'est le contenu qui dit lequel. Une tâche faite
-            ne le porte plus : sur le vert plein, un jaune à un tiers ne
-            surligne plus rien, il salit. */}
-        <span>{faite ? texte : surligner(texte, surligne)}</span>
+            demande de Rémy, et c'est le contenu qui dit lequel.
+
+            **Une tâche faite le garde, en blanc translucide**, et c'est une
+            correction. Le retirer paraissait juste, un jaune à un tiers ne
+            surlignant plus rien sur le vert plein ; mais le `mark` porte douze
+            pixels de rembourrage, donc le texte se décalait à chaque coche.
+            Changer la teinte plutôt que retirer l'élément garde la largeur au
+            pixel près, et le blanc est déjà celui de la case et du bouton. */}
+        <span>
+          {surligner(
+            texte,
+            surligne,
+            faite ? "rgb(255 255 255 / 0.22)" : undefined,
+          )}
+        </span>
       </button>
 
       {/* **Un lien et non un bouton** : ça navigue, donc le clic du milieu,
@@ -520,7 +531,17 @@ function Tache({
            icône seule porte toujours son nom accessible : la règle du dépôt. */
         aria-label={`Voir : ${texte}`}
         className={cn(
-          "grid shrink-0 place-items-center rounded-md transition-colors",
+          /* **Le rayon suit celui de la pilule qui le contient**, comme la
+             pilule suit celui du cadre : 22 px moins les 10 px de rembourrage
+             droit font 12. À 5 px, ce bouton dessinait un angle sec dans un
+             coin arrondi, et c'est ce qu'on voyait en premier.
+
+             Sur téléphone, le rembourrage tombe à 6, donc le calcul donnerait
+             16 px sur un carré de 28 : au-delà de la moitié du côté, un rayon
+             est un cercle. C'en est donc un, et il entre dans la famille des
+             commandes rondes que ce dépôt autorise, celle des flèches de
+             carrousel. */
+          "grid shrink-0 place-items-center rounded-full transition-colors sm:rounded-[12px]",
           "size-7 sm:size-auto sm:px-3 sm:py-1.5 sm:text-sm sm:font-semibold",
           "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring",
           faite

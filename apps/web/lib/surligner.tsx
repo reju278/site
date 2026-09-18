@@ -28,7 +28,19 @@ import { insecables } from "@/lib/typographie";
  * première correction, et celle-ci en a déjà connu une, le fond jaune par défaut
  * de `mark` qu'il a fallu éteindre.
  */
-export function surligner(texte: string, passages: readonly string[]) {
+export function surligner(
+  texte: string,
+  passages: readonly string[],
+  /**
+   * La teinte du trait, quand celle par défaut ne convient pas au fond.
+   *
+   * **Elle existe pour que le surlignage ne disparaisse jamais**, seulement
+   * qu'il change de couleur : le retirer ferait perdre au texte les douze
+   * pixels de rembourrage du `mark`, donc décaler tout ce qui suit. C'est ce
+   * que Rémy a vu en cochant une tâche.
+   */
+  fond = "color-mix(in srgb, var(--surlignage-jaune) 32%, transparent)",
+) {
   /* On coupe sur chaque passage, dans l'ordre où il apparaît. `reduce` sur les
      morceaux et non une expression rationnelle : les passages portent des
      apostrophes, des accents et des chiffres, et les échapper un par un pour
@@ -53,8 +65,7 @@ export function surligner(texte: string, passages: readonly string[]) {
         className="surlignage"
         style={
           {
-            "--surlignage-fond":
-              "color-mix(in srgb, var(--surlignage-jaune) 32%, transparent)",
+            "--surlignage-fond": fond,
           } as React.CSSProperties
         }
       >
