@@ -165,9 +165,10 @@ export function TachesImmersion() {
               ouverte && "rotate-180",
             )}
           />
-          {/* Le libellé est de Rémy. Il disait d'abord où on en est, « 1 sur
-              3 » ; il a tranché pour le nom de la chose. */}
-          Liste des tâches à remplir
+          {/* Le libellé est de Rémy, à sa troisième formulation : « 1 sur 3 »,
+              qui disait où on en est, puis « Liste des tâches à remplir », qui
+              nommait l'objet, puis celui-ci, qui dit à quoi ça sert. */}
+          À regarder avant votre rendez-vous
         </button>
       </div>
 
