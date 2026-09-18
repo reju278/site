@@ -816,13 +816,35 @@ couleur en dur que ce fichier interdit ; il passe en `text-border`.
 Sur demande de Rémy : trois tâches, une pilule fixe en bas de l'écran qui ouvre
 la liste d'un seul bloc, et une progression qui survit à la visite.
 
-**Le dessin a changé trois fois, et les trois corrections disent la même
+**Le dessin a changé cinq fois, et les corrections disent toutes la même
 chose.** La première version reprenait les gélules du hero, verre et lumière qui
 tourne : « pas des trucs qui clignotent, une vraie checklist ». La deuxième
 alignait trois pilules sur ordinateur et ne dépliait que sur téléphone : il a
 demandé le panneau des deux côtés. **Une liste de tâches n'est pas un objet qui
 attire l'œil, c'est un objet qu'on consulte**, et un rang qui traverse un grand
 écran se lit comme une barre d'outils.
+
+Puis trois réglages qui vont ensemble : la police des titres et un corps plus
+grand, **une tâche par ligne** à partir de `sm`, et le dessin des menus d'Apple,
+sans filets, chaque tâche devenant une pilule qui ne se montre qu'au survol.
+
+- **`sm:whitespace-nowrap` et jamais `whitespace-nowrap` nu.** « Regarder les
+  témoignages dans lesquels vous pouvez vous identifier » demande plus de quatre
+  cents pixels dans cette police : sur téléphone le texte s'enroule, faute de
+  quoi la page déborderait, ce que ce dépôt a déjà payé une fois.
+- **Le rayon intérieur se calcule.** 18 px au cadre moins 6 px de rembourrage
+  font 12 px, et c'est à ce prix que les deux courbes restent concentriques.
+- **Le survol n'est pas le seul déclencheur.** `has-[:focus-visible]` montre la
+  même pilule quand on atteint la case ou le lien à la tabulation, sans quoi on
+  se déplacerait dans une liste qui ne dit pas où on est.
+
+**Et un seul objet, pas deux.** Le déclencheur et la liste vivaient dans deux
+boîtes de verre posées l'une sur l'autre ; sur sa demande, il n'y en a plus
+qu'une, qui s'étend. C'est `layout` de Motion qui le fait, et c'est sa raison
+d'être : elle relève la boîte avant et après et interpole, là où aucune
+transition CSS ne sait animer une hauteur qui passe d'`auto` à `auto`. Le cadre
+passe de la gélule au rayon de 18 px, et le déclencheur reste en bas, immobile,
+pendant que la liste pousse au-dessus de lui.
 
 **C'est la sixième exception à « le flou va derrière, jamais devant »**, demandée
 explicitement, et elle se justifie comme les capsules de l'en-tête : un objet qui

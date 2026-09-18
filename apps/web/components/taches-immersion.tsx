@@ -3,6 +3,7 @@
 import { tachesImmersion } from "@/contenu/immersion";
 import { cn } from "@repo/ui/lib/utils";
 import { Check, ChevronUp } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
 
 /**
@@ -68,6 +69,7 @@ const VERRE = "border border-border bg-card/85 backdrop-blur-md";
 export function TachesImmersion() {
   const [faites, setFaites] = useState<readonly string[]>([]);
   const [ouverte, setOuverte] = useState(false);
+  const sansMouvement = useReducedMotion();
 
   useEffect(() => {
     try {
@@ -104,72 +106,97 @@ export function TachesImmersion() {
       data-taches
       className="pointer-events-none fixed inset-x-0 bottom-4 z-40 px-4 sm:bottom-5"
     >
-      {/* **Une seule mise en page pour les deux largeurs**, et c'est une
-          correction. Il y avait un rang de trois pilules sur ordinateur et un
-          panneau dépliant sur téléphone ; Rémy a demandé le panneau des deux
-          côtés. Deux dessins pour la même chose, c'était aussi deux réglages à
-          tenir d'accord, et le rang s'étalait sur presque toute la largeur d'un
-          grand écran, ce qui en faisait une barre d'outils plutôt qu'une liste.
+      {/* **Un seul objet et non deux**, sur demande de Rémy : « il ne faut pas
+          qu'il y ait deux éléments séparés, c'est ce menu-là qui s'étend ». Le
+          déclencheur et la liste vivaient dans deux boîtes de verre posées l'une
+          au-dessus de l'autre ; il n'y en a plus qu'une, qui grandit.
 
-          Le panneau monte plutôt qu'il ne descend : il n'y a rien sous une
-          barre posée en bas d'écran. */}
-      <div className="pointer-events-auto flex flex-col items-center gap-2">
-        {ouverte ? (
-          /* **Un seul bloc et non trois pilules empilées**, sur sa demande :
-             « d'un seul bloc, séparé par une ligne ». C'est le panneau des
-             menus de l'en-tête, même verre et même rayon de 16 px, et c'est ce
-             qui le fait lire comme une liste plutôt que comme trois objets
-             posés les uns sur les autres.
+          **C'est `layout` de Motion qui fait le travail**, et c'est la raison
+          d'être de cette propriété : elle relève la boîte avant et après le
+          changement et interpole entre les deux, là où aucune transition CSS ne
+          sait animer une hauteur qui passe de `auto` à `auto`.
 
-             `overflow-hidden` n'est pas décoratif : une ligne cochée porte un
-             fond plein, et sans rognage ses angles dépasseraient du panneau.
+          Le panneau s'étend vers le haut, `justify-end` : il n'y a rien sous une
+          barre posée en bas d'écran, et c'est aussi ce qui garde le déclencheur
+          immobile pendant que le reste pousse au-dessus de lui.
 
-             `divide-y` plutôt qu'une bordure par ligne : le filet ne se pose
-             qu'entre deux lignes, donc ni au-dessus de la première ni sous la
-             dernière, où il doublerait le bord du panneau. */
-          <ul
-            className={cn(
-              VERRE,
-              "w-full max-w-xs divide-y divide-border overflow-hidden rounded-[16px] sm:max-w-sm",
-            )}
-          >
-            {tachesImmersion.map((tache) => (
-              <li key={tache.id} className="flex">
-                <Tache
-                  texte={tache.texte}
-                  ancre={tache.ancre}
-                  faite={faites.includes(tache.id)}
-                  onClick={() => basculer(tache.id)}
-                  onVoir={() => setOuverte(false)}
-                  className="w-full"
-                />
-              </li>
-            ))}
-          </ul>
-        ) : null}
+          **Pas de filets, un rembourrage et des pilules dedans**, sur sa demande
+          aussi, qui cite les menus d'Apple : chaque tâche est une pilule qui ne
+          se montre qu'au survol.
 
-        <button
-          type="button"
-          onClick={() => setOuverte((o) => !o)}
-          aria-expanded={ouverte}
+          **Le rayon intérieur se calcule, il ne se choisit pas** : 18 px au
+          cadre moins 6 px de rembourrage font 12 px, et c'est à ce prix que les
+          deux courbes restent concentriques. Fermé, le cadre est une gélule et
+          son contenu aussi. */}
+      <div className="pointer-events-auto flex justify-center">
+        <motion.div
+          layout={!sansMouvement}
+          transition={{ duration: 0.32, ease: [0.32, 0.72, 0, 1] }}
           className={cn(
             VERRE,
-            "inline-flex items-center gap-2 rounded-full py-2 pr-4 pl-3 text-sm font-semibold text-foreground",
-            "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+            "flex w-max max-w-[calc(100vw-2rem)] flex-col gap-0.5 p-1.5",
+            "transition-[border-radius] duration-300",
+            ouverte ? "rounded-[18px]" : "rounded-full",
           )}
         >
-          <ChevronUp
-            aria-hidden
+          <AnimatePresence initial={false}>
+            {ouverte ? (
+              <motion.ul
+                key="liste"
+                layout={!sansMouvement}
+                initial={sansMouvement ? false : { opacity: 0 }}
+                animate={{
+                  opacity: 1,
+                  transition: { duration: sansMouvement ? 0 : 0.26, delay: 0.04 },
+                }}
+                exit={{ opacity: 0, transition: { duration: sansMouvement ? 0 : 0.12 } }}
+                className="flex flex-col gap-0.5"
+              >
+                {tachesImmersion.map((tache) => (
+                  <li key={tache.id} className="flex">
+                    <Tache
+                      texte={tache.texte}
+                      ancre={tache.ancre}
+                      faite={faites.includes(tache.id)}
+                      onClick={() => basculer(tache.id)}
+                      onVoir={() => setOuverte(false)}
+                      className="w-full"
+                    />
+                  </li>
+                ))}
+              </motion.ul>
+            ) : null}
+          </AnimatePresence>
+
+          <motion.button
+            layout={!sansMouvement}
+            type="button"
+            onClick={() => setOuverte((o) => !o)}
+            aria-expanded={ouverte}
             className={cn(
-              "size-4 shrink-0 transition-transform duration-300",
-              ouverte && "rotate-180",
+              /* **La police des titres**, sur demande de Rémy, avec sa hauteur
+                 de ligne rendue : l'utilitaire `titre` pose 1,12, ce qui est
+                 juste pour un titre de deux lignes et trop serré pour une ligne
+                 de liste. */
+              "titre inline-flex items-center justify-center gap-2.5 py-2 pr-4 pl-3 text-base leading-normal text-foreground transition-colors duration-200 sm:text-lg",
+              "hover:bg-foreground/6",
+              "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring",
+              ouverte ? "rounded-[12px]" : "rounded-full",
             )}
-          />
-          {/* Le libellé est de Rémy, à sa troisième formulation : « 1 sur 3 »,
-              qui disait où on en est, puis « Liste des tâches à remplir », qui
-              nommait l'objet, puis celui-ci, qui dit à quoi ça sert. */}
-          À regarder avant votre rendez-vous
-        </button>
+          >
+            <ChevronUp
+              aria-hidden
+              className={cn(
+                "size-5 shrink-0 transition-transform duration-300",
+                ouverte && "rotate-180",
+              )}
+            />
+            {/* Le libellé est de Rémy, à sa troisième formulation : « 1 sur 3 »,
+                qui disait où on en est, puis « Liste des tâches à remplir », qui
+                nommait l'objet, puis celui-ci, qui dit à quoi ça sert. */}
+            À regarder avant votre rendez-vous
+          </motion.button>
+        </motion.div>
       </div>
 
     </div>
@@ -193,6 +220,10 @@ export function TachesImmersion() {
  * **La ligne n'est pas un bouton, elle en contient un.** La case se coche, le
  * lien « Voir » navigue, et ce sont deux gestes différents : les fondre dans un
  * seul élément cliquable obligerait à deviner lequel on voulait.
+ *
+ * **Elle est une pilule qui ne se montre qu'au survol**, sur demande de Rémy,
+ * qui cite les menus d'Apple. Une tâche faite, elle, porte son fond vert en
+ * permanence : c'est un état, pas un survol.
  */
 function Tache({
   texte,
@@ -212,8 +243,18 @@ function Tache({
   return (
     <div
       className={cn(
-        "flex items-center gap-2 pr-2 transition-colors duration-300",
-        faite ? "bg-[var(--tache-faite)] text-white" : "text-foreground",
+        "flex items-center gap-2.5 rounded-[12px] pr-2.5 transition-colors duration-200",
+        /* Le survol révèle la pilule, comme dans un menu d'Apple. **Et le
+           clavier aussi** : `has-[:focus-visible]` la montre quand on atteint la
+           case ou le lien à la tabulation, sans quoi on se déplacerait dans une
+           liste qui ne dit pas où on est.
+
+           `foreground/6` plutôt qu'une couleur : c'est l'encre du thème à six
+           pour cent, donc ça marche sur les deux sans qu'on écrive deux
+           valeurs. */
+        faite
+          ? "bg-[var(--tache-faite)] text-white"
+          : "text-foreground hover:bg-foreground/6 has-[:focus-visible]:bg-foreground/6",
         className,
       )}
     >
@@ -222,14 +263,20 @@ function Tache({
         onClick={onClick}
         aria-pressed={faite}
         className={cn(
-          "flex min-w-0 flex-1 items-start gap-2.5 px-3.5 py-3 text-left text-xs leading-snug font-medium",
+          /* **Une seule ligne à partir de `sm`**, sur demande de Rémy, et le
+             panneau prend alors la largeur de la plus longue. En dessous, le
+             texte s'enroule : « Regarder les témoignages dans lesquels vous
+             pouvez vous identifier » demande plus de quatre cents pixels dans
+             cette police, et un `nowrap` sans borne ferait déborder la page,
+             ce que ce dépôt a déjà payé une fois. */
+          "titre flex min-w-0 flex-1 items-start gap-3 rounded-[12px] px-3.5 py-3 text-left text-[0.9375rem] leading-snug sm:items-center sm:text-base sm:whitespace-nowrap",
           "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring",
         )}
       >
         <span
           aria-hidden
           className={cn(
-            "mt-px grid size-[18px] shrink-0 place-items-center rounded-[5px]",
+            "mt-px grid size-5 shrink-0 place-items-center rounded-[5px] sm:mt-0",
             faite ? "bg-white/20" : "border-2 border-foreground/25",
           )}
         >
@@ -238,7 +285,7 @@ function Tache({
                propriété `scale`. La coche arrive donc en grossissant, avec un
                ressort court : c'est une action qu'on vient de faire, et le
                geste doit se sentir. */
-            <Check className="size-3.5 animate-[apparait-coche_320ms_cubic-bezier(0.34,1.56,0.64,1)_both] text-white" />
+            <Check className="size-4 animate-[apparait-coche_320ms_cubic-bezier(0.34,1.56,0.64,1)_both] text-white" />
           ) : null}
         </span>
 
@@ -261,7 +308,7 @@ function Tache({
         href={`#${ancre}`}
         onClick={onVoir}
         className={cn(
-          "shrink-0 rounded-md px-2.5 py-1 text-xs font-semibold transition-colors",
+          "shrink-0 rounded-md px-3 py-1.5 text-sm font-semibold transition-colors",
           "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring",
           faite
             ? "bg-white/20 text-white hover:bg-white/30"
