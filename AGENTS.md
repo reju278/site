@@ -811,6 +811,51 @@ retoucher un fichier de registre.
 **Le semis prend l'encre du thème.** Il arrive en `text-neutral-400/80`, une
 couleur en dur que ce fichier interdit ; il passe en `text-border`.
 
+### Ce qu'il reste du pied de page d'immersion : la marque, et rien d'autre
+
+Le retrait s'est fait en cinq temps, tous décidés par Rémy, et c'est la suite qui
+donne son sens au résultat : les liens sortants d'abord, puis les trois liens
+légaux, puis l'avertissement sur les témoignages et le copyright, puis la carte
+entière. Ce qui restait était une carte de verre portant l'appel, la liste des
+vingt-deux entretiens et le fond du deck : beaucoup de dessin pour une page dont
+on ne sort plus.
+
+**La liste des entretiens était une vraie navigation**, et c'est la seule perte
+réelle : c'était la façon d'atteindre un témoignage sans faire défiler la page.
+Les fenêtres s'ouvrent depuis les cartes et depuis leurs propres flèches, donc
+rien ne devient inatteignable, mais il faut le savoir avant de chercher ce lien.
+
+**La marque n'est plus un lien.** Elle menait à `#haut`, ce qui n'était pas une
+sortie mais un raccourci ; seule au centre d'un bas de page, elle se lit comme
+une signature, et une signature ne se clique pas.
+
+**Son contraste est sous le seuil, et c'est écrit plutôt que caché.**
+`--muted-foreground` à 75 % d'opacité donne 3,55:1 sur la page claire, contre les
+4,5:1 que ce fichier demande pour du texte courant. Rémy a demandé la discrétion
+en connaissance de cause ; le nom qu'on y lit est écrit en toutes lettres dans
+l'en-tête de la même page, et rien ne s'y clique. Le jour où la marque doit
+redevenir lisible, **c'est l'opacité qu'on retire, pas la taille**.
+
+### L'équipe est un rang de portraits, et les rôles ne s'affichent plus
+
+Deuxième forme de cette section, sur demande de Rémy. Elle était une carte par
+ligne, un annuaire : visage à gauche, nom et rôle à côté. Il l'a trouvée trop
+lourde et a demandé « la photo en rond, alignée horizontalement, le nom en
+dessous, tout simplement ». Cinq personnes ne demandent pas cinq cartes.
+
+**Les rôles restent écrits dans `contenu/immersion.ts`**, ce sont ses mots, et
+ils reviendront s'il les redemande. Ils ne sont simplement plus rendus.
+
+**L'emplacement qui réclamait le poste de Fabri Keutcha est parti avec eux**, et
+il l'a confirmé. Il ne disparaît pas parce qu'on a trouvé la réponse mais parce
+que la question ne se pose plus à l'écran : réclamer une donnée qu'on n'affiche
+nulle part est un rappel sans objet. Si les rôles reviennent, celui-là manque
+toujours, et rien ne s'invente pour le remplir.
+
+**Le titre est « Notre équipe »**, dicté par lui, et l'espace au-dessus est plus
+large que le rythme de la page : le mur de la communauté finit sur ses cartes, et
+un rang de visages qui commence trop près se lisait comme la suite du mur.
+
 ### Les portraits qui flottent autour du titre du mur
 
 `AnimatedTestimonialGrid` de 21st.dev, fourni par Rémy. Ce qui en vient tel quel :

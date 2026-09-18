@@ -1,123 +1,52 @@
 import { LogoFunnels } from "@/components/logo-funnels";
-import { TexteRoulant } from "@/components/texte-roulant";
-import { appelHub } from "@/contenu/hub";
 
 /**
- * Le pied de page de la page d'immersion.
+ * Le bas de la page d'immersion : la marque, et rien d'autre.
  *
- * C'est celui du hub dans sa forme, et pour la même raison : une page de
- * tunnel n'a pas de carte du site à tenir, donc pas de colonnes de liens. Une
- * seule carte d'offre, l'appel, puis ce qui est légal.
+ * **Il ne reste plus de pied de page**, sur décision de Rémy, et c'est
+ * l'aboutissement d'une suite de retraits plutôt qu'un changement isolé. Il
+ * avait d'abord fait enlever tous les liens sortants de la page, puis les trois
+ * liens légaux, puis l'avertissement sur les témoignages et le copyright. Ce
+ * qui restait était une grande carte portant l'appel, la liste des
+ * vingt-deux entretiens et le fond du deck : beaucoup de dessin pour une page
+ * dont on ne sort plus. Elle laisse la place à la marque, centrée.
  *
- * **Pas de rangée de réseaux.** Cinq pastilles sont cinq portes de sortie, et
- * c'est déjà la règle du hub.
+ * **Ce qui est parti avec elle**, pour que personne n'ait à le chercher : le
+ * fond du deck et son grain, la carte de verre et son ombre, le libellé de
+ * l'appel repris du hub, et la liste des entretiens. Cette liste-là était une
+ * vraie navigation, la seule façon d'atteindre un témoignage sans faire défiler
+ * la page ; les fenêtres s'ouvrent maintenant depuis les cartes et depuis les
+ * flèches de la fenêtre elle-même, donc rien ne devient inatteignable.
  *
- * **Le libellé de l'appel est celui du hub**, repris et non réécrit. Il ne
- * parle pas du hub mais du programme : le redire ici en d'autres termes
- * créerait deux versions d'un texte qui engage la société, et c'est exactement
- * ce qu'une seconde écriture finit toujours par produire.
+ * **La marque n'est plus un lien.** Elle menait à `#haut`, ce qui n'était pas
+ * une sortie mais un raccourci ; seule au centre d'un bas de page, elle se lit
+ * comme une signature, et une signature ne se clique pas. `LogoFunnels` porte
+ * déjà son `aria-hidden`, le nom écrit à côté suffit.
  *
- * **Le pied ne porte plus rien de légal**, sur décision de Rémy, et c'est la
- * suite de ce qui a déjà retiré les trois liens légaux de cette page : il a
- * demandé qu'aucun lien n'en sorte, puis que ce bas de page disparaisse. Sont
- * partis avec lui l'avertissement sur les témoignages, qui disait que le
- * parcours de chacun lui est propre et que rien n'est promis, et le copyright.
- * C'est son appel : cette page est commerciale et européenne, et un
- * avertissement de résultats y est ce qui répond à une réclamation, pas une
- * décoration. Il est toujours écrit dans `contenu/hub.ts` et se remet en une
- * ligne.
+ * **Elle est petite, atténuée et collée au bas de la page**, sur sa demande :
+ * « plus petit, vraiment tout en bas, discret, légèrement opaque ». Le
+ * rembourrage bas tombe donc à quelques pixels, là où un pied de page en
+ * réserve d'ordinaire plusieurs dizaines.
+ *
+ * **Le contraste est en dessous du seuil du texte courant, et c'est dit.**
+ * `--muted-foreground` à 75 % d'opacité donne #8c847f sur la page claire, soit
+ * **3,55:1**, là où ce dépôt demande 4,5:1 pour du texte courant. Mesuré, pas
+ * supposé. Ce n'est pas un oubli : Rémy a demandé la discrétion, le nom qu'on
+ * y lit est écrit en toutes lettres dans l'en-tête de la même page, et rien ne
+ * s'y clique ni ne s'y comprend. Si la marque doit redevenir lisible, c'est
+ * l'opacité qu'on retire, pas la taille.
+ *
+ * Le composant ne prend plus rien : il ne connaît plus les entretiens.
  */
-export function PiedImmersion({
-  entretiens,
-}: {
-  entretiens: readonly { ancre: string; nom: string }[];
-}) {
+export function PiedImmersion() {
   return (
-    <footer className="relative isolate pb-5">
-      {/* Le fond du deck. **Le fondu est en haut**, et c'est la position du
-          bloc qui le décide : il y a du contenu au-dessus et plus rien en
-          dessous, donc il s'allume par le haut et va jusqu'au bord. Les deux
-          écritures du masque s'écrivent : Safari n'a levé son préfixe qu'en
-          15.4. */}
-      <div
-        aria-hidden
-        className="fond-resultats grain-resultats pointer-events-none absolute inset-0 -z-10"
-        style={{
-          WebkitMaskImage:
-            "linear-gradient(to bottom, transparent 0%, #000 45%, #000 100%)",
-          maskImage:
-            "linear-gradient(to bottom, transparent 0%, #000 45%, #000 100%)",
-        }}
-      />
-
-      <div className="mx-auto max-w-6xl px-5">
-        {/* Le relief de verre et l'ombre portée dans la même déclaration : deux
-            `box-shadow` sur un même élément ne s'additionnent pas, le second
-            remplace le premier. */}
-        <div
-          style={{
-            boxShadow: "var(--ombre-verre), 0 18px 50px -30px rgba(0,0,0,0.35)",
-          }}
-          className="rounded-md border border-border bg-card px-6 py-8 sm:px-10 sm:py-10 lg:px-12"
-        >
-          <div>
-            <div>
-              {/* La marque, droite et non penchée : un nom de marque se pose
-                  droit. `href="#haut"` et non `/`, qui serait une sortie. */}
-              <a
-                href="#haut"
-                className="titre flex items-center gap-2 text-2xl tracking-tight text-foreground sm:text-3xl"
-              >
-                <LogoFunnels className="size-[1.05em]" />
-                Funnels.Club
-              </a>
-
-              <p className="mt-4 max-w-md text-base leading-relaxed text-pretty text-muted-foreground">
-                {appelHub.texte}
-              </p>
-
-              {/* Les entretiens, à la place des colonnes de liens du site,
-                  comme dans le pied de page du hub.
-
-                  **Ils pointent vers les lecteurs de cette page et non vers
-                  `/resultats`.** C'est la règle du tunnel : chaque nom renvoie
-                  à l'ancre de son lecteur, plus haut, donc on reste dedans. Le
-                  hub, lui, peut pointer vers `/hub/<nom>`, parce que chacun y a
-                  sa page ; ici les entretiens se regardent sur place.
-
-                  Un seul titre au-dessus des colonnes et non un titre par
-                  colonne : ce sont les entrées d'une même liste, et les
-                  répartir sous des intitulés inventés leur fabriquerait des
-                  catégories qui n'existent pas.
-
-                  Deux colonnes de front sur téléphone : à trois, un nom comme
-                  « Yannick et Sylvie » tiendrait sur trois lignes. */}
-              <nav aria-label="Les entretiens" className="mt-8 sm:mt-10">
-                {/* Pas de `h3` : un titre de colonne de pied de page n'est pas
-                    un titre de document et n'a rien à faire dans le plan. */}
-                <p className="text-sm font-semibold text-foreground">
-                  Les entretiens
-                </p>
-
-                <ul className="mt-4 grid grid-cols-2 gap-x-6 gap-y-2.5 sm:grid-cols-3 lg:gap-x-8">
-                  {entretiens.map((entretien) => (
-                    <li key={entretien.ancre}>
-                      <a
-                        href={`#${entretien.ancre}`}
-                        className="group/roule inline-block rounded-md text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-                      >
-                        <TexteRoulant>{entretien.nom}</TexteRoulant>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-
-            </div>
-          </div>
-        </div>
-
-      </div>
+    <footer className="px-5 pt-14 pb-4 sm:pt-16 sm:pb-5">
+      {/* Petite, atténuée et posée tout en bas, sur demande de Rémy : une
+          signature, pas un titre. */}
+      <p className="titre flex items-center justify-center gap-2 text-sm tracking-tight text-muted-foreground opacity-75 sm:text-base">
+        <LogoFunnels className="size-[1.05em]" />
+        Funnels.Club
+      </p>
     </footer>
   );
 }

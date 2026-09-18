@@ -1,8 +1,5 @@
 import { EnTeteImmersion } from "@/components/en-tete-immersion";
 import { PiedImmersion } from "@/components/pied-immersion";
-import { ancreEntretien, entretiensImmersion } from "@/contenu/immersion";
-import { temoignages } from "@/contenu/site";
-import { prenom } from "@/lib/prenom";
 import type { Metadata } from "next";
 
 /**
@@ -64,17 +61,6 @@ export const metadata: Metadata = {
 export default function LayoutImmersion({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  /* L'ordre est celui d'`entretiensImmersion`, donc celui de la page : le pied
-     de page les liste comme on vient de les voir, sans quoi on y chercherait un
-     nom à une place qu'il n'occupe pas plus haut. Le nom vient de
-     `temoignages`, jamais réécrit ici. */
-  const entretiens = entretiensImmersion.flatMap((id) => {
-    const temoignage = temoignages.find((t) => t.id === id);
-    return temoignage
-      ? [{ ancre: ancreEntretien(id), nom: prenom(temoignage.nom) }]
-      : [];
-  });
-
   return (
     /* Plus de rembourrage bas : il réservait la place de la barre d'appel fixe
        du téléphone, qui est partie avec les liens sortants. Laissé en place, il
@@ -113,7 +99,7 @@ export default function LayoutImmersion({
     >
       <EnTeteImmersion />
       {children}
-      <PiedImmersion entretiens={entretiens} />
+      <PiedImmersion />
     </div>
   );
 }

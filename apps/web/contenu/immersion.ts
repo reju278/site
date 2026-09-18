@@ -296,11 +296,16 @@ export const avisImmersion = {
  * c'est son avatar de `fabri@funnels.club` dans l'organisation Funnels Club,
  * donc une photo qu'il a lui-même posée, et non un visage trouvé ailleurs.
  *
- * **Son rôle, lui, reste vide, et rien n'est inventé pour le remplir.**
- * Calendly ne porte pas d'intitulé de poste, et la page source ne le montrait
- * pas. Un emplacement visible sous la rangée le dit, comme le veut la règle :
- * une section sans texte dit ce qu'elle attend, elle n'affiche pas une phrase
- * plausible. « Coach », « closer » ou « responsable » seraient tous
+ * **Les rôles ne sont plus affichés**, sur demande de Rémy : « la photo en
+ * rond, le nom en dessous, tout simplement ». Ils restent écrits ici, ce sont
+ * ses mots et ils reviendront s'il les redemande.
+ *
+ * **L'emplacement qui réclamait le poste de Fabri Keutcha est donc parti avec
+ * eux**, et il l'a confirmé. Il ne disparaît pas parce qu'on a trouvé la
+ * réponse mais parce que la question ne se pose plus à l'écran : réclamer une
+ * donnée qu'on n'affiche nulle part aurait été un rappel sans objet. Si les
+ * rôles reviennent, celui-là manque toujours, et rien ne s'invente pour le
+ * remplir : « coach », « closer » ou « responsable » seraient tous
  * vraisemblables, et c'est précisément le problème.
  *
  * Les photos sont servies par nous et non par ClickFunnels : une page qui
@@ -316,9 +321,8 @@ export const equipeImmersion: {
       devient inatteignable, et la personne suivante qui arrive sans photo
       casserait la compilation au lieu d'afficher son initiale. */
   membres: readonly { nom: string; role: string | null; photo: string | null }[];
-  manquant: string;
 } = {
-  titre: "L'équipe Funnels Club",
+  titre: "Notre équipe",
   membres: [
     {
       nom: "Rémy Jupille",
@@ -346,9 +350,6 @@ export const equipeImmersion: {
       photo: "/immersion/equipe-monica-ludovic.jpg",
     },
   ],
-  /* Ce que la section attend encore, affiché à l'écran tant que ça manque. */
-  manquant:
-    "l'intitulé du poste de Fabri Keutcha. Son portrait vient de Calendly, le reste de la rangée est complet.",
 };
 
 /**

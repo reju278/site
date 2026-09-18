@@ -497,10 +497,15 @@ export default function Immersion() {
       {/* L'ÉQUIPE.
 
           **Elle est masquée sur la page source et Rémy la remet**, réduite aux
-          cinq personnes d'aujourd'hui et redessinée en une carte par ligne.
-          Voir `RangeeEquipe`. */}
+          cinq personnes d'aujourd'hui et redessinée en un rang de portraits
+          ronds. Voir `RangeeEquipe`.
+
+          L'espace au-dessus du titre est plus large que le rythme de la page,
+          sur sa demande : le mur de la communauté finit sur ses cartes, et ce
+          rang de visages qui commence trop près se lisait comme la suite du
+          mur plutôt que comme une autre section. */}
       <SectionImmersion id="equipe" className="scroll-mt-24">
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="mx-auto max-w-3xl pt-10 text-center sm:pt-16">
           <TitreRoulant
             as="h2"
             segments={[{ texte: equipeImmersion.titre }]}
