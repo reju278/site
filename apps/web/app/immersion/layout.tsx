@@ -100,11 +100,26 @@ export default function LayoutImmersion({
     >
       <EnTeteImmersion />
       {children}
-      <PiedImmersion />
+      {/* L'espace qui séparait la marque du contenu, **déplacé du pied de page
+          à ici**, et ce n'est pas cosmétique : une barre `sticky` s'arrête à la
+          fin de son conteneur, donc au dernier pixel de ce bloc. Laissé dans le
+          pied, il faisait s'arrêter la barre tout en haut de celui-ci,
+          c'est-à-dire par-dessus les noms de l'équipe. Déplacé ici, il fait
+          partie de ce que la barre parcourt, et elle se pose juste au-dessus de
+          la marque. */}
+      <div aria-hidden className="h-11 sm:h-12" />
 
-      {/* Les trois tâches, posées en bas de l'écran. Dans le gabarit et non
-          dans la page : elles doivent rester visibles quoi qu'on regarde. */}
+      {/* Les trois tâches, collées en bas de l'écran. Dans le gabarit et non
+          dans la page : elles doivent rester visibles quoi qu'on regarde.
+
+          **Avant le pied de page et non après**, et l'ordre fait tout le
+          travail : la barre colle au bas de la fenêtre tant qu'il reste de son
+          conteneur à parcourir, et se pose à sa place dès qu'on atteint la fin.
+          Sa place est juste au-dessus de la marque, qu'elle cessait sinon de
+          laisser voir. */}
       <TachesImmersion />
+
+      <PiedImmersion />
     </div>
   );
 }

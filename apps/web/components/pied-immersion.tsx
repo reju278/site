@@ -40,7 +40,12 @@ import { LogoFunnels } from "@/components/logo-funnels";
  */
 export function PiedImmersion() {
   return (
-    <footer className="px-5 pt-14 pb-4 sm:pt-16 sm:pb-5">
+    /* **L'essentiel du rembourrage haut est passé dans le gabarit**, juste
+       avant la barre des tâches, pour que celle-ci s'arrête au ras de la marque
+       et non au-dessus de l'équipe. Voir `layout.tsx`. Ce qui reste ici est
+       l'écart entre la barre posée et la marque : sans lui, les deux se
+       touchent. */
+    <footer className="px-5 pt-3 pb-4 sm:pt-4 sm:pb-5">
       {/* Petite, atténuée et posée tout en bas, sur demande de Rémy : une
           signature, pas un titre. */}
       <p className="titre flex items-center justify-center gap-2 text-sm tracking-tight text-muted-foreground opacity-75 sm:text-base">

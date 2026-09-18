@@ -877,6 +877,58 @@ pousse son contenu sous son déclencheur ; le cadre étant posé en bas de l'éc
 l'ordre visuel est inversé et la liste monte pendant que le bouton reste où il
 est. L'ordre du DOM ne change pas : le déclencheur précède ce qu'il commande.
 
+**L'ouverture a demandé trois passes, et les trois défauts étaient
+différents.** C'est le genre d'endroit où « ça bugue » ne désigne pas une cause
+mais trois, et où seule la mesure image par image les sépare :
+
+- **La bordure basse manquait.** Le fichier de registre pose `last:border-b-0`
+  sur l'item, ce qui a du sens dans une pile d'accordéons et aucun sur un panneau
+  seul : le cadre de verre était bordé sur trois côtés. `cn()` ne voyait pas le
+  conflit, une variante et une classe nue étant deux groupes distincts pour lui.
+  On double donc la classe **dans la même variante**, `last:border-b`. C'est le
+  piège déjà écrit à propos de `dark:`.
+- **Le rayon suivait la hauteur.** `rounded-full` vaut la moitié de la hauteur :
+  pendant que l'accordéon anime cette hauteur, le rayon l'animait avec elle. Il
+  est passé en valeur fixe, 28 px, qui est exactement la gélule du bouton fermé,
+  et **il ne change plus entre ouvert et fermé**, sur demande de Rémy : deux
+  gestes simultanés sur le même objet se contrarient.
+- **La courbe faisait bondir la liste.** `cubic-bezier(0.32, 0.72, 0, 1)`, celle
+  des entrées d'`Apparition`, atteint 85 % du mouvement en 20 % du temps : sur
+  une translation de dix pixels c'est de la vivacité, sur une hauteur de deux
+  cents la liste saute de cent cinq pixels en **quatre millisecondes** puis rampe
+  pendant trois cents. Relevé image par image ; à une image sur trois, on ne voit
+  rien. La courbe est `ease-in-out` et la durée 260 ms.
+
+**La largeur ne change plus jamais, et c'est un gabarit qui s'en charge.** Le
+cadre est en `w-max` : fermé il prenait la largeur du déclencheur, ouvert celle
+de la plus longue tâche, et une tâche cochée perd son surlignage donc ses douze
+pixels de rembourrage. Le bloc se décalait à l'ouverture **et** à chaque coche.
+Une copie muette de la liste, `aria-hidden`, `inert`, `h-0 overflow-hidden`,
+reste dans le flux et fixe la largeur une fois pour toutes. Mesuré : 463 px dans
+les six états.
+
+**La barre est `sticky` et non `fixed`, et c'est ce qui l'arrête au-dessus de la
+marque.** Une barre `fixed` ne connaît que la fenêtre ; une barre `sticky`
+connaît son conteneur. **L'espace qui séparait la marque du contenu a donc
+déménagé du pied de page au gabarit** : laissé dans le pied, il faisait s'arrêter
+la barre tout en haut de celui-ci, c'est-à-dire par-dessus les noms de l'équipe.
+Aucun JavaScript, aucun seuil, et rien à tenir d'accord le jour où le pied change
+de hauteur.
+
+**Une ligne par tâche, et la borne est en bas.** Sur demande de Rémy, y compris
+sur téléphone. À 375 px, la place pour le texte est de 245 pixels une fois la
+case, la flèche et les écarts retirés ; le plus long libellé en demande 241 à
+douze pixels, surlignage compris, contre 264 à treize. C'est serré, et c'est le
+prix de la ligne unique : le prochain libellé qui s'allonge ne tiendra plus. À
+320 px, les deux premiers débordaient de trente-cinq et vingt-trois pixels **et
+le document défilait latéralement**, donc le texte s'enroule en dessous de
+360 px. C'est la règle sur `whitespace-nowrap`, qui ne s'écrit jamais sans borne,
+avec la borne en bas parce que c'est le petit écran qui manque de place.
+
+**Le bouton « Voir » n'est qu'une flèche en dessous de `sm`**, et c'est ce qui
+rend la ligne unique possible. Une icône seule porte toujours son nom
+accessible.
+
 **L'anneau d'avancement est `RingChart` de Bklit**, sur demande de Rémy, qui a
 lui-même désigné ce registre. C'est le seul des trois que ce fichier autorise
 pour un graphique, et c'en est un : un arc dont la longueur dit une proportion.
