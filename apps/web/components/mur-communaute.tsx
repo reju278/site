@@ -200,14 +200,15 @@ export function MurCommunaute() {
           parce que c'est le mur qui sait ce qu'il montre, pas le composant qui
           le replie.
 
-          **Le pas est mesuré.** Le mur déplié fait dix-sept mille pixels ; à
-          neuf cents pixels par clic, il fallait trente-neuf clics pour en voir
-          le bout, soit un post par clic. À mille huit cents, il en faut une
-          dizaine, et chaque clic découvre quatre ou cinq posts. C'est ce que
-          Rémy demande : plusieurs appuis, pas une page qui s'ouvre d'un
-          coup. */}
+          **Deux appuis mènent au mur entier**, sur demande de Rémy. Le pas
+          n'est donc plus une hauteur en pixels : la colonne la plus haute fait
+          dix-sept mille pixels sur un écran large et le double sur un
+          téléphone, où les deux colonnes s'empilent, et mille huit cents
+          pixels par clic demandaient dix appuis d'un côté et vingt de l'autre.
+          `MurDepliable` découvre la moitié de ce qui reste, donc le compte
+          tient à toutes les largeurs. */}
       <div className="mt-12">
-      <MurDepliable hauteur={760} pas={1800}>
+      <MurDepliable hauteur={760} clics={2}>
         {colonnes.map((colonne, i) => (
           <div key={i} className="flex flex-1 flex-col gap-4">
             {colonne.map((avis) => (

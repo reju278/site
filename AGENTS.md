@@ -2052,6 +2052,31 @@ donc la barre recouvrait le bas de la fenêtre et y répétait le même bouton.
 `body:has([role="dialog"][data-state="open"])` l'efface, avec `[data-state]` et
 pas seulement `[role]` : Radix garde le nœud pendant l'animation de fermeture.
 
+### Ce qui se déplie se mesure sur autre chose que lui-même, et se fond en pixels
+
+Le mur de la communauté s'ouvre par paliers, et il a fallu reprendre les trois
+valeurs qui décidaient de son repli. Aucune ne levait d'erreur.
+
+- **Un fondu en pourcentage s'étire avec ce qu'il fond.** Le bas du mur
+  s'éteignait sur ses trente-huit derniers pour cent : trois cents pixels au
+  repli, ce qui est une demi-carte, mais trois mille au premier palier,
+  c'est-à-dire une dizaine de posts effacés par le geste censé les découvrir.
+  Plus on ouvrait, plus on masquait. **Une bande de fondu s'écrit en pixels**,
+  `calc(100% - 240px)`, parce que ce qu'on veut estomper est une fin de carte,
+  et qu'une carte a une hauteur en pixels.
+- **Un bloc rogné ne peut pas dire la hauteur qu'il aurait sans l'être.** On
+  mesurait la plus haute de ses deux colonnes, ce qui est juste tant qu'elles
+  sont côte à côte et faux dès qu'elles s'empilent : sur téléphone le mur fait
+  la somme des deux, quarante et un mille pixels, et on en annonçait vingt
+  mille. Le dernier palier découvrait le double de ce qu'il promettait. La
+  mesure vit donc sur un **bloc intérieur** qui porte le flux, le cadre ne
+  gardant que la hauteur bornée, l'`overflow` et le masque.
+- **Un pas en pixels ne tient aucune promesse de nombre de clics.** Rémy voulait
+  deux appuis au maximum ; mille huit cents pixels par clic en demandaient dix
+  sur un écran large et vingt sur un téléphone, pour la raison ci-dessus. Le
+  palier est donc **une fraction de ce qui reste**, et c'est le nombre d'appuis
+  qui se déclare.
+
 
 ## Pas de backend, et c'est un choix
 

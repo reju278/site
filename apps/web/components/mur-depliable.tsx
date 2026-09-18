@@ -57,6 +57,15 @@ import { useEffect, useRef, useState } from "react";
  * subit. Le fondu et le bouton restent donc en place entre deux clics, et
  * disparaissent ensemble quand le dernier post est visible.
  *
+ * **Le palier est une fraction de ce qui reste, et non une hauteur en
+ * pixels**, sur demande de Rémy : « appuyez au maximum deux fois ». Un pas en
+ * pixels ne peut pas tenir cette promesse, parce que la hauteur du mur dépend
+ * de la largeur : la colonne la plus haute fait dix-sept mille pixels sur un
+ * écran large et le double sur un téléphone, où les deux colonnes s'empilent.
+ * Mille huit cents pixels par clic demandaient donc dix appuis d'un côté et
+ * vingt de l'autre. On découvre la moitié de ce qui reste, et `clics` dit
+ * combien d'appuis mènent au bout, à toutes les largeurs.
+ *
  * **La fin se mesure, elle ne se compte pas.** On compare la hauteur du contenu
  * à celle de la fenêtre de lecture : quand le contenu tient, c'est fini. Compter
  * les cartes obligerait à savoir combien il en reste, donc à connaître leur
@@ -76,26 +85,49 @@ import { useEffect, useRef, useState } from "react";
  * un mur qu'on vient d'ouvrir ne sert personne, et un bouton qui change de
  * libellé au même endroit fait douter de ce qu'on vient de faire.
  */
+/**
+ * La bande sur laquelle le bas du mur s'éteint.
+ *
+ * Elle est écrite une fois parce qu'elle part dans deux propriétés, la
+ * préfixée et l'autre, et que deux valeurs qui doivent être identiques finissent
+ * par diverger.
+ */
+const FONDU = "linear-gradient(to bottom, #000 calc(100% - 240px), transparent 100%)";
+
 export function MurDepliable({
   children,
   hauteur,
-  pas,
+  clics = 2,
 }: {
   children: React.ReactNode;
   /** La hauteur du mur avant le premier clic, en pixels. */
   hauteur: number;
-  /** Ce que chaque clic découvre en plus, en pixels. */
-  pas: number;
+  /** Le nombre d'appuis qui mènent au mur entier. */
+  clics?: number;
 }) {
   const [palier, setPalier] = useState(0);
-  const [complet, setComplet] = useState(false);
+  const [contenu, setContenu] = useState(0);
   const cadre = useRef<HTMLDivElement>(null);
+  const flux = useRef<HTMLDivElement>(null);
 
-  const limite = hauteur + palier * pas;
+  /* Chaque palier découvre la même fraction de ce qui restait à voir au
+     premier chargement : au dernier, la limite vaut exactement la hauteur du
+     contenu. Tant qu'on n'a pas mesuré, on s'en tient à la hauteur repliée,
+     qui est ce que le serveur a rendu. */
+  const limite =
+    contenu > 0
+      ? hauteur + (palier * (contenu - hauteur)) / clics
+      : hauteur;
+  /* Le pixel de tolérance n'est pas une précaution de style : les hauteurs
+     relevées sont fractionnaires, et `hauteur + clics * (contenu - hauteur) /
+     clics` ne retombe pas toujours au bit près sur `contenu`. Sans lui, le
+     dernier appui laisse le bouton en place devant un mur pourtant entier. */
+  const complet = contenu > 0 && limite >= contenu - 1;
 
   useEffect(() => {
     const el = cadre.current;
-    if (!el) return;
+    const dedans = flux.current;
+    if (!el || !dedans) return;
 
     const mesurer = () => {
       /* **La fin se mesure sur la mise en page, pas sur le défilement.**
@@ -106,14 +138,17 @@ export function MurDepliable({
          défilement, et la dernière carte du mur, par définition jamais vue,
          la portait toujours.
 
-         La hauteur de la plus haute colonne, elle, est celle de la mise en
-         page : elle ignore les transformations et ne bouge pas avec
-         l'animation. */
-      const contenu = Math.max(
-        ...[...el.children].map((c) => c.getBoundingClientRect().height),
-      );
-      const fini = limite >= contenu;
-      setComplet(fini);
+         **C'est le bloc intérieur qu'on mesure, et c'est pour ça qu'il
+         existe.** On prenait la plus haute des colonnes, ce qui est juste tant
+         qu'elles sont côte à côte et faux dès qu'elles s'empilent : sur
+         téléphone, le mur fait la somme des deux, quarante et un mille pixels,
+         et on en annonçait vingt mille. Le dernier palier découvrait alors le
+         double de ce qu'il promettait. La boîte du bloc intérieur, elle, dit la
+         hauteur du flux dans les deux sens, et comme c'est sa boîte de bordure,
+         elle ignore les translations de ses enfants. */
+      const mesure = dedans.getBoundingClientRect().height;
+      setContenu(mesure);
+      const fini = limite >= mesure - 1;
 
       for (const carte of el.querySelectorAll<HTMLElement>("[data-carte]")) {
         const rognee =
@@ -129,6 +164,7 @@ export function MurDepliable({
        téléphone. */
     const observateur = new ResizeObserver(mesurer);
     observateur.observe(el);
+    observateur.observe(dedans);
     return () => observateur.disconnect();
   }, [limite]);
 
@@ -137,27 +173,41 @@ export function MurDepliable({
     <div className="relative">
       <div
         ref={cadre}
-        className={cn(
-          "mx-auto flex max-w-4xl flex-col gap-4 sm:flex-row sm:items-start",
-          !complet && "overflow-hidden",
-        )}
+        className={cn("mx-auto max-w-4xl", !complet && "overflow-hidden")}
         style={
           complet
             ? undefined
             : {
                 maxHeight: `${limite}px`,
-                /* Le fondu du bas. Il commence aux deux tiers : plus haut, on
-                   perdrait des cartes entières ; plus bas, la coupe
-                   redeviendrait une ligne. Les deux écritures s'écrivent,
-                   Safari n'ayant levé son préfixe qu'en 15.4. */
-                WebkitMaskImage:
-                  "linear-gradient(to bottom, #000 62%, transparent 100%)",
-                maskImage:
-                  "linear-gradient(to bottom, #000 62%, transparent 100%)",
+                /* Le fondu du bas, **en pixels et non en pourcentage**, et
+                   c'est une correction. Écrit `62%`, il s'étirait avec la
+                   fenêtre de lecture : à sept cent soixante pixels il effaçait
+                   les trois cents derniers, et au premier palier il en effaçait
+                   trois mille, c'est-à-dire une dizaine de posts rendus
+                   illisibles par le geste censé les découvrir. Plus on ouvrait,
+                   plus on masquait.
+
+                   Une bande fixe fait ce qu'on attend d'elle à toutes les
+                   hauteurs : elle laisse la coupe se perdre sur la fin d'une
+                   carte, et tout ce qui est au-dessus se lit en entier. Sa
+                   valeur vaut à peu près une demi-carte.
+
+                   Les deux écritures s'écrivent, Safari n'ayant levé son
+                   préfixe qu'en 15.4. */
+                WebkitMaskImage: FONDU,
+                maskImage: FONDU,
               }
         }
       >
-        {children}
+        {/* Le flux lui-même. Il est distinct du cadre parce que le cadre porte
+            une hauteur bornée : un bloc rogné ne peut pas dire la hauteur qu'il
+            aurait sans l'être. */}
+        <div
+          ref={flux}
+          className="flex flex-col gap-4 sm:flex-row sm:items-start"
+        >
+          {children}
+        </div>
       </div>
 
       {complet ? null : (
