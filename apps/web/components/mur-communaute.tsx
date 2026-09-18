@@ -10,6 +10,7 @@ import { TitreRoulant } from "@/components/titre-roulant";
 import { insecables } from "@/lib/typographie";
 import { anonymiser } from "@/lib/anonymat";
 import { prenom } from "@/lib/prenom";
+import { surligner } from "@/lib/surligner";
 import { titreCommunaute } from "@/contenu/immersion";
 import Image from "next/image";
 
@@ -62,66 +63,6 @@ import Image from "next/image";
 
 /** Le fond de carte relevé chez eux, rendu aux deux thèmes. */
 const FOND = "color-mix(in srgb, currentColor 4%, transparent)";
-
-/**
- * Le trait de surligneur, comme sur les articles d'avis.
- *
- * **Il enveloppe, il ne réécrit pas.** Chaque passage de `surligne` est une
- * sous-chaîne exacte du post, vérifiée contre la source : la fonction la
- * retrouve et pose un `mark` autour, sans toucher à un seul caractère. Un
- * passage qui ne se retrouverait pas laisserait simplement le paragraphe
- * intact, plutôt que d'en perdre un bout.
- *
- * `mark` et non un `span` : c'est l'élément du surlignage, et c'est lui qui dit
- * à un lecteur d'écran que ce passage est mis en avant.
- *
- * Le jaune est `--surlignage-jaune` à 32 %, la même teinte et la même densité
- * que les voies du message de Rémy. Ce n'est pas une couleur de plus : c'est
- * celle que le site emploie déjà pour « regardez ça ».
- *
- * L'animation, elle, vit dans `globals.css` : le fond est une image tirée de
- * gauche à droite quand le bloc entre dans la vue. Elle a besoin d'un ancêtre
- * `data-apparition`, d'où l'`Apparition` autour de chaque carte.
- */
-function surligner(texte: string, passages: readonly string[]) {
-  /* On coupe sur chaque passage, dans l'ordre où il apparaît. `reduce` sur les
-     morceaux et non une expression rationnelle : les passages portent des
-     apostrophes, des accents et des chiffres, et les échapper un par un pour
-     construire un motif serait une occasion de plus de se tromper. */
-  let morceaux: (string | { marque: string })[] = [texte];
-
-  for (const passage of passages) {
-    morceaux = morceaux.flatMap((m) => {
-      if (typeof m !== "string") return [m];
-      const i = m.indexOf(passage);
-      if (i === -1) return [m];
-      return [
-        m.slice(0, i),
-        { marque: passage },
-        m.slice(i + passage.length),
-      ];
-    });
-  }
-
-  return morceaux.map((m, i) =>
-    typeof m === "string" ? (
-      <span key={i}>{insecables(m)}</span>
-    ) : (
-      <mark
-        key={i}
-        className="surlignage"
-        style={
-          {
-            "--surlignage-fond":
-              "color-mix(in srgb, var(--surlignage-jaune) 32%, transparent)",
-          } as React.CSSProperties
-        }
-      >
-        {insecables(m.marque)}
-      </mark>
-    ),
-  );
-}
 
 export function MurCommunaute() {
   /* **Les deux premiers posts ouvrent les deux colonnes**, dans l'ordre du

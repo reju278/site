@@ -2,8 +2,16 @@
 
 import { tachesImmersion } from "@/contenu/immersion";
 import { cn } from "@repo/ui/lib/utils";
-import { Check, ChevronUp } from "lucide-react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { surligner } from "@/lib/surligner";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@repo/ui/components/accordion";
+import { Ring } from "@repo/ui/components/charts/ring";
+import { RingChart } from "@repo/ui/components/charts/ring-chart";
+import { Check } from "lucide-react";
 import { useEffect, useState } from "react";
 
 /**
@@ -69,7 +77,11 @@ const VERRE = "border border-border bg-card/85 backdrop-blur-md";
 export function TachesImmersion() {
   const [faites, setFaites] = useState<readonly string[]>([]);
   const [ouverte, setOuverte] = useState(false);
-  const sansMouvement = useReducedMotion();
+
+  /* Le compte se calcule, il ne s'écrit pas : c'est la règle du dépôt sur les
+     textes qui comptent leurs éléments. */
+  const finies = faites.length;
+  const total = tachesImmersion.length;
 
   useEffect(() => {
     try {
@@ -111,14 +123,21 @@ export function TachesImmersion() {
           déclencheur et la liste vivaient dans deux boîtes de verre posées l'une
           au-dessus de l'autre ; il n'y en a plus qu'une, qui grandit.
 
-          **C'est `layout` de Motion qui fait le travail**, et c'est la raison
-          d'être de cette propriété : elle relève la boîte avant et après le
-          changement et interpole entre les deux, là où aucune transition CSS ne
-          sait animer une hauteur qui passe de `auto` à `auto`.
+          **L'ouverture est celle de l'`Accordion` du dépôt, pas une animation
+          écrite ici**, et c'est une correction : la version précédente animait
+          la boîte avec `layout` de Motion, qui mesure l'avant et l'après et
+          interpole en déformant tout ce qu'elle contient. Rémy l'a trouvée
+          « buggée », et il avait raison : pendant la transition, le texte et les
+          cases sont mis à l'échelle, donc flous et de travers. `Accordion`
+          n'anime que la **hauteur**, depuis une variable que Radix mesure,
+          `--radix-accordion-content-height`, et rien à l'intérieur ne bouge.
+          C'était déjà dans `packages/ui` ; il n'y avait rien à écrire.
 
-          Le panneau s'étend vers le haut, `justify-end` : il n'y a rien sous une
-          barre posée en bas d'écran, et c'est aussi ce qui garde le déclencheur
-          immobile pendant que le reste pousse au-dessus de lui.
+          **`flex-col-reverse` est ce qui la fait s'ouvrir vers le haut.** Un
+          accordéon pousse son contenu sous son déclencheur ; ici le cadre est
+          posé en bas de l'écran, donc l'ordre visuel est inversé et c'est la
+          liste qui monte pendant que le bouton reste où il est. L'ordre du DOM,
+          lui, ne change pas : le déclencheur précède ce qu'il commande.
 
           **Pas de filets, un rembourrage et des pilules dedans**, sur sa demande
           aussi, qui cite les menus d'Apple : chaque tâche est une pilule qui ne
@@ -128,78 +147,118 @@ export function TachesImmersion() {
           cadre moins 6 px de rembourrage font 12 px, et c'est à ce prix que les
           deux courbes restent concentriques. Fermé, le cadre est une gélule et
           son contenu aussi. */}
-      <div className="pointer-events-auto flex justify-center">
-        <motion.div
-          layout={!sansMouvement}
-          transition={{ duration: 0.32, ease: [0.32, 0.72, 0, 1] }}
+      <Accordion
+        type="single"
+        collapsible
+        value={ouverte ? "taches" : ""}
+        onValueChange={(v) => setOuverte(v === "taches")}
+        className="pointer-events-auto flex justify-center"
+      >
+        <AccordionItem
+          value="taches"
           className={cn(
             VERRE,
-            "flex w-max max-w-[calc(100vw-2rem)] flex-col gap-0.5 p-1.5",
+            "flex w-max max-w-[calc(100vw-2rem)] flex-col-reverse gap-0.5 border-b p-1.5",
             "transition-[border-radius] duration-300",
             ouverte ? "rounded-[18px]" : "rounded-full",
           )}
         >
-          <AnimatePresence initial={false}>
-            {ouverte ? (
-              <motion.ul
-                key="liste"
-                layout={!sansMouvement}
-                initial={sansMouvement ? false : { opacity: 0 }}
-                animate={{
-                  opacity: 1,
-                  transition: { duration: sansMouvement ? 0 : 0.26, delay: 0.04 },
-                }}
-                exit={{ opacity: 0, transition: { duration: sansMouvement ? 0 : 0.12 } }}
-                className="flex flex-col gap-0.5"
-              >
-                {tachesImmersion.map((tache) => (
-                  <li key={tache.id} className="flex">
-                    <Tache
-                      texte={tache.texte}
-                      ancre={tache.ancre}
-                      faite={faites.includes(tache.id)}
-                      onClick={() => basculer(tache.id)}
-                      onVoir={() => setOuverte(false)}
-                      className="w-full"
-                    />
-                  </li>
-                ))}
-              </motion.ul>
-            ) : null}
-          </AnimatePresence>
-
-          <motion.button
-            layout={!sansMouvement}
-            type="button"
-            onClick={() => setOuverte((o) => !o)}
-            aria-expanded={ouverte}
+          <AccordionTrigger
             className={cn(
               /* **La police des titres**, sur demande de Rémy, avec sa hauteur
                  de ligne rendue : l'utilitaire `titre` pose 1,12, ce qui est
                  juste pour un titre de deux lignes et trop serré pour une ligne
-                 de liste. */
-              "titre inline-flex items-center justify-center gap-2.5 py-2 pr-4 pl-3 text-base leading-normal text-foreground transition-colors duration-200 sm:text-lg",
+                 de liste.
+
+                 Le `py-4` et le `hover:underline` du fichier de registre sont
+                 écrasés ici : c'est ce qu'un `className` a le droit de faire,
+                 et c'est la raison pour laquelle on ne retouche pas le
+                 fichier. */
+              "titre items-center gap-2.5 py-2 pr-3 pl-4 text-base leading-normal text-foreground transition-colors duration-200 hover:no-underline sm:text-lg",
               "hover:bg-foreground/6",
               "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring",
               ouverte ? "rounded-[12px]" : "rounded-full",
             )}
           >
-            <ChevronUp
-              aria-hidden
-              className={cn(
-                "size-5 shrink-0 transition-transform duration-300",
-                ouverte && "rotate-180",
-              )}
-            />
             {/* Le libellé est de Rémy, à sa troisième formulation : « 1 sur 3 »,
                 qui disait où on en est, puis « Liste des tâches à remplir », qui
                 nommait l'objet, puis celui-ci, qui dit à quoi ça sert. */}
             À regarder avant votre rendez-vous
-          </motion.button>
-        </motion.div>
-      </div>
+            <Avancement finies={finies} total={total} />
+          </AccordionTrigger>
+
+          <AccordionContent className="pt-0 pb-0">
+            <ul className="flex flex-col gap-0.5">
+              {tachesImmersion.map((tache) => (
+                <li key={tache.id} className="flex">
+                  <Tache
+                    texte={tache.texte}
+                    surligne={tache.surligne}
+                    ancre={tache.ancre}
+                    faite={faites.includes(tache.id)}
+                    onClick={() => basculer(tache.id)}
+                    onVoir={() => setOuverte(false)}
+                    className="w-full"
+                  />
+                </li>
+              ))}
+            </ul>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
 
     </div>
+  );
+}
+
+/**
+ * L'anneau d'avancement, à droite du libellé.
+ *
+ * **C'est `RingChart` de Bklit**, sur demande de Rémy, qui a lui-même désigné ce
+ * registre. C'est le seul des trois que le dépôt autorise pour un graphique, et
+ * c'est bien ce dont il s'agit : un arc dont la longueur dit une proportion.
+ * Rien n'est dessiné ici, ni le cercle, ni sa progression, ni son animation.
+ *
+ * **Le prix est réel et il faut le connaître avant d'étendre cet emploi.** Le
+ * composant amène `@visx/group`, `@visx/shape`, `@visx/responsive` et Motion
+ * dans le paquet client de la page. Pour un anneau de vingt-six pixels, c'est
+ * cher ; ce qui le justifie ici, c'est la règle du dépôt, qui interdit de
+ * redessiner à la main ce qu'un registre donne. Un second anneau sur le site ne
+ * coûtera plus rien, un troisième non plus.
+ *
+ * **`size` est passé en dur**, sans quoi le composant lit la taille de son
+ * parent : dans une ligne de texte, il n'y a pas de parent qui ait une taille à
+ * lui.
+ *
+ * **Le compte est écrit à côté et non au centre.** `RingCenter` existe, mais à
+ * vingt-six pixels de diamètre il n'y a de la place pour aucun chiffre lisible.
+ * Le texte porte donc l'information, et l'anneau la répète : c'est le bon sens
+ * de la règle sur la couleur seule, un indicateur graphique n'est jamais le seul
+ * porteur.
+ */
+function Avancement({ finies, total }: { finies: number; total: number }) {
+  return (
+    <span className="ml-1 inline-flex shrink-0 items-center gap-2">
+      <span aria-hidden className="grid size-[26px] place-items-center">
+        <RingChart
+          data={[
+            { label: "Tâches faites", value: finies, maxValue: total },
+          ]}
+          size={26}
+          strokeWidth={4}
+          baseInnerRadius={7}
+          ringGap={0}
+        >
+          <Ring index={0} color="var(--tache-faite)" />
+        </RingChart>
+      </span>
+
+      {/* `tabular-nums` : sans lui, le « 1 » est plus étroit que le « 2 » et le
+          libellé se décale d'un pixel à chaque coche. */}
+      <span className="text-sm tabular-nums">
+        {finies} sur {total}
+      </span>
+    </span>
   );
 }
 
@@ -227,6 +286,7 @@ export function TachesImmersion() {
  */
 function Tache({
   texte,
+  surligne,
   ancre,
   faite,
   onClick,
@@ -234,6 +294,7 @@ function Tache({
   className,
 }: {
   texte: string;
+  surligne: readonly string[];
   ancre: string;
   faite: boolean;
   onClick: () => void;
@@ -289,7 +350,11 @@ function Tache({
           ) : null}
         </span>
 
-        <span>{texte}</span>
+        {/* **Le passage important porte le trait de surligneur du site**, sur
+            demande de Rémy, et c'est le contenu qui dit lequel. Une tâche faite
+            ne le porte plus : sur le vert plein, un jaune à un tiers ne
+            surligne plus rien, il salit. */}
+        <span>{faite ? texte : surligner(texte, surligne)}</span>
       </button>
 
       {/* **Un lien et non un bouton** : ça navigue, donc le clic du milieu,

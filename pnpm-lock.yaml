@@ -140,6 +140,9 @@ importers:
       '@visx/grid':
         specifier: 4.0.1-alpha.0
         version: 4.0.1-alpha.0(react@19.2.8)
+      '@visx/group':
+        specifier: 4.0.1-alpha.0
+        version: 4.0.1-alpha.0(react@19.2.8)
       '@visx/pattern':
         specifier: 4.0.1-alpha.0
         version: 4.0.1-alpha.0(react@19.2.8)

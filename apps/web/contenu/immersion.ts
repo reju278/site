@@ -380,12 +380,17 @@ export const titreCommunaute = [
  * une visite. Elles désignent ce qu'il y a à faire sur cette page et nulle part
  * ailleurs, dans l'ordre où on les rencontre en descendant.
  *
- * **La troisième est la seule qu'il n'ait pas dictée telle quelle.** Il me
- * décrivait la tâche, donc à la troisième personne : « regarder les témoignages
- * dans lesquels ils peuvent s'identifier ». Elle est transposée au plus près
- * pour s'adresser au lecteur comme les deux autres, et **elle reste à valider
- * par lui** : c'est du texte affiché, et ce dépôt ne laisse pas l'agent en
- * écrire.
+ * **Les trois libellés sont de Rémy, à leur deuxième écriture.** Les premiers
+ * décrivaient le geste, « regarder la vidéo de présentation de… » ; ceux-ci
+ * disent ce qu'on en retire, et le troisième cesse de nommer un support pour
+ * nommer ce qu'on y cherche. Ils sont plus courts, ce qui est aussi ce qui leur
+ * permet de tenir sur une ligne.
+ *
+ * **`surligne` désigne, il ne réécrit pas.** Chaque entrée est une sous-chaîne
+ * exacte du libellé : le trait de surligneur se pose autour sans toucher au
+ * texte, et un passage qui ne s'y retrouverait pas laisse la phrase intacte. Le
+ * choix de ce qui compte est du contenu et non du code : une fonction qui
+ * devinerait « le mot important » se tromperait au premier renommage.
  *
  * **L'identifiant ne se renomme pas.** C'est lui qui est rangé dans le
  * navigateur des visiteurs : le changer remettrait à zéro la progression de tous
@@ -400,17 +405,20 @@ export const titreCommunaute = [
 export const tachesImmersion = [
   {
     id: "video-presentation",
-    texte: "Regarder la vidéo de présentation de Funnels Club",
+    texte: "Regarder la présentation de Funnels Club",
+    surligne: ["la présentation"],
     ancre: "programme",
   },
   {
     id: "video-modele",
-    texte: "Regarder la vidéo de présentation du modèle de Funnels Club",
+    texte: "Comprendre le modèle de Funnels Club",
+    surligne: ["le modèle"],
     ancre: "strategie",
   },
   {
     id: "temoignages",
-    texte: "Regarder les témoignages dans lesquels vous pouvez vous identifier",
+    texte: "Trouver une histoire inspirante",
+    surligne: ["une histoire inspirante"],
     ancre: "avis",
   },
 ] as const;

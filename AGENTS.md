@@ -863,6 +863,41 @@ connaissant le chiffre. C'est écrit à côté du jeton `--tache-faite`, et ce q
 répare sans changer sa couleur, le jour où il le voudra, c'est **l'encre** : la
 même encre foncée que le reste du site tient 6:1 sur ce vert.
 
+**L'ouverture est celle de l'`Accordion` du dépôt, pas une animation écrite sur
+place**, et c'est une correction. Une version animait la boîte avec `layout` de
+Motion, qui mesure l'avant et l'après et interpole en **déformant tout ce qu'elle
+contient** : pendant la transition, le texte et les cases sont mis à l'échelle,
+donc flous et de travers. Rémy l'a décrite comme « buggée » et il avait raison.
+`Accordion` n'anime que la hauteur, depuis une variable que Radix mesure, et rien
+à l'intérieur ne bouge. **La leçon vaut pour la prochaine fois : avant d'animer
+une ouverture, regarder ce que les registres déjà installés savent faire.**
+
+**`flex-col-reverse` est ce qui la fait s'ouvrir vers le haut.** Un accordéon
+pousse son contenu sous son déclencheur ; le cadre étant posé en bas de l'écran,
+l'ordre visuel est inversé et la liste monte pendant que le bouton reste où il
+est. L'ordre du DOM ne change pas : le déclencheur précède ce qu'il commande.
+
+**L'anneau d'avancement est `RingChart` de Bklit**, sur demande de Rémy, qui a
+lui-même désigné ce registre. C'est le seul des trois que ce fichier autorise
+pour un graphique, et c'en est un : un arc dont la longueur dit une proportion.
+**Le prix est réel** : le composant amène `@visx/group`, `@visx/shape`,
+`@visx/responsive` et Motion dans le paquet client de la page, pour un anneau de
+vingt-six pixels. Ce qui le justifie, c'est la règle qui interdit de redessiner à
+la main ce qu'un registre donne ; le deuxième anneau du site ne coûtera plus
+rien. `size` se passe en dur, faute de quoi le composant lit la taille de son
+parent, et une ligne de texte n'en a pas. Le compte est écrit **à côté** et non
+au centre : `RingCenter` existe, mais à vingt-six pixels aucun chiffre n'y est
+lisible, et un indicateur graphique n'est de toute façon jamais le seul porteur
+de son information.
+
+**Le passage important de chaque tâche porte le trait de surligneur du site**, et
+c'est le contenu qui dit lequel, en sous-chaînes exactes. La fonction `surligner`
+est **sortie du mur de la communauté dans `lib`** à cette occasion : deux copies
+du même découpage auraient divergé à la première correction, et celle-ci en a
+déjà connu une, le fond jaune par défaut de `mark` qu'il a fallu éteindre. Une
+tâche faite ne surligne plus rien : sur le vert plein, un jaune à un tiers ne met
+plus en avant, il salit.
+
 **La progression vit dans `localStorage`**, pas dans un cookie : le site n'a ni
 base ni compte, et ce stockage ne quitte pas l'appareil. Trois précautions qui
 n'en sont pas :
