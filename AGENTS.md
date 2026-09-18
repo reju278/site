@@ -836,17 +836,37 @@ de champ. Leurs quinze places en portaient onze sur ordinateur, toutes de taille
 voisine, quatre d'entre elles sous le titre. Aucune de ces demandes ne pouvait se
 satisfaire en recopiant.
 
-**Trois plans, et quatre choses varient ensemble.** Taille, flou, opacité et
-amplitude du flottement. Une seule d'entre elles ne donne pas de la distance,
-elle donne un défaut d'affichage ; et l'amplitude compte autant que le reste,
-parce que quinze portraits qui bougent tous pareil défont la profondeur dès que
-ça bouge. C'est la parallaxe : ce qui est loin se déplace moins.
+**Trois plans, et il n'en reste que deux signes : la taille et l'amplitude du
+flottement.** Ce qui est loin est petit et se déplace peu, c'est la parallaxe, et
+elle compte autant que la taille : quinze portraits qui bougent tous pareil
+défont la profondeur dès que ça bouge.
 
-**L'opacité passe par l'animation, jamais par une classe.** Motion écrit
-`opacity` en style, donc une classe `opacity-*` est écrasée à la première image.
-C'est la même famille de panne que les classes préfixées face à
-`tailwind-merge` : une règle qui est là et n'agit pas. Le flou, lui, reste en
-classe puisqu'il n'est pas animé.
+**Le flou et l'opacité ont été essayés et retirés par Rémy**, et les deux
+retraits disent la même chose : une photographie de quelqu'un ne s'abîme pas pour
+faire joli. Un flou de trois pixels sur un visage de quarante ne se lit pas comme
+de la distance mais comme une image mal chargée. L'opacité, elle, avait un défaut
+plus net : les portraits partent tous du centre et **se croisent en chemin**,
+donc pendant une seconde on voyait au travers les uns des autres. C'est le
+`z-index` qui décide maintenant lequel passe devant, par plan, et il reste sous
+le dix du bloc de texte : un portrait ne passe jamais devant les mots.
+
+**Une ombre portée légère les décolle**, sur sa demande, et ce n'est pas le
+`shadow-xl` du fichier d'origine : celui-là dessinait une carte blanche sous
+chaque visage, ce que Rémy avait fait retirer deux demandes plus tôt.
+
+**Aucun portrait n'en recouvre un autre, et ça se mesure deux à deux à chaque
+largeur.** Les abscisses sont en pourcentage et les tailles en pixels : deux
+places qui ne se touchent pas à 1280 px peuvent se recouvrir à 1024. Chaque place
+déclare donc la largeur à partir de laquelle elle existe. Relevé : sept visages à
+768 px, onze à 1024, quinze à 1280, zéro croisement et zéro portrait sur le
+texte aux trois.
+
+**Les tops de la rangée haute sont en pixels, pas en pourcentage.** La zone haute
+est le rembourrage de la section, une valeur fixe ; la hauteur totale, elle,
+dépend du nombre de lignes du titre et du chapô. Écrits en pourcentage, ils ont
+suivi l'allongement du chapô et une grande latérale est venue se poser sur une
+petite. C'est la même leçon que partout ailleurs dans ce fichier : une valeur
+relative qui tient à une mesure ne tient pas quand cette mesure bouge.
 
 **Les portraits latéraux n'existent qu'à partir de `xl`, et c'est de la
 géométrie.** Le bloc de texte fait `max-w-3xl`, la section `max-w-7xl` : en
@@ -901,8 +921,15 @@ animés en JavaScript, hors de portée de la règle de `globals.css` ; mais
 contrairement aux rayons de lumière, qu'on ne rend pas du tout, ce sont des
 personnes, et une personne qu'on efface n'est pas une animation neutralisée.
 
-**L'étiquette entre crochets de cette section est partie**, sur demande de Rémy,
-et son chapô est de lui.
+**L'étiquette entre crochets est remplacée par le logo**, sur demande de Rémy :
+la marque, centrée au-dessus du titre, dit la même chose sans une ligne de texte
+de plus.
+
+**Le titre de cette section est à elle, `titreCommunaute`, et c'est une
+correction.** Il reprenait `titreResultats`, « De vraies personnes. De vrais
+résultats. », qui sert aussi à l'accueil : le changer là-bas aurait touché une
+page que Rémy n'a pas demandé de modifier. Le titre et le chapô sont de lui,
+dictés.
 
 ### Les rayons de lumière du fond des résultats, et pourquoi ils sont facultatifs
 

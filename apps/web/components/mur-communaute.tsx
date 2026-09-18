@@ -1,4 +1,5 @@
 import { Apparition } from "@/components/apparition";
+import { LogoFunnels } from "@/components/logo-funnels";
 import { MurDepliable } from "@/components/mur-depliable";
 import {
   PLACES_PORTRAITS,
@@ -9,7 +10,7 @@ import { TitreRoulant } from "@/components/titre-roulant";
 import { insecables } from "@/lib/typographie";
 import { anonymiser } from "@/lib/anonymat";
 import { prenom } from "@/lib/prenom";
-import { titreResultats } from "@/contenu/site";
+import { titreCommunaute } from "@/contenu/immersion";
 import Image from "next/image";
 
 /**
@@ -47,11 +48,16 @@ import Image from "next/image";
  * s'ouvre sur son auteur, puis sur un extrait qui lui sert de titre, puis sur le
  * post entier : c'est l'ordre d'un post, et c'est ce que Rémy a demandé.
  *
- * **Le titre est celui de l'accueil**, `titreResultats`, et non une variante
- * écrite pour l'occasion : « De vraies personnes. De vrais résultats. » est de
- * Rémy, déjà relu, et dit exactement ce que ce mur montre. Reprendre le
- * « Ils adorent, pourquoi pas vous ? » de TrendTrack aurait été recopier le
- * texte commercial d'une autre société sur le nôtre.
+ * **Le titre est à lui, `titreCommunaute`, et c'est une correction.** Il
+ * reprenait celui de l'accueil, « De vraies personnes. De vrais résultats. »,
+ * ce qui était défendable tant que le mur passait pour une preuve de résultats.
+ * Rémy a demandé qu'il dise le côté communautaire, et cette phrase-là sert
+ * aussi à la section des avis de l'accueil : la changer là-bas aurait touché une
+ * page qu'il n'a pas demandé de modifier. Un titre par endroit.
+ *
+ * Reprendre le « Ils adorent, pourquoi pas vous ? » de TrendTrack aurait été
+ * recopier le texte commercial d'une autre société sur le nôtre : le titre et
+ * le chapô sont de Rémy, dictés.
  */
 
 /** Le fond de carte relevé chez eux, rendu aux deux thèmes. */
@@ -192,16 +198,27 @@ export function MurCommunaute() {
           font déjà, et trois lignes empilées au-dessus d'un mur de posts
           faisaient une marche de plus avant d'arriver au sujet. */}
       <div className="mx-auto flex max-w-3xl flex-col gap-4 text-center">
+        {/* La marque, centrée au-dessus du titre, sur demande de Rémy. Elle
+            prend la place de l'étiquette entre crochets qui était là, et dit la
+            même chose sans une ligne de texte de plus.
+
+            `aria-hidden` est porté par le logo lui-même : le nom de la marque
+            est écrit dans le titre juste en dessous, le faire annoncer deux
+            fois n'apprendrait rien. */}
+        <LogoFunnels className="mx-auto size-12" />
+
         <TitreRoulant
           as="h2"
-          segments={titreResultats}
+          segments={titreCommunaute}
           className="titre text-3xl text-balance text-foreground sm:text-4xl"
         />
 
         {/* Leur `max-width: 60ch` : c'est la largeur de lecture, et elle se
             mesure en caractères parce qu'elle suit le corps du texte. */}
         <p className="mx-auto max-w-[60ch] text-pretty text-muted-foreground">
-          Découvrez des posts extraits de la communauté de Funnels.Club
+          Faire partie d&apos;une communauté, c&apos;est être entouré de
+          personnes qui sont comme nous, qui pensent comme nous et qui avancent
+          dans la même direction que nous, pour se sentir compris et soutenu.
         </p>
       </div>
       </PortraitsFlottants>

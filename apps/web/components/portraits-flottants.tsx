@@ -51,16 +51,40 @@ import { useEffect, useRef, useState } from "react";
  *   délais. Les valeurs sont tirées une fois dans un `useEffect`, exactement
  *   comme `LightRays` le fait pour ses rayons.
  *
- * **Trois plans, et c'est ce qui fait la profondeur.** Le premier est net et
- * grand, le deuxième un peu flou et moyen, le troisième franchement flou et
- * petit. Trois choses varient ensemble, jamais une seule : la taille, le flou
- * et l'opacité. Une seule d'entre elles ne donne pas de la distance, elle donne
- * un défaut d'affichage.
+ * **Trois plans, et il n'en reste que deux signes : la taille et l'amplitude
+ * du flottement.** Ce qui est loin est petit et se déplace peu, c'est la
+ * parallaxe. Les deux autres signes ont été essayés et retirés par Rémy, et les
+ * deux retraits disent la même chose : **une photographie de quelqu'un ne
+ * s'abîme pas pour faire joli.**
+ *
+ * - **Le flou**, d'abord. Sur un visage de quarante pixels posé sur une page
+ *   claire, trois pixels de flou ne se lisent pas comme de la distance mais
+ *   comme une image mal chargée.
+ * - **L'opacité** ensuite, et le défaut était plus net : les portraits partent
+ *   tous du centre et **se croisent en chemin**, donc pendant une seconde on
+ *   voyait au travers les uns des autres. Une photo translucide n'a pas l'air
+ *   lointaine, elle a l'air cassée. Ils sont tous pleins, et c'est le `z-index`
+ *   qui décide lequel passe devant, par plan : le grand est devant le petit,
+ *   comme dans le monde.
+ *
+ * **Une ombre portée légère les décolle**, sur sa demande. Ce n'est pas le
+ * `shadow-xl` du fichier d'origine, qui dessinait une carte blanche sous chaque
+ * visage : c'est une ombre basse et très diffuse, du même genre que celles des
+ * cartes du site.
  *
  * **Le flottement suit le plan, et c'est le quatrième signe.** Un objet proche
  * se déplace plus qu'un objet lointain, c'est la parallaxe : l'amplitude tirée
  * au hasard est donc multipliée par celle du plan. Sans ça, quinze portraits de
  * trois tailles bougent tous pareil et la profondeur se défait dès que ça bouge.
+ *
+ * **Rien n'est aligné sur un arc**, sur sa demande aussi. Les places du haut
+ * avaient toutes leur `top` dans la même bande étroite, ce qui dessinait une
+ * couronne au-dessus du titre ; elles s'échelonnent maintenant sur toute la
+ * hauteur de la zone, et leurs abscisses sont réparties plutôt que régulières.
+ *
+ * **Aucune ne se superpose à une autre**, et ça se mesure, deux à deux, à
+ * chaque largeur. Deux portraits qui se recouvrent ne se lisent pas comme de la
+ * profondeur mais comme une erreur de placement, ce que Rémy a vu tout de suite.
  *
  * **L'opacité passe par l'animation et non par une classe.** Motion écrit
  * `opacity` en style, donc une classe `opacity-*` est écrasée à la première
@@ -116,46 +140,74 @@ import { useEffect, useRef, useState } from "react";
 /** Leurs quinze positions, recopiées. Onze au-dessus de `md`, quatre en dessous. */
 type Plan = 1 | 2 | 3;
 
-/** Ce que chaque plan donne à un portrait : son flou, son opacité, son amplitude. */
-const PLANS: Record<Plan, { flou: string; opacite: number; ampleur: number }> = {
-  1: { flou: "", opacite: 1, ampleur: 1 },
-  2: { flou: "blur-[1.5px]", opacite: 0.8, ampleur: 0.6 },
-  3: { flou: "blur-[3px]", opacite: 0.55, ampleur: 0.35 },
+/**
+ * Ce que chaque plan donne à un portrait : son rang et son amplitude.
+ *
+ * `rang` sert de `z-index`, et il reste **sous le dix** du bloc de texte : un
+ * portrait ne passe jamais devant les mots.
+ */
+const PLANS: Record<Plan, { rang: number; ampleur: number }> = {
+  1: { rang: 3, ampleur: 1 },
+  2: { rang: 2, ampleur: 0.6 },
+  3: { rang: 1, ampleur: 0.35 },
 };
 
+/** L'ombre portée, légère : elle décolle le portrait sans dessiner une carte. */
+const OMBRE = "shadow-[0_8px_20px_-10px_rgba(0,0,0,0.35)]";
+
 const POSITIONS: {
-  top?: string;
+  top: string;
   left?: string;
   right?: string;
   plan: Plan;
   className: string;
 }[] = [
-  /* Au-dessus du titre. Ces places-là valent à toutes les largeurs, le texte
-     commençant plus bas qu'elles ne finissent. */
-  { top: "10%", left: "12%", plan: 1, className: "hidden md:block w-28 h-28" },
-  { top: "7%", right: "14%", plan: 1, className: "hidden md:block w-24 h-24" },
-  { top: "2%", left: "30%", plan: 2, className: "hidden md:block w-20 h-20" },
-  { top: "4%", right: "32%", plan: 2, className: "hidden md:block w-16 h-16" },
-  { top: "1%", left: "47%", plan: 3, className: "hidden md:block w-12 h-12" },
-  { top: "20%", left: "3%", plan: 3, className: "hidden md:block w-12 h-12" },
-  { top: "22%", right: "6%", plan: 3, className: "hidden md:block w-14 h-14" },
-  { top: "14%", left: "22%", plan: 3, className: "hidden lg:block w-10 h-10" },
-  { top: "16%", right: "24%", plan: 3, className: "hidden lg:block w-12 h-12" },
+  /* Au-dessus du titre, et **en pixels et non en pourcentage**. La zone haute
+     est le rembourrage de la section, qui vaut 224 px à partir de `sm` : une
+     valeur fixe. Les tops écrits en pourcentage suivaient la hauteur totale, qui
+     dépend du nombre de lignes du titre et du chapô, donc un portrait
+     parfaitement placé à une largeur descendait sur les mots à une autre.
 
-  /* Sur les côtés, au niveau du texte. Elles demandent un couloir, donc `xl`. */
-  { top: "42%", left: "1%", plan: 1, className: "hidden xl:block w-32 h-32" },
-  { top: "38%", right: "1%", plan: 1, className: "hidden xl:block w-32 h-32" },
-  { top: "66%", left: "4%", plan: 2, className: "hidden xl:block w-20 h-20" },
-  { top: "63%", right: "5%", plan: 2, className: "hidden xl:block w-20 h-20" },
-  { top: "52%", left: "14%", plan: 3, className: "hidden xl:block w-12 h-12" },
-  { top: "50%", right: "15%", plan: 3, className: "hidden xl:block w-12 h-12" },
+     **Chaque place déclare la largeur à partir de laquelle elle existe**, et
+     ce seuil se mesure : deux portraits qui ne se touchent pas à 1280 px
+     peuvent se recouvrir à 1024, puisque leurs abscisses sont en pourcentage et
+     leurs tailles en pixels. Sept visages à 768 px, onze à 1024, quinze à 1280,
+     et zéro croisement aux trois. */
+  { top: "18px", left: "10%", plan: 1, className: "hidden md:block w-28 h-28" },
+  { top: "100px", right: "12%", plan: 1, className: "hidden lg:block w-24 h-24" },
+  { top: "136px", left: "20%", plan: 2, className: "hidden lg:block w-20 h-20" },
+  { top: "8px", left: "40%", plan: 2, className: "hidden md:block w-16 h-16" },
+  { top: "118px", left: "33%", plan: 3, className: "hidden md:block w-14 h-14" },
+  { top: "36px", right: "28%", plan: 2, className: "hidden md:block w-16 h-16" },
+  { top: "154px", left: "3%", plan: 3, className: "hidden md:block w-12 h-12" },
+  { top: "54px", left: "25%", plan: 3, className: "hidden md:block w-10 h-10" },
+  { top: "4px", right: "40%", plan: 3, className: "hidden md:block w-12 h-12" },
+  { top: "82px", left: "45%", plan: 3, className: "hidden lg:block w-10 h-10" },
+  { top: "172px", right: "30%", plan: 3, className: "hidden lg:block w-10 h-10" },
+
+  /* Sur les côtés, au niveau du texte. Elles demandent un couloir, donc `xl`.
+
+     **Leurs tops sont en pixels eux aussi**, et c'est la correction du même
+     défaut : écrits en pourcentage, ils suivaient la hauteur totale, qui dépend
+     de la longueur du chapô. Le chapô a justement doublé, et la grande de
+     gauche est venue se poser sur la petite du coin. Comptés depuis le haut, ils
+     restent au niveau du texte, qui commence lui aussi à une distance fixe.
+
+     **Il y en a deux par côté et non trois.** La troisième ne tenait pas sans
+     recouvrir une voisine, et deux portraits qui se recouvrent ne se lisent pas
+     comme de la profondeur mais comme une erreur de placement. */
+  { top: "236px", left: "1%", plan: 1, className: "hidden xl:block w-32 h-32" },
+  { top: "250px", left: "14%", plan: 3, className: "hidden xl:block w-12 h-12" },
+  { top: "228px", right: "1%", plan: 1, className: "hidden xl:block w-32 h-32" },
+  { top: "262px", right: "15%", plan: 3, className: "hidden xl:block w-12 h-12" },
 
   /* Sur téléphone, tout tient au-dessus du titre : le bloc de texte y prend
-     toute la largeur, il n'y a aucun côté disponible. */
-  { top: "2%", left: "3%", plan: 1, className: "block md:hidden w-20 h-20" },
-  { top: "1%", right: "5%", plan: 1, className: "block md:hidden w-16 h-16" },
-  { top: "14%", left: "33%", plan: 3, className: "block md:hidden w-12 h-12" },
-  { top: "9%", right: "29%", plan: 3, className: "block md:hidden w-10 h-10" },
+     toute la largeur, il n'y a aucun côté disponible. La zone haute y vaut
+     176 px, d'où des tops plus serrés. */
+  { top: "8px", left: "3%", plan: 1, className: "block md:hidden w-20 h-20" },
+  { top: "4px", right: "5%", plan: 1, className: "block md:hidden w-16 h-16" },
+  { top: "100px", left: "30%", plan: 3, className: "block md:hidden w-12 h-12" },
+  { top: "96px", right: "26%", plan: 3, className: "block md:hidden w-10 h-10" },
 ];
 
 /** Le nombre de places posées. C'est lui qui décide combien de membres on prend. */
@@ -239,12 +291,13 @@ export function PortraitsFlottants({
         const tirage = tirages[i];
         const ecart = ecarts?.[i];
 
-        const cadre = cn(
-          "absolute rounded-full",
-          place.className,
-          plan.flou,
-        );
-        const pose = { top: place.top, left: place.left, right: place.right };
+        const cadre = cn("absolute rounded-full", OMBRE, place.className);
+        const pose = {
+          top: place.top,
+          left: place.left,
+          right: place.right,
+          zIndex: plan.rang,
+        };
 
         /* Premier passage : une boîte inerte, à sa place et invisible, dont le
            seul travail est de se laisser mesurer. */
@@ -276,7 +329,7 @@ export function PortraitsFlottants({
               sansMouvement
                 ? undefined
                 : {
-                    opacity: plan.opacite,
+                    opacity: 1,
                     scale: 1,
                     x: 0,
                     y: 0,
@@ -291,7 +344,7 @@ export function PortraitsFlottants({
             }
             viewport={{ once: true, amount: 0.4 }}
             whileHover={
-              sansMouvement ? undefined : { scale: 1.1, opacity: 1, zIndex: 20 }
+              sansMouvement ? undefined : { scale: 1.1, zIndex: 9 }
             }
           >
             {/* `img` et non `next/image` : le fichier fait 200 px de côté pour

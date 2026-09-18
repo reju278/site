@@ -350,3 +350,24 @@ export const equipeImmersion: {
   manquant:
     "l'intitulé du poste de Fabri Keutcha. Son portrait vient de Calendly, le reste de la rangée est complet.",
 };
+
+/**
+ * Le titre du mur de la communauté, dicté par Rémy.
+ *
+ * **Il ne partage plus celui de l'accueil.** Le mur reprenait `titreResultats`,
+ * « De vraies personnes. De vrais résultats. », qui sert aussi à la section des
+ * avis de l'accueil : le changer là-bas aurait changé une page que Rémy n'a pas
+ * demandé de toucher. Un titre par endroit, donc, et celui-ci dit ce que la
+ * section montre vraiment, une communauté et non une liste de résultats.
+ *
+ * **Deux segments, donc deux lignes.** `TitreRoulant` rend un segment par ligne,
+ * et la phrase entière ne tient pas sur une ligne de téléphone : autant décider
+ * la coupure plutôt que la laisser tomber au hasard de la largeur.
+ *
+ * **Pas d'accent italique sur « Funnels Club ».** Un nom de marque se pose
+ * droit, comme dans l'en-tête du hub.
+ */
+export const titreCommunaute = [
+  { texte: "La communauté" },
+  { texte: "Funnels Club" },
+] as const;
