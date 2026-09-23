@@ -28,6 +28,14 @@ export default function LayoutPreparation({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <div
+      /* **La hauteur de la bande fixe du haut**, écrite une seule fois : elle
+         décide de la bande elle-même, de la place de la capsule sous elle et
+         du rembourrage du hero. Trois écritures séparées auraient divergé au
+         premier réglage, et la capsule serait passée sous la bande.
+
+         C'est la place de la gélule fixe, son écart au bord compris. Plus
+         haute sur téléphone : la phrase y tient sur deux lignes. */
+      className="[--bande-h:4.25rem] sm:[--bande-h:3.25rem] lg:[--bande-h:3.5rem]"
       /* Les mesures de la vidéo, **recopiées** du gabarit d'`/immersion` et non
          partagées : c'est la même recette, et le hero et `globals.css` les
          lisent sous ces trois noms. Le jour où l'une change là-bas, elle change
@@ -40,7 +48,12 @@ export default function LayoutPreparation({
         } as React.CSSProperties
       }
     >
-      <EnTeteImmersion ancres={ancresPreparation} />
+      {/* **La capsule descend sous la bande fixe**, de la hauteur de celle-ci :
+          voir `--bande-h` plus haut, écrite une fois pour les deux. */}
+      <EnTeteImmersion
+        ancres={ancresPreparation}
+        className="top-[calc(var(--bande-h)+0.25rem)] lg:top-[calc(var(--bande-h)+0.5rem)]"
+      />
       {children}
       {/* L'écart entre l'équipe et la signature. Sur `/immersion`, la barre des
           tâches s'y ajoute ; sans elle, il reste celui-ci. */}

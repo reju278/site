@@ -72,7 +72,13 @@ const ENTREE_SUR_PAGE =
 
 export function EnTeteImmersion({
   ancres = ancresImmersion,
+  className,
 }: {
+  /**
+   * Pour descendre la capsule sous une bande fixe, sur `/preparation`. Les
+   * classes `top-*` passées ici remplacent celles du composant.
+   */
+  className?: string;
   /**
    * Les sections de la page que la capsule désigne. Celles d'`/immersion` par
    * défaut ; `/preparation` passe les siennes, qui sont moins nombreuses.
@@ -110,7 +116,12 @@ export function EnTeteImmersion({
   );
 
   return (
-    <header className="pointer-events-none fixed inset-x-0 top-2 z-50 px-3 lg:top-5 lg:px-5">
+    <header
+      className={cn(
+        "pointer-events-none fixed inset-x-0 top-2 z-50 px-3 lg:top-5 lg:px-5",
+        className,
+      )}
+    >
       {/* **Une seule capsule, centrée**, sur demande de Rémy : le nom, les
           ancres et la bascule de thème sont fusionnés. Elles étaient deux,
           poussées aux deux bords par un `justify-between`.

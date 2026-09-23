@@ -41,15 +41,22 @@ export const ancresPreparation = [
 ] as const;
 
 export const presentationPreparation = {
-  /* La bande du haut de la page source, posée en gélule au-dessus du titre. */
+  /* La bande du haut de la page source, fixée en haut de l'écran. */
   bande:
     "Regardez attentivement cette vidéo pour préparer au mieux votre rendez-vous.",
   /* **Deux segments, donc deux lignes.** La coupe est celle de l'agent, à la
      virgule près : aucun mot n'est touché, seul l'endroit où la phrase passe à
      la ligne est décidé. Rémy tranche s'il la veut ailleurs. */
   titre: [
-    "Présentation du parfait tunnel de vente*",
-    "pour vendre une formation en ligne, du coaching ou du consulting",
+    /* **« parfait tunnel de vente* » en surbrillance**, comme sur la page
+       source, où il est en gras et en bleu. Rémy l'a demandé. */
+    {
+      texte: "Présentation du parfait tunnel de vente*",
+      surligne: "parfait tunnel de vente*",
+    },
+    {
+      texte: "pour vendre une formation en ligne, du coaching ou du consulting",
+    },
   ],
   note: "*La même stratégie que nous appliquons et enseignons aux membres de Funnels Club",
   video: {
