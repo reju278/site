@@ -1490,15 +1490,15 @@ voile du dialogue, et c'est le verre qui le fait tenir sur un fond dont on ne
 sait rien. Il est **sous** le panneau et non au-dessus : on ferme une fenêtre
 quand on a fini de lire, et on finit de lire en bas.
 
-**Sixième : la gélule fixe de `/preparation`**, qui porte la consigne « Regardez
-attentivement cette vidéo » tout en haut de l'écran, sur demande de Rémy. C'est
-la gélule du hero en `sur="voile"`, donc `bg-card/85` et son flou : elle passe de
-la photographie à la page en défilant, et c'est la vraie surface sous le texte
-qui la garde lisible sur les deux. Une bande bleue pleine a été essayée et
-écartée par Rémy.
+**La notification de `/preparation` relève de la deuxième**, celle de la carte
+de cookies : c'est l'autre carte qui flotte en bas de l'écran, elle en porte le
+verre au pixel, et deux dessins pour la même famille d'objets se liraient comme
+une inattention. Deux essais l'ont précédée et ont été écartés par Rémy, une
+bande bleue fixée en haut puis la gélule du hero posée au-dessus de l'en-tête :
+le haut appartient à l'en-tête.
 
-Ces six exceptions couvrent tout ce qui a le droit de flouter par-devant. Une
-septième ne s'ajoute pas parce qu'elle irait bien : elle se décide, et elle
+Ces cinq exceptions couvrent tout ce qui a le droit de flouter par-devant. Une
+sixième ne s'ajoute pas parce qu'elle irait bien : elle se décide, et elle
 s'écrit ici.
 
 ### L'habillage de l'en-tête suit la page, jamais le défilement
@@ -1994,11 +1994,9 @@ dans la source donne donc une occurrence sur une page qui n'en montre aucune.
 **`/preparation` est `/immersion` sans sa barre des tâches**, sur demande de
 Rémy : son hero, sa galerie des entretiens et sa rangée de l'équipe sont les
 mêmes composants, et la capsule de l'en-tête reçoit ses ancres en propriété.
-Seul le contenu du hero change, relevé sur `parfait-confirmation`, où
-« parfait tunnel de vente* » est en surbrillance comme sur la page source : un
-surligneur `bg-primary` et non un texte bleu, qui ne tiendrait pas son contraste
-sur la photographie. `TitreRoulant` le pose par le champ `surligne` d'un
-segment, une sous-chaîne exacte qu'il enveloppe sans la réécrire. Une
+Seul le contenu du hero change : relevé sur `parfait-confirmation`, puis
+redicté par Rémy pour le titre et le sous-titre. La consigne « regardez cette
+vidéo » est une notification Sonner en bas de l'écran, `ConsigneVideo`. Une
 correction faite sur l'un de ces blocs vaut donc pour les deux pages, et
 c'est voulu. Les trois mesures de la vidéo, en revanche, sont recopiées dans
 les deux gabarits : le jour où l'une change, elle change aux deux.

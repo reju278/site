@@ -41,24 +41,22 @@ export const ancresPreparation = [
 ] as const;
 
 export const presentationPreparation = {
-  /* La bande du haut de la page source, fixée en haut de l'écran. */
-  bande:
-    "Regardez attentivement cette vidéo pour préparer au mieux votre rendez-vous.",
-  /* **Deux segments, donc deux lignes.** La coupe est celle de l'agent, à la
-     virgule près : aucun mot n'est touché, seul l'endroit où la phrase passe à
-     la ligne est décidé. Rémy tranche s'il la veut ailleurs. */
-  titre: [
-    /* **« parfait tunnel de vente* » en surbrillance**, comme sur la page
-       source, où il est en gras et en bleu. Rémy l'a demandé. */
-    {
-      texte: "Présentation du parfait tunnel de vente*",
-      surligne: "parfait tunnel de vente*",
-    },
-    {
-      texte: "pour vendre une formation en ligne, du coaching ou du consulting",
-    },
-  ],
-  note: "*La même stratégie que nous appliquons et enseignons aux membres de Funnels Club",
+  /* **La consigne de la page, en notification**, dictée par Rémy en
+     remplacement de la bande de la page source, « Regardez attentivement cette
+     vidéo pour préparer au mieux votre rendez-vous. ». Voir `ConsigneVideo`. */
+  consigne: {
+    titre: "Très important",
+    texte: "Regardez cette vidéo pour préparer votre rendez-vous au mieux.",
+  },
+  /* **Le titre et le sous-titre sont coupés là où Rémy l'a dicté.** Sans
+     l'astérisque de la page source ni sa surbrillance, retirés par Rémy : la
+     note qui suit perd donc aussi le sien, elle ne renverrait plus à rien. */
+  titre: [{ texte: "Présentation du parfait tunnel de vente" }],
+  /* Dicté par Rémy : « la prestation de service » remplace « le consulting »
+     de la page source. */
+  sousTitre:
+    "Pour vendre une formation en ligne, du coaching ou de la prestation de service",
+  note: "La même stratégie que nous appliquons et enseignons aux membres de Funnels Club",
   video: {
     id: "775nifg0kr",
     /* Le titre de l'iframe décrit la vidéo et non le lecteur. */

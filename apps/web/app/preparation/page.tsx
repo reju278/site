@@ -1,8 +1,7 @@
-import { AnimeSiVisible } from "@/components/anime-si-visible";
+import { ConsigneVideo } from "@/components/consigne-video";
 import { GalerieEntretiens } from "@/components/galerie-entretiens";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { ParticulesHero } from "@/components/particules-hero";
-import { Gelule, PointGelule } from "@/components/pilules-hero";
 import { RangeeEquipe } from "@/components/rangee-equipe";
 import { SemisPoints } from "@/components/semis-points";
 import { TitreRoulant } from "@/components/titre-roulant";
@@ -41,56 +40,21 @@ export const metadata: Metadata = {
 };
 
 export default function Preparation() {
-  const { bande, titre, note, video } = presentationPreparation;
+  const { consigne, titre, sousTitre, note, video } = presentationPreparation;
 
   return (
     <>
       <div id="haut" />
 
-      {/* **La bande de la page source, fixée tout en haut de l'écran**, sur
-          demande de Rémy : c'est la consigne de la page, elle reste sous les
-          yeux pendant qu'on regarde la vidéo.
-
-          **C'est la gélule du hero d'`/immersion`**, sa lumière qui tourne et
-          son point vert, et non une bande pleine : Rémy a écarté le bleu uni,
-          qui ne ressemblait à rien d'autre sur la page.
-
-          **`sur="voile"` et non `image`**, parce qu'elle ne reste pas sur la
-          photographie : on défile, et elle passe sur la page, claire en thème
-          clair. Le blanc de `image` y disparaîtrait. `voile` porte une vraie
-          surface, `bg-card/85` et son flou, et l'encre du thème : lisible sur
-          les deux. C'est la sixième exception au flou par-devant, écrite dans
-          `AGENTS.md`.
-
-          Sa place est `--bande-h`, déclarée dans le gabarit : c'est elle qui
-          pousse la capsule de l'en-tête et le haut du hero. `pointer-events` est
-          rendu à la seule gélule, pour ne pas bloquer les clics sur la bande
-          vide autour d'elle. */}
-      <div className="pointer-events-none fixed inset-x-0 top-2 z-50 flex justify-center px-3 lg:top-3">
-        <AnimeSiVisible className="pointer-events-auto">
-          <Gelule
-            as="p"
-            sur="voile"
-            teinte="var(--icone-resultats)"
-            pastille={<PointGelule />}
-            /* **Un cran plus grande que les gélules du hero**, sur demande de
-               Rémy : « il faut qu'on la voie ». Le rembourrage est sur la
-               gélule, le corps sur le libellé, qui passe devant celui du
-               composant parce qu'il est plus près du texte. */
-            className="py-2 pr-5 pl-4 shadow-[0_4px_16px_rgba(0,0,0,0.18)]"
-          >
-            <span className="text-sm font-semibold sm:text-base">
-              {insecables(bande)}
-            </span>
-          </Gelule>
-        </AnimeSiVisible>
-      </div>
+      {/* La consigne de la page, en notification en bas de l'écran, sur
+          demande de Rémy. */}
+      <ConsigneVideo {...consigne} />
 
       {/* LE HERO, celui d'`/immersion` au caractère près. */}
       <section
         id="presentation"
         data-hero
-        className="relative isolate flex flex-col px-5 pt-[calc(var(--bande-h)+5rem)] sm:min-h-[calc(100svh+var(--part-cachee))] sm:pt-[calc(var(--bande-h)+6rem)]"
+        className="relative isolate flex flex-col px-5 pt-20 sm:min-h-[calc(100svh+var(--part-cachee))] sm:pt-24"
       >
         <div
           data-bande-sombre
@@ -120,15 +84,23 @@ export default function Preparation() {
 
         <div className="mx-auto flex w-full max-w-[var(--largeur-video)] flex-1 flex-col">
           <div className="mx-auto mt-auto flex max-w-4xl flex-col items-center text-center">
-            {/* Un corps plus petit que celui d'`/immersion` : ce titre fait
-                cent caractères, celui-là en fait vingt-trois. */}
+            {/* Le corps du titre d'`/immersion`, depuis que le sous-titre en
+                est sorti : il ne reste que quarante caractères. */}
             <TitreRoulant
               as="h1"
               segments={titre}
-              className="titre text-[1.75rem] text-balance text-white sm:text-4xl lg:text-5xl"
+              className="titre text-[2rem] text-balance text-white sm:text-5xl lg:text-6xl"
             />
 
-            {/* La note de l'astérisque. Du blanc en dur sur la photographie,
+            {/* Le sous-titre, sur la ligne suivante et en corps de texte, sur
+                demande de Rémy : le titre s'arrête sur le sujet de la vidéo,
+                ceci dit à qui elle s'adresse. Du blanc en dur à 90 % sur la
+                photographie, comme le titre. */}
+            <p className="mt-5 text-lg leading-snug text-balance text-white/90 sm:text-2xl">
+              {insecables(sousTitre)}
+            </p>
+
+            {/* La note, qui renvoyait à un astérisque du titre. Du blanc en dur sur la photographie,
                 sombre dans les deux thèmes grâce à `--fond-hero` et au voile :
                 à 70 %, il tient ses 4,5:1 au pire cas, image blanche sous un
                 voile à 55 %. */}
@@ -167,7 +139,7 @@ export default function Preparation() {
             C'est la même raison que sous la vidéo d'`/immersion`. */}
         <SectionPreparation
           id="avis"
-          className="scroll-mt-[calc(var(--bande-h)+6rem)] [&>div]:pt-16 sm:[&>div]:pt-20"
+          className="scroll-mt-24 [&>div]:pt-16 sm:[&>div]:pt-20"
         >
           <div className="mx-auto max-w-3xl text-center">
             <TitreRoulant
@@ -185,7 +157,7 @@ export default function Preparation() {
       </div>
 
       {/* L'ÉQUIPE, celle d'`/immersion`. */}
-      <SectionPreparation id="equipe" className="scroll-mt-[calc(var(--bande-h)+6rem)]">
+      <SectionPreparation id="equipe" className="scroll-mt-24">
         <div className="mx-auto max-w-3xl pt-10 text-center sm:pt-16">
           <TitreRoulant
             as="h2"

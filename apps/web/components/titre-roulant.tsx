@@ -42,18 +42,7 @@ import { Fragment, useEffect, useRef, useState } from "react";
  * vrais résultats.<style>… ». Une contre-règle globale n'a pas ce problème, et
  * elle n'est écrite qu'une fois.
  */
-export type SegmentTitre = {
-  texte: string;
-  accent?: boolean;
-  /**
-   * Un passage du segment à mettre en surbrillance, **sous-chaîne exacte** de
-   * `texte` : il est retrouvé et enveloppé, jamais réécrit. Un passage absent
-   * laisse le titre intact. Les mots gardent chacun leur masque, la
-   * surbrillance est posée sur le groupe, donc elle couvre aussi les espaces
-   * entre eux.
-   */
-  surligne?: string;
-};
+export type SegmentTitre = { texte: string; accent?: boolean };
 
 /**
  * Les signes qui ne peuvent pas commencer une ligne, et ceux qui ne peuvent pas
@@ -215,36 +204,6 @@ export function TitreRoulant({
           </Fragment>
         ));
 
-        /* La surbrillance, en rangs de mots : on compte les mots qui
-           précèdent le passage et ceux qu'il contient, avec le même découpage
-           que le titre, pour que les deux tombent d'accord. */
-        const debut = segment.surligne
-          ? segment.texte.indexOf(segment.surligne)
-          : -1;
-        const avant =
-          debut > 0 ? regrouper(segment.texte.slice(0, debut).trim()).length : 0;
-        const nombre =
-          debut >= 0 && segment.surligne
-            ? regrouper(segment.surligne).length
-            : 0;
-        const ligne =
-          nombre > 0 ? (
-            <>
-              {corps.slice(0, avant)}
-              {/* `mark` : c'est l'élément du surlignage, et il le dit à un
-                  lecteur d'écran. `box-decoration-clone` : si le passage passe
-                  à la ligne, chaque morceau garde son rembourrage et ses
-                  angles. Le fond est celui du bouton plein du site, donc son
-                  encre tient ses 4,5:1 quelle que soit l'image dessous. */}
-              <mark className="rounded-sm bg-primary px-[0.18em] text-primary-foreground [box-decoration-break:clone] [-webkit-box-decoration-break:clone]">
-                {corps.slice(avant, avant + nombre)}
-              </mark>
-              {corps.slice(avant + nombre)}
-            </>
-          ) : (
-            corps
-          );
-
         return segments.length > 1 ? (
           /* **L'espace entre deux segments est rendu mais pas affiché.**
 
@@ -261,10 +220,10 @@ export function TitreRoulant({
              décrit plus haut, à l'échelle du segment. */
           <Fragment key={s}>
             {s > 0 ? <span className="sr-only"> </span> : null}
-            <span className="block">{ligne}</span>
+            <span className="block">{corps}</span>
           </Fragment>
         ) : (
-          <Fragment key={s}>{ligne}</Fragment>
+          <Fragment key={s}>{corps}</Fragment>
         );
       })}
     </Balise>
