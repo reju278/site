@@ -49,7 +49,7 @@ export default function Preparation() {
       {/* La consigne de la page, en notification en bas de l'écran, sur
           demande de Rémy. */}
       <ConsigneVideo
-        texte={consigne}
+        {...consigne}
         affiche={`/temoignages/${video.id}.jpg`}
       />
 

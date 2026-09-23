@@ -1496,9 +1496,17 @@ verre au pixel, et deux dessins pour la même famille d'objets se liraient comme
 une inattention. Deux essais l'ont précédée et ont été écartés par Rémy, une
 bande bleue fixée en haut puis la gélule du hero posée au-dessus de l'en-tête :
 le haut appartient à l'en-tête. Elle est faite de briques de registre, sur
-demande de Rémy : Sonner pour la notification, `BorderBeam` de MagicUI pour la
-lumière du bord, et la gélule « Fermer » de la fenêtre des entretiens. La vignette
-de la vidéo tient la place d'une icône.
+demande de Rémy : Sonner pour la notification, et pour « Fermer » le bouton
+« Voir plus » du mur d'`/immersion`, `BoutonScintillant` à 25 px. Le texte porte
+le surligneur jaune de l'accueil et son animation, par `surligner` et
+`Apparition`. La vignette de la vidéo tient la place d'une icône, et en large
+elle prend la hauteur du texte. Une lumière `BorderBeam` a fait le tour de la
+carte, puis a été retirée par Rémy.
+
+Elle joue un « toudoum » synthétisé à son arrivée, trois secondes après le
+chargement. **Il ne sonne que si le navigateur le permet** : sans un clic ou une
+touche préalable, Chrome, Safari et Firefox gardent le son coupé, et on ne
+rejoue pas au premier clic, ce qui ferait sonner la page au mauvais moment.
 
 Ces cinq exceptions couvrent tout ce qui a le droit de flouter par-devant. Une
 sixième ne s'ajoute pas parce qu'elle irait bien : elle se décide, et elle

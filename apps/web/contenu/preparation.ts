@@ -45,8 +45,21 @@ export const presentationPreparation = {
      remplacement de la bande de la page source, « Regardez attentivement cette
      vidéo pour préparer au mieux votre rendez-vous. », puis d'un « Très
      important » qu'il a écarté. Voir `ConsigneVideo`. */
-  consigne:
-    "Il est important de bien visionner cette vidéo pour que vous ayez toutes les informations et que notre échange soit pertinent. N'hésitez pas à la regarder en accéléré pour gagner du temps.",
+  consigne: {
+    /* Dicté par Rémy. */
+    titre: "⚠️ Préparer votre rendez-vous",
+    texte:
+      "Il est important de bien visionner cette vidéo avant votre rendez-vous pour que vous ayez toutes les informations et que notre échange soit pertinent. N'hésitez pas à la regarder en accéléré pour gagner du temps.",
+    /* **Les passages surlignés, choisis par l'agent** sur demande de Rémy, qui
+       n'a pas dit lesquels : à lui de trancher. Chacun est une sous-chaîne
+       exacte de `texte`, enveloppée sans être réécrite ; un passage qui ne s'y
+       retrouve pas laisse le texte intact. */
+    surligne: [
+      "bien visionner cette vidéo avant votre rendez-vous",
+      "toutes les informations",
+      "en accéléré",
+    ],
+  },
   /* **Le titre et le sous-titre sont coupés là où Rémy l'a dicté.** Sans
      l'astérisque de la page source ni sa surbrillance, ni la note qui
      l'expliquait, « La même stratégie que nous appliquons et enseignons aux

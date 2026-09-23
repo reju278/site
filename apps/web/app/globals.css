@@ -1459,6 +1459,6 @@ body:has([role="dialog"][data-state="open"]) :is([data-barre-appel], [data-tache
    lui-même en pleine largeur, d'où la borne. */
 @media (width >= 600px) {
   [data-sonner-toaster]:has(.consigne-video) {
-    --width: min(40rem, 100vw - 2rem) !important;
+    --width: min(48rem, 100vw - 2rem) !important;
   }
 }
