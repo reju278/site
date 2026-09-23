@@ -1962,7 +1962,7 @@ garantie.
 
 ## Un tunnel n'est pas une page du site
 
-`/hub` et `/immersion` sont des **tunnels** : on y arrive par un lien qu'on a
+`/hub`, `/immersion` et `/preparation` sont des **tunnels** : on y arrive par un lien qu'on a
 reçu, et la règle est qu'on n'en sort que par l'appel. La liste des racines vit
 dans `lib/tunnels.ts`, et `HorsTunnel` la lit pour retirer l'en-tête et le pied
 de page du site, qui offriraient sinon une trentaine de portes de sortie.
@@ -1983,6 +1983,14 @@ sortie.
 HTML.** L'en-tête du site y est rendu côté serveur puis jeté : son texte figure
 dans la charge utile sans être ni visible ni cliquable. Chercher « Programmes »
 dans la source donne donc une occurrence sur une page qui n'en montre aucune.
+
+**`/preparation` est `/immersion` sans sa barre des tâches**, sur demande de
+Rémy : son hero, sa galerie des entretiens et sa rangée de l'équipe sont les
+mêmes composants, et la capsule de l'en-tête reçoit ses ancres en propriété.
+Seul le contenu du hero change, relevé sur `parfait-confirmation`. Une
+correction faite sur l'un de ces blocs vaut donc pour les deux pages, et
+c'est voulu. Les trois mesures de la vidéo, en revanche, sont recopiées dans
+les deux gabarits : le jour où l'une change, elle change aux deux.
 
 ## Le même texte à deux endroits n'est écrit qu'une fois
 

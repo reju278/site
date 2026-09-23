@@ -70,7 +70,18 @@ const ENTREE_SUR_IMAGE =
 const ENTREE_SUR_PAGE =
   "text-muted-foreground hover:bg-accent hover:text-foreground focus:bg-accent";
 
-export function EnTeteImmersion() {
+export function EnTeteImmersion({
+  ancres = ancresImmersion,
+}: {
+  /**
+   * Les sections de la page que la capsule désigne. Celles d'`/immersion` par
+   * défaut ; `/preparation` passe les siennes, qui sont moins nombreuses.
+   * **Chaque entrée doit désigner une section qui existe sur la page qui
+   * l'affiche** : une ancre vers une section absente est une cible qui ne mène
+   * nulle part.
+   */
+  ancres?: readonly { id: string; libelle: string }[];
+} = {}) {
   const [surImage, setSurImage] = useState(false);
   const [ouvert, setOuvert] = useState(false);
 
@@ -156,7 +167,7 @@ export function EnTeteImmersion() {
                 demande `group/roule` sur ce qui porte le survol, faute de quoi
                 il ne se déclenche que sur les lettres et non sur l'entrée
                 entière, rembourrage compris. */}
-            {ancresImmersion.map((ancre) => (
+            {ancres.map((ancre) => (
               <a
                 key={ancre.id}
                 href={`#${ancre.id}`}
@@ -239,7 +250,7 @@ export function EnTeteImmersion() {
                 aria-label="Les sections de la page"
                 className="flex flex-col gap-1 pt-2"
               >
-                {ancresImmersion.map((ancre, rang) => (
+                {ancres.map((ancre, rang) => (
                   <a
                     key={ancre.id}
                     href={`#${ancre.id}`}

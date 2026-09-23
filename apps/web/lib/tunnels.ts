@@ -16,7 +16,7 @@
  * le pied de page, et porte toujours son `robots: { index: false }` dans son
  * gabarit. Ce fichier ne le vérifie pas : il ne fait que nommer les racines.
  */
-export const TUNNELS = ["/hub", "/immersion"] as const;
+export const TUNNELS = ["/hub", "/immersion", "/preparation"] as const;
 
 /** L'adresse est-elle dans un tunnel, racine ou sous-page ? */
 export function dansUnTunnel(chemin: string | null): boolean {
