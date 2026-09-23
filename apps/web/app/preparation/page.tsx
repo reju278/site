@@ -50,7 +50,7 @@ export default function Preparation() {
           demande de Rémy. */}
       <ConsigneVideo
         {...consigne}
-        affiche={`/temoignages/${video.id}.jpg`}
+        video={video.id}
       />
 
       {/* LE HERO, celui d'`/immersion` au caractère près. */}

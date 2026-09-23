@@ -80,6 +80,21 @@ const OPTIONS_NATIF = (() => {
   return o;
 })();
 
+/**
+ * L'événement qui demande à un lecteur `natif` de démarrer, avec l'identifiant
+ * Wistia de la vidéo en `detail.id`.
+ *
+ * **Il existe parce que l'iframe est d'une autre origine** : la page ne peut pas
+ * appuyer sur son bouton de lecture. Le lecteur se recharge donc avec la
+ * lecture automatique, ce qui ne marche que parce que la demande part d'un clic
+ * du visiteur : c'est ce geste qui autorise le son. Sans lui, le navigateur
+ * refuserait, ou démarrerait sans le son.
+ *
+ * Un événement de fenêtre et non une propriété : celui qui demande, la
+ * notification de `/preparation`, n'a aucun lien de parenté avec le lecteur.
+ */
+export const LIRE_VIDEO = "lecteur-video:lire";
+
 /** « 981 » devient « 16:21 ». */
 export function duree(secondes: number): string {
   const m = Math.floor(secondes / 60);
@@ -149,7 +164,20 @@ export function LecteurVideo({
 }) {
   const [lance, setLance] = useState(false);
   const [proche, setProche] = useState(false);
+  /* En mode natif, la lecture demandée de l'extérieur par `LIRE_VIDEO`. */
+  const [demandee, setDemandee] = useState(false);
   const cadre = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!natif) return;
+    const ecouter = (evenement: Event) => {
+      if ((evenement as CustomEvent<{ id: string }>).detail?.id !== id) return;
+      setProche(true);
+      setDemandee(true);
+    };
+    window.addEventListener(LIRE_VIDEO, ecouter);
+    return () => window.removeEventListener(LIRE_VIDEO, ecouter);
+  }, [natif, id]);
 
   useEffect(() => {
     if (!actif) setLance(false);
@@ -252,7 +280,10 @@ export function LecteurVideo({
         //
         // Le prix est un rognage de moins d'un pour cent de l'image.
         <iframe
-          src={`https://fast.wistia.net/embed/iframe/${id}?${natif ? OPTIONS_NATIF : OPTIONS}`}
+          /* Une lecture demandée change la clé, donc remonte l'iframe avec
+             `autoPlay` : c'est le rechargement qui la fait démarrer. */
+          key={demandee ? "lecture" : "repos"}
+          src={`https://fast.wistia.net/embed/iframe/${id}?${natif && !demandee ? OPTIONS_NATIF : OPTIONS}`}
           title={titre}
           allow="autoplay; fullscreen"
           allowFullScreen

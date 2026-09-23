@@ -2,6 +2,7 @@
 
 import { Apparition } from "@/components/apparition";
 import { BoutonScintillant } from "@/components/bouton-scintillant";
+import { LIRE_VIDEO } from "@/components/lecteur-video";
 import { TexteRoulant } from "@/components/texte-roulant";
 import { surligner } from "@/lib/surligner";
 import { cn } from "@repo/ui/lib/utils";
@@ -49,15 +50,17 @@ export function ConsigneVideo({
   titre,
   texte,
   surligne,
-  affiche,
+  video,
 }: {
   titre: string;
   texte: string;
   /** Des sous-chaînes exactes de `texte`, à surligner. */
   surligne: readonly string[];
-  /** L'affiche de la vidéo du haut de page, servie par nous. */
-  affiche: string;
+  /** L'identifiant Wistia de la vidéo du haut de page. */
+  video: string;
 }) {
+  /* L'affiche est servie par nous, au même chemin que celle du lecteur. */
+  const affiche = `/temoignages/${video}.jpg`;
   const [ouverte, setOuverte] = useState(false);
 
   useEffect(() => {
@@ -74,6 +77,7 @@ export function ConsigneVideo({
           texte={texte}
           surligne={surligne}
           affiche={affiche}
+          video={video}
         />
       ), {
         id: ID,
@@ -90,7 +94,7 @@ export function ConsigneVideo({
       clearTimeout(minuteur);
       toast.dismiss(ID);
     };
-  }, [titre, texte, surligne, affiche]);
+  }, [titre, texte, surligne, affiche, video]);
 
   return (
     /* **Le voile de bas en haut**, sur demande de Rémy : tant que la
@@ -122,12 +126,14 @@ function Carte({
   texte,
   surligne,
   affiche,
+  video,
 }: {
   id: string | number;
   titre: string;
   texte: string;
   surligne: readonly string[];
   affiche: string;
+  video: string;
 }) {
   /* Sous mouvement réduit, le saut jusqu'à la vidéo se fait sans défilement
      animé. */
@@ -138,6 +144,9 @@ function Carte({
     document
       .querySelector("#presentation .scene-video")
       ?.scrollIntoView({ behavior: reduit ? "auto" : "smooth", block: "center" });
+    /* **Et la lance**, sur demande de Rémy. Voir `LIRE_VIDEO` : l'iframe se
+       recharge en lecture automatique, et c'est ce clic qui l'autorise. */
+    window.dispatchEvent(new CustomEvent(LIRE_VIDEO, { detail: { id: video } }));
     toast.dismiss(id);
   };
 
@@ -158,7 +167,7 @@ function Carte({
       <button
         type="button"
         onClick={allerALaVideo}
-        aria-label="Aller à la vidéo"
+        aria-label="Lancer la vidéo"
         className="group/vignette relative aspect-video w-full shrink-0 overflow-hidden rounded-md sm:aspect-auto sm:w-64 sm:self-stretch"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
