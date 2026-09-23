@@ -1462,3 +1462,13 @@ body:has([role="dialog"][data-state="open"]) :is([data-barre-appel], [data-tache
     --width: min(48rem, 100vw - 2rem) !important;
   }
 }
+
+/* La notification de `/preparation` s'efface quand une fenêtre d'entretien est
+   ouverte. Sonner est au-dessus de tout, et elle se posait par-dessus le bas de
+   l'article et ses commandes. Elle revient à la fermeture de la fenêtre.
+   `[data-state]` et pas seulement `[role]`, pour la même raison que la barre
+   d'appel : Radix garde le nœud pendant l'animation de fermeture. */
+body:has([role="dialog"][data-state="open"])
+  [data-sonner-toaster]:has(.consigne-video) {
+  visibility: hidden;
+}

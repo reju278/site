@@ -285,10 +285,11 @@ export function GalerieFenetre({
                 « Fermer » : elles commandent la fenêtre, elles n'appartiennent
                 pas à l'article.
 
-                `-left-14` et `-right-14` : hors du panneau sur grand écran. En
-                dessous de `sm`, il n'y a pas la place de chaque côté, elles
-                reviennent **dans** la marge du panneau, où elles se posent sur
-                l'en-tête coloré de l'entretien.
+                `-left-14` et `-right-14` : hors du panneau sur grand écran.
+                **En dessous de `sm`, elles descendent à côté du bouton
+                « Fermer »**, sur demande de Rémy : il n'y a pas la place de
+                chaque côté du panneau, et posées dessus elles masquaient le
+                titre et le lecteur de l'entretien. Voir la rangée du bas.
 
                 `size-10` : la cible tactile du projet. */}
             <button
@@ -297,7 +298,7 @@ export function GalerieFenetre({
               aria-label="Entretien précédent"
               className={cn(
                 VERRE_COMMANDE,
-                "absolute top-1/2 left-2 z-10 size-10 -translate-y-1/2 sm:-left-14",
+                "absolute top-1/2 z-10 hidden size-10 -translate-y-1/2 sm:-left-14 sm:inline-flex",
               )}
             >
               <ChevronLeft aria-hidden className="size-5" />
@@ -309,7 +310,7 @@ export function GalerieFenetre({
               aria-label="Entretien suivant"
               className={cn(
                 VERRE_COMMANDE,
-                "absolute top-1/2 right-2 z-10 size-10 -translate-y-1/2 sm:-right-14",
+                "absolute top-1/2 z-10 hidden size-10 -translate-y-1/2 sm:-right-14 sm:inline-flex",
               )}
             >
               <ChevronRight aria-hidden className="size-5" />
@@ -322,7 +323,8 @@ export function GalerieFenetre({
                 « Fermer » fait 36 px, son écart au panneau 12, et on laisse
                 12 px au-dessus et en dessous. Le panneau vaut donc la hauteur
                 d'écran moins 72. Tout ce qui est repris là est rendu à la
-                vidéo.
+                vidéo. Sur téléphone, la rangée du bas porte les flèches, qui
+                font 40 px : quatre de plus, d'où moins 76.
 
                 **Le défilement est sur le bloc intérieur et non sur le
                 panneau** : la barre de défilement courait sur l'angle arrondi,
@@ -335,7 +337,7 @@ export function GalerieFenetre({
             <div className="overflow-hidden rounded-[var(--rayon-jonction)] border border-border bg-background shadow-lg">
               <div
                 key={courant?.id}
-                className="max-h-[calc(100dvh-4.5rem)] overflow-y-auto"
+                className="max-h-[calc(100dvh-4.75rem)] overflow-y-auto sm:max-h-[calc(100dvh-4.5rem)]"
                 /* **Un renvoi vers un autre entretien change la fenêtre au
                    lieu de la fermer**, sur demande de Rémy.
 
@@ -398,6 +400,20 @@ export function GalerieFenetre({
               d'un objet, une couverture, et `AGENTS.md` interdit de l'étendre.
               Fermer est l'action que les jetons du projet appellent
               destructive. */}
+          {/* **La rangée du bas** : « Fermer », et sur téléphone les deux
+              flèches de part et d'autre. Les mêmes boutons que sur les côtés,
+              au même verre et à la même cible de 40 px ; seule leur place
+              change avec la largeur. */}
+          <div className="flex items-center justify-center gap-3">
+          <button
+            type="button"
+            onClick={() => aller(-1)}
+            aria-label="Entretien précédent"
+            className={cn(VERRE_COMMANDE, "size-10 sm:hidden")}
+          >
+            <ChevronLeft aria-hidden className="size-5" />
+          </button>
+
           <DialogClose asChild>
             <Gelule
               as="button"
@@ -405,12 +421,29 @@ export function GalerieFenetre({
               teinte="var(--destructive)"
               /* `group/roule` : le libellé roule au survol, comme les entrées
                  du menu, sur demande de Rémy. */
-              className="group/roule mx-auto"
+              /* **40 px de haut sur téléphone**, sur demande de Rémy : la
+                 hauteur des deux flèches qui l'encadrent, pour que la rangée
+                 se lise comme trois commandes d'un même rang. Le libellé
+                 grandit avec, il passe devant le corps du composant parce
+                 qu'il est plus près du texte. */
+              className="group/roule min-h-10 pr-5 pl-4 sm:min-h-0 sm:pr-4 sm:pl-3"
               pastille={<X aria-hidden className="size-4 shrink-0" />}
             >
-              <TexteRoulant>Fermer</TexteRoulant>
+              <span className="text-sm">
+                <TexteRoulant>Fermer</TexteRoulant>
+              </span>
             </Gelule>
           </DialogClose>
+
+          <button
+            type="button"
+            onClick={() => aller(1)}
+            aria-label="Entretien suivant"
+            className={cn(VERRE_COMMANDE, "size-10 sm:hidden")}
+          >
+            <ChevronRight aria-hidden className="size-5" />
+          </button>
+          </div>
         </DialogContent>
       </Dialog>
     </>
