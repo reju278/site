@@ -57,7 +57,7 @@ export const presentationPreparation = {
     surligne: [
       "bien visionner cette vidéo avant votre rendez-vous",
       "toutes les informations",
-      "en accéléré",
+      /* « en accéléré » a été surligné, puis retiré par Rémy. */
     ],
   },
   /* **Le titre et le sous-titre sont coupés là où Rémy l'a dicté.** Sans
