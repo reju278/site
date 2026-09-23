@@ -1495,7 +1495,10 @@ de cookies : c'est l'autre carte qui flotte en bas de l'écran, elle en porte le
 verre au pixel, et deux dessins pour la même famille d'objets se liraient comme
 une inattention. Deux essais l'ont précédée et ont été écartés par Rémy, une
 bande bleue fixée en haut puis la gélule du hero posée au-dessus de l'en-tête :
-le haut appartient à l'en-tête.
+le haut appartient à l'en-tête. Elle est faite de briques de registre, sur
+demande de Rémy : Sonner pour la notification, `BorderBeam` de MagicUI pour la
+lumière du bord, et la gélule « Fermer » de la fenêtre des entretiens. La vignette
+de la vidéo tient la place d'une icône.
 
 Ces cinq exceptions couvrent tout ce qui a le droit de flouter par-devant. Une
 sixième ne s'ajoute pas parce qu'elle irait bien : elle se décide, et elle

@@ -43,20 +43,19 @@ export const ancresPreparation = [
 export const presentationPreparation = {
   /* **La consigne de la page, en notification**, dictée par Rémy en
      remplacement de la bande de la page source, « Regardez attentivement cette
-     vidéo pour préparer au mieux votre rendez-vous. ». Voir `ConsigneVideo`. */
-  consigne: {
-    titre: "Très important",
-    texte: "Regardez cette vidéo pour préparer votre rendez-vous au mieux.",
-  },
+     vidéo pour préparer au mieux votre rendez-vous. », puis d'un « Très
+     important » qu'il a écarté. Voir `ConsigneVideo`. */
+  consigne:
+    "Il est important de bien visionner cette vidéo pour que vous ayez toutes les informations et que notre échange soit pertinent. N'hésitez pas à la regarder en accéléré pour gagner du temps.",
   /* **Le titre et le sous-titre sont coupés là où Rémy l'a dicté.** Sans
-     l'astérisque de la page source ni sa surbrillance, retirés par Rémy : la
-     note qui suit perd donc aussi le sien, elle ne renverrait plus à rien. */
+     l'astérisque de la page source ni sa surbrillance, ni la note qui
+     l'expliquait, « La même stratégie que nous appliquons et enseignons aux
+     membres de Funnels Club », retirés par Rémy. */
   titre: [{ texte: "Présentation du parfait tunnel de vente" }],
   /* Dicté par Rémy : « la prestation de service » remplace « le consulting »
      de la page source. */
   sousTitre:
     "Pour vendre une formation en ligne, du coaching ou de la prestation de service",
-  note: "La même stratégie que nous appliquons et enseignons aux membres de Funnels Club",
   video: {
     id: "775nifg0kr",
     /* Le titre de l'iframe décrit la vidéo et non le lecteur. */

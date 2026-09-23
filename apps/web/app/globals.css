@@ -1443,3 +1443,22 @@ body:has([role="dialog"][data-state="open"]) :is([data-barre-appel], [data-tache
 [data-hors-ecran] * {
   animation-play-state: paused !important;
 }
+
+/* La notification de `/preparation`, élargie sur ordinateur, sur demande de
+   Rémy : les 356 px de Sonner y serraient la vignette, le texte et le bouton
+   sur six lignes.
+
+   **Sur la pile et non sur la notification.** Sonner centre la pile et pose
+   chaque notification à sa largeur : élargir la seule notification la faisait
+   déborder à droite, décentrée de la moitié de l'écart, mesuré à 30 px.
+   `:has` borne la règle à la pile qui la porte, donc les autres notifications
+   du site gardent leur largeur.
+
+   `!important` parce que Sonner écrit `--width` en style en ligne sur la pile,
+   et qu'une feuille ne passe pas devant sans lui. Sous 600 px, Sonner passe de
+   lui-même en pleine largeur, d'où la borne. */
+@media (width >= 600px) {
+  [data-sonner-toaster]:has(.consigne-video) {
+    --width: min(40rem, 100vw - 2rem) !important;
+  }
+}

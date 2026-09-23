@@ -40,7 +40,7 @@ export const metadata: Metadata = {
 };
 
 export default function Preparation() {
-  const { consigne, titre, sousTitre, note, video } = presentationPreparation;
+  const { consigne, titre, sousTitre, video } = presentationPreparation;
 
   return (
     <>
@@ -48,7 +48,10 @@ export default function Preparation() {
 
       {/* La consigne de la page, en notification en bas de l'écran, sur
           demande de Rémy. */}
-      <ConsigneVideo {...consigne} />
+      <ConsigneVideo
+        texte={consigne}
+        affiche={`/temoignages/${video.id}.jpg`}
+      />
 
       {/* LE HERO, celui d'`/immersion` au caractère près. */}
       <section
@@ -98,14 +101,6 @@ export default function Preparation() {
                 photographie, comme le titre. */}
             <p className="mt-5 text-lg leading-snug text-balance text-white/90 sm:text-2xl">
               {insecables(sousTitre)}
-            </p>
-
-            {/* La note, qui renvoyait à un astérisque du titre. Du blanc en dur sur la photographie,
-                sombre dans les deux thèmes grâce à `--fond-hero` et au voile :
-                à 70 %, il tient ses 4,5:1 au pire cas, image blanche sous un
-                voile à 55 %. */}
-            <p className="mt-4 text-sm text-pretty text-white/70 sm:text-base">
-              {insecables(note)}
             </p>
           </div>
 
