@@ -177,10 +177,9 @@ export const recrutement = {
   /* Le formulaire de candidature, fourni par Rémy. Il est à lui, donc il porte
      la balise de provenance comme tout autre lien vers ses propriétés. */
   postuler: {
-    libelle: "Postuler",
-    /* Le libellé visible est court ; cette suite, masquée à l'écran, le
-       complète pour dire où le lien mène. Elle commence par une espace. */
-    suite: " au poste de représentant des ventes",
+    /* Dicté par Rémy. Il dit où le lien mène, donc il se suffit à lui-même :
+       la suite masquée qui complétait « Postuler » est partie avec lui. */
+    libelle: "Remplir le formulaire de candidature",
     href: avecTag("https://form.funnels.club/recrutement"),
   },
 

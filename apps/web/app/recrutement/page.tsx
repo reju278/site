@@ -145,9 +145,6 @@ export default function Recrutement() {
               className="w-full sm:w-auto"
             >
               <TexteRoulant>{recrutement.postuler.libelle}</TexteRoulant>
-              {/* Le libellé visible est court ; la suite, lue par les
-                  lecteurs d'écran et les robots, dit où le lien mène. */}
-              <span className="sr-only">{recrutement.postuler.suite}</span>
             </BoutonScintillant>
           </Apparition>
         </div>
