@@ -65,7 +65,7 @@ export const recrutement = {
     titre: "Ce que nous offrons",
     points: [
       {
-        texte: "Coaching quotidien avec notre responsable des ventes",
+        texte: "Coaching quotidien pour vous former aux meilleures stratégies de closing",
         surligne: "Coaching quotidien",
       },
       {
