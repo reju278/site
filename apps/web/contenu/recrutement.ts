@@ -90,7 +90,7 @@ export const recrutement = {
       },
       {
         texte:
-          "Vous souhaitez avoir un impact sur le succès d'entrepreneurs en francophonie.",
+          "Vous souhaitez avoir un impact sur le succès d'entrepreneurs.",
         surligne: "avoir un impact",
       },
       {
