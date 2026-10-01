@@ -42,7 +42,7 @@ export const recrutement = {
     {
       texte:
         "Actuellement en pleine croissance, nous cherchons à étendre notre équipe et, en tant que représentant des ventes, vous jouerez un rôle essentiel dans la conversion de nos prospects en clients pour nos programmes d'accompagnement : le Funnels Club et le consulting privé avec Rémy. Vous serez le premier point de contact pour nos clients potentiels, assurant la transmission de nos valeurs et contribuant à l'expansion de la marque Funnels.club.",
-      surligne: ["représentant des ventes"],
+      surligne: ["représentant des ventes", "Funnels Club", "consulting privé"],
     },
     {
       texte:
