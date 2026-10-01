@@ -65,7 +65,8 @@ export const recrutement = {
     titre: "Ce que nous offrons",
     points: [
       {
-        texte: "Coaching quotidien pour vous former aux meilleures stratégies de closing",
+        texte:
+          "Coaching quotidien pour vous former aux meilleures stratégies de closing",
         surligne: "Coaching quotidien",
       },
       {
@@ -89,14 +90,14 @@ export const recrutement = {
         surligne: "depuis n'importe où dans le monde",
       },
       {
-        texte:
-          "Vous souhaitez avoir un impact sur le succès d'entrepreneurs.",
+        texte: "Vous souhaitez avoir un impact sur le succès d'entrepreneurs.",
         surligne: "avoir un impact",
       },
       {
         texte:
           "Vous souhaitez avoir jusqu'à 6 rendez-vous entrants chaque jour de prospects qualifiés.",
-        surligne: "rendez-vous entrants",
+        surligne:
+          "jusqu'à 6 rendez-vous entrants chaque jour de prospects qualifiés",
       },
       {
         texte:
