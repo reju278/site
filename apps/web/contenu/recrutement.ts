@@ -129,8 +129,7 @@ export const recrutement = {
     points: [
       {
         titre: "Vous devez être une personne positive et loyale.",
-        texte:
-          "Nous cherchons une collaboration à long terme de minimum 3 à 5 ans dans l'équipe. Si vous ne souhaitez pas une mission à plein temps, ne postulez pas.",
+        texte: "Nous cherchons une collaboration à long terme.",
       },
       {
         titre: "Vous devez être un(e) bon(ne) communicant(e) :",
