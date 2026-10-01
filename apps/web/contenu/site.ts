@@ -1189,6 +1189,10 @@ export const colonnesPiedDePage: readonly {
          seul chemin. Le libellé dit ce qu'on y trouve plutôt que le nom du
          podcast, qui est déjà celui d'une chaîne dans la colonne voisine. */
       { libelle: "Épisodes du podcast", href: "/podcast" },
+      /* `/recrutement` n'est pas dans l'en-tête, Rémy ne l'a pas demandé : le
+         pied de page tient la carte du site, donc c'est ici que la page a son
+         chemin, comme le podcast. */
+      { libelle: "Recrutement", href: "/recrutement" },
     ],
   },
   {
