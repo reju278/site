@@ -134,7 +134,10 @@ export function PiedDePage() {
               sous les liens : à cette largeur il n'y a pas de place à côté, et
               les étirer n'aurait plus de sens. */}
           <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,20rem)] lg:gap-10">
-            <div>
+            {/* La colonne gauche est en `flex` à partir de `lg` pour que la
+                rangée des réseaux puisse descendre au bas de la carte, voir
+                plus bas. */}
+            <div className="lg:flex lg:flex-col">
           <Link
             href="/"
             aria-label={`${identite.nom}, retour à l'accueil`}
@@ -208,8 +211,16 @@ export function PiedDePage() {
 
             Les mentions y étaient, à droite. Rémy les a descendues sous la
             carte, contre le copyright : elles y sont plus discrètes et
-            alignées sur le texte légal, qui est de la même nature. */}
-              <div className="mt-10 flex flex-col gap-8 sm:flex-row sm:items-center sm:justify-between">
+            alignées sur le texte légal, qui est de la même nature.
+
+            **Elle est collée au bas de la carte à partir de `lg`**, sur demande
+            de Rémy. À cette largeur les trois cartes d'offres, à droite, sont
+            plus hautes que les liens : la rangée restait à mi-hauteur, flottant
+            dans un vide sans rapport avec rien. `mt-auto` la pousse au bas de
+            la colonne, que la grille étire déjà sur toute la ligne ; l'écart
+            minimal passe en `pt-*`, qui n'entre pas en conflit avec lui. Sous
+            `lg`, les cartes passent dessous et rien ne change. */}
+              <div className="mt-10 flex flex-col gap-8 sm:flex-row sm:items-center sm:justify-between lg:mt-auto lg:pt-10">
                 <Reseaux rond />
               </div>
             </div>
