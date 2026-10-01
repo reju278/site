@@ -116,7 +116,7 @@ export const recrutement = {
       },
       {
         texte:
-          "Vous souhaitez rejoindre une équipe structurée, avec des scripts, processus et une bonne organisation.",
+          "Vous souhaitez rejoindre une équipe structurée, avec des scripts, des processus, un CRM personnalisé créé en interne et une bonne organisation.",
         surligne: "équipe structurée",
       },
       {
