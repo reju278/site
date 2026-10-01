@@ -169,7 +169,7 @@ export const recrutement = {
   },
 
   salaire: {
-    titre: "Salaire",
+    titre: "Rémunération",
     texte:
       "Payé à la commission uniquement. Les détails vous seront expliqués lors de votre entretien.",
   },
