@@ -119,11 +119,6 @@ export const recrutement = {
           "Vous souhaitez rejoindre une équipe structurée, avec des scripts, des processus, un CRM personnalisé créé en interne et une bonne organisation.",
         surligne: "équipe structurée",
       },
-      {
-        texte:
-          "Vous souhaitez être en contact constant avec un représentant des ventes expérimenté pour vous améliorer.",
-        surligne: "représentant des ventes expérimenté",
-      },
     ],
   },
 
