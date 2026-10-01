@@ -1,7 +1,7 @@
 import { Apparition } from "@/components/apparition";
 import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { EnTetePage } from "@/components/en-tete-page";
-import { Emplacement, Section } from "@/components/section";
+import { Section } from "@/components/section";
 import { TexteRoulant } from "@/components/texte-roulant";
 import { recrutement } from "@/contenu/recrutement";
 import { surligner } from "@/lib/surligner";
@@ -18,9 +18,8 @@ import Link from "next/link";
  * exigé : ce sont les trois teintes de la lettre, et elles y disent déjà
  * « ce qu'on peut faire », « ce qui marche » et « ce qu'il ne faut pas ».
  *
- * L'ordre est celui de l'annonce, puis le bouton pour postuler, puis le
- * témoignage de Geoffrey : on lit, on décide, et quelqu'un de l'équipe raconte
- * ce que le poste donne pour qui hésite encore.
+ * L'ordre est celui de l'annonce, et le bouton pour postuler la termine : on
+ * lit, puis on décide.
  */
 
 export const metadata: Metadata = {
@@ -149,23 +148,6 @@ export default function Recrutement() {
           </Apparition>
         </div>
       </Section>
-
-      {/* Le témoignage de Geoffrey, sous le bouton.
-
-          Pas une `Section` : son rembourrage haut s'ajouterait au bas de
-          l'annonce, et le témoignage se détacherait du bouton qu'il
-          accompagne. */}
-      <section className="px-5 pb-20 sm:pb-28">
-        <div className="mx-auto max-w-4xl">
-          <h2 className={`${TITRE_SECTION} text-center`}>
-            {recrutement.temoignage.titre}
-          </h2>
-          <Emplacement
-            className="mt-8 aspect-video min-h-0"
-            attendu={recrutement.temoignage.attendu}
-          />
-        </div>
-      </section>
     </>
   );
 }

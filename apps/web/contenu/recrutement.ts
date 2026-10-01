@@ -22,8 +22,8 @@ import { avecTag } from "@/contenu/site";
  * est une sous-chaîne exacte de sa phrase, `surligner` le vérifie en ne posant
  * rien s'il ne la retrouve pas.
  *
- * **Écrit par l'agent, à valider par Rémy** : le `h1`, la description des
- * métadonnées et le titre de la section du témoignage. Tout le reste est à lui.
+ * **Écrit par l'agent, à valider par Rémy** : le `h1` et la description des
+ * métadonnées. Tout le reste est à lui.
  */
 export const recrutement = {
   /* Le titre de l'onglet reste court : le gabarit ajoute « · Rémy Jupille ». */
@@ -183,17 +183,7 @@ export const recrutement = {
     href: avecTag("https://form.funnels.club/recrutement"),
   },
 
-  /* Le témoignage de Geoffrey, de l'équipe.
-
-     **L'identifiant Wistia manque.** Ni les titres ni les transcriptions du
-     compte ne le font apparaître : la vidéo n'est peut-être pas transcrite, ou
-     porte un nom qu'aucune recherche n'a deviné. Tant qu'il est `null`, la
-     section affiche un emplacement, et le jour où il arrive, il faut aussi
-     l'affiche et la date de mise en ligne pour le `VideoObject`. */
-  temoignage: {
-    titre: "Le témoignage de Geoffrey, de l'équipe",
-    wistia: null as string | null,
-    attendu:
-      "l'entretien de Geoffrey sur ses résultats en tant que représentant des ventes (identifiant Wistia à fournir)",
-  },
+  /* **Pas de témoignage vidéo.** L'entretien de Geoffrey était prévu sous le
+     bouton ; Rémy ne l'a plus, et la section est retirée plutôt que laissée en
+     emplacement. */
 } as const;
