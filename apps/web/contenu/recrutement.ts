@@ -73,10 +73,6 @@ export const recrutement = {
         surligne: "Formation exclusive",
       },
       {
-        texte: "Un système de commission parmi les plus avantageux du marché",
-        surligne: "système de commission",
-      },
-      {
         texte:
           "Possibilités de prendre de plus grandes responsabilités à l'avenir",
         surligne: "plus grandes responsabilités",
