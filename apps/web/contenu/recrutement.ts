@@ -46,7 +46,7 @@ export const recrutement = {
     },
     {
       texte:
-        "Chez Jupille Group LTD, nous visons l'excellence dans l'accompagnement et la satisfaction client. L'éthique est notre plus forte valeur, notamment en n'acceptant dans nos programmes que les personnes dont nous sommes certains de pouvoir faire réussir. Nous cherchons à créer une équipe fidèle, soudée où tout le monde peut partager ses idées et s'exprimer.",
+        "Chez Funnels Club, nous visons l'excellence dans l'accompagnement et la satisfaction client. L'éthique est notre plus forte valeur, notamment en n'acceptant dans nos programmes que les personnes dont nous sommes certains de pouvoir faire réussir. Nous cherchons à créer une équipe fidèle, soudée où tout le monde peut partager ses idées et s'exprimer.",
       surligne: ["L'éthique est notre plus forte valeur"],
     },
   ],
