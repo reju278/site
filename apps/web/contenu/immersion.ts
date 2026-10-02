@@ -288,25 +288,13 @@ export const avisImmersion = {
 /**
  * L'équipe.
  *
- * **Cinq personnes et non les sept de la page source**, sur décision de Rémy :
- * la section y était masquée, et il la remet avec l'équipe d'aujourd'hui.
- * Maxime Legros et Kylian Baude en sortent.
- *
- * **Fabri Keutcha a son portrait, pris sur Calendly**, sur indication de Rémy :
- * c'est son avatar de `fabri@funnels.club` dans l'organisation Funnels Club,
- * donc une photo qu'il a lui-même posée, et non un visage trouvé ailleurs.
+ * **Quatre personnes et non les sept de la page source**, sur décision de
+ * Rémy : la section y était masquée, et il la remet avec l'équipe
+ * d'aujourd'hui. Maxime Legros et Kylian Baude en sortent, puis Fabri Keutcha.
  *
  * **Les rôles ne sont plus affichés**, sur demande de Rémy : « la photo en
  * rond, le nom en dessous, tout simplement ». Ils restent écrits ici, ce sont
  * ses mots et ils reviendront s'il les redemande.
- *
- * **L'emplacement qui réclamait le poste de Fabri Keutcha est donc parti avec
- * eux**, et il l'a confirmé. Il ne disparaît pas parce qu'on a trouvé la
- * réponse mais parce que la question ne se pose plus à l'écran : réclamer une
- * donnée qu'on n'affiche nulle part aurait été un rappel sans objet. Si les
- * rôles reviennent, celui-là manque toujours, et rien ne s'invente pour le
- * remplir : « coach », « closer » ou « responsable » seraient tous
- * vraisemblables, et c'est précisément le problème.
  *
  * Les photos sont servies par nous et non par ClickFunnels : une page qui
  * charge ses portraits sur un CDN tiers fait payer à chaque visiteur une
@@ -317,7 +305,7 @@ export const equipeImmersion: {
   titre: string;
   /** `photo` et `role` sont nullables **exprès** : c'est ce qui garde vivante
       la carte à initiales de `RangeeEquipe`. Sans cette annotation, `as const`
-      fige le type sur les cinq valeurs du jour, la branche « sans portrait »
+      fige le type sur les valeurs du jour, la branche « sans portrait »
       devient inatteignable, et la personne suivante qui arrive sans photo
       casserait la compilation au lieu d'afficher son initiale. */
   membres: readonly { nom: string; role: string | null; photo: string | null }[];
@@ -333,11 +321,6 @@ export const equipeImmersion: {
       nom: "Geoffrey Bonniot",
       role: "Responsable coaching",
       photo: "/immersion/equipe-geoffrey-bonniot.jpg",
-    },
-    {
-      nom: "Fabri Keutcha",
-      role: null,
-      photo: "/immersion/equipe-fabri-keutcha.jpg",
     },
     {
       nom: "Ludivine Ludovic",
