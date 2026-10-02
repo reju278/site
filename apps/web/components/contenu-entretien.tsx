@@ -1,6 +1,7 @@
 "use client";
 
 import { ArticleAvis } from "@/components/article-avis";
+import { BoutonAppel, type AppelGalerie } from "@/components/bouton-appel";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { ancreEntretien } from "@/contenu/immersion";
 import { sansNoms } from "@/lib/anonymat";
@@ -37,7 +38,17 @@ const pourLeTunnel = (t: string) => sansNoms(versImmersion(t));
  * Il ne connaît pas la fenêtre qui le porte : il rend un en-tête, une vidéo et
  * un article, et c'est `ModaleAvis` qui les encadre.
  */
-export function ContenuEntretien({ article }: { article: Entretien }) {
+export function ContenuEntretien({
+  article,
+  appel,
+}: {
+  article: Entretien;
+  /**
+   * Le bouton de réservation sous la vidéo, sur `/appel` seulement. Voir
+   * `appel` dans `GalerieFenetre`.
+   */
+  appel?: AppelGalerie;
+}) {
   const nom = prenom(article.nom);
   const autre = article.autre;
 
@@ -104,6 +115,14 @@ export function ContenuEntretien({ article }: { article: Entretien }) {
                     natif
                   />
                 </div>
+
+                {/* **L'appel sous la vidéo, sur `/appel` seulement**, sur
+                    demande de Rémy. Il avait été retiré de cet endroit sur
+                    `/immersion`, où il coupait l'en-tête du texte ; sur une
+                    page dont le seul but est la réservation, Rémy le veut
+                    là. Le clic ferme la fenêtre et descend au formulaire :
+                    voir `GalerieFenetre`. */}
+                {appel ? <BoutonAppel appel={appel} className="mt-8" /> : null}
               </div>
 
               {/* Le bloc de l'article, qui remonte sur l'en-tête.

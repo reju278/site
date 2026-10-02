@@ -1,6 +1,7 @@
 "use client";
 
 import { ContenuEntretien } from "@/components/contenu-entretien";
+import type { AppelGalerie } from "@/components/bouton-appel";
 import type { Entretien } from "@/lib/entretien";
 import { useEffect, useState } from "react";
 
@@ -60,7 +61,14 @@ export function prechargerEntretien(id: string) {
   void demander(id);
 }
 
-export function EntretienCharge({ id }: { id: string }) {
+export function EntretienCharge({
+  id,
+  appel,
+}: {
+  id: string;
+  /** Voir `appel` dans `GalerieFenetre`. */
+  appel?: AppelGalerie;
+}) {
   const [article, setArticle] = useState<Entretien | null>(
     () => cache.get(id) ?? null,
   );
@@ -86,7 +94,7 @@ export function EntretienCharge({ id }: { id: string }) {
   }, [id]);
 
   if (!article) return <SqueletteEntretien />;
-  return <ContenuEntretien article={article} />;
+  return <ContenuEntretien article={article} appel={appel} />;
 }
 
 /**

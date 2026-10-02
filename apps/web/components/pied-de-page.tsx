@@ -1,12 +1,11 @@
+import { MentionsLegales } from "@/components/mentions-legales";
 import { Reseaux } from "@/components/reseaux";
 import { TexteRoulant } from "@/components/texte-roulant";
 import {
-  avertissements,
   colonnesPiedDePage,
   consultingPiedDePage,
   estExterne,
   identite,
-  legales,
   liens,
   livre,
 } from "@/contenu/site";
@@ -41,7 +40,6 @@ import Link from "next/link";
  * projet décrit. Voir `AGENTS.md`.
  */
 export function PiedDePage() {
-  const annee = new Date().getFullYear();
 
   return (
     // La largeur est celle de `Section`, au pixel : `max-w-6xl` plus `px-5`,
@@ -340,39 +338,9 @@ export function PiedDePage() {
             déjà visiblement en dehors. Un trait de plus au même endroit ne
             sépare pas mieux, il ajoute une ligne à regarder. Retiré sur
             décision de Rémy. */}
-          <div className="flex flex-col gap-4 text-xs leading-relaxed text-muted-foreground">
-            {/* Les avertissements, au mot près. Voir `site.ts`. */}
-            {avertissements.map((texte) => (
-              <p key={texte} className="max-w-5xl text-pretty">
-                {texte}
-              </p>
-            ))}
-
-            {/* Les mentions, juste au-dessus du copyright et au même fer.
-
-              Elles étaient dans la carte, à droite de la rangée des réseaux.
-              Rémy les a descendues ici : ce sont des textes de même nature que
-              l'avertissement, et les séparer revenait à dire que l'un se lit et
-              l'autre se clique. Même corps, même couleur, même bord gauche. */}
-            <nav aria-label="Mentions légales" className="pt-2">
-              <ul className="flex flex-wrap gap-x-5 gap-y-1">
-                {legales.map((entree) => (
-                  <li key={entree.href}>
-                    <Link
-                      href={entree.href}
-                      className="group/roule inline-block rounded-md transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-                    >
-                      <TexteRoulant>{entree.libelle}</TexteRoulant>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-
-            <p>
-              © {annee} {identite.societe}
-            </p>
-          </div>
+          {/* Les avertissements, les mentions et le copyright : voir
+              `MentionsLegales`, que `/appel` montre aussi. */}
+          <MentionsLegales />
         </div>
       </div>
     </footer>

@@ -1,3 +1,4 @@
+import type { AppelGalerie } from "@/components/bouton-appel";
 import { GalerieFenetre, type EntretienGalerie } from "@/components/galerie-fenetre";
 import { avisDe } from "@/contenu/avis";
 import { ancreEntretien, entretiensImmersion } from "@/contenu/immersion";
@@ -34,7 +35,12 @@ import { sansNoms } from "@/lib/anonymat";
  * référencement ; elles restent sur `/resultats/<nom>`, où elles font leur
  * travail. C'est déjà la règle du hub, dans `AGENTS.md`.
  */
-export function GalerieEntretiens() {
+export function GalerieEntretiens({
+  appel,
+}: {
+  /** Voir `appel` dans `GalerieFenetre`. */
+  appel?: AppelGalerie;
+} = {}) {
   /* Le nom, l'accroche, la durée et l'affiche sont lus dans `temoignages` et
      `avis.ts`, jamais réécrits ici. Un entretien retiré de là disparaît d'ici
      sans laisser de carte vide.
@@ -65,5 +71,5 @@ export function GalerieEntretiens() {
     ];
   });
 
-  return <GalerieFenetre entretiens={entretiens} />;
+  return <GalerieFenetre entretiens={entretiens} appel={appel} />;
 }

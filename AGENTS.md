@@ -1980,7 +1980,7 @@ garantie.
 
 ## Un tunnel n'est pas une page du site
 
-`/hub`, `/immersion` et `/preparation` sont des **tunnels** : on y arrive par un lien qu'on a
+`/hub`, `/immersion`, `/preparation`, `/appel` et `/thanks` sont des **tunnels** : on y arrive par un lien qu'on a
 reçu, et la règle est qu'on n'en sort que par l'appel. La liste des racines vit
 dans `lib/tunnels.ts`, et `HorsTunnel` la lit pour retirer l'en-tête et le pied
 de page du site, qui offriraient sinon une trentaine de portes de sortie.
@@ -2011,6 +2011,47 @@ vidéo » est une notification Sonner en bas de l'écran, `ConsigneVideo`. Une
 correction faite sur l'un de ces blocs vaut donc pour les deux pages, et
 c'est voulu. Les trois mesures de la vidéo, en revanche, sont recopiées dans
 les deux gabarits : le jour où l'une change, elle change aux deux.
+
+**`/appel` est `/preparation` avec le formulaire de Calendly à la place de la
+vidéo**, servie sur `go.funnels.club/appel`. **Il n'y reste que le
+formulaire**, sur décision de Rémy : le message et la galerie, qui y ont été,
+vivent sur `/thanks`. Sur demande de Rémy, elle n'a ni
+la notification de consigne, ni l'équipe, et son en-tête ne garde que la
+marque : `EnTeteImmersion` reçoit une liste d'ancres vide et `bascule={false}`.
+**La page est forcée au thème clair** par `FournisseurTheme`, qui enveloppe le
+fournisseur racine : `next-themes` ignore un fournisseur imbriqué, un
+`forcedTheme` posé dans le gabarit de la page n'aurait rien fait.
+
+**`/thanks` suit la structure de `www.funnels.club/thanks-confirmation-2026`
+dans le dessin du site**, servie sur `go.funnels.club/thanks` : c'est la
+confirmation qu'on reçoit après avoir réservé. Titre et alerte, étape 1 (sa
+vidéo dans le hero, ses consignes dessous), étape 2 et la vidéo de
+`/preparation`, puis la galerie sans boutons de réservation, l'appel étant
+déjà pris. L'étape 1 est une seule carte (vidéo, consignes, signature avec le
+portrait de Rémy) posée à cheval sur la photographie, et la section du hero
+s'arrête à une hauteur connue pour placer la jonction. Pas de notification
+`ConsigneVideo` : elle y a été, Rémy l'a retirée. Elle est forcée au clair
+comme `/appel`, avec le même pied de page.
+
+**`/thanks` lit la réservation que Calendly met dans son adresse**
+(`invitee_*`, `event_start_time`, `assigned_to`, `answer_N`), pour tutoyer la
+personne avec son e-mail, sa date et son téléphone, lui montrer un
+récapitulatif et un bouton WhatsApp vers son hôte. **Ce sont des données
+personnelles dans une adresse, et le site charge GTM** : un script en HTML
+brut, `lib/reservation-capture.ts`, les relève et les retire de l'adresse
+pendant la lecture du HTML, avant l'hydratation donc avant GTM ; seules les
+`utm_*` restent. Vérifié : rien dans `dataLayer`. Calendly encode ses valeurs
+deux fois, `lib/reservation.ts` défait la seconde couche. Chaque champ est
+facultatif, et la page sans réservation reste la page générique. Le
+formulaire ne bascule pas en 3D, et le hero ne prend donc pas une hauteur
+d'écran. `FormulaireCalendly` écrit l'iframe lui-même, sans `widget.js`, et
+un script posé juste après elle lui donne son adresse pendant la lecture du
+HTML : elle part sans attendre l'hydratation. Le formulaire reste blanc dans
+les deux thèmes, sur décision de Rémy, et son cadre prend la hauteur que
+Calendly annonce par `calendly.page_height` : on ne défile jamais dans
+l'iframe. Il déclare l'iframe
+`color-scheme: light` : sans cela, en thème sombre, le navigateur peint un fond
+blanc opaque autour de la carte de Calendly.
 
 ## Le même texte à deux endroits n'est écrit qu'une fois
 

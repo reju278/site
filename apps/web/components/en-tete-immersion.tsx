@@ -72,8 +72,14 @@ const ENTREE_SUR_PAGE =
 
 export function EnTeteImmersion({
   ancres = ancresImmersion,
+  bascule = true,
   className,
 }: {
+  /**
+   * La bascule de thème. Retirée sur `/appel`, dont le thème est forcé au
+   * clair : voir `FournisseurTheme`.
+   */
+  bascule?: boolean;
   /**
    * Pour descendre la capsule sous une bande fixe, sur `/preparation`. Les
    * classes `top-*` passées ici remplacent celles du composant.
@@ -84,12 +90,14 @@ export function EnTeteImmersion({
    * défaut ; `/preparation` passe les siennes, qui sont moins nombreuses.
    * **Chaque entrée doit désigner une section qui existe sur la page qui
    * l'affiche** : une ancre vers une section absente est une cible qui ne mène
-   * nulle part.
+   * nulle part. **Une liste vide ne laisse que la marque et la bascule de
+   * thème**, sans menu de téléphone : c'est l'en-tête d'`/appel`.
    */
   ancres?: readonly { id: string; libelle: string }[];
 } = {}) {
   const [surImage, setSurImage] = useState(false);
   const [ouvert, setOuvert] = useState(false);
+  const avecAncres = ancres.length > 0;
 
   useLayoutEffect(() => {
     const bande = document.querySelector("[data-bande-sombre]");
@@ -169,6 +177,7 @@ export function EnTeteImmersion({
               largeur : à 375 px, la capsule et la bascule de thème prennent
               déjà presque les 375 pixels. C'est le bouton juste à côté qui les
               ouvre là-bas. */}
+          {avecAncres && (
           <nav
             aria-label="Les sections de la page"
             className="hidden items-center gap-1 sm:flex"
@@ -188,8 +197,9 @@ export function EnTeteImmersion({
               </a>
             ))}
           </nav>
+          )}
 
-          <BasculeTheme surImage={surImage} />
+          {bascule && <BasculeTheme surImage={surImage} />}
 
           {/* **Le déclencheur du menu, à droite de la bascule de thème**, sur
               demande de Rémy, et sur téléphone seulement : au-dessus de `sm`,
@@ -204,6 +214,7 @@ export function EnTeteImmersion({
               Une icône seule porte son `aria-label`, et `aria-expanded` dit
               l'état : sans lui, un lecteur d'écran annonce un bouton sans
               jamais dire qu'il vient d'ouvrir quelque chose. */}
+          {avecAncres && (
           <button
             type="button"
             onClick={() => setOuvert((o) => !o)}
@@ -223,6 +234,7 @@ export function EnTeteImmersion({
               <Menu aria-hidden className="size-4" />
             )}
           </button>
+          )}
           </div>
 
           {/* Le panneau qui pousse la capsule vers le bas.
@@ -249,6 +261,7 @@ export function EnTeteImmersion({
               Tailwind v4 pose les translations sur `translate` : écrite
               autrement, la descente se ferait d'un coup. C'est le piège que le
               dépôt a déjà rencontré sur les cartes de la galerie. */}
+          {avecAncres && (
           <div
             id="menu-immersion"
             className={cn(
@@ -289,6 +302,7 @@ export function EnTeteImmersion({
               </nav>
             </div>
           </div>
+          )}
         </div>
       </div>
     </header>

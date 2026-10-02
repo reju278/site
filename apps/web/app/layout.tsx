@@ -1,9 +1,9 @@
+import { FournisseurTheme } from "@/components/fournisseur-theme";
 import { EnTete } from "@/components/en-tete";
 import { HorsTunnel } from "@/components/hors-tunnel";
 import { PiedDePage } from "@/components/pied-de-page";
 import { GTM, SITE, identite } from "@/contenu/site";
 import { Toaster } from "@repo/ui/components/sonner";
-import { ThemeProvider } from "@repo/ui/components/theme-provider";
 import type { Metadata } from "next";
 import { Fraunces, Ms_Madi } from "next/font/google";
 import localFont from "next/font/local";
@@ -230,8 +230,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
             La valeur est passée ici et non dans `packages/ui` : le composant
             partagé reste un fournisseur générique, et c'est le site qui dit ce
-            qu'il veut. */}
-        <ThemeProvider defaultTheme="dark">
+            qu'il veut. `FournisseurTheme` force en plus le clair sur les pages
+            qui n'ont pas de bascule, `/appel` aujourd'hui. */}
+        <FournisseurTheme defaultTheme="dark">
           {/* L'en-tête et le pied de page s'effacent sur le hub, et sur lui
               seul : c'est une page de publicité dont on ne sort que par le
               bouton d'appel. Voir `components/hors-hub.tsx`. Rien ne change
@@ -246,7 +247,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             </HorsTunnel>
           </div>
           <Toaster />
-        </ThemeProvider>
+        </FournisseurTheme>
       </body>
     </html>
   );

@@ -71,9 +71,28 @@ export function MessageRemy({
    * ajustement.
    */
   contenu = messageRemy,
+  /**
+   * Où mène « entrer en contact avec nous ». La page de l'appel par défaut,
+   * dans un nouvel onglet. **Une ancre de la même page s'y suit sans nouvel
+   * onglet** : sur `/appel`, le lien remonte au formulaire de réservation.
+   * **`null` laisse le libellé en texte** : sur `/thanks`, l'appel est déjà
+   * réservé.
+   */
+  lienAppel = liens.appel,
+  /**
+   * L'ancre de la vidéo de formation. **`null` laisse le libellé en texte**,
+   * sans lien : sur `/appel`, il n'y a pas de vidéo à rejoindre, et un tunnel
+   * ne sort pas vers une autre page. C'est la règle des liens déshabillés de
+   * `AGENTS.md`.
+   */
+  ancreVideo = "#video",
 }: {
   contenu?: ContenuMessage;
+  lienAppel?: string | null;
+  ancreVideo?: string | null;
 } = {}) {
+  const lienInterne = lienAppel?.startsWith("#") ?? false;
+
   return (
     <section className="pb-20 sm:pb-28">
       {/* La mesure du texte est plus étroite que celle de la page, mais le
@@ -339,21 +358,31 @@ export function MessageRemy({
             <Apparition>
               <p>
                 {contenu.conclusion.avant}
-              <a
-                href="#video"
-                className="font-semibold text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-              >
-                {contenu.conclusion.lienVideo}
-              </a>
+              {/* Un libellé vide n'écrit rien : c'est ainsi qu'une
+                  conclusion sans vidéo, celle d'`/appel`, s'écrit. */}
+              {!contenu.conclusion.lienVideo ? null : ancreVideo ? (
+                <a
+                  href={ancreVideo}
+                  className="font-semibold text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                >
+                  {contenu.conclusion.lienVideo}
+                </a>
+              ) : (
+                contenu.conclusion.lienVideo
+              )}
               {contenu.conclusion.milieu}
-              <a
-                href={liens.appel}
-                target="_blank"
-                rel="noreferrer"
-                className="font-semibold text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-              >
-                {contenu.conclusion.lienAppel}
-              </a>
+              {lienAppel ? (
+                <a
+                  href={lienAppel}
+                  target={lienInterne ? undefined : "_blank"}
+                  rel={lienInterne ? undefined : "noreferrer"}
+                  className="font-semibold text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                >
+                  {contenu.conclusion.lienAppel}
+                </a>
+              ) : (
+                contenu.conclusion.lienAppel
+              )}
                 {contenu.conclusion.apres}
               </p>
             </Apparition>

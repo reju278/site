@@ -319,6 +319,22 @@
       transform: translateZ(0) rotate(360deg);
     }
   }
+
+  /* Le liseré de `ShineBorder`, de MagicUI : un dégradé qui glisse le long du
+     bord. Ajouté par le CLI de shadcn pour l'alerte de `/thanks`. */
+  --animate-shine: shine var(--duration) infinite linear;
+
+  @keyframes shine {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 100% 100%;
+    }
+    to {
+      background-position: 0% 0%;
+    }
+  }
 }
 
 @layer base {

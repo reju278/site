@@ -38,7 +38,17 @@ import { LogoFunnels } from "@/components/logo-funnels";
  *
  * Le composant ne prend plus rien : il ne connaît plus les entretiens.
  */
-export function PiedImmersion() {
+export function PiedImmersion({
+  children,
+}: {
+  /**
+   * Ce qui se pose sous la marque, après un filet : les mentions légales sur
+   * `/appel`, sur demande de Rémy, pour que le bas de page se lise comme un
+   * pied de page. Les autres pages n'en passent pas et gardent la marque
+   * seule.
+   */
+  children?: React.ReactNode;
+} = {}) {
   return (
     /* **L'essentiel du rembourrage haut est passé dans le gabarit**, juste
        avant la barre des tâches, pour que celle-ci s'arrête au ras de la marque
@@ -52,6 +62,12 @@ export function PiedImmersion() {
         <LogoFunnels className="size-[1.05em]" />
         Funnels.Club
       </p>
+
+      {children ? (
+        <div className="mx-auto mt-6 max-w-[var(--largeur-video,72rem)] border-t border-border pt-8 sm:mt-8">
+          {children}
+        </div>
+      ) : null}
     </footer>
   );
 }
