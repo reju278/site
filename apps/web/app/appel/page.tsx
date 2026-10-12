@@ -6,6 +6,7 @@ import { insecables } from "@/lib/typographie";
 
 import type { Metadata } from "next";
 import { preconnect } from "react-dom";
+import { avecReglages } from "@/lib/reglages-seo";
 
 /**
  * La page de réservation d'appel, servie sur `go.funnels.club/appel`.
@@ -28,7 +29,7 @@ import { preconnect } from "react-dom";
  * à rattraper.
  */
 
-export const metadata: Metadata = {
+const metadonnees: Metadata = {
   title: identiteAppel.titrePage,
   description: identiteAppel.description,
 };
@@ -119,4 +120,9 @@ export default function Appel() {
       </section>
     </>
   );
+}
+
+/** Les métadonnées de la page, avec les réglages SEO du CRM par-dessus. */
+export async function generateMetadata(): Promise<Metadata> {
+  return avecReglages("/appel", metadonnees);
 }

@@ -9,6 +9,7 @@ import { insecables } from "@/lib/typographie";
 import { ArrowRight, Play } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { avecReglages } from "@/lib/reglages-seo";
 
 /**
  * Le sommaire des entretiens du hub, à `/hub/resultats`.
@@ -33,7 +34,7 @@ import Link from "next/link";
  * une carte qui ne mène nulle part est un cul-de-sac sur une page payante.
  */
 
-export const metadata: Metadata = {
+const metadonnees: Metadata = {
   title: sommaireHub.titre,
   description: sommaireHub.description,
 };
@@ -225,4 +226,9 @@ export default function SommaireHub() {
       </Section>
     </>
   );
+}
+
+/** Les métadonnées de la page, avec les réglages SEO du CRM par-dessus. */
+export async function generateMetadata(): Promise<Metadata> {
+  return avecReglages("/hub/resultats", metadonnees);
 }

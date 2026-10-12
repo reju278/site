@@ -15,6 +15,7 @@ import { insecables } from "@/lib/typographie";
 import { ShineBorder } from "@repo/ui/components/shine-border";
 import { cn } from "@repo/ui/lib/utils";
 import type { Metadata } from "next";
+import { avecReglages } from "@/lib/reglages-seo";
 
 /**
  * La page de confirmation, servie sur `go.funnels.club/thanks`.
@@ -35,7 +36,7 @@ import type { Metadata } from "next";
  * **Le message de Rémy n'y est plus** : la page source n'en a pas.
  */
 
-export const metadata: Metadata = {
+const metadonnees: Metadata = {
   title: identiteThanks.titrePage,
   description: identiteThanks.description,
 };
@@ -258,4 +259,9 @@ export default function Thanks() {
       </div>
     </>
   );
+}
+
+/** Les métadonnées de la page, avec les réglages SEO du CRM par-dessus. */
+export async function generateMetadata(): Promise<Metadata> {
+  return avecReglages("/thanks", metadonnees);
 }

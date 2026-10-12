@@ -8,6 +8,7 @@ import { surligner } from "@/lib/surligner";
 import { insecables } from "@/lib/typographie";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { avecReglages } from "@/lib/reglages-seo";
 
 /**
  * La page de recrutement : l'annonce du poste de représentant des ventes.
@@ -22,7 +23,7 @@ import Link from "next/link";
  * lit, puis on décide.
  */
 
-export const metadata: Metadata = {
+const metadonnees: Metadata = {
   title: recrutement.titrePage,
   description: recrutement.description,
   alternates: { canonical: "/recrutement" },
@@ -150,4 +151,9 @@ export default function Recrutement() {
       </Section>
     </>
   );
+}
+
+/** Les métadonnées de la page, avec les réglages SEO du CRM par-dessus. */
+export async function generateMetadata(): Promise<Metadata> {
+  return avecReglages("/recrutement", metadonnees);
 }

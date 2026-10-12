@@ -29,6 +29,7 @@ import { insecables } from "@/lib/typographie";
 
 import { cn } from "@repo/ui/lib/utils";
 import type { Metadata } from "next";
+import { avecReglages } from "@/lib/reglages-seo";
 
 /**
  * La page d'immersion.
@@ -53,7 +54,7 @@ import type { Metadata } from "next";
  * qu'à la lecture. La page source les chargeait toutes au premier octet.
  */
 
-export const metadata: Metadata = {
+const metadonnees: Metadata = {
   title: identiteImmersion.titrePage,
   description: identiteImmersion.description,
 };
@@ -525,4 +526,9 @@ function SectionImmersion({
       <div className="mx-auto max-w-6xl px-5 py-9 sm:py-12">{children}</div>
     </section>
   );
+}
+
+/** Les métadonnées de la page, avec les réglages SEO du CRM par-dessus. */
+export async function generateMetadata(): Promise<Metadata> {
+  return avecReglages("/immersion", metadonnees);
 }

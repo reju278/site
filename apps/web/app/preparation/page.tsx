@@ -14,6 +14,7 @@ import { insecables } from "@/lib/typographie";
 
 import { cn } from "@repo/ui/lib/utils";
 import type { Metadata } from "next";
+import { avecReglages } from "@/lib/reglages-seo";
 
 /**
  * La page de préparation, qu'on reçoit après avoir réservé un appel.
@@ -34,7 +35,7 @@ import type { Metadata } from "next";
  * seul `h1`, le titre de la vidéo, et les sections en `h2`.
  */
 
-export const metadata: Metadata = {
+const metadonnees: Metadata = {
   title: identitePreparation.titrePage,
   description: identitePreparation.description,
 };
@@ -182,4 +183,9 @@ function SectionPreparation({
       <div className="mx-auto max-w-6xl px-5 py-9 sm:py-12">{children}</div>
     </section>
   );
+}
+
+/** Les métadonnées de la page, avec les réglages SEO du CRM par-dessus. */
+export async function generateMetadata(): Promise<Metadata> {
+  return avecReglages("/preparation", metadonnees);
 }

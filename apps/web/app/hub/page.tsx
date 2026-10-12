@@ -9,6 +9,7 @@ import { HUB_RESULTATS, SORTIE, controlerLeHub } from "@/lib/hub";
 import { KineticText } from "@repo/ui/components/kinetic-text";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { avecReglages } from "@/lib/reglages-seo";
 
 /**
  * L'accueil du hub : la formation gratuite.
@@ -40,7 +41,7 @@ import Link from "next/link";
  * déjà, et la suite du parcours est de voir qui l'a suivie.
  */
 
-export const metadata: Metadata = {
+const metadonnees: Metadata = {
   title: formationHub.titrePage,
   description: formationHub.description,
 };
@@ -282,4 +283,9 @@ export default function FormationHub() {
       </section>
     </>
   );
+}
+
+/** Les métadonnées de la page, avec les réglages SEO du CRM par-dessus. */
+export async function generateMetadata(): Promise<Metadata> {
+  return avecReglages("/hub", metadonnees);
 }

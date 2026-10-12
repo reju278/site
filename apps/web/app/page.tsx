@@ -29,6 +29,8 @@ import {
 } from "@/contenu/site";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@repo/ui/lib/utils";
+import type { Metadata } from "next";
+import { avecReglages } from "@/lib/reglages-seo";
 
 /**
  * Les données structurées de la page d'accueil.
@@ -689,4 +691,12 @@ export default function Accueil() {
           avoir à retrouver ce qu'elle devait dire. */}
     </>
   );
+}
+
+/**
+ * L'accueil hérite ses métadonnées de `layout.tsx` ; les réglages SEO du
+ * CRM se posent par-dessus.
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  return avecReglages("/", {});
 }

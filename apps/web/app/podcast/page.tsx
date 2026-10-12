@@ -4,8 +4,9 @@ import { podcast } from "@/contenu/site";
 import { formaterDate, lireEpisodes } from "@/lib/flux";
 import { ArrowUpRight } from "lucide-react";
 import type { Metadata } from "next";
+import { avecReglages } from "@/lib/reglages-seo";
 
-export const metadata: Metadata = {
+const metadonnees: Metadata = {
   alternates: { canonical: "/podcast" },
   title: podcast.nom,
 };
@@ -78,4 +79,9 @@ export default async function Podcast() {
       </Section>
     </>
   );
+}
+
+/** Les métadonnées de la page, avec les réglages SEO du CRM par-dessus. */
+export async function generateMetadata(): Promise<Metadata> {
+  return avecReglages("/podcast", metadonnees);
 }

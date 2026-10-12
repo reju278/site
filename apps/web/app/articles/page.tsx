@@ -2,8 +2,9 @@ import { GrilleArticles, PAR_PAGE } from "@/components/grille-articles";
 import { lettre } from "@/contenu/site";
 import { lireArticles } from "@/lib/flux";
 import type { Metadata } from "next";
+import { avecReglages } from "@/lib/reglages-seo";
 
-export const metadata: Metadata = {
+const metadonnees: Metadata = {
   alternates: { canonical: "/articles" },
   title: lettre.titreBlog,
   /* L'ancienne description était la baseline, soit vingt-six caractères : la
@@ -36,4 +37,9 @@ export default async function Articles() {
       total={total}
     />
   );
+}
+
+/** Les métadonnées de la page, avec les réglages SEO du CRM par-dessus. */
+export async function generateMetadata(): Promise<Metadata> {
+  return avecReglages("/articles", metadonnees);
 }

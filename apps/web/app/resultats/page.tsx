@@ -6,8 +6,9 @@ import { temoignages } from "@/contenu/site";
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { avecReglages } from "@/lib/reglages-seo";
 
-export const metadata: Metadata = {
+const metadonnees: Metadata = {
   alternates: { canonical: "/resultats" },
   title: "Résultats",
   /* **Ni nombre ni nom d'intervieweur**, et les deux pour la même raison :
@@ -191,4 +192,9 @@ export default function Resultats() {
       }
     </>
   );
+}
+
+/** Les métadonnées de la page, avec les réglages SEO du CRM par-dessus. */
+export async function generateMetadata(): Promise<Metadata> {
+  return avecReglages("/resultats", metadonnees);
 }
