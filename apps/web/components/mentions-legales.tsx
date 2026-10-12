@@ -22,8 +22,14 @@ import Link from "next/link";
  */
 export function MentionsLegales({
   nouvelOnglet = false,
+  liens = legales,
   className,
 }: {
+  /**
+   * Les adresses des pages légales. Le VSL Funnel a les siennes
+   * (`/course/…`) : mêmes textes, sous le tunnel.
+   */
+  liens?: readonly { libelle: string; href: string }[];
   /**
    * Ouvre les pages légales dans un nouvel onglet. **Sur `/appel`** : on y
    * lit une mention sans quitter le formulaire, et un tunnel ne se quitte que
@@ -49,7 +55,7 @@ export function MentionsLegales({
 
       <nav aria-label="Mentions légales" className="pt-2">
         <ul className="flex flex-wrap gap-x-5 gap-y-1">
-          {legales.map((entree) => (
+          {liens.map((entree) => (
             <li key={entree.href}>
               <Link
                 href={entree.href}

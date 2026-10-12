@@ -10,7 +10,7 @@ import { usePathname } from "next/navigation";
  * quoi qu'il arrive, et une page sombre autour de lui le faisait trancher.
  * **`/thanks`**, qui reprend `/appel` à l'identique.
  */
-const PAGES_CLAIRES = ["/appel", "/thanks"] as const;
+const PAGES_CLAIRES = ["/appel", "/thanks", "/course", "/video"] as const;
 
 /**
  * Le fournisseur de thème du site, qui force le clair sur `PAGES_CLAIRES`.

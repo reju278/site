@@ -28,6 +28,21 @@ function adresseCalendly(base: string): string {
     if (cle.indexOf("utm_") === 0) adresse.searchParams.set(cle, valeur);
   });
 
+  /* Le prénom et l'e-mail laissés par l'opt-in du VSL Funnel (`/course`),
+     pour que Calendly s'ouvre déjà rempli. Gardés dans le navigateur, jamais
+     dans l'adresse de la page. Littéral recopié de `CLE_CONTACT_VSL` : la
+     fonction ne doit rien importer. */
+  try {
+    const contact = JSON.parse(sessionStorage.getItem("vsl-contact") || "null");
+    if (contact && typeof contact.email === "string") {
+      adresse.searchParams.set("email", contact.email);
+      if (typeof contact.prenom === "string" && contact.prenom)
+        adresse.searchParams.set("name", contact.prenom);
+    }
+  } catch (e) {
+    /* Stockage bloqué : le formulaire reste vide. */
+  }
+
   return adresse.toString();
 }
 

@@ -16,6 +16,7 @@ import { ShineBorder } from "@repo/ui/components/shine-border";
 import { cn } from "@repo/ui/lib/utils";
 import type { Metadata } from "next";
 import { avecReglages } from "@/lib/reglages-seo";
+import { CompteurVue } from "@/components/compteur-vue";
 
 /**
  * La page de confirmation, servie sur `go.funnels.club/thanks`.
@@ -56,6 +57,10 @@ export default function Thanks() {
   return (
     <>
       <div id="haut" />
+      {/* Compté dans le VSL Funnel du CRM (étape « Appel réservé ») : la
+          page sert aussi les autres prises d'appel, ses chiffres les
+          comptent toutes. */}
+      <CompteurVue tunnel="vsl" etape="merci" />
 
       {/* **Le relevé de la réservation**, en HTML brut et en tête de page :
           il lit ce que Calendly a mis dans l'adresse et l'en retire pendant
