@@ -2,7 +2,7 @@ import { FournisseurTheme } from "@/components/fournisseur-theme";
 import { EnTete } from "@/components/en-tete";
 import { HorsTunnel } from "@/components/hors-tunnel";
 import { PiedDePage } from "@/components/pied-de-page";
-import { GTM, SITE, identite } from "@/contenu/site";
+import { GTM, IMAGE_PARTAGE, SITE, identite } from "@/contenu/site";
 import { Toaster } from "@repo/ui/components/sonner";
 import type { Metadata } from "next";
 import { Fraunces, Ms_Madi } from "next/font/google";
@@ -152,7 +152,13 @@ export const metadata: Metadata = {
     siteName: identite.nom,
     title: `${identite.nom} · ${identite.promesse}`,
     description: identite.resume,
+    /* L'image d'un lien partagé. Sans elle, un lien posté sur LinkedIn ou
+       WhatsApp s'affichait en simple ligne de texte. Les pages qui déclarent
+       leur propre `openGraph` remplacent celui-ci en entier : elles
+       reprennent `IMAGE_PARTAGE` si elles n'ont pas mieux. */
+    images: [IMAGE_PARTAGE],
   },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({

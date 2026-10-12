@@ -23,7 +23,19 @@ export type AEcrire = null;
  * fois : trois copies finissent toujours par diverger, et une URL canonique
  * fausse se paie en pages dédoublées dans l'index.
  */
-export const SITE = "https://remy-jupille.com";
+// Le www, parce que c'est là que Vercel redirige : `remy-jupille.com`
+// répond 308 vers `www.remy-jupille.com`. Un canonique et un plan du site
+// écrits sans le www désignaient une adresse qui redirige — Google lit ça
+// comme deux signaux contraires, et indexe moins.
+export const SITE = "https://www.remy-jupille.com";
+
+/** L'image de partage par défaut : Rémy, face caméra, en 1280 × 720. */
+export const IMAGE_PARTAGE = {
+  url: "/affiche-video.jpg",
+  width: 1280,
+  height: 720,
+  alt: "Rémy Jupille",
+};
 
 /**
  * Le conteneur Google Tag Manager.

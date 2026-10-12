@@ -2,7 +2,7 @@ import { AppelOffres } from "@/components/appel-offres";
 import { EnTetePage } from "@/components/en-tete-page";
 import { Section } from "@/components/section";
 import { TexteRoulant } from "@/components/texte-roulant";
-import { SITE, identite, lettre } from "@/contenu/site";
+import { IMAGE_PARTAGE, SITE, identite, lettre } from "@/contenu/site";
 import {
   articlesPublies,
   formaterDate,
@@ -101,7 +101,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       url: `${SITE}/articles/${article.slug}`,
       publishedTime: article.date || undefined,
       authors: [article.auteur ?? identite.nom],
-      images: article.image ? [article.image] : undefined,
+      images: article.image ? [article.image] : [IMAGE_PARTAGE],
     },
   };
 }
