@@ -38,11 +38,13 @@ export default function Strategie() {
     <>
       <div id="haut" />
 
-      {/* LE HERO, celui de `/preparation` au caractère près. */}
+      {/* LE HERO, celui de `/preparation`, **sans sa hauteur d'écran** : elle
+          servait à la vidéo inclinée, qui dépasse sous la fenêtre, et poussait
+          ici le titre loin de l'en-tête. Rémy trouvait l'écart trop grand. */}
       <section
         id="presentation"
         data-hero
-        className="relative isolate flex flex-col px-5 pt-20 sm:min-h-[calc(100svh+var(--part-cachee))] sm:pt-24"
+        className="relative isolate flex flex-col px-5 pt-24 sm:pt-28"
       >
         <div
           data-bande-sombre
@@ -71,7 +73,7 @@ export default function Strategie() {
         />
 
         <div className="mx-auto flex w-full max-w-[var(--largeur-video)] flex-1 flex-col">
-          <div className="mx-auto mt-auto flex max-w-4xl flex-col items-center text-center">
+          <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
             <TitreRoulant
               as="h1"
               segments={titre}
@@ -104,7 +106,7 @@ export default function Strategie() {
           sur demande de Rémy, **en plus grand** : c'est la seule chose à faire
           sur cette page. L'adresse porte sa balise de provenance, déjà posée
           dans `liens`. */}
-      <section className="px-5 pt-14 pb-6 sm:pt-20">
+      <section className="px-5 pt-10 pb-6 sm:pt-12">
         <div className="mx-auto flex max-w-2xl flex-col items-center text-center">
           <BoutonScintillant
             href={liens.appel}
