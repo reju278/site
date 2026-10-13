@@ -1980,7 +1980,7 @@ garantie.
 
 ## Un tunnel n'est pas une page du site
 
-`/hub`, `/immersion`, `/preparation`, `/appel` et `/thanks` sont des **tunnels** : on y arrive par un lien qu'on a
+`/hub`, `/immersion`, `/preparation`, `/appel`, `/thanks` et `/strategie` sont des **tunnels** : on y arrive par un lien qu'on a
 reçu, et la règle est qu'on n'en sort que par l'appel. La liste des racines vit
 dans `lib/tunnels.ts`, et `HorsTunnel` la lit pour retirer l'en-tête et le pied
 de page du site, qui offriraient sinon une trentaine de portes de sortie.
@@ -2052,6 +2052,17 @@ Calendly annonce par `calendly.page_height` : on ne défile jamais dans
 l'iframe. Il déclare l'iframe
 `color-scheme: light` : sans cela, en thème sombre, le navigateur peint un fond
 blanc opaque autour de la carte de Calendly.
+
+**`/strategie` est le hero de `/preparation`, réduit à la vidéo et à un
+bouton**, servie sur `go.funnels.club/strategie`. On y arrive par l'e-mail S25
+de la séquence ClickFunnels, dont la page d'origine, `remy-jupille.com/stratégie`,
+avait disparu. Trois écarts, tous demandés par Rémy : **la vidéo est posée
+droite**, sans la bascule d'`/immersion` ; **elle est plus étroite**, 52rem au
+lieu de 76rem, parce qu'elle était trop grosse sur ordinateur ; et **le bouton
+est le `BoutonScintillant` en plus grand** (`min-h-16`, texte en `xl`), seul
+geste de la page, vers `liens.appel`. Pas de galerie, pas d'équipe, pas de
+consigne. Le titre et le sous-titre sont de l'agent, d'après l'e-mail : à
+valider par Rémy.
 
 ## Le même texte à deux endroits n'est écrit qu'une fois
 
