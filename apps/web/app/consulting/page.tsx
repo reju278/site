@@ -38,7 +38,7 @@ function rendre(segment: Segment, i: number) {
 
   if ("href" in segment) {
     /* Le Calendly sort du site : nouvel onglet et `noreferrer`, la balise de
-       provenance est déjà dans `liens`. L'article de Lilian reste ici. */
+       provenance est déjà dans `liens`. Un lien interne reste dans l'onglet. */
     return estExterne(segment.href) ? (
       <a
         key={i}

@@ -41,11 +41,9 @@ export const consulting = {
 
   paragraphes: [
     [
-      "Si comme ",
-      /* Le prénom mène à son article : c'est le lien interne qui porte le plus
-         de sens ici, et il dit au lecteur où trouver toute son histoire. */
-      { texte: "Lilian", href: "/resultats/lilian" },
-      ", vous avez envie de travailler en « one to one » avec Rémy, cliquez sur le lien suivant pour prendre rendez-vous avec nous, et savoir si vous êtes éligible à cet accompagnement ultra-personnalisé : ",
+      /* Le prénom n'est pas un lien, sur décision de Rémy : le seul lien du
+         paragraphe est celui de la candidature. */
+      "Si comme Lilian, vous avez envie de travailler en « one to one » avec Rémy, cliquez sur le lien suivant pour prendre rendez-vous avec nous, et savoir si vous êtes éligible à cet accompagnement ultra-personnalisé : ",
       { texte: "Candidature Consulting", href: liens.candidatureConsulting },
     ],
     [
