@@ -170,9 +170,10 @@ export const liens = {
   // qui ne savait pas encore ce qu'est le consulting. C'est la page qui envoie
   // ensuite au formulaire de candidature, par `candidatureConsulting`.
   consulting: "/consulting",
-  // Le formulaire de candidature, sur décision de Rémy, comme celui du
-  // recrutement. Il remplace le Calendly « Candidature Consulting ».
-  candidatureConsulting: avecTag("https://form.funnels.club/consulting"),
+  // Le formulaire de candidature, fourni par Rémy. Il remplace le Calendly
+  // « Candidature Consulting ». Il vit sur le CRM et non sur `form.funnels.club`
+  // comme celui du recrutement : `form.funnels.club/consulting` rend un 404.
+  candidatureConsulting: avecTag("https://crm.funnels.club/f/consulting"),
   lettre: avecTag("https://lettre.funnels.club"),
   espaceMembre: avecTag("https://groupe.funnels.club"),
   livre: avecTag("https://www.digital-selfmade.com/livre-1"),
