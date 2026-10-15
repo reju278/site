@@ -16,7 +16,7 @@ import Link from "next/link";
  * le bouton pour postuler.
  *
  * C'est la page vers laquelle mènent tous les liens « consulting » du site.
- * Le Calendly n'est atteint qu'ici, par le lien du premier paragraphe et par le
+ * Le formulaire de candidature n'est atteint qu'ici, par le lien du premier paragraphe et par le
  * bouton : on postule après avoir lu ce qu'on demande.
  *
  * Le texte se lit comme la lettre de l'accueil : même mesure, même corps, même
@@ -37,7 +37,7 @@ function rendre(segment: Segment, i: number) {
   if (typeof segment === "string") return insecables(segment);
 
   if ("href" in segment) {
-    /* Le Calendly sort du site : nouvel onglet et `noreferrer`, la balise de
+    /* Le formulaire sort du site : nouvel onglet et `noreferrer`, la balise de
        provenance est déjà dans `liens`. Un lien interne reste dans l'onglet. */
     return estExterne(segment.href) ? (
       <a

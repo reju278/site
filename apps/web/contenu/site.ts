@@ -170,12 +170,9 @@ export const liens = {
   // qui ne savait pas encore ce qu'est le consulting. C'est la page qui envoie
   // ensuite au Calendly, par `candidatureConsulting`.
   consulting: "/consulting",
-  // `appel-decouverte-clone-2` rendait un 404 : l'événement a été supprimé côté
-  // Calendly. Celui-ci est « Candidature Consulting », le seul événement actif
-  // du compte qui corresponde à l'offre.
-  candidatureConsulting: avecTag(
-    "https://calendly.com/funnels-club/consulting",
-  ),
+  // Le formulaire de candidature, sur décision de Rémy, comme celui du
+  // recrutement. Il remplace le Calendly « Candidature Consulting ».
+  candidatureConsulting: avecTag("https://form.funnels.club/consulting"),
   lettre: avecTag("https://lettre.funnels.club"),
   espaceMembre: avecTag("https://groupe.funnels.club"),
   livre: avecTag("https://www.digital-selfmade.com/livre-1"),
