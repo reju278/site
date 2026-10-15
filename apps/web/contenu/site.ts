@@ -168,7 +168,7 @@ export const liens = {
   // l'en-tête, le pied de page, la carte d'offre de l'accueil. Ils menaient
   // droit au Calendly, c'est-à-dire qu'on demandait de postuler à quelqu'un
   // qui ne savait pas encore ce qu'est le consulting. C'est la page qui envoie
-  // ensuite au Calendly, par `candidatureConsulting`.
+  // ensuite au formulaire de candidature, par `candidatureConsulting`.
   consulting: "/consulting",
   // Le formulaire de candidature, sur décision de Rémy, comme celui du
   // recrutement. Il remplace le Calendly « Candidature Consulting ».

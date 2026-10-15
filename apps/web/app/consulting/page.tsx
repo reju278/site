@@ -7,6 +7,7 @@ import { TexteRoulant } from "@/components/texte-roulant";
 import { avis } from "@/contenu/avis";
 import { consulting, type Segment } from "@/contenu/consulting";
 import { SITE, estExterne, temoignages } from "@/contenu/site";
+import { avecReglages } from "@/lib/reglages-seo";
 import { insecables } from "@/lib/typographie";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -23,7 +24,7 @@ import Link from "next/link";
  * surlignage jaune, qui y dit déjà « regardez ça ».
  */
 
-export const metadata: Metadata = {
+const metadonnees: Metadata = {
   title: consulting.titrePage,
   description: consulting.description,
   alternates: { canonical: "/consulting" },
@@ -163,4 +164,9 @@ export default function Consulting() {
       </Section>
     </>
   );
+}
+
+/** Les métadonnées de la page, avec les réglages SEO du CRM par-dessus. */
+export async function generateMetadata(): Promise<Metadata> {
+  return avecReglages("/consulting", metadonnees);
 }
