@@ -18,6 +18,7 @@ import { ParticulesHero } from "@/components/particules-hero";
 import { Section } from "@/components/section";
 import {
   SITE,
+  estExterne,
   identite,
   liens,
   pastilleHero,
@@ -541,6 +542,9 @@ export default function Accueil() {
               <div className="mt-auto pt-8">
                 <BoutonScintillant
                   href={offre.href}
+                  /* Le consulting mène à sa page, ici même : pas de nouvel
+                     onglet pour lui. */
+                  externe={estExterne(offre.href)}
                   fond={
                     offre.id === "funnels-club"
                       ? "var(--primary)"

@@ -9,6 +9,7 @@ Le site de Rémy Jupille. Vitrine, monté sur la stack de départ.
 | `/` | La promesse, à qui elle s'adresse, les deux programmes, un extrait de preuve, la biographie courte, les questions. |
 | `/resultats` | La mosaïque des résultats clients, chiffres et citations. |
 | `/a-propos` | Le parcours. |
+| `/consulting` | Le consulting privé avec Rémy : l'entretien de Lilian, le texte de l'offre, le bouton vers le Calendly. |
 | `/recrutement` | L'annonce du poste de représentant des ventes, et le bouton pour postuler. |
 | `/cgv`, `/confidentialite`, `/mentions` | Les pages légales. |
 

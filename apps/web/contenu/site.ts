@@ -164,10 +164,18 @@ export const liens = {
   // Fournie par Rémy, et servie sur `www` comme les autres : sans le
   // sous-domaine, la redirection perd la balise de provenance.
   formation: FORMATION,
+  // **Tout ce qui parle du consulting mène à sa page**, sur décision de Rémy :
+  // l'en-tête, le pied de page, la carte d'offre de l'accueil. Ils menaient
+  // droit au Calendly, c'est-à-dire qu'on demandait de postuler à quelqu'un
+  // qui ne savait pas encore ce qu'est le consulting. C'est la page qui envoie
+  // ensuite au Calendly, par `candidatureConsulting`.
+  consulting: "/consulting",
   // `appel-decouverte-clone-2` rendait un 404 : l'événement a été supprimé côté
   // Calendly. Celui-ci est « Candidature Consulting », le seul événement actif
   // du compte qui corresponde à l'offre.
-  consulting: avecTag("https://calendly.com/funnels-club/consulting"),
+  candidatureConsulting: avecTag(
+    "https://calendly.com/funnels-club/consulting",
+  ),
   lettre: avecTag("https://lettre.funnels.club"),
   espaceMembre: avecTag("https://groupe.funnels.club"),
   livre: avecTag("https://www.digital-selfmade.com/livre-1"),
@@ -547,7 +555,6 @@ export const menus: readonly {
         href: liens.consulting,
         texte: "Accompagnement privé",
         mention: "Animé par Rémy",
-        externe: true,
       },
     ],
   },
@@ -1178,11 +1185,7 @@ export const colonnesPiedDePage: readonly {
     titre: "Programmes",
     entrees: [
       { libelle: "Funnels Club", href: liens.appel, externe: true },
-      {
-        libelle: "Consulting privé avec Rémy",
-        href: liens.consulting,
-        externe: true,
-      },
+      { libelle: "Consulting privé avec Rémy", href: liens.consulting },
       /* **« Espace membre » a été retiré**, sur demande de Rémy. Ce n'est pas
          une page du site mais la porte d'entrée des clients, et le pied de page
          tient la carte du site. Le lien reste dans l'en-tête, à côté de

@@ -1,6 +1,7 @@
 "use client";
 
 import { TexteRoulant } from "@/components/texte-roulant";
+import { estExterne } from "@/contenu/site";
 import { cn } from "@repo/ui/lib/utils";
 import { ArrowRight } from "lucide-react";
 import { useCallback, useRef } from "react";
@@ -322,8 +323,10 @@ export function CarteOffre({
                 survol à tenir d'accord. */}
             <a
               href={href}
-              target="_blank"
-              rel="noreferrer"
+              /* Un nouvel onglet seulement pour une adresse qui quitte le site :
+                 la carte du consulting mène désormais à une page d'ici. */
+              target={estExterne(href) ? "_blank" : undefined}
+              rel={estExterne(href) ? "noreferrer" : undefined}
               style={{
                 backgroundColor: FONDS_BOUTON[teinte],
                 color: ENCRES_BOUTON[teinte],
