@@ -2,6 +2,7 @@ import { EnTeteImmersion } from "@/components/en-tete-immersion";
 import { MentionsLegales } from "@/components/mentions-legales";
 import { PiedImmersion } from "@/components/pied-immersion";
 import type { Metadata } from "next";
+import Script from "next/script";
 
 /**
  * Le cadre de la page de confirmation.
@@ -20,6 +21,10 @@ export const metadata: Metadata = {
     nocache: true,
     noimageindex: true,
   },
+  /* Le jeton de page externe de ClickFunnels : il désigne cette page comme
+     l'étape de confirmation du tunnel, et le SDK chargé plus bas le lit dans
+     le `head`. Il est propre à cette page ; une autre page externe a le sien. */
+  other: { "cf-page-token": "cfp_9t5JQnhFsnb3VAQqb2elC3gW" },
 };
 
 export default function LayoutThanks({
@@ -51,6 +56,12 @@ export default function LayoutThanks({
       <PiedImmersion>
         <MentionsLegales nouvelOnglet />
       </PiedImmersion>
+      {/* Le SDK de ClickFunnels, qui compte la visite dans l'étape du tunnel.
+          `afterInteractive`, comme GTM : rien ne doit retarder le rendu. */}
+      <Script
+        src="https://sdk.myclickfunnels.com/sdk.js"
+        strategy="afterInteractive"
+      />
     </div>
   );
 }
