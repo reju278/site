@@ -232,9 +232,11 @@ export const titreTemoignagesVsl = [
   { texte: "attirer leurs clients", accent: true },
 ] as const;
 
-/** Le sous-titre de la section, dicté par Rémy. */
+/** Le sous-titre de la section, dicté par Rémy. Sa première phrase, qui
+ * annonçait les vidéos complètes « plus tard », est retirée à sa demande :
+ * aucune page après l'inscription ne les montre. */
 export const sousTitreTemoignagesVsl =
-  "Chacun des témoignages ci-dessous sera accessible plus tard si vous souhaitez regarder la vidéo en intégralité. Il s'agit de vrais témoignages de vraies personnes que l'on a vraiment interviewées en vidéo.";
+  "Il s'agit de vrais témoignages de vraies personnes que l'on a vraiment interviewées en vidéo.";
 
 export const temoignagesVsl = [
   {
