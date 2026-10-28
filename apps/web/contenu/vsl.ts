@@ -115,7 +115,8 @@ export const optinVsl = {
 } as const;
 
 export const videoVsl = {
-  surtitre: "Vidéo formation comme promis :",
+  /* Dicté par Rémy, suivi du prénom de l'opt-in : voir `TitreVideoVsl`. */
+  surtitre: "Ta vidéo de formation offerte, comme promis",
   video: {
     id: "6w8wxhaqzk",
     titre: "La formation gratuite Funnels Club",

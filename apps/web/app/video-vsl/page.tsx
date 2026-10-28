@@ -2,6 +2,7 @@ import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { CompteurVue } from "@/components/compteur-vue";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { TexteRoulant } from "@/components/texte-roulant";
+import { TitreVideoVsl } from "@/components/titre-video-vsl";
 import { videoVsl } from "@/contenu/vsl";
 import { avecReglages } from "@/lib/reglages-seo";
 import type { Metadata } from "next";
@@ -39,9 +40,7 @@ export default function Video() {
     <main className="px-5 pt-12 sm:pt-16">
       <CompteurVue tunnel="vsl" etape="vsl" />
       <div className="mx-auto flex max-w-4xl flex-col items-center gap-6 text-center">
-        <p className="titre text-2xl text-foreground sm:text-3xl">
-          {videoVsl.surtitre}
-        </p>
+        <TitreVideoVsl texte={videoVsl.surtitre} />
         <LecteurVideo
           id={video.id}
           titre={video.titre}
