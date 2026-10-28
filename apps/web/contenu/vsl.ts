@@ -34,10 +34,9 @@ export const optinVsl = {
        375 px, « créée) » tombait seul sur la dernière ligne. */
     { texte: " (même si vous ne l'avez pas encore\u00a0créée)" },
   ],
-  note: "formation en ligne, service ou coaching",
-  /* Les mêmes trois mots que la note, en étiquettes sous le titre, sur
-     demande de Rémy, pour qu'on les voie mieux. Seule la majuscule change. */
-  typesOffre: ["Formation en ligne", "Service", "Coaching"],
+  /* Ce que veut dire « offre digitale ». « Service » est devenu
+     « prestation de services », sur précision de Rémy. */
+  note: "formation en ligne, prestation de services ou coaching",
   /* L'aperçu de la vidéo : une image tirée de la vidéo en 4K. */
   apercu: {
     image: "/vsl/apercu-1920.webp",

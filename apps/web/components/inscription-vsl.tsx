@@ -52,37 +52,34 @@ export function InscriptionVsl() {
               sous la photo. */}
           <BoutonScintillant
             action={() => setOuvert(true)}
-            className="w-full text-lg md:hidden"
+            className="min-h-16 w-full text-lg sm:text-xl md:hidden"
           >
             <TexteRoulant>{optinVsl.bouton}</TexteRoulant>
           </BoutonScintillant>
-          <p className="font-semibold text-foreground">{optinVsl.intro}</p>
-          {/* Les trois points, présentés comme les parties de la vidéo, sur
-              demande de Rémy : un numéro, puis la phrase. Une liste ordonnée,
-              donc annoncée comme telle par un lecteur d'écran. */}
-          <ol className="flex flex-col gap-2.5">
-            {optinVsl.points.map((point, rang) => (
+          <p className="text-lg font-bold text-foreground sm:text-xl">
+            {optinVsl.intro}
+          </p>
+          {/* Les trois points, ce qu'on va voir dans la vidéo : une petite
+              icône de lecture devant chacun, et non un numéro de partie, sur
+              précision de Rémy : ce ne sont pas des chapitres. */}
+          <ul className="flex flex-col gap-2.5">
+            {optinVsl.points.map((point) => (
               <li
                 key={point}
-                className="flex gap-3 rounded-md border bg-background/60 p-3"
+                className="flex items-start gap-3 rounded-md border bg-background/60 p-3"
               >
-                <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-primary/10 text-sm font-bold text-primary tabular-nums">
-                  {String(rang + 1).padStart(2, "0")}
+                <span className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
+                  <Play className="size-3.5 fill-current" />
                 </span>
-                <span className="flex flex-col gap-0.5">
-                  <span className="text-xs font-semibold tracking-wide text-primary uppercase">
-                    Partie {rang + 1}
-                  </span>
-                  <span className="text-[15px] leading-snug text-foreground">
-                    {point}
-                  </span>
+                <span className="text-base leading-snug text-foreground sm:text-[17px]">
+                  {point}
                 </span>
               </li>
             ))}
-          </ol>
+          </ul>
           <BoutonScintillant
             action={() => setOuvert(true)}
-            className="mt-2 w-full text-lg"
+            className="mt-2 min-h-16 w-full text-lg sm:text-xl"
           >
             <TexteRoulant>{optinVsl.bouton}</TexteRoulant>
           </BoutonScintillant>

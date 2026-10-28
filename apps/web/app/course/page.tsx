@@ -39,7 +39,7 @@ export default function Course() {
           le bouton qui ouvre l'inscription doit être visible au chargement,
           sans défiler, même sur un petit iPhone dont les barres du navigateur
           mangent une centaine de pixels. */}
-      <div className="mx-auto flex max-w-5xl flex-col gap-6 sm:gap-10">
+      <div className="mx-auto flex max-w-5xl flex-col gap-4 sm:gap-10">
         <header className="mx-auto flex max-w-3xl flex-col gap-2 text-center sm:gap-4">
           <h1 className="titre text-[1.6rem] leading-tight text-balance text-foreground sm:text-[2.6rem]">
             {optinVsl.titre.map((morceau, rang) =>
@@ -59,24 +59,16 @@ export default function Course() {
               ),
             )}
           </h1>
-          {/* Ce que veut dire « offre digitale », en étiquettes et non en
-              petite ligne grise, sur demande de Rémy : on le lit d'un coup
-              d'œil. Le texte entier reste là pour un lecteur d'écran, qui
-              n'a pas à deviner que trois étiquettes forment une phrase. */}
-          <p className="flex flex-wrap items-center justify-center gap-1 text-xs sm:gap-2 sm:text-base">
-            <span className="font-semibold text-primary">
-              *Offre digitale :
-            </span>
-            <span className="sr-only">{optinVsl.note}</span>
-            {optinVsl.typesOffre.map((type) => (
-              <span
-                key={type}
-                aria-hidden
-                className="rounded-md border border-primary/20 bg-primary/8 px-1.5 py-0.5 font-semibold text-foreground sm:px-2.5"
-              >
-                {type}
-              </span>
-            ))}
+          {/* Ce que veut dire « offre digitale » : une ligne de définition,
+              comme une note de bas de page qu'on aurait remontée, mais
+              lisible, sur demande de Rémy. L'astérisque répond à celui du
+              titre ; le texte est en encre de page et non en gris. */}
+          <p className="text-sm text-balance text-foreground/75 sm:text-lg">
+            <span className="font-bold text-primary">*</span>
+            <span className="font-semibold text-foreground">
+              Offre digitale
+            </span>{" "}
+            : {optinVsl.note}
           </p>
         </header>
         <InscriptionVsl />
