@@ -1,5 +1,6 @@
 import { CompteurVue } from "@/components/compteur-vue";
 import { InscriptionVsl } from "@/components/inscription-vsl";
+import { PreuveTrustpilot } from "@/components/preuve-trustpilot";
 import { optinVsl } from "@/contenu/vsl";
 import { avecReglages } from "@/lib/reglages-seo";
 import type { Metadata } from "next";
@@ -31,12 +32,16 @@ export default function Course() {
     <main
       /* Le haut de page ne dégage plus l'en-tête, retiré sur demande de
          Rémy : le titre monte au plus près du bord. */
-      className="px-5 pt-8 sm:pt-12"
+      className="px-5 pt-5 sm:pt-12"
     >
       <CompteurVue tunnel="vsl" etape="optin" />
-      <div className="mx-auto flex max-w-5xl flex-col gap-10">
-        <header className="mx-auto flex max-w-3xl flex-col gap-4 text-center">
-          <h1 className="titre text-3xl leading-tight text-balance text-foreground sm:text-[2.6rem]">
+      {/* Sur téléphone, tout est resserré, titre compris, sur demande de Rémy :
+          le bouton qui ouvre l'inscription doit être visible au chargement,
+          sans défiler, même sur un petit iPhone dont les barres du navigateur
+          mangent une centaine de pixels. */}
+      <div className="mx-auto flex max-w-5xl flex-col gap-6 sm:gap-10">
+        <header className="mx-auto flex max-w-3xl flex-col gap-2 text-center sm:gap-4">
+          <h1 className="titre text-[1.6rem] leading-tight text-balance text-foreground sm:text-[2.6rem]">
             {optinVsl.titre.map((morceau, rang) =>
               "accent" in morceau ? (
                 <span key={rang} className="text-primary">
@@ -54,12 +59,13 @@ export default function Course() {
               ),
             )}
           </h1>
-          <p className="text-base text-muted-foreground sm:text-lg">
+          <p className="text-sm text-muted-foreground sm:text-lg">
             <span className="font-semibold text-primary">*Offre digitale</span>{" "}
             : {optinVsl.note}
           </p>
         </header>
         <InscriptionVsl />
+        <PreuveTrustpilot />
       </div>
       {/* Le SDK de ClickFunnels, qui compte la visite dans l'étape du tunnel.
           `afterInteractive`, comme sur `/thanks` : rien ne doit retarder le

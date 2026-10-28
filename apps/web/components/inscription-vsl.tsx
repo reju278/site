@@ -37,10 +37,25 @@ export function InscriptionVsl() {
 
   return (
     <>
-      <div className="grid items-center gap-6 rounded-[var(--radius-lg)] border bg-card p-4 shadow-[0_30px_70px_-35px_rgba(0,0,0,0.35)] sm:p-6 md:grid-cols-[1.15fr_1fr] md:gap-8">
+      {/* Sur ordinateur, les deux colonnes s'étirent à la même hauteur
+          (`md:items-stretch`) : la photo remplit toute sa zone, quelle que soit
+          la longueur du texte à droite, au lieu de flotter au milieu avec du
+          blanc au-dessus et au-dessous. Sur téléphone, elles s'empilent et la
+          photo garde son 16/9. */}
+      <div className="grid items-center gap-4 rounded-[var(--radius-lg)] border bg-card p-3 sm:gap-6 shadow-[0_30px_70px_-35px_rgba(0,0,0,0.35)] sm:p-6 md:grid-cols-[1.15fr_1fr] md:items-stretch md:gap-8">
         <ApercuVideo ouvrir={() => setOuvert(true)} />
 
         <div className="flex flex-col gap-4">
+          {/* Un bouton de plus, sur téléphone seulement, sur demande de Rémy :
+              les colonnes s'y empilent, et celui du bas de la carte tombe sous
+              la ligne de flottaison. Celui-ci est visible au chargement, juste
+              sous la photo. */}
+          <BoutonScintillant
+            action={() => setOuvert(true)}
+            className="w-full text-lg md:hidden"
+          >
+            <TexteRoulant>{optinVsl.bouton}</TexteRoulant>
+          </BoutonScintillant>
           <p className="font-semibold text-foreground">{optinVsl.intro}</p>
           <ul className="flex flex-col gap-3">
             {optinVsl.points.map((point) => (
@@ -258,7 +273,7 @@ function ApercuVideo({ ouvrir }: { ouvrir: () => void }) {
       type="button"
       onClick={ouvrir}
       aria-label="Voir la vidéo gratuite"
-      className="group relative block aspect-video w-full overflow-hidden rounded-md bg-black text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+      className="group relative block aspect-video w-full overflow-hidden rounded-md bg-black md:aspect-auto md:h-full md:min-h-64 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
     >
       {/* L'image du haut de page : `fetchPriority="high"`, et la largeur
           qu'elle occupe pour que le navigateur choisisse bien. Elle fait
@@ -268,7 +283,7 @@ function ApercuVideo({ ouvrir }: { ouvrir: () => void }) {
       <img
         src={apercu.image}
         srcSet={`${apercu.imageMobile} 1080w, ${apercu.image} 1920w`}
-        sizes="(min-width: 768px) 560px, calc(100vw - 4.5rem)"
+        sizes="(min-width: 768px) 640px, calc(100vw - 4rem)"
         alt={apercu.alt}
         width={1920}
         height={1080}
@@ -277,7 +292,11 @@ function ApercuVideo({ ouvrir }: { ouvrir: () => void }) {
         className="absolute inset-0 size-full object-cover"
       />
 
-      <span className="absolute top-[46%] left-1/2 flex h-12 w-[4.5rem] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-md bg-primary text-primary-foreground shadow-[0_10px_30px_-8px_rgba(0,0,0,0.5)]">
+      {/* Le bouton de lecture est translucide, comme celui de Wistia, sur
+          demande de Rémy : le visage reste visible au travers. Il se remplit
+          au survol. Pas d'ombre portée : sur un fond qu'on voit au travers,
+          elle salirait l'image au lieu de détacher le bouton. */}
+      <span className="absolute top-[46%] left-1/2 flex h-12 w-[4.5rem] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-md bg-primary/70 text-primary-foreground transition-colors group-hover:bg-primary/90">
         <Play className="size-6 fill-current" />
       </span>
 

@@ -896,6 +896,13 @@ summary {
      couleur de la palette du site, c'est une marque citée. */
   --youtube: #ff0000;
 
+  /* Le vert de Trustpilot, celui des étoiles de la preuve sous l'opt-in de
+     `/course`. Une marque citée, comme `--youtube`, et fixe d'un thème à
+     l'autre pour la même raison. Il ne tient que 2,6:1 sur la page claire :
+     les étoiles n'y portent donc pas l'information seules, la note est
+     écrite en toutes lettres à côté, comme pour le livre. */
+  --trustpilot: #00b67a;
+
   /* L'or des étoiles de la note du livre.
 
      **Ce n'est pas `--or`, et il a fallu le mesurer pour s'en apercevoir.**

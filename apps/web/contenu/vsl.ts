@@ -25,7 +25,9 @@ export const optinVsl = {
      mêmes mots. */
   titre: [
     { texte: "Nous allons mettre en place le " },
-    { texte: "PARFAIT “tunnel de vente”", accent: true },
+    /* Espaces insécables dans « tunnel de vente » : l'expression se coupait
+       en deux entre ses guillemets sur téléphone. */
+    { texte: "PARFAIT “tunnel\u00a0de\u00a0vente”", accent: true },
     { texte: " pour vendre votre " },
     { texte: "offre digitale*", accent: true },
     /* « encore » et « créée) » sont liés par une espace insécable : sur
@@ -38,6 +40,35 @@ export const optinVsl = {
     image: "/vsl/apercu-1920.webp",
     imageMobile: "/vsl/apercu-1080.webp",
     alt: "Rémy présente la formation gratuite, face caméra",
+  },
+  /* La preuve sous le bloc d'inscription : la note Trustpilot de
+     Funnels.Club, relevée sur trustpilot.com/review/funnels.club le 28
+     octobre 2026 : TrustScore 4,7 sur 5, 230 avis, dont 84 % à 5 étoiles.
+
+     **« Plus de 200 avis » et non « 230 avis »** : un compte exact écrit dans
+     une phrase est faux dès l'avis suivant, la règle du dépôt sur les textes
+     qui comptent leurs éléments. Le plancher reste vrai tant que les avis
+     montent. **La note, elle, peut bouger** : elle se revérifie sur
+     Trustpilot, et la remplir change aussi les étoiles, calculées depuis elle.
+
+     Aucun lien vers Trustpilot : c'est un tunnel, on n'en sort que par
+     l'appel. Aucun balisage `AggregateRating` non plus, voir `AGENTS.md`.
+
+     Les portraits sont ceux de trois membres déjà publiés sur `/immersion`,
+     Christian, Roland et Valérie. Ce ne sont pas des auteurs d'avis
+     Trustpilot : ils illustrent la communauté.
+
+     **Libellé écrit par l'agent, à valider par Rémy.** */
+  preuve: {
+    note: 4.7,
+    /* Sans la mention de Trustpilot, sur demande de Rémy. La note reste
+       celle de Trustpilot, et c'est là qu'elle se vérifie. */
+    texte: "4,7 sur 5 · plus de 200 avis",
+    portraits: [
+      "/immersion/temoignage-christian-joyce.jpg",
+      "/immersion/temoignage-roland-buffet.jpg",
+      "/immersion/temoignage-valerie-di-falco.jpg",
+    ],
   },
   intro: "Vidéo gratuite qui présente la solution pour :",
   points: [
