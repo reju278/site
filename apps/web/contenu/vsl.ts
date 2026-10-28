@@ -213,9 +213,6 @@ export const finOptin = {
   apres: " dans laquelle je vous dévoile la solution pour :",
 } as const;
 
-/** Sous la signature de la lettre de `/course`, dicté par Rémy. */
-export const fonctionRemy = "Fondateur de Funnels Club";
-
 /**
  * Les témoignages sous la lettre de `/course`, sur demande de Rémy : des
  * cartes au dessin de celles du hero d'`/immersion`, l'affiche de l'entretien

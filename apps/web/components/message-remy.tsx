@@ -119,10 +119,10 @@ export function MessageRemy({
    */
   lien,
   /**
-   * La fonction de Rémy sous son nom. Passée, elle remplace la signature
-   * manuscrite par le nom écrit droit et cette ligne dessous.
+   * `false` retire la salutation et la signature. Sur `/course`, la lettre
+   * finit sur son bouton, sur demande de Rémy.
    */
-  fonction,
+  signature = true,
   /**
    * Les passages de la phrase d'ouverture à surligner en jaune, celui des
    * voies. Sur `/course`, où la liste des voies est retirée, ce sont les types
@@ -144,7 +144,7 @@ export function MessageRemy({
   lienAppel?: string | null;
   ancreVideo?: string | null;
   lien?: (libelle: string) => React.ReactNode;
-  fonction?: string;
+  signature?: boolean;
   surlignes?: readonly string[];
   fin?: React.ReactNode;
   ouverture?: string;
@@ -482,30 +482,21 @@ export function MessageRemy({
 
               Elle est plus grande que le texte et non plus petite : une
               signature est un geste, pas une mention. */}
-          <Apparition className="mt-10 sm:mt-12">
-            {/* La salutation reste dans l'axe du texte, sur décision de Rémy :
+          {signature ? (
+            <Apparition className="mt-10 sm:mt-12">
+              {/* La salutation reste dans l'axe du texte, sur décision de Rémy :
                 c'est la dernière ligne de la lettre, elle appartient au corps.
                 Seule la signature en sort. */}
-            <p className="text-base text-foreground sm:text-lg">
-              {contenu.salutation}
-            </p>
-            {fonction ? (
-              /* Sur `/course`, sur demande de Rémy : le nom en toutes lettres,
-                 droit, et sa fonction dessous. Pas d'anglaise penchée. */
-              <p className="mt-6 text-base sm:text-lg">
-                <span className="block font-semibold text-foreground">
-                  {contenu.signature}
-                </span>
-                <span className="block text-muted-foreground">{fonction}</span>
+              <p className="text-base text-foreground sm:text-lg">
+                {contenu.salutation}
               </p>
-            ) : (
               <div className="flex justify-end">
                 <p className="signature mt-2 origin-bottom-right -rotate-3 pr-2 text-5xl text-foreground sm:text-6xl">
                   {contenu.signature}
                 </p>
               </div>
-            )}
-          </Apparition>
+            </Apparition>
+          ) : null}
         </div>
       </div>
     </section>

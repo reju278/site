@@ -11,7 +11,6 @@ import {
   messageRemyOptin,
   ouvertureOptin,
   finOptin,
-  fonctionRemy,
   surlignesOptin,
   optinVsl,
 } from "@/contenu/vsl";
@@ -99,7 +98,7 @@ export default function Course() {
         <MessageRemy
           contenu={messageRemyOptin}
           lien={(libelle) => <OuvrirInscription>{libelle}</OuvrirInscription>}
-          fonction={fonctionRemy}
+          signature={false}
           surlignes={surlignesOptin}
           ouverture={ouvertureOptin}
           fin={
