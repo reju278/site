@@ -259,37 +259,68 @@ export const questionnaireVsl = {
  * `{prenom}` est remplacé à l'affichage.
  */
 export const strategieVsl = {
-  titre: "Ta stratégie personnalisée",
-  titreAvecPrenom: "{prenom}, voici ta stratégie personnalisée",
-  /* Le tableau comparatif, sur demande de Rémy : les deux premières lignes
-     sont calculées, les suivantes reprennent les quatre étapes de la VSL.
-     Tout est de l'agent, à valider. Les libellés restent courts : trois
-     colonnes doivent tenir sur un téléphone. */
-  colonneAvant: "Aujourd'hui",
-  colonneApres: "Avec Funnels Club",
-  criterePrix: "Prix de ton offre",
+  titre: "Voici ta stratégie",
+  /* Dicté par Rémy : « Rémy, voici ta stratégie. » */
+  titreAvecPrenom: "{prenom}, voici ta stratégie",
+  /* Les deux tableaux comparatifs, sur demande de Rémy. Les arguments du
+     premier viennent de sa vidéo sur les prix (« multiplier vos prix par
+     10 »), ceux du second de la VSL ; resserrés par l'agent pour tenir dans
+     une case de téléphone, à valider. */
+  titrePrix: "Pourquoi vendre plus cher",
+  petitPrix: "Petit prix",
+  offreA: "Offre à",
   critereClients: "Clients par mois pour",
   clients: "clients",
-  lignes: [
+  lignesPrix: [
     {
-      critere: "Positionnement",
-      avant: "Une offre parmi d'autres",
-      apres: "Niche validée et client de rêve identifié",
+      critere: "Les clients que tu attires",
+      avant: "Comparent les prix et remettent à plus tard",
+      apres: "Ont un vrai besoin et décident vite",
     },
     {
-      critere: "Offre",
-      avant: "Sa valeur ne se voit pas",
-      apres: "Complète, vendue à sa juste valeur",
+      critere: "Leur implication",
+      avant: "Achètent et n'appliquent pas",
+      apres: "Appliquent et obtiennent des résultats",
     },
     {
-      critere: "Tunnel de vente",
-      avant: "Tu vas chercher tes clients",
-      apres: "Il attire tes clients à toi",
+      critere: "Ton marketing",
+      avant: "Convaincre, relancer, faire des promotions",
+      apres: "Simple et direct : voici ma solution",
     },
     {
-      critere: "Nouveaux clients",
-      avant: "Irréguliers",
-      apres: "Chaque mois, par la publicité et le contenu",
+      critere: "Ta marge",
+      avant: "Trop juste pour bien accompagner",
+      apres: "De quoi offrir un service exceptionnel",
+    },
+  ],
+  titreTunnel: "Site internet ou tunnel de vente",
+  colonneSite: "Site internet",
+  colonneTunnel: "Tunnel Funnels Club",
+  lignesTunnel: [
+    {
+      critere: "Le parcours",
+      avant: "Plein de pages, le visiteur se perd",
+      apres: "3 à 4 pages qui se suivent dans l'ordre",
+    },
+    {
+      critere: "Tes prospects",
+      avant: "Tu dois aller les chercher",
+      apres: "Ce sont eux qui viennent à toi",
+    },
+    {
+      critere: "Le tri",
+      avant: "Tout le monde arrive, sans filtre",
+      apres: "Seuls tes clients de rêve restent",
+    },
+    {
+      critere: "La publicité",
+      avant: "Difficile à rentabiliser",
+      apres: "Pensé pour la publicité en ligne",
+    },
+    {
+      critere: "La technique",
+      avant: "Une usine à gaz à créer et à gérer",
+      apres: "Très peu de technique, un modèle à copier",
     },
   ],
   titreActivite: "Comment on va y arriver ensemble",

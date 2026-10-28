@@ -40,6 +40,122 @@ function Signe({ oui }: { oui: boolean }) {
   );
 }
 
+/** Une ligne d'un tableau comparatif : chiffrée (surlignée) ou qualitative
+ * (croix et coche). */
+type Ligne = {
+  critere: string;
+  avant: string;
+  apres: string;
+  chiffre?: boolean;
+};
+
+/**
+ * Un tableau comparatif, comme ceux qui comparent deux logiciels, sur demande
+ * de Rémy : la colonne de gauche est ce qu'on quitte, celle de droite, teintée,
+ * ce que Funnels Club propose. La stratégie en pose deux.
+ */
+function TableauComparatif({
+  colonneAvant,
+  colonneApres,
+  lignes,
+}: {
+  colonneAvant: string;
+  colonneApres: string;
+  lignes: Ligne[];
+}) {
+  return (
+    <>
+      {/* Le tableau. Un vrai `table` : un lecteur d'écran annonce chaque
+            case avec sa ligne et sa colonne. Trois colonnes courtes tiennent
+            sur 335 px, d'où des libellés de quelques mots. La colonne
+            « Avec Funnels Club » est teintée : c'est celle qu'on lit. */}
+      <table className="mt-4 w-full border-separate border-spacing-0 text-left text-sm sm:table-fixed sm:text-base">
+        <thead>
+          <tr>
+            {/* Sur téléphone, la colonne des critères disparaît : chaque
+                  critère passe sur sa propre ligne, au-dessus de ses deux
+                  valeurs, et le tableau n'a plus que deux colonnes. Trois
+                  dans 300 px donnaient des cases de quatre mots par ligne. */}
+            <td className="hidden sm:table-cell sm:w-[34%]" />
+            {/* **Les deux en-têtes restent en haut de l'écran** tant qu'on
+                  est dans le tableau, sur demande de Rémy : sur téléphone, le
+                  tableau fait plus d'un écran, et on ne savait plus quelle
+                  colonne on lisait. Fonds opaques, sinon les lignes défilent
+                  au travers. Même rembourrage des deux côtés, pour que les
+                  deux libellés soient sur la même ligne. */}
+            <th
+              scope="col"
+              className="sticky top-0 z-10 bg-[color-mix(in_srgb,var(--foreground)_4%,var(--background))] px-2 py-3 align-middle text-xs font-semibold tracking-wide text-muted-foreground uppercase sm:static sm:bg-transparent sm:px-4 sm:text-sm"
+            >
+              {colonneAvant}
+            </th>
+            <th
+              scope="col"
+              className="sticky top-0 z-10 rounded-t-md bg-[color-mix(in_srgb,var(--primary)_10%,color-mix(in_srgb,var(--foreground)_4%,var(--background)))] px-2 py-3 align-middle text-xs font-semibold tracking-wide text-primary uppercase sm:static sm:px-4 sm:text-sm"
+            >
+              {colonneApres}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {lignes.map((ligne, rang, toutes) => {
+            const derniere = rang === toutes.length - 1;
+            return (
+              <Fragment key={ligne.critere}>
+                <tr className="sm:hidden">
+                  <th
+                    colSpan={2}
+                    className="border-t border-foreground/10 pt-3 pb-1 text-sm font-semibold text-foreground"
+                  >
+                    {insecables(ligne.critere)}
+                  </th>
+                </tr>
+                <tr>
+                  <th
+                    scope="row"
+                    className="hidden border-t border-foreground/10 py-3 pr-4 align-top text-base font-semibold text-foreground sm:table-cell"
+                  >
+                    {insecables(ligne.critere)}
+                  </th>
+                  <td className="w-1/2 px-2 pt-1 pb-3 align-top text-muted-foreground sm:border-t sm:border-foreground/10 sm:px-4 sm:py-3">
+                    {ligne.chiffre ? (
+                      <span className="titre text-lg text-foreground/70 tabular-nums sm:text-xl">
+                        {insecables(ligne.avant)}
+                      </span>
+                    ) : (
+                      <span className="flex gap-1.5">
+                        <Signe oui={false} />
+                        <span>{insecables(ligne.avant)}</span>
+                      </span>
+                    )}
+                  </td>
+                  <td
+                    className={`w-1/2 bg-primary/10 px-2 pt-1 pb-3 align-top text-foreground sm:border-t sm:border-primary/15 sm:px-4 sm:py-3 ${derniere ? "rounded-b-md" : ""}`}
+                  >
+                    {ligne.chiffre ? (
+                      <mark
+                        className="surlignage titre text-lg tabular-nums sm:text-xl"
+                        style={jaune}
+                      >
+                        {insecables(ligne.apres)}
+                      </mark>
+                    ) : (
+                      <span className="flex gap-1.5">
+                        <Signe oui />
+                        <span>{insecables(ligne.apres)}</span>
+                      </span>
+                    )}
+                  </td>
+                </tr>
+              </Fragment>
+            );
+          })}
+        </tbody>
+      </table>
+    </>
+  );
+}
+
 /**
  * La stratégie personnalisée de `/video-vsl`, sous le bouton de réservation,
  * à la place du calculateur, sur demande de Rémy : voir `strategieVsl`.
@@ -49,12 +165,11 @@ function Signe({ oui }: { oui: boolean }) {
  * rend rien, plutôt qu'une stratégie « personnalisée » faite de valeurs par
  * défaut.
  *
- * **Un tableau comparatif, comme ceux qui comparent deux logiciels**, sur
- * demande de Rémy : « Aujourd'hui » contre « Avec Funnels Club », une ligne
- * par argument. Les deux premières sont chiffrées (le prix, les clients
- * qu'il faut pour l'objectif), les suivantes reprennent les quatre étapes de
- * la VSL. Une courbe Bklit puis deux colonnes avant/après ont été essayées
- * avant ; la courbe demandait trop de lecture sur téléphone.
+ * **Deux tableaux comparatifs**, sur demande de Rémy : « Pourquoi vendre plus
+ * cher » (son prix et le prix visé, les clients qu'il faut, puis les
+ * arguments de sa vidéo sur les prix), et « Site internet ou tunnel de vente »
+ * (les arguments de la VSL). Une courbe Bklit, un avant/après puis un tableau
+ * unique ont été essayés avant.
  *
  * **Les témoignages sont choisis par activité**, et rendus par le serveur :
  * la page passe une galerie par activité, et celle-ci n'affiche que la bonne.
@@ -114,110 +229,39 @@ export function StrategieVsl({
           {insecables(remplir(titre, valeurs))}
         </h2>
 
-        {/* Le tableau. Un vrai `table` : un lecteur d'écran annonce chaque
-            case avec sa ligne et sa colonne. Trois colonnes courtes tiennent
-            sur 335 px, d'où des libellés de quelques mots. La colonne
-            « Avec Funnels Club » est teintée : c'est celle qu'on lit. */}
-        <table className="mt-6 w-full border-separate border-spacing-0 text-left text-sm sm:table-fixed sm:text-base">
-          <thead>
-            <tr>
-              {/* Sur téléphone, la colonne des critères disparaît : chaque
-                  critère passe sur sa propre ligne, au-dessus de ses deux
-                  valeurs, et le tableau n'a plus que deux colonnes. Trois
-                  dans 300 px donnaient des cases de quatre mots par ligne. */}
-              <td className="hidden sm:table-cell sm:w-[34%]" />
-              {/* **Les deux en-têtes restent en haut de l'écran** tant qu'on
-                  est dans le tableau, sur demande de Rémy : sur téléphone, le
-                  tableau fait plus d'un écran, et on ne savait plus quelle
-                  colonne on lisait. Fonds opaques, sinon les lignes défilent
-                  au travers. Même rembourrage des deux côtés, pour que les
-                  deux libellés soient sur la même ligne. */}
-              <th
-                scope="col"
-                className="sticky top-0 z-10 bg-[color-mix(in_srgb,var(--foreground)_4%,var(--background))] px-2 py-3 align-middle text-xs font-semibold tracking-wide text-muted-foreground uppercase sm:static sm:bg-transparent sm:px-4 sm:text-sm"
-              >
-                {strategieVsl.colonneAvant}
-              </th>
-              <th
-                scope="col"
-                className="sticky top-0 z-10 rounded-t-md bg-[color-mix(in_srgb,var(--primary)_10%,color-mix(in_srgb,var(--foreground)_4%,var(--background)))] px-2 py-3 align-middle text-xs font-semibold tracking-wide text-primary uppercase sm:static sm:px-4 sm:text-sm"
-              >
-                {strategieVsl.colonneApres}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {[
-              {
-                critere: strategieVsl.criterePrix,
-                avant: euros.format(calcul.prix),
-                apres: euros.format(calcul.cible ?? calcul.prix),
-                chiffre: true,
-              },
-              {
-                critere: `${strategieVsl.critereClients} ${euros.format(objectif)}`,
-                avant: `${calcul.clients} ${strategieVsl.clients}`,
-                apres: `${calcul.clientsCible ?? calcul.clients} ${strategieVsl.clients}`,
-                chiffre: true,
-              },
-              ...strategieVsl.lignes.map((ligne) => ({
-                ...ligne,
-                chiffre: false,
-              })),
-            ].map((ligne, rang, toutes) => {
-              const derniere = rang === toutes.length - 1;
-              return (
-                <Fragment key={ligne.critere}>
-                  <tr className="sm:hidden">
-                    <th
-                      colSpan={2}
-                      className="border-t border-foreground/10 pt-3 pb-1 text-sm font-semibold text-foreground"
-                    >
-                      {insecables(ligne.critere)}
-                    </th>
-                  </tr>
-                  <tr>
-                    <th
-                      scope="row"
-                      className="hidden border-t border-foreground/10 py-3 pr-4 align-top text-base font-semibold text-foreground sm:table-cell"
-                    >
-                      {insecables(ligne.critere)}
-                    </th>
-                    <td className="w-1/2 px-2 pt-1 pb-3 align-top text-muted-foreground sm:border-t sm:border-foreground/10 sm:px-4 sm:py-3">
-                      {ligne.chiffre ? (
-                        <span className="titre text-lg text-foreground/70 tabular-nums sm:text-xl">
-                          {insecables(ligne.avant)}
-                        </span>
-                      ) : (
-                        <span className="flex gap-1.5">
-                          <Signe oui={false} />
-                          <span>{insecables(ligne.avant)}</span>
-                        </span>
-                      )}
-                    </td>
-                    <td
-                      className={`w-1/2 bg-primary/10 px-2 pt-1 pb-3 align-top text-foreground sm:border-t sm:border-primary/15 sm:px-4 sm:py-3 ${derniere ? "rounded-b-md" : ""}`}
-                    >
-                      {ligne.chiffre ? (
-                        <mark
-                          className="surlignage titre text-lg tabular-nums sm:text-xl"
-                          style={jaune}
-                        >
-                          {insecables(ligne.apres)}
-                        </mark>
-                      ) : (
-                        <span className="flex gap-1.5">
-                          <Signe oui />
-                          <span>{insecables(ligne.apres)}</span>
-                        </span>
-                      )}
-                    </td>
-                  </tr>
-                </Fragment>
-              );
-            })}
-          </tbody>
-        </table>
+        <h3 className="titre mt-8 text-xl text-balance text-foreground sm:text-2xl">
+          {strategieVsl.titrePrix}
+        </h3>
+        <TableauComparatif
+          colonneAvant={
+            calcul.cible
+              ? `${strategieVsl.offreA} ${euros.format(calcul.prix)}`
+              : strategieVsl.petitPrix
+          }
+          colonneApres={`${strategieVsl.offreA} ${euros.format(calcul.cible ?? calcul.prix)}`}
+          lignes={[
+            ...(calcul.cible
+              ? [
+                  {
+                    critere: `${strategieVsl.critereClients} ${euros.format(objectif)}`,
+                    avant: `${calcul.clients} ${strategieVsl.clients}`,
+                    apres: `${calcul.clientsCible} ${strategieVsl.clients}`,
+                    chiffre: true,
+                  },
+                ]
+              : []),
+            ...strategieVsl.lignesPrix,
+          ]}
+        />
+
+        <h3 className="titre mt-10 text-xl text-balance text-foreground sm:text-2xl">
+          {strategieVsl.titreTunnel}
+        </h3>
+        <TableauComparatif
+          colonneAvant={strategieVsl.colonneSite}
+          colonneApres={strategieVsl.colonneTunnel}
+          lignes={[...strategieVsl.lignesTunnel]}
+        />
 
         {/* « Comment y arriver » : le paragraphe propre à l'activité, puis
             les quatre étapes de la VSL, numérotées, puis l'appel. Sur demande
