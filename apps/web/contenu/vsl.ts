@@ -169,5 +169,15 @@ export const surlignesOptin = [
   "de la prestation de services",
 ] as const;
 
+/** La fin de la lettre de `/course`, dictée par Rémy. Le libellé du lien
+ * ouvre la fenêtre d'inscription ; les trois points qui suivent sont ceux du
+ * haut de page, `optinVsl.points`. La lettre ne s'ouvre plus sur un
+ * guillemet, elle ne se ferme donc plus sur un. */
+export const finOptin = {
+  avant: "Et j'ai réalisé cette ",
+  lien: "vidéo gratuite",
+  apres: " dans laquelle je vous dévoile la solution pour :",
+} as const;
+
 /** Sous la signature de la lettre de `/course`, dicté par Rémy. */
 export const fonctionRemy = "Fondateur de Funnels Club";

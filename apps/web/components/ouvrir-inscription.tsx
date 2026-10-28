@@ -1,5 +1,8 @@
 "use client";
 
+import { BoutonScintillant } from "@/components/bouton-scintillant";
+import { TexteRoulant } from "@/components/texte-roulant";
+
 /** Le nom de l'événement qui ouvre la fenêtre d'inscription de `/course`. */
 export const OUVRIR_INSCRIPTION = "ouvrir-inscription-vsl";
 
@@ -21,5 +24,17 @@ export function OuvrirInscription({ children }: { children: React.ReactNode }) {
     >
       {children}
     </button>
+  );
+}
+
+/** Le bouton plein qui ouvre la même fenêtre, à la fin de la lettre. */
+export function BoutonOuvrirInscription({ children }: { children: string }) {
+  return (
+    <BoutonScintillant
+      action={() => window.dispatchEvent(new Event(OUVRIR_INSCRIPTION))}
+      className="min-h-16 w-full text-lg sm:w-auto sm:px-10 sm:text-xl"
+    >
+      <TexteRoulant>{children}</TexteRoulant>
+    </BoutonScintillant>
   );
 }

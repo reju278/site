@@ -1,10 +1,14 @@
 import { CompteurVue } from "@/components/compteur-vue";
-import { InscriptionVsl } from "@/components/inscription-vsl";
+import { InscriptionVsl, ListePointsVsl } from "@/components/inscription-vsl";
 import { PreuveTrustpilot } from "@/components/preuve-trustpilot";
 import { MessageRemy } from "@/components/message-remy";
-import { OuvrirInscription } from "@/components/ouvrir-inscription";
+import {
+  BoutonOuvrirInscription,
+  OuvrirInscription,
+} from "@/components/ouvrir-inscription";
 import {
   messageRemyOptin,
+  finOptin,
   fonctionRemy,
   surlignesOptin,
   optinVsl,
@@ -95,6 +99,21 @@ export default function Course() {
           lien={(libelle) => <OuvrirInscription>{libelle}</OuvrirInscription>}
           fonction={fonctionRemy}
           surlignes={surlignesOptin}
+          fin={
+            <div className="flex flex-col gap-6">
+              <p>
+                {finOptin.avant}
+                <OuvrirInscription>{finOptin.lien}</OuvrirInscription>
+                {finOptin.apres}
+              </p>
+              <ListePointsVsl />
+              <div>
+                <BoutonOuvrirInscription>
+                  {optinVsl.bouton}
+                </BoutonOuvrirInscription>
+              </div>
+            </div>
+          }
         />
       </div>
       {/* Le SDK de ClickFunnels, qui compte la visite dans l'étape du tunnel.

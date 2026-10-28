@@ -27,6 +27,36 @@ import { useEffect, useRef, useState } from "react";
  * navigation complète : le formulaire de Calendly lit ces informations au
  * chargement de la page, pas après une navigation côté client.
  */
+/**
+ * Les trois points de la vidéo, coche verte devant. Écrits une fois et montrés
+ * deux fois sur `/course` : à côté de l'aperçu, et à la fin de la lettre de
+ * Rémy, sur sa demande.
+ */
+export function ListePointsVsl() {
+  return (
+    <ul className="flex flex-col gap-3.5">
+      {optinVsl.points.map((point, rang) => (
+        <li key={rang} className="flex items-start gap-3">
+          <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-[var(--icone-resultats)] text-white">
+            <Check className="size-3.5" strokeWidth={3.5} />
+          </span>
+          <span className="text-base leading-snug text-foreground/85 sm:text-[17px]">
+            {point.map((morceau, i) =>
+              typeof morceau === "string" ? (
+                morceau
+              ) : (
+                <strong key={i} className="font-semibold text-foreground">
+                  {morceau.gras}
+                </strong>
+              ),
+            )}
+          </span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export function InscriptionVsl() {
   const [ouvert, setOuvert] = useState(false);
   useZoneVisible(ouvert);
@@ -70,26 +100,7 @@ export function InscriptionVsl() {
               parmi cinq dessins. Le vert est `--icone-resultats`, celui de la
               flèche des résultats : il change de valeur selon le thème pour
               tenir le contraste d'un glyphe. */}
-          <ul className="flex flex-col gap-3.5">
-            {optinVsl.points.map((point, rang) => (
-              <li key={rang} className="flex items-start gap-3">
-                <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-[var(--icone-resultats)] text-white">
-                  <Check className="size-3.5" strokeWidth={3.5} />
-                </span>
-                <span className="text-base leading-snug text-foreground/85 sm:text-[17px]">
-                  {point.map((morceau, i) =>
-                    typeof morceau === "string" ? (
-                      morceau
-                    ) : (
-                      <strong key={i} className="font-semibold text-foreground">
-                        {morceau.gras}
-                      </strong>
-                    ),
-                  )}
-                </span>
-              </li>
-            ))}
-          </ul>
+          <ListePointsVsl />
           <BoutonScintillant
             action={() => setOuvert(true)}
             className="mt-2 min-h-16 w-full text-lg sm:text-xl"

@@ -129,6 +129,11 @@ export function MessageRemy({
    * d'offre qu'elle nommait, sur demande de Rémy.
    */
   surlignes = [],
+  /**
+   * Remplace le dernier paragraphe de la lettre. Sur `/course`, la fin
+   * renvoie à la vidéo et reprend ses trois points.
+   */
+  fin,
 }: {
   contenu?: ContenuMessage;
   lienAppel?: string | null;
@@ -136,6 +141,7 @@ export function MessageRemy({
   lien?: (libelle: string) => React.ReactNode;
   fonction?: string;
   surlignes?: readonly string[];
+  fin?: React.ReactNode;
 } = {}) {
   const lienInterne = lienAppel?.startsWith("#") ?? false;
 
@@ -405,41 +411,45 @@ export function MessageRemy({
 
                 Le second sort du site et porte donc sa balise de provenance,
                 qui est déjà dans `liens.appel`, et son `rel="noreferrer"`. */}
-            <Apparition>
-              <p>
-                {contenu.conclusion.avant}
-                {/* Un libellé vide n'écrit rien : c'est ainsi qu'une
+            {fin ? (
+              <Apparition>{fin}</Apparition>
+            ) : (
+              <Apparition>
+                <p>
+                  {contenu.conclusion.avant}
+                  {/* Un libellé vide n'écrit rien : c'est ainsi qu'une
                   conclusion sans vidéo, celle d'`/appel`, s'écrit. */}
-                {!contenu.conclusion.lienVideo ? null : lien ? (
-                  lien(contenu.conclusion.lienVideo)
-                ) : ancreVideo ? (
-                  <a
-                    href={ancreVideo}
-                    className="font-semibold text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-                  >
-                    {contenu.conclusion.lienVideo}
-                  </a>
-                ) : (
-                  contenu.conclusion.lienVideo
-                )}
-                {contenu.conclusion.milieu}
-                {lien ? (
-                  lien(contenu.conclusion.lienAppel)
-                ) : lienAppel ? (
-                  <a
-                    href={lienAppel}
-                    target={lienInterne ? undefined : "_blank"}
-                    rel={lienInterne ? undefined : "noreferrer"}
-                    className="font-semibold text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-                  >
-                    {contenu.conclusion.lienAppel}
-                  </a>
-                ) : (
-                  contenu.conclusion.lienAppel
-                )}
-                {contenu.conclusion.apres}
-              </p>
-            </Apparition>
+                  {!contenu.conclusion.lienVideo ? null : lien ? (
+                    lien(contenu.conclusion.lienVideo)
+                  ) : ancreVideo ? (
+                    <a
+                      href={ancreVideo}
+                      className="font-semibold text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                    >
+                      {contenu.conclusion.lienVideo}
+                    </a>
+                  ) : (
+                    contenu.conclusion.lienVideo
+                  )}
+                  {contenu.conclusion.milieu}
+                  {lien ? (
+                    lien(contenu.conclusion.lienAppel)
+                  ) : lienAppel ? (
+                    <a
+                      href={lienAppel}
+                      target={lienInterne ? undefined : "_blank"}
+                      rel={lienInterne ? undefined : "noreferrer"}
+                      className="font-semibold text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                    >
+                      {contenu.conclusion.lienAppel}
+                    </a>
+                  ) : (
+                    contenu.conclusion.lienAppel
+                  )}
+                  {contenu.conclusion.apres}
+                </p>
+              </Apparition>
+            )}
           </div>
 
           {/* La signature, en bas à droite et de biais.
