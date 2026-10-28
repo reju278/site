@@ -73,10 +73,27 @@ export const optinVsl = {
     ],
   },
   intro: "Vidéo gratuite qui présente la solution pour :",
+  /* Les trois points, en morceaux pour que les mots clés passent en gras,
+     sur demande de Rémy. Le texte est le sien, mot pour mot ; seule la
+     ponctuation est uniformisée : plus de point final sur le premier, les
+     deux autres n'en avaient pas. */
   points: [
-    "Valider votre niche, définir votre positionnement et identifier parfaitement votre client de rêve.",
-    "Créer une offre digitale de A à Z ou à améliorer celle que vous avez déjà afin d'augmenter vos prix jusqu'à plusieurs milliers d'euros, même si vous démarrez de zéro",
-    "Vendre votre offre digitale grâce au parfait tunnel de vente",
+    [
+      { gras: "Valider votre niche" },
+      ", définir votre positionnement et identifier parfaitement ",
+      { gras: "votre client de rêve" },
+    ],
+    [
+      { gras: "Créer une offre digitale" },
+      " de A à Z ou à améliorer celle que vous avez déjà afin d'",
+      { gras: "augmenter vos prix" },
+      " jusqu'à plusieurs milliers d'euros, même si vous démarrez de zéro",
+    ],
+    [
+      { gras: "Vendre votre offre digitale" },
+      " grâce au ",
+      { gras: "parfait tunnel de vente" },
+    ],
   ],
   bouton: "Accéder à la vidéo GRATUITE",
   fenetre: {

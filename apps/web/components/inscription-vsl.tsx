@@ -67,13 +67,21 @@ export function InscriptionVsl() {
               flèche des résultats : il change de valeur selon le thème pour
               tenir le contraste d'un glyphe. */}
           <ul className="flex flex-col gap-3.5">
-            {optinVsl.points.map((point) => (
-              <li key={point} className="flex items-start gap-3">
+            {optinVsl.points.map((point, rang) => (
+              <li key={rang} className="flex items-start gap-3">
                 <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-[var(--icone-resultats)] text-white">
                   <Check className="size-3.5" strokeWidth={3.5} />
                 </span>
-                <span className="text-base leading-snug text-foreground sm:text-[17px]">
-                  {point}
+                <span className="text-base leading-snug text-foreground/85 sm:text-[17px]">
+                  {point.map((morceau, i) =>
+                    typeof morceau === "string" ? (
+                      morceau
+                    ) : (
+                      <strong key={i} className="font-semibold text-foreground">
+                        {morceau.gras}
+                      </strong>
+                    ),
+                  )}
                 </span>
               </li>
             ))}
@@ -195,7 +203,12 @@ function Formulaire() {
         placeholder="Prénom"
         value={prenom}
         onChange={(e) => setPrenom(e.target.value)}
-        className="h-12 text-base"
+        /* Plus visibles, sur demande de Rémy : fond de carte, blanc sur le
+           beige de la fenêtre, contour plus marqué, texte indicatif plus
+           lisible. Doublés en `dark:` : la variante du registre pose
+           `dark:bg-input/30`, que `cn()` ne voit pas comme un conflit. Et
+           `md:text-base` contre son `md:text-sm`. */
+        className="h-13 border-foreground/20 bg-card text-base shadow-sm placeholder:text-foreground/50 md:text-base dark:border-foreground/25 dark:bg-card"
         aria-label="Prénom"
       />
       <Input
@@ -207,7 +220,12 @@ function Formulaire() {
         placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="h-12 text-base"
+        /* Plus visibles, sur demande de Rémy : fond de carte, blanc sur le
+           beige de la fenêtre, contour plus marqué, texte indicatif plus
+           lisible. Doublés en `dark:` : la variante du registre pose
+           `dark:bg-input/30`, que `cn()` ne voit pas comme un conflit. Et
+           `md:text-base` contre son `md:text-sm`. */
+        className="h-13 border-foreground/20 bg-card text-base shadow-sm placeholder:text-foreground/50 md:text-base dark:border-foreground/25 dark:bg-card"
         aria-label="Email"
       />
       <label className="flex cursor-pointer items-start gap-2.5 pt-1 text-xs leading-relaxed text-muted-foreground">
