@@ -1,8 +1,7 @@
 import { BoutonOuvrirInscription } from "@/components/ouvrir-inscription";
 import { avisDe } from "@/contenu/avis";
-import { avisImmersion } from "@/contenu/immersion";
 import { temoignages } from "@/contenu/site";
-import { optinVsl, temoignagesVsl } from "@/contenu/vsl";
+import { optinVsl, temoignagesVsl, titreTemoignagesVsl } from "@/contenu/vsl";
 import { insecables } from "@/lib/typographie";
 import Image from "next/image";
 
@@ -39,11 +38,8 @@ export function TemoignagesVsl() {
     <section className="mx-auto max-w-6xl pb-8">
       <div className="mx-auto max-w-3xl text-center">
         <h2 className="titre text-3xl tracking-tight text-balance text-foreground sm:text-4xl">
-          {insecables(avisImmersion.titre)}
+          {insecables(titreTemoignagesVsl)}
         </h2>
-        <p className="mt-3 text-base text-pretty text-muted-foreground sm:text-lg">
-          {insecables(avisImmersion.sousTitre)}
-        </p>
       </div>
 
       <ul className="mx-auto mt-10 grid max-w-4xl grid-cols-1 gap-5 sm:mt-12 sm:grid-cols-2">

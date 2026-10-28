@@ -198,6 +198,11 @@ export const fonctionRemy = "Fondateur de Funnels Club";
  * **Les six premiers sont dans l'ordre dicté par Rémy** : Roland, Yannick et
  * Sylvie, François, Olga, Corentin, Valérie. La suite est libre.
  */
+/** Le titre de la section, dicté par Rémy pour cette page. Pas de
+ * sous-titre, sur sa demande. */
+export const titreTemoignagesVsl =
+  "Ils ont mis en place le parfait tunnel de vente pour attirer leurs clients";
+
 export const temoignagesVsl = [
   {
     id: "rgio4y4o8f",
