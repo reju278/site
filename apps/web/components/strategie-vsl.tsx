@@ -217,20 +217,22 @@ export function StrategieVsl({
       aria-labelledby="strategie-titre"
       className="mx-auto mt-16 w-full max-w-6xl text-left sm:mt-20"
     >
+      {/* Le titre hors du bloc, sur demande de Rémy : c'est le titre de la
+          section, le bloc n'en est que le contenu. */}
+      <h2
+        id="strategie-titre"
+        className="titre text-center text-3xl text-balance text-foreground sm:text-4xl"
+      >
+        {insecables(remplir(titre, valeurs))}
+      </h2>
+
       <div
-        className="relief-verre mx-auto max-w-4xl rounded-[25px] p-5 sm:p-8"
+        className="relief-verre mx-auto mt-8 max-w-4xl rounded-[25px] p-5 sm:p-8"
         style={{
           backgroundColor: "color-mix(in srgb, currentColor 4%, transparent)",
         }}
       >
-        <h2
-          id="strategie-titre"
-          className="titre text-center text-2xl text-balance text-foreground sm:text-3xl"
-        >
-          {insecables(remplir(titre, valeurs))}
-        </h2>
-
-        <h3 className="titre mt-8 text-xl text-balance text-foreground sm:text-2xl">
+        <h3 className="titre text-xl text-balance text-foreground sm:text-2xl">
           {strategieVsl.titrePrix}
         </h3>
         <TableauComparatif
