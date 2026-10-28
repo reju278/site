@@ -14,9 +14,9 @@ import Image from "next/image";
  * la place du portrait, en photo fixe : la vidéo y a été, Rémy l'a retirée,
  * pour que la carte se lise d'un coup d'œil sans rien promettre au clic.
  *
- * **Les résultats sont ceux de vraies personnes.** Qu'ils ne sont pas
- * typiques, c'est le pied de page qui le dit, dans l'avertissement légal,
- * sur décision de Rémy : pas de seconde mention sous la grille.
+ * **Les résultats sont ceux de vraies personnes.** La mention qui dit qu'ils
+ * ne sont pas garantis est dans le pied de page, sous les avertissements, sur
+ * décision de Rémy : voir `mentionTemoignagesVsl`.
  */
 export function TemoignagesVsl() {
   const cartes = temoignagesVsl.map(({ id, citation }) => {

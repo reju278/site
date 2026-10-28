@@ -158,6 +158,15 @@ export const messageRemyOptin = {
     "Si vous souhaitez créer et vendre une formation en ligne, du coaching ou du consulting, ou même de la prestation de services, alors il y a trois erreurs que vous devez absolument éviter.",
   voies: [],
   amorceErreurs: "",
+  /* « plus de 1 000 business » retiré sur décision de Rémy : un chiffre
+     qu'il faudrait pouvoir prouver à Google. « de nombreux » est de l'agent,
+     à valider. */
+  deploiement: {
+    ...messageRemy.deploiement,
+    avant:
+      "Ce tunnel de vente, je l'applique aujourd'hui moi-même dans mon propre business. Et au cours des dernières années, nous l'avons mis en place dans de nombreux ",
+    souligne: "business",
+  },
 };
 
 /** Les types d'offre surlignés en jaune dans la phrase d'ouverture, comme
@@ -198,17 +207,29 @@ export const fonctionRemy = "Fondateur de Funnels Club";
  * **Les six premiers sont dans l'ordre dicté par Rémy** : Roland, Yannick et
  * Sylvie, François, Olga, Corentin, Valérie. La suite est libre.
  */
-/** Le titre de la section, dicté par Rémy pour cette page, axé sur les
- * résultats des élèves. « Résultats » au pluriel, là où il l'avait dicté au
- * singulier : à valider. Pas de
- * sous-titre, sur sa demande. Il prend les codes du titre du haut de page, à
- * sa demande aussi : « PARFAIT » en capitales, le tunnel de vente entre
- * guillemets, et les mêmes morceaux en bleu. */
+/** Le titre de la section, dicté par Rémy pour cette page. Pas de
+ * sous-titre, sur sa demande. Il prend les codes du titre du haut de page :
+ * « PARFAIT » en capitales, le tunnel de vente entre guillemets, les mêmes
+ * morceaux en bleu.
+ *
+ * **Il ne parle pas de résultats**, et c'est voulu. « Résultats de nos élèves
+ * après avoir mis en place… » a été essayé puis retiré par Rémy : au-dessus de
+ * montants, il les présentait comme ce qu'on obtient en suivant la méthode,
+ * ce que Google Ads refuse (allégations douteuses, voir son guide de
+ * conformité). */
 export const titreTemoignagesVsl = [
-  { texte: "Résultats de nos élèves", accent: true },
-  { texte: " après avoir mis en place le " },
+  { texte: "Ils ont mis en place le " },
   { texte: "PARFAIT “tunnel\u00a0de\u00a0vente”", accent: true },
+  { texte: " pour " },
+  { texte: "attirer leurs clients", accent: true },
 ] as const;
+
+/** La mention de résultats de `/course`, dans le pied de page sous les
+ * avertissements, sur décision de Rémy. Le texte est le « disclaimer type »
+ * de son guide de conformité Google Ads (§5). Ce guide la demande aussi à côté
+ * des témoignages chiffrés : Rémy a choisi le pied de page seul. */
+export const mentionTemoignagesVsl =
+  "Résultats individuels, non garantis. Ceci n'est pas une opportunité de gain garanti : les résultats présentés ne sont pas typiques et dépendent de votre travail. Nous ne garantissons aucun revenu.";
 
 export const temoignagesVsl = [
   {
