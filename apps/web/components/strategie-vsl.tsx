@@ -100,11 +100,61 @@ function EtiquettesX({
 EtiquettesX.displayName = "XAxis";
 
 /**
+ * Une étiquette en pastille, en SVG : un fond arrondi sous un texte court.
+ * La largeur est estimée sur le nombre de caractères, ce qui suffit à des
+ * libellés de quelques mots en 12 px.
+ */
+function Pastille({
+  x,
+  y,
+  texte,
+  fond,
+  encre = "#fff",
+  ancre = "middle",
+}: {
+  x: number;
+  y: number;
+  texte: string;
+  fond: string;
+  encre?: string;
+  ancre?: "start" | "middle" | "end";
+}) {
+  const largeur = texte.length * 6.8 + 16;
+  const gauche =
+    ancre === "start" ? x : ancre === "end" ? x - largeur : x - largeur / 2;
+  return (
+    <g>
+      <rect
+        x={gauche}
+        y={y - 11}
+        width={largeur}
+        height={22}
+        rx={11}
+        style={{ fill: fond }}
+      />
+      <text
+        x={gauche + largeur / 2}
+        y={y}
+        dy="0.35em"
+        textAnchor="middle"
+        style={{ fill: encre }}
+      >
+        {texte}
+      </text>
+    </g>
+  );
+}
+
+/**
  * Les repères qui rendent la courbe lisible sans la toucher, sur demande de
  * Rémy : sur téléphone, il n'y a pas de survol, donc rien de ce que dit
- * l'infobulle ne se voit. Chaque aire porte un point là où elle atteint
- * l'objectif, une ligne qui descend jusqu'à l'axe, et le nombre de clients
- * écrit à côté. La ligne de l'objectif porte son montant.
+ * l'infobulle ne se voit.
+ *
+ * - **Chaque courbe porte son nom à son extrémité**, « Ton prix actuel » et
+ *   « Offre à … », au lieu d'une légende à part qu'il faut faire correspondre.
+ * - **La ligne de l'objectif porte son montant**, en pastille.
+ * - **Là où chaque courbe atteint l'objectif**, un point, une ligne jusqu'à
+ *   l'axe et le nombre de clients en pastille de sa couleur.
  *
  * Même nom d'affichage que l'axe, pour la même raison : rester hors du
  * masque d'apparition, qui couperait les libellés posés près des bords.
@@ -113,10 +163,12 @@ function ReperesObjectif({
   objectif,
   libelleObjectif,
   reperes,
+  courbes,
 }: {
   objectif: number;
   libelleObjectif: string;
   reperes: { date: Date; libelle: string; couleur: string }[];
+  courbes: { date: Date; valeur: number; libelle: string; couleur: string }[];
 }) {
   const { xScale, yScale, innerWidth, innerHeight } = useChartStable();
   const y = yScale(objectif);
@@ -128,51 +180,61 @@ function ReperesObjectif({
         y1={y}
         y2={y}
         stroke="var(--foreground)"
-        strokeOpacity={0.45}
+        strokeOpacity={0.55}
+        strokeWidth={1.5}
         strokeDasharray="6,4"
       />
-      {/* À droite, au-dessus de la ligne : à gauche, il tombait sur le point
-          du prix visé, qui atteint l'objectif tôt. */}
-      <text
-        x={innerWidth}
-        y={y - 8}
-        textAnchor="end"
-        className="fill-foreground"
-      >
-        {libelleObjectif}
-      </text>
       {reperes.map((repere) => {
         const x = xScale(repere.date);
         return (
-          <g key={repere.libelle}>
+          <g key={repere.libelle + repere.couleur}>
             <line
               x1={x}
               x2={x}
               y1={y}
               y2={innerHeight}
               stroke={repere.couleur}
-              strokeOpacity={0.6}
+              strokeOpacity={0.7}
               strokeDasharray="3,3"
             />
             <circle
               cx={x}
               cy={y}
-              r={5}
-              fill={repere.couleur}
-              stroke="var(--background)"
-              strokeWidth={2}
-            />
-            <text
-              x={x}
-              y={y + 18}
-              textAnchor={x > innerWidth * 0.8 ? "end" : "middle"}
+              r={6}
               style={{ fill: repere.couleur }}
-            >
-              {repere.libelle}
-            </text>
+              stroke="var(--background)"
+              strokeWidth={2.5}
+            />
+            <Pastille
+              x={x}
+              y={innerHeight - 14}
+              texte={repere.libelle}
+              fond={repere.couleur}
+              ancre={x > innerWidth * 0.85 ? "end" : "middle"}
+            />
           </g>
         );
       })}
+      {/* L'objectif, à gauche au-dessus de sa ligne : à gauche, les deux
+          courbes sont encore sous l'objectif, la place est libre. */}
+      <Pastille
+        x={4}
+        y={y - 18}
+        texte={libelleObjectif}
+        fond="var(--foreground)"
+        encre="var(--background)"
+        ancre="start"
+      />
+      {courbes.map((courbe) => (
+        <Pastille
+          key={courbe.libelle}
+          x={xScale(courbe.date) - 2}
+          y={yScale(courbe.valeur) - 18}
+          texte={courbe.libelle}
+          fond={courbe.couleur}
+          ancre="end"
+        />
+      ))}
     </g>
   );
 }
@@ -299,29 +361,11 @@ export function StrategieVsl({
           )}
         </p>
 
-        {/* La légende, écrite et non devinée : deux aires de deux couleurs
-            ne se lisent pas sans elle. */}
-        <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-1.5 text-sm text-muted-foreground">
-          <li className="flex items-center gap-2">
-            <span
-              aria-hidden
-              className="size-3 rounded-sm bg-[var(--muted-foreground)]"
-            />
-            {strategieVsl.legendeActuel}
-          </li>
-          {calcul.cible ? (
-            <li className="flex items-center gap-2">
-              <span aria-hidden className="size-3 rounded-sm bg-primary" />
-              {insecables(remplir(strategieVsl.legendeCible, valeurs))}
-            </li>
-          ) : null}
-        </ul>
-
         <div className="mt-3">
           <AreaChart
             data={calcul.donnees}
             aspectRatio={etroit ? "1 / 1" : "2 / 1"}
-            margin={{ top: 16, right: 12, bottom: 28, left: 52 }}
+            margin={{ top: 36, right: 12, bottom: 28, left: 52 }}
           >
             <Grid horizontal vertical={false} numTicksRows={3} />
             {calcul.cible ? (
@@ -346,6 +390,24 @@ export function StrategieVsl({
               points={[calcul.donnees[0]!, calcul.donnees.at(-1)!]}
             />
             <ReperesObjectif
+              courbes={[
+                {
+                  date: calcul.donnees.at(-1)!.date,
+                  valeur: calcul.donnees.at(-1)!.actuel,
+                  libelle: remplir(strategieVsl.legendeActuel, valeurs),
+                  couleur: "var(--muted-foreground)",
+                },
+                ...(calcul.cible
+                  ? [
+                      {
+                        date: calcul.donnees.at(-1)!.date,
+                        valeur: Number(calcul.donnees.at(-1)!.cible),
+                        libelle: remplir(strategieVsl.legendeCible, valeurs),
+                        couleur: "var(--primary)",
+                      },
+                    ]
+                  : []),
+              ]}
               objectif={objectif}
               libelleObjectif={`Objectif : ${euros.format(objectif)}`}
               reperes={[

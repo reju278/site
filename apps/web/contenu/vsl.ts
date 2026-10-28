@@ -279,10 +279,10 @@ export const strategieVsl = {
   /* Au-delà de 5 000 €, pas de prix plus haut à viser. */
   projectionSansCible:
     "Sur une année, ça représente donc {annee}. À ce prix, l'enjeu n'est plus de vendre plus cher, mais d'attirer chaque mois les bons clients.",
-  legendeActuel: "Avec ton prix actuel",
+  legendeActuel: "Ton prix actuel : {prix}",
   /* L'axe des clients, sous la courbe. */
   axeClients: "Nombre de clients par mois",
-  legendeCible: "Avec une offre à {cible}",
+  legendeCible: "Offre à {cible}",
   titreActivite: "Comment on va y arriver ensemble",
   /* Les quatre axes de la VSL, repris de sa transcription (Wistia,
      « DIRECT VSL - MOTION GRAPHICS », de 0:30 à 2:15) et tutoyés. Les mots
