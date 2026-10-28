@@ -327,6 +327,61 @@ export const strategieVsl = {
   /* Les quatre axes de la VSL, repris de sa transcription (Wistia,
      « DIRECT VSL - MOTION GRAPHICS », de 0:30 à 2:15) et tutoyés. Les mots
      sont ceux de Rémy, resserrés pour tenir sur une carte : à valider. */
+  /* Sous « Comment on va y arriver ensemble », sur demande de Rémy : ce que
+     contient une offre à plusieurs milliers d'euros, puis le tunnel de vente
+     et sa simplicité. Repris de sa vidéo sur le cas de Roland, resserré par
+     l'agent, à valider. */
+  titreOffre: "Ce que contient une offre à plusieurs milliers d'euros",
+  introOffre:
+    "Le prix reflète le résultat, pas les heures de vidéo. Voici ce que tes clients achètent vraiment :",
+  composantsOffre: [
+    {
+      titre: "Une formation",
+      texte: "Des modules clairs, étape par étape, avec ce qu'il faut savoir.",
+    },
+    {
+      titre: "Des outils",
+      texte:
+        "Des modèles et des documents prêts à l'emploi pour aller plus vite.",
+    },
+    {
+      titre: "Du coaching",
+      texte:
+        "Des séances en groupe ou en individuel pour avancer sans rester bloqué.",
+    },
+    {
+      titre: "Une communauté",
+      texte: "Un lieu pour échanger et poser ses questions au quotidien.",
+    },
+    {
+      titre: "L'IA, en plus",
+      texte: "Pour appliquer ta méthode plus facilement et plus rapidement.",
+    },
+  ],
+  titreTunnelEtapes: "Ton tunnel de vente : simple, en quatre pages",
+  introTunnelEtapes:
+    "Pas besoin de savoir coder ni d'être bon en technique. C'est d'ailleurs le parcours que tu es en train de suivre :",
+  etapesTunnel: [
+    {
+      titre: "La page d'inscription",
+      texte: "Ta promesse, et l'email de ton client de rêve.",
+    },
+    {
+      titre: "La vidéo",
+      texte: "Une dizaine de minutes pour expliquer comment tu l'aides.",
+    },
+    {
+      titre: "La réservation",
+      texte: "C'est lui qui choisit de prendre rendez-vous avec toi.",
+    },
+    {
+      titre: "L'appel",
+      texte:
+        "Un premier échange sans rien à vendre, puis l'offre si c'est pertinent.",
+    },
+  ],
+  noteTunnel:
+    "Un seul tunnel, qui tourne 24 h/24, même quand tu dors. On te donne le modèle et on l'adapte avec toi à ton domaine.",
   /* Dicté par Rémy, en titre comme « Comment on va y arriver ensemble ». */
   /* Le bouton sous les quatre étapes, dicté par Rémy. Ceux des
      témoignages gardent `appel.libelle`. */
