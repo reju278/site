@@ -164,7 +164,16 @@ export const messageRemyOptin = {
      des erreurs (« ne suffisent plus », « beaucoup de mal à transformer ce
      trafic en clients ») et les valeurs (« simple et répétable », sans
      « toute une vie peut reposer »). Lus dans `messageRemyHub`, pas recopiés. */
-  erreurs: messageRemyHub.erreurs,
+  erreurs: [
+    messageRemyHub.erreurs[0]!,
+    messageRemyHub.erreurs[1]!,
+    {
+      ...messageRemyHub.erreurs[2]!,
+      /* « AVANT » en capitales, sur demande de Rémy : c'est le mot qui fait
+         l'erreur. */
+      titre: messageRemyHub.erreurs[2]!.titre.replace("avant", "AVANT"),
+    },
+  ],
   valeurs: messageRemyHub.valeurs,
   /* « plus de 1 000 business » retiré sur décision de Rémy : un chiffre
      qu'il faudrait pouvoir prouver à Google. « de nombreux » est de l'agent,
