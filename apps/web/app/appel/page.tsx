@@ -1,6 +1,6 @@
 import { FormulaireCalendly } from "@/components/formulaire-calendly";
 import { ParticulesHero } from "@/components/particules-hero";
-import { TitreRoulant } from "@/components/titre-roulant";
+import { TitreAppelVsl } from "@/components/titre-video-vsl";
 import { identiteAppel, reservationAppel } from "@/contenu/appel";
 import { insecables } from "@/lib/typographie";
 
@@ -90,9 +90,8 @@ export default function Appel() {
 
         <div className="mx-auto flex w-full max-w-[var(--largeur-video)] flex-1 flex-col">
           <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
-            <TitreRoulant
-              as="h1"
-              segments={titre}
+            <TitreAppelVsl
+              texte={titre[0].texte}
               className="titre text-[2rem] text-balance text-white sm:text-5xl lg:text-6xl"
             />
 
@@ -111,11 +110,10 @@ export default function Appel() {
               `/preparation` s'y ajoutaient. */}
           <FormulaireCalendly
             url={calendlyPageAppel}
-            titre="Réserver votre appel avec Funnels Club"
+            titre="Réserve ton appel avec Funnels Club"
             hauteurMin={hauteurMin}
             className="mt-8 w-full sm:mt-0"
           />
-
         </div>
       </section>
     </>

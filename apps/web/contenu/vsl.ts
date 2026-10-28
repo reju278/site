@@ -20,6 +20,9 @@ export const API_FUNNELS =
 /** La clé sous laquelle l'opt-in garde prénom et e-mail pour Calendly. */
 export const CLE_CONTACT_VSL = "vsl-contact";
 
+/* **Le tunnel tutoie**, sur décision de Rémy : titres, listes, boutons et
+   fenêtre d'inscription. Les citations des témoignages restent telles
+   qu'elles ont été dites. */
 export const optinVsl = {
   /* Dicté par Rémy. Les guillemets sont ceux qu'il a demandés, anglais et non
      français, dans leur forme typographique (“ ”) plutôt que droite. Les deux
@@ -40,11 +43,11 @@ export const optinVsl = {
     { texte: "PARFAIT “tunnel\u00a0de\u00a0vente”", accent: true },
     { texte: " pour " },
     { texte: "attirer des clients", accent: true },
-    { texte: " et vendre votre " },
+    { texte: " et vendre ta " },
     { texte: "formation", accent: true },
-    { texte: " ou votre " },
+    { texte: " ou ton " },
     { texte: "coaching", accent: true },
-    { texte: " (même si votre offre n’existe\u00a0pas\u00a0encore)" },
+    { texte: " (même si ton offre n’existe\u00a0pas\u00a0encore)" },
   ],
   /* L'aperçu de la vidéo : une image tirée de la vidéo en 4K. */
   apercu: {
@@ -88,25 +91,25 @@ export const optinVsl = {
      deux autres n'en avaient pas. */
   points: [
     [
-      { gras: "Valider votre niche" },
-      ", définir votre positionnement et identifier parfaitement ",
-      { gras: "votre client de rêve" },
+      { gras: "Valider ta niche" },
+      ", définir ton positionnement et identifier parfaitement ",
+      { gras: "ton client de rêve" },
     ],
     [
       { gras: "Créer une offre digitale" },
-      " de A à Z ou à améliorer celle que vous avez déjà afin d'",
-      { gras: "augmenter vos prix" },
-      " jusqu'à plusieurs milliers d'euros, même si vous démarrez de zéro",
+      " de A à Z ou à améliorer celle que tu as déjà afin d'",
+      { gras: "augmenter tes prix" },
+      " jusqu'à plusieurs milliers d'euros, même si tu démarres de zéro",
     ],
     [
-      { gras: "Vendre votre offre digitale" },
+      { gras: "Vendre ton offre digitale" },
       " grâce au ",
       { gras: "parfait tunnel de vente" },
     ],
   ],
   bouton: "Accéder à la vidéo GRATUITE",
   fenetre: {
-    titre: "Entrez vos informations pour découvrir la stratégie :",
+    titre: "Entre tes informations pour découvrir la stratégie :",
     consentement:
       "J'accepte de recevoir les emails de Funnels Club (désabonnement possible à tout moment) et je valide la ",
     lienConfidentialite: "Politique de confidentialité",
@@ -124,16 +127,15 @@ export const videoVsl = {
     affiche: "/vsl/affiche.jpg",
   },
   appel: [
-    { texte: "Postulez maintenant pour un appel gratuit de " },
+    { texte: "Postule maintenant pour un appel gratuit de " },
     { texte: "30 min", gras: true },
     {
-      texte:
-        " afin de savoir si vous êtes admissible au programme et au coaching ",
+      texte: " afin de savoir si tu es admissible au programme et au coaching ",
     },
     { texte: "“Funnels Club”", gras: true },
   ],
   /* « GRATUIT » en capitales, sur demande de Rémy. */
-  bouton: "Réservez votre appel GRATUIT",
+  bouton: "Réserve ton appel GRATUIT",
 } as const;
 
 /** Les mentions du tunnel : celles du site, sous leurs propres adresses. */
@@ -150,13 +152,13 @@ export const legalesVsl = [
  * **Le début et le titre changent, dictés par Rémy.** La lettre s'ouvre
  * directement sur les trois erreurs : la phrase sur les trois façons de vendre,
  * la liste qui suit et « Mais peu importe… » sont retirées. Le titre est sa
- * phrase, « Je m'appelle Rémy, et j'ai un message pour vous... ». Tout le
+ * phrase, « Je m'appelle Rémy, et j'ai un message pour toi... ». Tout le
  * reste est la lettre de l'accueil, mot pour
  * mot.
  */
 export const messageRemyOptin = {
   ...messageRemy,
-  titre: "Je m'appelle Rémy, et j'ai un message pour vous...",
+  titre: "Je m'appelle Rémy, et j'ai un message pour toi...",
   amorceVoies:
     "Si vous souhaitez créer et vendre une formation en ligne, du coaching ou du consulting, ou même de la prestation de services, alors il y a trois erreurs que vous devez absolument éviter.",
   voies: [],

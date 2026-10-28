@@ -16,17 +16,17 @@ import { messageRemy } from "@/contenu/site";
 
 /** L'identité de la page, pour l'onglet et le partage. À valider par Rémy. */
 export const identiteAppel = {
-  titrePage: "Réserver votre appel",
+  titrePage: "Réserve ton appel",
   description:
     "Choisissez le créneau qui vous convient pour échanger avec l'équipe Funnels Club, puis découvrez les histoires des membres que nous avons accompagnés.",
 } as const;
 
 export const reservationAppel = {
   /* À valider par Rémy. */
-  titre: [{ texte: "Réservez votre appel" }],
+  titre: [{ texte: "Réserve ton appel" }],
   /* Dicté par Rémy. */
   sousTitre:
-    "Nous vous accompagnons à travers toutes les étapes de votre business de formation, du lancement jusqu'à 6 ou 7 chiffres par an.",
+    "Nous t'accompagnons à travers toutes les étapes de ton business de formation, du lancement jusqu'à 6 ou 7 chiffres par an.",
   /* Le formulaire donné par Rémy, sans sa requête : `hide_gdpr_banner` est
      ajouté par `FormulaireCalendly`. */
   calendly:
