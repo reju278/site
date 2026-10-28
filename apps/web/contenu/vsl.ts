@@ -33,6 +33,18 @@ export const optinVsl = {
     { texte: " (même si vous ne l'avez pas encore\u00a0créée)" },
   ],
   note: "formation en ligne, service ou coaching",
+  /* L'aperçu verrouillé de la vidéo, à la place de l'image.
+
+     **Libellés écrits par l'agent, provisoires, à valider par Rémy** : la
+     pastille, le message du verrou et son bouton. */
+  apercu: {
+    video: "/vsl/apercu-boucle.mp4",
+    affiche: "/vsl/apercu-boucle.jpg",
+    alt: "Rémy présente la formation gratuite, face caméra",
+    pastille: "Aperçu · sans le son",
+    verrou: "Cette vidéo est réservée aux inscrits",
+    debloquer: "Débloquer la vidéo gratuitement",
+  },
   intro: "Vidéo gratuite qui présente la solution pour :",
   points: [
     "Valider votre niche, définir votre positionnement et identifier parfaitement votre client de rêve.",

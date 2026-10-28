@@ -2,7 +2,12 @@
 
 import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { TexteRoulant } from "@/components/texte-roulant";
-import { API_FUNNELS, CLE_CONTACT_VSL, optinVsl } from "@/contenu/vsl";
+import {
+  API_FUNNELS,
+  CLE_CONTACT_VSL,
+  optinVsl,
+  videoVsl,
+} from "@/contenu/vsl";
 import {
   Dialog,
   DialogContent,
@@ -10,8 +15,8 @@ import {
   DialogTitle,
 } from "@repo/ui/components/dialog";
 import { Input } from "@repo/ui/components/input";
-import { ArrowRight, LoaderCircle, Lock } from "lucide-react";
-import { useRef, useState } from "react";
+import { ArrowRight, LoaderCircle, Lock, Play } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * L'opt-in de la formation gratuite : l'aperçu de la vidéo et le bouton
@@ -33,25 +38,7 @@ export function InscriptionVsl() {
   return (
     <>
       <div className="grid items-center gap-6 rounded-[var(--radius-lg)] border bg-card p-4 shadow-[0_30px_70px_-35px_rgba(0,0,0,0.35)] sm:p-6 md:grid-cols-[1.15fr_1fr] md:gap-8">
-        <button
-          type="button"
-          onClick={() => setOuvert(true)}
-          aria-label="Voir la vidéo gratuite"
-          className="group relative block overflow-hidden rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/vsl/apercu.jpg"
-            alt="Rémy présente la formation gratuite"
-            width={1280}
-            height={721}
-            fetchPriority="high"
-            className="aspect-video w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-          />
-          {/* L'aperçu porte déjà son bouton de lecture : seul un voile au
-              survol dit qu'il se clique. */}
-          <span className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/10" />
-        </button>
+        <ApercuVerrouille ouvrir={() => setOuvert(true)} />
 
         <div className="flex flex-col gap-4">
           <p className="font-semibold text-foreground">{optinVsl.intro}</p>
@@ -240,5 +227,125 @@ function Formulaire() {
         Vos informations restent confidentielles.
       </p>
     </form>
+  );
+}
+
+/** Une durée en secondes, écrite comme un lecteur l'affiche : « 16:16 ». */
+const duree = (secondes: number) =>
+  `${Math.floor(secondes / 60)}:${String(Math.round(secondes % 60)).padStart(2, "0")}`;
+
+/**
+ * L'aperçu verrouillé de la vidéo, à la place de l'image d'avant.
+ *
+ * **Une vraie vidéo, mais pas le lecteur de Wistia** : huit secondes de la
+ * formation, sans son, qui tournent en boucle comme une bande-annonce
+ * (`public/vsl/apercu-boucle.mp4`, 257 Ko). Le lecteur de Wistia aurait coûté
+ * environ 500 Ko de script en haut de page, et c'est ce haut de page que Google
+ * chronomètre ; il aurait surtout lancé la vidéo au clic, alors qu'elle doit
+ * rester fermée.
+ *
+ * **L'image passe avant la vidéo.** Elle est posée dessous, en
+ * `fetchPriority="high"` : c'est elle qui s'affiche d'abord et que Google
+ * mesure, et la vidéo la recouvre dès qu'elle tourne. Une affiche de `<video>`
+ * ne peut pas recevoir de priorité.
+ *
+ * **Au clic**, l'image se voile et le cadenas dit qu'il faut s'inscrire, puis
+ * la fenêtre d'inscription s'ouvre. Le voile reste ensuite : la vidéo est
+ * toujours fermée tant qu'on ne s'est pas inscrit.
+ *
+ * **Sous mouvement réduit, rien ne tourne** : la lecture n'est lancée que si la
+ * préférence ne demande rien, et l'image reste.
+ */
+function ApercuVerrouille({ ouvrir }: { ouvrir: () => void }) {
+  const { apercu } = optinVsl;
+  const [verrouille, setVerrouille] = useState(false);
+  const video = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const element = video.current;
+    if (!element) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    element.play().catch(() => {
+      /* Lecture refusée (économie d'énergie, par exemple) : l'image reste. */
+    });
+  }, []);
+
+  const cliquer = () => {
+    if (verrouille) {
+      ouvrir();
+      return;
+    }
+    setVerrouille(true);
+    video.current?.pause();
+    /* Le temps de voir le cadenas avant que la fenêtre le recouvre. */
+    window.setTimeout(ouvrir, 650);
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={cliquer}
+      aria-label={`${apercu.verrou}. ${apercu.debloquer}`}
+      className="group relative block aspect-video w-full overflow-hidden rounded-md bg-black text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={apercu.affiche}
+        alt={apercu.alt}
+        width={960}
+        height={540}
+        fetchPriority="high"
+        className="absolute inset-0 size-full object-cover"
+      />
+      <video
+        ref={video}
+        src={apercu.video}
+        muted
+        loop
+        playsInline
+        preload="auto"
+        width={960}
+        height={540}
+        aria-hidden
+        className={`absolute inset-0 size-full object-cover transition-[filter,scale] duration-500 ${
+          verrouille ? "scale-110 blur-md brightness-75" : ""
+        }`}
+      />
+
+      {verrouille ? (
+        /* Le verrou. Fond sombre sous le texte blanc, et non le seul flou :
+           un flou ne change pas la luminosité de ce qu'il brouille. */
+        <span className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/45 px-4 text-center text-white">
+          <span className="flex size-14 items-center justify-center rounded-full border border-white/55 bg-white/15 backdrop-blur-[6px]">
+            <Lock className="size-6" />
+          </span>
+          <span className="text-base font-bold [text-shadow:0_2px_10px_rgba(0,0,0,0.5)] sm:text-lg">
+            {apercu.verrou}
+          </span>
+          <span className="rounded-md bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground shadow-[0_10px_24px_-10px_rgba(4,94,230,0.9)]">
+            {apercu.debloquer}
+          </span>
+        </span>
+      ) : (
+        <>
+          <span className="absolute top-3 left-3 rounded-full bg-black/55 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur-[6px]">
+            {apercu.pastille}
+          </span>
+          <span className="absolute top-[46%] left-1/2 flex h-12 w-[4.5rem] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-md bg-primary text-primary-foreground shadow-[0_10px_30px_-8px_rgba(0,0,0,0.5)] transition-[scale] group-hover:scale-105">
+            <Play className="size-6 fill-current" />
+          </span>
+        </>
+      )}
+
+      {/* La barre du lecteur : elle dit que c'est une vidéo, et sa durée. */}
+      <span className="absolute inset-x-0 bottom-0 flex h-9 items-center gap-2 bg-gradient-to-t from-black/65 to-transparent px-3 text-xs text-white">
+        <Play className="size-3.5 fill-current" />
+        <span>0:00</span>
+        <span className="relative h-1 flex-1 rounded-full bg-white/35">
+          <span className="absolute inset-y-0 left-0 w-[3%] rounded-full bg-primary" />
+        </span>
+        <span>{duree(videoVsl.video.secondes)}</span>
+      </span>
+    </button>
   );
 }
