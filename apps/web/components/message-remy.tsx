@@ -31,6 +31,32 @@ import { TitreRoulant } from "@/components/titre-roulant";
  * **La signature est une vraie fonte manuscrite**, demandée par Rémy. Elle ne
  * sert qu'ici ; voir l'utilitaire `signature` dans `globals.css`.
  */
+/** Pose le surlignage jaune des voies sur chaque passage listé de `texte`. */
+function surligner(texte: string, passages: readonly string[]) {
+  if (passages.length === 0) return texte;
+  const motif = new RegExp(
+    `(${passages.map((p) => p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})`,
+  );
+  return texte.split(motif).map((morceau, i) =>
+    passages.includes(morceau) ? (
+      <mark
+        key={i}
+        className="surlignage"
+        style={
+          {
+            "--surlignage-fond":
+              "color-mix(in srgb, var(--surlignage-jaune) 32%, transparent)",
+          } as React.CSSProperties
+        }
+      >
+        {morceau}
+      </mark>
+    ) : (
+      morceau
+    ),
+  );
+}
+
 /**
  * Le contenu de la lettre, avec ses chaînes élargies.
  *
@@ -92,11 +118,24 @@ export function MessageRemy({
    * inscrit : les deux libellés y ouvrent la fenêtre d'inscription.
    */
   lien,
+  /**
+   * La fonction de Rémy sous son nom. Passée, elle remplace la signature
+   * manuscrite par le nom écrit droit et cette ligne dessous.
+   */
+  fonction,
+  /**
+   * Les passages de la phrase d'ouverture à surligner en jaune, celui des
+   * voies. Sur `/course`, où la liste des voies est retirée, ce sont les types
+   * d'offre qu'elle nommait, sur demande de Rémy.
+   */
+  surlignes = [],
 }: {
   contenu?: ContenuMessage;
   lienAppel?: string | null;
   ancreVideo?: string | null;
   lien?: (libelle: string) => React.ReactNode;
+  fonction?: string;
+  surlignes?: readonly string[];
 } = {}) {
   const lienInterne = lienAppel?.startsWith("#") ?? false;
 
@@ -161,7 +200,7 @@ export function MessageRemy({
               très au-dessus du seuil. */}
           <div className="mt-10 space-y-6 text-base leading-relaxed text-pretty text-foreground/85 sm:mt-12 sm:text-lg">
             <Apparition>
-              <p>{contenu.amorceVoies}</p>
+              <p>{surligner(contenu.amorceVoies, surlignes)}</p>
             </Apparition>
 
             {/* Les trois voies, numérotées.
@@ -174,35 +213,39 @@ export function MessageRemy({
                 entrée : découper un `ol` en trois conteneurs animés casserait
                 la liste, qu'un lecteur d'écran n'annoncerait plus comme telle
                 ni avec son nombre d'éléments. */}
-            <Apparition>
-              <ol className="list-decimal space-y-3 pl-5 marker:font-semibold marker:text-foreground">
-                {contenu.voies.map((voie) => (
-                  <li key={voie.titre}>
-                    {/* Surlignées en jaune, comme les erreurs le sont en
+            {contenu.voies.length > 0 ? (
+              <Apparition>
+                <ol className="list-decimal space-y-3 pl-5 marker:font-semibold marker:text-foreground">
+                  {contenu.voies.map((voie) => (
+                    <li key={voie.titre}>
+                      {/* Surlignées en jaune, comme les erreurs le sont en
                         rouge, sur décision de Rémy. Les deux couleurs disent
                         deux choses opposées, ce qu'on peut faire et ce qu'il ne
                         faut pas faire, et c'est le seul endroit du site où elles
                         se répondent. */}
-                    <mark
-                      className="surlignage"
-                      style={
-                        {
-                          "--surlignage-fond":
-                            "color-mix(in srgb, var(--surlignage-jaune) 32%, transparent)",
-                        } as React.CSSProperties
-                      }
-                    >
-                      {voie.titre}
-                    </mark>{" "}
-                    {voie.texte}
-                  </li>
-                ))}
-              </ol>
-            </Apparition>
+                      <mark
+                        className="surlignage"
+                        style={
+                          {
+                            "--surlignage-fond":
+                              "color-mix(in srgb, var(--surlignage-jaune) 32%, transparent)",
+                          } as React.CSSProperties
+                        }
+                      >
+                        {voie.titre}
+                      </mark>{" "}
+                      {voie.texte}
+                    </li>
+                  ))}
+                </ol>
+              </Apparition>
+            ) : null}
 
-            <Apparition>
-              <p>{contenu.amorceErreurs}</p>
-            </Apparition>
+            {contenu.amorceErreurs ? (
+              <Apparition>
+                <p>{contenu.amorceErreurs}</p>
+              </Apparition>
+            ) : null}
 
             {/* Les trois erreurs.
 
@@ -424,11 +467,22 @@ export function MessageRemy({
             <p className="text-base text-foreground sm:text-lg">
               {contenu.salutation}
             </p>
-            <div className="flex justify-end">
-              <p className="signature mt-2 origin-bottom-right -rotate-3 pr-2 text-5xl text-foreground sm:text-6xl">
-                {contenu.signature}
+            {fonction ? (
+              /* Sur `/course`, sur demande de Rémy : le nom en toutes lettres,
+                 droit, et sa fonction dessous. Pas d'anglaise penchée. */
+              <p className="mt-6 text-base sm:text-lg">
+                <span className="block font-semibold text-foreground">
+                  {contenu.signature}
+                </span>
+                <span className="block text-muted-foreground">{fonction}</span>
               </p>
-            </div>
+            ) : (
+              <div className="flex justify-end">
+                <p className="signature mt-2 origin-bottom-right -rotate-3 pr-2 text-5xl text-foreground sm:text-6xl">
+                  {contenu.signature}
+                </p>
+              </div>
+            )}
           </Apparition>
         </div>
       </div>

@@ -144,14 +144,30 @@ export const legalesVsl = [
  * La lettre de Rémy, reprise de l'accueil sous la note des avis de `/course`,
  * sur décision de Rémy, à la place d'une section « Qui suis-je ».
  *
- * **Seule la première phrase change.** « Très bien vivre de vos
- * connaissances » orientait la lettre vers le revenu ; la page d'inscription
- * parle d'attirer des clients et de vendre une formation ou un coaching.
- * **Phrase écrite par l'agent, à valider par Rémy.** Tout le reste est la
- * lettre de l'accueil, mot pour mot.
+ * **Le début et le titre changent, dictés par Rémy.** La lettre s'ouvre
+ * directement sur les trois erreurs : la phrase sur les trois façons de vendre,
+ * la liste qui suit et « Mais peu importe… » sont retirées. Le titre est sa
+ * consigne, « Moi, c'est Rémy et j'ai un message pour vous », mise en forme
+ * par l'agent : à valider. Tout le reste est la lettre de l'accueil, mot pour
+ * mot.
  */
 export const messageRemyOptin = {
   ...messageRemy,
+  titre: "Moi, c'est Rémy, et j'ai un message pour vous",
   amorceVoies:
-    "Si vous voulez attirer des clients et vendre votre expertise en ligne, vous avez aujourd'hui trois façons de le faire.",
+    "Si vous souhaitez créer et vendre une formation en ligne, du coaching ou du consulting, ou même de la prestation de services, alors il y a trois erreurs que vous devez absolument éviter.",
+  voies: [],
+  amorceErreurs: "",
 };
+
+/** Les types d'offre surlignés en jaune dans la phrase d'ouverture, comme
+ * l'étaient les voies, sur demande de Rémy. Sous-chaînes exactes de
+ * `amorceVoies`. */
+export const surlignesOptin = [
+  "une formation en ligne",
+  "du coaching ou du consulting",
+  "de la prestation de services",
+] as const;
+
+/** Sous la signature de la lettre de `/course`, dicté par Rémy. */
+export const fonctionRemy = "Fondateur de Funnels Club";

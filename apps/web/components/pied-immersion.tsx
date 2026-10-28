@@ -42,10 +42,9 @@ export function PiedImmersion({
   children,
 }: {
   /**
-   * Ce qui se pose sous la marque, après un filet : les mentions légales sur
-   * `/appel`, sur demande de Rémy, pour que le bas de page se lise comme un
-   * pied de page. Les autres pages n'en passent pas et gardent la marque
-   * seule.
+   * Les mentions légales, sur les pages du tunnel qui en ont. Passées, elles
+   * remplacent la marque : le pied n'est plus qu'elles, centrées. Les autres
+   * pages n'en passent pas et gardent la marque seule.
    */
   children?: React.ReactNode;
 } = {}) {
@@ -55,19 +54,24 @@ export function PiedImmersion({
        et non au-dessus de l'équipe. Voir `layout.tsx`. Ce qui reste ici est
        l'écart entre la barre posée et la marque : sans lui, les deux se
        touchent. */
-    <footer className="px-5 pt-3 pb-4 sm:pt-4 sm:pb-5">
-      {/* Petite, atténuée et posée tout en bas, sur demande de Rémy : une
-          signature, pas un titre. */}
-      <p className="titre flex items-center justify-center gap-2 text-sm tracking-tight text-muted-foreground opacity-75 sm:text-base">
-        <LogoFunnels className="size-[1.05em]" />
-        Funnels.Club
-      </p>
-
-      {children ? (
-        <div className="mx-auto mt-6 max-w-[var(--largeur-video,72rem)] border-t border-border pt-8 sm:mt-8">
-          {children}
-        </div>
-      ) : null}
-    </footer>
+    children ? (
+      /* **Avec des mentions, le pied se réduit à elles**, sur demande de
+         Rémy : ni filet, ni marque, tout centré dans une colonne étroite. Le
+         filet coupait la page d'une ligne qui ne séparait rien, et le logo
+         posé au-dessus des mentions avait l'air d'un titre sans contenu. Le
+         nom de la société reste dans le copyright. */
+      <footer className="mx-auto max-w-2xl px-5 pt-6 pb-8 text-center sm:pb-10 [&_nav_ul]:justify-center [&_p]:mx-auto">
+        {children}
+      </footer>
+    ) : (
+      <footer className="px-5 pt-3 pb-4 sm:pt-4 sm:pb-5">
+        {/* Petite, atténuée et posée tout en bas, sur demande de Rémy : une
+            signature, pas un titre. */}
+        <p className="titre flex items-center justify-center gap-2 text-sm tracking-tight text-muted-foreground opacity-75 sm:text-base">
+          <LogoFunnels className="size-[1.05em]" />
+          Funnels.Club
+        </p>
+      </footer>
+    )
   );
 }

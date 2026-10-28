@@ -3,7 +3,12 @@ import { InscriptionVsl } from "@/components/inscription-vsl";
 import { PreuveTrustpilot } from "@/components/preuve-trustpilot";
 import { MessageRemy } from "@/components/message-remy";
 import { OuvrirInscription } from "@/components/ouvrir-inscription";
-import { messageRemyOptin, optinVsl } from "@/contenu/vsl";
+import {
+  messageRemyOptin,
+  fonctionRemy,
+  surlignesOptin,
+  optinVsl,
+} from "@/contenu/vsl";
 import { avecReglages } from "@/lib/reglages-seo";
 import type { Metadata } from "next";
 import Script from "next/script";
@@ -80,10 +85,16 @@ export default function Course() {
           tant qu'on ne s'est pas inscrit. La marge négative rend le
           rembourrage que la lettre porte déjà, pour qu'il ne s'ajoute pas à
           celui de la page. */}
-      <div className="-mx-5 mt-16 sm:mt-24">
+      {/* Sur téléphone, le titre de la lettre tient sur une ligne à côté de la
+          photo, sur demande de Rémy : il se coupait avant « Rémy ! ». Taille
+          fluide, comme le titre de la page, et réglée ici et non dans la
+          lettre, que l'accueil garde telle quelle. */}
+      <div className="-mx-5 mt-16 sm:mt-24 [&_[data-titre-roulant]]:text-[1.75rem] sm:[&_[data-titre-roulant]]:text-4xl">
         <MessageRemy
           contenu={messageRemyOptin}
           lien={(libelle) => <OuvrirInscription>{libelle}</OuvrirInscription>}
+          fonction={fonctionRemy}
+          surlignes={surlignesOptin}
         />
       </div>
       {/* Le SDK de ClickFunnels, qui compte la visite dans l'étape du tunnel.
