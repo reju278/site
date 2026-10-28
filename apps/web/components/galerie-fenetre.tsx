@@ -72,9 +72,10 @@ export function GalerieFenetre({
 }: {
   entretiens: readonly EntretienGalerie[];
   /**
-   * Trois cartes sur une seule ligne en large, et un seul bouton d'appel
-   * dessous, sur `/video-vsl`, sur demande de Rémy. Sans lui, la grille a
-   * deux colonnes et l'appel se pose au milieu et en bas.
+   * Trois cartes sur une seule ligne en large, sans bouton d'appel dessous,
+   * sur `/video-vsl`, sur demande de Rémy : l'appel n'est que dans la
+   * fenêtre de l'entretien ouvert. Sans lui, la grille a deux colonnes et
+   * l'appel se pose au milieu et en bas.
    */
   enLigne?: boolean;
   /**
@@ -298,10 +299,6 @@ export function GalerieFenetre({
       >
         {entretiens.slice(0, milieu).map((e, n) => carte(e, n))}
       </ul>
-
-      {appel && enLigne ? (
-        <BoutonAppel appel={appel} className="mt-10" />
-      ) : null}
 
       {appel && !enLigne ? (
         <>
