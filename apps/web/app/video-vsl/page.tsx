@@ -46,7 +46,7 @@ export default function Video() {
   });
 
   return (
-    <main className="px-5 pt-12 sm:pt-16">
+    <main className="px-5 pt-24 sm:pt-28">
       {/* Les domaines que le lecteur de Wistia contacte, relevés en ouvrant
           son iframe : la page du lecteur, son script, l'affiche et les
           segments de la vidéo. Ouvrir ces connexions pendant la lecture du

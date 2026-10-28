@@ -1,3 +1,4 @@
+import { EnTeteImmersion } from "@/components/en-tete-immersion";
 import { MentionsLegales } from "@/components/mentions-legales";
 import { PiedImmersion } from "@/components/pied-immersion";
 import { legalesVsl } from "@/contenu/vsl";
@@ -7,7 +8,7 @@ import type { Metadata } from "next";
 /**
  * Le cadre de la VSL du VSL Funnel, `go.funnels.club/video-vsl` : on y arrive
  * après l'opt-in de `/course`. Un tunnel, interdit d'index, thème clair
- * forcé. Sans en-tête ni logo, sur demande de Rémy : la vidéo d'abord.
+ * forcé. La marque en haut, comme sur `/appel`, sur demande de Rémy.
  */
 export const metadata: Metadata = {
   alternates: { canonical: "https://go.funnels.club/video-vsl" },
@@ -20,6 +21,9 @@ export default function LayoutVideo({
   return (
     <div data-police-tunnel>
       <PoliceTunnel />
+      {/* La marque, comme sur `/appel` : `absolute` et non `fixed`, elle reste
+          en haut de la page et ne suit pas le défilement. */}
+      <EnTeteImmersion ancres={[]} bascule={false} className="absolute" />
       {children}
       <div aria-hidden className="h-20 sm:h-28" />
       <PiedImmersion>
