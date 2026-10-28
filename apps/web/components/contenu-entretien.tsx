@@ -1,7 +1,11 @@
 "use client";
 
 import { ArticleAvis } from "@/components/article-avis";
-import { BoutonAppel, type AppelGalerie } from "@/components/bouton-appel";
+import {
+  BoutonAppel,
+  EncartAppel,
+  type AppelGalerie,
+} from "@/components/bouton-appel";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { ancreEntretien } from "@/contenu/immersion";
 import { sansNoms } from "@/lib/anonymat";
@@ -54,7 +58,7 @@ export function ContenuEntretien({
 
   return (
     <>
-            {/* Le contenu de la fenêtre, rendu par le serveur.
+      {/* Le contenu de la fenêtre, rendu par le serveur.
 
                 **Il reprend la forme d'une page d'avis**, sur demande de
                 Rémy : un en-tête coloré qui porte le titre et la vidéo, puis
@@ -62,49 +66,49 @@ export function ContenuEntretien({
                 arrondie. C'est ce que fait `/resultats/<nom>`, et c'est cette
                 séparation qui donne à la fenêtre l'air d'une page plutôt que
                 d'une boîte. */}
-            <div className="relative">
-              {/* L'en-tête, sur le fond du deck : le même que les en-têtes de
+      <div className="relative">
+        {/* L'en-tête, sur le fond du deck : le même que les en-têtes de
                   pages du site, ses trois halos et son grain. Il n'a pas de
                   fondu par le bas, contrairement à `EnTetePage` : ici c'est
                   le bloc de l'article qui vient mordre dedans, et un fondu
                   sous une arête dessinée ne servirait à rien. */}
-              <div className="relative isolate px-5 pt-10 pb-28 sm:px-8 sm:pt-12 sm:pb-32">
-                <div
-                  aria-hidden
-                  className="fond-resultats grain-resultats pointer-events-none absolute inset-0 -z-10"
-                />
+        <div className="relative isolate px-5 pt-10 pb-28 sm:px-8 sm:pt-12 sm:pb-32">
+          <div
+            aria-hidden
+            className="fond-resultats grain-resultats pointer-events-none absolute inset-0 -z-10"
+          />
 
-                {/* **Ferré à gauche et non centré**, sur demande de Rémy. Un titre
+          {/* **Ferré à gauche et non centré**, sur demande de Rémy. Un titre
                 court s'annonce bien au centre ; ceux-ci font deux lignes et
                 leur chapô quatre, et un bloc de texte centré sur quatre lignes
                 oblige l'œil à retrouver le début de chaque ligne. La règle du
                 dépôt le dit déjà : `text-balance` ne s'emploie que sur du texte
                 centré, et sur un texte ferré à gauche le bord est déjà l'axe. */}
-            <div className="mx-auto max-w-3xl">
-                  {/* `p` et non un `h1` : la fenêtre s'ouvre par-dessus une
+          <div className="mx-auto max-w-3xl">
+            {/* `p` et non un `h1` : la fenêtre s'ouvre par-dessus une
                       page qui a déjà le sien, et deux `h1` dans un document
                       cassent le plan. Le nom accessible de la fenêtre est
                       porté par `DialogTitle`, en `sr-only`. */}
-                  <p className="titre text-2xl text-pretty text-foreground sm:text-3xl">
-                    {insecables(sansNoms(article.titre))}
-                  </p>
+            <p className="titre text-2xl text-pretty text-foreground sm:text-3xl">
+              {insecables(sansNoms(article.titre))}
+            </p>
 
-                  <p className="mt-4 text-base leading-relaxed text-pretty text-muted-foreground">
-                    {sansNoms(article.chapo)}
-                  </p>
-                </div>
+            <p className="mt-4 text-base leading-relaxed text-pretty text-muted-foreground">
+              {sansNoms(article.chapo)}
+            </p>
+          </div>
 
-                {/* La vidéo, dans l'en-tête et plus large que le texte : une
+          {/* La vidéo, dans l'en-tête et plus large que le texte : une
                     vidéo se regarde, un texte se lit, et les deux n'ont pas
                     la même bonne mesure. C'est ce que fait la page. */}
-                <div className="mx-auto mt-8 max-w-3xl">
-                  <LecteurVideo
-                    id={article.id}
-                    titre={`Entretien avec ${nom}`}
-                    secondes={article.secondes}
-                    affiche={`/temoignages/${article.id}.jpg`}
-                    afficheAlt={sansNoms(article.afficheAlt)}
-                    /* **Le lecteur de Wistia, servi d'emblée**, sur demande de
+          <div className="mx-auto mt-8 max-w-3xl">
+            <LecteurVideo
+              id={article.id}
+              titre={`Entretien avec ${nom}`}
+              secondes={article.secondes}
+              affiche={`/temoignages/${article.id}.jpg`}
+              afficheAlt={sansNoms(article.afficheAlt)}
+              /* **Le lecteur de Wistia, servi d'emblée**, sur demande de
                        Rémy : plus aucune affiche cliquable sur cette page.
 
                        Ici le prix est le plus faible de la page : la fenêtre ne
@@ -112,20 +116,20 @@ export function ContenuEntretien({
                        existe à la fois et elle est démontée à la fermeture. Ce
                        sont les vingt-cinq lecteurs qui auraient été
                        impensables, pas celui-là. */
-                    natif
-                  />
-                </div>
+              natif
+            />
+          </div>
 
-                {/* **L'appel sous la vidéo, sur `/appel` seulement**, sur
+          {/* **L'appel sous la vidéo, sur `/appel` seulement**, sur
                     demande de Rémy. Il avait été retiré de cet endroit sur
                     `/immersion`, où il coupait l'en-tête du texte ; sur une
                     page dont le seul but est la réservation, Rémy le veut
                     là. Le clic ferme la fenêtre et descend au formulaire :
                     voir `GalerieFenetre`. */}
-                {appel ? <BoutonAppel appel={appel} className="mt-8" /> : null}
-              </div>
+          {appel ? <BoutonAppel appel={appel} className="mt-8" /> : null}
+        </div>
 
-              {/* Le bloc de l'article, qui remonte sur l'en-tête.
+        {/* Le bloc de l'article, qui remonte sur l'en-tête.
 
                   **L'arrondi et le filet sont portés par le bloc lui-même** et
                   non par une lèvre posée par-dessus : posés sur une lèvre, la
@@ -140,8 +144,8 @@ export function ContenuEntretien({
                   rayon. La cohérence se fait donc par le haut : la fenêtre,
                   sa jonction et la bande de l'accueil portent la même
                   courbe. */}
-              <div className="relative -mt-20 rounded-t-[var(--rayon-jonction)] border-t border-border bg-background px-5 pt-10 pb-10 sm:-mt-24 sm:px-8 sm:pt-12">
-                {/* Le bandeau vers l'autre entretien de la même personne.
+        <div className="relative -mt-20 rounded-t-[var(--rayon-jonction)] border-t border-border bg-background px-5 pt-10 pb-10 sm:-mt-24 sm:px-8 sm:pt-12">
+          {/* Le bandeau vers l'autre entretien de la même personne.
 
                     Trois membres ont témoigné deux fois, à un an et demi
                     d'écart, et les deux récits sont sur la page. Quelqu'un
@@ -152,31 +156,31 @@ export function ContenuEntretien({
                     clic ferme la fenêtre avant de sauter : voir `ModaleAvis`.
                     Il ne s'affiche que si cet autre entretien est bien sur la
                     page, sinon ce serait une cible qui ne mène nulle part. */}
-                {autre ? (
-                  <a
-                    href={`#${ancreEntretien(autre.id)}`}
-                    /* Même traitement que la carte : une ombre plutôt qu'un
+          {autre ? (
+            <a
+              href={`#${ancreEntretien(autre.id)}`}
+              /* Même traitement que la carte : une ombre plutôt qu'un
                        cadre coloré. Les deux vivent dans la même page, et
                        deux façons de répondre au survol s'y liraient comme
                        deux familles d'objets. */
-                    className="relief-verre group/roule mx-auto mb-10 flex max-w-3xl items-center gap-4 rounded-md border border-border bg-card p-5 transition-[translate,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-24px_rgba(0,0,0,0.45)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-                  >
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-                        L&apos;autre entretien
-                      </span>
-                      <span className="mt-1 block text-base text-pretty text-card-foreground">
-                        {sansNoms(autre.libelle)}
-                      </span>
-                    </span>
-                    <ArrowRight
-                      aria-hidden
-                      className="size-5 shrink-0 text-primary"
-                    />
-                  </a>
-                ) : null}
+              className="relief-verre group/roule mx-auto mb-10 flex max-w-3xl items-center gap-4 rounded-md border border-border bg-card p-5 transition-[translate,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-24px_rgba(0,0,0,0.45)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            >
+              <span className="min-w-0 flex-1">
+                <span className="block text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                  L&apos;autre entretien
+                </span>
+                <span className="mt-1 block text-base text-pretty text-card-foreground">
+                  {sansNoms(autre.libelle)}
+                </span>
+              </span>
+              <ArrowRight
+                aria-hidden
+                className="size-5 shrink-0 text-primary"
+              />
+            </a>
+          ) : null}
 
-                {/* L'article.
+          {/* L'article.
 
                     `max-w-3xl` : une ligne de texte courant se lit entre
                     soixante et quatre-vingts caractères, et la fenêtre est
@@ -186,15 +190,15 @@ export function ContenuEntretien({
                     était sous la vidéo a été retiré sur demande de Rémy : à
                     cet endroit, il coupait l'en-tête du texte sans qu'on ait
                     rien lu. Ici, le lecteur a parcouru la moitié du récit. */}
-                <article className="mx-auto max-w-3xl">
-                  <ArticleAvis
-                    article={article}
-                    texte={pourLeTunnel}
-                    appel={null}
-                  />
-                </article>
-              </div>
-            </div>
+          <article className="mx-auto max-w-3xl">
+            <ArticleAvis
+              article={article}
+              texte={pourLeTunnel}
+              appel={appel?.encart ? <EncartAppel appel={appel} /> : null}
+            />
+          </article>
+        </div>
+      </div>
     </>
   );
 }

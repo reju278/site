@@ -41,7 +41,10 @@ import { sansNoms } from "@/lib/anonymat";
 export function GalerieEntretiens({
   appel,
   ids = entretiensImmersion,
+  enLigne,
 }: {
+  /** Voir `enLigne` dans `GalerieFenetre`. */
+  enLigne?: boolean;
   /** Voir `appel` dans `GalerieFenetre`. */
   appel?: AppelGalerie;
   /**
@@ -82,5 +85,7 @@ export function GalerieEntretiens({
     ];
   });
 
-  return <GalerieFenetre entretiens={entretiens} appel={appel} />;
+  return (
+    <GalerieFenetre entretiens={entretiens} appel={appel} enLigne={enLigne} />
+  );
 }

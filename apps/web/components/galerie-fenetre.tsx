@@ -68,8 +68,15 @@ const VERRE_COMMANDE =
 export function GalerieFenetre({
   entretiens,
   appel,
+  enLigne = false,
 }: {
   entretiens: readonly EntretienGalerie[];
+  /**
+   * Trois cartes sur une seule ligne en large, et un seul bouton d'appel
+   * dessous, sur `/video-vsl`, sur demande de Rémy. Sans lui, la grille a
+   * deux colonnes et l'appel se pose au milieu et en bas.
+   */
+  enLigne?: boolean;
   /**
    * L'appel à réserver, sur `/appel` seulement : un bouton au milieu de la
    * galerie, un en bas, et un sous la vidéo de chaque entretien ouvert.
@@ -99,11 +106,7 @@ export function GalerieFenetre({
       {/* **La carte s'incline sous le pointeur**, sur demande de Rémy, qui
           a cité les cartes 3D de l'accueil. C'est le même geste, sorti en
           composant plutôt que recopié : voir `CarteInclinable`. */}
-      <CarteInclinable
-        teinte="doux"
-        rayon="rounded-[25px]"
-        className="h-full"
-      >
+      <CarteInclinable teinte="doux" rayon="rounded-[25px]" className="h-full">
         <button
           type="button"
           onClick={() => setIndex(n)}
@@ -279,15 +282,28 @@ export function GalerieFenetre({
   /* La coupure de l'appel du milieu, **arrondie au nombre pair** : la grille
      a deux colonnes, et une moitié impaire laisserait une case vide juste
      au-dessus du bouton. */
-  const milieu = appel ? Math.ceil(entretiens.length / 4) * 2 : entretiens.length;
+  const milieu =
+    appel && !enLigne
+      ? Math.ceil(entretiens.length / 4) * 2
+      : entretiens.length;
 
   return (
     <>
-      <ul className="mx-auto mt-10 grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2">
+      <ul
+        className={
+          enLigne
+            ? "mx-auto mt-10 grid max-w-6xl grid-cols-1 gap-4 lg:grid-cols-3"
+            : "mx-auto mt-10 grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2"
+        }
+      >
         {entretiens.slice(0, milieu).map((e, n) => carte(e, n))}
       </ul>
 
-      {appel ? (
+      {appel && enLigne ? (
+        <BoutonAppel appel={appel} className="mt-10" />
+      ) : null}
+
+      {appel && !enLigne ? (
         <>
           <BoutonAppel appel={appel} className="mt-10" />
           <ul className="mx-auto mt-10 grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2">
@@ -310,7 +326,9 @@ export function GalerieFenetre({
             if (!cible) return;
             saut.current = null;
             evenement.preventDefault();
-            document.querySelector(cible)?.scrollIntoView({ behavior: "smooth" });
+            document
+              .querySelector(cible)
+              ?.scrollIntoView({ behavior: "smooth" });
           }}
           className="max-h-none max-w-[calc(100%-2rem)] gap-3 border-0 bg-transparent p-0 shadow-none sm:max-w-4xl"
         >
@@ -454,44 +472,44 @@ export function GalerieFenetre({
               au même verre et à la même cible de 40 px ; seule leur place
               change avec la largeur. */}
           <div className="flex items-center justify-center gap-3">
-          <button
-            type="button"
-            onClick={() => aller(-1)}
-            aria-label="Entretien précédent"
-            className={cn(VERRE_COMMANDE, "size-10 sm:hidden")}
-          >
-            <ChevronLeft aria-hidden className="size-5" />
-          </button>
+            <button
+              type="button"
+              onClick={() => aller(-1)}
+              aria-label="Entretien précédent"
+              className={cn(VERRE_COMMANDE, "size-10 sm:hidden")}
+            >
+              <ChevronLeft aria-hidden className="size-5" />
+            </button>
 
-          <DialogClose asChild>
-            <Gelule
-              as="button"
-              sur="voile"
-              teinte="var(--destructive)"
-              /* `group/roule` : le libellé roule au survol, comme les entrées
+            <DialogClose asChild>
+              <Gelule
+                as="button"
+                sur="voile"
+                teinte="var(--destructive)"
+                /* `group/roule` : le libellé roule au survol, comme les entrées
                  du menu, sur demande de Rémy. */
-              /* **40 px de haut sur téléphone**, sur demande de Rémy : la
+                /* **40 px de haut sur téléphone**, sur demande de Rémy : la
                  hauteur des deux flèches qui l'encadrent, pour que la rangée
                  se lise comme trois commandes d'un même rang. Le libellé
                  grandit avec, il passe devant le corps du composant parce
                  qu'il est plus près du texte. */
-              className="group/roule min-h-10 pr-5 pl-4 sm:min-h-0 sm:pr-4 sm:pl-3"
-              pastille={<X aria-hidden className="size-4 shrink-0" />}
-            >
-              <span className="text-sm">
-                <TexteRoulant>Fermer</TexteRoulant>
-              </span>
-            </Gelule>
-          </DialogClose>
+                className="group/roule min-h-10 pr-5 pl-4 sm:min-h-0 sm:pr-4 sm:pl-3"
+                pastille={<X aria-hidden className="size-4 shrink-0" />}
+              >
+                <span className="text-sm">
+                  <TexteRoulant>Fermer</TexteRoulant>
+                </span>
+              </Gelule>
+            </DialogClose>
 
-          <button
-            type="button"
-            onClick={() => aller(1)}
-            aria-label="Entretien suivant"
-            className={cn(VERRE_COMMANDE, "size-10 sm:hidden")}
-          >
-            <ChevronRight aria-hidden className="size-5" />
-          </button>
+            <button
+              type="button"
+              onClick={() => aller(1)}
+              aria-label="Entretien suivant"
+              className={cn(VERRE_COMMANDE, "size-10 sm:hidden")}
+            >
+              <ChevronRight aria-hidden className="size-5" />
+            </button>
           </div>
         </DialogContent>
       </Dialog>

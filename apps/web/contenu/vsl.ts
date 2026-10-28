@@ -138,6 +138,14 @@ export const optinVsl = {
 export const videoVsl = {
   /* Dicté par Rémy, suivi du prénom de l'opt-in : voir `TitreVideoVsl`. */
   surtitre: "Voici ta vidéo de formation offerte",
+  /* Quand l'objectif est connu, sur demande de Rémy. `{objectif}` est le
+     montant retenu pour sa tranche (`strategieVsl.montants`). */
+  titreObjectif:
+    "Découvre comment nous allons t'aider à atteindre {objectif} par mois",
+  /* Le bloc sous la vidéo, quand les réponses sont connues. De l'agent, à
+     valider. */
+  appelPersonnalise:
+    "On regarde ensemble ton offre et ton objectif de {objectif} par mois, et on te dit si tu es admissible au programme et au coaching Funnels Club.",
   /* « DIRECT VSL - MOTION GRAPHICS » chez Wistia, sur demande de Rémy, à la
      place de « Direct Webinar Funnels Club » (6w8wxhaqzk). La durée et
      l'affiche sont relevées sur le média. */
@@ -256,20 +264,78 @@ export const questionnaireVsl = {
  * `{clientsCible}`, `{annee}` et `{anneeCible}` sont remplacés à l'affichage.
  */
 export const strategieVsl = {
+  /* La première phrase est dictée par Rémy ; les deux suivantes sont de
+     l'agent, écrites dans le même ton à sa demande. */
   titre: "Ta stratégie personnalisée",
   titreAvecPrenom: "{prenom}, voici ta stratégie personnalisée",
   phraseObjectif:
-    "Tu vises {objectif} par mois. Avec une offre à {prix}, il te faut {clients} clients par mois pour y arriver.",
+    "Comme tu vises {objectif} par mois, avec une offre à {prix}, il te faut donc {clients} clients par mois pour y arriver.",
   /* Quand la tranche de prix a une cible. */
   projection:
-    "Et si ton offre valait {cible} ? Avec le même nombre de clients, ton année passerait de {annee} à {anneeCible}. Ou, pour le même objectif, {clientsCible} clients par mois suffiraient.",
+    "Maintenant, si ton offre valait {cible}, il ne te faudrait plus que {clientsCible} clients par mois pour atteindre le même objectif. Et avec tes {clients} clients, ton année passerait de {annee} à {anneeCible}.",
   /* Au-delà de 5 000 €, pas de prix plus haut à viser. */
   projectionSansCible:
-    "Sur une année, cet objectif représente {annee}. À ce prix, l'enjeu n'est pas de vendre plus cher, c'est d'attirer chaque mois les bons clients.",
+    "Sur une année, ça représente donc {annee}. À ce prix, l'enjeu n'est plus de vendre plus cher, mais d'attirer chaque mois les bons clients.",
   legendeActuel: "Avec ton prix actuel",
+  /* L'axe des clients, sous la courbe. */
+  axeClients: "Nombre de clients par mois",
   legendeCible: "Avec une offre à {cible}",
-  titreActivite: "Comment y arriver",
+  titreActivite: "Comment on va y arriver ensemble",
+  /* Les quatre axes de la VSL, repris de sa transcription (Wistia,
+     « DIRECT VSL - MOTION GRAPHICS », de 0:30 à 2:15) et tutoyés. Les mots
+     sont ceux de Rémy, resserrés pour tenir sur une carte : à valider. */
+  /* Dicté par Rémy, en titre comme « Comment on va y arriver ensemble ». */
+  introEtapes: "Voici les quatre étapes que nous allons mettre en place",
+  etapes: [
+    {
+      titre: "Ta niche et ton client de rêve",
+      texte:
+        "Nous validons ta niche, définissons ton positionnement et identifions parfaitement ton client de rêve, pour te distinguer de la concurrence.",
+    },
+    {
+      titre: "Ton offre digitale",
+      texte:
+        "Ensemble, nous créons de zéro ou améliorons ton offre pour que tu puisses augmenter tes prix jusqu'à plusieurs milliers d'euros, avec de vrais résultats pour tes clients.",
+    },
+    {
+      titre: "Ton tunnel de vente",
+      texte:
+        "Tu reçois notre modèle de tunnel de vente, et nous l'adaptons à ta niche, à ton client de rêve et à ton offre, au prix que l'on aura déterminé ensemble.",
+    },
+    {
+      titre: "Tes nouveaux clients",
+      texte:
+        "Nous t'accompagnons sur la publicité et la création de contenu, pour obtenir de nouveaux clients sans te demander quand viendra le prochain.",
+    },
+  ],
   titreTemoignages: "Ils étaient dans ta situation",
+  /* Sous le titre des témoignages, propre à l'activité : ce qui rapproche
+     ces trois entretiens de la personne. */
+  introTemoignages: {
+    "Vendeur de formation":
+      "Comme toi, ils vendent une formation. Regarde comment ils l'ont construite et à quel prix ils la vendent aujourd'hui.",
+    "Créateur de contenu":
+      "Ils partageaient leur savoir, comme toi. Regarde comment ils en ont fait une offre qui se vend.",
+    "Coach / Consultant":
+      "Ils ont transformé leur savoir-faire en un accompagnement qui se vend bien. Regarde comment ils s'y sont pris.",
+    "Thérapeute / Praticien":
+      "Ils ont mis leur savoir dans une offre en ligne. Regarde comment ils ont organisé et tarifé leur activité.",
+    "Services en ligne (agence, freelance, prestations)":
+      "Regarde comment ils ont revu leur offre et leur tarif pour attirer les bons clients.",
+  } as Record<string, string>,
+  /* Le bouton d'appel des témoignages et de leur fenêtre, au modèle du hub :
+     sous la vidéo de l'entretien ouvert, au milieu de son article et sous
+     les cartes. Vers `/appel`, dans un nouvel onglet. */
+  appel: {
+    ancre: "/appel",
+    libelle: "Réserve ton appel GRATUIT",
+    nouvelOnglet: true,
+    encart: {
+      titre: "Parlons de ton activité",
+      texte:
+        "Un appel gratuit de 30 minutes avec l'équipe pour faire le point sur ton offre, ton prix et la façon dont tu la vends aujourd'hui.",
+    },
+  },
   /* Le paragraphe propre à chaque activité, clé = le choix exact. */
   activites: {
     "Vendeur de formation":

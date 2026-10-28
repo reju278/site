@@ -94,7 +94,12 @@ export default function Video() {
           galeries={Object.fromEntries(
             Object.entries(strategieVsl.temoignages).map(([activite, ids]) => [
               activite,
-              <GalerieEntretiens key={activite} ids={ids} />,
+              <GalerieEntretiens
+                key={activite}
+                ids={ids}
+                enLigne
+                appel={strategieVsl.appel}
+              />,
             ]),
           )}
         />
