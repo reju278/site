@@ -209,8 +209,8 @@ export const fonctionRemy = "Fondateur de Funnels Club";
  * de la personne (`avis.ts`) ; `TemoignagesVsl` refuse de construire si l'une
  * n'y figure plus. **Le choix de la citation est de l'agent, à valider par
  * Rémy** : de préférence une phrase sur la méthode ou l'accompagnement plutôt
- * qu'un montant, le résultat étant déjà dit par la ligne du dessous, qui est
- * l'accroche de `temoignages`.
+ * qu'un montant. **Aucune n'annonce de résultat**, sur décision de Rémy :
+ * celle de Yannick et Sylvie, « notre chiffre a triplé », a été remplacée.
  *
  * **Les six premiers sont dans l'ordre dicté par Rémy** : Roland, Yannick et
  * Sylvie, François, Olga, Corentin, Valérie. La suite est libre.
@@ -248,7 +248,7 @@ export const temoignagesVsl = [
   {
     id: "2xege6bt0u",
     citation:
-      "Il y a des phrases que Rémy a dites dans la formation qui ont été des électrochocs, et c'est ça qui nous a fait mettre en place des choses qui ont fait que notre chiffre a triplé.",
+      "Tu ne sais pas ce que tu ne sais pas, et ce n'est pas parce que tu es bon dans un domaine que tu es bon sur tous les domaines.",
   },
   {
     id: "b5taio9plc",

@@ -2,6 +2,7 @@ import { BoutonOuvrirInscription } from "@/components/ouvrir-inscription";
 import { avisDe } from "@/contenu/avis";
 import { temoignages } from "@/contenu/site";
 import { optinVsl, temoignagesVsl, titreTemoignagesVsl } from "@/contenu/vsl";
+import { prenom } from "@/lib/prenom";
 import { insecables } from "@/lib/typographie";
 import Image from "next/image";
 
@@ -14,9 +15,10 @@ import Image from "next/image";
  * la place du portrait, en photo fixe : la vidéo y a été, Rémy l'a retirée,
  * pour que la carte se lise d'un coup d'œil sans rien promettre au clic.
  *
- * **Les résultats sont ceux de vraies personnes.** La mention qui dit qu'ils
- * ne sont pas garantis est dans le pied de page, sous les avertissements, sur
- * décision de Rémy : voir `mentionTemoignagesVsl`.
+ * **Aucun résultat chiffré**, sur décision de Rémy : ni la ligne d'accroche
+ * de `temoignages`, ni une citation qui annonce un résultat. Le prénom et la
+ * phrase de la personne, rien d'autre. C'est ce qui met la section à l'abri
+ * des règles Google Ads sur les témoignages chiffrés.
  */
 export function TemoignagesVsl() {
   const cartes = temoignagesVsl.map(({ id, citation }) => {
@@ -78,11 +80,11 @@ export function TemoignagesVsl() {
               {/* Le nom juste sous l'image, sur demande de Rémy, puis
                   l'accroche à la place du métier des cartes du hero. */}
               <div className="flex flex-1 flex-col gap-3 px-2">
-                <figcaption>
-                  <span className="block font-semibold">{carte.nom}</span>
-                  <span className="block text-sm text-pretty text-muted-foreground">
-                    {insecables(carte.description)}
-                  </span>
+                {/* Le prénom seul et un cran plus gros, sur demande de
+                    Rémy, sans la ligne de résultat : plus aucun montant sur
+                    la page. */}
+                <figcaption className="text-lg font-semibold sm:text-xl">
+                  {prenom(carte.nom)}
                 </figcaption>
                 <blockquote className="text-[0.9375rem] leading-relaxed font-medium text-pretty">
                   {insecables(`« ${carte.citation} »`)}
