@@ -268,13 +268,37 @@ export const questionnaireVsl = {
 export const strategieVsl = {
   titre: "Ta stratégie personnalisée",
   titreAvecPrenom: "{prenom}, voici ta stratégie personnalisée",
-  /* L'avant/après, sur demande de Rémy : une ligne et deux colonnes. */
-  pourAtteindre: "Pour atteindre",
-  parMois: "par mois :",
-  avant: "Avant",
-  apres: "Après",
-  seul: "Ta stratégie",
-  offreA: "Offre à",
+  /* Le tableau comparatif, sur demande de Rémy : les deux premières lignes
+     sont calculées, les suivantes reprennent les quatre étapes de la VSL.
+     Tout est de l'agent, à valider. Les libellés restent courts : trois
+     colonnes doivent tenir sur un téléphone. */
+  colonneAvant: "Aujourd'hui",
+  colonneApres: "Avec Funnels Club",
+  criterePrix: "Prix de ton offre",
+  critereClients: "Clients par mois pour",
+  clients: "clients",
+  lignes: [
+    {
+      critere: "Positionnement",
+      avant: "Une offre parmi d'autres",
+      apres: "Niche validée et client de rêve identifié",
+    },
+    {
+      critere: "Offre",
+      avant: "Sa valeur ne se voit pas",
+      apres: "Complète, vendue à sa juste valeur",
+    },
+    {
+      critere: "Tunnel de vente",
+      avant: "Tu vas chercher tes clients",
+      apres: "Il attire tes clients à toi",
+    },
+    {
+      critere: "Nouveaux clients",
+      avant: "Irréguliers",
+      apres: "Chaque mois, par la publicité et le contenu",
+    },
+  ],
   titreActivite: "Comment on va y arriver ensemble",
   /* Les quatre axes de la VSL, repris de sa transcription (Wistia,
      « DIRECT VSL - MOTION GRAPHICS », de 0:30 à 2:15) et tutoyés. Les mots

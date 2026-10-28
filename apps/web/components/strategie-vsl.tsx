@@ -6,7 +6,8 @@ import { jaune } from "@/components/titre-video-vsl";
 import { strategieVsl } from "@/contenu/vsl";
 import { usePrenomVsl, useReponsesVsl } from "@/lib/prenom-vsl";
 import { insecables } from "@/lib/typographie";
-import { useMemo } from "react";
+import { Check, X } from "lucide-react";
+import { Fragment, useMemo } from "react";
 
 const euros = new Intl.NumberFormat("fr-FR", {
   style: "currency",
@@ -22,77 +23,20 @@ function remplir(texte: string, valeurs: Record<string, string>) {
   );
 }
 
-/**
- * Une rangée de points, un par client : on voit d'un coup d'œil qu'il en
- * faut beaucoup d'un côté et peu de l'autre, sans rien lire. Au-delà de
- * quarante, la rangée s'arrête sur « + », pour ne pas devenir une texture.
- */
-function PointsClients({
-  nombre,
-  couleur,
-}: {
-  nombre: number;
-  couleur: string;
-}) {
-  const affiches = Math.min(nombre, 40);
-  return (
-    <span aria-hidden className="mt-4 flex flex-wrap gap-1.5">
-      {Array.from({ length: affiches }, (_, i) => (
-        <span
-          key={i}
-          className="size-3 rounded-full"
-          style={{ backgroundColor: couleur }}
-        />
-      ))}
-      {nombre > affiches ? (
-        <span
-          className="text-xs leading-3 font-semibold"
-          style={{ color: couleur }}
-        >
-          +
-        </span>
-      ) : null}
-    </span>
-  );
-}
-
-/** Une colonne de l'avant/après : le prix, le nombre de clients, les points. */
-function Colonne({
-  etiquette,
-  prix,
-  clients,
-  mise,
-}: {
-  etiquette: string;
-  prix: string;
-  clients: number;
-  /** La colonne d'après, en bleu et cernée. */
-  mise?: boolean;
-}) {
-  const couleur = mise ? "var(--primary)" : "var(--muted-foreground)";
-  return (
-    <div
-      className={
-        mise
-          ? "rounded-md border-2 border-primary bg-background p-5"
-          : "rounded-md border border-foreground/10 bg-background/60 p-5"
-      }
-    >
-      <p
-        className="text-sm font-semibold tracking-wide uppercase"
-        style={{ color: couleur }}
-      >
-        {etiquette}
-      </p>
-      <p className="mt-2 text-base text-muted-foreground">{insecables(prix)}</p>
-      <p className="titre mt-1 text-4xl text-foreground tabular-nums sm:text-5xl">
-        {clients}
-        <span className="ml-2 text-base font-normal text-muted-foreground">
-          clients / mois
-        </span>
-      </p>
-      <PointsClients nombre={clients} couleur={couleur} />
-    </div>
+/** Le signe d'une case qualitative : une croix grise, une coche verte. */
+function Signe({ oui }: { oui: boolean }) {
+  return oui ? (
+    <Check
+      aria-hidden
+      className="mt-0.5 size-4 shrink-0 text-[var(--icone-resultats)]"
+      strokeWidth={3}
+    />
+  ) : (
+    <X
+      aria-hidden
+      className="mt-0.5 size-4 shrink-0 text-muted-foreground"
+      strokeWidth={3}
+    />
   );
 }
 
@@ -105,11 +49,12 @@ function Colonne({
  * rend rien, plutôt qu'une stratégie « personnalisée » faite de valeurs par
  * défaut.
  *
- * **Un avant/après et non une courbe**, sur demande de Rémy, qui trouvait le
- * graphique et ses phrases trop compliqués : une ligne pour l'objectif, puis
- * deux colonnes, le prix actuel et le prix visé, chacune avec le nombre de
- * clients qu'il faut et un point par client. La courbe Bklit a été essayée
- * avant, avec ses repères ; elle demandait trop de lecture sur téléphone.
+ * **Un tableau comparatif, comme ceux qui comparent deux logiciels**, sur
+ * demande de Rémy : « Aujourd'hui » contre « Avec Funnels Club », une ligne
+ * par argument. Les deux premières sont chiffrées (le prix, les clients
+ * qu'il faut pour l'objectif), les suivantes reprennent les quatre étapes de
+ * la VSL. Une courbe Bklit puis deux colonnes avant/après ont été essayées
+ * avant ; la courbe demandait trop de lecture sur téléphone.
  *
  * **Les témoignages sont choisis par activité**, et rendus par le serveur :
  * la page passe une galerie par activité, et celle-ci n'affiche que la bonne.
@@ -169,46 +114,104 @@ export function StrategieVsl({
           {insecables(remplir(titre, valeurs))}
         </h2>
 
-        {/* Une ligne, et l'objectif surligné : c'est tout le texte. */}
-        <p className="mt-4 text-center text-lg text-foreground sm:text-xl">
-          {insecables(strategieVsl.pourAtteindre)}{" "}
-          <mark className="surlignage" style={jaune}>
-            {insecables(euros.format(objectif))}
-          </mark>{" "}
-          {strategieVsl.parMois}
-        </p>
-
-        <div
-          className={
-            calcul.cible
-              ? "mt-6 grid grid-cols-1 items-stretch gap-3 sm:grid-cols-[1fr_auto_1fr]"
-              : "mx-auto mt-6 max-w-sm"
-          }
-        >
-          <Colonne
-            etiquette={calcul.cible ? strategieVsl.avant : strategieVsl.seul}
-            prix={`${strategieVsl.offreA} ${euros.format(calcul.prix)}`}
-            clients={calcul.clients}
-            mise={!calcul.cible}
-          />
-          {calcul.cible && calcul.clientsCible ? (
-            <>
-              <span
-                aria-hidden
-                className="flex items-center justify-center text-2xl text-primary sm:text-3xl"
+        {/* Le tableau. Un vrai `table` : un lecteur d'écran annonce chaque
+            case avec sa ligne et sa colonne. Trois colonnes courtes tiennent
+            sur 335 px, d'où des libellés de quelques mots. La colonne
+            « Avec Funnels Club » est teintée : c'est celle qu'on lit. */}
+        <table className="mt-6 w-full border-separate border-spacing-0 text-left text-sm sm:table-fixed sm:text-base">
+          <thead>
+            <tr>
+              {/* Sur téléphone, la colonne des critères disparaît : chaque
+                  critère passe sur sa propre ligne, au-dessus de ses deux
+                  valeurs, et le tableau n'a plus que deux colonnes. Trois
+                  dans 300 px donnaient des cases de quatre mots par ligne. */}
+              <td className="hidden sm:table-cell sm:w-[34%]" />
+              <th
+                scope="col"
+                className="px-2 pb-3 text-xs font-semibold tracking-wide text-muted-foreground uppercase sm:px-4 sm:text-sm"
               >
-                <span className="sm:hidden">↓</span>
-                <span className="hidden sm:inline">→</span>
-              </span>
-              <Colonne
-                etiquette={strategieVsl.apres}
-                prix={`${strategieVsl.offreA} ${euros.format(calcul.cible)}`}
-                clients={calcul.clientsCible}
-                mise
-              />
-            </>
-          ) : null}
-        </div>
+                {strategieVsl.colonneAvant}
+              </th>
+              <th
+                scope="col"
+                className="rounded-t-md bg-primary/10 px-2 pt-3 pb-3 text-xs font-semibold tracking-wide text-primary uppercase sm:px-4 sm:text-sm"
+              >
+                {strategieVsl.colonneApres}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {[
+              {
+                critere: strategieVsl.criterePrix,
+                avant: euros.format(calcul.prix),
+                apres: euros.format(calcul.cible ?? calcul.prix),
+                chiffre: true,
+              },
+              {
+                critere: `${strategieVsl.critereClients} ${euros.format(objectif)}`,
+                avant: `${calcul.clients} ${strategieVsl.clients}`,
+                apres: `${calcul.clientsCible ?? calcul.clients} ${strategieVsl.clients}`,
+                chiffre: true,
+              },
+              ...strategieVsl.lignes.map((ligne) => ({
+                ...ligne,
+                chiffre: false,
+              })),
+            ].map((ligne, rang, toutes) => {
+              const derniere = rang === toutes.length - 1;
+              return (
+                <Fragment key={ligne.critere}>
+                  <tr className="sm:hidden">
+                    <th
+                      colSpan={2}
+                      className="border-t border-foreground/10 pt-3 pb-1 text-sm font-semibold text-foreground"
+                    >
+                      {insecables(ligne.critere)}
+                    </th>
+                  </tr>
+                  <tr>
+                    <th
+                      scope="row"
+                      className="hidden border-t border-foreground/10 py-3 pr-4 align-top text-base font-semibold text-foreground sm:table-cell"
+                    >
+                      {insecables(ligne.critere)}
+                    </th>
+                    <td className="w-1/2 px-2 pt-1 pb-3 align-top text-muted-foreground sm:border-t sm:border-foreground/10 sm:px-4 sm:py-3">
+                      {ligne.chiffre ? (
+                        <span className="titre text-lg text-foreground/70 tabular-nums sm:text-xl">
+                          {insecables(ligne.avant)}
+                        </span>
+                      ) : (
+                        <span className="flex gap-1.5">
+                          <Signe oui={false} />
+                          <span>{insecables(ligne.avant)}</span>
+                        </span>
+                      )}
+                    </td>
+                    <td
+                      className={`w-1/2 bg-primary/10 px-2 pt-1 pb-3 align-top text-foreground sm:border-t sm:border-primary/15 sm:px-4 sm:py-3 ${derniere ? "rounded-b-md" : ""}`}
+                    >
+                      {ligne.chiffre ? (
+                        <mark
+                          className="surlignage titre text-lg tabular-nums sm:text-xl"
+                          style={jaune}
+                        >
+                          {insecables(ligne.apres)}
+                        </mark>
+                      ) : (
+                        <span className="flex gap-1.5">
+                          <Signe oui />
+                          <span>{insecables(ligne.apres)}</span>
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                </Fragment>
+              );
+            })}
+          </tbody>
+        </table>
 
         {/* « Comment y arriver » : le paragraphe propre à l'activité, puis
             les quatre étapes de la VSL, numérotées, puis l'appel. Sur demande
