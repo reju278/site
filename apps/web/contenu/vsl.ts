@@ -19,13 +19,13 @@ export const API_FUNNELS =
 export const CLE_CONTACT_VSL = "vsl-contact";
 
 export const optinVsl = {
-  /* Dicté par Rémy. Ses guillemets droits sont rendus en guillemets français,
-     avec leurs espaces insécables, comme partout sur le site. Les deux mises
-     en avant en bleu sont celles du titre précédent, reportées sur les mêmes
-     mots. */
+  /* Dicté par Rémy. Les guillemets sont ceux qu'il a demandés, anglais et non
+     français, dans leur forme typographique (“ ”) plutôt que droite. Les deux
+     mises en avant en bleu sont celles du titre précédent, reportées sur les
+     mêmes mots. */
   titre: [
     { texte: "Nous allons mettre en place le " },
-    { texte: "PARFAIT «\u00a0tunnel de vente\u00a0»", accent: true },
+    { texte: "PARFAIT “tunnel de vente”", accent: true },
     { texte: " pour vendre votre " },
     { texte: "offre digitale*", accent: true },
     /* « encore » et « créée) » sont liés par une espace insécable : sur
