@@ -23,7 +23,8 @@ function remplir(texte: string, valeurs: Record<string, string>) {
   );
 }
 
-/** Le signe d'une case qualitative : une croix grise, une coche verte. */
+/** Le signe d'une case qualitative : une croix rouge, sur demande de Rémy,
+ * celle des erreurs de la lettre (`--erreur-texte`), et une coche verte. */
 function Signe({ oui }: { oui: boolean }) {
   return oui ? (
     <Check
@@ -34,7 +35,7 @@ function Signe({ oui }: { oui: boolean }) {
   ) : (
     <X
       aria-hidden
-      className="mt-0.5 size-4 shrink-0 text-muted-foreground"
+      className="mt-0.5 size-4 shrink-0 text-[var(--erreur-texte)]"
       strokeWidth={3}
     />
   );
