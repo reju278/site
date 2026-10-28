@@ -134,6 +134,11 @@ export function MessageRemy({
    * renvoie à la vidéo et reprend ses trois points.
    */
   fin,
+  /**
+   * Un paragraphe avant la phrase d'ouverture. Sur `/course`, Rémy s'y
+   * présente avant d'en venir aux trois erreurs.
+   */
+  ouverture,
 }: {
   contenu?: ContenuMessage;
   lienAppel?: string | null;
@@ -142,6 +147,7 @@ export function MessageRemy({
   fonction?: string;
   surlignes?: readonly string[];
   fin?: React.ReactNode;
+  ouverture?: string;
 } = {}) {
   const lienInterne = lienAppel?.startsWith("#") ?? false;
 
@@ -205,6 +211,12 @@ export function MessageRemy({
               contraste, qui reste à plus de dix pour un dans les deux thèmes,
               très au-dessus du seuil. */}
           <div className="mt-10 space-y-6 text-base leading-relaxed text-pretty text-foreground/85 sm:mt-12 sm:text-lg">
+            {ouverture ? (
+              <Apparition>
+                <p>{ouverture}</p>
+              </Apparition>
+            ) : null}
+
             <Apparition>
               <p>{surligner(contenu.amorceVoies, surlignes)}</p>
             </Apparition>

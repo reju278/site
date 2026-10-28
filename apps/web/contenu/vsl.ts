@@ -177,6 +177,14 @@ export const messageRemyOptin = {
   },
 };
 
+/** Le premier paragraphe de la lettre de `/course`, dicté par Rémy et mis en
+ * phrase par l'agent : à valider. « Plusieurs millions d'euros » est un
+ * résultat de Rémy et non une promesse au lecteur, ce que son guide Google Ads
+ * accepte (« parler de ses propres résultats »), à condition d'en garder la
+ * preuve. C'est la formule déjà validée pour les slides 4 et 7. */
+export const ouvertureOptin =
+  "Je suis formateur depuis plus de dix ans, et j'ai réalisé plusieurs millions d'euros de chiffre d'affaires grâce à la stratégie que je m'apprête à vous dévoiler.";
+
 /** Les types d'offre surlignés en jaune dans la phrase d'ouverture, comme
  * l'étaient les voies, sur demande de Rémy. Sous-chaînes exactes de
  * `amorceVoies`. */

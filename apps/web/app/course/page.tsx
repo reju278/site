@@ -9,6 +9,7 @@ import {
 } from "@/components/ouvrir-inscription";
 import {
   messageRemyOptin,
+  ouvertureOptin,
   finOptin,
   fonctionRemy,
   surlignesOptin,
@@ -100,6 +101,7 @@ export default function Course() {
           lien={(libelle) => <OuvrirInscription>{libelle}</OuvrirInscription>}
           fonction={fonctionRemy}
           surlignes={surlignesOptin}
+          ouverture={ouvertureOptin}
           fin={
             <div className="flex flex-col gap-6">
               <p>
