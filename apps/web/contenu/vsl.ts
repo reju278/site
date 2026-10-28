@@ -19,6 +19,13 @@ export const API_FUNNELS =
 export const CLE_CONTACT_VSL = "vsl-contact";
 
 export const optinVsl = {
+  /* La pilule de réassurance tout en haut, dictée par Rémy. Le chiffre est
+     le sien ; c'est une allégation commerciale, à pouvoir justifier. */
+  pilule: {
+    avant: "Tunnel de vente mis en place dans ",
+    fort: "plus de 1 000 business",
+    apres: " de formation ou de coaching",
+  },
   /* Dicté par Rémy. Les guillemets sont ceux qu'il a demandés, anglais et non
      français, dans leur forme typographique (“ ”) plutôt que droite. Les deux
      mises en avant en bleu sont celles du titre précédent, reportées sur les
@@ -138,3 +145,52 @@ export const legalesVsl = [
   { libelle: "Confidentialité", href: "/course/confidentialite" },
   { libelle: "Mentions", href: "/course/mentions" },
 ] as const;
+
+/**
+ * « Qui je suis », sous la note des avis de `/course`, dictée par Rémy.
+ *
+ * **Ses mots, à peine resserrés** : la dictée est mise en phrases, sans rien
+ * ajouter ni reformuler. « accompagner d'autres personnes à eux aussi bien
+ * vivre » devient « à, elles aussi, bien vivre » pour l'accord. La phrase sur
+ * le livre est écrite par l'agent, à partir des chiffres de la fiche Amazon
+ * que Rémy a fournie le 28 octobre 2026 : 4,6 sur 5, 267 avis. « Plus de 250 »
+ * reste vrai quand les avis montent ; la note, elle, se revérifie.
+ *
+ * Les chiffres (dix ans, plusieurs millions d'euros, plus de 1 000 personnes)
+ * sont les siens : ce sont des allégations commerciales, à pouvoir justifier.
+ */
+export type MorceauTexte = string | { gras: string };
+
+export const quiJeSuis = {
+  /* « Qui suis-je » en titre et « Je m'appelle Rémy Jupille » dessous, sur
+     demande de Rémy ; le premier paragraphe ne redit donc plus son nom. */
+  titre: "Qui suis-je",
+  presentation: "Je m'appelle Rémy Jupille",
+  portrait: "/vsl/remy-portrait.webp",
+  paragraphes: [
+    [
+      "Je vends mes propres formations depuis ",
+      { gras: "plus de 10 ans" },
+      ", et j'ai généré ",
+      { gras: "plusieurs millions d'euros de chiffre d'affaires" },
+      ".",
+    ],
+    [
+      "Aujourd'hui, je suis passionné par l'idée d'accompagner d'autres personnes à, elles aussi, bien vivre de leur activité de formation ou de coaching.",
+    ],
+    [
+      "C'est pour ça que j'ai créé ",
+      { gras: "Funnels Club" },
+      ", mon accompagnement, avec lequel j'ai déjà accompagné ",
+      { gras: "plus de 1 000 personnes" },
+      " à mettre en place le parfait tunnel de vente que j'ai identifié pour réussir : pour attirer des clients qualifiés et les convertir, même pour des offres jusqu'à plusieurs milliers d'euros.",
+    ],
+    [
+      "J'ai aussi écrit le livre ",
+      { gras: "Digital Selfmade" },
+      ", noté ",
+      { gras: "4,6 sur 5" },
+      " par plus de 250 lecteurs sur Amazon.",
+    ],
+  ] satisfies readonly (readonly MorceauTexte[])[],
+};
