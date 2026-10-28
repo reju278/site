@@ -16,7 +16,7 @@ import {
 } from "@repo/ui/components/dialog";
 import { Input } from "@repo/ui/components/input";
 import { LoaderCircle, Lock, Play } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * L'opt-in de la formation gratuite : l'aperçu de la vidéo et le bouton
@@ -33,6 +33,7 @@ import { useRef, useState } from "react";
  */
 export function InscriptionVsl() {
   const [ouvert, setOuvert] = useState(false);
+  useZoneVisible(ouvert);
   const { fenetre } = optinVsl;
 
   return (
@@ -87,9 +88,16 @@ export function InscriptionVsl() {
       </div>
 
       <Dialog open={ouvert} onOpenChange={setOuvert}>
-        <DialogContent className="max-w-md gap-0 p-0 sm:max-w-md">
-          <div className="border-b px-6 pt-7 pb-5 text-center">
-            <DialogTitle className="titre text-2xl text-balance">
+        {/* **Sur téléphone, la fenêtre se cale sur ce qu'on voit vraiment**,
+            sur signalement de Rémy : centrée sur l'écran entier, elle passait
+            pour moitié sous le clavier d'iPhone, case et bouton compris. Elle
+            se colle donc en haut de la zone visible et en prend la hauteur au
+            plus, en défilant à l'intérieur, les deux valeurs venant de
+            `visualViewport` (voir `useZoneVisible`). Au-dessus de `sm`, elle
+            reste centrée comme les autres fenêtres du site. */}
+        <DialogContent className="top-[calc(var(--zone-visible-haut,0px)+0.75rem)] max-h-[calc(var(--zone-visible-hauteur,100dvh)-1.5rem)] max-w-md translate-y-0 gap-0 overflow-y-auto overscroll-contain p-0 sm:top-[50%] sm:max-h-none sm:max-w-md sm:translate-y-[-50%] sm:overflow-visible">
+          <div className="border-b px-6 pt-5 pb-4 text-center sm:pt-7 sm:pb-5">
+            <DialogTitle className="titre text-xl text-balance sm:text-2xl">
               {fenetre.titre}
             </DialogTitle>
             <DialogDescription className="mt-1.5 text-sm">
@@ -173,6 +181,7 @@ function Formulaire() {
     <form
       ref={formulaire}
       onSubmit={valider}
+      onFocus={recentrer}
       className="flex flex-col gap-3 px-6 pt-5 pb-6"
     >
       {/* Les trois champs portent leur `data-cf-element` : c'est ce que le
@@ -321,4 +330,49 @@ function ApercuVideo({ ouvrir }: { ouvrir: () => void }) {
       </span>
     </button>
   );
+}
+
+/**
+ * Publie la zone de l'écran réellement visible pendant que la fenêtre est
+ * ouverte : `--zone-visible-haut` et `--zone-visible-hauteur` sur la racine.
+ *
+ * Sur iPhone, le clavier ne réduit pas la page, il la recouvre : `100vh` et
+ * `100dvh` gardent leur valeur, et seul `visualViewport` dit ce qui reste
+ * au-dessus du clavier, et de combien la page a glissé pour montrer le champ.
+ * Les deux sont relus à chaque changement, ouverture et fermeture du clavier
+ * comprises.
+ */
+function useZoneVisible(actif: boolean) {
+  useEffect(() => {
+    const zone = window.visualViewport;
+    if (!actif || !zone) return;
+    const racine = document.documentElement.style;
+    const publier = () => {
+      racine.setProperty("--zone-visible-haut", `${zone.offsetTop}px`);
+      racine.setProperty("--zone-visible-hauteur", `${zone.height}px`);
+    };
+    publier();
+    zone.addEventListener("resize", publier);
+    zone.addEventListener("scroll", publier);
+    return () => {
+      zone.removeEventListener("resize", publier);
+      zone.removeEventListener("scroll", publier);
+      racine.removeProperty("--zone-visible-haut");
+      racine.removeProperty("--zone-visible-hauteur");
+    };
+  }, [actif]);
+}
+
+/**
+ * Ramène au milieu de la fenêtre le champ qu'on vient de toucher, une fois le
+ * clavier sorti : iOS fait défiler la page, pas la fenêtre, et le champ
+ * suivant pouvait rester sous le clavier. Sur ordinateur, la fenêtre ne
+ * défile pas, donc rien ne bouge.
+ */
+function recentrer(evenement: React.FocusEvent<HTMLFormElement>) {
+  const champ = evenement.target;
+  if (!(champ instanceof HTMLElement)) return;
+  window.setTimeout(() => {
+    champ.scrollIntoView({ block: "center", behavior: "smooth" });
+  }, 300);
 }
