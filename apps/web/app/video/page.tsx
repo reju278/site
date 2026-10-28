@@ -7,6 +7,7 @@ import { reservationAppel } from "@/contenu/appel";
 import { videoVsl } from "@/contenu/vsl";
 import { avecReglages } from "@/lib/reglages-seo";
 import type { Metadata } from "next";
+import Script from "next/script";
 import { preconnect } from "react-dom";
 
 /**
@@ -23,6 +24,11 @@ const metadonnees: Metadata = {
   title: { absolute: "Votre vidéo de formation · Funnels Club" },
   description:
     "La vidéo de formation gratuite de Funnels Club, puis votre appel gratuit de 30 minutes avec l'équipe.",
+  /* Le jeton de page externe de ClickFunnels : l'étape « VSL » du tunnel
+     « 2026 : Direct VSL (Claude) », celle vers laquelle ClickFunnels renvoie
+     après l'opt-in de `/course`. Le SDK chargé plus bas le lit dans le
+     `head`. */
+  other: { "cf-page-token": "cfp_l60xdzWdOgmVukEK736PxYux" },
 };
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -76,6 +82,12 @@ export default function Video() {
           className="w-full"
         />
       </section>
+      {/* Le SDK de ClickFunnels, qui compte la visite dans l'étape du tunnel.
+          `afterInteractive`, comme sur `/course` et `/thanks`. */}
+      <Script
+        src="https://sdk.myclickfunnels.com/sdk.js"
+        strategy="afterInteractive"
+      />
     </main>
   );
 }
