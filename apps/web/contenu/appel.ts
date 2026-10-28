@@ -22,15 +22,8 @@ export const identiteAppel = {
 } as const;
 
 export const reservationAppel = {
-  /* Dicté par Rémy. Les guillemets droits de sa dictée sont rendus en
-     guillemets français, avec leurs espaces insécables, comme partout sur le
-     site. */
-  titre: [
-    {
-      texte:
-        "Nous allons mettre en place le PARFAIT «\u00a0tunnel de vente\u00a0» pour vendre votre offre digitale* (même si vous ne l'avez pas encore créée)",
-    },
-  ],
+  /* À valider par Rémy. */
+  titre: [{ texte: "Réservez votre appel" }],
   /* Dicté par Rémy. */
   sousTitre:
     "Nous vous accompagnons à travers toutes les étapes de votre business de formation, du lancement jusqu'à 6 ou 7 chiffres par an.",
