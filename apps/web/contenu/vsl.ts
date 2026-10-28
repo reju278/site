@@ -232,12 +232,9 @@ export const titreTemoignagesVsl = [
   { texte: "attirer leurs clients", accent: true },
 ] as const;
 
-/** La mention de résultats de `/course`, dans le pied de page sous les
- * avertissements, sur décision de Rémy. Le texte est le « disclaimer type »
- * de son guide de conformité Google Ads (§5). Ce guide la demande aussi à côté
- * des témoignages chiffrés : Rémy a choisi le pied de page seul. */
-export const mentionTemoignagesVsl =
-  "Résultats individuels, non garantis. Ceci n'est pas une opportunité de gain garanti : les résultats présentés ne sont pas typiques et dépendent de votre travail. Nous ne garantissons aucun revenu.";
+/** Le sous-titre de la section, dicté par Rémy. */
+export const sousTitreTemoignagesVsl =
+  "Chacun des témoignages ci-dessous sera accessible plus tard si vous souhaitez regarder la vidéo en intégralité. Il s'agit de vrais témoignages de vraies personnes que l'on a vraiment interviewées en vidéo.";
 
 export const temoignagesVsl = [
   {

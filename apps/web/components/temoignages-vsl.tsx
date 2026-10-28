@@ -1,7 +1,12 @@
 import { BoutonOuvrirInscription } from "@/components/ouvrir-inscription";
 import { avisDe } from "@/contenu/avis";
 import { temoignages } from "@/contenu/site";
-import { optinVsl, temoignagesVsl, titreTemoignagesVsl } from "@/contenu/vsl";
+import {
+  optinVsl,
+  sousTitreTemoignagesVsl,
+  temoignagesVsl,
+  titreTemoignagesVsl,
+} from "@/contenu/vsl";
 import { prenom } from "@/lib/prenom";
 import { insecables } from "@/lib/typographie";
 import Image from "next/image";
@@ -50,6 +55,9 @@ export function TemoignagesVsl() {
             ),
           )}
         </h2>
+        <p className="mt-4 text-base text-pretty text-muted-foreground sm:text-lg">
+          {insecables(sousTitreTemoignagesVsl)}
+        </p>
       </div>
 
       <ul className="mx-auto mt-10 grid max-w-4xl grid-cols-1 gap-5 sm:mt-12 sm:grid-cols-2">

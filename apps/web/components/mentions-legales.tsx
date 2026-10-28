@@ -23,12 +23,8 @@ import Link from "next/link";
 export function MentionsLegales({
   nouvelOnglet = false,
   liens = legales,
-  mention,
   className,
 }: {
-  /** Un paragraphe de plus sous les avertissements, pour une page qui en a
-   * besoin : la mention de résultats de `/course`. */
-  mention?: string;
   /**
    * Les adresses des pages légales. Le VSL Funnel a les siennes
    * (`/course/…`) : mêmes textes, sous le tunnel.
@@ -56,7 +52,6 @@ export function MentionsLegales({
           {texte}
         </p>
       ))}
-      {mention ? <p className="max-w-5xl text-pretty">{mention}</p> : null}
 
       <nav aria-label="Mentions légales" className="pt-2">
         <ul className="flex flex-wrap gap-x-5 gap-y-1">
