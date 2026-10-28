@@ -241,7 +241,7 @@ export function StrategieVsl({
               ? `${strategieVsl.offreA} ${euros.format(calcul.prix)}`
               : strategieVsl.petitPrix
           }
-          colonneApres={`${strategieVsl.offreA} ${euros.format(calcul.cible ?? calcul.prix)}`}
+          colonneApres={`${strategieVsl.offreA} ${euros.format(calcul.cible ?? calcul.prix)}${calcul.cible ? ` ${strategieVsl.exemple}` : ""}`}
           lignes={[
             ...(calcul.cible
               ? [

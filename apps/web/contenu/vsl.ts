@@ -269,6 +269,9 @@ export const strategieVsl = {
   titrePrix: "Pourquoi vendre plus cher",
   petitPrix: "Petit prix",
   offreA: "Offre à",
+  /* À côté du prix visé, sur demande de Rémy : c'est un exemple, pas un prix
+     imposé, pour ne pas effrayer qui a peur de monter le sien. */
+  exemple: "(exemple)",
   critereClients: "Clients par mois pour",
   clients: "clients",
   lignesPrix: [
