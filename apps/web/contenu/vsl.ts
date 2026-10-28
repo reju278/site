@@ -354,13 +354,20 @@ export const strategieVsl = {
       },
     ],
   },
-  /* Sous le tableau, pour aller dans le sens de la personne, sur demande de
-     Rémy : on l'aide quel que soit son prix, et à le monter si elle veut
-     atteindre son objectif plus facilement. */
-  rassurancePrix:
-    "Quoi qu'il arrive, on t'aide à vendre ton offre au prix que tu as fixé. Et si tu veux atteindre ton objectif plus facilement, on t'aide à monter ton tarif : plus on vend cher, moins il faut de clients.",
-  rassurancePrixHaut:
-    "Tu vends déjà au bon niveau de prix. On t'aide à attirer chaque mois les clients qu'il te faut pour atteindre ton objectif.",
+  /* L'encadré sous le tableau, pour aller dans le sens de la personne, sur
+     demande de Rémy : on l'aide quel que soit son prix, et à le monter si
+     elle veut atteindre son objectif plus facilement. De l'agent, à valider.
+     `{objectif}` et `{clients}` sont remplacés à l'affichage. */
+  rassurancePrix: {
+    accroche: "Ton prix, ta décision.",
+    texte:
+      "On t'aide à vendre ton offre au prix que tu as choisi. Et si tu veux atteindre {objectif} par mois plus vite, on t'aide à la valoriser pour la vendre plus cher : moins de clients à trouver, et bien plus de sérénité.",
+  },
+  rassurancePrixHaut: {
+    accroche: "Tu es déjà au bon niveau de prix.",
+    texte:
+      "Il ne te reste qu'à attirer chaque mois les {clients} clients qu'il te faut. C'est exactement le rôle de ton tunnel de vente.",
+  },
   titreTunnel: "Site internet VS tunnel de vente",
   colonneSite: "Site internet",
   colonneTunnel: "Tunnel Funnels Club",

@@ -6,7 +6,7 @@ import { jaune } from "@/components/titre-video-vsl";
 import { strategieVsl } from "@/contenu/vsl";
 import { usePrenomVsl, useReponsesVsl } from "@/lib/prenom-vsl";
 import { insecables } from "@/lib/typographie";
-import { Check, X } from "lucide-react";
+import { Check, ShieldCheck, X } from "lucide-react";
 import { Fragment, useMemo } from "react";
 
 const euros = new Intl.NumberFormat("fr-FR", {
@@ -283,13 +283,30 @@ export function StrategieVsl({
             ...strategieVsl.lignesPrix[gamme],
           ]}
         />
-        <p className="mt-4 text-base leading-relaxed text-pretty text-foreground sm:text-lg">
-          {insecables(
+        {/* L'encadré qui va dans le sens de la personne, sur demande de
+            Rémy : une accroche en gras, une phrase avec son objectif. */}
+        {(() => {
+          const encadre =
             gamme === "haut"
               ? strategieVsl.rassurancePrixHaut
-              : strategieVsl.rassurancePrix,
-          )}
-        </p>
+              : strategieVsl.rassurancePrix;
+          return (
+            <div className="mt-5 flex gap-3 rounded-md border border-primary/25 bg-primary/5 p-4 sm:p-5">
+              <ShieldCheck
+                aria-hidden
+                className="mt-0.5 size-5 shrink-0 text-primary"
+              />
+              <p className="text-base leading-relaxed text-pretty text-foreground">
+                <strong className="font-semibold">{encadre.accroche}</strong>{" "}
+                {insecables(
+                  encadre.texte
+                    .replace("{objectif}", euros.format(objectif))
+                    .replace("{clients}", String(calcul.apres.clients)),
+                )}
+              </p>
+            </div>
+          );
+        })()}
 
         <h3 className="titre mt-10 text-xl text-balance text-foreground sm:text-2xl">
           {strategieVsl.titreTunnel}
