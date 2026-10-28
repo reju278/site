@@ -294,16 +294,30 @@ export function StrategieVsl({
             /* Au dessin de l'encadré d'appel des entretiens, sur demande
                de Rémy : une carte blanche, un titre, une phrase, sans
                icône. */
-            <div className="relief-verre mt-6 rounded-md border border-border bg-card p-6 sm:p-8">
+            <div className="relief-verre mt-6 rounded-md border border-border bg-background p-6 sm:p-8">
               <p className="titre text-2xl text-balance text-card-foreground sm:text-3xl">
                 {insecables(encadre.accroche)}
               </p>
               <p className="mt-3 text-base leading-relaxed text-pretty text-muted-foreground sm:text-lg">
-                {insecables(
-                  encadre.texte
-                    .replace("{objectif}", euros.format(objectif))
-                    .replace("{clients}", String(calcul.apres.clients)),
-                )}
+                {/* L'objectif et le nombre de clients au surligneur jaune,
+                    comme les chiffres du reste de la page. */}
+                {insecables(encadre.texte)
+                  .split(/(\{\w+\})/)
+                  .map((morceau, i) => {
+                    const valeur =
+                      morceau === "{objectif}"
+                        ? `${euros.format(objectif)} par mois`
+                        : morceau === "{clients}"
+                          ? `${calcul.apres.clients} clients`
+                          : null;
+                    return valeur ? (
+                      <mark key={i} className="surlignage" style={jaune}>
+                        {insecables(valeur)}
+                      </mark>
+                    ) : (
+                      morceau
+                    );
+                  })}
               </p>
             </div>
           );

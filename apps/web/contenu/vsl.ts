@@ -361,12 +361,12 @@ export const strategieVsl = {
   rassurancePrix: {
     accroche: "Ton prix, ta décision.",
     texte:
-      "On t'aide à vendre ton offre au prix que tu as choisi. Et si tu veux atteindre {objectif} par mois plus vite, on t'aide à la valoriser pour la vendre plus cher : moins de clients à trouver, et bien plus de sérénité.",
+      "On t'aide à vendre ton offre au prix que tu as choisi. Et si tu veux atteindre {objectif} plus vite, on t'aide à la valoriser pour la vendre plus cher : moins de clients à trouver, et bien plus de sérénité.",
   },
   rassurancePrixHaut: {
     accroche: "Tu es déjà au bon niveau de prix.",
     texte:
-      "Il ne te reste qu'à attirer chaque mois les {clients} clients qu'il te faut. C'est exactement le rôle de ton tunnel de vente.",
+      "Il ne te reste qu'à attirer chaque mois les {clients} qu'il te faut. C'est exactement le rôle de ton tunnel de vente.",
   },
   titreTunnel: "Site internet VS tunnel de vente",
   colonneSite: "Site internet",
