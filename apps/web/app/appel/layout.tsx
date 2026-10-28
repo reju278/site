@@ -3,6 +3,7 @@ import { MentionsLegales } from "@/components/mentions-legales";
 import { PiedImmersion } from "@/components/pied-immersion";
 import { reservationAppel } from "@/contenu/appel";
 import type { Metadata } from "next";
+import Script from "next/script";
 
 /**
  * Le cadre de la page de réservation d'appel.
@@ -22,6 +23,11 @@ export const metadata: Metadata = {
     nocache: true,
     noimageindex: true,
   },
+  /* Le jeton de page externe de ClickFunnels : l'étape « Appel » du tunnel
+     « 2026 : Direct VSL (Claude) ». Le SDK chargé plus bas le lit dans le
+     `head`. Dans le gabarit et non dans la page, comme sur `/thanks` : la
+     route n'a pas de sous-pages qui fausseraient le compte des visites. */
+  other: { "cf-page-token": "cfp_iQFkFSWVIfD3rZi0CRyQrLrw" },
 };
 
 export default function LayoutAppel({
@@ -53,6 +59,12 @@ export default function LayoutAppel({
       <PiedImmersion>
         <MentionsLegales nouvelOnglet />
       </PiedImmersion>
+      {/* Le SDK de ClickFunnels, qui compte la visite dans l'étape du tunnel.
+          `afterInteractive`, comme sur les autres étapes. */}
+      <Script
+        src="https://sdk.myclickfunnels.com/sdk.js"
+        strategy="afterInteractive"
+      />
     </div>
   );
 }
