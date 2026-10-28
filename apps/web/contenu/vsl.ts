@@ -266,13 +266,19 @@ export const strategieVsl = {
      premier viennent de sa vidéo sur les prix (« multiplier vos prix par
      10 »), ceux du second de la VSL ; resserrés par l'agent pour tenir dans
      une case de téléphone, à valider. */
-  titrePrix: "Pourquoi vendre plus cher",
-  petitPrix: "Petit prix",
-  offreA: "Offre à",
-  /* À côté du prix visé, sur demande de Rémy : c'est un exemple, pas un prix
-     imposé, pour ne pas effrayer qui a peur de monter le sien. */
-  exemple: "(exemple)",
-  critereClients: "Clients par mois pour",
+  /* Le premier tableau, sans « vendre plus cher » ni prix visé, sur
+     demande de Rémy qui craignait l'objection : le prix qu'il a indiqué dans
+     le formulaire, face à une offre à 2 000 € minimum, pour atteindre son
+     objectif. S'il vend déjà à 2 000 € ou plus, son prix passe à droite,
+     face à une offre à petit prix. `{objectif}` et `{tranche}` sont
+     remplacés à l'affichage. */
+  titrePrix: "Comment atteindre {objectif} par mois",
+  tonPrix: "Ton prix : {tranche}",
+  prixMinimum: 2000,
+  offreMinimum: "Offre à 2 000 € minimum",
+  prixBas: 200,
+  offreBasse: "Offre à petit prix (200 €)",
+  critereClients: "Clients par mois",
   clients: "clients",
   lignesPrix: [
     {
@@ -296,7 +302,7 @@ export const strategieVsl = {
       apres: "De quoi offrir un service exceptionnel",
     },
   ],
-  titreTunnel: "Site internet ou tunnel de vente",
+  titreTunnel: "Site internet VS tunnel de vente",
   colonneSite: "Site internet",
   colonneTunnel: "Tunnel Funnels Club",
   lignesTunnel: [
@@ -412,12 +418,13 @@ export const strategieVsl = {
       "iy3jgcijgu",
     ],
   } as Record<string, readonly string[]>,
+  /* Le prix retenu pour compter les clients de chaque tranche. */
   prix: {
-    "Moins de 500€": { prix: 500, cible: 1500 },
-    "500€ à 2 000€": { prix: 1000, cible: 3000 },
-    "2 000€ à 5 000€": { prix: 3000, cible: 6000 },
-    "Plus de 5 000€": { prix: 6000, cible: null },
-  } as Record<string, { prix: number; cible: number | null }>,
+    "Moins de 500€": 500,
+    "500€ à 2 000€": 1000,
+    "2 000€ à 5 000€": 3000,
+    "Plus de 5 000€": 6000,
+  } as Record<string, number>,
   montants: {
     "Moins de 5000€ /mois": 5000,
     "Entre 5000€ et 10 000€ /mois": 10000,

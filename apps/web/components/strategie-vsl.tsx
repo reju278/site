@@ -166,9 +166,11 @@ function TableauComparatif({
  * rend rien, plutôt qu'une stratégie « personnalisée » faite de valeurs par
  * défaut.
  *
- * **Deux tableaux comparatifs**, sur demande de Rémy : « Pourquoi vendre plus
- * cher » (son prix et le prix visé, les clients qu'il faut, puis les
- * arguments de sa vidéo sur les prix), et « Site internet ou tunnel de vente »
+ * **Deux tableaux comparatifs**, sur demande de Rémy : « Comment atteindre
+ * {objectif} par mois » (le prix indiqué dans le formulaire face à une offre
+ * à 2 000 € minimum, les clients qu'il faut, puis les arguments de sa vidéo
+ * sur les prix ; sans prix visé ni « vendre plus cher », qui faisaient
+ * naître l'objection), et « Site internet ou tunnel de vente »
  * (les arguments de la VSL). Une courbe Bklit, un avant/après puis un tableau
  * unique ont été essayés avant.
  *
@@ -193,15 +195,34 @@ export function StrategieVsl({
     : undefined;
 
   const calcul = useMemo(() => {
-    if (!tranchePrix || !objectif) return null;
-    const { prix, cible } = tranchePrix;
-    return {
-      prix,
-      cible,
-      clients: Math.ceil(objectif / prix),
-      clientsCible: cible ? Math.ceil(objectif / cible) : null,
+    if (!tranchePrix || !objectif || !reponses?.prix) return null;
+    const { prixMinimum, prixBas } = strategieVsl;
+    const sien = {
+      entete: strategieVsl.tonPrix.replace("{tranche}", reponses.prix),
+      prix: tranchePrix,
+      clients: Math.ceil(objectif / tranchePrix),
     };
-  }, [tranchePrix, objectif]);
+    /* Sous 2 000 €, son prix est à gauche, face à une offre à 2 000 €
+       minimum ; à partir de 2 000 €, il est à droite, face à une offre à
+       petit prix. La colonne de droite est toujours celle qui marche. */
+    return tranchePrix < prixMinimum
+      ? {
+          avant: sien,
+          apres: {
+            entete: strategieVsl.offreMinimum,
+            prix: prixMinimum,
+            clients: Math.ceil(objectif / prixMinimum),
+          },
+        }
+      : {
+          avant: {
+            entete: strategieVsl.offreBasse,
+            prix: prixBas,
+            clients: Math.ceil(objectif / prixBas),
+          },
+          apres: sien,
+        };
+  }, [tranchePrix, objectif, reponses?.prix]);
 
   if (!reponses || !calcul || !objectif) return null;
 
@@ -233,26 +254,23 @@ export function StrategieVsl({
         }}
       >
         <h3 className="titre text-xl text-balance text-foreground sm:text-2xl">
-          {strategieVsl.titrePrix}
+          {insecables(
+            strategieVsl.titrePrix.replace(
+              "{objectif}",
+              euros.format(objectif),
+            ),
+          )}
         </h3>
         <TableauComparatif
-          colonneAvant={
-            calcul.cible
-              ? `${strategieVsl.offreA} ${euros.format(calcul.prix)}`
-              : strategieVsl.petitPrix
-          }
-          colonneApres={`${strategieVsl.offreA} ${euros.format(calcul.cible ?? calcul.prix)}${calcul.cible ? ` ${strategieVsl.exemple}` : ""}`}
+          colonneAvant={calcul.avant.entete}
+          colonneApres={calcul.apres.entete}
           lignes={[
-            ...(calcul.cible
-              ? [
-                  {
-                    critere: `${strategieVsl.critereClients} ${euros.format(objectif)}`,
-                    avant: `${calcul.clients} ${strategieVsl.clients}`,
-                    apres: `${calcul.clientsCible} ${strategieVsl.clients}`,
-                    chiffre: true,
-                  },
-                ]
-              : []),
+            {
+              critere: strategieVsl.critereClients,
+              avant: `${calcul.avant.clients} ${strategieVsl.clients} à ${euros.format(calcul.avant.prix)}`,
+              apres: `${calcul.apres.clients} ${strategieVsl.clients} à ${euros.format(calcul.apres.prix)}`,
+              chiffre: true,
+            },
             ...strategieVsl.lignesPrix,
           ]}
         />
