@@ -126,15 +126,21 @@ export function StrategieVsl({
                   valeurs, et le tableau n'a plus que deux colonnes. Trois
                   dans 300 px donnaient des cases de quatre mots par ligne. */}
               <td className="hidden sm:table-cell sm:w-[34%]" />
+              {/* **Les deux en-têtes restent en haut de l'écran** tant qu'on
+                  est dans le tableau, sur demande de Rémy : sur téléphone, le
+                  tableau fait plus d'un écran, et on ne savait plus quelle
+                  colonne on lisait. Fonds opaques, sinon les lignes défilent
+                  au travers. Même rembourrage des deux côtés, pour que les
+                  deux libellés soient sur la même ligne. */}
               <th
                 scope="col"
-                className="px-2 pb-3 text-xs font-semibold tracking-wide text-muted-foreground uppercase sm:px-4 sm:text-sm"
+                className="sticky top-0 z-10 bg-[color-mix(in_srgb,var(--foreground)_4%,var(--background))] px-2 py-3 align-middle text-xs font-semibold tracking-wide text-muted-foreground uppercase sm:static sm:bg-transparent sm:px-4 sm:text-sm"
               >
                 {strategieVsl.colonneAvant}
               </th>
               <th
                 scope="col"
-                className="rounded-t-md bg-primary/10 px-2 pt-3 pb-3 text-xs font-semibold tracking-wide text-primary uppercase sm:px-4 sm:text-sm"
+                className="sticky top-0 z-10 rounded-t-md bg-[color-mix(in_srgb,var(--primary)_10%,color-mix(in_srgb,var(--foreground)_4%,var(--background)))] px-2 py-3 align-middle text-xs font-semibold tracking-wide text-primary uppercase sm:static sm:px-4 sm:text-sm"
               >
                 {strategieVsl.colonneApres}
               </th>
