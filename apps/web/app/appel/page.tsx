@@ -35,7 +35,7 @@ const metadonnees: Metadata = {
 };
 
 export default function Appel() {
-  const { titre, sousTitre, calendly, hauteurMin } = reservationAppel;
+  const { titre, sousTitre, calendlyPageAppel, hauteurMin } = reservationAppel;
 
   /* La poignée de main avec Calendly commence dès l'en-tête du HTML, avant
      même que l'iframe soit lue : `calendly.com` sert sa page, `assets` ses
@@ -110,7 +110,7 @@ export default function Appel() {
               de vide transparent au-dessus de sa carte, et les 40 px de
               `/preparation` s'y ajoutaient. */}
           <FormulaireCalendly
-            url={calendly}
+            url={calendlyPageAppel}
             titre="Réserver votre appel avec Funnels Club"
             hauteurMin={hauteurMin}
             className="mt-8 w-full sm:mt-0"
