@@ -6,12 +6,7 @@ import { jaune } from "@/components/titre-video-vsl";
 import { strategieVsl } from "@/contenu/vsl";
 import { usePrenomVsl, useReponsesVsl } from "@/lib/prenom-vsl";
 import { insecables } from "@/lib/typographie";
-import { Area } from "@repo/ui/components/charts/area";
-import { AreaChart } from "@repo/ui/components/charts/area-chart";
-import { Grid } from "@repo/ui/components/charts/grid";
-import { useChartStable } from "@repo/ui/components/charts/chart-context";
-import { ChartTooltip } from "@repo/ui/components/charts/tooltip/chart-tooltip";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 
 const euros = new Intl.NumberFormat("fr-FR", {
   style: "currency",
@@ -28,217 +23,78 @@ function remplir(texte: string, valeurs: Record<string, string>) {
 }
 
 /**
- * Comme `remplir`, mais chaque valeur chiffrée passe au surligneur jaune,
- * celui de la lettre de `/course`, sur demande de Rémy : ce sont les points
- * clés de la phrase. Le prénom, lui, reste nu.
+ * Une rangée de points, un par client : on voit d'un coup d'œil qu'il en
+ * faut beaucoup d'un côté et peu de l'autre, sans rien lire. Au-delà de
+ * quarante, la rangée s'arrête sur « + », pour ne pas devenir une texture.
  */
-function remplirSurligne(texte: string, valeurs: Record<string, string>) {
-  return insecables(texte)
-    .split(/(\{\w+\})/)
-    .map((morceau, i) => {
-      const cle = /^\{(\w+)\}$/.exec(morceau)?.[1];
-      if (!cle || !(cle in valeurs)) return morceau;
-      if (cle === "prenom") return valeurs[cle];
-      return (
-        <mark key={i} className="surlignage" style={jaune}>
-          {insecables(valeurs[cle]!)}
-        </mark>
-      );
-    });
-}
-
-const eurosCourts = new Intl.NumberFormat("fr-FR", {
-  notation: "compact",
-  maximumFractionDigits: 1,
-});
-
-/**
- * Les valeurs de l'axe vertical, à gauche de la courbe, sur demande de Rémy :
- * zéro, l'objectif et le haut de l'échelle.
- *
- * **Son nom d'affichage est `YAxis`**, et c'est fonctionnel : Bklit range
- * sous le masque d'apparition tout ce qu'il ne reconnaît pas, masque qui
- * s'arrête au bord de la zone tracée et couperait ces étiquettes, posées dans
- * la marge. Il laisse dehors les composants qui portent ce nom.
- */
-function EtiquettesY({ valeurs }: { valeurs: number[] }) {
-  const { yScale } = useChartStable();
-  return (
-    <g aria-hidden className="fill-muted-foreground text-[11px] tabular-nums">
-      {valeurs.map((v) => (
-        <text key={v} x={-8} y={yScale(v)} dy="0.32em" textAnchor="end">
-          {`${eurosCourts.format(v)} €`}
-        </text>
-      ))}
-    </g>
-  );
-}
-EtiquettesY.displayName = "YAxis";
-
-/** Les nombres de clients sous la courbe. Même raison pour le nom. */
-function EtiquettesX({
-  points,
+function PointsClients({
+  nombre,
+  couleur,
 }: {
-  points: { date: Date; clients: number }[];
+  nombre: number;
+  couleur: string;
 }) {
-  const { xScale, innerHeight } = useChartStable();
+  const affiches = Math.min(nombre, 40);
   return (
-    <g aria-hidden className="fill-muted-foreground text-[11px] tabular-nums">
-      {points.map((p) => (
-        <text
-          key={p.clients}
-          x={xScale(p.date)}
-          y={innerHeight + 18}
-          textAnchor="middle"
-        >
-          {p.clients}
-        </text>
-      ))}
-    </g>
-  );
-}
-EtiquettesX.displayName = "XAxis";
-
-/**
- * Une étiquette en pastille, en SVG : un fond arrondi sous un texte court.
- * La largeur est estimée sur le nombre de caractères, ce qui suffit à des
- * libellés de quelques mots en 12 px.
- */
-function Pastille({
-  x,
-  y,
-  texte,
-  fond,
-  encre = "#fff",
-  ancre = "middle",
-}: {
-  x: number;
-  y: number;
-  texte: string;
-  fond: string;
-  encre?: string;
-  ancre?: "start" | "middle" | "end";
-}) {
-  const largeur = texte.length * 6.8 + 16;
-  const gauche =
-    ancre === "start" ? x : ancre === "end" ? x - largeur : x - largeur / 2;
-  return (
-    <g>
-      <rect
-        x={gauche}
-        y={y - 11}
-        width={largeur}
-        height={22}
-        rx={11}
-        style={{ fill: fond }}
-      />
-      <text
-        x={gauche + largeur / 2}
-        y={y}
-        dy="0.35em"
-        textAnchor="middle"
-        style={{ fill: encre }}
-      >
-        {texte}
-      </text>
-    </g>
-  );
-}
-
-/**
- * Les repères qui rendent la courbe lisible sans la toucher, sur demande de
- * Rémy : sur téléphone, il n'y a pas de survol, donc rien de ce que dit
- * l'infobulle ne se voit.
- *
- * - **Chaque courbe porte son nom à son extrémité**, « Ton prix actuel » et
- *   « Offre à … », au lieu d'une légende à part qu'il faut faire correspondre.
- * - **La ligne de l'objectif porte son montant**, en pastille.
- * - **Là où chaque courbe atteint l'objectif**, un point, une ligne jusqu'à
- *   l'axe et le nombre de clients en pastille de sa couleur.
- *
- * Même nom d'affichage que l'axe, pour la même raison : rester hors du
- * masque d'apparition, qui couperait les libellés posés près des bords.
- */
-function ReperesObjectif({
-  objectif,
-  libelleObjectif,
-  reperes,
-  courbes,
-}: {
-  objectif: number;
-  libelleObjectif: string;
-  reperes: { date: Date; libelle: string; couleur: string }[];
-  courbes: { date: Date; valeur: number; libelle: string; couleur: string }[];
-}) {
-  const { xScale, yScale, innerWidth, innerHeight } = useChartStable();
-  const y = yScale(objectif);
-  return (
-    <g aria-hidden className="text-[12px] font-semibold tabular-nums">
-      <line
-        x1={0}
-        x2={innerWidth}
-        y1={y}
-        y2={y}
-        stroke="var(--foreground)"
-        strokeOpacity={0.55}
-        strokeWidth={1.5}
-        strokeDasharray="6,4"
-      />
-      {reperes.map((repere) => {
-        const x = xScale(repere.date);
-        return (
-          <g key={repere.libelle + repere.couleur}>
-            <line
-              x1={x}
-              x2={x}
-              y1={y}
-              y2={innerHeight}
-              stroke={repere.couleur}
-              strokeOpacity={0.7}
-              strokeDasharray="3,3"
-            />
-            <circle
-              cx={x}
-              cy={y}
-              r={6}
-              style={{ fill: repere.couleur }}
-              stroke="var(--background)"
-              strokeWidth={2.5}
-            />
-            <Pastille
-              x={x}
-              y={innerHeight - 14}
-              texte={repere.libelle}
-              fond={repere.couleur}
-              ancre={x > innerWidth * 0.85 ? "end" : "middle"}
-            />
-          </g>
-        );
-      })}
-      {/* L'objectif, à gauche au-dessus de sa ligne : à gauche, les deux
-          courbes sont encore sous l'objectif, la place est libre. */}
-      <Pastille
-        x={4}
-        y={y - 18}
-        texte={libelleObjectif}
-        fond="var(--foreground)"
-        encre="var(--background)"
-        ancre="start"
-      />
-      {courbes.map((courbe) => (
-        <Pastille
-          key={courbe.libelle}
-          x={xScale(courbe.date) - 2}
-          y={yScale(courbe.valeur) - 18}
-          texte={courbe.libelle}
-          fond={courbe.couleur}
-          ancre="end"
+    <span aria-hidden className="mt-4 flex flex-wrap gap-1.5">
+      {Array.from({ length: affiches }, (_, i) => (
+        <span
+          key={i}
+          className="size-3 rounded-full"
+          style={{ backgroundColor: couleur }}
         />
       ))}
-    </g>
+      {nombre > affiches ? (
+        <span
+          className="text-xs leading-3 font-semibold"
+          style={{ color: couleur }}
+        >
+          +
+        </span>
+      ) : null}
+    </span>
   );
 }
-ReperesObjectif.displayName = "XAxis";
+
+/** Une colonne de l'avant/après : le prix, le nombre de clients, les points. */
+function Colonne({
+  etiquette,
+  prix,
+  clients,
+  mise,
+}: {
+  etiquette: string;
+  prix: string;
+  clients: number;
+  /** La colonne d'après, en bleu et cernée. */
+  mise?: boolean;
+}) {
+  const couleur = mise ? "var(--primary)" : "var(--muted-foreground)";
+  return (
+    <div
+      className={
+        mise
+          ? "rounded-md border-2 border-primary bg-background p-5"
+          : "rounded-md border border-foreground/10 bg-background/60 p-5"
+      }
+    >
+      <p
+        className="text-sm font-semibold tracking-wide uppercase"
+        style={{ color: couleur }}
+      >
+        {etiquette}
+      </p>
+      <p className="mt-2 text-base text-muted-foreground">{insecables(prix)}</p>
+      <p className="titre mt-1 text-4xl text-foreground tabular-nums sm:text-5xl">
+        {clients}
+        <span className="ml-2 text-base font-normal text-muted-foreground">
+          clients / mois
+        </span>
+      </p>
+      <PointsClients nombre={clients} couleur={couleur} />
+    </div>
+  );
+}
 
 /**
  * La stratégie personnalisée de `/video-vsl`, sous le bouton de réservation,
@@ -249,10 +105,11 @@ ReperesObjectif.displayName = "XAxis";
  * rend rien, plutôt qu'une stratégie « personnalisée » faite de valeurs par
  * défaut.
  *
- * **La courbe est l'aire de Bklit** : le chiffre d'affaires mensuel selon le
- * nombre de clients, au prix actuel et, quand la tranche en a une, au prix
- * visé. La ligne pointillée est l'objectif : là où chaque aire la franchit,
- * c'est le nombre de clients qu'il faut.
+ * **Un avant/après et non une courbe**, sur demande de Rémy, qui trouvait le
+ * graphique et ses phrases trop compliqués : une ligne pour l'objectif, puis
+ * deux colonnes, le prix actuel et le prix visé, chacune avec le nombre de
+ * clients qu'il faut et un point par client. La courbe Bklit a été essayée
+ * avant, avec ses repères ; elle demandait trop de lecture sur téléphone.
  *
  * **Les témoignages sont choisis par activité**, et rendus par le serveur :
  * la page passe une galerie par activité, et celle-ci n'affiche que la bonne.
@@ -267,18 +124,6 @@ export function StrategieVsl({
   const prenom = usePrenomVsl();
   const reponses = useReponsesVsl();
 
-  /* **Plus haute sur téléphone.** À 2/1 dans 300 px de large, la courbe
-     faisait 150 px de haut, et ses repères se marchaient dessus. Elle passe
-     au carré en dessous de 640 px. */
-  const [etroit, setEtroit] = useState(false);
-  useEffect(() => {
-    const requete = window.matchMedia("(max-width: 639px)");
-    const suivre = () => setEtroit(requete.matches);
-    suivre();
-    requete.addEventListener("change", suivre);
-    return () => requete.removeEventListener("change", suivre);
-  }, []);
-
   const tranchePrix = reponses?.prix
     ? strategieVsl.prix[reponses.prix]
     : undefined;
@@ -289,42 +134,17 @@ export function StrategieVsl({
   const calcul = useMemo(() => {
     if (!tranchePrix || !objectif) return null;
     const { prix, cible } = tranchePrix;
-    const clients = Math.ceil(objectif / prix);
-    /* En abscisse le nombre de clients par mois, en ordonnée le chiffre
-       d'affaires mensuel, sur demande de Rémy. L'axe de Bklit est un axe de
-       dates : chaque nombre de clients reçoit une date fictive, un jour par
-       client, qui ne s'affiche nulle part. On va un peu au-delà du nombre
-       nécessaire pour qu'on voie la ligne de l'objectif franchie. */
-    const fin = clients + Math.max(2, Math.ceil(clients / 4));
-    const donnees = Array.from({ length: fin + 1 }, (_, k) => ({
-      date: new Date(2026, 0, 1 + k),
-      clients: k,
-      actuel: k * prix,
-      ...(cible ? { cible: k * cible } : {}),
-    }));
     return {
       prix,
       cible,
-      clients,
+      clients: Math.ceil(objectif / prix),
       clientsCible: cible ? Math.ceil(objectif / cible) : null,
-      annee: clients * prix * 12,
-      anneeCible: cible ? clients * cible * 12 : null,
-      donnees,
     };
   }, [tranchePrix, objectif]);
 
   if (!reponses || !calcul || !objectif) return null;
 
-  const valeurs = {
-    prenom,
-    objectif: euros.format(objectif),
-    prix: euros.format(calcul.prix),
-    cible: calcul.cible ? euros.format(calcul.cible) : "",
-    clients: String(calcul.clients),
-    clientsCible: String(calcul.clientsCible ?? ""),
-    annee: euros.format(calcul.annee),
-    anneeCible: calcul.anneeCible ? euros.format(calcul.anneeCible) : "",
-  };
+  const valeurs = { prenom };
   const titre = prenom ? strategieVsl.titreAvecPrenom : strategieVsl.titre;
   const activite = reponses.activite
     ? strategieVsl.activites[reponses.activite]
@@ -349,113 +169,45 @@ export function StrategieVsl({
           {insecables(remplir(titre, valeurs))}
         </h2>
 
-        <p className="mt-5 text-lg leading-relaxed text-pretty text-foreground sm:text-xl">
-          {remplirSurligne(strategieVsl.phraseObjectif, valeurs)}
-        </p>
-        <p className="mt-3 text-lg leading-relaxed text-pretty text-foreground/85 sm:text-xl">
-          {remplirSurligne(
-            calcul.cible
-              ? strategieVsl.projection
-              : strategieVsl.projectionSansCible,
-            valeurs,
-          )}
+        {/* Une ligne, et l'objectif surligné : c'est tout le texte. */}
+        <p className="mt-4 text-center text-lg text-foreground sm:text-xl">
+          {insecables(strategieVsl.pourAtteindre)}{" "}
+          <mark className="surlignage" style={jaune}>
+            {insecables(euros.format(objectif))}
+          </mark>{" "}
+          {strategieVsl.parMois}
         </p>
 
-        <div className="mt-3">
-          <AreaChart
-            data={calcul.donnees}
-            aspectRatio={etroit ? "1 / 1" : "2 / 1"}
-            margin={{ top: 36, right: 12, bottom: 28, left: 52 }}
-          >
-            <Grid horizontal vertical={false} numTicksRows={3} />
-            {calcul.cible ? (
-              <Area
-                dataKey="cible"
-                fill="var(--primary)"
-                stroke="var(--primary)"
-                fillOpacity={0.35}
+        <div
+          className={
+            calcul.cible
+              ? "mt-6 grid grid-cols-1 items-stretch gap-3 sm:grid-cols-[1fr_auto_1fr]"
+              : "mx-auto mt-6 max-w-sm"
+          }
+        >
+          <Colonne
+            etiquette={calcul.cible ? strategieVsl.avant : strategieVsl.seul}
+            prix={`${strategieVsl.offreA} ${euros.format(calcul.prix)}`}
+            clients={calcul.clients}
+            mise={!calcul.cible}
+          />
+          {calcul.cible && calcul.clientsCible ? (
+            <>
+              <span
+                aria-hidden
+                className="flex items-center justify-center text-2xl text-primary sm:text-3xl"
+              >
+                <span className="sm:hidden">↓</span>
+                <span className="hidden sm:inline">→</span>
+              </span>
+              <Colonne
+                etiquette={strategieVsl.apres}
+                prix={`${strategieVsl.offreA} ${euros.format(calcul.cible)}`}
+                clients={calcul.clientsCible}
+                mise
               />
-            ) : null}
-            <EtiquettesY
-              valeurs={[
-                0,
-                Number(
-                  calcul.donnees.at(-1)?.cible ??
-                    calcul.donnees.at(-1)?.actuel ??
-                    0,
-                ),
-              ]}
-            />
-            <EtiquettesX
-              points={[calcul.donnees[0]!, calcul.donnees.at(-1)!]}
-            />
-            <ReperesObjectif
-              courbes={[
-                {
-                  date: calcul.donnees.at(-1)!.date,
-                  valeur: calcul.donnees.at(-1)!.actuel,
-                  libelle: remplir(strategieVsl.legendeActuel, valeurs),
-                  couleur: "var(--muted-foreground)",
-                },
-                ...(calcul.cible
-                  ? [
-                      {
-                        date: calcul.donnees.at(-1)!.date,
-                        valeur: Number(calcul.donnees.at(-1)!.cible),
-                        libelle: remplir(strategieVsl.legendeCible, valeurs),
-                        couleur: "var(--primary)",
-                      },
-                    ]
-                  : []),
-              ]}
-              objectif={objectif}
-              libelleObjectif={`Objectif : ${euros.format(objectif)}`}
-              reperes={[
-                {
-                  date: calcul.donnees[calcul.clients]!.date,
-                  libelle: `${calcul.clients} clients`,
-                  couleur: "var(--muted-foreground)",
-                },
-                ...(calcul.clientsCible
-                  ? [
-                      {
-                        date: calcul.donnees[calcul.clientsCible]!.date,
-                        libelle: `${calcul.clientsCible} clients`,
-                        couleur: "var(--primary)",
-                      },
-                    ]
-                  : []),
-              ]}
-            />
-            <Area
-              dataKey="actuel"
-              fill="var(--muted-foreground)"
-              stroke="var(--muted-foreground)"
-              fillOpacity={0.3}
-            />
-            <ChartTooltip
-              showDatePill={false}
-              content={({ point }: { point: Record<string, unknown> }) => (
-                <div className="rounded-md bg-popover px-3 py-2 text-sm text-popover-foreground shadow-md tabular-nums">
-                  <span className="block font-semibold">
-                    {Number(point.clients)}{" "}
-                    {Number(point.clients) > 1 ? "clients" : "client"}
-                  </span>
-                  <span className="block text-muted-foreground">
-                    {euros.format(Number(point.actuel))}
-                  </span>
-                  {point.cible !== undefined ? (
-                    <span className="block text-primary">
-                      {euros.format(Number(point.cible))}
-                    </span>
-                  ) : null}
-                </div>
-              )}
-            />
-          </AreaChart>
-          <p className="mt-1 text-center text-xs text-muted-foreground">
-            {strategieVsl.axeClients}
-          </p>
+            </>
+          ) : null}
         </div>
 
         {/* « Comment y arriver » : le paragraphe propre à l'activité, puis

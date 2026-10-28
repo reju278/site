@@ -263,26 +263,18 @@ export const questionnaireVsl = {
  * sur sa consigne) ; `montants` donne le montant mensuel retenu pour chaque
  * tranche d'objectif.
  *
- * `{prenom}`, `{objectif}`, `{prix}`, `{cible}`, `{clients}`,
- * `{clientsCible}`, `{annee}` et `{anneeCible}` sont remplacés à l'affichage.
+ * `{prenom}` est remplacé à l'affichage.
  */
 export const strategieVsl = {
-  /* La première phrase est dictée par Rémy ; les deux suivantes sont de
-     l'agent, écrites dans le même ton à sa demande. */
   titre: "Ta stratégie personnalisée",
   titreAvecPrenom: "{prenom}, voici ta stratégie personnalisée",
-  phraseObjectif:
-    "Comme tu vises {objectif} par mois, avec une offre à {prix}, il te faut donc {clients} clients par mois pour y arriver.",
-  /* Quand la tranche de prix a une cible. */
-  projection:
-    "Maintenant, si ton offre valait {cible}, il ne te faudrait plus que {clientsCible} clients par mois pour atteindre le même objectif. Et avec tes {clients} clients, ton année passerait de {annee} à {anneeCible}.",
-  /* Au-delà de 5 000 €, pas de prix plus haut à viser. */
-  projectionSansCible:
-    "Sur une année, ça représente donc {annee}. À ce prix, l'enjeu n'est plus de vendre plus cher, mais d'attirer chaque mois les bons clients.",
-  legendeActuel: "Ton prix actuel : {prix}",
-  /* L'axe des clients, sous la courbe. */
-  axeClients: "Nombre de clients par mois",
-  legendeCible: "Offre à {cible}",
+  /* L'avant/après, sur demande de Rémy : une ligne et deux colonnes. */
+  pourAtteindre: "Pour atteindre",
+  parMois: "par mois :",
+  avant: "Avant",
+  apres: "Après",
+  seul: "Ta stratégie",
+  offreA: "Offre à",
   titreActivite: "Comment on va y arriver ensemble",
   /* Les quatre axes de la VSL, repris de sa transcription (Wistia,
      « DIRECT VSL - MOTION GRAPHICS », de 0:30 à 2:15) et tutoyés. Les mots
