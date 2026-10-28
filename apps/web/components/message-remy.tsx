@@ -86,10 +86,17 @@ export function MessageRemy({
    * `AGENTS.md`.
    */
   ancreVideo = "#video",
+  /**
+   * Remplace les deux liens de la conclusion par ce rendu. Sur la page
+   * d'inscription de `/course`, la vidéo est fermée tant qu'on ne s'est pas
+   * inscrit : les deux libellés y ouvrent la fenêtre d'inscription.
+   */
+  lien,
 }: {
   contenu?: ContenuMessage;
   lienAppel?: string | null;
   ancreVideo?: string | null;
+  lien?: (libelle: string) => React.ReactNode;
 } = {}) {
   const lienInterne = lienAppel?.startsWith("#") ?? false;
 
@@ -358,31 +365,35 @@ export function MessageRemy({
             <Apparition>
               <p>
                 {contenu.conclusion.avant}
-              {/* Un libellé vide n'écrit rien : c'est ainsi qu'une
+                {/* Un libellé vide n'écrit rien : c'est ainsi qu'une
                   conclusion sans vidéo, celle d'`/appel`, s'écrit. */}
-              {!contenu.conclusion.lienVideo ? null : ancreVideo ? (
-                <a
-                  href={ancreVideo}
-                  className="font-semibold text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-                >
-                  {contenu.conclusion.lienVideo}
-                </a>
-              ) : (
-                contenu.conclusion.lienVideo
-              )}
-              {contenu.conclusion.milieu}
-              {lienAppel ? (
-                <a
-                  href={lienAppel}
-                  target={lienInterne ? undefined : "_blank"}
-                  rel={lienInterne ? undefined : "noreferrer"}
-                  className="font-semibold text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-                >
-                  {contenu.conclusion.lienAppel}
-                </a>
-              ) : (
-                contenu.conclusion.lienAppel
-              )}
+                {!contenu.conclusion.lienVideo ? null : lien ? (
+                  lien(contenu.conclusion.lienVideo)
+                ) : ancreVideo ? (
+                  <a
+                    href={ancreVideo}
+                    className="font-semibold text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                  >
+                    {contenu.conclusion.lienVideo}
+                  </a>
+                ) : (
+                  contenu.conclusion.lienVideo
+                )}
+                {contenu.conclusion.milieu}
+                {lien ? (
+                  lien(contenu.conclusion.lienAppel)
+                ) : lienAppel ? (
+                  <a
+                    href={lienAppel}
+                    target={lienInterne ? undefined : "_blank"}
+                    rel={lienInterne ? undefined : "noreferrer"}
+                    className="font-semibold text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                  >
+                    {contenu.conclusion.lienAppel}
+                  </a>
+                ) : (
+                  contenu.conclusion.lienAppel
+                )}
                 {contenu.conclusion.apres}
               </p>
             </Apparition>

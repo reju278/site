@@ -1,8 +1,9 @@
 import { CompteurVue } from "@/components/compteur-vue";
 import { InscriptionVsl } from "@/components/inscription-vsl";
 import { PreuveTrustpilot } from "@/components/preuve-trustpilot";
-import { QuiJeSuis } from "@/components/qui-je-suis";
-import { optinVsl } from "@/contenu/vsl";
+import { MessageRemy } from "@/components/message-remy";
+import { OuvrirInscription } from "@/components/ouvrir-inscription";
+import { messageRemyOptin, optinVsl } from "@/contenu/vsl";
 import { avecReglages } from "@/lib/reglages-seo";
 import type { Metadata } from "next";
 import Script from "next/script";
@@ -42,20 +43,6 @@ export default function Course() {
           mangent une centaine de pixels. */}
       <div className="mx-auto flex max-w-6xl flex-col gap-4 sm:gap-10">
         <header className="mx-auto flex max-w-4xl flex-col gap-2 text-center sm:gap-4">
-          {/* La pilule de réassurance, tout en haut, sur demande de Rémy : la
-              preuve avant la promesse. Pas d'icône : un contour fin en
-              dégradé du bleu du site, un fond de carte, et le chiffre mis en
-              valeur dans la phrase. Le contour est un fond d'un pixel autour
-              de la pilule, une bordure ne sachant pas porter de dégradé. */}
-          <p className="mx-auto max-w-full rounded-full bg-gradient-to-r from-primary/50 via-primary/15 to-primary/50 p-px shadow-[0_8px_24px_-12px_rgba(4,94,230,0.45)]">
-            <span className="block rounded-full bg-card px-4 py-1.5 text-xs leading-snug font-medium text-foreground/80 sm:px-5 sm:py-2 sm:text-sm">
-              {optinVsl.pilule.avant}
-              <strong className="font-bold text-primary">
-                {optinVsl.pilule.fort}
-              </strong>
-              {optinVsl.pilule.apres}
-            </span>
-          </p>
           <h1
             /* **Une taille fluide sur téléphone**, proportionnelle à la
                largeur de l'écran : mesuré de 320 à 430 px, c'est ce qui
@@ -86,7 +73,18 @@ export default function Course() {
         </header>
         <InscriptionVsl />
         <PreuveTrustpilot />
-        <QuiJeSuis />
+      </div>
+
+      {/* La lettre de Rémy, reprise de l'accueil, sous la note des avis. Ses
+          deux liens ouvrent la fenêtre d'inscription : la vidéo est fermée
+          tant qu'on ne s'est pas inscrit. La marge négative rend le
+          rembourrage que la lettre porte déjà, pour qu'il ne s'ajoute pas à
+          celui de la page. */}
+      <div className="-mx-5 mt-16 sm:mt-24">
+        <MessageRemy
+          contenu={messageRemyOptin}
+          lien={(libelle) => <OuvrirInscription>{libelle}</OuvrirInscription>}
+        />
       </div>
       {/* Le SDK de ClickFunnels, qui compte la visite dans l'étape du tunnel.
           `afterInteractive`, comme sur `/thanks` : rien ne doit retarder le

@@ -2,6 +2,7 @@
 
 import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { TexteRoulant } from "@/components/texte-roulant";
+import { OUVRIR_INSCRIPTION } from "@/components/ouvrir-inscription";
 import {
   API_FUNNELS,
   CLE_CONTACT_VSL,
@@ -29,6 +30,14 @@ import { useEffect, useRef, useState } from "react";
 export function InscriptionVsl() {
   const [ouvert, setOuvert] = useState(false);
   useZoneVisible(ouvert);
+
+  /* Les liens de la lettre de Rémy, plus bas sur la page, ouvrent aussi la
+     fenêtre : voir `OuvrirInscription`. */
+  useEffect(() => {
+    const ouvrir = () => setOuvert(true);
+    window.addEventListener(OUVRIR_INSCRIPTION, ouvrir);
+    return () => window.removeEventListener(OUVRIR_INSCRIPTION, ouvrir);
+  }, []);
   const { fenetre } = optinVsl;
 
   return (
