@@ -6,7 +6,7 @@ import { jaune } from "@/components/titre-video-vsl";
 import { strategieVsl } from "@/contenu/vsl";
 import { usePrenomVsl, useReponsesVsl } from "@/lib/prenom-vsl";
 import { insecables } from "@/lib/typographie";
-import { Check, ShieldCheck, X } from "lucide-react";
+import { Check, X } from "lucide-react";
 import { Fragment, useMemo } from "react";
 
 const euros = new Intl.NumberFormat("fr-FR", {
@@ -291,32 +291,19 @@ export function StrategieVsl({
               ? strategieVsl.rassurancePrixHaut
               : strategieVsl.rassurancePrix;
           return (
-            <div
-              className="relief-verre mt-6 flex items-start gap-4 rounded-md border border-primary/20 p-5 sm:p-6"
-              style={{
-                background:
-                  "linear-gradient(135deg, color-mix(in srgb, var(--primary) 12%, var(--background)), color-mix(in srgb, var(--primary) 4%, var(--background)))",
-              }}
-            >
-              {/* Le bouclier dans une pastille pleine : c'est le signe de
-                  l'encadré, et il se voit avant qu'on lise. */}
-              <span
-                aria-hidden
-                className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm"
-              >
-                <ShieldCheck className="size-5" />
-              </span>
-              <p className="min-w-0 text-base leading-relaxed text-pretty text-foreground/85">
-                <span className="titre block text-lg text-foreground sm:text-xl">
-                  {encadre.accroche}
-                </span>
-                <span className="mt-1 block">
-                  {insecables(
-                    encadre.texte
-                      .replace("{objectif}", euros.format(objectif))
-                      .replace("{clients}", String(calcul.apres.clients)),
-                  )}
-                </span>
+            /* Au dessin de l'encadré d'appel des entretiens, sur demande
+               de Rémy : une carte blanche, un titre, une phrase, sans
+               icône. */
+            <div className="relief-verre mt-6 rounded-md border border-border bg-card p-6 sm:p-8">
+              <p className="titre text-2xl text-balance text-card-foreground sm:text-3xl">
+                {insecables(encadre.accroche)}
+              </p>
+              <p className="mt-3 text-base leading-relaxed text-pretty text-muted-foreground sm:text-lg">
+                {insecables(
+                  encadre.texte
+                    .replace("{objectif}", euros.format(objectif))
+                    .replace("{clients}", String(calcul.apres.clients)),
+                )}
               </p>
             </div>
           );
