@@ -310,6 +310,18 @@ export function StrategieVsl({
                         : morceau === "{clients}"
                           ? `${calcul.apres.clients} clients`
                           : null;
+                    if (morceau === "{lien}")
+                      return (
+                        <a
+                          key={i}
+                          href={strategieVsl.appel.ancre}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="font-semibold text-primary underline decoration-primary/40 underline-offset-4 transition-colors hover:decoration-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                        >
+                          {strategieVsl.lienAppelEncadre}
+                        </a>
+                      );
                     return valeur ? (
                       <mark key={i} className="surlignage" style={jaune}>
                         {insecables(valeur)}
