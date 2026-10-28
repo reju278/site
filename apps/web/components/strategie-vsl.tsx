@@ -6,19 +6,8 @@ import { jaune } from "@/components/titre-video-vsl";
 import { strategieVsl } from "@/contenu/vsl";
 import { usePrenomVsl, useReponsesVsl } from "@/lib/prenom-vsl";
 import { insecables } from "@/lib/typographie";
-import {
-  Check,
-  GraduationCap,
-  MessagesSquare,
-  Sparkles,
-  Users,
-  Wrench,
-  X,
-} from "lucide-react";
+import { Check, X } from "lucide-react";
 import { Fragment, useMemo } from "react";
-
-/** Les icônes des composants de l'offre, dans l'ordre de `composantsOffre`. */
-const ICONES_OFFRE = [GraduationCap, Wrench, Users, MessagesSquare, Sparkles];
 
 const euros = new Intl.NumberFormat("fr-FR", {
   style: "currency",
@@ -288,79 +277,6 @@ export function StrategieVsl({
             {insecables(activite)}
           </p>
         ) : null}
-        {/* Ce que contient une offre à plusieurs milliers d'euros : des
-            tuiles, une par composant, l'IA en dernier et en violet, la teinte
-            qui dit « IA » sur le site (`--etincelle`). */}
-        <h4 className="mt-8 text-lg font-semibold text-balance text-foreground">
-          {strategieVsl.titreOffre}
-        </h4>
-        <p className="mt-2 text-base text-pretty text-muted-foreground">
-          {insecables(strategieVsl.introOffre)}
-        </p>
-        <ul className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {strategieVsl.composantsOffre.map((composant, rang) => {
-            const Icone = ICONES_OFFRE[rang] ?? Sparkles;
-            const ia = rang === strategieVsl.composantsOffre.length - 1;
-            return (
-              <li
-                key={composant.titre}
-                className="flex gap-3 rounded-md border border-foreground/10 bg-background/60 p-4"
-              >
-                <span
-                  aria-hidden
-                  className="flex size-9 shrink-0 items-center justify-center rounded-md"
-                  style={{
-                    backgroundColor: ia
-                      ? "color-mix(in srgb, var(--etincelle) 15%, transparent)"
-                      : "color-mix(in srgb, var(--primary) 12%, transparent)",
-                    color: ia ? "var(--etincelle)" : "var(--primary)",
-                  }}
-                >
-                  <Icone className="size-5" />
-                </span>
-                <span className="min-w-0">
-                  <span className="block font-semibold text-foreground">
-                    {composant.titre}
-                  </span>
-                  <span className="mt-0.5 block text-sm leading-relaxed text-pretty text-muted-foreground">
-                    {insecables(composant.texte)}
-                  </span>
-                </span>
-              </li>
-            );
-          })}
-        </ul>
-
-        {/* Le tunnel, en quatre pages qui se suivent : des flèches entre elles
-            en large, l'une sous l'autre sur téléphone. */}
-        <h4 className="mt-8 text-lg font-semibold text-balance text-foreground">
-          {strategieVsl.titreTunnelEtapes}
-        </h4>
-        <p className="mt-2 text-base text-pretty text-muted-foreground">
-          {insecables(strategieVsl.introTunnelEtapes)}
-        </p>
-        <ol className="mt-4 grid grid-cols-1 gap-3 lg:grid-cols-4">
-          {strategieVsl.etapesTunnel.map((etape, rang) => (
-            <li
-              key={etape.titre}
-              className="relative rounded-md border border-primary/25 bg-primary/5 p-4"
-            >
-              <span className="text-xs font-semibold tracking-wide text-primary uppercase">
-                {`Page ${rang + 1}`}
-              </span>
-              <span className="mt-1 block font-semibold text-foreground">
-                {etape.titre}
-              </span>
-              <span className="mt-1 block text-sm leading-relaxed text-pretty text-muted-foreground">
-                {insecables(etape.texte)}
-              </span>
-            </li>
-          ))}
-        </ol>
-        <p className="mt-3 text-sm text-pretty text-muted-foreground">
-          {insecables(strategieVsl.noteTunnel)}
-        </p>
-
         <h3 className="titre mt-10 text-xl text-balance text-foreground sm:text-2xl">
           {strategieVsl.introEtapes}
         </h3>
