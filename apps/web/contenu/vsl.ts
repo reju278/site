@@ -148,13 +148,13 @@ export const legalesVsl = [
  * **Le début et le titre changent, dictés par Rémy.** La lettre s'ouvre
  * directement sur les trois erreurs : la phrase sur les trois façons de vendre,
  * la liste qui suit et « Mais peu importe… » sont retirées. Le titre est sa
- * consigne, « Moi, c'est Rémy et j'ai un message pour vous », mise en forme
- * par l'agent : à valider. Tout le reste est la lettre de l'accueil, mot pour
+ * phrase, « Je m'appelle Rémy, et j'ai un message pour vous... ». Tout le
+ * reste est la lettre de l'accueil, mot pour
  * mot.
  */
 export const messageRemyOptin = {
   ...messageRemy,
-  titre: "Moi, c'est Rémy, et j'ai un message pour vous",
+  titre: "Je m'appelle Rémy, et j'ai un message pour vous...",
   amorceVoies:
     "Si vous souhaitez créer et vendre une formation en ligne, du coaching ou du consulting, ou même de la prestation de services, alors il y a trois erreurs que vous devez absolument éviter.",
   voies: [],
