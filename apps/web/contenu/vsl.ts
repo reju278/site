@@ -181,3 +181,92 @@ export const finOptin = {
 
 /** Sous la signature de la lettre de `/course`, dicté par Rémy. */
 export const fonctionRemy = "Fondateur de Funnels Club";
+
+/**
+ * Les témoignages sous la lettre de `/course`, sur demande de Rémy : des
+ * cartes au dessin de celles du hero d'`/immersion`, l'affiche de l'entretien
+ * en tête. Rien ne s'y clique : la preuve se lit sans rien ouvrir, et on ne
+ * sort pas du tunnel.
+ *
+ * **Chaque citation est au mot près**, prise dans les citations de l'article
+ * de la personne (`avis.ts`) ; `TemoignagesVsl` refuse de construire si l'une
+ * n'y figure plus. **Le choix de la citation est de l'agent, à valider par
+ * Rémy** : de préférence une phrase sur la méthode ou l'accompagnement plutôt
+ * qu'un montant, le résultat étant déjà dit par la ligne du dessous, qui est
+ * l'accroche de `temoignages`.
+ *
+ * **Les six premiers sont dans l'ordre dicté par Rémy** : Roland, Yannick et
+ * Sylvie, François, Olga, Corentin, Valérie. La suite est libre.
+ */
+export const temoignagesVsl = [
+  {
+    id: "rgio4y4o8f",
+    citation:
+      "C'est incroyable comme c'est mathématique finalement. Si tu fais ce qu'il faut faire, que tu appliques ce qu'il faut appliquer, et que tu connais ton métier.",
+  },
+  {
+    id: "2xege6bt0u",
+    citation:
+      "Il y a des phrases que Rémy a dites dans la formation qui ont été des électrochocs, et c'est ça qui nous a fait mettre en place des choses qui ont fait que notre chiffre a triplé.",
+  },
+  {
+    id: "b5taio9plc",
+    citation:
+      "On a nos fausses croyances, on croit qu'on sait, on croit que c'est comme ça qu'il faut faire. Le fait de pouvoir interagir, ça déverrouille plein de choses.",
+  },
+  {
+    id: "vtfaka0m80",
+    citation:
+      "Savoir que je pouvais vous envoyer le lien d'une page que j'avais faite et que vous alliez me dire si c'est ok, c'est hyper rassurant.",
+  },
+  {
+    id: "iy3jgcijgu",
+    citation:
+      "Vous ne parlez pas de tout et de rien pour dire qu'il y a beaucoup de contenu. Vous parlez seulement de l'essentiel, de ce qui est nécessaire.",
+  },
+  {
+    id: "4lkp9f6lm4",
+    citation:
+      "Je me suis mise sur les réseaux sociaux le vingt-huit août, et le trente et un août, j'avais déjà ma première cliente.",
+  },
+  {
+    id: "f2ie1v99b8",
+    citation:
+      "Ce n'est pas des gens qui sont là pour vendre pour vendre. Si le profil ne correspond pas, on vous le dit clairement.",
+  },
+  {
+    id: "abj3v8v8ek",
+    citation:
+      "Je t'ai fait confiance tout de suite, j'ai dit : ok, je prends la seconde. Et puis là, bingo. C'était la libération.",
+  },
+  {
+    id: "gcfo8miafe",
+    citation:
+      "Ce que Funnels Club m'a apporté, c'est deux choses : clarté et structuration.",
+  },
+  {
+    id: "2vtsinplyx",
+    citation:
+      "Simplification, étape par étape : c'est vraiment ce qui m'a le plus aidé dans le process.",
+  },
+  {
+    id: "brvvtbkmfo",
+    citation:
+      "Ça nous permet d'éviter de faire plusieurs erreurs et de gagner du temps, mais de manière phénoménale.",
+  },
+  {
+    id: "ive07co9xm",
+    citation:
+      "C'est important de se planter, mais on peut se planter de tellement de manières. Et il y a des gens qui sont passés avant nous.",
+  },
+  {
+    id: "tvy3jbhml9",
+    citation:
+      "Je suis face à quelqu'un qui sait de quoi il parle, et qui n'en fait pas plus que ça sur sa personne ou sur ses revenus.",
+  },
+  {
+    id: "s3npr5izhy",
+    citation:
+      "Vous nous guidez à chaque étape du processus, et en fait c'est impossible d'être perdu.",
+  },
+] as const;

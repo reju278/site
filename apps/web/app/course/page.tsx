@@ -1,6 +1,7 @@
 import { CompteurVue } from "@/components/compteur-vue";
 import { InscriptionVsl, ListePointsVsl } from "@/components/inscription-vsl";
 import { PreuveTrustpilot } from "@/components/preuve-trustpilot";
+import { TemoignagesVsl } from "@/components/temoignages-vsl";
 import { MessageRemy } from "@/components/message-remy";
 import {
   BoutonOuvrirInscription,
@@ -116,6 +117,7 @@ export default function Course() {
           }
         />
       </div>
+      <TemoignagesVsl />
       {/* Le SDK de ClickFunnels, qui compte la visite dans l'étape du tunnel.
           `afterInteractive`, comme sur `/thanks` : rien ne doit retarder le
           rendu. */}
