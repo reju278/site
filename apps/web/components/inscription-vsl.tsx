@@ -85,62 +85,8 @@ export function InscriptionVsl() {
           <Formulaire />
         </DialogContent>
       </Dialog>
-
-      {/* Le relais vers ClickFunnels, invisible.
-
-          C'est lui que le SDK prend en charge, et non le formulaire de la
-          fenêtre, parce que le SDK **remplace l'envoi** : il l'annule, puis
-          poste lui-même vers ClickFunnels par une navigation complète, qui
-          aurait pu couper en route l'envoi au CRM, donc l'étiquette
-          « inscription vsl » et la séquence. Ici, on ne le soumet qu'une fois
-          le CRM d'accord : ClickFunnels compte alors l'opt-in de l'étape, et
-          renvoie vers l'étape suivante du tunnel.
-
-          Toujours monté, hors de la fenêtre : le SDK le trouve au
-          chargement. Pas de `type="hidden"` sur les champs, que le SDK ne
-          lit pas forcément ; le `hidden` du formulaire suffit à les cacher,
-          et `tabIndex` à les sortir du clavier. */}
-      <form id={RELAIS_CLICKFUNNELS} hidden aria-hidden>
-        <input data-cf-element="first-name" name="first_name" tabIndex={-1} />
-        <input data-cf-element="email" name="email" type="email" tabIndex={-1} />
-      </form>
     </>
   );
-}
-
-const RELAIS_CLICKFUNNELS = "relais-clickfunnels";
-
-/**
- * Passe l'inscription au SDK de ClickFunnels, puis à l'étape suivante.
- *
- * Le SDK ne s'occupe que d'un formulaire qu'il a reconnu
- * (`data-cf-sdk-enhanced`) ; sinon, script bloqué ou pas encore chargé, on va
- * directement à `/video`. Et si sa navigation n'est pas partie au bout de
- * cinq secondes, en local par exemple, où l'adresse ne correspond pas à
- * l'étape enregistrée, on y va aussi : l'inscription est déjà au CRM, le
- * visiteur ne doit pas rester bloqué.
- */
-function continuer(prenom: string, email: string) {
-  const relais = document.getElementById(RELAIS_CLICKFUNNELS);
-  if (
-    relais instanceof HTMLFormElement &&
-    relais.dataset.cfSdkEnhanced === "true"
-  ) {
-    const champ = (nom: string) =>
-      relais.querySelector<HTMLInputElement>(`[data-cf-element="${nom}"]`);
-    const champPrenom = champ("first-name");
-    const champEmail = champ("email");
-    if (champPrenom && champEmail) {
-      champPrenom.value = prenom;
-      champEmail.value = email;
-      window.setTimeout(() => {
-        window.location.href = "/video";
-      }, 5000);
-      relais.requestSubmit();
-      return;
-    }
-  }
-  window.location.href = "/video";
 }
 
 function Formulaire() {
@@ -182,7 +128,7 @@ function Formulaire() {
       }
       const fenetreGtm = window as unknown as { dataLayer?: unknown[] };
       fenetreGtm.dataLayer?.push({ event: "lead", funnel: "vsl" });
-      continuer(prenom.trim(), email.trim());
+      window.location.href = "/video";
     } catch (e) {
       setErreur(
         e instanceof Error && e.message !== "Failed to fetch"
