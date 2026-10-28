@@ -41,7 +41,16 @@ export default function Course() {
           mangent une centaine de pixels. */}
       <div className="mx-auto flex max-w-6xl flex-col gap-4 sm:gap-10">
         <header className="mx-auto flex max-w-4xl flex-col gap-2 text-center sm:gap-4">
-          <h1 className="titre text-2xl leading-tight whitespace-pre-line text-balance sm:whitespace-normal text-foreground sm:text-[2.6rem] sm:leading-[1.22]">
+          <h1
+            /* **Une taille fluide sur téléphone**, proportionnelle à la
+               largeur de l'écran : mesuré de 320 à 430 px, c'est ce qui
+               garde la même forme de titre partout, en remplissant la
+               largeur, sans mot isolé. Interligne serré sur téléphone pour
+               que le bouton reste visible au chargement, et titre un peu
+               plus petit sur les écrans peu hauts (iPhone SE et
+               semblables), où il le poussait sous le bord. */
+            className="titre text-[clamp(1.75rem,7.7vw,2.4rem)] leading-[1.15] [@media(max-height:720px)]:text-[clamp(1.5rem,7.25vw,2.4rem)] [@media(max-height:720px)]:leading-[1.12] text-balance text-foreground sm:text-[2.6rem] sm:leading-[1.22]"
+          >
             {optinVsl.titre.map((morceau, rang) =>
               "accent" in morceau ? (
                 <span key={rang} className="text-primary">

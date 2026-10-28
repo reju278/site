@@ -23,26 +23,26 @@ export const optinVsl = {
      français, dans leur forme typographique (“ ”) plutôt que droite. Les deux
      mises en avant en bleu sont celles du titre précédent, reportées sur les
      mêmes mots. */
-  /* **Les retours à la ligne `\n` ne valent que sur téléphone** : le titre y
-     est en `whitespace-pre-line`, et redevient un texte ordinaire au-dessus
-     de `sm`, où les `\n` comptent comme des espaces. Aucune taille ne
-     donnait seule une bonne forme de 320 à 375 px : « le PARFAIT » ou
-     « place le » restaient seuls sur une ligne. La coupure s'écrit donc,
-     comme le veut la règle du dépôt : sept lignes de 180 à 265 px à 24 px,
-     qui tiennent dès 320 px de large.
+  /* Dicté par Rémy. Ses guillemets droits sont rendus dans leur forme
+     typographique (“ ”). En bleu : « PARFAIT “tunnel de vente” », « attirer
+     des clients », « formation » et « coaching ».
 
      Espaces insécables dans « tunnel de vente », qui se coupait entre ses
-     guillemets. « Formation » et « coaching » remplacent « offre digitale* »
-     et sa note, sur décision de Rémy ; « créé » s'accorde avec « coaching »,
-     le nom le plus proche. */
+     guillemets sur téléphone, et dans « n’existe pas encore) », pour que la
+     parenthèse ne finisse jamais sur une ligne trop courte.
+
+     Pas de coupure écrite : elles donnaient un titre étroit. C'est la taille
+     fluide du titre, voir `app/course/page.tsx`, qui lui donne sa forme. */
   titre: [
-    { texte: "Nous allons mettre\nen place le " },
-    { texte: "PARFAIT\n“tunnel\u00a0de\u00a0vente”", accent: true },
-    { texte: " pour\nvendre votre " },
+    { texte: "Nous allons mettre en place le " },
+    { texte: "PARFAIT “tunnel\u00a0de\u00a0vente”", accent: true },
+    { texte: " pour " },
+    { texte: "attirer des clients", accent: true },
+    { texte: " et vendre votre " },
     { texte: "formation", accent: true },
-    { texte: "\nou votre " },
+    { texte: " ou votre " },
     { texte: "coaching", accent: true },
-    { texte: "\n(même si vous ne l'avez\npas encore\u00a0créé)" },
+    { texte: " (même si votre offre n’existe\u00a0pas\u00a0encore)" },
   ],
   /* L'aperçu de la vidéo : une image tirée de la vidéo en 4K. */
   apercu: {

@@ -8,12 +8,7 @@ import {
   optinVsl,
   videoVsl,
 } from "@/contenu/vsl";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@repo/ui/components/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@repo/ui/components/dialog";
 import { Input } from "@repo/ui/components/input";
 import { Check, LoaderCircle, Lock, Play, Volume2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -103,14 +98,17 @@ export function InscriptionVsl() {
             plus, en défilant à l'intérieur, les deux valeurs venant de
             `visualViewport` (voir `useZoneVisible`). Au-dessus de `sm`, elle
             reste centrée comme les autres fenêtres du site. */}
-        <DialogContent className="top-[calc(var(--zone-visible-haut,0px)+0.75rem)] max-h-[calc(var(--zone-visible-hauteur,100dvh)-1.5rem)] max-w-md translate-y-0 gap-0 overflow-y-auto overscroll-contain p-0 sm:top-[50%] sm:max-h-none sm:max-w-md sm:translate-y-[-50%] sm:overflow-visible">
-          <div className="border-b px-6 pt-5 pb-4 text-center sm:pt-7 sm:pb-5">
+        <DialogContent
+          /* Sans description : Radix demande de le dire explicitement. */
+          aria-describedby={undefined}
+          className="top-[calc(var(--zone-visible-haut,0px)+0.75rem)] max-h-[calc(var(--zone-visible-hauteur,100dvh)-1.5rem)] max-w-md translate-y-0 gap-0 overflow-y-auto overscroll-contain p-0 sm:top-[50%] sm:max-h-none sm:max-w-md sm:translate-y-[-50%] sm:overflow-visible"
+        >
+          {/* Le titre seul, sans phrase dessous ni trait de séparation, sur
+              demande de Rémy : le formulaire suit directement. */}
+          <div className="px-6 pt-5 text-center sm:pt-7">
             <DialogTitle className="titre text-xl text-balance sm:text-2xl">
               {fenetre.titre}
             </DialogTitle>
-            <DialogDescription className="mt-1.5 text-sm">
-              La vidéo vous attend juste après.
-            </DialogDescription>
           </div>
           <Formulaire />
         </DialogContent>
