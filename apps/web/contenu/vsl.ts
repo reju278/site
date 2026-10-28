@@ -198,15 +198,16 @@ export const fonctionRemy = "Fondateur de Funnels Club";
  * **Les six premiers sont dans l'ordre dicté par Rémy** : Roland, Yannick et
  * Sylvie, François, Olga, Corentin, Valérie. La suite est libre.
  */
-/** Le titre de la section, dicté par Rémy pour cette page. Pas de
+/** Le titre de la section, dicté par Rémy pour cette page, axé sur les
+ * résultats des élèves. « Résultats » au pluriel, là où il l'avait dicté au
+ * singulier : à valider. Pas de
  * sous-titre, sur sa demande. Il prend les codes du titre du haut de page, à
  * sa demande aussi : « PARFAIT » en capitales, le tunnel de vente entre
  * guillemets, et les mêmes morceaux en bleu. */
 export const titreTemoignagesVsl = [
-  { texte: "Ils ont mis en place le " },
+  { texte: "Résultats de nos élèves", accent: true },
+  { texte: " après avoir mis en place le " },
   { texte: "PARFAIT “tunnel\u00a0de\u00a0vente”", accent: true },
-  { texte: " pour " },
-  { texte: "attirer leurs clients", accent: true },
 ] as const;
 
 export const temoignagesVsl = [
