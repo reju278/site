@@ -38,7 +38,15 @@ export function TemoignagesVsl() {
     <section className="mx-auto max-w-6xl pb-8">
       <div className="mx-auto max-w-3xl text-center">
         <h2 className="titre text-3xl tracking-tight text-balance text-foreground sm:text-4xl">
-          {insecables(titreTemoignagesVsl)}
+          {titreTemoignagesVsl.map((morceau, rang) =>
+            "accent" in morceau ? (
+              <span key={rang} className="text-primary">
+                {morceau.texte}
+              </span>
+            ) : (
+              <span key={rang}>{morceau.texte}</span>
+            ),
+          )}
         </h2>
       </div>
 
