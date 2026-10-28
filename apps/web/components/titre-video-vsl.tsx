@@ -5,16 +5,17 @@ import { usePrenomVsl } from "@/lib/prenom-vsl";
 
 /**
  * Les titres du tunnel VSL suivis du prénom de l'opt-in, sur demande de Rémy :
- * « Ta vidéo de formation offerte, comme promis, Prénom » sur `/video-vsl`,
- * « Réserve ton appel, Prénom » sur `/appel`. Sans prénom, la phrase s'arrête
- * avant la virgule et reste juste. Voir `usePrenomVsl`.
+ * « Voici ta vidéo de formation offerte Prénom ! » sur `/video-vsl`,
+ * « Réserve ton appel Prénom ! » sur `/appel`, sans virgule devant le prénom.
+ * Sans prénom, la phrase reste juste sans lui. Voir `usePrenomVsl`.
  */
 export function TitreVideoVsl({ texte }: { texte: string }) {
   const prenom = usePrenomVsl();
   return (
     <h1 className="titre text-2xl text-balance text-foreground sm:text-3xl">
       {texte}
-      {prenom ? `, ${prenom}` : null}
+      {prenom ? ` ${prenom}` : null}
+      {"\u00a0!"}
     </h1>
   );
 }
@@ -31,7 +32,7 @@ export function TitreAppelVsl({
   return (
     <TitreRoulant
       as="h1"
-      segments={[{ texte: prenom ? `${texte}, ${prenom}` : texte }]}
+      segments={[{ texte: `${prenom ? `${texte} ${prenom}` : texte}\u00a0!` }]}
       className={className}
     />
   );

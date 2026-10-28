@@ -119,13 +119,17 @@ export const optinVsl = {
 
 export const videoVsl = {
   /* Dicté par Rémy, suivi du prénom de l'opt-in : voir `TitreVideoVsl`. */
-  surtitre: "Ta vidéo de formation offerte, comme promis",
+  surtitre: "Voici ta vidéo de formation offerte",
+  /* « DIRECT VSL - MOTION GRAPHICS » chez Wistia, sur demande de Rémy, à la
+     place de « Direct Webinar Funnels Club » (6w8wxhaqzk). La durée et
+     l'affiche sont relevées sur le média. */
   video: {
-    id: "6w8wxhaqzk",
+    id: "di3bzcmi50",
     titre: "La formation gratuite Funnels Club",
-    secondes: 976,
-    affiche: "/vsl/affiche.jpg",
+    secondes: 981,
+    affiche: "/vsl/affiche-motion.jpg",
   },
+
   appel: [
     { texte: "Postule maintenant pour un appel gratuit de " },
     { texte: "30 min", gras: true },

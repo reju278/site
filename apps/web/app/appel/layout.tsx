@@ -51,7 +51,9 @@ export default function LayoutAppel({
       }
     >
       <PoliceTunnel />
-      <EnTeteImmersion ancres={[]} bascule={false} />
+      {/* `absolute` et non `fixed`, sur demande de Rémy : la marque reste en
+          haut de la page et ne suit pas le défilement. */}
+      <EnTeteImmersion ancres={[]} bascule={false} className="absolute" />
       {children}
       {/* **Le pied de page, loin sous le formulaire**, sur demande de Rémy :
           la marque, un filet, puis les mentions du pied de page du site.
