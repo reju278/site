@@ -82,9 +82,9 @@ export function TitreAppelVsl({
 }
 
 /**
- * Le paragraphe sous la vidéo de `/video-vsl`, ouvert par le prénom, sur
- * demande de Rémy : « Prénom, postule maintenant… ». Sans prénom, la phrase
- * commence comme elle est écrite.
+ * Le paragraphe sous la vidéo de `/video-vsl`, ouvert par le prénom, sans
+ * virgule et sans aucun montant, sur demande de Rémy : « Prénom postule
+ * maintenant… ». Sans prénom, la phrase commence comme elle est écrite.
  */
 export function AppelVideoVsl({
   morceaux,
@@ -92,54 +92,13 @@ export function AppelVideoVsl({
   morceaux: readonly { texte: string; gras?: boolean }[];
 }) {
   const prenom = usePrenomVsl();
-  const reponses = useReponsesVsl();
-  const objectif = useObjectifVsl();
-
-  /* **Avec les réponses, le bloc parle de la personne**, sur demande de
-     Rémy, qui trouvait le paragraphe générique et peu joli : ce qu'on
-     regardera ensemble, avec son objectif surligné. */
-  const prix = reponses?.prix
-    ? strategieVsl.prix[reponses.prix]?.prix
-    : undefined;
-  if (prix && objectif) {
-    const valeurs: Record<string, React.ReactNode> = {
-      duree: <strong>30 min</strong>,
-      objectif: (
-        <mark className="surlignage" style={jaune}>
-          {insecables(euros.format(objectif))}
-        </mark>
-      ),
-      prix: (
-        <mark className="surlignage" style={jaune}>
-          {insecables(euros.format(prix))}
-        </mark>
-      ),
-    };
-    const phrase = prenom
-      ? videoVsl.appelPersonnalise.replace("{prenom}", prenom)
-      : videoVsl.appelPersonnalise.replace("{prenom} postule", "Postule");
-    return (
-      <p className="mt-4 max-w-3xl text-xl leading-relaxed text-pretty text-foreground sm:text-2xl">
-        {insecables(phrase)
-          .split(/(\{\w+\})/)
-          .map((morceau, i) => {
-            const cle = /^\{(\w+)\}$/.exec(morceau)?.[1];
-            return cle && valeurs[cle] ? (
-              <span key={i}>{valeurs[cle]}</span>
-            ) : (
-              morceau
-            );
-          })}
-      </p>
-    );
-  }
 
   return (
     <p className="mt-4 max-w-3xl text-xl leading-relaxed text-pretty text-foreground sm:text-2xl">
       {morceaux.map((morceau, rang) => {
         const texte =
           rang === 0 && prenom
-            ? `${prenom}, ${morceau.texte.charAt(0).toLowerCase()}${morceau.texte.slice(1)}`
+            ? `${prenom} ${morceau.texte.charAt(0).toLowerCase()}${morceau.texte.slice(1)}`
             : morceau.texte;
         return morceau.gras ? (
           <strong key={rang}>{texte}</strong>
