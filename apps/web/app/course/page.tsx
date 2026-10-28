@@ -28,7 +28,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function Course() {
   return (
-    <main className="px-5 pt-28 sm:pt-36">
+    <main
+      /* Le haut de page ne dégage plus l'en-tête, retiré sur demande de
+         Rémy : le titre monte au plus près du bord. */
+      className="px-5 pt-8 sm:pt-12"
+    >
       <CompteurVue tunnel="vsl" etape="optin" />
       <div className="mx-auto flex max-w-5xl flex-col gap-10">
         <header className="mx-auto flex max-w-3xl flex-col gap-4 text-center">

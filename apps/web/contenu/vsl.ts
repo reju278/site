@@ -28,7 +28,9 @@ export const optinVsl = {
     { texte: "PARFAIT «\u00a0tunnel de vente\u00a0»", accent: true },
     { texte: " pour vendre votre " },
     { texte: "offre digitale*", accent: true },
-    { texte: " (même si vous ne l'avez pas encore créée)" },
+    /* « encore » et « créée) » sont liés par une espace insécable : sur
+       375 px, « créée) » tombait seul sur la dernière ligne. */
+    { texte: " (même si vous ne l'avez pas encore\u00a0créée)" },
   ],
   note: "formation en ligne, service ou coaching",
   intro: "Vidéo gratuite qui présente la solution pour :",
