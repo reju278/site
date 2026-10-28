@@ -64,10 +64,13 @@ export function prechargerEntretien(id: string) {
 export function EntretienCharge({
   id,
   appel,
+  presents,
 }: {
   id: string;
   /** Voir `appel` dans `GalerieFenetre`. */
   appel?: AppelGalerie;
+  /** Voir `presents` dans `ContenuEntretien`. */
+  presents?: readonly string[];
 }) {
   const [article, setArticle] = useState<Entretien | null>(
     () => cache.get(id) ?? null,
@@ -94,7 +97,9 @@ export function EntretienCharge({
   }, [id]);
 
   if (!article) return <SqueletteEntretien />;
-  return <ContenuEntretien article={article} appel={appel} />;
+  return (
+    <ContenuEntretien article={article} appel={appel} presents={presents} />
+  );
 }
 
 /**

@@ -35,21 +35,30 @@ const LIEN = /\[([^\]]+)\]\(([^)]+)\)/g;
  * vingt-deux, et pointer vers une ancre qui n'existe pas donnerait un lien mort
  * que le clavier atteint quand même.
  */
-export function versImmersion(texte: string): string {
+export function versImmersion(
+  texte: string,
+  /**
+   * Les entretiens présents sur la page, ceux vers lesquels un renvoi peut
+   * mener. Tous ceux d'`/immersion` par défaut ; `/video-vsl` n'en montre que
+   * trois, et un renvoi vers un autre n'irait nulle part.
+   */
+  presents: readonly string[] = entretiensImmersion,
+  /** Si la page a une section des entretiens à l'ancre `#avis`. */
+  sommaire = true,
+): string {
   return texte.replace(LIEN, (_entier, libelle: string, href: string) => {
     if (href.startsWith("/resultats/")) {
       const slug = href.slice("/resultats/".length);
       const article = avis.find((a) => a.slug === slug);
-      const present =
-        article &&
-        (entretiensImmersion as readonly string[]).includes(article.id);
+      const present = article && presents.includes(article.id);
 
       return present ? `[${libelle}](#${ancreEntretien(article.id)})` : libelle;
     }
 
     /* `/resultats` mène au sommaire du site. Ici, la section des entretiens
        tient ce rôle, et elle porte déjà son ancre. */
-    if (href === "/resultats") return `[${libelle}](#avis)`;
+    if (href === "/resultats")
+      return sommaire ? `[${libelle}](#avis)` : libelle;
 
     return libelle;
   });

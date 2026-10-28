@@ -443,7 +443,14 @@ export function GalerieFenetre({
                     d'entretien démonte le précédent, coupe son lecteur et
                     remet le défilement en haut. */}
                 {courant ? (
-                  <EntretienCharge id={courant.id} appel={appel} />
+                  <EntretienCharge
+                    id={courant.id}
+                    appel={appel}
+                    /* En ligne, sur `/video-vsl`, seuls ces entretiens sont
+                       sur la page : les renvois vers les autres perdent leur
+                       lien au lieu de mener nulle part. */
+                    presents={enLigne ? entretiens.map((e) => e.id) : undefined}
+                  />
                 ) : null}
               </div>
             </div>

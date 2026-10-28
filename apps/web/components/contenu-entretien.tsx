@@ -29,7 +29,6 @@ import type { Entretien } from "@/lib/entretien";
  * celle de l'appel. Les liens des articles sont traités par `versImmersion`,
  * qui liste ce qui reste.
  */
-const pourLeTunnel = (t: string) => sansNoms(versImmersion(t));
 
 /**
  * Ce qu'une fenêtre d'entretien contient.
@@ -45,8 +44,16 @@ const pourLeTunnel = (t: string) => sansNoms(versImmersion(t));
 export function ContenuEntretien({
   article,
   appel,
+  presents,
 }: {
   article: Entretien;
+  /**
+   * Les entretiens présents sur la page, et sans section `#avis` : les
+   * renvois vers les autres perdent leur lien, le bandeau « l'autre
+   * entretien » disparaît s'il n'est pas là. Sur `/video-vsl`, qui n'en
+   * montre que trois. Sans lui, c'est la page d'`/immersion`.
+   */
+  presents?: readonly string[];
   /**
    * Le bouton de réservation sous la vidéo, sur `/appel` seulement. Voir
    * `appel` dans `GalerieFenetre`.
@@ -54,7 +61,12 @@ export function ContenuEntretien({
   appel?: AppelGalerie;
 }) {
   const nom = prenom(article.nom);
-  const autre = article.autre;
+  const autre =
+    article.autre && (!presents || presents.includes(article.autre.id))
+      ? article.autre
+      : undefined;
+  const pourLeTunnel = (t: string) =>
+    sansNoms(presents ? versImmersion(t, presents, false) : versImmersion(t));
 
   return (
     <>
