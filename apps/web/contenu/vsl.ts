@@ -35,6 +35,9 @@ export const optinVsl = {
     { texte: " (même si vous ne l'avez pas encore\u00a0créée)" },
   ],
   note: "formation en ligne, service ou coaching",
+  /* Les mêmes trois mots que la note, en étiquettes sous le titre, sur
+     demande de Rémy, pour qu'on les voie mieux. Seule la majuscule change. */
+  typesOffre: ["Formation en ligne", "Service", "Coaching"],
   /* L'aperçu de la vidéo : une image tirée de la vidéo en 4K. */
   apercu: {
     image: "/vsl/apercu-1920.webp",

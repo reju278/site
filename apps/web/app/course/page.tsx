@@ -59,9 +59,24 @@ export default function Course() {
               ),
             )}
           </h1>
-          <p className="text-sm text-muted-foreground sm:text-lg">
-            <span className="font-semibold text-primary">*Offre digitale</span>{" "}
-            : {optinVsl.note}
+          {/* Ce que veut dire « offre digitale », en étiquettes et non en
+              petite ligne grise, sur demande de Rémy : on le lit d'un coup
+              d'œil. Le texte entier reste là pour un lecteur d'écran, qui
+              n'a pas à deviner que trois étiquettes forment une phrase. */}
+          <p className="flex flex-wrap items-center justify-center gap-1 text-xs sm:gap-2 sm:text-base">
+            <span className="font-semibold text-primary">
+              *Offre digitale :
+            </span>
+            <span className="sr-only">{optinVsl.note}</span>
+            {optinVsl.typesOffre.map((type) => (
+              <span
+                key={type}
+                aria-hidden
+                className="rounded-md border border-primary/20 bg-primary/8 px-1.5 py-0.5 font-semibold text-foreground sm:px-2.5"
+              >
+                {type}
+              </span>
+            ))}
           </p>
         </header>
         <InscriptionVsl />

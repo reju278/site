@@ -15,7 +15,7 @@ import {
   DialogTitle,
 } from "@repo/ui/components/dialog";
 import { Input } from "@repo/ui/components/input";
-import { ArrowRight, LoaderCircle, Lock, Play } from "lucide-react";
+import { LoaderCircle, Lock, Play } from "lucide-react";
 import { useRef, useState } from "react";
 
 /**
@@ -57,16 +57,29 @@ export function InscriptionVsl() {
             <TexteRoulant>{optinVsl.bouton}</TexteRoulant>
           </BoutonScintillant>
           <p className="font-semibold text-foreground">{optinVsl.intro}</p>
-          <ul className="flex flex-col gap-3">
-            {optinVsl.points.map((point) => (
-              <li key={point} className="flex gap-2.5 text-[15px] leading-snug">
-                <span className="mt-1 flex size-4 shrink-0 items-center justify-center rounded-full bg-primary/12 text-primary">
-                  <ArrowRight className="size-3" strokeWidth={3} />
+          {/* Les trois points, présentés comme les parties de la vidéo, sur
+              demande de Rémy : un numéro, puis la phrase. Une liste ordonnée,
+              donc annoncée comme telle par un lecteur d'écran. */}
+          <ol className="flex flex-col gap-2.5">
+            {optinVsl.points.map((point, rang) => (
+              <li
+                key={point}
+                className="flex gap-3 rounded-md border bg-background/60 p-3"
+              >
+                <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-primary/10 text-sm font-bold text-primary tabular-nums">
+                  {String(rang + 1).padStart(2, "0")}
                 </span>
-                <span>{point}</span>
+                <span className="flex flex-col gap-0.5">
+                  <span className="text-xs font-semibold tracking-wide text-primary uppercase">
+                    Partie {rang + 1}
+                  </span>
+                  <span className="text-[15px] leading-snug text-foreground">
+                    {point}
+                  </span>
+                </span>
               </li>
             ))}
-          </ul>
+          </ol>
           <BoutonScintillant
             action={() => setOuvert(true)}
             className="mt-2 w-full text-lg"
