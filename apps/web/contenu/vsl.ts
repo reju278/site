@@ -1,3 +1,4 @@
+import { messageRemyHub } from "@/contenu/hub";
 import { messageRemy } from "@/contenu/site";
 /**
  * Le VSL Funnel, sous go.funnels.club : l'opt-in de la formation gratuite
@@ -158,6 +159,13 @@ export const messageRemyOptin = {
     "Si vous souhaitez créer et vendre une formation en ligne, du coaching ou du consulting, ou même de la prestation de services, alors il y a trois erreurs que vous devez absolument éviter.",
   voies: [],
   amorceErreurs: "",
+  /* Les passages que Rémy a fait corriger pour les règles publicitaires sur le
+     hub, repris tels quels pour Google Ads, sur sa demande : les deux absolus
+     des erreurs (« ne suffisent plus », « beaucoup de mal à transformer ce
+     trafic en clients ») et les valeurs (« simple et répétable », sans
+     « toute une vie peut reposer »). Lus dans `messageRemyHub`, pas recopiés. */
+  erreurs: messageRemyHub.erreurs,
+  valeurs: messageRemyHub.valeurs,
   /* « plus de 1 000 business » retiré sur décision de Rémy : un chiffre
      qu'il faudrait pouvoir prouver à Google. « de nombreux » est de l'agent,
      à valider. */
