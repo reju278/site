@@ -17,9 +17,11 @@ import { useRef, useState } from "react";
  * L'opt-in de la formation gratuite : l'aperçu de la vidéo et le bouton
  * ouvrent la même fenêtre — prénom, e-mail, consentement.
  *
- * L'inscription part au CRM Funnels Club (`/vsl/optin`), qui pose le
- * contact dans ClickFunnels avec l'étiquette « inscription vsl ». Prénom
- * et e-mail restent dans le navigateur (`sessionStorage`, jamais dans
+ * L'inscription part à ClickFunnels par son SDK : la page est l'étape
+ * « Page d'inscription » du tunnel, et les automatisations se règlent
+ * là-bas. Le CRM Funnels Club (`/vsl/optin`) ne sert plus que de repli
+ * quand le SDK n'a pas pu se charger. Prénom et e-mail restent dans le
+ * navigateur (`sessionStorage`, jamais dans
  * l'adresse) pour pré-remplir Calendly sur `/video`. On y va par une
  * navigation complète : le formulaire de Calendly lit ces informations au
  * chargement de la page, pas après une navigation côté client.
@@ -93,17 +95,43 @@ function Formulaire() {
   const { fenetre } = optinVsl;
   const [prenom, setPrenom] = useState("");
   const [email, setEmail] = useState("");
-  const [accord, setAccord] = useState(false);
   const [envoi, setEnvoi] = useState(false);
   const [erreur, setErreur] = useState<string | null>(null);
   const formulaire = useRef<HTMLFormElement>(null);
 
-  const valider = async (evenement: React.FormEvent) => {
-    evenement.preventDefault();
-    if (!accord) {
-      setErreur("Cochez la case pour recevoir la formation.");
+  /* Deux chemins, et le SDK décide lequel.
+
+     **Le SDK de ClickFunnels a pris le formulaire en charge**
+     (`data-cf-sdk-enhanced`) : c'est le chemin normal. Il a déjà annulé
+     l'envoi natif, il poste le prénom, l'e-mail et le consentement à
+     ClickFunnels, qui crée le contact, compte l'opt-in de l'étape, lance ses
+     automatisations et renvoie vers l'étape suivante du tunnel. On ne fait
+     ici que ce qui doit se faire avant que la page change : garder prénom et
+     e-mail pour pré-remplir Calendly, et prévenir GTM.
+
+     **Le SDK n'est pas là**, bloqueur de publicités ou script en échec :
+     l'inscription passe par le CRM, comme avant le SDK, pour ne perdre
+     personne. Sans ce chemin, le formulaire, qui n'a pas d'`action`, se
+     renverrait sur la page avec le prénom et l'e-mail dans l'adresse. */
+  const valider = async (evenement: React.FormEvent<HTMLFormElement>) => {
+    const parLeSdk = evenement.currentTarget.dataset.cfSdkEnhanced === "true";
+    try {
+      sessionStorage.setItem(
+        CLE_CONTACT_VSL,
+        JSON.stringify({ prenom: prenom.trim(), email: email.trim() }),
+      );
+    } catch {
+      /* Stockage bloqué : Calendly ne sera simplement pas pré-rempli. */
+    }
+    const fenetreGtm = window as unknown as { dataLayer?: unknown[] };
+    fenetreGtm.dataLayer?.push({ event: "lead", funnel: "vsl" });
+
+    if (parLeSdk) {
+      setEnvoi(true);
       return;
     }
+
+    evenement.preventDefault();
     setEnvoi(true);
     setErreur(null);
     try {
@@ -118,16 +146,6 @@ function Formulaire() {
         };
         throw new Error(corps.erreur ?? "Inscription impossible");
       }
-      try {
-        sessionStorage.setItem(
-          CLE_CONTACT_VSL,
-          JSON.stringify({ prenom: prenom.trim(), email: email.trim() }),
-        );
-      } catch {
-        /* Stockage bloqué : Calendly ne sera simplement pas pré-rempli. */
-      }
-      const fenetreGtm = window as unknown as { dataLayer?: unknown[] };
-      fenetreGtm.dataLayer?.push({ event: "lead", funnel: "vsl" });
       window.location.href = "/video";
     } catch (e) {
       setErreur(
@@ -140,9 +158,18 @@ function Formulaire() {
   };
 
   return (
-    <form ref={formulaire} onSubmit={valider} className="flex flex-col gap-3 px-6 pt-5 pb-6">
+    <form
+      ref={formulaire}
+      onSubmit={valider}
+      className="flex flex-col gap-3 px-6 pt-5 pb-6"
+    >
+      {/* Les trois champs portent leur `data-cf-element` : c'est ce que le
+          SDK lit, et rien d'autre. Aucun champ du formulaire n'en est
+          dépourvu, la documentation de ClickFunnels l'interdisant. */}
       <Input
         required
+        data-cf-element="first-name"
+        name="first_name"
         autoComplete="given-name"
         placeholder="Prénom"
         value={prenom}
@@ -152,6 +179,8 @@ function Formulaire() {
       />
       <Input
         required
+        data-cf-element="email"
+        name="email"
         type="email"
         autoComplete="email"
         placeholder="Email"
@@ -161,10 +190,17 @@ function Formulaire() {
         aria-label="Email"
       />
       <label className="flex cursor-pointer items-start gap-2.5 pt-1 text-xs leading-relaxed text-muted-foreground">
+        {/* Le consentement part à ClickFunnels comme champ personnalisé de
+            la fiche du contact, « consentement ». Le SDK envoie la valeur
+            d'une case sans regarder si elle est cochée : c'est `required`
+            qui garantit qu'elle l'est, puisque le formulaire ne part pas
+            sans. Tout contact arrivé par ici porte donc « oui ». */}
         <input
           type="checkbox"
-          checked={accord}
-          onChange={(e) => setAccord(e.target.checked)}
+          required
+          data-cf-element="custom-attribute:consentement"
+          name="consentement"
+          value="oui"
           className="mt-0.5 size-4 shrink-0 cursor-pointer accent-[var(--primary)]"
         />
         <span>
