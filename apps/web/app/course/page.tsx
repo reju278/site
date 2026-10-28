@@ -39,7 +39,7 @@ export default function Course() {
           le bouton qui ouvre l'inscription doit être visible au chargement,
           sans défiler, même sur un petit iPhone dont les barres du navigateur
           mangent une centaine de pixels. */}
-      <div className="mx-auto flex max-w-5xl flex-col gap-4 sm:gap-10">
+      <div className="mx-auto flex max-w-6xl flex-col gap-4 sm:gap-10">
         <header className="mx-auto flex max-w-3xl flex-col gap-2 text-center sm:gap-4">
           <h1 className="titre text-[1.6rem] leading-tight text-balance text-foreground sm:text-[2.6rem]">
             {optinVsl.titre.map((morceau, rang) =>

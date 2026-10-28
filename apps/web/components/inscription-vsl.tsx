@@ -15,7 +15,7 @@ import {
   DialogTitle,
 } from "@repo/ui/components/dialog";
 import { Input } from "@repo/ui/components/input";
-import { LoaderCircle, Lock, Play } from "lucide-react";
+import { Check, LoaderCircle, Lock, Play } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 /**
@@ -38,12 +38,14 @@ export function InscriptionVsl() {
 
   return (
     <>
-      {/* Sur ordinateur, les deux colonnes s'étirent à la même hauteur
-          (`md:items-stretch`) : la photo remplit toute sa zone, quelle que soit
-          la longueur du texte à droite, au lieu de flotter au milieu avec du
-          blanc au-dessus et au-dessous. Sur téléphone, elles s'empilent et la
-          photo garde son 16/9. */}
-      <div className="grid items-center gap-4 rounded-[var(--radius-lg)] border bg-card p-3 sm:gap-6 shadow-[0_30px_70px_-35px_rgba(0,0,0,0.35)] sm:p-6 md:grid-cols-[1.15fr_1fr] md:items-stretch md:gap-8">
+      {/* La photo garde toujours son 16/9, sur décision de Rémy : la vidéo
+          doit se montrer sous son meilleur jour, pas rognée pour remplir une
+          hauteur. Pour qu'il n'y ait pas de blanc à côté d'elle sur
+          ordinateur, c'est la largeur des colonnes qui s'ajuste : la photo
+          prend un peu plus de place, et sa hauteur rejoint celle de la
+          liste. Mesuré à 1280 px : carte de 72 rem, 1,5 part pour la photo,
+          361 px de haut pour 347 de liste. */}
+      <div className="grid items-center gap-4 rounded-[var(--radius-lg)] border bg-card p-3 sm:gap-6 shadow-[0_30px_70px_-35px_rgba(0,0,0,0.35)] sm:p-6 md:grid-cols-[1.5fr_1fr] md:gap-8">
         <ApercuVideo ouvrir={() => setOuvert(true)} />
 
         <div className="flex flex-col gap-4">
@@ -60,17 +62,15 @@ export function InscriptionVsl() {
           <p className="text-lg font-bold text-foreground sm:text-xl">
             {optinVsl.intro}
           </p>
-          {/* Les trois points, ce qu'on va voir dans la vidéo : une petite
-              icône de lecture devant chacun, et non un numéro de partie, sur
-              précision de Rémy : ce ne sont pas des chapitres. */}
-          <ul className="flex flex-col gap-2.5">
+          {/* Les trois points, précédés d'une coche verte, choisie par Rémy
+              parmi cinq dessins. Le vert est `--icone-resultats`, celui de la
+              flèche des résultats : il change de valeur selon le thème pour
+              tenir le contraste d'un glyphe. */}
+          <ul className="flex flex-col gap-3.5">
             {optinVsl.points.map((point) => (
-              <li
-                key={point}
-                className="flex items-start gap-3 rounded-md border bg-background/60 p-3"
-              >
-                <span className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
-                  <Play className="size-3.5 fill-current" />
+              <li key={point} className="flex items-start gap-3">
+                <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-[var(--icone-resultats)] text-white">
+                  <Check className="size-3.5" strokeWidth={3.5} />
                 </span>
                 <span className="text-base leading-snug text-foreground sm:text-[17px]">
                   {point}
@@ -292,7 +292,7 @@ function ApercuVideo({ ouvrir }: { ouvrir: () => void }) {
       type="button"
       onClick={ouvrir}
       aria-label="Voir la vidéo gratuite"
-      className="group relative block aspect-video w-full overflow-hidden rounded-md bg-black md:aspect-auto md:h-full md:min-h-64 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+      className="group relative block aspect-video w-full overflow-hidden rounded-md bg-black text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
     >
       {/* L'image du haut de page : `fetchPriority="high"`, et la largeur
           qu'elle occupe pour que le navigateur choisisse bien. Elle fait
