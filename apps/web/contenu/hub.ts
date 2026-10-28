@@ -71,7 +71,8 @@ export const titresHub: Record<string, EnTetesHub> = {
       "Roland Buffet forme les entreprises du bâtiment. Il raconte comment il est passé de mille kilomètres de voiture par semaine à une formation vendue en ligne.",
     chapo:
       "Roland Buffet forme les entreprises du bâtiment à la gestion depuis plus de treize ans. Dans cet entretien avec Rémy Jupille, il raconte comment il est passé de mille kilomètres de voiture par semaine à une formation en ligne vendue par un tunnel de vente.",
-    carte: "Il est passé de mille kilomètres par semaine à une formation en ligne",
+    carte:
+      "Il est passé de mille kilomètres par semaine à une formation en ligne",
   },
 
   "augustin-passy": {
@@ -289,7 +290,8 @@ export const titresHub: Record<string, EnTetesHub> = {
   },
 
   "francois-mastermind": {
-    titre: "Avis mastermind : François Daoud a dix fois moins de clients qu'avant",
+    titre:
+      "Avis mastermind : François Daoud a dix fois moins de clients qu'avant",
     titrePage: "Avis mastermind : François Daoud",
     description:
       "Neuf mois après son premier entretien, François Daoud raconte pourquoi il a dix fois moins de clients qu'avant, et ce que son offre unique a changé.",
@@ -423,7 +425,6 @@ export const appelHub = {
  */
 export const avertissementHub =
   "Les personnes qui témoignent sur cette page sont des clients de Funnels Club et ont accepté d'être filmées. Leur parcours leur est propre : il dépend de leur métier, de leur expérience et du travail qu'elles y ont consacré, et ne préjuge en rien de ce qu'une autre personne obtiendrait. Rien sur cette page ne constitue une promesse ni une garantie de résultat.";
-
 
 /**
  * Les affiches, et ce qu'il a fallu en faire.
@@ -697,9 +698,14 @@ export const messageRemyHub: ContenuMessage = {
 
   valeurs: {
     ...messageRemy.valeurs,
-    souligneBis: "simple",
-    liaison: " et ",
-    souligneTer: "répétable",
+    /* « il doit rester simple et répétable ». Les champs vides le sont
+       exprès : n'écraser que les trois derniers donnait « il doit rester
+       simple, et donner des résultats simple et répétable ». */
+    souligne: "simple",
+    milieu: " et ",
+    souligneBis: "répétable",
+    liaison: "",
+    souligneTer: "",
     apres:
       ". On ne cherche pas à faire un coup. On veut un business qui se construit dans la durée, sur des étapes qu'on peut refaire. Parce que quoi de plus stressant qu'un chiffre d'affaires en montagnes russes ?",
   },
