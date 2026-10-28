@@ -1,10 +1,11 @@
 import { BoutonScintillant } from "@/components/bouton-scintillant";
-import { CalculateurClients } from "@/components/calculateur-clients";
+import { GalerieEntretiens } from "@/components/galerie-entretiens";
 import { CompteurVue } from "@/components/compteur-vue";
 import { LecteurVideo } from "@/components/lecteur-video";
+import { StrategieVsl } from "@/components/strategie-vsl";
 import { TexteRoulant } from "@/components/texte-roulant";
 import { AppelVideoVsl, TitreVideoVsl } from "@/components/titre-video-vsl";
-import { videoVsl } from "@/contenu/vsl";
+import { strategieVsl, videoVsl } from "@/contenu/vsl";
 import { avecReglages } from "@/lib/reglages-seo";
 import type { Metadata } from "next";
 import Script from "next/script";
@@ -86,8 +87,17 @@ export default function Video() {
           <TexteRoulant>{videoVsl.bouton}</TexteRoulant>
         </BoutonScintillant>
 
-        {/* Le calculateur, sous le bouton, sur demande de Rémy. */}
-        <CalculateurClients />
+        {/* La stratégie personnalisée, sous le bouton, sur demande de Rémy :
+            une galerie d'entretiens par activité, rendue ici par le serveur,
+            et la stratégie n'affiche que celle de la personne. */}
+        <StrategieVsl
+          galeries={Object.fromEntries(
+            Object.entries(strategieVsl.temoignages).map(([activite, ids]) => [
+              activite,
+              <GalerieEntretiens key={activite} ids={ids} />,
+            ]),
+          )}
+        />
       </div>
 
       {/* Le SDK de ClickFunnels, qui compte la visite dans l'étape du tunnel.

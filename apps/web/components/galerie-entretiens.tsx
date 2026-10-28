@@ -1,5 +1,8 @@
 import type { AppelGalerie } from "@/components/bouton-appel";
-import { GalerieFenetre, type EntretienGalerie } from "@/components/galerie-fenetre";
+import {
+  GalerieFenetre,
+  type EntretienGalerie,
+} from "@/components/galerie-fenetre";
 import { avisDe } from "@/contenu/avis";
 import { ancreEntretien, entretiensImmersion } from "@/contenu/immersion";
 import { temoignages } from "@/contenu/site";
@@ -37,9 +40,17 @@ import { sansNoms } from "@/lib/anonymat";
  */
 export function GalerieEntretiens({
   appel,
+  ids = entretiensImmersion,
 }: {
   /** Voir `appel` dans `GalerieFenetre`. */
   appel?: AppelGalerie;
+  /**
+   * Les entretiens à montrer, dans cet ordre. Tous ceux d'`/immersion` par
+   * défaut ; la stratégie de `/video-vsl` n'en montre que trois, choisis
+   * selon l'activité. Ils doivent être dans `entretiensImmersion` : c'est la
+   * seule liste dont les articles sont servis à la demande.
+   */
+  ids?: readonly string[];
 } = {}) {
   /* Le nom, l'accroche, la durée et l'affiche sont lus dans `temoignages` et
      `avis.ts`, jamais réécrits ici. Un entretien retiré de là disparaît d'ici
@@ -54,7 +65,7 @@ export function GalerieEntretiens({
      Huit des vingt-deux en ont un dans les données, les autres n'ont jamais été
      enregistrés qu'avec leur prénom : il n'y a donc rien à conditionner, le
      champ porte déjà ce qu'on sait de chacun. */
-  const entretiens = entretiensImmersion.flatMap<EntretienGalerie>((id) => {
+  const entretiens = ids.flatMap<EntretienGalerie>((id) => {
     const temoignage = temoignages.find((t) => t.id === id);
     const article = avisDe(id);
     if (!temoignage || !article) return [];

@@ -162,28 +162,6 @@ export const videoVsl = {
 } as const;
 
 /**
- * Le calculateur de `/video-vsl`, sous le bouton de réservation, sur demande
- * de Rémy : combien de clients par mois pour atteindre 10 000 €. **Les
- * libellés sont de l'agent, à valider par Rémy.** Les bornes du curseur aussi :
- * de 100 € à 10 000 €, par pas de 50.
- */
-export const calculateurVsl = {
-  /* Le montant du titre est l'objectif saisi : il suit le champ. */
-  titreAvant: "Combien de clients pour atteindre ",
-  titreApres: " par mois ?",
-  libellePrix: "Le prix de ton offre",
-  libelleObjectif: "Ton objectif",
-  parMois: "€ / mois",
-  clientsSingulier: "client par mois",
-  clientsPluriel: "clients par mois",
-  prixDepart: 2000,
-  prixMin: 100,
-  prixMax: 10000,
-  pasPrix: 50,
-  objectifDepart: 10000,
-} as const;
-
-/**
  * Les trois questions de la fenêtre d'inscription de `/course`, sur demande
  * de Rémy : après prénom, e-mail et consentement, « Voir la formation
  * GRATUITE » les fait apparaître une à une à la place des champs, avec une
@@ -263,27 +241,74 @@ export const questionnaireVsl = {
 } as const;
 
 /**
- * Ce que les réponses changent au calculateur, sur demande de Rémy (« une
- * réponse personnalisée sur la page de la VSL ») : le prix et l'objectif de
- * départ prennent une valeur dans la tranche choisie. Choisies par l'agent,
- * à valider.
+ * La stratégie personnalisée de `/video-vsl`, sous le bouton de réservation,
+ * à la place du calculateur, sur demande de Rémy. Elle ne se sert que de ce
+ * qu'on sait : le prénom et les trois réponses de la fenêtre d'inscription.
+ * Sans réponses (lien ouvert directement), elle ne s'affiche pas.
+ *
+ * **Tout le texte est de l'agent, d'après les consignes de Rémy, à valider.**
+ * Les montants aussi : `prix` donne le prix retenu pour chaque tranche et le
+ * prix vers lequel on l'amène (500 € vers 1 500 €, rien au-delà de 5 000 €,
+ * sur sa consigne) ; `montants` donne le montant mensuel retenu pour chaque
+ * tranche d'objectif.
+ *
+ * `{prenom}`, `{objectif}`, `{prix}`, `{cible}`, `{clients}`,
+ * `{clientsCible}`, `{annee}` et `{anneeCible}` sont remplacés à l'affichage.
  */
-export const departCalculateurVsl: {
-  prix: Record<string, number>;
-  objectif: Record<string, number>;
-} = {
+export const strategieVsl = {
+  titre: "Ta stratégie personnalisée",
+  titreAvecPrenom: "{prenom}, voici ta stratégie personnalisée",
+  phraseObjectif:
+    "Tu vises {objectif} par mois. Avec une offre à {prix}, il te faut {clients} clients par mois pour y arriver.",
+  /* Quand la tranche de prix a une cible. */
+  projection:
+    "Et si ton offre valait {cible} ? Avec le même nombre de clients, ton année passerait de {annee} à {anneeCible}. Ou, pour le même objectif, {clientsCible} clients par mois suffiraient.",
+  /* Au-delà de 5 000 €, pas de prix plus haut à viser. */
+  projectionSansCible:
+    "Sur une année, cet objectif représente {annee}. À ce prix, l'enjeu n'est pas de vendre plus cher, c'est d'attirer chaque mois les bons clients.",
+  legendeActuel: "Avec ton prix actuel",
+  legendeCible: "Avec une offre à {cible}",
+  titreActivite: "Comment y arriver",
+  titreTemoignages: "Ils étaient dans ta situation",
+  /* Le paragraphe propre à chaque activité, clé = le choix exact. */
+  activites: {
+    "Vendeur de formation":
+      "Une formation se vend plusieurs milliers d'euros quand elle ne se limite pas à des vidéos : des modules pour apprendre, des coachings en direct pour avancer, un groupe pour ne pas rester seul, et un accompagnement pour aller au bout. C'est cet ensemble qui justifie le prix, et c'est ce qu'on construit avec toi.",
+    "Créateur de contenu":
+      "Ton audience te fait déjà confiance. L'étape suivante est de transformer ce que tu partages gratuitement en une offre complète : une formation en modules, avec des coachings et un groupe. C'est ce qui te permet de proposer une offre à plusieurs milliers d'euros à ceux qui te suivent.",
+    "Coach / Consultant":
+      "Vendre ton temps à l'heure plafonne vite ton revenu. L'idée est de transformer ton accompagnement en programme : une méthode en étapes, des séances, un suivi sur plusieurs semaines. Un programme se vend pour ce qu'il permet d'atteindre, pas à l'heure, et c'est ce qui permet de monter ton tarif.",
+    "Thérapeute / Praticien":
+      "Ton savoir peut servir à bien plus de personnes que celles que tu reçois. Même principe qu'une formation : tu le mets en modules, tu ajoutes des temps d'échange en groupe et un accompagnement. Ton activité ne dépend plus seulement de ton agenda.",
+    "Services en ligne (agence, freelance, prestations)":
+      "Le piège des prestations, c'est de facturer au temps passé. L'idée est de bien packager et bien facturer tes services : une offre claire, un livrable défini, un prix à la hauteur de ce que tu apportes. Avec le bon tunnel de vente, ce sont les bons clients qui viennent à toi.",
+  } as Record<string, string>,
+  /* Les entretiens montrés selon l'activité, dictés par Rémy, Roland en tête
+     « pour monter le tarif ». Coach / Consultant n'a pas été dicté : choix
+     de l'agent, à valider. */
+  temoignages: {
+    "Vendeur de formation": ["rgio4y4o8f", "b5taio9plc", "2xege6bt0u"],
+    "Créateur de contenu": ["rgio4y4o8f", "b5taio9plc", "tvy3jbhml9"],
+    "Coach / Consultant": ["rgio4y4o8f", "gcfo8miafe", "iy3jgcijgu"],
+    "Thérapeute / Praticien": ["rgio4y4o8f", "abj3v8v8ek", "ive07co9xm"],
+    "Services en ligne (agence, freelance, prestations)": [
+      "rgio4y4o8f",
+      "9a6g6hsyzp",
+      "iy3jgcijgu",
+    ],
+  } as Record<string, readonly string[]>,
   prix: {
-    "Moins de 500€": 300,
-    "500€ à 2 000€": 1000,
-    "2 000€ à 5 000€": 3000,
-    "Plus de 5 000€": 6000,
-  },
-  objectif: {
+    "Moins de 500€": { prix: 500, cible: 1500 },
+    "500€ à 2 000€": { prix: 1000, cible: 3000 },
+    "2 000€ à 5 000€": { prix: 3000, cible: 6000 },
+    "Plus de 5 000€": { prix: 6000, cible: null },
+  } as Record<string, { prix: number; cible: number | null }>,
+  montants: {
     "Moins de 5000€ /mois": 5000,
     "Entre 5000€ et 10 000€ /mois": 10000,
     "Entre 10 000€ et 50 000€ /mois": 20000,
     "Plus de 50 000€ /mois": 50000,
-  },
+  } as Record<string, number>,
 };
 
 /** Les mentions du tunnel : celles du site, sous leurs propres adresses. */
