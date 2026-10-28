@@ -706,6 +706,9 @@ export const messageRemyHub: ContenuMessage = {
 
   deploiement: {
     ...messageRemy.deploiement,
+    /* Sans « plus de » à la fin : suivi de « des centaines de business », il
+       donnait « dans plus de des centaines de business ». */
+    avant: messageRemy.deploiement.avant.replace(/plus de $/, ""),
     souligne: "des centaines de business",
   },
 
