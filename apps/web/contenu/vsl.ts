@@ -142,10 +142,13 @@ export const videoVsl = {
      montant retenu pour sa tranche (`strategieVsl.montants`). */
   titreObjectif:
     "Découvre comment nous allons t'aider à atteindre {objectif} par mois",
-  /* Le bloc sous la vidéo, quand les réponses sont connues. De l'agent, à
-     valider. */
+  /* Le bloc sous la vidéo, quand les réponses sont connues : la phrase
+     d'origine (`appel`), personnalisée sur demande de Rémy, sans virgule.
+     `{prix}` est le prix retenu pour la tranche (`strategieVsl.prix`), le
+     même que celui de la stratégie. Sans prénom, la phrase commence à
+     « Postule ». */
   appelPersonnalise:
-    "On regarde ensemble ton offre et ton objectif de {objectif} par mois, et on te dit si tu es admissible au programme et au coaching Funnels Club.",
+    "{prenom} postule maintenant pour un appel gratuit de {duree} afin de savoir si tu es admissible au programme et au coaching Funnels Club pour atteindre {objectif} par mois avec une offre à {prix}.",
   /* « DIRECT VSL - MOTION GRAPHICS » chez Wistia, sur demande de Rémy, à la
      place de « Direct Webinar Funnels Club » (6w8wxhaqzk). La durée et
      l'affiche sont relevées sur le média. */

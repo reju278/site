@@ -98,34 +98,39 @@ export function AppelVideoVsl({
   /* **Avec les réponses, le bloc parle de la personne**, sur demande de
      Rémy, qui trouvait le paragraphe générique et peu joli : ce qu'on
      regardera ensemble, avec son objectif surligné. */
-  if (reponses?.prix && objectif) {
-    const valeurs: Record<string, string> = {
-      prix: reponses.prix,
-      objectif: euros.format(objectif),
+  const prix = reponses?.prix
+    ? strategieVsl.prix[reponses.prix]?.prix
+    : undefined;
+  if (prix && objectif) {
+    const valeurs: Record<string, React.ReactNode> = {
+      duree: <strong>30 min</strong>,
+      objectif: (
+        <mark className="surlignage" style={jaune}>
+          {insecables(euros.format(objectif))}
+        </mark>
+      ),
+      prix: (
+        <mark className="surlignage" style={jaune}>
+          {insecables(euros.format(prix))}
+        </mark>
+      ),
     };
+    const phrase = prenom
+      ? videoVsl.appelPersonnalise.replace("{prenom}", prenom)
+      : videoVsl.appelPersonnalise.replace("{prenom} postule", "Postule");
     return (
-      <div className="mt-4 max-w-2xl">
-        <p className="text-lg leading-relaxed text-pretty text-foreground sm:text-xl">
-          {prenom ? `${prenom}, ` : null}
-          {insecables(
-            prenom
-              ? videoVsl.appelPersonnalise.charAt(0).toLowerCase() +
-                  videoVsl.appelPersonnalise.slice(1)
-              : videoVsl.appelPersonnalise,
-          )
-            .split(/(\{\w+\})/)
-            .map((morceau, i) => {
-              const cle = /^\{(\w+)\}$/.exec(morceau)?.[1];
-              return cle && valeurs[cle] ? (
-                <mark key={i} className="surlignage" style={jaune}>
-                  {insecables(valeurs[cle])}
-                </mark>
-              ) : (
-                morceau
-              );
-            })}
-        </p>
-      </div>
+      <p className="mt-4 max-w-3xl text-xl leading-relaxed text-pretty text-foreground sm:text-2xl">
+        {insecables(phrase)
+          .split(/(\{\w+\})/)
+          .map((morceau, i) => {
+            const cle = /^\{(\w+)\}$/.exec(morceau)?.[1];
+            return cle && valeurs[cle] ? (
+              <span key={i}>{valeurs[cle]}</span>
+            ) : (
+              morceau
+            );
+          })}
+      </p>
     );
   }
 
