@@ -291,18 +291,32 @@ export function StrategieVsl({
               ? strategieVsl.rassurancePrixHaut
               : strategieVsl.rassurancePrix;
           return (
-            <div className="mt-5 flex gap-3 rounded-md border border-primary/25 bg-primary/5 p-4 sm:p-5">
-              <ShieldCheck
+            <div
+              className="relief-verre mt-6 flex items-start gap-4 rounded-md border border-primary/20 p-5 sm:p-6"
+              style={{
+                background:
+                  "linear-gradient(135deg, color-mix(in srgb, var(--primary) 12%, var(--background)), color-mix(in srgb, var(--primary) 4%, var(--background)))",
+              }}
+            >
+              {/* Le bouclier dans une pastille pleine : c'est le signe de
+                  l'encadré, et il se voit avant qu'on lise. */}
+              <span
                 aria-hidden
-                className="mt-0.5 size-5 shrink-0 text-primary"
-              />
-              <p className="text-base leading-relaxed text-pretty text-foreground">
-                <strong className="font-semibold">{encadre.accroche}</strong>{" "}
-                {insecables(
-                  encadre.texte
-                    .replace("{objectif}", euros.format(objectif))
-                    .replace("{clients}", String(calcul.apres.clients)),
-                )}
+                className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm"
+              >
+                <ShieldCheck className="size-5" />
+              </span>
+              <p className="min-w-0 text-base leading-relaxed text-pretty text-foreground/85">
+                <span className="titre block text-lg text-foreground sm:text-xl">
+                  {encadre.accroche}
+                </span>
+                <span className="mt-1 block">
+                  {insecables(
+                    encadre.texte
+                      .replace("{objectif}", euros.format(objectif))
+                      .replace("{clients}", String(calcul.apres.clients)),
+                  )}
+                </span>
               </p>
             </div>
           );
