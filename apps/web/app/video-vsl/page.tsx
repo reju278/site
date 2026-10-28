@@ -1,4 +1,5 @@
 import { BoutonScintillant } from "@/components/bouton-scintillant";
+import { CalculateurClients } from "@/components/calculateur-clients";
 import { CompteurVue } from "@/components/compteur-vue";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { TexteRoulant } from "@/components/texte-roulant";
@@ -84,6 +85,9 @@ export default function Video() {
         >
           <TexteRoulant>{videoVsl.bouton}</TexteRoulant>
         </BoutonScintillant>
+
+        {/* Le calculateur, sous le bouton, sur demande de Rémy. */}
+        <CalculateurClients />
       </div>
 
       {/* Le SDK de ClickFunnels, qui compte la visite dans l'étape du tunnel.

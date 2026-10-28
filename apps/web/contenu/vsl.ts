@@ -157,6 +157,28 @@ export const videoVsl = {
   bouton: "Réserve ton appel GRATUIT",
 } as const;
 
+/**
+ * Le calculateur de `/video-vsl`, sous le bouton de réservation, sur demande
+ * de Rémy : combien de clients par mois pour atteindre 10 000 €. **Les
+ * libellés sont de l'agent, à valider par Rémy.** Les bornes du curseur aussi :
+ * de 100 € à 10 000 €, par pas de 50.
+ */
+export const calculateurVsl = {
+  /* Le montant du titre est l'objectif saisi : il suit le champ. */
+  titreAvant: "Combien de clients pour atteindre ",
+  titreApres: " par mois ?",
+  libellePrix: "Le prix de ton offre",
+  libelleObjectif: "Ton objectif",
+  parMois: "€ / mois",
+  clientsSingulier: "client par mois",
+  clientsPluriel: "clients par mois",
+  prixDepart: 2000,
+  prixMin: 100,
+  prixMax: 10000,
+  pasPrix: 50,
+  objectifDepart: 10000,
+} as const;
+
 /** Les mentions du tunnel : celles du site, sous leurs propres adresses. */
 export const legalesVsl = [
   { libelle: "CGV", href: "/course/cgv" },
