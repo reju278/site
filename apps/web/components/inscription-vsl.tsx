@@ -71,6 +71,7 @@ export function ListePointsVsl() {
 
 export function InscriptionVsl() {
   const [ouvert, setOuvert] = useState(false);
+  const [annonce, setAnnonce] = useState<string | null>(null);
   useZoneVisible(ouvert);
 
   /* Les liens de la lettre de Rémy, plus bas sur la page, ouvrent aussi la
@@ -137,19 +138,27 @@ export function InscriptionVsl() {
         >
           {/* Le titre seul, sans phrase dessous ni trait de séparation, sur
               demande de Rémy : le formulaire suit directement. */}
+          {/* Pendant les questions, le titre devient l'annonce des trois
+              questions, sur demande de Rémy : « Juste un instant Prénom… ».
+              Le formulaire le fait savoir par `annoncer`. */}
           <div className="px-6 pt-5 text-center sm:pt-7">
             <DialogTitle className="titre text-xl text-balance sm:text-2xl">
-              {fenetre.titre}
+              {annonce ? insecables(annonce) : fenetre.titre}
             </DialogTitle>
           </div>
-          <Formulaire />
+          <Formulaire annoncer={setAnnonce} />
         </DialogContent>
       </Dialog>
     </>
   );
 }
 
-function Formulaire() {
+function Formulaire({
+  annoncer,
+}: {
+  /** Le titre de la fenêtre pendant les questions, `null` avant. */
+  annoncer: (titre: string | null) => void;
+}) {
   const { fenetre } = optinVsl;
   const [prenom, setPrenom] = useState("");
   const [email, setEmail] = useState("");
@@ -162,6 +171,21 @@ function Formulaire() {
   const formulaire = useRef<HTMLFormElement>(null);
   const { questions } = questionnaireVsl;
   const question = etape >= 0 ? questions[etape] : undefined;
+
+  /* Le titre de la fenêtre suit l'étape, et revient au sien quand la
+     fenêtre se ferme (le formulaire est alors démonté). */
+  const questionsEnCours = etape >= 0;
+  const prenomSaisi = prenom.trim();
+  useEffect(() => {
+    annoncer(
+      questionsEnCours
+        ? prenomSaisi
+          ? questionnaireVsl.introAvecPrenom.replace("{prenom}", prenomSaisi)
+          : questionnaireVsl.intro
+        : null,
+    );
+  }, [annoncer, questionsEnCours, prenomSaisi]);
+  useEffect(() => () => annoncer(null), [annoncer]);
 
   /* Un choix fait avancer ; le dernier envoie le formulaire. `flushSync`
      écrit la réponse dans son champ caché avant l'envoi : sans lui, le SDK
@@ -266,7 +290,6 @@ function Formulaire() {
 
       {question ? (
         <EtapeQuestion
-          prenom={prenom.trim()}
           rang={etape}
           total={questions.length}
           titre={question.titre}
@@ -382,7 +405,6 @@ function Formulaire() {
  * se sente pas ailleurs.
  */
 function EtapeQuestion({
-  prenom,
   rang,
   total,
   titre,
@@ -393,7 +415,6 @@ function EtapeQuestion({
   choisir,
   retour,
 }: {
-  prenom: string;
   rang: number;
   total: number;
   titre: string;
@@ -404,16 +425,8 @@ function EtapeQuestion({
   choisir: (choix: string) => void;
   retour: () => void;
 }) {
-  const intro = prenom
-    ? questionnaireVsl.introAvecPrenom.replace("{prenom}", prenom)
-    : questionnaireVsl.intro;
-
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-center text-sm text-pretty text-muted-foreground">
-        {insecables(intro)}
-      </p>
-
       {/* La progression : une barre et « 1 / 3 ». */}
       <div className="flex items-center gap-3">
         <div

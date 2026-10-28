@@ -208,13 +208,14 @@ export const calculateurVsl = {
  * ne serait plus reconnu par Calendly. Les intitulés, eux, sont tutoyés et
  * personnalisés : `{prenom}` est remplacé par le prénom de l'opt-in.
  *
- * Les intitulés et l'introduction sont de l'agent, à valider par Rémy.
+ * Les intitulés des questions sont de l'agent, à valider par Rémy.
  */
 export const questionnaireVsl = {
+  /* Dicté par Rémy : le titre de la fenêtre pendant les questions. */
   intro:
-    "Juste un instant : trois questions pour pouvoir t'aider au mieux avant d'accéder à la formation.",
+    "Juste une dernière étape avant d'accéder à ta vidéo de formation gratuite :",
   introAvecPrenom:
-    "Juste un instant {prenom} : trois questions pour pouvoir t'aider au mieux avant d'accéder à la formation.",
+    "Juste une dernière étape avant d'accéder à ta vidéo de formation gratuite {prenom} :",
   retour: "Retour",
   questions: [
     {
