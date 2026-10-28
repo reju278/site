@@ -3,6 +3,7 @@ import { InscriptionVsl } from "@/components/inscription-vsl";
 import { optinVsl } from "@/contenu/vsl";
 import { avecReglages } from "@/lib/reglages-seo";
 import type { Metadata } from "next";
+import Script from "next/script";
 
 /**
  * L'opt-in du VSL Funnel : la promesse, l'aperçu de la vidéo, et la fenêtre
@@ -13,6 +14,12 @@ const metadonnees: Metadata = {
   title: { absolute: "La formation gratuite · Funnels Club" },
   description:
     "La vidéo gratuite qui présente le parfait tunnel de vente pour vendre votre offre digitale, de façon simple, régulière et prévisible.",
+  /* Le jeton de page externe de ClickFunnels : il désigne cette page comme
+     l'étape d'inscription du tunnel « 2026 : Direct VSL (Claude) », et le SDK
+     chargé plus bas le lit dans le `head`. Posé ici et non dans le gabarit,
+     qui couvre aussi les pages légales de `/course` : elles seraient sinon
+     comptées comme des visites de l'inscription. */
+  other: { "cf-page-token": "cfp_RZaldUb55ckllKCJnqLN9TPk" },
 };
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -50,6 +57,13 @@ export default function Course() {
         </header>
         <InscriptionVsl />
       </div>
+      {/* Le SDK de ClickFunnels, qui compte la visite dans l'étape du tunnel.
+          `afterInteractive`, comme sur `/thanks` : rien ne doit retarder le
+          rendu. */}
+      <Script
+        src="https://sdk.myclickfunnels.com/sdk.js"
+        strategy="afterInteractive"
+      />
     </main>
   );
 }
