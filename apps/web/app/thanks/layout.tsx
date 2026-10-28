@@ -1,6 +1,7 @@
 import { EnTeteImmersion } from "@/components/en-tete-immersion";
 import { MentionsLegales } from "@/components/mentions-legales";
 import { PiedImmersion } from "@/components/pied-immersion";
+import { PoliceTunnel } from "@/components/police-tunnel";
 import type { Metadata } from "next";
 import Script from "next/script";
 
@@ -32,6 +33,7 @@ export default function LayoutThanks({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <div
+      data-police-tunnel
       /* `--largeur-video` est la largeur de la carte de l'étape 1, et
          `--video-h` la hauteur de sa vidéo, rembourrage de la carte déduit
          (1,5 rem de chaque côté en grand ; un demi-rem d'écart sur
@@ -48,6 +50,7 @@ export default function LayoutThanks({
         } as React.CSSProperties
       }
     >
+      <PoliceTunnel />
       <EnTeteImmersion ancres={[]} bascule={false} />
       {children}
       {/* Le pied de page d'`/appel` : la marque, un filet, les mentions du

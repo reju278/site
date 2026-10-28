@@ -45,6 +45,22 @@
   letter-spacing: -0.015em;
 }
 
+/* Les titres du tunnel VSL sont en Plus Jakarta Sans, sur décision de Rémy.
+
+   `[data-police-tunnel]` est posé par les gabarits de `/course`, `/video`,
+   `/appel` et `/thanks`, qui chargent aussi la police
+   (`components/police-tunnel.tsx`). La règle vise toute la page qui le
+   contient, et non le seul gabarit : la fenêtre d'inscription est rendue dans
+   un portail, hors de lui. Hors couche, elle passe devant l'utilitaire
+   `titre`. Les axes de Fraunces n'ont plus de sens sur une police qui ne les
+   a pas : ils sont remis à zéro. */
+:root:has([data-police-tunnel]) .titre {
+  font-family: var(--font-tunnel), system-ui, sans-serif;
+  font-weight: 800;
+  font-variation-settings: normal;
+  letter-spacing: -0.02em;
+}
+
 /* `text-balance` n'entre pas dans l'utilitaire `titre`.
 
    Équilibrer les lignes n'a de sens que sur un titre centré, dont on veut les

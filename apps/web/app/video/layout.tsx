@@ -2,6 +2,7 @@ import { EnTeteImmersion } from "@/components/en-tete-immersion";
 import { MentionsLegales } from "@/components/mentions-legales";
 import { PiedImmersion } from "@/components/pied-immersion";
 import { legalesVsl } from "@/contenu/vsl";
+import { PoliceTunnel } from "@/components/police-tunnel";
 import type { Metadata } from "next";
 
 /**
@@ -18,7 +19,8 @@ export default function LayoutVideo({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div>
+    <div data-police-tunnel>
+      <PoliceTunnel />
       <EnTeteImmersion ancres={[]} bascule={false} />
       {children}
       <div aria-hidden className="h-20 sm:h-28" />

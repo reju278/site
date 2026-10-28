@@ -2,6 +2,7 @@ import { EnTeteImmersion } from "@/components/en-tete-immersion";
 import { MentionsLegales } from "@/components/mentions-legales";
 import { PiedImmersion } from "@/components/pied-immersion";
 import { reservationAppel } from "@/contenu/appel";
+import { PoliceTunnel } from "@/components/police-tunnel";
 import type { Metadata } from "next";
 import Script from "next/script";
 
@@ -35,6 +36,7 @@ export default function LayoutAppel({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <div
+      data-police-tunnel
       /* Les mêmes noms que les gabarits des deux autres pages, que lisent le
          hero et `[data-hero]` dans `globals.css`. La « vidéo » est ici le
          formulaire de Calendly à sa hauteur minimale, et la jonction tombe
@@ -48,6 +50,7 @@ export default function LayoutAppel({
         } as React.CSSProperties
       }
     >
+      <PoliceTunnel />
       <EnTeteImmersion ancres={[]} bascule={false} />
       {children}
       {/* **Le pied de page, loin sous le formulaire**, sur demande de Rémy :
