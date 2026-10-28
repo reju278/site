@@ -23,20 +23,27 @@ export const optinVsl = {
      français, dans leur forme typographique (“ ”) plutôt que droite. Les deux
      mises en avant en bleu sont celles du titre précédent, reportées sur les
      mêmes mots. */
+  /* **Les retours à la ligne `\n` ne valent que sur téléphone** : le titre y
+     est en `whitespace-pre-line`, et redevient un texte ordinaire au-dessus
+     de `sm`, où les `\n` comptent comme des espaces. Aucune taille ne
+     donnait seule une bonne forme de 320 à 375 px : « le PARFAIT » ou
+     « place le » restaient seuls sur une ligne. La coupure s'écrit donc,
+     comme le veut la règle du dépôt : sept lignes de 180 à 265 px à 24 px,
+     qui tiennent dès 320 px de large.
+
+     Espaces insécables dans « tunnel de vente », qui se coupait entre ses
+     guillemets. « Formation » et « coaching » remplacent « offre digitale* »
+     et sa note, sur décision de Rémy ; « créé » s'accorde avec « coaching »,
+     le nom le plus proche. */
   titre: [
-    { texte: "Nous allons mettre en place le " },
-    /* Espaces insécables dans « tunnel de vente » : l'expression se coupait
-       en deux entre ses guillemets sur téléphone. */
-    { texte: "PARFAIT “tunnel\u00a0de\u00a0vente”", accent: true },
-    { texte: " pour vendre votre " },
-    { texte: "offre digitale*", accent: true },
-    /* « encore » et « créée) » sont liés par une espace insécable : sur
-       375 px, « créée) » tombait seul sur la dernière ligne. */
-    { texte: " (même si vous ne l'avez pas encore\u00a0créée)" },
+    { texte: "Nous allons mettre\nen place le " },
+    { texte: "PARFAIT\n“tunnel\u00a0de\u00a0vente”", accent: true },
+    { texte: " pour\nvendre votre " },
+    { texte: "formation", accent: true },
+    { texte: "\nou votre " },
+    { texte: "coaching", accent: true },
+    { texte: "\n(même si vous ne l'avez\npas encore\u00a0créé)" },
   ],
-  /* Ce que veut dire « offre digitale ». « Service » est devenu
-     « prestation de services », sur précision de Rémy. */
-  note: "formation en ligne, prestation de services ou coaching",
   /* L'aperçu de la vidéo : une image tirée de la vidéo en 4K. */
   apercu: {
     image: "/vsl/apercu-1920.webp",

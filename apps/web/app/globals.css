@@ -58,7 +58,9 @@
   font-family: var(--font-tunnel), system-ui, sans-serif;
   font-weight: 800;
   font-variation-settings: normal;
-  letter-spacing: -0.02em;
+  /* -0,01 em et non -0,02 : à 800 de graisse et en grand corps, Rémy
+     trouvait le titre trop resserré sur ordinateur. */
+  letter-spacing: -0.01em;
 }
 
 /* `text-balance` n'entre pas dans l'utilitaire `titre`.

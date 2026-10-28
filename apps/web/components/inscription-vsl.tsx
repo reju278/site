@@ -15,7 +15,7 @@ import {
   DialogTitle,
 } from "@repo/ui/components/dialog";
 import { Input } from "@repo/ui/components/input";
-import { Check, LoaderCircle, Lock, Play } from "lucide-react";
+import { Check, LoaderCircle, Lock, Play, Volume2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 /**
@@ -335,6 +335,16 @@ function ApercuVideo({ ouvrir }: { ouvrir: () => void }) {
           elle salirait l'image au lieu de détacher le bouton. */}
       <span className="absolute top-[46%] left-1/2 flex h-12 w-[4.5rem] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-md bg-primary/70 text-primary-foreground transition-colors group-hover:bg-primary/90">
         <Play className="size-6 fill-current" />
+      </span>
+
+      {/* L'icône son, en haut à droite comme sur le lecteur de Wistia, sur
+          demande de Rémy : elle dit que la vidéo est parlée. Décorative, le
+          bouton entier portant déjà son libellé. */}
+      <span
+        aria-hidden
+        className="absolute top-3 right-3 flex size-9 items-center justify-center rounded-full bg-black/55 text-white"
+      >
+        <Volume2 className="size-[18px]" />
       </span>
 
       {/* La barre du lecteur : elle dit que c'est une vidéo, et sa durée. */}

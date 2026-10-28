@@ -40,8 +40,8 @@ export default function Course() {
           sans défiler, même sur un petit iPhone dont les barres du navigateur
           mangent une centaine de pixels. */}
       <div className="mx-auto flex max-w-6xl flex-col gap-4 sm:gap-10">
-        <header className="mx-auto flex max-w-3xl flex-col gap-2 text-center sm:gap-4">
-          <h1 className="titre text-[1.6rem] leading-tight text-balance text-foreground sm:text-[2.6rem]">
+        <header className="mx-auto flex max-w-4xl flex-col gap-2 text-center sm:gap-4">
+          <h1 className="titre text-2xl leading-tight whitespace-pre-line text-balance sm:whitespace-normal text-foreground sm:text-[2.6rem] sm:leading-[1.22]">
             {optinVsl.titre.map((morceau, rang) =>
               "accent" in morceau ? (
                 <span key={rang} className="text-primary">
@@ -59,17 +59,6 @@ export default function Course() {
               ),
             )}
           </h1>
-          {/* Ce que veut dire « offre digitale » : une ligne de définition,
-              comme une note de bas de page qu'on aurait remontée, mais
-              lisible, sur demande de Rémy. L'astérisque répond à celui du
-              titre ; le texte est en encre de page et non en gris. */}
-          <p className="text-sm text-balance text-foreground/75 sm:text-lg">
-            <span className="font-bold text-primary">*</span>
-            <span className="font-semibold text-foreground">
-              Offre digitale
-            </span>{" "}
-            : {optinVsl.note}
-          </p>
         </header>
         <InscriptionVsl />
         <PreuveTrustpilot />
