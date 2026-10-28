@@ -1,7 +1,7 @@
 import { Plus_Jakarta_Sans } from "next/font/google";
 
 /**
- * La police des titres du tunnel VSL (`/course`, `/video`, `/appel`,
+ * La police des titres du tunnel VSL (`/course`, `/video-vsl`, `/appel`,
  * `/thanks`), choisie par Rémy parmi dix propositions : plus moderne que
  * Fraunces, qui reste celle du reste du site.
  *

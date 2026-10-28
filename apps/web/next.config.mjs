@@ -35,6 +35,15 @@ export default {
         destination: "/confidentialites",
         permanent: true,
       },
+      /* La VSL du VSL Funnel a quitté `/video` pour `/video-vsl`, sur demande
+         de Rémy : l'adresse dit de quel tunnel elle est. L'ancienne a été
+         l'étape du tunnel ClickFunnels et a pu partir dans des e-mails ; la
+         requête (prénom, e-mail pour Calendly) suit la redirection. */
+      {
+        source: "/video",
+        destination: "/video-vsl",
+        permanent: true,
+      },
     ];
   },
 };

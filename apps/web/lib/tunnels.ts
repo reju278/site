@@ -23,7 +23,7 @@ export const TUNNELS = [
   "/appel",
   "/thanks",
   "/course",
-  "/video",
+  "/video-vsl",
   "/strategie",
 ] as const;
 

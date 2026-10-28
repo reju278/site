@@ -33,7 +33,7 @@ export const reservationAppel = {
     "https://calendly.com/funnels-club/candidature-funnels-club-clone-5",
   /* Le formulaire de la page `/appel` seule, sur demande de Rémy : celui de
      `funnels.club/appel`. Il est distinct de `calendly`, qui reste celui du
-     formulaire posé sous la vidéo de `/video`. Même règle pour la requête :
+     formulaire posé sous la vidéo de `/video-vsl`. Même règle pour la requête :
      `hide_gdpr_banner` est ajouté par `FormulaireCalendly`. */
   calendlyPageAppel:
     "https://calendly.com/funnels-club/appel-decouverte-l-clone",

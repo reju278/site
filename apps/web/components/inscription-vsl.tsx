@@ -23,7 +23,7 @@ import { useEffect, useRef, useState } from "react";
  * là-bas. Le CRM Funnels Club (`/vsl/optin`) ne sert plus que de repli
  * quand le SDK n'a pas pu se charger. Prénom et e-mail restent dans le
  * navigateur (`sessionStorage`, jamais dans
- * l'adresse) pour pré-remplir Calendly sur `/video`. On y va par une
+ * l'adresse) pour pré-remplir Calendly sur `/video-vsl`. On y va par une
  * navigation complète : le formulaire de Calendly lit ces informations au
  * chargement de la page, pas après une navigation côté client.
  */
@@ -192,7 +192,7 @@ function Formulaire() {
         };
         throw new Error(corps.erreur ?? "Inscription impossible");
       }
-      window.location.href = "/video";
+      window.location.href = "/video-vsl";
     } catch (e) {
       setErreur(
         e instanceof Error && e.message !== "Failed to fetch"

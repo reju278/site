@@ -2,7 +2,7 @@ import { messageRemyHub } from "@/contenu/hub";
 import { messageRemy } from "@/contenu/site";
 /**
  * Le VSL Funnel, sous go.funnels.club : l'opt-in de la formation gratuite
- * (`/course`), la vidéo et la prise d'appel (`/video`), puis la
+ * (`/course`), la vidéo et la prise d'appel (`/video-vsl`), puis la
  * confirmation (`/thanks`, où Calendly renvoie).
  *
  * Les textes sont repris **au mot près** des pages ClickFunnels de Rémy
@@ -131,7 +131,8 @@ export const videoVsl = {
     },
     { texte: "“Funnels Club”", gras: true },
   ],
-  bouton: "Réservez votre appel gratuit",
+  /* « GRATUIT » en capitales, sur demande de Rémy. */
+  bouton: "Réservez votre appel GRATUIT",
 } as const;
 
 /** Les mentions du tunnel : celles du site, sous leurs propres adresses. */

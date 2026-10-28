@@ -47,7 +47,7 @@
 
 /* Les titres du tunnel VSL sont en Plus Jakarta Sans, sur décision de Rémy.
 
-   `[data-police-tunnel]` est posé par les gabarits de `/course`, `/video`,
+   `[data-police-tunnel]` est posé par les gabarits de `/course`, `/video-vsl`,
    `/appel` et `/thanks`, qui chargent aussi la police
    (`components/police-tunnel.tsx`). La règle vise toute la page qui le
    contient, et non le seul gabarit : la fenêtre d'inscription est rendue dans
