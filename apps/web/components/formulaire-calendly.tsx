@@ -42,6 +42,22 @@ function adresseCalendly(base: string): string {
       if (typeof contact.prenom === "string" && contact.prenom)
         adresse.searchParams.set("name", contact.prenom);
     }
+    /* Les réponses au questionnaire de `/video-vsl`, aux questions de
+       Calendly qu'elles reprennent mot pour mot. Les numéros sont ceux de
+       `questionnaireVsl`, recopiés : la fonction ne doit rien importer. */
+    const reponses = JSON.parse(localStorage.getItem("vsl-reponses") || "null");
+    if (
+      frais &&
+      reponses &&
+      Date.now() - (reponses.t || 0) < 7 * 24 * 60 * 60 * 1000
+    ) {
+      if (typeof reponses.activite === "string")
+        adresse.searchParams.set("a2", reponses.activite);
+      if (typeof reponses.objectif === "string")
+        adresse.searchParams.set("a3", reponses.objectif);
+      if (typeof reponses.prix === "string")
+        adresse.searchParams.set("a5", reponses.prix);
+    }
   } catch (e) {
     /* Stockage bloqué : le formulaire reste vide. */
   }

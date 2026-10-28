@@ -1,13 +1,14 @@
 "use client";
 
-import { calculateurVsl } from "@/contenu/vsl";
+import { calculateurVsl, departCalculateurVsl } from "@/contenu/vsl";
+import { useReponsesVsl } from "@/lib/prenom-vsl";
 import { insecables } from "@/lib/typographie";
 import { Area } from "@repo/ui/components/charts/area";
 import { AreaChart } from "@repo/ui/components/charts/area-chart";
 import { Grid } from "@repo/ui/components/charts/grid";
 import { ChartTooltip } from "@repo/ui/components/charts/tooltip/chart-tooltip";
 import { Slider } from "@repo/ui/components/slider";
-import { useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 
 const euros = new Intl.NumberFormat("fr-FR", {
   style: "currency",
@@ -38,6 +39,18 @@ export function CalculateurClients() {
   const [objectif, setObjectif] = useState<number>(
     calculateurVsl.objectifDepart,
   );
+  /* Les réponses au questionnaire règlent le point de départ, sur demande
+     de Rémy : le calculateur s'ouvre sur sa tranche de prix et d'objectif.
+     Ensuite, c'est le curseur qui décide. */
+  const reponses = useReponsesVsl();
+  useEffect(() => {
+    const prixRepondu =
+      reponses?.prix && departCalculateurVsl.prix[reponses.prix];
+    const objectifRepondu =
+      reponses?.objectif && departCalculateurVsl.objectif[reponses.objectif];
+    if (prixRepondu) setPrix(prixRepondu);
+    if (objectifRepondu) setObjectif(objectifRepondu);
+  }, [reponses]);
   const idPrix = useId();
   const idObjectif = useId();
 

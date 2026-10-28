@@ -7,11 +7,23 @@ import {
   API_FUNNELS,
   CLE_CONTACT_VSL,
   optinVsl,
+  questionnaireVsl,
   videoVsl,
 } from "@/contenu/vsl";
+import { enregistrerReponsesVsl, type ReponsesVsl } from "@/lib/prenom-vsl";
+import { insecables } from "@/lib/typographie";
+import { cn } from "@repo/ui/lib/utils";
 import { Dialog, DialogContent, DialogTitle } from "@repo/ui/components/dialog";
 import { Input } from "@repo/ui/components/input";
-import { Check, LoaderCircle, Lock, Play, Volume2 } from "lucide-react";
+import {
+  ArrowLeft,
+  Check,
+  LoaderCircle,
+  Lock,
+  Play,
+  Volume2,
+} from "lucide-react";
+import { flushSync } from "react-dom";
 import { useEffect, useRef, useState } from "react";
 
 /**
@@ -143,7 +155,27 @@ function Formulaire() {
   const [email, setEmail] = useState("");
   const [envoi, setEnvoi] = useState(false);
   const [erreur, setErreur] = useState<string | null>(null);
+  /* `-1` : prénom, e-mail et consentement. `0` à `2` : les trois questions,
+     une à la fois, à la place des champs. Voir `questionnaireVsl`. */
+  const [etape, setEtape] = useState(-1);
+  const [reponses, setReponses] = useState<ReponsesVsl>({});
   const formulaire = useRef<HTMLFormElement>(null);
+  const { questions } = questionnaireVsl;
+  const question = etape >= 0 ? questions[etape] : undefined;
+
+  /* Un choix fait avancer ; le dernier envoie le formulaire. `flushSync`
+     écrit la réponse dans son champ caché avant l'envoi : sans lui, le SDK
+     lirait la valeur d'avant. */
+  const choisir = (choix: string) => {
+    if (!question || envoi) return;
+    const suite = { ...reponses, [question.cle]: choix };
+    flushSync(() => setReponses(suite));
+    if (etape < questions.length - 1) {
+      setEtape(etape + 1);
+      return;
+    }
+    formulaire.current?.requestSubmit();
+  };
 
   /* Deux chemins, et le SDK décide lequel.
 
@@ -161,6 +193,10 @@ function Formulaire() {
      renverrait sur la page avec le prénom et l'e-mail dans l'adresse. */
   const valider = async (evenement: React.FormEvent<HTMLFormElement>) => {
     const parLeSdk = evenement.currentTarget.dataset.cfSdkEnhanced === "true";
+    /* Les réponses, pour pré-remplir Calendly et régler la stratégie de
+       `/video-vsl`. Elles partent aussi à ClickFunnels, par leurs champs
+       cachés. */
+    enregistrerReponsesVsl(reponses);
     try {
       localStorage.setItem(
         CLE_CONTACT_VSL,
@@ -214,93 +250,244 @@ function Formulaire() {
       onFocus={recentrer}
       className="flex flex-col gap-3 px-6 pt-5 pb-6"
     >
-      {/* Les trois champs portent leur `data-cf-element` : c'est ce que le
+      {/* Les trois réponses, en champs personnalisés de la fiche du contact
+          ClickFunnels, sur demande de Rémy. Un `input` caché est un élément
+          que le SDK accepte pour `custom-attribute:` ; le champ se crée chez
+          ClickFunnels à la première valeur reçue. */}
+      {questions.map((q) => (
+        <input
+          key={q.cle}
+          type="hidden"
+          data-cf-element={`custom-attribute:${q.champ}`}
+          name={q.champ}
+          value={reponses[q.cle] ?? ""}
+        />
+      ))}
+
+      {question ? (
+        <EtapeQuestion
+          prenom={prenom.trim()}
+          rang={etape}
+          total={questions.length}
+          titre={question.titre}
+          choix={question.choix}
+          emojis={question.emojis}
+          choisi={reponses[question.cle]}
+          envoi={envoi}
+          choisir={choisir}
+          retour={() => setEtape(etape - 1)}
+        />
+      ) : null}
+
+      {/* **Les champs restent dans le formulaire pendant les questions**,
+          cachés et non démontés : c'est ce formulaire-là que le SDK envoie à
+          la dernière réponse, prénom et e-mail compris. */}
+      <div hidden={etape >= 0} className="flex flex-col gap-3">
+        {/* Les trois champs portent leur `data-cf-element` : c'est ce que le
           SDK lit, et rien d'autre. Aucun champ du formulaire n'en est
           dépourvu, la documentation de ClickFunnels l'interdisant. */}
-      <Input
-        required
-        data-cf-element="first-name"
-        name="first_name"
-        autoComplete="given-name"
-        placeholder="Prénom"
-        value={prenom}
-        onChange={(e) => setPrenom(e.target.value)}
-        /* Plus visibles, sur demande de Rémy : fond de carte, blanc sur le
+        <Input
+          required
+          data-cf-element="first-name"
+          name="first_name"
+          autoComplete="given-name"
+          placeholder="Prénom"
+          value={prenom}
+          onChange={(e) => setPrenom(e.target.value)}
+          /* Plus visibles, sur demande de Rémy : fond de carte, blanc sur le
            beige de la fenêtre, contour plus marqué, texte indicatif plus
            lisible. Doublés en `dark:` : la variante du registre pose
            `dark:bg-input/30`, que `cn()` ne voit pas comme un conflit. Et
            `md:text-base` contre son `md:text-sm`. */
-        className="h-13 border-foreground/20 bg-card text-base shadow-sm placeholder:text-foreground/50 md:text-base dark:border-foreground/25 dark:bg-card"
-        aria-label="Prénom"
-      />
-      <Input
-        required
-        data-cf-element="email"
-        name="email"
-        type="email"
-        autoComplete="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        /* Plus visibles, sur demande de Rémy : fond de carte, blanc sur le
+          className="h-13 border-foreground/20 bg-card text-base shadow-sm placeholder:text-foreground/50 md:text-base dark:border-foreground/25 dark:bg-card"
+          aria-label="Prénom"
+        />
+        <Input
+          required
+          data-cf-element="email"
+          name="email"
+          type="email"
+          autoComplete="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          /* Plus visibles, sur demande de Rémy : fond de carte, blanc sur le
            beige de la fenêtre, contour plus marqué, texte indicatif plus
            lisible. Doublés en `dark:` : la variante du registre pose
            `dark:bg-input/30`, que `cn()` ne voit pas comme un conflit. Et
            `md:text-base` contre son `md:text-sm`. */
-        className="h-13 border-foreground/20 bg-card text-base shadow-sm placeholder:text-foreground/50 md:text-base dark:border-foreground/25 dark:bg-card"
-        aria-label="Email"
-      />
-      <label className="flex cursor-pointer items-start gap-2.5 pt-1 text-xs leading-relaxed text-muted-foreground">
-        {/* Le consentement part à ClickFunnels comme champ personnalisé de
+          className="h-13 border-foreground/20 bg-card text-base shadow-sm placeholder:text-foreground/50 md:text-base dark:border-foreground/25 dark:bg-card"
+          aria-label="Email"
+        />
+        <label className="flex cursor-pointer items-start gap-2.5 pt-1 text-xs leading-relaxed text-muted-foreground">
+          {/* Le consentement part à ClickFunnels comme champ personnalisé de
             la fiche du contact, « consentement ». Le SDK envoie la valeur
             d'une case sans regarder si elle est cochée : c'est `required`
             qui garantit qu'elle l'est, puisque le formulaire ne part pas
             sans. Tout contact arrivé par ici porte donc « oui ». */}
-        <input
-          type="checkbox"
-          required
-          data-cf-element="custom-attribute:consentement"
-          name="consentement"
-          value="oui"
-          className="mt-0.5 size-4 shrink-0 cursor-pointer accent-[var(--primary)]"
-        />
-        <span>
-          {fenetre.consentement}
-          <a
-            href="/course/confidentialite"
-            target="_blank"
-            rel="noreferrer"
-            className="underline underline-offset-2 hover:text-foreground"
-          >
-            {fenetre.lienConfidentialite}
-          </a>
-          .
-        </span>
-      </label>
-      {erreur ? (
-        <p role="alert" className="text-sm text-destructive">
-          {erreur}
+          <input
+            type="checkbox"
+            required
+            data-cf-element="custom-attribute:consentement"
+            name="consentement"
+            value="oui"
+            className="mt-0.5 size-4 shrink-0 cursor-pointer accent-[var(--primary)]"
+          />
+          <span>
+            {fenetre.consentement}
+            <a
+              href="/course/confidentialite"
+              target="_blank"
+              rel="noreferrer"
+              className="underline underline-offset-2 hover:text-foreground"
+            >
+              {fenetre.lienConfidentialite}
+            </a>
+            .
+          </span>
+        </label>
+        {erreur ? (
+          <p role="alert" className="text-sm text-destructive">
+            {erreur}
+          </p>
+        ) : null}
+        <BoutonScintillant
+          /* Le bouton du site est un `type="button"`. **Il n'envoie plus** :
+           il vérifie les champs avec les contrôles natifs, puis passe aux
+           questions, sur décision de Rémy. L'envoi part à la dernière
+           réponse. */
+          action={() => {
+            if (!envoi && formulaire.current?.reportValidity()) setEtape(0);
+          }}
+          className="mt-2 w-full text-lg"
+        >
+          {envoi ? (
+            <LoaderCircle className="size-5 animate-spin" />
+          ) : (
+            <TexteRoulant>{fenetre.bouton}</TexteRoulant>
+          )}
+        </BoutonScintillant>
+        <p className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
+          <Lock className="size-3" />
+          Vos informations restent confidentielles.
         </p>
-      ) : null}
-      <BoutonScintillant
-        /* Le bouton du site est un `type="button"` : il demande l'envoi
-           du formulaire, qui garde ainsi ses vérifications natives. */
-        action={() => {
-          if (!envoi) formulaire.current?.requestSubmit();
-        }}
-        className="mt-2 w-full text-lg"
-      >
-        {envoi ? (
-          <LoaderCircle className="size-5 animate-spin" />
-        ) : (
-          <TexteRoulant>{fenetre.bouton}</TexteRoulant>
-        )}
-      </BoutonScintillant>
-      <p className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
-        <Lock className="size-3" />
-        Vos informations restent confidentielles.
-      </p>
+      </div>
     </form>
+  );
+}
+
+/**
+ * Une question du questionnaire, à la place des champs de la fenêtre : la
+ * fenêtre et son titre ne changent pas, sur demande de Rémy, pour qu'on ne
+ * se sente pas ailleurs.
+ */
+function EtapeQuestion({
+  prenom,
+  rang,
+  total,
+  titre,
+  choix,
+  emojis,
+  choisi,
+  envoi,
+  choisir,
+  retour,
+}: {
+  prenom: string;
+  rang: number;
+  total: number;
+  titre: string;
+  choix: readonly string[];
+  emojis: readonly string[];
+  choisi: string | undefined;
+  envoi: boolean;
+  choisir: (choix: string) => void;
+  retour: () => void;
+}) {
+  const intro = prenom
+    ? questionnaireVsl.introAvecPrenom.replace("{prenom}", prenom)
+    : questionnaireVsl.intro;
+
+  return (
+    <div className="flex flex-col gap-4">
+      <p className="text-center text-sm text-pretty text-muted-foreground">
+        {insecables(intro)}
+      </p>
+
+      {/* La progression : une barre et « 1 / 3 ». */}
+      <div className="flex items-center gap-3">
+        <div
+          role="progressbar"
+          aria-valuemin={0}
+          aria-valuemax={total}
+          aria-valuenow={rang + 1}
+          aria-label="Progression"
+          className="h-2 flex-1 overflow-hidden rounded-full bg-foreground/10"
+        >
+          <div
+            className="h-full rounded-full bg-primary transition-[width] duration-500 ease-out"
+            style={{ width: `${((rang + 1) / total) * 100}%` }}
+          />
+        </div>
+        <span className="text-sm font-medium text-muted-foreground tabular-nums">
+          {rang + 1} / {total}
+        </span>
+      </div>
+
+      {/* La `key` remonte le bloc à chaque question : l'apparition se
+          rejoue. */}
+      <fieldset
+        key={titre}
+        disabled={envoi}
+        className="animate-in fade-in-0 slide-in-from-right-4 duration-300"
+      >
+        <legend className="text-lg font-semibold text-balance text-foreground">
+          {insecables(titre)}
+        </legend>
+        <div className="mt-4 flex flex-col gap-2.5">
+          {choix.map((c, i) => (
+            <button
+              key={c}
+              type="button"
+              onClick={() => choisir(c)}
+              aria-pressed={choisi === c}
+              className={cn(
+                "flex min-h-13 w-full items-center justify-between gap-3 rounded-md border bg-card px-4 py-3 text-left text-base font-medium text-foreground shadow-sm transition-colors hover:border-primary hover:bg-primary/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+                choisi === c
+                  ? "border-primary bg-primary/5"
+                  : "border-foreground/20",
+              )}
+            >
+              {/* L'émoji à l'écran seulement : la valeur choisie reste `c`. */}
+              <span className="flex items-center gap-3">
+                <span aria-hidden className="text-xl leading-none">
+                  {emojis[i]}
+                </span>
+                {c}
+              </span>
+              {envoi && choisi === c && rang === total - 1 ? (
+                <LoaderCircle
+                  aria-hidden
+                  className="size-5 shrink-0 animate-spin"
+                />
+              ) : null}
+            </button>
+          ))}
+        </div>
+      </fieldset>
+
+      {rang > 0 ? (
+        <button
+          type="button"
+          onClick={retour}
+          disabled={envoi}
+          className="inline-flex min-h-10 items-center gap-1.5 self-start rounded-md text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        >
+          <ArrowLeft aria-hidden className="size-4" />
+          {questionnaireVsl.retour}
+        </button>
+      ) : null}
+    </div>
   );
 }
 

@@ -31,6 +31,10 @@ export const API_FUNNELS =
  */
 export const CLE_CONTACT_VSL = "vsl-contact";
 
+/** La clé des réponses au questionnaire de `/video-vsl`, rangées à côté du
+ * contact et avec la même durée de vie. Recopiée dans `FormulaireCalendly`. */
+export const CLE_REPONSES_VSL = "vsl-reponses";
+
 /** Sept jours, en millisecondes. Recopié dans `FormulaireCalendly`. */
 export const DUREE_CONTACT_VSL = 7 * 24 * 60 * 60 * 1000;
 
@@ -178,6 +182,108 @@ export const calculateurVsl = {
   pasPrix: 50,
   objectifDepart: 10000,
 } as const;
+
+/**
+ * Les trois questions de la fenêtre d'inscription de `/course`, sur demande
+ * de Rémy : après prénom, e-mail et consentement, « Voir la formation
+ * GRATUITE » les fait apparaître une à une à la place des champs, avec une
+ * barre de progression.
+ *
+ * **L'inscription part à la dernière réponse, et pas avant**, sur décision de
+ * Rémy : le SDK de ClickFunnels envoie et change de page dans le même geste,
+ * il n'y a pas de temps entre les deux pour poser autre chose. Le prix est
+ * connu : quelqu'un qui abandonne pendant les questions n'est pas inscrit.
+ *
+ * **Chaque réponse part dans un champ personnalisé de la fiche ClickFunnels**,
+ * `champ`, créé à la première valeur reçue.
+ *
+ * **Les émojis ne s'affichent qu'à l'écran**, sur demande de Rémy : `emojis`
+ * suit `choix` rang pour rang, et ni ClickFunnels ni Calendly ne les
+ * reçoivent. La valeur envoyée reste le choix nu.
+ *
+ * **Les choix sont ceux du Calendly de `/appel`, au caractère près**
+ * (« Appel découverte (YT) », relevé par son API) : c'est ce qui permet de
+ * pré-remplir ses questions avec ces réponses, `calendly` donnant le numéro
+ * de la question dans le formulaire (`a2`, `a3`, `a5`). Un choix réécrit ici
+ * ne serait plus reconnu par Calendly. Les intitulés, eux, sont tutoyés et
+ * personnalisés : `{prenom}` est remplacé par le prénom de l'opt-in.
+ *
+ * Les intitulés et l'introduction sont de l'agent, à valider par Rémy.
+ */
+export const questionnaireVsl = {
+  intro:
+    "Juste un instant : trois questions pour pouvoir t'aider au mieux avant d'accéder à la formation.",
+  introAvecPrenom:
+    "Juste un instant {prenom} : trois questions pour pouvoir t'aider au mieux avant d'accéder à la formation.",
+  retour: "Retour",
+  questions: [
+    {
+      cle: "activite",
+      champ: "activite",
+      calendly: "a2",
+      titre: "Quelle option correspond le mieux à ton activité ?",
+      choix: [
+        "Vendeur de formation",
+        "Créateur de contenu",
+        "Coach / Consultant",
+        "Thérapeute / Praticien",
+        "Services en ligne (agence, freelance, prestations)",
+      ],
+      emojis: ["🎓", "🎥", "🧭", "🌿", "💻"],
+    },
+    {
+      cle: "objectif",
+      champ: "objectif_revenu",
+      calendly: "a3",
+      titre:
+        "Quel est ton objectif de revenu mensuel dans les 6 prochains mois ?",
+      choix: [
+        "Moins de 5000€ /mois",
+        "Entre 5000€ et 10 000€ /mois",
+        "Entre 10 000€ et 50 000€ /mois",
+        "Plus de 50 000€ /mois",
+      ],
+      emojis: ["🌱", "🚀", "🔥", "🏆"],
+    },
+    {
+      cle: "prix",
+      champ: "prix_offre",
+      calendly: "a5",
+      titre: "À quel prix veux-tu vendre ton offre principale ?",
+      choix: [
+        "Moins de 500€",
+        "500€ à 2 000€",
+        "2 000€ à 5 000€",
+        "Plus de 5 000€",
+      ],
+      emojis: ["💶", "💰", "💎", "👑"],
+    },
+  ],
+} as const;
+
+/**
+ * Ce que les réponses changent au calculateur, sur demande de Rémy (« une
+ * réponse personnalisée sur la page de la VSL ») : le prix et l'objectif de
+ * départ prennent une valeur dans la tranche choisie. Choisies par l'agent,
+ * à valider.
+ */
+export const departCalculateurVsl: {
+  prix: Record<string, number>;
+  objectif: Record<string, number>;
+} = {
+  prix: {
+    "Moins de 500€": 300,
+    "500€ à 2 000€": 1000,
+    "2 000€ à 5 000€": 3000,
+    "Plus de 5 000€": 6000,
+  },
+  objectif: {
+    "Moins de 5000€ /mois": 5000,
+    "Entre 5000€ et 10 000€ /mois": 10000,
+    "Entre 10 000€ et 50 000€ /mois": 20000,
+    "Plus de 50 000€ /mois": 50000,
+  },
+};
 
 /** Les mentions du tunnel : celles du site, sous leurs propres adresses. */
 export const legalesVsl = [
