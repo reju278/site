@@ -1497,3 +1497,23 @@ body:has([role="dialog"][data-state="open"])
   [data-sonner-toaster]:has(.consigne-video) {
   visibility: hidden;
 }
+
+/* La fenêtre d'entretien de `/video-vsl`, au dessin du reste de la page, sur
+   demande de Rémy : surlignages sans rembourrage sur les côtés (seul le texte
+   est surligné, comme dans la stratégie) et titres de section à la taille des
+   titres de la page. Les autres pages gardent le dessin des articles d'avis. */
+[data-fenetre-vsl] mark.surlignage {
+  padding-inline: 0;
+}
+
+[data-fenetre-vsl] article h2 {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+@media (min-width: 40rem) {
+  [data-fenetre-vsl] article h2 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+}

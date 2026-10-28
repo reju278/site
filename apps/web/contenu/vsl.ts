@@ -259,9 +259,9 @@ export const questionnaireVsl = {
  * `{prenom}` est remplacé à l'affichage.
  */
 export const strategieVsl = {
-  titre: "Voici ta stratégie",
+  titre: "Voici ta stratégie :",
   /* Dicté par Rémy : « Rémy, voici ta stratégie. » */
-  titreAvecPrenom: "{prenom}, voici ta stratégie",
+  titreAvecPrenom: "Voici ta stratégie {prenom} :",
   /* Les deux tableaux comparatifs, sur demande de Rémy. Les arguments du
      premier viennent de sa vidéo sur les prix (« multiplier vos prix par
      10 »), ceux du second de la VSL ; resserrés par l'agent pour tenir dans

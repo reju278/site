@@ -317,6 +317,9 @@ export function GalerieFenetre({
         }}
       >
         <DialogContent
+          /* Sur `/video-vsl`, la fenêtre prend le dessin de la page : voir
+             `[data-fenetre-vsl]` dans `globals.css`. */
+          data-fenetre-vsl={enLigne || undefined}
           showCloseButton={false}
           onCloseAutoFocus={(evenement) => {
             const cible = saut.current;
