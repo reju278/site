@@ -63,6 +63,14 @@ const OPTIONS = new URLSearchParams({
   fullscreenButton: "true",
   settingsControl: "true",
   smallPlayButton: "true",
+
+  /* **Jamais au-delà de 1080p.** Sans plafond, Wistia servait la VSL en 4K
+     (3840 × 2160, mesuré) dans un cadre de 375 px de large : le téléphone
+     téléchargeait et décodait quatre fois plus de pixels qu'il n'en affiche,
+     ce qui fait saccader en 4G. Mesuré à 1080p : démarrage en 7 ms, aucune
+     attente de chargement, aucune image perdue. Aucun cadre du site ne
+     dépasse 1216 px de large. */
+  qualityMax: "1080",
 });
 
 /* Les mêmes options, **sans la lecture automatique**.
@@ -111,6 +119,7 @@ export function LecteurVideo({
   legende,
   actif = true,
   natif = false,
+  prioritaire = false,
   afficheAlt,
   className,
 }: {
@@ -160,10 +169,22 @@ export function LecteurVideo({
    * permettre.
    */
   natif?: boolean;
+  /**
+   * En mode natif, pour la vidéo qui est **le sujet de la page** (`/video-vsl`) :
+   * l'iframe est écrite dans le HTML du serveur au lieu d'attendre
+   * l'hydratation et l'observateur, et l'affiche part en priorité. Mesuré en
+   * local : l'iframe partait à 238 ms, elle part à 71 ms.
+   *
+   * **Pas de `preload=auto`**, essayé puis retiré : il avait chargé 126
+   * secondes de vidéo avant le moindre clic, ce qu'un forfait de téléphone
+   * paie pour rien. Le préchargement par défaut de Wistia suffit, le
+   * démarrage est mesuré à 7 ms.
+   */
+  prioritaire?: boolean;
   className?: string;
 }) {
   const [lance, setLance] = useState(false);
-  const [proche, setProche] = useState(false);
+  const [proche, setProche] = useState(prioritaire);
   /* En mode natif, la lecture demandée de l'extérieur par `LIRE_VIDEO`. */
   const [demandee, setDemandee] = useState(false);
   const cadre = useRef<HTMLDivElement>(null);
@@ -200,7 +221,7 @@ export function LecteurVideo({
      apparaît sans clic, comme Rémy l'a demandé. On ne change que le moment où
      l'iframe est créée. */
   useEffect(() => {
-    if (!natif) return;
+    if (!natif || prioritaire) return;
     const el = cadre.current;
     if (!el) return;
 
@@ -215,7 +236,9 @@ export function LecteurVideo({
     );
     observateur.observe(el);
     return () => observateur.disconnect();
-  }, [natif]);
+  }, [natif, prioritaire]);
+
+  const options = natif && !demandee ? OPTIONS_NATIF : OPTIONS;
 
   return (
     <div
@@ -252,73 +275,92 @@ export function LecteurVideo({
           Le rayon est écrit aux deux endroits : dehors pour que l'ombre portée
           suive la forme, dedans pour rogner. */}
       <div className="absolute inset-0 overflow-hidden rounded-md bg-black">
-      {/* **L'affiche tient la place tant que l'iframe n'est pas là**, en mode
+        {/* **L'affiche tient la place tant que l'iframe n'est pas là**, en mode
           natif : sans elle, on verrait un rectangle noir le temps que Wistia
           réponde. Elle est déjà servie par nous, donc elle ne coûte rien de
           plus. */}
-      {natif && !proche ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={affiche}
-          alt=""
-          aria-hidden
-          className="absolute inset-0 size-full object-cover"
-        />
-      ) : null}
+        {/* **Elle reste sous l'iframe une fois celle-ci créée.** Retirée au
+          moment où l'iframe arrivait, elle laissait un rectangle noir le temps
+          que Wistia peigne son lecteur, soit plusieurs centaines de
+          millisecondes sur un téléphone. Le lecteur est transparent
+          (`wmode`) jusqu'à ce qu'il peigne, donc l'affiche se voit au travers
+          et le passage de l'une à l'autre ne montre aucun trou. */}
+        {natif ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={affiche}
+            /* Sur téléphone, la version de 640 px : quatre fois moins de pixels
+             pour un cadre de 375 px de large. */
+            srcSet={
+              afficheMobile
+                ? `${afficheMobile} 640w, ${affiche} 1280w`
+                : undefined
+            }
+            sizes={
+              afficheMobile ? "(min-width: 896px) 832px, 100vw" : undefined
+            }
+            alt=""
+            aria-hidden
+            width={1280}
+            height={720}
+            fetchPriority={prioritaire ? "high" : undefined}
+            className="absolute inset-0 size-full object-cover"
+          />
+        ) : null}
 
-      {(natif && proche) || lance ? (
-        // L'iframe déborde de trois pixels de chaque côté, et `overflow-hidden`
-        // coupe ce qui dépasse.
-        //
-        // C'est un contournement, assumé comme tel. Trois mesures ont établi
-        // d'où vient le liseré clair : le cadre et l'iframe ont exactement les
-        // mêmes dimensions, avec zéro écart des quatre côtés ; en colorant le
-        // cadre en rouge vif, aucun rouge n'apparaît, donc l'iframe le couvre
-        // entièrement ; et en ouvrant l'URL de l'iframe en page principale, où
-        // elle cesse d'être d'une autre origine, on voit que le lecteur peint
-        // lui-même cette zone. Le faire déborder est la seule prise qui reste.
-        //
-        // Le prix est un rognage de moins d'un pour cent de l'image.
-        <iframe
-          /* Une lecture demandée change la clé, donc remonte l'iframe avec
+        {(natif && proche) || lance ? (
+          // L'iframe déborde de trois pixels de chaque côté, et `overflow-hidden`
+          // coupe ce qui dépasse.
+          //
+          // C'est un contournement, assumé comme tel. Trois mesures ont établi
+          // d'où vient le liseré clair : le cadre et l'iframe ont exactement les
+          // mêmes dimensions, avec zéro écart des quatre côtés ; en colorant le
+          // cadre en rouge vif, aucun rouge n'apparaît, donc l'iframe le couvre
+          // entièrement ; et en ouvrant l'URL de l'iframe en page principale, où
+          // elle cesse d'être d'une autre origine, on voit que le lecteur peint
+          // lui-même cette zone. Le faire déborder est la seule prise qui reste.
+          //
+          // Le prix est un rognage de moins d'un pour cent de l'image.
+          <iframe
+            /* Une lecture demandée change la clé, donc remonte l'iframe avec
              `autoPlay` : c'est le rechargement qui la fait démarrer. */
-          key={demandee ? "lecture" : "repos"}
-          src={`https://fast.wistia.net/embed/iframe/${id}?${natif && !demandee ? OPTIONS_NATIF : OPTIONS}`}
-          title={titre}
-          allow="autoplay; fullscreen"
-          allowFullScreen
-          className="absolute -inset-[3px] size-[calc(100%+6px)] border-0"
-        />
-      ) : null}
+            key={demandee ? "lecture" : "repos"}
+            src={`https://fast.wistia.net/embed/iframe/${id}?${options}`}
+            title={titre}
+            allow="autoplay; fullscreen"
+            allowFullScreen
+            className="absolute -inset-[3px] size-[calc(100%+6px)] border-0"
+          />
+        ) : null}
 
-      {!natif && !lance ? (
-        <button
-          type="button"
-          onClick={() => setLance(true)}
-          // Le libellé porte le titre et la durée : on décide de lancer une
-          // vidéo de seize minutes autrement qu'une de trente secondes.
-          aria-label={`Lire la vidéo, ${titre}, ${duree(secondes)}`}
-          className="group absolute inset-0 cursor-pointer"
-        >
-          {/* L'image zoome au survol. C'est elle qui bouge, pas le cadre :
+        {!natif && !lance ? (
+          <button
+            type="button"
+            onClick={() => setLance(true)}
+            // Le libellé porte le titre et la durée : on décide de lancer une
+            // vidéo de seize minutes autrement qu'une de trente secondes.
+            aria-label={`Lire la vidéo, ${titre}, ${duree(secondes)}`}
+            className="group absolute inset-0 cursor-pointer"
+          >
+            {/* L'image zoome au survol. C'est elle qui bouge, pas le cadre :
               `overflow-hidden` sur le parent la recadre, ce qui donne un
               mouvement contenu au lieu d'un bloc qui pousse ses voisins. */}
-          <picture>
-            {afficheMobile ? (
-              <source media="(min-width: 768px)" srcSet={affiche} />
-            ) : null}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={afficheMobile ?? affiche}
-              alt={afficheAlt ?? ""}
-              width={1280}
-              height={720}
-              loading="lazy"
-              className="size-full scale-100 object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-            />
-          </picture>
+            <picture>
+              {afficheMobile ? (
+                <source media="(min-width: 768px)" srcSet={affiche} />
+              ) : null}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={afficheMobile ?? affiche}
+                alt={afficheAlt ?? ""}
+                width={1280}
+                height={720}
+                loading="lazy"
+                className="size-full scale-100 object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+              />
+            </picture>
 
-          {/* Le voile global a disparu, sur décision de Rémy : il ternissait
+            {/* Le voile global a disparu, sur décision de Rémy : il ternissait
               l'affiche, et c'est elle qu'on est venu regarder.
 
               Il portait un vrai rôle et il a fallu le remplacer, pas
@@ -331,19 +373,19 @@ export function LecteurVideo({
               sous le seuil.
 
               Il ne reste qu'un voile au survol, comme réponse au geste. */}
-          <span
-            aria-hidden
-            className="absolute inset-0 transition-colors duration-300 group-hover:bg-black/15"
-          />
+            <span
+              aria-hidden
+              className="absolute inset-0 transition-colors duration-300 group-hover:bg-black/15"
+            />
 
-          {/* Ce n'est pas un vrai bouton : toute l'affiche est cliquable, et
+            {/* Ce n'est pas un vrai bouton : toute l'affiche est cliquable, et
               ceci n'en est que la marque visible. Un bouton dans un bouton
               serait du HTML invalide et donnerait deux cibles au clavier. */}
-          <span
-            aria-hidden
-            className="absolute inset-0 flex items-center justify-center"
-          >
-            {/* Le disque.
+            <span
+              aria-hidden
+              className="absolute inset-0 flex items-center justify-center"
+            >
+              {/* Le disque.
 
                 Il est la seule marque de lecture du site : la pilule portant
                 « Voir la vidéo » a été retirée, sur décision de Rémy, y compris
@@ -385,8 +427,8 @@ export function LecteurVideo({
                 contraste, un flou ne changeant pas la luminosité moyenne de ce
                 qu'il brouille : il s'ajoute à la densité du fond, il ne la
                 remplace pas. */}
-            <span className="flex size-20 items-center justify-center rounded-full bg-black/45 backdrop-blur-md transition-colors duration-300 group-hover:bg-primary sm:size-24">
-              {/* Le triangle est décalé d'un cheveu : son centre optique n'est
+              <span className="flex size-20 items-center justify-center rounded-full bg-black/45 backdrop-blur-md transition-colors duration-300 group-hover:bg-primary sm:size-24">
+                {/* Le triangle est décalé d'un cheveu : son centre optique n'est
                   pas son centre géométrique, et centré au pixel il paraît collé
                   à gauche.
 
@@ -400,11 +442,11 @@ export function LecteurVideo({
                   le blanc tient 5,6:1. La couleur du signe n'a donc pas à
                   suivre celle de son fond, comme c'était le cas quand le
                   triangle était sombre. */}
-              <Play className="ml-[4px] size-8 fill-white text-white sm:size-9" />
+                <Play className="ml-[4px] size-8 fill-white text-white sm:size-9" />
+              </span>
             </span>
-          </span>
 
-          {/* La légende, sur son voile.
+            {/* La légende, sur son voile.
 
               Le voile n'est pas décoratif : un texte posé sur une photo se
               mesure au pire cas, image entièrement blanche dessous. À 70 % de
@@ -413,16 +455,16 @@ export function LecteurVideo({
 
               `aria-hidden` : le nom et la durée sont déjà dans l'`aria-label`
               du bouton, et les répéter ferait tout annoncer deux fois. */}
-          {legende ? (
-            <span
-              aria-hidden
-              className="absolute inset-x-0 bottom-0 block bg-gradient-to-t from-black/95 via-black/70 to-transparent px-4 pt-20 pb-4 text-left sm:px-6 sm:pb-5"
-            >
-              {legende}
-            </span>
-          ) : null}
+            {legende ? (
+              <span
+                aria-hidden
+                className="absolute inset-x-0 bottom-0 block bg-gradient-to-t from-black/95 via-black/70 to-transparent px-4 pt-20 pb-4 text-left sm:px-6 sm:pb-5"
+              >
+                {legende}
+              </span>
+            ) : null}
 
-          {/* La durée ne s'affiche que si rien d'autre n'occupe le bas.
+            {/* La durée ne s'affiche que si rien d'autre n'occupe le bas.
 
               Sur une carte de témoignage, la légende y est déjà et la référence
               n'en porte pas. Sur le hero, le coin est libre et l'information
@@ -430,16 +472,16 @@ export function LecteurVideo({
               autrement qu'une de trente secondes. Dans les deux cas elle reste
               annoncée par l'`aria-label` du bouton, donc rien n'est perdu pour
               qui ne voit pas l'écran. */}
-          {legende ? null : (
-            <span
-              aria-hidden
-              className="absolute right-3 bottom-3 rounded-md bg-black/70 px-2 py-1 text-xs font-semibold text-white tabular-nums"
-            >
-              {duree(secondes)}
-            </span>
-          )}
-        </button>
-      ) : null}
+            {legende ? null : (
+              <span
+                aria-hidden
+                className="absolute right-3 bottom-3 rounded-md bg-black/70 px-2 py-1 text-xs font-semibold text-white tabular-nums"
+              >
+                {duree(secondes)}
+              </span>
+            )}
+          </button>
+        ) : null}
       </div>
     </div>
   );

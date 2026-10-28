@@ -37,3 +37,31 @@ export function TitreAppelVsl({
     />
   );
 }
+
+/**
+ * Le paragraphe sous la vidéo de `/video-vsl`, ouvert par le prénom, sur
+ * demande de Rémy : « Prénom, postule maintenant… ». Sans prénom, la phrase
+ * commence comme elle est écrite.
+ */
+export function AppelVideoVsl({
+  morceaux,
+}: {
+  morceaux: readonly { texte: string; gras?: boolean }[];
+}) {
+  const prenom = usePrenomVsl();
+  return (
+    <p className="mt-4 max-w-3xl text-xl leading-relaxed text-pretty text-foreground sm:text-2xl">
+      {morceaux.map((morceau, rang) => {
+        const texte =
+          rang === 0 && prenom
+            ? `${prenom}, ${morceau.texte.charAt(0).toLowerCase()}${morceau.texte.slice(1)}`
+            : morceau.texte;
+        return morceau.gras ? (
+          <strong key={rang}>{texte}</strong>
+        ) : (
+          <span key={rang}>{texte}</span>
+        );
+      })}
+    </p>
+  );
+}

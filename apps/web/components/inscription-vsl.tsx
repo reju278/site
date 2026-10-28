@@ -22,7 +22,7 @@ import { useEffect, useRef, useState } from "react";
  * « Page d'inscription » du tunnel, et les automatisations se règlent
  * là-bas. Le CRM Funnels Club (`/vsl/optin`) ne sert plus que de repli
  * quand le SDK n'a pas pu se charger. Prénom et e-mail restent dans le
- * navigateur (`sessionStorage`, jamais dans
+ * navigateur (`localStorage`, sept jours, jamais dans
  * l'adresse) pour pré-remplir Calendly sur `/video-vsl`. On y va par une
  * navigation complète : le formulaire de Calendly lit ces informations au
  * chargement de la page, pas après une navigation côté client.
@@ -162,9 +162,13 @@ function Formulaire() {
   const valider = async (evenement: React.FormEvent<HTMLFormElement>) => {
     const parLeSdk = evenement.currentTarget.dataset.cfSdkEnhanced === "true";
     try {
-      sessionStorage.setItem(
+      localStorage.setItem(
         CLE_CONTACT_VSL,
-        JSON.stringify({ prenom: prenom.trim(), email: email.trim() }),
+        JSON.stringify({
+          prenom: prenom.trim(),
+          email: email.trim(),
+          t: Date.now(),
+        }),
       );
     } catch {
       /* Stockage bloqué : Calendly ne sera simplement pas pré-rempli. */

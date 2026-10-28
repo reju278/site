@@ -33,8 +33,11 @@ function adresseCalendly(base: string): string {
      dans l'adresse de la page. Littéral recopié de `CLE_CONTACT_VSL` : la
      fonction ne doit rien importer. */
   try {
-    const contact = JSON.parse(sessionStorage.getItem("vsl-contact") || "null");
-    if (contact && typeof contact.email === "string") {
+    const contact = JSON.parse(localStorage.getItem("vsl-contact") || "null");
+    /* Sept jours, recopié de `DUREE_CONTACT_VSL`. */
+    const frais =
+      contact && Date.now() - (contact.t || 0) < 7 * 24 * 60 * 60 * 1000;
+    if (frais && typeof contact.email === "string") {
       adresse.searchParams.set("email", contact.email);
       if (typeof contact.prenom === "string" && contact.prenom)
         adresse.searchParams.set("name", contact.prenom);

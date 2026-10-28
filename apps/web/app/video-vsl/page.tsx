@@ -2,11 +2,12 @@ import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { CompteurVue } from "@/components/compteur-vue";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { TexteRoulant } from "@/components/texte-roulant";
-import { TitreVideoVsl } from "@/components/titre-video-vsl";
+import { AppelVideoVsl, TitreVideoVsl } from "@/components/titre-video-vsl";
 import { videoVsl } from "@/contenu/vsl";
 import { avecReglages } from "@/lib/reglages-seo";
 import type { Metadata } from "next";
 import Script from "next/script";
+import { preload } from "react-dom";
 
 /**
  * La VSL du VSL Funnel : la vidéo de formation promise à l'opt-in, puis la
@@ -35,9 +36,28 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function Video() {
   const { video } = videoVsl;
+  preload(video.affiche, {
+    as: "image",
+    fetchPriority: "high",
+    imageSrcSet: `${video.afficheMobile} 640w, ${video.affiche} 1280w`,
+    imageSizes: "(min-width: 896px) 832px, 100vw",
+  });
 
   return (
     <main className="px-5 pt-12 sm:pt-16">
+      {/* Les domaines que le lecteur de Wistia contacte, relevés en ouvrant
+          son iframe : la page du lecteur, son script, l'affiche et les
+          segments de la vidéo. Ouvrir ces connexions pendant la lecture du
+          HTML retire une négociation TLS de chacune des premières requêtes.
+
+          **En balises et non par `preconnect()` de `react-dom`** : appelé
+          depuis un composant serveur, celui-ci ne finit que dans la charge
+          utile RSC, appliquée à l'hydratation, donc trop tard. Mesuré dans le
+          HTML servi. */}
+      <link rel="preconnect" href="https://fast.wistia.net" />
+      <link rel="preconnect" href="https://fast.wistia.com" />
+      <link rel="preconnect" href="https://embed-ssl.wistia.com" />
+      <link rel="preconnect" href="https://embed-cloudfront.wistia.com" />
       <CompteurVue tunnel="vsl" etape="vsl" />
       <div className="mx-auto flex max-w-4xl flex-col items-center gap-6 text-center">
         <TitreVideoVsl texte={videoVsl.surtitre} />
@@ -46,25 +66,20 @@ export default function Video() {
           titre={video.titre}
           secondes={video.secondes}
           affiche={video.affiche}
+          afficheMobile={video.afficheMobile}
           afficheAlt="La formation gratuite Funnels Club"
           natif
+          prioritaire
           className="w-full shadow-[0_30px_70px_-25px_rgba(0,0,0,0.45)]"
         />
-        <p className="mt-4 max-w-3xl text-xl leading-relaxed text-pretty text-foreground sm:text-2xl">
-          {videoVsl.appel.map((morceau, rang) =>
-            "gras" in morceau ? (
-              <strong key={rang}>{morceau.texte}</strong>
-            ) : (
-              <span key={rang}>{morceau.texte}</span>
-            ),
-          )}
-        </p>
-        {/* Vers la page d'appel, en navigation complète (un `a`, pas un lien
-            client) : le formulaire de Calendly y lit au chargement le prénom
-            et l'e-mail laissés par l'opt-in, voir `FormulaireCalendly`. */}
+        <AppelVideoVsl morceaux={videoVsl.appel} />
+        {/* Vers la page d'appel, **dans un nouvel onglet**, sur demande de
+            Rémy : la vidéo reste ouverte derrière. Le formulaire de Calendly
+            y lit au chargement le prénom et l'e-mail laissés par l'opt-in,
+            dans le `localStorage`, que le nouvel onglet partage (voir
+            `CLE_CONTACT_VSL`). */}
         <BoutonScintillant
           href="/appel"
-          externe={false}
           className="min-h-16 w-full px-10 text-lg sm:w-auto sm:text-xl"
         >
           <TexteRoulant>{videoVsl.bouton}</TexteRoulant>

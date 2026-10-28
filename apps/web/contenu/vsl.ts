@@ -17,8 +17,22 @@ export const API_FUNNELS =
     ? "https://lovely-pheasant-821.eu-west-1.convex.site"
     : "https://savory-herring-410.eu-west-1.convex.site";
 
-/** La clé sous laquelle l'opt-in garde prénom et e-mail pour Calendly. */
+/**
+ * La clé sous laquelle l'opt-in garde prénom et e-mail, pour les titres du
+ * tunnel et pour pré-remplir Calendly.
+ *
+ * **Dans le `localStorage` et non le `sessionStorage`**, depuis que `/appel`
+ * s'ouvre dans un nouvel onglet, sur demande de Rémy : un lien
+ * `rel="noreferrer"` ne recopie pas le `sessionStorage` dans l'onglet qu'il
+ * ouvre, et Calendly arrivait vide. Le contact porte sa date (`t`) et n'est
+ * plus lu après `DUREE_CONTACT_VSL` : de quoi revenir d'un e-mail de la
+ * séquence, sans garder indéfiniment un e-mail dans le navigateur. Jamais
+ * dans l'adresse, où GTM le lirait.
+ */
 export const CLE_CONTACT_VSL = "vsl-contact";
+
+/** Sept jours, en millisecondes. Recopié dans `FormulaireCalendly`. */
+export const DUREE_CONTACT_VSL = 7 * 24 * 60 * 60 * 1000;
 
 /* **Le tunnel tutoie**, sur décision de Rémy : titres, listes, boutons et
    fenêtre d'inscription. Les citations des témoignages restent telles
@@ -128,6 +142,7 @@ export const videoVsl = {
     titre: "La formation gratuite Funnels Club",
     secondes: 981,
     affiche: "/vsl/affiche-motion.jpg",
+    afficheMobile: "/vsl/affiche-motion-640.jpg",
   },
 
   appel: [
