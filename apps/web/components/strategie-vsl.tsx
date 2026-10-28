@@ -500,7 +500,7 @@ export function StrategieVsl({
             href={strategieVsl.appel.ancre}
             className="min-h-16 w-full px-10 text-lg sm:w-auto sm:text-xl"
           >
-            <TexteRoulant>{strategieVsl.appel.libelle}</TexteRoulant>
+            <TexteRoulant>{strategieVsl.boutonEtapes}</TexteRoulant>
           </BoutonScintillant>
         </div>
       </div>

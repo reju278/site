@@ -288,6 +288,9 @@ export const strategieVsl = {
      « DIRECT VSL - MOTION GRAPHICS », de 0:30 à 2:15) et tutoyés. Les mots
      sont ceux de Rémy, resserrés pour tenir sur une carte : à valider. */
   /* Dicté par Rémy, en titre comme « Comment on va y arriver ensemble ». */
+  /* Le bouton sous les quatre étapes, dicté par Rémy. Ceux des
+     témoignages gardent `appel.libelle`. */
+  boutonEtapes: "Discuter avec notre équipe",
   introEtapes: "Voici les quatre étapes que nous allons mettre en place",
   etapes: [
     {
