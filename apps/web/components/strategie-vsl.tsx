@@ -227,6 +227,15 @@ export function StrategieVsl({
   if (!reponses || !calcul || !objectif) return null;
 
   const valeurs = { prenom };
+  /* La gamme de la personne : sous 500 €, entre 500 € et 2 000 €, à partir
+     de 2 000 €. Elle choisit les lignes du tableau. */
+  const gamme: "bas" | "moyen" | "haut" = !tranchePrix
+    ? "bas"
+    : tranchePrix >= strategieVsl.prixMinimum
+      ? "haut"
+      : tranchePrix >= 1000
+        ? "moyen"
+        : "bas";
   const titre = prenom ? strategieVsl.titreAvecPrenom : strategieVsl.titre;
   const activite = reponses.activite
     ? strategieVsl.activites[reponses.activite]
@@ -271,9 +280,16 @@ export function StrategieVsl({
               apres: `${calcul.apres.clients} ${strategieVsl.clients} à ${euros.format(calcul.apres.prix)}`,
               chiffre: true,
             },
-            ...strategieVsl.lignesPrix,
+            ...strategieVsl.lignesPrix[gamme],
           ]}
         />
+        <p className="mt-4 text-base leading-relaxed text-pretty text-foreground sm:text-lg">
+          {insecables(
+            gamme === "haut"
+              ? strategieVsl.rassurancePrixHaut
+              : strategieVsl.rassurancePrix,
+          )}
+        </p>
 
         <h3 className="titre mt-10 text-xl text-balance text-foreground sm:text-2xl">
           {strategieVsl.titreTunnel}

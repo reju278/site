@@ -280,28 +280,87 @@ export const strategieVsl = {
   offreBasse: "Offre à petit prix (200 €)",
   critereClients: "Clients par mois",
   clients: "clients",
-  lignesPrix: [
-    {
-      critere: "Les clients que tu attires",
-      avant: "Comparent les prix et remettent à plus tard",
-      apres: "Ont un vrai besoin et décident vite",
-    },
-    {
-      critere: "Leur implication",
-      avant: "Achètent et n'appliquent pas",
-      apres: "Appliquent et obtiennent des résultats",
-    },
-    {
-      critere: "Ton marketing",
-      avant: "Convaincre, relancer, faire des promotions",
-      apres: "Simple et direct : voici ma solution",
-    },
-    {
-      critere: "Ta marge",
-      avant: "Trop juste pour bien accompagner",
-      apres: "De quoi offrir un service exceptionnel",
-    },
-  ],
+  /* Les lignes du tableau, adaptées à la tranche de prix choisie, sur
+     demande de Rémy : entre 500 € et 2 000 €, la personne n'attire pas des
+     clients qui « comparent les prix et remettent à plus tard » ; lui dire
+     serait sec et faux. Sa colonne y dit ce qui est plus difficile, pas ce
+     qui ne marche pas. Sous 500 €, la comparaison reste franche ; à partir
+     de 2 000 €, son prix est la bonne colonne. De l'agent, à valider. */
+  lignesPrix: {
+    bas: [
+      {
+        critere: "Les clients que tu attires",
+        avant: "Comparent les prix et remettent à plus tard",
+        apres: "Ont un vrai besoin et décident vite",
+      },
+      {
+        critere: "Leur implication",
+        avant: "Achètent et n'appliquent pas toujours",
+        apres: "Appliquent et obtiennent des résultats",
+      },
+      {
+        critere: "Ton marketing",
+        avant: "Beaucoup de volume à aller chercher",
+        apres: "Simple et direct : voici ma solution",
+      },
+      {
+        critere: "Ta marge",
+        avant: "Trop juste pour bien accompagner",
+        apres: "De quoi offrir un service exceptionnel",
+      },
+    ],
+    moyen: [
+      {
+        critere: "Les clients que tu attires",
+        avant: "Intéressés, mais ils hésitent plus longtemps",
+        apres: "Décidés, avec un vrai besoin",
+      },
+      {
+        critere: "Leur implication",
+        avant: "Variable d'un client à l'autre",
+        apres: "Engagés, ils vont au bout",
+      },
+      {
+        critere: "Ton marketing",
+        avant: "Plus de clients à trouver chaque mois",
+        apres: "Moins de clients, donc moins d'efforts",
+      },
+      {
+        critere: "Ta marge",
+        avant: "Correcte, mais vite absorbée",
+        apres: "De quoi offrir un service exceptionnel",
+      },
+    ],
+    haut: [
+      {
+        critere: "Les clients que tu attires",
+        avant: "Comparent les prix et remettent à plus tard",
+        apres: "Ont un vrai besoin et décident vite",
+      },
+      {
+        critere: "Leur implication",
+        avant: "Achètent et n'appliquent pas toujours",
+        apres: "Appliquent et obtiennent des résultats",
+      },
+      {
+        critere: "Ton marketing",
+        avant: "Beaucoup de volume à aller chercher",
+        apres: "Simple et direct : voici ma solution",
+      },
+      {
+        critere: "Ta marge",
+        avant: "Trop juste pour bien accompagner",
+        apres: "De quoi offrir un service exceptionnel",
+      },
+    ],
+  },
+  /* Sous le tableau, pour aller dans le sens de la personne, sur demande de
+     Rémy : on l'aide quel que soit son prix, et à le monter si elle veut
+     atteindre son objectif plus facilement. */
+  rassurancePrix:
+    "Quoi qu'il arrive, on t'aide à vendre ton offre au prix que tu as fixé. Et si tu veux atteindre ton objectif plus facilement, on t'aide à monter ton tarif : plus on vend cher, moins il faut de clients.",
+  rassurancePrixHaut:
+    "Tu vends déjà au bon niveau de prix. On t'aide à attirer chaque mois les clients qu'il te faut pour atteindre ton objectif.",
   titreTunnel: "Site internet VS tunnel de vente",
   colonneSite: "Site internet",
   colonneTunnel: "Tunnel Funnels Club",
