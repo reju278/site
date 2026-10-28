@@ -24,7 +24,7 @@ import {
   Volume2,
 } from "lucide-react";
 import { flushSync } from "react-dom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 /**
  * L'opt-in de la formation gratuite : l'aperçu de la vidéo et le bouton
@@ -425,8 +425,24 @@ function EtapeQuestion({
   choisir: (choix: string) => void;
   retour: () => void;
 }) {
+  /* **La hauteur ne fait que grandir**, sur demande de Rémy : la fenêtre
+     prend la taille de la question la plus haute vue jusque-là et la garde.
+     Sans cela, elle se redimensionnait à chaque question, la première ayant
+     cinq choix et les suivantes quatre. Mesurée avant que le navigateur
+     peigne, donc sans saut visible. */
+  const bloc = useRef<HTMLDivElement>(null);
+  const [hauteurMin, setHauteurMin] = useState(0);
+  useLayoutEffect(() => {
+    const hauteur = bloc.current?.offsetHeight ?? 0;
+    setHauteurMin((avant) => Math.max(avant, hauteur));
+  }, [rang]);
+
   return (
-    <div className="flex flex-col gap-4">
+    <div
+      ref={bloc}
+      style={{ minHeight: hauteurMin || undefined }}
+      className="flex flex-col gap-4"
+    >
       {/* La progression : une barre et « 1 / 3 ». */}
       <div className="flex items-center gap-3">
         <div
@@ -489,17 +505,23 @@ function EtapeQuestion({
         </div>
       </fieldset>
 
-      {rang > 0 ? (
-        <button
-          type="button"
-          onClick={retour}
-          disabled={envoi}
-          className="inline-flex min-h-10 items-center gap-1.5 self-start rounded-md text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-        >
-          <ArrowLeft aria-hidden className="size-4" />
-          {questionnaireVsl.retour}
-        </button>
-      ) : null}
+      {/* Présent dès la première question, mais invisible et hors du
+          clavier : sa place est réservée, sinon la fenêtre grandirait à la
+          deuxième question, quand il apparaît. */}
+      <button
+        type="button"
+        onClick={retour}
+        disabled={envoi || rang === 0}
+        aria-hidden={rang === 0 || undefined}
+        tabIndex={rang === 0 ? -1 : undefined}
+        className={cn(
+          "inline-flex min-h-10 items-center gap-1.5 self-start rounded-md text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+          rang === 0 && "invisible",
+        )}
+      >
+        <ArrowLeft aria-hidden className="size-4" />
+        {questionnaireVsl.retour}
+      </button>
     </div>
   );
 }
