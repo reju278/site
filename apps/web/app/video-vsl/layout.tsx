@@ -23,7 +23,12 @@ export default function LayoutVideo({
       <PoliceTunnel />
       {/* La marque, comme sur `/appel` : `absolute` et non `fixed`, elle reste
           en haut de la page et ne suit pas le défilement. */}
-      <EnTeteImmersion ancres={[]} bascule={false} className="absolute" />
+      <EnTeteImmersion
+        ancres={[]}
+        bascule={false}
+        /* Plus petite sur téléphone, sur demande de Rémy. */
+        className="absolute origin-top max-sm:top-1 max-sm:scale-[0.8]"
+      />
       {children}
       <div aria-hidden className="h-20 sm:h-28" />
       <PiedImmersion>
