@@ -10,9 +10,9 @@ import { TitreRoulant } from "@/components/titre-roulant";
 import {
   appelTemoignage,
   libelleAppelTemoignage,
-  pagesTemoignage,
-  type ClePageTemoignage,
+  pageTemoignage,
 } from "@/contenu/temoignages-tunnel";
+import type { CleTemoignage } from "@/lib/pages-temoignage";
 import { avecReglages } from "@/lib/reglages-seo";
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
@@ -20,7 +20,8 @@ import type { Metadata } from "next";
 /**
  * Les pages de témoignage en tunnel, `go.funnels.club/<prénom>` : un titre,
  * la vidéo, un bouton. **Écrites une fois ici** pour que deux pages au même
- * format ne divergent jamais ; chaque dossier d'`app/` n'en fait que l'appel.
+ * format ne divergent jamais ; la route `app/[temoignage]` n'en fait que
+ * l'appel.
  *
  * **Le dessin est celui de `/thanks`**, sur demande de Rémy : le hero
  * photographique et le titre, puis la vidéo posée à cheval sur la
@@ -30,8 +31,8 @@ import type { Metadata } from "next";
  * Un seul `h1`, le titre. Le bouton n'a pas de titre : un bloc d'appel n'est
  * jamais un `h2`.
  */
-export function PageTemoignage({ cle }: { cle: ClePageTemoignage }) {
-  const { titre, video } = pagesTemoignage[cle];
+export function PageTemoignage({ cle }: { cle: CleTemoignage }) {
+  const { titre, video } = pageTemoignage(cle);
 
   return (
     <>
@@ -165,7 +166,7 @@ export function CadreTemoignage({ children }: { children: React.ReactNode }) {
 }
 
 /** Les métadonnées du gabarit : canonique absolue, interdite d'index. */
-export function metadonneesCadre(cle: ClePageTemoignage): Metadata {
+export function metadonneesCadre(cle: CleTemoignage): Metadata {
   return {
     /* Absolu et non relatif : voir le gabarit d'`/immersion`. */
     alternates: { canonical: `https://go.funnels.club/${cle}` },
@@ -179,7 +180,7 @@ export function metadonneesCadre(cle: ClePageTemoignage): Metadata {
 }
 
 /** Les métadonnées de la page, avec les réglages SEO du CRM par-dessus. */
-export function metadonneesPage(cle: ClePageTemoignage): Promise<Metadata> {
-  const { titrePage, description } = pagesTemoignage[cle];
+export function metadonneesPage(cle: CleTemoignage): Promise<Metadata> {
+  const { titrePage, description } = pageTemoignage(cle);
   return avecReglages(`/${cle}`, { title: titrePage, description });
 }

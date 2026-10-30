@@ -1,6 +1,7 @@
 "use client";
 
 import { ThemeProvider } from "@repo/ui/components/theme-provider";
+import { CHEMINS_TEMOIGNAGE } from "@/lib/pages-temoignage";
 import { usePathname } from "next/navigation";
 
 /**
@@ -15,8 +16,7 @@ const PAGES_CLAIRES = [
   "/thanks",
   "/course",
   "/video-vsl",
-  "/roland",
-  "/francois",
+  ...CHEMINS_TEMOIGNAGE,
 ] as const;
 
 /**

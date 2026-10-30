@@ -1,3 +1,5 @@
+import { CHEMINS_TEMOIGNAGE } from "@/lib/pages-temoignage";
+
 /**
  * Les tunnels : les racines qui ne sont pas des pages du site.
  *
@@ -25,8 +27,7 @@ export const TUNNELS = [
   "/course",
   "/video-vsl",
   "/strategie",
-  "/roland",
-  "/francois",
+  ...CHEMINS_TEMOIGNAGE,
 ] as const;
 
 /** L'adresse est-elle dans un tunnel, racine ou sous-page ? */

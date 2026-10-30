@@ -136,7 +136,7 @@ pas la balise si elle est déjà là.
 **Une page de témoignage porte sa propre provenance**, sur demande de Rémy :
 son bouton d'appel envoie `el=<prénom>` et non `el=site`, pour qu'Hyros dise
 quelle page a amené l'appel. `go.funnels.club/roland` envoie `el=roland`. Le
-lien s'écrit avec `appelDepuis("<prénom>")`, jamais `liens.appel`, et la
+lien s'écrit avec `appelDepuis("<clé>")`, jamais `liens.appel`, et la
 provenance est le dernier segment de l'adresse de la page : on retrouve l'une
 à partir de l'autre sans table. Toute nouvelle page de témoignage suit la règle.
 
@@ -1987,7 +1987,7 @@ garantie.
 
 ## Un tunnel n'est pas une page du site
 
-`/hub`, `/immersion`, `/preparation`, `/appel`, `/thanks`, `/strategie` et les pages de témoignage (`/roland`, `/francois`) sont des **tunnels** : on y arrive par un lien qu'on a
+`/hub`, `/immersion`, `/preparation`, `/appel`, `/thanks`, `/strategie` et les pages de témoignage (`/roland`, `/francois` et les autres, voir `lib/pages-temoignage.ts`) sont des **tunnels** : on y arrive par un lien qu'on a
 reçu, et la règle est qu'on n'en sort que par l'appel. La liste des racines vit
 dans `lib/tunnels.ts`, et `HorsTunnel` la lit pour retirer l'en-tête et le pied
 de page du site, qui offriraient sinon une trentaine de portes de sortie.
@@ -2071,22 +2071,34 @@ geste de la page, vers `liens.appel`. Pas de galerie, pas d'équipe, pas de
 consigne. Le titre et le sous-titre sont de l'agent, d'après l'e-mail : à
 valider par Rémy.
 
-**Les pages de témoignage, `go.funnels.club/<prénom>`, sont `/thanks` réduit à
-une vidéo et un bouton** (issue #6) : `/roland`, puis `/francois`, au même
-format sur demande de Rémy. Le dessin vit **une fois** dans
-`components/page-temoignage.tsx`, le contenu dans `contenu/temoignages-tunnel.ts`,
-et chaque dossier d'`app/` n'en fait que l'appel : deux pages au même format ne
-doivent pas pouvoir diverger. Le hero et le titre sont ceux de `/thanks` ;
-l'entretien s'y pose à cheval, **seul, sans carte ni alerte rouge ni phrase sous
-le bouton**, retirées par Rémy, avec une ombre douce. Forcées au clair, sans le
-SDK de ClickFunnels. La marque est en `absolute` et réduite sur téléphone, comme
-sur `/appel`, et la jonction passe au milieu de la vidéo sur téléphone : la
-valeur par largeur vit dans `--jonction-temoignage`, recopiée dans `--jonction`
-par le style en ligne, seul à battre la règle globale de `[data-hero]`. Le
-bouton envoie `el=<clé>` à Hyros, voir la section Hyros. Ajouter une page :
-une entrée dans `pagesTemoignage`, un dossier `app/<clé>` copié de `/roland`,
-la racine dans `lib/tunnels.ts` et `components/fournisseur-theme.tsx`. Titres
-et identités de l'agent, sans montant : à valider par Rémy.
+**Les pages de témoignage, `go.funnels.club/<clé>`, sont `/thanks` réduit à
+une vidéo et un bouton** (issue #6) : une par entretien du site, vingt-deux, sur
+demande de Rémy. Le dessin vit **une fois** dans `components/page-temoignage.tsx`
+et la route est **une seule**, `app/[temoignage]`, figée au build avec
+`dynamicParams = false` : une autre adresse à la racine rend un 404. Les clés
+vivent dans `lib/pages-temoignage.ts`, module léger lu côté client par
+`lib/tunnels.ts` et `FournisseurTheme` ; `contenu/temoignages-tunnel.ts` ne porte
+que le prénom affiché et l'article source, **tout le reste vient d'`avis.ts` et
+de `temoignages`** (vidéo, durée, `alt`, description) et jette au build si
+l'article manque. Un second entretien prend le suffixe `-mastermind`, comme son
+article, et le titre « la suite de l'histoire ». L'élision est calculée :
+« d'Augustin », « d'Olga ».
+
+Le hero et le titre sont ceux de `/thanks` ; l'entretien s'y pose à cheval,
+**seul, sans carte ni alerte rouge ni phrase sous le bouton**, retirées par
+Rémy, avec une ombre douce. Forcées au clair, sans le SDK de ClickFunnels. La
+marque est en `absolute` et réduite sur téléphone, comme sur `/appel`, et la
+jonction passe au milieu de la vidéo sur téléphone : la valeur par largeur vit
+dans `--jonction-temoignage`, recopiée dans `--jonction` par le style en ligne,
+seul à battre la règle globale de `[data-hero]`. Le bouton envoie `el=<clé>` à
+Hyros, voir la section Hyros. GTM et ce qu'il charge (Hyros, Meta, Google Ads,
+GA4, LinkedIn) viennent du gabarit racine, vérifié dans le navigateur.
+
+**Ajouter une page** : une clé dans `lib/pages-temoignage.ts`, une entrée dans
+`SOURCES`, et **la même clé dans le catalogue du CRM**,
+`PAGES_TEMOIGNAGE` de `packages/backend/convex/funnels.ts` du dépôt
+`Funnels-Club`, sans quoi elle n'a pas de réglages SEO. Titres de l'agent, sans
+montant : à valider par Rémy.
 
 ## Le même texte à deux endroits n'est écrit qu'une fois
 
