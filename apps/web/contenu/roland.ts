@@ -4,11 +4,13 @@
  * Rémy a demandé une page au dessin de `/thanks`, réduite à l'entretien de
  * Roland Buffet et à un bouton pour réserver un appel.
  *
- * **Le titre, l'alerte et l'identité sont écrits par l'agent**, en
+ * **Le titre et l'identité sont écrits par l'agent**, en
  * s'inspirant de `/thanks`. À valider par Rémy. Ils ne portent aucun montant :
  * le chiffre est dit par Roland dans la vidéo, il n'a pas à être répété en
  * titre d'une page qu'on envoie.
  */
+
+import { appelDepuis } from "@/contenu/site";
 
 /** L'identité de la page, pour l'onglet et le partage. À valider par Rémy. */
 export const identiteRoland = {
@@ -19,15 +21,6 @@ export const identiteRoland = {
 
 export const presentationRoland = {
   titre: [{ texte: "Découvre l'histoire de Roland" }],
-
-  /* L'alerte sous le titre, découpée pour ses marques comme celle de
-     `/thanks` : « Important » en tête, la consigne soulignée. */
-  alerte: {
-    important: "Important",
-    avant: " : regarde ",
-    consigne: "la vidéo jusqu'au bout",
-    apres: " avant de réserver ton appel !",
-  },
 
   /* L'entretien du 30 avril 2024, le premier des deux : celui qui raconte le
      lancement. Mêmes valeurs que dans `site.ts`. */
@@ -41,6 +34,8 @@ export const presentationRoland = {
 
   appel: {
     libelle: "Réserver mon appel découverte",
-    note: "Gratuit, sans engagement : on regarde ensemble comment appliquer cette méthode à ton projet.",
+    /* `el=roland` et non `el=site` : Hyros attribue l'appel à cette page.
+       Voir `appelDepuis`. */
+    href: appelDepuis("roland"),
   },
 } as const;

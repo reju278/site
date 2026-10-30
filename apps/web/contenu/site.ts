@@ -72,9 +72,22 @@ export const identite = {
  * balise oubliée ne se voit pas : le lien marche, la vente est attribuée
  * ailleurs, et personne ne s'en aperçoit avant de lire les chiffres.
  */
-export function avecTag(url: string): string {
+export function avecTag(url: string, provenance = "site"): string {
   const separateur = url.includes("?") ? "&" : "?";
-  return url.includes("el=site") ? url : `${url}${separateur}el=site`;
+  return /[?&]el=/.test(url) ? url : `${url}${separateur}el=${provenance}`;
+}
+
+/**
+ * Le lien d'appel d'une page de témoignage, balisé au nom de la page.
+ *
+ * **Chaque page de témoignage porte sa propre provenance**, sur demande de
+ * Rémy : `go.funnels.club/roland` envoie `el=roland`, et non `el=site`. Hyros
+ * dit alors quelle page a amené l'appel, et non seulement qu'il vient du site.
+ * La provenance est le prénom de l'adresse de la page, en minuscules, pour
+ * qu'on retrouve l'une à partir de l'autre sans table de correspondance.
+ */
+export function appelDepuis(provenance: string): string {
+  return avecTag("https://www.funnels.club/appel", provenance);
 }
 
 /**
@@ -112,7 +125,7 @@ export function estExterne(href: string): boolean {
  *
  * Écrite une fois et non trois : voir le commentaire dans `liens`.
  */
-const APPEL = avecTag("https://www.funnels.club/appel");
+const APPEL = appelDepuis("site");
 
 /**
  * La vidéo de formation gratuite, celle qui explique le tunnel de vente.

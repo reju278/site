@@ -133,6 +133,13 @@ des chiffres devenus faux.
 `avecTag()` choisit `?` ou `&` selon que l'URL a déjà une requête, et ne double
 pas la balise si elle est déjà là.
 
+**Une page de témoignage porte sa propre provenance**, sur demande de Rémy :
+son bouton d'appel envoie `el=<prénom>` et non `el=site`, pour qu'Hyros dise
+quelle page a amené l'appel. `go.funnels.club/roland` envoie `el=roland`. Le
+lien s'écrit avec `appelDepuis("<prénom>")`, jamais `liens.appel`, et la
+provenance est le dernier segment de l'adresse de la page : on retrouve l'une
+à partir de l'autre sans table. Toute nouvelle page de témoignage suit la règle.
+
 Exception : les plateformes tierces qu'Hyros ne suit pas, YouTube par exemple.
 Un paramètre inconnu dans une URL de chaîne n'apporte rien. L'exception se
 justifie en commentaire à côté du lien.
@@ -2065,12 +2072,16 @@ consigne. Le titre et le sous-titre sont de l'agent, d'après l'e-mail : à
 valider par Rémy.
 
 **`/roland` est `/thanks` réduit à une vidéo et un bouton**, servie sur
-`go.funnels.club/roland` (issue #6). Le hero, le titre, l'alerte rouge et la
-carte posée à cheval sur la photographie sont ceux de `/thanks` ; la carte ne
-porte que l'entretien de Roland Buffet (`rgio4y4o8f`, le premier des deux), et
-le bouton de `/strategie` suit, vers `liens.appel`. Forcée au clair comme
+`go.funnels.club/roland` (issue #6). Le hero et le titre sont ceux de `/thanks` ;
+l'entretien de Roland Buffet (`rgio4y4o8f`, le premier des deux) s'y pose à
+cheval, **seul, sans carte ni alerte rouge ni phrase sous le bouton**, retirées
+par Rémy, et le bouton de `/strategie` suit, vers `appelDepuis("roland")`, donc avec
+`el=roland` pour Hyros. Forcée au clair comme
 `/thanks`, sans le SDK de ClickFunnels : elle n'est pas une étape de leur
-tunnel. Le titre, l'alerte et l'identité sont de l'agent, sans montant : à
+tunnel. La marque est en `absolute` et réduite sur téléphone, comme sur
+`/appel`, et la jonction passe au milieu de la vidéo sur téléphone : la valeur
+par largeur vit dans `--jonction-roland`, recopiée dans `--jonction` par le
+style en ligne, seul à battre la règle globale de `[data-hero]`. Le titre et l'identité sont de l'agent, sans montant : à
 valider par Rémy.
 
 ## Le même texte à deux endroits n'est écrit qu'une fois

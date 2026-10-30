@@ -1,24 +1,20 @@
 import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { ParticulesHero } from "@/components/particules-hero";
-import { PointGelule } from "@/components/pilules-hero";
 import { TexteRoulant } from "@/components/texte-roulant";
 import { TitreRoulant } from "@/components/titre-roulant";
 import { identiteRoland, presentationRoland } from "@/contenu/roland";
-import { liens } from "@/contenu/site";
 import { avecReglages } from "@/lib/reglages-seo";
-import { insecables } from "@/lib/typographie";
-import { ShineBorder } from "@repo/ui/components/shine-border";
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 
 /**
- * La page du témoignage de Roland : un titre, l'alerte, la vidéo, un bouton.
+ * La page du témoignage de Roland : un titre, la vidéo, un bouton.
  *
  * **Le dessin est celui de `/thanks`**, sur demande de Rémy : le hero
- * photographique, le titre et l'alerte rouge, puis une carte posée à cheval
- * sur la photographie. La carte ne porte que la vidéo. La seule sortie du
- * tunnel est l'appel, juste en dessous.
+ * photographique et le titre, puis la vidéo posée à cheval sur la
+ * photographie, seule : l'alerte rouge et la carte blanche ont été retirées
+ * par Rémy. La seule sortie du tunnel est l'appel, juste en dessous.
  *
  * Un seul `h1`, le titre. Le bouton n'a pas de titre : un bloc d'appel n'est
  * jamais un `h2`.
@@ -30,7 +26,7 @@ const metadonnees: Metadata = {
 };
 
 export default function Roland() {
-  const { titre, alerte, video, appel } = presentationRoland;
+  const { titre, video, appel } = presentationRoland;
 
   return (
     <>
@@ -42,8 +38,17 @@ export default function Roland() {
       <div id="presentation">
         <section
           data-hero
-          className="relative isolate flex flex-col px-5 pt-20 pb-[calc(var(--video-h)/2+3rem)] sm:pt-28"
-          style={{ "--jonction": "88px" } as React.CSSProperties}
+          /* **Sur téléphone, la jonction passe au milieu de la vidéo**, comme
+             sur l'accueil : à 88 px, elle tombait sur le haut de la vidéo et
+             la photographie n'en gardait qu'une bande. La vidéo remonte de sa
+             demi-hauteur plus 0,5 rem, donc son milieu est à 8 px du bas de
+             la section.
+
+             `--jonction` passe par le style en ligne, seul à battre la règle
+             globale de `[data-hero]` ; la valeur par largeur vit dans
+             `--jonction-roland`, que les classes posent. */
+          className="relative isolate flex flex-col px-5 pt-20 pb-[calc(var(--video-h)/2+3rem)] [--jonction-roland:8px] sm:pt-28 sm:[--jonction-roland:88px]"
+          style={{ "--jonction": "var(--jonction-roland)" } as React.CSSProperties}
         >
           <div
             data-bande-sombre
@@ -67,7 +72,9 @@ export default function Roland() {
 
           <div
             aria-hidden
-            className="absolute inset-x-0 -z-10 h-24 rounded-t-[var(--rayon-jonction)] bg-background"
+            /* Sur téléphone, l'arrondi descend à l'échelle du site (5 px),
+               sur demande de Rémy : le grand rayon y prenait trop de place. */
+            className="absolute inset-x-0 -z-10 h-24 rounded-t-[var(--rayon-jonction)] bg-background max-sm:rounded-t-lg"
             style={{ bottom: "calc(var(--jonction) - 96px)" }}
           />
 
@@ -77,36 +84,14 @@ export default function Roland() {
               segments={titre}
               className="titre text-[2rem] text-balance text-white sm:text-5xl lg:text-6xl"
             />
-
-            {/* L'alerte de `/thanks`, au même dessin : voir son commentaire
-                pour les rouges en dur et le `div` plutôt que le `p`. */}
-            <div
-              role="note"
-              style={{ "--teinte": "#ffffff" } as React.CSSProperties}
-              className="relative mt-6 inline-flex max-w-full items-center gap-3 overflow-hidden rounded-[1.25rem] bg-[#dc2626] px-5 py-2.5 text-left text-sm leading-snug font-medium text-white shadow-[0_14px_34px_-14px_rgba(220,38,38,0.65)] sm:mt-7 sm:rounded-full sm:px-6 sm:py-3 sm:text-lg"
-            >
-              <ShineBorder
-                borderWidth={2}
-                duration={8}
-                shineColor={["#7f1d1d", "#450a0a"]}
-              />
-              <PointGelule />
-              <span>
-                <strong className="font-bold">{alerte.important}</strong>
-                {alerte.avant}
-                <strong className="font-bold underline decoration-white/70 decoration-2 underline-offset-4">
-                  {alerte.consigne}
-                </strong>
-                {insecables(alerte.apres)}
-              </span>
-            </div>
           </div>
         </section>
 
-        {/* LA CARTE, qui ne porte que la vidéo. Le rembourrage est celui que
-            soustrait `--video-h` dans le gabarit. */}
+        {/* LA VIDÉO, seule, sans la carte blanche de `/thanks`, sur demande
+            de Rémy : juste une ombre douce derrière elle. Elle remonte d'une
+            demi-hauteur pour se poser à cheval sur la photographie. */}
         <section className="relative px-5 -mt-[calc(var(--video-h)/2+3rem-2.5rem)]">
-          <div className="mx-auto max-w-[var(--largeur-video)] rounded-[var(--rayon-jonction)] border border-border bg-card p-4 text-card-foreground shadow-[0_30px_70px_-25px_rgba(0,0,0,0.45)] sm:p-6">
+          <div className="mx-auto max-w-[var(--largeur-video)]">
             <LecteurVideo
               id={video.id}
               titre={video.titre}
@@ -114,25 +99,24 @@ export default function Roland() {
               affiche={`/temoignages/${video.id}.jpg`}
               afficheAlt="Roland Buffet en entretien vidéo avec Rémy Jupille, chacun depuis son bureau"
               natif
+              className="shadow-[0_20px_50px_-20px_rgba(0,0,0,0.5)]"
             />
           </div>
         </section>
       </div>
 
       {/* L'APPEL, seul sous la vidéo : le bouton de `/strategie`. L'adresse
-          porte sa balise de provenance, déjà posée dans `liens`. */}
+          porte la provenance de cette page, `el=roland`, et non celle du
+          site : voir `appelDepuis`. */}
       <section className="px-5 pt-10 pb-6 sm:pt-12">
         <div className="mx-auto flex max-w-2xl flex-col items-center text-center">
           <BoutonScintillant
-            href={liens.appel}
+            href={appel.href}
             className="min-h-16 w-full text-lg sm:w-auto sm:px-12 sm:text-xl"
           >
             <TexteRoulant>{appel.libelle}</TexteRoulant>
             <ArrowRight aria-hidden className="size-5 shrink-0" />
           </BoutonScintillant>
-          <p className="mt-4 text-base leading-relaxed text-pretty text-muted-foreground">
-            {insecables(appel.note)}
-          </p>
         </div>
       </section>
     </>
