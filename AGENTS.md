@@ -1980,7 +1980,7 @@ garantie.
 
 ## Un tunnel n'est pas une page du site
 
-`/hub`, `/immersion`, `/preparation`, `/appel`, `/thanks` et `/strategie` sont des **tunnels** : on y arrive par un lien qu'on a
+`/hub`, `/immersion`, `/preparation`, `/appel`, `/thanks`, `/strategie` et `/roland` sont des **tunnels** : on y arrive par un lien qu'on a
 reçu, et la règle est qu'on n'en sort que par l'appel. La liste des racines vit
 dans `lib/tunnels.ts`, et `HorsTunnel` la lit pour retirer l'en-tête et le pied
 de page du site, qui offriraient sinon une trentaine de portes de sortie.
@@ -2062,6 +2062,15 @@ lieu de 76rem, parce qu'elle était trop grosse sur ordinateur ; et **le bouton
 est le `BoutonScintillant` en plus grand** (`min-h-16`, texte en `xl`), seul
 geste de la page, vers `liens.appel`. Pas de galerie, pas d'équipe, pas de
 consigne. Le titre et le sous-titre sont de l'agent, d'après l'e-mail : à
+valider par Rémy.
+
+**`/roland` est `/thanks` réduit à une vidéo et un bouton**, servie sur
+`go.funnels.club/roland` (issue #6). Le hero, le titre, l'alerte rouge et la
+carte posée à cheval sur la photographie sont ceux de `/thanks` ; la carte ne
+porte que l'entretien de Roland Buffet (`rgio4y4o8f`, le premier des deux), et
+le bouton de `/strategie` suit, vers `liens.appel`. Forcée au clair comme
+`/thanks`, sans le SDK de ClickFunnels : elle n'est pas une étape de leur
+tunnel. Le titre, l'alerte et l'identité sont de l'agent, sans montant : à
 valider par Rémy.
 
 ## Le même texte à deux endroits n'est écrit qu'une fois

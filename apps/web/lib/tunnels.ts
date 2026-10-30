@@ -25,6 +25,7 @@ export const TUNNELS = [
   "/course",
   "/video-vsl",
   "/strategie",
+  "/roland",
 ] as const;
 
 /** L'adresse est-elle dans un tunnel, racine ou sous-page ? */
