@@ -42,10 +42,17 @@ export default function LayoutAppel({
          formulaire de Calendly à sa hauteur minimale, et la jonction tombe
          donc à son milieu ; quand il grandit, `--surplus-formulaire` la
          garde en place. Le formulaire ne bascule pas, donc rien ne dépasse
-         sous l'écran et `--part-cachee` n'est pas déclarée. */
+         sous l'écran et `--part-cachee` n'est pas déclarée.
+
+         **72 rem et non 64**, parce qu'une fois le jour choisi Calendly
+         ajoute la colonne des horaires et que sa carte demande alors près de
+         1 100 px. À 1 024, il gardait trois colonnes en les tassant : la date
+         passait sur deux lignes et les horaires étaient coupés à droite,
+         ce que Rémy a pris pour un bug. Mesuré : à 1 152 px, la colonne
+         tient entière. */
       style={
         {
-          "--largeur-video": "min(100vw - 2.5rem, 64rem)",
+          "--largeur-video": "min(100vw - 2.5rem, 72rem)",
           "--video-h": `${reservationAppel.hauteurMin}px`,
         } as React.CSSProperties
       }

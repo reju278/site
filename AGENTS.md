@@ -2056,7 +2056,12 @@ un script posé juste après elle lui donne son adresse pendant la lecture du
 HTML : elle part sans attendre l'hydratation. Le formulaire reste blanc dans
 les deux thèmes, sur décision de Rémy, et son cadre prend la hauteur que
 Calendly annonce par `calendly.page_height` : on ne défile jamais dans
-l'iframe. Il déclare l'iframe
+l'iframe. **Le cadre fait 72 rem et non 64** : une fois le jour choisi,
+Calendly ajoute la colonne des horaires et sa carte demande près de 1 100 px ;
+à 1 024, elle restait tassée, la date sur deux lignes et les créneaux écrasés
+contre le bord, ce que Rémy a pris pour un bug. **Juger après son animation**,
+qui dure deux secondes : une capture prise juste après le clic montre la
+colonne qui déborde, à toutes les largeurs. Il déclare l'iframe
 `color-scheme: light` : sans cela, en thème sombre, le navigateur peint un fond
 blanc opaque autour de la carte de Calendly.
 
