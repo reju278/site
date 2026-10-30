@@ -16,6 +16,7 @@ const PAGES_CLAIRES = [
   "/course",
   "/video-vsl",
   "/roland",
+  "/francois",
 ] as const;
 
 /**

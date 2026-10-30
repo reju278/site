@@ -1987,7 +1987,7 @@ garantie.
 
 ## Un tunnel n'est pas une page du site
 
-`/hub`, `/immersion`, `/preparation`, `/appel`, `/thanks`, `/strategie` et `/roland` sont des **tunnels** : on y arrive par un lien qu'on a
+`/hub`, `/immersion`, `/preparation`, `/appel`, `/thanks`, `/strategie` et les pages de témoignage (`/roland`, `/francois`) sont des **tunnels** : on y arrive par un lien qu'on a
 reçu, et la règle est qu'on n'en sort que par l'appel. La liste des racines vit
 dans `lib/tunnels.ts`, et `HorsTunnel` la lit pour retirer l'en-tête et le pied
 de page du site, qui offriraient sinon une trentaine de portes de sortie.
@@ -2071,18 +2071,22 @@ geste de la page, vers `liens.appel`. Pas de galerie, pas d'équipe, pas de
 consigne. Le titre et le sous-titre sont de l'agent, d'après l'e-mail : à
 valider par Rémy.
 
-**`/roland` est `/thanks` réduit à une vidéo et un bouton**, servie sur
-`go.funnels.club/roland` (issue #6). Le hero et le titre sont ceux de `/thanks` ;
-l'entretien de Roland Buffet (`rgio4y4o8f`, le premier des deux) s'y pose à
-cheval, **seul, sans carte ni alerte rouge ni phrase sous le bouton**, retirées
-par Rémy, et le bouton de `/strategie` suit, vers `appelDepuis("roland")`, donc avec
-`el=roland` pour Hyros. Forcée au clair comme
-`/thanks`, sans le SDK de ClickFunnels : elle n'est pas une étape de leur
-tunnel. La marque est en `absolute` et réduite sur téléphone, comme sur
-`/appel`, et la jonction passe au milieu de la vidéo sur téléphone : la valeur
-par largeur vit dans `--jonction-roland`, recopiée dans `--jonction` par le
-style en ligne, seul à battre la règle globale de `[data-hero]`. Le titre et l'identité sont de l'agent, sans montant : à
-valider par Rémy.
+**Les pages de témoignage, `go.funnels.club/<prénom>`, sont `/thanks` réduit à
+une vidéo et un bouton** (issue #6) : `/roland`, puis `/francois`, au même
+format sur demande de Rémy. Le dessin vit **une fois** dans
+`components/page-temoignage.tsx`, le contenu dans `contenu/temoignages-tunnel.ts`,
+et chaque dossier d'`app/` n'en fait que l'appel : deux pages au même format ne
+doivent pas pouvoir diverger. Le hero et le titre sont ceux de `/thanks` ;
+l'entretien s'y pose à cheval, **seul, sans carte ni alerte rouge ni phrase sous
+le bouton**, retirées par Rémy, avec une ombre douce. Forcées au clair, sans le
+SDK de ClickFunnels. La marque est en `absolute` et réduite sur téléphone, comme
+sur `/appel`, et la jonction passe au milieu de la vidéo sur téléphone : la
+valeur par largeur vit dans `--jonction-temoignage`, recopiée dans `--jonction`
+par le style en ligne, seul à battre la règle globale de `[data-hero]`. Le
+bouton envoie `el=<clé>` à Hyros, voir la section Hyros. Ajouter une page :
+une entrée dans `pagesTemoignage`, un dossier `app/<clé>` copié de `/roland`,
+la racine dans `lib/tunnels.ts` et `components/fournisseur-theme.tsx`. Titres
+et identités de l'agent, sans montant : à valider par Rémy.
 
 ## Le même texte à deux endroits n'est écrit qu'une fois
 
