@@ -6,7 +6,6 @@ import { GalerieEntretiens } from "@/components/galerie-entretiens";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { MurCommunaute } from "@/components/mur-communaute";
 import { BoutonScintillant } from "@/components/bouton-scintillant";
-import { ParticulesHero } from "@/components/particules-hero";
 import { Gelule, PointGelule } from "@/components/pilules-hero";
 import { TexteRoulant } from "@/components/texte-roulant";
 import { TitreRoulant } from "@/components/titre-roulant";
@@ -62,84 +61,11 @@ export default function ConfirmationFormFunnel() {
           une sortie. */}
       <div id="haut" />
 
-      {/* LE HERO, repris du hub au caractère près, sur demande de Rémy : la
-          même image de fond, le même voile, les mêmes particules, la même
-          lèvre, et la vidéo à cheval sur la jonction.
-
-          **`data-hero` n'est pas décoratif.** `--jonction`, la ligne où l'image
-          cède la place à la page, n'est déclarée dans `globals.css` que sous
-          `[data-hero]`. Sans l'attribut, la variable n'existe pas,
-          `calc(var(--jonction) - 96px)` devient invalide, et la lèvre perd son
-          ancrage : elle remonte et se pose en travers du titre. Rien
-          n'échoue, un CSS invalide est simplement ignoré. C'est la panne que le
-          hub a déjà connue. */}
-      <section
-        id="programme"
-        data-hero
-        /* Le rembourrage haut dégage la barre de navigation, qui flotte
-           au-dessus. Il est plus court qu'avant : le titre est monté, et
-           quatre-vingt-seize pixels laissaient un vide que Rémy a signalé. */
-        className="relative isolate flex flex-col px-5 pt-20 sm:min-h-[calc(100svh+var(--part-cachee))] sm:pt-24"
-      >
-        {/* Deux fichiers, un par largeur : servir 1920 px à un écran de 375 en
-            fait payer six fois le poids pour rien. Le voile assombri garantit
-            le contraste du texte dans les deux thèmes.
-
-            `data-bande-sombre` est le repère qu'observe `EnTeteImmersion` pour
-            savoir qu'il surplombe une image : sans lui, il s'habillerait pour
-            un fond de page et deviendrait clair sur sombre. */}
-        <div
-          data-bande-sombre
-          /* `bg-[var(--fond-hero)]` : la photographie porte sa propre
-             transparence dans son tiers haut, donc sans fond opaque elle
-             laissait paraître la couleur de page au travers. En thème clair,
-             cela donnait un gris moyen sous le voile, et tout ce qui est posé
-             dessus y perdait son relief. Voir le jeton dans `globals.css`. */
-          className="absolute inset-x-0 top-0 bottom-[calc(var(--jonction)-88px)] -z-10 overflow-hidden bg-[var(--fond-hero)]"
-        >
-          <picture>
-            <source media="(min-width: 768px)" srcSet="/fond-hero.jpg" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/fond-hero-mobile.jpg"
-              alt=""
-              width={1920}
-              height={1097}
-              fetchPriority="high"
-              /* **Cadrée par le bas**, sur demande de Rémy : le pied de
-                 l'image est le vrai pied de l'image.
-
-                 Depuis que le hero fait une hauteur d'écran, le cadre est plus
-                 large que haut par rapport au paysage : `cover` le met donc à
-                 l'échelle sur la largeur et rogne en hauteur. Centré, il
-                 mangeait une cinquantaine de pixels en bas comme en haut, et
-                 le chemin du premier plan se terminait dans le vide.
-
-                 **Ce qui est rogné passe entièrement en haut, et c'est sans
-                 conséquence ici.** `AGENTS.md` prévient qu'un cadrage par le
-                 bas supprime la transparence que ces paysages portent dans leur
-                 tiers haut, et qu'il faut alors refaire le raccord au masque.
-                 Le cas ne se pose pas : ce bord-là est au tout premier pixel de
-                 la page, il n'a rien au-dessus avec quoi se raccorder. */
-              className="size-full object-cover object-bottom"
-            />
-          </picture>
-          <div aria-hidden className="absolute inset-0 bg-black/55" />
-          <ParticulesHero />
-        </div>
-
-        {/* La lèvre : la page qui monte par-dessus l'image, ses deux angles
-            hauts arrondis. Elle est **en dehors** du conteneur de l'image, et
-            c'est la réparation d'un vrai défaut : ce conteneur est rogné sur un
-            pixel fractionnaire, et le lissage de cette arête dessinait un trait
-            clair sur toute la largeur. Dehors, la lèvre couvre l'arête au lieu
-            de s'aligner dessus. */}
-        <div
-          aria-hidden
-          className="absolute inset-x-0 -z-10 h-24 rounded-t-[var(--rayon-jonction)] bg-background"
-          style={{ bottom: "calc(var(--jonction) - 96px)" }}
-        />
-
+      {/* **Le haut de page, sans photographie**, sur demande de Rémy : ni
+          image, ni voile, ni particules, ni lèvre. La page est la suite du
+          sondage et en garde l'habit, le fond crème du formulaire, avec la
+          marque seule au-dessus (`layout.tsx`). */}
+      <section id="programme" className="relative flex flex-col px-5 pt-8 sm:pt-12">
         <div className="mx-auto flex w-full max-w-[var(--largeur-video)] flex-1 flex-col">
           {/* **`mt-auto` et non `my-auto` : tout l'espace libre passe
               au-dessus du titre**, sur demande de Rémy, qui le veut « vraiment
@@ -149,7 +75,7 @@ export default function ConfirmationFormFunnel() {
 
               Une seule marge automatique suffit à poser la vidéo au bas de la
               colonne : elle absorbe tout ce qui reste. */}
-          <div className="mx-auto mt-auto max-w-3xl text-center">
+          <div className="mx-auto max-w-3xl text-center">
             {/* Le titre est celui de Rémy, relevé sur la page source. La page
                 source n'a pas de titre d'accueil : elle commence par un logo
                 puis par cette phrase. En inventer une ici reviendrait à écrire
@@ -169,7 +95,7 @@ export default function ConfirmationFormFunnel() {
                 la date de l'appel quand le sondage les a transmis, puis
                 l'alerte de `/thanks`. */}
             <TitreConfirmationForm />
-            <p className="mt-6 text-sm font-semibold tracking-wide text-white/80 uppercase">
+            <p className="mt-6 text-sm font-semibold tracking-wide text-muted-foreground uppercase">
               {confirmationFormFunnel.video1.numero}
             </p>
           </div>
@@ -185,7 +111,7 @@ export default function ConfirmationFormFunnel() {
               la section : c'est elle qui sert aussi à `--video-h`, donc à la
               jonction. Deux écritures divergeraient au premier agrandissement,
               et la lèvre dessinerait sa ligne en travers de la vidéo. */}
-                    <div className="scene-video mt-8 w-full sm:mt-10">
+          <div className="scene-video mt-8 w-full sm:mt-10">
             <LecteurVideo
               id={confirmationFormFunnel.video1.video.id}
               titre={confirmationFormFunnel.video1.video.titre}

@@ -23,7 +23,7 @@ export function TitreConfirmationForm() {
 
   return (
     <>
-      <h1 className="titre text-[2rem] text-balance text-white sm:text-5xl lg:text-6xl">
+      <h1 className="titre text-[2rem] text-balance text-foreground sm:text-5xl lg:text-6xl">
         {prenom || quand ? (
           <>
             Félicitations{prenom ? ` ${prenom}` : ""}, ton appel est réservé
@@ -31,7 +31,7 @@ export function TitreConfirmationForm() {
               <>
                 {" "}
                 pour le{" "}
-                <span className="text-[var(--primary)] brightness-150">
+                <span className="text-primary">
                   {insecables(quand)}
                 </span>
               </>
@@ -42,8 +42,8 @@ export function TitreConfirmationForm() {
           confirmationFormFunnel.titreGenerique
         )}
       </h1>
-      <p className="mt-5 text-lg text-pretty text-white/90 sm:text-xl">
-        <strong className="font-bold text-white">{alerte.important}</strong>
+      <p className="mt-5 text-lg text-pretty text-foreground/80 sm:text-xl">
+        <strong className="font-bold text-destructive">{alerte.important}</strong>
         {alerte.avant}
         <span className="underline decoration-2 underline-offset-4">
           {alerte.videos}

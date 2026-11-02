@@ -1,4 +1,5 @@
-import { EnTeteImmersion } from "@/components/en-tete-immersion";
+import { LogoFunnels } from "@/components/logo-funnels";
+import { PoliceTunnel } from "@/components/police-tunnel";
 import { PiedImmersion } from "@/components/pied-immersion";
 import { TachesImmersion } from "@/components/taches-immersion";
 import type { Metadata } from "next";
@@ -67,6 +68,7 @@ export default function LayoutConfirmationFormFunnel({
        du téléphone, qui est partie avec les liens sortants. Laissé en place, il
        aurait fait quatre-vingt-seize pixels de vide sous le pied de page. */
     <div
+      data-police-tunnel
       /* **Les mesures de la vidéo vivent ici et non sur le hero.**
 
          Elles y étaient tant qu'une seule vidéo s'en servait. Rémy en veut deux
@@ -98,7 +100,19 @@ export default function LayoutConfirmationFormFunnel({
         } as React.CSSProperties
       }
     >
-      <EnTeteImmersion />
+      <PoliceTunnel />
+      {/* **Rien que la marque, au milieu**, sur demande de Rémy : ni capsule,
+          ni menu, ni bascule de thème. C'est la suite du sondage, pas une
+          page du site. */}
+      <header className="flex justify-center px-5 pt-6 sm:pt-8">
+        <a
+          href="#haut"
+          className="titre flex items-center gap-2 text-lg tracking-tight whitespace-nowrap text-foreground"
+        >
+          <LogoFunnels className="size-[1.05em]" />
+          Funnels.Club
+        </a>
+      </header>
       {children}
       {/* L'espace qui séparait la marque du contenu, **déplacé du pied de page
           à ici**, et ce n'est pas cosmétique : une barre `sticky` s'arrête à la

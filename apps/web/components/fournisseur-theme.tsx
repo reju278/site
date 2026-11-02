@@ -17,6 +17,7 @@ const PAGES_CLAIRES = [
   "/course",
   "/video-vsl",
   ...CHEMINS_TEMOIGNAGE,
+  "/form-funnel-thanks",
 ] as const;
 
 /**
