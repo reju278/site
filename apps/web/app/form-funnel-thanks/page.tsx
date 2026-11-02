@@ -141,9 +141,10 @@ export default function ConfirmationFormFunnel() {
                  la profondeur et non comme un contour. Elle est **portée** et
                  non intérieure : elle ne se dispute pas la place du relief de
                  verre. */
-              /* Plus d'inclinaison au défilement, sur demande de Rémy : la
-                 vidéo reste droite, l'ombre suffit. */
-              className="shadow-[0_30px_70px_-25px_rgba(0,0,0,0.55)]"
+              /* Plus d'inclinaison au défilement, sur demande de Rémy. Un
+                 liseré sombre et une ombre serrée détachent ses bords du fond
+                 crème, que la vidéo partage : sans eux, elle s'y fondait. */
+              className="shadow-[0_30px_70px_-25px_rgba(0,0,0,0.55),0_2px_10px_rgba(0,0,0,0.18)] ring-1 ring-black/25"
             />
           </div>
         </div>
