@@ -405,3 +405,33 @@ export const tachesImmersion = [
     ancre: "avis",
   },
 ] as const;
+
+/**
+ * La confirmation du Form Funnel, `go.funnels.club/form-funnel-thanks` : là
+ * où le sondage de form.funnels.club mène une fois l'appel réservé. C'est
+ * `/immersion` avec un autre haut de page, sur demande de Rémy : le titre
+ * félicite, l'alerte reprend celle de `/thanks`, et les deux vidéos se
+ * numérotent. Les deux vidéos sont celles d'`/immersion` en attendant les
+ * siennes : Rémy refait la première (comment confirmer le rendez-vous), la
+ * seconde est la formation gratuite promise sur le sondage.
+ */
+export const confirmationFormFunnel = {
+  titrePage: "Ton appel est réservé",
+  description:
+    "Ton appel de démonstration est réservé : les deux vidéos à regarder avant.",
+  /* Le titre sans réservation lisible, et ses deux morceaux quand le
+     prénom et la date sont arrivés du sondage (voir `TitreConfirmationForm`). */
+  titreGenerique: "Félicitations, ton appel est réservé !",
+  video1: {
+    numero: "Vidéo 1/2",
+    /* Provisoire : la vidéo du haut d'`/immersion`. */
+    video: plateformeImmersion.video,
+  },
+  video2: {
+    numero: "Vidéo 2/2",
+    titre:
+      "Voici ta vidéo de formation gratuite qui te présente le système de A à Z, comme promis.",
+    /* Provisoire : la vidéo du modèle d'`/immersion`. */
+    video: modeleImmersion.video,
+  },
+};

@@ -28,6 +28,7 @@ export const TUNNELS = [
   "/video-vsl",
   "/strategie",
   ...CHEMINS_TEMOIGNAGE,
+  "/form-funnel-thanks",
 ] as const;
 
 /** L'adresse est-elle dans un tunnel, racine ou sous-page ? */
