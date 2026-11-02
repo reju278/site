@@ -1,6 +1,7 @@
 import { SemisPoints } from "@/components/semis-points";
 import { GalerieEntretiens } from "@/components/galerie-entretiens";
 import { LecteurVideo } from "@/components/lecteur-video";
+import { Play } from "lucide-react";
 import { MurCommunaute } from "@/components/mur-communaute";
 import { TitreRoulant } from "@/components/titre-roulant";
 import { RangeeEquipe } from "@/components/rangee-equipe";
@@ -88,9 +89,6 @@ export default function ConfirmationFormFunnel() {
                 la date de l'appel quand le sondage les a transmis, puis
                 l'alerte de `/thanks`. */}
             <TitreConfirmationForm />
-            <p className="mt-6 text-sm font-semibold tracking-wide text-muted-foreground uppercase">
-              {confirmationFormFunnel.video1.numero}
-            </p>
           </div>
 
           {/* La vidéo, **à cheval sur la jonction** : sa moitié haute sur la
@@ -104,7 +102,27 @@ export default function ConfirmationFormFunnel() {
               la section : c'est elle qui sert aussi à `--video-h`, donc à la
               jonction. Deux écritures divergeraient au premier agrandissement,
               et la lèvre dessinerait sa ligne en travers de la vidéo. */}
-          <div className="scene-video mt-8 w-full sm:mt-10">
+          {/* **« Vidéo 1/2 » est une bande bleue collée au haut de la vidéo**,
+              sur demande de Rémy : elle repère la vidéo au premier coup d'œil.
+              Le cadre commun porte la largeur (celle de la vidéo, bornée à la
+              hauteur de l'écran), l'arrondi et l'ombre ; la bande passe cinq
+              pixels sous la vidéo pour que ses coins arrondis laissent voir du
+              bleu et non un creux. */}
+          <div
+            className="scene-video mx-auto mt-8 w-full overflow-hidden rounded-md shadow-[0_30px_70px_-25px_rgba(0,0,0,0.55)] sm:mt-10"
+            style={{
+              maxWidth: `calc(85svh * ${confirmationFormFunnel.video1.video.format.largeur} / ${confirmationFormFunnel.video1.video.format.hauteur})`,
+            }}
+          >
+            {/* La police des titres, une icône de lecture et la durée : elle
+                se lit comme le titre de la vidéo, pas comme une étiquette. */}
+            <p className="titre relative z-0 -mb-[5px] flex items-center justify-center gap-2 bg-primary px-4 pt-2.5 pb-[calc(0.625rem+5px)] text-base tracking-tight text-primary-foreground sm:text-lg">
+              <Play aria-hidden className="size-4 fill-current" />
+              {confirmationFormFunnel.video1.numero}
+              <span className="font-sans text-sm font-medium text-primary-foreground/75 sm:text-base">
+                · {Math.round(confirmationFormFunnel.video1.video.secondes / 60)} min
+              </span>
+            </p>
             <LecteurVideo
               id={confirmationFormFunnel.video1.video.id}
               titre={confirmationFormFunnel.video1.video.titre}
@@ -112,6 +130,11 @@ export default function ConfirmationFormFunnel() {
               affiche={`/temoignages/${confirmationFormFunnel.video1.video.id}.jpg`}
               afficheAlt="Rémy explique comment confirmer ton rendez-vous"
               format={confirmationFormFunnel.video1.video.format}
+              /* L'aperçu muet intégré de Wistia, sur demande de Rémy : la
+                 vidéo défile sans le son, en boucle sur ses trente-cinq
+                 premières secondes, et « Cliquer pour le son » la lance. */
+              apercuAnime
+              boucleApercu={35}
               /* **Le lecteur de Wistia, servi d'emblée**, sur demande de Rémy,
                  et pour cette vidéo seulement : son affiche et son bouton à
                  lui, pas les nôtres. Le prix est écrit sur la propriété, une
@@ -122,9 +145,9 @@ export default function ConfirmationFormFunnel() {
                  la profondeur et non comme un contour. Elle est **portée** et
                  non intérieure : elle ne se dispute pas la place du relief de
                  verre. */
-              /* Plus d'inclinaison au défilement, sur demande de Rémy : la
-                 vidéo reste droite, l'ombre suffit. */
-              className="shadow-[0_30px_70px_-25px_rgba(0,0,0,0.55)]"
+              /* Plus d'inclinaison au défilement, sur demande de Rémy. L'ombre
+                 est portée par le cadre commun, avec la bande. */
+              className="relative z-10"
             />
           </div>
         </div>

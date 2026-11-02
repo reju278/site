@@ -89,6 +89,43 @@ const OPTIONS_NATIF = (() => {
 })();
 
 /**
+ * Les mêmes options, **en aperçu muet** : le « silent autoplay » intégré de
+ * Wistia. La vidéo démarre seule, sans le son, avec le bouton « Cliquer pour
+ * le son » de Wistia ; un clic la reprend au début, avec le son.
+ *
+ * **Pas de `muted=true`** : il force le silence et retire ce bouton. C'est
+ * `silentAutoPlay` seul qui donne le comportement intégré de Wistia.
+ */
+const OPTIONS_APERCU = (() => {
+  const o = new URLSearchParams(OPTIONS);
+  o.set("silentAutoPlay", "allow");
+  return o;
+})();
+
+/**
+ * Charge une fois le script de Wistia qui pilote les iframes (`E-v1.js`), et
+ * lui confie une vidéo : il appelle `pret` quand le lecteur répond.
+ */
+type VideoWistia = {
+  bind: (evenement: string, rappel: (...args: number[]) => void) => void;
+  unbind: (evenement: string, rappel: (...args: number[]) => void) => void;
+  isMuted: () => boolean;
+  time: (secondes: number) => void;
+};
+const piloterWistia = (id: string, pret: (video: VideoWistia) => void) => {
+  const fenetre = window as unknown as { _wq?: unknown[] };
+  fenetre._wq = fenetre._wq ?? [];
+  fenetre._wq.push({ id, onReady: pret });
+  if (!document.querySelector('script[data-wistia-api]')) {
+    const script = document.createElement("script");
+    script.src = "https://fast.wistia.com/assets/external/E-v1.js";
+    script.async = true;
+    script.dataset.wistiaApi = "";
+    document.head.appendChild(script);
+  }
+};
+
+/**
  * L'événement qui demande à un lecteur `natif` de démarrer, avec l'identifiant
  * Wistia de la vidéo en `detail.id`.
  *
@@ -122,6 +159,8 @@ export function LecteurVideo({
   prioritaire = false,
   afficheAlt,
   format,
+  apercuAnime = false,
+  boucleApercu,
   className,
 }: {
   id: string;
@@ -189,6 +228,18 @@ export function LecteurVideo({
    * téléphone) tient alors dans la hauteur de l'écran, centrée.
    */
   format?: { largeur: number; hauteur: number };
+  /**
+   * En mode natif : l'aperçu muet intégré de Wistia, au lieu d'une affiche
+   * fixe ; un clic sur « Cliquer pour le son » lance la vidéo avec le son.
+   * Voir `OPTIONS_APERCU`. Demandé par Rémy pour la vidéo du haut de
+   * `/form-funnel-thanks`.
+   */
+  apercuAnime?: boolean;
+  /**
+   * Tant que l'aperçu est muet, il repart du début à ce nombre de secondes.
+   * Une fois le son activé, la vidéo va jusqu'au bout.
+   */
+  boucleApercu?: number;
   className?: string;
 }) {
   const [lance, setLance] = useState(false);
@@ -246,7 +297,27 @@ export function LecteurVideo({
     return () => observateur.disconnect();
   }, [natif, prioritaire]);
 
-  const options = natif && !demandee ? OPTIONS_NATIF : OPTIONS;
+  /* La boucle de l'aperçu, par l'API de Wistia : l'iframe est d'une autre
+     origine, la page ne peut pas lire son temps elle-même. */
+  useEffect(() => {
+    if (!apercuAnime || !boucleApercu || !proche) return;
+    let video: VideoWistia | undefined;
+    const surTemps = (secondes: number) => {
+      if (video?.isMuted() && secondes >= boucleApercu) video.time(0);
+    };
+    piloterWistia(id, (v) => {
+      video = v;
+      v.bind("timechange", surTemps);
+    });
+    return () => video?.unbind("timechange", surTemps);
+  }, [apercuAnime, boucleApercu, proche, id]);
+
+  const options =
+    natif && !demandee
+      ? apercuAnime
+        ? OPTIONS_APERCU
+        : OPTIONS_NATIF
+      : OPTIONS;
 
   return (
     <div
@@ -348,8 +419,35 @@ export function LecteurVideo({
             title={titre}
             allow="autoplay; fullscreen"
             allowFullScreen
-            className="absolute -inset-[3px] size-[calc(100%+6px)] border-0"
+            /* `wistia_embed` : c'est à cela que le script de Wistia reconnaît
+               une iframe qu'il peut piloter (la boucle de l'aperçu). */
+            name={boucleApercu ? "wistia_embed" : undefined}
+            className={cn(
+              "absolute -inset-[3px] size-[calc(100%+6px)] border-0",
+              boucleApercu && "wistia_embed",
+            )}
           />
+        ) : null}
+
+        {/* **Le bouton de lecture, au milieu de l'aperçu muet**, sur demande
+            de Rémy : on voit que la vidéo se lance d'un clic. Le clic remonte
+            l'iframe avec la lecture sonore (`demandee`), donc la vidéo repart
+            du début avec le son ; le geste de la personne est ce qui autorise
+            le son. */}
+        {natif && apercuAnime && !demandee ? (
+          <button
+            type="button"
+            onClick={() => {
+              setProche(true);
+              setDemandee(true);
+            }}
+            aria-label={`Lire avec le son : ${titre}`}
+            className="group absolute inset-0 z-10 grid cursor-pointer place-items-center"
+          >
+            <span className="grid h-16 w-24 place-items-center rounded-md bg-[#045ee6] shadow-[0_10px_30px_-10px_rgba(0,0,0,0.6)] transition-transform duration-200 group-hover:scale-105">
+              <Play aria-hidden className="size-8 fill-white text-white" />
+            </span>
+          </button>
         ) : null}
 
         {!natif && !lance ? (
