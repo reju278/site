@@ -69,7 +69,9 @@ export default function ConfirmationFormFunnel() {
 
               Une seule marge automatique suffit à poser la vidéo au bas de la
               colonne : elle absorbe tout ce qui reste. */}
-          <div className="mx-auto max-w-3xl text-center">
+          {/* Plus large sur ordinateur, sur demande de Rémy : à 768 px, le
+              titre s'empilait sur quatre lignes resserrées. */}
+          <div className="mx-auto max-w-3xl text-center lg:max-w-5xl">
             {/* Le titre est celui de Rémy, relevé sur la page source. La page
                 source n'a pas de titre d'accueil : elle commence par un logo
                 puis par cette phrase. En inventer une ici reviendrait à écrire
@@ -107,10 +109,13 @@ export default function ConfirmationFormFunnel() {
               téléphone, à gauche sur ordinateur, avec sa flèche. Le cadre est
               celui de la vidéo (sa largeur, bornée à la hauteur de l'écran) ;
               la note en sort sur ordinateur, posée contre son bord gauche. */}
+          {/* La hauteur de la vidéo, bornée à l'écran : 85 % sur téléphone,
+              68 % sur ordinateur, où le titre et la gélule prennent déjà le
+              haut de l'écran (Rémy voulait la voir entière sans défiler). */}
           <div
-            className="scene-video relative mx-auto mt-8 w-full sm:mt-10"
+            className="scene-video relative mx-auto mt-8 w-full [--hauteur-video:85svh] sm:mt-10 lg:[--hauteur-video:68svh]"
             style={{
-              maxWidth: `calc(85svh * ${confirmationFormFunnel.video1.video.format.largeur} / ${confirmationFormFunnel.video1.video.format.hauteur})`,
+              maxWidth: `calc(var(--hauteur-video) * ${confirmationFormFunnel.video1.video.format.largeur} / ${confirmationFormFunnel.video1.video.format.hauteur})`,
             }}
           >
             <NoteManuscrite

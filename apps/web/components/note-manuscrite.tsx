@@ -21,7 +21,7 @@ const FlecheBas = () => (
     strokeLinecap="round"
     strokeLinejoin="round"
     aria-hidden
-    className="h-14 w-12"
+    className="h-12 w-10"
   >
     <path d="M14 4c18 6 30 22 26 52" />
     <path d="M28 46l12 12 9-15" />
@@ -59,21 +59,24 @@ export function NoteManuscrite({
     <div
       className={cn(
         feutre.className,
-        "flex items-center text-foreground max-lg:flex-col lg:flex-row lg:items-end",
+        // Au-dessus de la vidéo : la flèche doit rester visible jusqu'à son bord.
+        "relative z-10 flex items-center text-foreground max-lg:flex-col lg:flex-row lg:items-end",
         className,
       )}
     >
-      <p className="-rotate-3 text-center text-[1.65rem] leading-[1.05] text-balance lg:text-right lg:text-[1.9rem]">
-        {children}
-        {legende ? (
-          <span className="mt-1 block text-xl text-foreground/70 lg:text-2xl">
-            {legende}
+      <div className="-rotate-3 text-center lg:text-right">
+        <p className="text-[1.65rem] leading-[1.05] text-balance lg:text-[1.9rem]">
+          {children}
+        </p>
+        {/* Sur téléphone, la flèche part de la droite de « Vidéo 1/2 » et non
+            du dessous : la note gagne une ligne et descend vers la vidéo. */}
+        <p className="mt-1 flex items-start justify-center gap-1 text-xl text-foreground/70 lg:block lg:text-2xl">
+          {legende}
+          <span className="text-foreground lg:hidden">
+            <FlecheBas />
           </span>
-        ) : null}
-      </p>
-      <span className="max-lg:mt-1 max-lg:translate-x-8 lg:hidden">
-        <FlecheBas />
-      </span>
+        </p>
+      </div>
       <span className="hidden shrink-0 lg:-mb-2 lg:ml-1 lg:block">
         <FlecheDroite />
       </span>
