@@ -424,6 +424,9 @@ export const confirmationFormFunnel = {
   titreGenerique: "Félicitations, ton appel est réservé !",
   video1: {
     numero: "Vidéo 1/2",
+    /* La note au feutre qui montre la vidéo, dictée par Rémy (au tutoiement
+       de la page). */
+    consigne: "Clique sur la vidéo pour la regarder et confirmer ton rendez-vous !",
     /* Tournée au téléphone par Rémy : Loom importée dans Wistia (dossier
        « Form funnel »), montrée à son format d'origine, vertical. */
     video: {
