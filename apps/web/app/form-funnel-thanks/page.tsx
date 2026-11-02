@@ -122,13 +122,9 @@ export default function ConfirmationFormFunnel() {
                  la profondeur et non comme un contour. Elle est **portée** et
                  non intérieure : elle ne se dispute pas la place du relief de
                  verre. */
-              /* **Inclinée vers l'avant, puis redressée au défilement**, sur
-                 demande de Rémy et relevée sur wistia.com. La recette vit dans
-                 `globals.css`, avec la perspective posée sur le conteneur
-                 juste au-dessus : les deux classes vont ensemble, une carte qui
-                 tourne sans perspective au-dessus d'elle s'aplatit au lieu de
-                 se coucher. */
-              className="video-bascule shadow-[0_30px_70px_-25px_rgba(0,0,0,0.55)]"
+              /* Plus d'inclinaison au défilement, sur demande de Rémy : la
+                 vidéo reste droite, l'ombre suffit. */
+              className="shadow-[0_30px_70px_-25px_rgba(0,0,0,0.55)]"
             />
           </div>
         </div>
