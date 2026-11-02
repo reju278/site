@@ -1,7 +1,6 @@
 import { LogoFunnels } from "@/components/logo-funnels";
 import { PoliceTunnel } from "@/components/police-tunnel";
 import { PiedImmersion } from "@/components/pied-immersion";
-import { TachesImmersion } from "@/components/taches-immersion";
 import type { Metadata } from "next";
 
 /**
@@ -114,24 +113,10 @@ export default function LayoutConfirmationFormFunnel({
         </a>
       </header>
       {children}
-      {/* L'espace qui séparait la marque du contenu, **déplacé du pied de page
-          à ici**, et ce n'est pas cosmétique : une barre `sticky` s'arrête à la
-          fin de son conteneur, donc au dernier pixel de ce bloc. Laissé dans le
-          pied, il faisait s'arrêter la barre tout en haut de celui-ci,
-          c'est-à-dire par-dessus les noms de l'équipe. Déplacé ici, il fait
-          partie de ce que la barre parcourt, et elle se pose juste au-dessus de
-          la marque. */}
+      {/* L'espace qui sépare le contenu de la marque du pied de page. La
+          barre des trois tâches d'`/immersion` n'est pas reprise ici, sur
+          demande de Rémy : la page ne montre que les vidéos. */}
       <div aria-hidden className="h-11 sm:h-12" />
-
-      {/* Les trois tâches, collées en bas de l'écran. Dans le gabarit et non
-          dans la page : elles doivent rester visibles quoi qu'on regarde.
-
-          **Avant le pied de page et non après**, et l'ordre fait tout le
-          travail : la barre colle au bas de la fenêtre tant qu'il reste de son
-          conteneur à parcourir, et se pose à sa place dès qu'on atteint la fin.
-          Sa place est juste au-dessus de la marque, qu'elle cessait sinon de
-          laisser voir. */}
-      <TachesImmersion />
 
       <PiedImmersion />
     </div>

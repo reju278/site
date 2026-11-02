@@ -424,8 +424,14 @@ export const confirmationFormFunnel = {
   titreGenerique: "Félicitations, ton appel est réservé !",
   video1: {
     numero: "Vidéo 1/2",
-    /* Provisoire : la vidéo du haut d'`/immersion`. */
-    video: plateformeImmersion.video,
+    /* Tournée au téléphone par Rémy : Loom importée dans Wistia (dossier
+       « Form funnel »), montrée à son format d'origine, vertical. */
+    video: {
+      id: "2cve6yh0tx",
+      titre: "Confirme ton rendez-vous",
+      secondes: 198,
+      format: { largeur: 770, hauteur: 1588 },
+    },
   },
   video2: {
     numero: "Vidéo 2/2",

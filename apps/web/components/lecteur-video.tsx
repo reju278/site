@@ -121,6 +121,7 @@ export function LecteurVideo({
   natif = false,
   prioritaire = false,
   afficheAlt,
+  format,
   className,
 }: {
   id: string;
@@ -181,6 +182,13 @@ export function LecteurVideo({
    * démarrage est mesuré à 7 ms.
    */
   prioritaire?: boolean;
+  /**
+   * Les dimensions d'origine, quand la vidéo n'est pas en 16/9 : le cadre
+   * les suit au lieu de la loger dans le 16/9 avec deux bandes noires. Une
+   * vidéo verticale (la vidéo 1/2 de `/form-funnel-thanks`, tournée au
+   * téléphone) tient alors dans la hauteur de l'écran, centrée.
+   */
+  format?: { largeur: number; hauteur: number };
   className?: string;
 }) {
   const [lance, setLance] = useState(false);
@@ -252,9 +260,20 @@ export function LecteurVideo({
         // Le rapport est toujours 16/9, celui dans lequel Wistia sert ses
         // vidéos. Un cadre de 2,4/1 a été essayé pour masquer les bandes
         // noires des enregistrements ; Rémy a tranché pour le 16/9.
-        "relative isolate aspect-16/9 rounded-md",
+        "relative isolate rounded-md",
+        format ? "mx-auto" : "aspect-16/9",
         className,
       )}
+      // Des dimensions lues à l'exécution : Tailwind ne génère pas de classe
+      // pour elles, d'où le style.
+      style={
+        format
+          ? {
+              aspectRatio: `${format.largeur} / ${format.hauteur}`,
+              maxWidth: `calc(85svh * ${format.largeur} / ${format.hauteur})`,
+            }
+          : undefined
+      }
     >
       {/* **Le rognage vit dans un enfant, et pas sur le cadre lui-même.**
 
