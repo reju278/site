@@ -59,14 +59,14 @@ export function NoteManuscrite({
     <div
       className={cn(
         feutre.className,
-        "flex items-center text-primary max-lg:flex-col lg:flex-row lg:items-end",
+        "flex items-center text-foreground max-lg:flex-col lg:flex-row lg:items-end",
         className,
       )}
     >
       <p className="-rotate-3 text-center text-[1.65rem] leading-[1.05] text-balance lg:text-right lg:text-[1.9rem]">
         {children}
         {legende ? (
-          <span className="mt-1 block text-xl text-primary/70 lg:text-2xl">
+          <span className="mt-1 block text-xl text-foreground/70 lg:text-2xl">
             {legende}
           </span>
         ) : null}
