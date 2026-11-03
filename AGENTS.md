@@ -2096,7 +2096,8 @@ avant la redirection, le formulaire envoie tout ce qu'il a rempli à
 tableau « Refusée », sous Sourcing (`calendly.enregistrerRefus` du dépôt
 `Funnels-Club`). L'envoi part en `keepalive` et sans attendre : un CRM
 injoignable ne retient personne sur le formulaire. Forcée au
-clair, sans le SDK de ClickFunnels.
+clair, avec son jeton de page et le SDK de ClickFunnels, qui ne se charge
+qu'en production (`SdkClickFunnels`).
 
 **Les aperçus de partage du tunnel VSL** (`/course`, `/video-vsl`, `/appel`,
 `/thanks`) viennent de `lib/partage.ts` et de `public/partage/`. **Le CRM passe

@@ -1,13 +1,14 @@
 import { MentionsLegales } from "@/components/mentions-legales";
 import { PiedImmersion } from "@/components/pied-immersion";
 import { PoliceTunnel } from "@/components/police-tunnel";
+import { SdkClickFunnels } from "@/components/sdk-clickfunnels";
 import type { Metadata } from "next";
 
 /**
  * Le cadre de `/prochaine-etape`, celui de `/thanks` : un tunnel, sans
  * en-tête, interdit d'index, absent de `sitemap.ts`, forcé au clair par
- * `FournisseurTheme`. Sans le SDK de ClickFunnels : la page n'est une étape
- * d'aucun de ses tunnels.
+ * `FournisseurTheme`. Avec le SDK de ClickFunnels, qui la compte comme une
+ * étape du tunnel, comme `/thanks`.
  */
 export const metadata: Metadata = {
   alternates: { canonical: "https://go.funnels.club/prochaine-etape" },
@@ -17,6 +18,9 @@ export const metadata: Metadata = {
     nocache: true,
     noimageindex: true,
   },
+  /* Le jeton de page externe de ClickFunnels, fourni par Rémy : il désigne
+     cette page comme l'étape de refus du tunnel. */
+  other: { "cf-page-token": "cfp_jTr2TslzDZ5UJtgZGC8gKW9r" },
 };
 
 export default function LayoutProchaineEtape({
@@ -30,6 +34,7 @@ export default function LayoutProchaineEtape({
       <PiedImmersion>
         <MentionsLegales nouvelOnglet />
       </PiedImmersion>
+      <SdkClickFunnels />
     </div>
   );
 }
