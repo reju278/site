@@ -1,11 +1,9 @@
 import { BoutonScintillant } from "@/components/bouton-scintillant";
-import { GalerieEntretiens } from "@/components/galerie-entretiens";
 import { CompteurVue } from "@/components/compteur-vue";
 import { LecteurVideo } from "@/components/lecteur-video";
-import { StrategieVsl } from "@/components/strategie-vsl";
 import { TexteRoulant } from "@/components/texte-roulant";
 import { AppelVideoVsl, TitreVideoVsl } from "@/components/titre-video-vsl";
-import { strategieVsl, videoVsl } from "@/contenu/vsl";
+import { videoVsl } from "@/contenu/vsl";
 import { avecReglages } from "@/lib/reglages-seo";
 import { SdkClickFunnels } from "@/components/sdk-clickfunnels";
 import type { Metadata } from "next";
@@ -103,22 +101,6 @@ export default function Video() {
           <ArrowRight aria-hidden className="size-6 shrink-0 sm:size-7" strokeWidth={2.5} />
         </BoutonScintillant>
 
-        {/* La stratégie personnalisée, sous le bouton, sur demande de Rémy :
-            une galerie d'entretiens par activité, rendue ici par le serveur,
-            et la stratégie n'affiche que celle de la personne. */}
-        <StrategieVsl
-          galeries={Object.fromEntries(
-            Object.entries(strategieVsl.temoignages).map(([activite, ids]) => [
-              activite,
-              <GalerieEntretiens
-                key={activite}
-                ids={ids}
-                enLigne
-                appel={strategieVsl.appel}
-              />,
-            ]),
-          )}
-        />
       </div>
 
       {/* Le SDK de ClickFunnels, qui compte la visite dans l'étape du tunnel.
