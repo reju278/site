@@ -8,7 +8,12 @@ import {
   CLE_CONTACT_VSL,
   optinVsl,
 } from "@/contenu/vsl";
-import { Dialog, DialogContent, DialogTitle } from "@repo/ui/components/dialog";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogTitle,
+} from "@repo/ui/components/dialog";
 import { Input } from "@repo/ui/components/input";
 import {
   Check,
@@ -16,6 +21,7 @@ import {
   Play,
   Scan,
   Settings,
+  X,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
@@ -125,6 +131,9 @@ export function InscriptionVsl() {
         <DialogContent
           /* Sans description : Radix demande de le dire explicitement. */
           aria-describedby={undefined}
+          /* La croix du registre s'annonce « Close » en anglais aux lecteurs
+             d'écran ; la nôtre, même dessin, dit « Fermer ». */
+          showCloseButton={false}
           className="top-[calc(var(--zone-visible-haut,0px)+0.75rem)] max-h-[calc(var(--zone-visible-hauteur,100dvh)-1.5rem)] max-w-md translate-y-0 gap-0 overflow-y-auto overscroll-contain p-0 sm:top-[50%] sm:max-h-none sm:max-w-md sm:translate-y-[-50%] sm:overflow-visible"
         >
           {/* Le titre seul, sans phrase dessous ni trait de séparation, sur
@@ -135,6 +144,12 @@ export function InscriptionVsl() {
             </DialogTitle>
           </div>
           <Formulaire />
+          <DialogClose
+            aria-label="Fermer"
+            className="absolute top-3 right-3 flex size-10 items-center justify-center rounded-md text-muted-foreground opacity-70 transition-opacity hover:opacity-100 sm:top-4 sm:right-4 sm:size-8"
+          >
+            <X aria-hidden className="size-4" />
+          </DialogClose>
         </DialogContent>
       </Dialog>
     </>
