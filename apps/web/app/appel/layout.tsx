@@ -1,5 +1,3 @@
-import { MentionsLegales } from "@/components/mentions-legales";
-import { PiedImmersion } from "@/components/pied-immersion";
 import { PoliceTunnel } from "@/components/police-tunnel";
 import { SdkClickFunnels } from "@/components/sdk-clickfunnels";
 import type { Metadata } from "next";
@@ -49,15 +47,10 @@ export default function LayoutAppel({
     >
       <PoliceTunnel />
       {children}
-      {/* **Le pied de page, loin sous le formulaire**, sur demande de Rémy :
-          la marque, un filet, puis les mentions du pied de page du site.
-          L'écart et le filet disent qu'on a quitté la page pour son pied.
-          Les liens légaux s'ouvrent dans un nouvel onglet, pour qu'on ne
-          quitte pas la réservation. */}
-      <div aria-hidden className="h-28 sm:h-40" />
-      <PiedImmersion>
-        <MentionsLegales nouvelOnglet />
-      </PiedImmersion>
+      {/* **Plus de pied de page**, sur demande de Rémy : ni avertissement,
+          ni mention des cookies, ni liens légaux. Seulement de l'air sous
+          le formulaire. */}
+      <div aria-hidden className="h-16 sm:h-24" />
       {/* Le SDK de ClickFunnels, qui compte la visite dans l'étape du tunnel.
           `afterInteractive`, comme sur les autres étapes. */}
       <SdkClickFunnels />
