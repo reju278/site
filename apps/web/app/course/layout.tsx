@@ -1,6 +1,3 @@
-import { MentionsLegales } from "@/components/mentions-legales";
-import { PiedImmersion } from "@/components/pied-immersion";
-import { legalesVsl } from "@/contenu/vsl";
 import { PoliceTunnel } from "@/components/police-tunnel";
 import type { Metadata } from "next";
 
@@ -30,9 +27,7 @@ export default function LayoutCourse({
       <PoliceTunnel />
       {children}
       <div aria-hidden className="h-20 sm:h-28" />
-      <PiedImmersion>
-        <MentionsLegales nouvelOnglet liens={legalesVsl} />
-      </PiedImmersion>
+      {/* Plus de pied de page dans le tunnel VSL, sur demande de Rémy. */}
     </div>
   );
 }

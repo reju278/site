@@ -1,5 +1,3 @@
-import { MentionsLegales } from "@/components/mentions-legales";
-import { PiedImmersion } from "@/components/pied-immersion";
 import { PoliceTunnel } from "@/components/police-tunnel";
 import { SdkClickFunnels } from "@/components/sdk-clickfunnels";
 import type { Metadata } from "next";
@@ -31,9 +29,7 @@ export default function LayoutProchaineEtape({
       <PoliceTunnel />
       {children}
       <div aria-hidden className="h-16 sm:h-24" />
-      <PiedImmersion>
-        <MentionsLegales nouvelOnglet />
-      </PiedImmersion>
+      {/* Plus de pied de page dans le tunnel VSL, sur demande de Rémy. */}
       <SdkClickFunnels />
     </div>
   );

@@ -1,5 +1,3 @@
-import { MentionsLegales } from "@/components/mentions-legales";
-import { PiedImmersion } from "@/components/pied-immersion";
 import { PoliceTunnel } from "@/components/police-tunnel";
 import { SdkClickFunnels } from "@/components/sdk-clickfunnels";
 import type { Metadata } from "next";
@@ -47,12 +45,8 @@ export default function LayoutThanks({
     >
       <PoliceTunnel />
       {children}
-      {/* Le pied de page d'`/appel` : la marque, un filet, les mentions du
-          site. La page source les porte aussi. */}
       <div aria-hidden className="h-16 sm:h-24" />
-      <PiedImmersion>
-        <MentionsLegales nouvelOnglet />
-      </PiedImmersion>
+      {/* Plus de pied de page dans le tunnel VSL, sur demande de Rémy. */}
       {/* Le SDK de ClickFunnels, qui compte la visite dans l'étape du tunnel.
           `afterInteractive`, comme GTM : rien ne doit retarder le rendu. */}
       <SdkClickFunnels />

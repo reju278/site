@@ -2054,8 +2054,8 @@ l'étape 2 et la vidéo de `/preparation`, puis la pile d'entretiens de
 `/form-funnel-thanks` (Roland en grand, puis « Découvrir 3 autres
 histoires »), sans boutons de réservation, l'appel étant déjà pris. Sa liste
 vit une fois, dans `contenu/entretiens-pile.ts`, pour les deux pages. Pas de notification `ConsigneVideo` :
-elle y a été, Rémy l'a retirée. Elle est forcée au clair comme `/appel`, avec
-le même pied de page.
+elle y a été, Rémy l'a retirée. Elle est forcée au clair comme `/appel`, et n'a
+pas de pied de page.
 
 **`/thanks` lit la réservation que Calendly met dans son adresse**
 (`invitee_*`, `event_start_time`, `assigned_to`, `answer_N`), pour tutoyer la
@@ -2081,6 +2081,10 @@ qui dure deux secondes : une capture prise juste après le clic montre la
 colonne qui déborde, à toutes les largeurs. Il déclare l'iframe
 `color-scheme: light` : sans cela, en thème sombre, le navigateur peint un fond
 blanc opaque autour de la carte de Calendly.
+
+**Le tunnel VSL n'a plus de pied de page**, sur demande de Rémy : ni
+avertissement, ni mention des cookies, ni liens légaux, sur `/course`,
+`/video-vsl`, `/appel`, `/thanks` et `/prochaine-etape`.
 
 **`/prochaine-etape` est la page de qui répond « NON, je n'ai PAS accès aux
 ressources financières »** dans le formulaire d'`/appel`, sur décision de

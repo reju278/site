@@ -41,6 +41,11 @@ import { useCallback, useEffect, useMemo, useState } from "react";
  * par l'API. Si les créneaux ne se lisent pas (jeton absent, Calendly qui ne
  * répond pas), la page le dit et propose de réessayer.
  */
+/** La première question à réponse libre : son micro porte la bulle d'aide. */
+const premiereQuestionTexte = reservationYt.questions.find(
+  (question) => question.type === "texte",
+)?.cle;
+
 export function ReservationAppel() {
   // `undefined` : en lecture ; `null` : indisponible.
   const [creneaux, setCreneaux] = useState<string[] | null | undefined>();
@@ -656,6 +661,8 @@ export function ReservationAppel() {
                     )}
                   />
                   <BoutonDictee
+                    /* La bulle d'aide, sur le premier micro seulement. */
+                    aide={question.cle === premiereQuestionTexte}
                     libelle={question.libelle}
                     valeur={reponses[question.cle]?.[0] ?? ""}
                     changer={(texte) => {
