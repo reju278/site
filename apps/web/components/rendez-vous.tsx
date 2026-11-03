@@ -1,36 +1,27 @@
 "use client";
 
 import { BoutonScintillant } from "@/components/bouton-scintillant";
-import { PointGelule } from "@/components/pilules-hero";
+import { TexteRoulant } from "@/components/texte-roulant";
 import {
-  consignesRendezVous,
   messageWhatsapp,
   recapReservation,
+  sansWhatsapp,
   whatsappHotes,
 } from "@/contenu/thanks";
 import {
-  dateLisible,
   heureLisible,
   jourLisible,
   useReservation,
   type Reservation,
 } from "@/lib/reservation";
-import { surligner } from "@/lib/surligner";
 import { cn } from "@repo/ui/lib/utils";
-import {
-  CalendarCheck,
-  CalendarDays,
-  Clock,
-  Mail,
-  Phone,
-  User,
-  type LucideIcon,
-} from "lucide-react";
+import { CalendarCheck, CalendarDays, ChevronDown } from "lucide-react";
 import { siWhatsapp } from "simple-icons";
 
 /**
- * Le rendez-vous que Calendly vient de réserver, sur `/thanks` : les consignes
- * personnelles, puis le récapitulatif et le bouton WhatsApp.
+ * Le rendez-vous que Calendly vient de réserver, sur `/thanks`, dessiné comme
+ * une vraie réservation, avec le bouton WhatsApp qui le confirme. Les
+ * consignes écrites qui le précédaient ont été retirées par Rémy.
  *
  * **Client et non serveur, et c'est voulu** : les détails arrivent dans
  * l'adresse, que le script de `lib/reservation.ts` relève puis efface avant
@@ -63,8 +54,7 @@ function hoteConnu(hote: string | undefined) {
 
 /**
  * Le lien `wa.me` vers l'hôte, ou vers le numéro par défaut, avec le message
- * préparé. `null` sans numéro. Écrit une fois : le bouton du récapitulatif et
- * le lien des consignes mènent au même endroit.
+ * préparé. `null` sans numéro.
  */
 function lienWhatsapp(r: Reservation | null) {
   const numero = hoteConnu(r?.hote)?.numero ?? whatsappHotes.parDefaut;
@@ -72,322 +62,325 @@ function lienWhatsapp(r: Reservation | null) {
   const message = messageWhatsapp({
     prenom: r?.prenom,
     hote: prenomHote(r?.hote),
-    date: dateLisible(r?.debut),
+    jour: jourLisible(r?.debut),
+    heure: heureLisible(r?.debut),
   });
   return `https://wa.me/${numero}?text=${encodeURIComponent(message)}`;
 }
 
-/**
- * Un paragraphe, ses valeurs en gras, ses gestes surlignés et son lien.
- *
- * Les valeurs et le lien sont coupés d'abord, puis chaque morceau de texte
- * passe par `surligner` : un passage surligné ne contient jamais ni valeur ni
- * lien, donc les marques ne se chevauchent pas.
- */
-function marquer(
-  texte: string,
-  gras: readonly string[],
-  surligne: readonly string[],
-  lien: { texte: string; href: string } | null,
-) {
-  type Morceau = string | { gras: string } | { lien: string };
-  const couper = (
-    morceaux: Morceau[],
-    cible: string,
-    marque: (c: string) => Morceau,
-  ) =>
-    morceaux.flatMap((m): Morceau[] => {
-      if (typeof m !== "string") return [m];
-      const i = m.indexOf(cible);
-      if (i === -1) return [m];
-      return [m.slice(0, i), marque(cible), m.slice(i + cible.length)];
-    });
-
-  let morceaux: Morceau[] = [texte];
-  for (const valeur of gras)
-    morceaux = couper(morceaux, valeur, (c) => ({ gras: c }));
-  if (lien) morceaux = couper(morceaux, lien.texte, (c) => ({ lien: c }));
-
-  return morceaux.map((m, i) => {
-    if (typeof m === "string")
-      return <span key={i}>{surligner(m, surligne)}</span>;
-    if ("gras" in m)
-      return (
-        <strong key={i} className="font-semibold text-card-foreground">
-          {m.gras}
-        </strong>
-      );
-    /* Le vert de WhatsApp, celui du bouton, pour dire où mène le lien. Un
-       nouvel onglet : sur ordinateur, `wa.me` ouvre une page qui propose
-       l'application, et la confirmation ne doit pas faire quitter la page. */
-    return (
-      <a
-        key={i}
-        href={lien!.href}
-        target="_blank"
-        rel="noreferrer"
-        className="font-semibold text-[#008069] underline decoration-2 underline-offset-4 hover:text-[#00684f] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-      >
-        {m.lien}
-      </a>
-    );
-  });
-}
-
-export function ConsignesRendezVous() {
-  const r = useReservation();
-  const href = lienWhatsapp(r);
-  const { paragraphes, surligne, gras, lien } = consignesRendezVous({
-    prenom: r?.prenom,
-    email: r?.email,
-    telephone: r?.telephone,
-    date: dateLisible(r?.debut),
-    whatsapp: Boolean(href),
-  });
-
-  return (
-    <div className="space-y-4">
-      {paragraphes.map((paragraphe, i) => (
-        /* La clé est la place et non le texte : le premier paragraphe change
-           de texte quand la réservation est lue, et une clé qui change
-           remonterait l'élément au lieu de le mettre à jour. */
-        <p key={i}>
-          {marquer(
-            paragraphe,
-            gras,
-            /* La phrase du lien n'est pas surlignée : elle porte aussi
-               « via WhatsApp », et le surlignage ne vaut que pour la phrase
-               d'origine, sur demande de Rémy. Le lien suffit à la marquer. */
-            href && paragraphe.includes(lien) ? [] : surligne,
-            href ? { texte: lien, href } : null,
-          )}
-        </p>
-      ))}
-    </div>
-  );
-}
-
-/** Une ligne de coordonnées : une icône dans sa pastille, un libellé, une valeur. */
-function Coordonnee({
-  icone: Icone,
-  libelle,
-  valeur,
-  large = false,
+/** Une ligne du rendez-vous : une icône dans sa pastille, puis le texte. */
+function Ligne({
+  icone,
+  children,
 }: {
-  icone: LucideIcon;
-  libelle: string;
-  valeur: string;
-  /** Sur toute la largeur de la grille : l'e-mail, qui est long. */
-  large?: boolean;
+  icone: React.ReactNode;
+  children: React.ReactNode;
 }) {
   return (
-    <div
-      className={cn(
-        "flex min-w-0 items-center gap-3",
-        large && "sm:col-span-2",
-      )}
-    >
+    <li className="flex items-center gap-3">
       <span
         aria-hidden
-        className="flex size-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+        className="flex size-9 shrink-0 items-center justify-center rounded-md bg-foreground/[0.05] text-foreground/70"
       >
-        <Icone className="size-4" />
+        {icone}
       </span>
-      <div className="min-w-0">
-        <p className="text-xs text-muted-foreground">{libelle}</p>
-        <p className="truncate font-medium text-card-foreground">{valeur}</p>
-      </div>
-    </div>
+      <span className="min-w-0 text-base text-card-foreground sm:text-lg">
+        {children}
+      </span>
+    </li>
+  );
+}
+
+/** Les initiales d'un nom, « RT » pour « Rémy Test ». */
+function initiales(prenom?: string, nom?: string) {
+  return [prenom, nom]
+    .map((mot) => mot?.trim().charAt(0).toUpperCase())
+    .filter(Boolean)
+    .join("");
+}
+
+/** « Geoffrey Bonniot » pour « Geoffrey BONNIOT », comme Calendly l'écrit. */
+function nomPropre(nom: string) {
+  return nom
+    .toLowerCase()
+    .replace(/(^|[\s-])\p{L}/gu, (lettre) => lettre.toUpperCase());
+}
+
+/** Le logo de WhatsApp, en `currentColor`. */
+function LogoWhatsapp({ className }: { className?: string }) {
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" className={cn("fill-current", className)}>
+      <path d={siWhatsapp.path} />
+    </svg>
   );
 }
 
 /**
- * Le récapitulatif, en carte de rendez-vous, **seulement si Calendly a
- * transmis quelque chose** : sans réservation, une carte de cases vides ne
- * dirait rien. Le bouton WhatsApp, lui, s'affiche dès qu'un numéro d'hôte est
- * connu, réservation lue ou non : confirmer reste utile sans prénom.
+ * Le rendez-vous, dessiné comme une vraie réservation, sur demande de Rémy :
+ * les deux visages superposés, « Rémy Test avec Geoffrey Bonniot », le lieu
+ * (WhatsApp, au numéro de la personne), le jour et l'heure, puis le bouton
+ * vert qui le confirme. Plus de coordonnées ni de réponses en vrac, plus de
+ * pastille « En attente de confirmation » : le bouton dit ce qu'il reste à
+ * faire.
  *
- * **Trois étages, sur demande de Rémy, qui voulait mieux qu'un tableau** :
- * l'en-tête dit qui et quand, avec le portrait de l'hôte, comme un carton
- * d'invitation ; les coordonnées viennent ensuite, à vérifier d'un coup
- * d'œil ; les réponses enfin, chacune sous sa question, parce qu'une réponse
- * longue ne tient pas dans une colonne. Chaque étage disparaît s'il est vide.
+ * **Chaque ligne tombe si elle manque**, et sans réservation lue il ne reste
+ * que le bouton : une carte de cases vides ne dirait rien, confirmer reste
+ * utile sans prénom.
  */
 export function RecapRendezVous() {
   const r = useReservation();
   const lien = lienWhatsapp(r);
   const hote = hoteConnu(r?.hote);
-  const prenom = prenomHote(r?.hote);
+  const nomHote = hote?.nom ?? (r?.hote ? nomPropre(r.hote) : undefined);
+  const invite = [r?.prenom, r?.nom].filter(Boolean).join(" ");
 
   const jour = jourLisible(r?.debut);
   const debut = heureLisible(r?.debut);
   const fin = heureLisible(r?.fin);
   const creneau = debut ? (fin ? `${debut} – ${fin}` : debut) : undefined;
 
-  const nomComplet = [r?.prenom, r?.nom].filter(Boolean).join(" ");
-  const coordonnees = [
-    nomComplet && {
-      icone: User,
-      libelle: recapReservation.nom,
-      valeur: nomComplet,
-    },
-    r?.telephone && {
-      icone: Phone,
-      libelle: recapReservation.telephone,
-      valeur: r.telephone,
-    },
-    r?.email && {
-      icone: Mail,
-      libelle: recapReservation.email,
-      valeur: r.email,
-      large: true,
-    },
-  ].filter(Boolean) as {
-    icone: LucideIcon;
-    libelle: string;
-    valeur: string;
-    large?: boolean;
-  }[];
-  const reponses = r?.reponses ?? [];
+  const detail = [
+    ...(r?.email
+      ? [{ libelle: recapReservation.email, reponse: r.email }]
+      : []),
+    ...(r?.reponses ?? []),
+  ];
 
-  const aDuContenu = Boolean(
-    r && (jour || r.hote || coordonnees.length || reponses.length),
-  );
+  const aDuContenu = Boolean(r && (invite || nomHote || jour || r.telephone));
   if (!aDuContenu && !lien) return null;
 
+  const bouton = lien ? (
+    <BoutonScintillant
+      href={lien}
+      fond="#1DAA4D"
+      encre="#ffffff"
+      /* Sur téléphone, 16 px et un rembourrage resserré : la carte est
+         posée dans celle de l'étape 1, et à 20 px le libellé passait sur deux
+         lignes. */
+      className="min-h-16 w-full gap-2 px-4 text-base font-bold sm:gap-3 sm:px-8 sm:text-2xl"
+    >
+      <LogoWhatsapp className="size-5 shrink-0 sm:size-6" />
+      {/* Le texte qui roule au survol, comme sur les autres boutons du
+          tunnel, relevé par Rémy. */}
+      <TexteRoulant>{recapReservation.bouton}</TexteRoulant>
+    </BoutonScintillant>
+  ) : null;
+
+  if (!aDuContenu) return bouton;
+
   return (
-    <div className="mt-8 overflow-hidden rounded-[12px] border border-border bg-background shadow-[0_12px_32px_-24px_rgba(0,0,0,0.35)]">
-      {aDuContenu ? (
-        <>
-          {/* L'EN-TÊTE : qui et quand. Un lavis du bleu du site, assez léger
-              pour que le texte garde le contraste de la page. */}
-          <div className="flex items-center gap-4 border-b border-border bg-primary/[0.06] p-5 sm:p-6">
+    <div className="mx-auto w-full max-w-xl rounded-[12px] border border-border bg-background p-4 shadow-[0_12px_32px_-24px_rgba(0,0,0,0.35)] sm:p-7">
+      {/* Les deux visages, celui de l'hôte devant, à cheval sur celui de la
+          personne : ses initiales, faute de photo. Décoratifs, les deux noms
+          sont écrits juste à côté. */}
+      <div className="flex items-center gap-4">
+        <div aria-hidden className="flex shrink-0 items-center">
+          <span className="flex size-14 items-center justify-center rounded-full bg-primary/10 text-lg font-semibold text-primary ring-4 ring-background sm:size-16 sm:text-xl">
+            {initiales(r?.prenom, r?.nom) || "?"}
+          </span>
+          {hote?.photo ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={hote.photo}
+              alt=""
+              width={128}
+              height={128}
+              className="-ml-4 size-14 rounded-full object-cover ring-4 ring-background sm:size-16"
+            />
+          ) : (
+            <span className="-ml-4 flex size-14 items-center justify-center rounded-full bg-primary text-primary-foreground ring-4 ring-background sm:size-16">
+              <CalendarCheck className="size-6" />
+            </span>
+          )}
+        </div>
+        <div className="min-w-0">
+          <p className="text-xs font-semibold tracking-wide text-primary uppercase">
+            {recapReservation.surtitre}
+          </p>
+          <p className="titre mt-1 text-lg leading-snug text-balance text-card-foreground sm:text-2xl">
+            {recapReservation.avec(invite, nomHote)}
+          </p>
+        </div>
+      </div>
+
+      <ul className="mt-6 space-y-3 border-t border-border pt-6">
+        {r?.telephone ? (
+          <Ligne icone={<LogoWhatsapp className="size-4" />}>
+            {recapReservation.lieu}{" "}
+            <strong className="font-semibold whitespace-nowrap">
+              {numeroLisible(r.telephone)}
+            </strong>
+          </Ligne>
+        ) : null}
+        {jour ? (
+          <Ligne icone={<CalendarDays className="size-4" />}>
+            {/* La majuscule en texte : `first-letter` n'agit pas sur un
+                élément en ligne. */}
+            {jour.charAt(0).toUpperCase() + jour.slice(1)}
+            {creneau ? (
+              <>
+                {" · "}
+                <span className="whitespace-nowrap">{creneau}</span>
+              </>
+            ) : null}
+          </Ligne>
+        ) : null}
+      </ul>
+
+      {bouton ? <div className="mt-7">{bouton}</div> : null}
+
+      {/* « Détail de l'événement », replié par défaut, sur demande de Rémy :
+          l'e-mail et les réponses au formulaire, pour qui veut vérifier.
+          `details` natif : le texte est dans le document dès le premier
+          octet, et il s'ouvre au clavier sans rien écrire. */}
+      {detail.length ? (
+        <details className="group mt-5 border-t border-border pt-4">
+          <summary className="flex cursor-pointer list-none items-center justify-center gap-1.5 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground [&::-webkit-details-marker]:hidden">
+            {recapReservation.detail}
+            <ChevronDown
+              aria-hidden
+              className="size-4 transition-transform group-open:rotate-180"
+            />
+          </summary>
+          <dl className="mt-4 divide-y divide-border rounded-md border border-border bg-card">
+            {detail.map((q) => (
+              <div key={q.libelle} className="px-4 py-3">
+                <dt className="text-xs text-muted-foreground">{q.libelle}</dt>
+                <dd className="mt-0.5 text-sm font-medium break-words whitespace-pre-line text-card-foreground sm:text-base">
+                  {q.reponse}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </details>
+      ) : null}
+    </div>
+  );
+}
+
+/** Un numéro français lisible, « +33 6 00 00 00 00 » ; les autres tels quels. */
+function numeroLisible(numero: string) {
+  const fr = numero.replace(/\s/g, "").match(/^\+33(\d)(\d{2})(\d{2})(\d{2})(\d{2})$/);
+  return fr ? `+33 ${fr.slice(1).join(" ")}` : numero;
+}
+
+/**
+ * « Tu n'as pas WhatsApp ? », sous le rendez-vous, replié par défaut, sur
+ * demande de Rémy : confirmer en répondant « Oui » à l'e-mail d'invitation
+ * que l'hôte a envoyé, montré tel qu'il arrive dans Gmail.
+ *
+ * **L'e-mail est dessiné aux couleurs de Gmail en sombre**, en dur : c'est
+ * la capture d'une autre application, comme dans le script de la vidéo de
+ * Rémy (`labo/confirmer-appel.html`), pas une surface du site. L'expéditeur,
+ * le sujet et l'aperçu prennent l'hôte, la personne et le créneau de la
+ * réservation ; l'heure de réception est celle de la page, puisque
+ * l'invitation part au moment de la réservation.
+ */
+export function SansWhatsapp() {
+  const r = useReservation();
+  /* Rien sans réservation lue : au rendu serveur, où elle est toujours
+     absente, l'heure de réception différerait de celle du navigateur. */
+  if (!r) return null;
+  const hote = hoteConnu(r?.hote);
+  const nomHote = hote?.nom ?? (r?.hote ? nomPropre(r.hote) : undefined);
+  const prenomH = prenomHote(nomHote);
+  const debut = r?.debut ? new Date(r.debut) : undefined;
+  const fin = r?.fin ? new Date(r.fin) : undefined;
+
+  const heure = (date: Date) =>
+    new Intl.DateTimeFormat("fr-FR", {
+      hour: "2-digit",
+      minute: "2-digit",
+    }).format(date);
+  const jourCourt = debut
+    ? new Intl.DateTimeFormat("fr-FR", {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      }).format(debut)
+    : undefined;
+  const jourLong = debut
+    ? new Intl.DateTimeFormat("fr-FR", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }).format(debut)
+    : undefined;
+  const plage = debut
+    ? `${heure(debut)}${fin ? ` - ${heure(fin)}` : ""}`
+    : undefined;
+
+  const qui = [prenomH, r.prenom].filter(Boolean).join(" et ") || "Funnels Club";
+  const sujet = `Invitation: ${qui}${jourCourt ? ` - ${jourCourt} ${plage}` : ""}`;
+  const apercu = `${qui}.${jourLong ? ` ${jourLong.charAt(0).toUpperCase() + jourLong.slice(1)} ⋅ ${plage?.replace(" - ", " – ")}` : ""}`;
+
+  return (
+    <details className="group mx-auto mt-4 w-full max-w-xl rounded-[12px] border border-border bg-background shadow-[0_12px_32px_-24px_rgba(0,0,0,0.35)]">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-4 text-base font-semibold text-card-foreground sm:px-7 [&::-webkit-details-marker]:hidden">
+        {sansWhatsapp.titre}
+        <ChevronDown
+          aria-hidden
+          className="size-5 shrink-0 text-muted-foreground transition-transform group-open:rotate-180"
+        />
+      </summary>
+      <div className="space-y-4 border-t border-border px-4 pt-4 pb-5 text-base text-card-foreground/85 sm:px-7 sm:pb-7">
+        <p>
+          <span className="font-semibold text-primary">1.</span>{" "}
+          {sansWhatsapp.etape1(prenomH)}
+        </p>
+
+        {/* La boîte de réception, une ligne : l'invitation, non lue. */}
+        <div
+          aria-hidden
+          className="rounded-[18px] bg-[#0f0f0f] p-1.5 font-[Roboto,Arial,sans-serif] select-none"
+        >
+          <div className="flex items-start gap-3 rounded-[14px] bg-[#1e1e1e] px-3 pt-3 pb-2.5 text-[#c4c7c5]">
             {hote?.photo ? (
-              /* `alt` vide : le nom de l'hôte est écrit juste à côté. */
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={hote.photo}
                 alt=""
-                width={112}
-                height={112}
-                className="size-14 shrink-0 rounded-full object-cover ring-2 ring-background sm:size-16"
+                width={88}
+                height={88}
+                className="mt-0.5 size-10 shrink-0 rounded-full object-cover"
               />
             ) : (
-              <span
-                aria-hidden
-                className="flex size-14 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground sm:size-16"
-              >
-                <CalendarCheck className="size-6" />
-              </span>
+              <span className="mt-0.5 size-10 shrink-0 rounded-full bg-[#3c4043]" />
             )}
-
-            <div className="min-w-0">
-              <p className="text-xs font-semibold tracking-wide text-primary uppercase">
-                {recapReservation.surtitre}
+            <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+              <p className="flex items-center justify-between gap-2">
+                <span className="truncate text-[15px] font-bold text-[#e3e3e3]">
+                  {nomHote ?? "Funnels Club"}
+                </span>
+                <span className="flex shrink-0 items-center gap-2 text-xs font-bold text-[#e3e3e3]">
+                  {heure(new Date())}
+                  <span className="size-2 rounded-full bg-[#a8c7fa]" />
+                </span>
               </p>
-              <p className="titre mt-0.5 text-lg leading-snug text-card-foreground sm:text-2xl">
-                {recapReservation.appelAvec(prenom)}
-              </p>
-              {jour ? (
-                <p className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground sm:text-base">
-                  <span className="inline-flex items-center gap-1.5">
-                    <CalendarDays aria-hidden className="size-4 shrink-0" />
-                    <span className="first-letter:uppercase">{jour}</span>
-                  </span>
-                  {creneau ? (
-                    <span className="inline-flex items-center gap-1.5">
-                      <Clock aria-hidden className="size-4 shrink-0" />
-                      {creneau}
-                    </span>
-                  ) : null}
-                </p>
-              ) : null}
-
-              {/* **« En attente de confirmation »**, sur demande de Rémy :
-                  un rappel de plus que le rendez-vous n'est pas acquis tant
-                  qu'il n'a pas répondu à l'e-mail. Le jaune des surlignages
-                  de la page, qui marque déjà les gestes à faire, et le point
-                  qui pulse des gélules de l'accueil : un état en cours, pas
-                  une erreur. L'encre reste celle de la page, le jaune n'est
-                  qu'un fond. */}
-              <p
-                style={
-                  {
-                    "--teinte": "var(--surlignage-jaune)",
-                  } as React.CSSProperties
-                }
-                className="mt-3 inline-flex items-center gap-2 rounded-full bg-[color-mix(in_srgb,var(--surlignage-jaune)_22%,transparent)] px-3 py-1 text-xs font-semibold text-card-foreground ring-1 ring-[color-mix(in_srgb,var(--surlignage-jaune)_45%,transparent)] ring-inset sm:text-sm"
-              >
-                <PointGelule />
-                {recapReservation.statut}
+              <p className="truncate text-sm font-bold text-[#e3e3e3]">{sujet}</p>
+              <p className="flex items-center justify-between gap-2">
+                <span className="truncate text-sm text-[#a8aaa9]">{apercu}</span>
+                <span className="shrink-0 text-base text-[#a8aaa9]">☆</span>
               </p>
             </div>
           </div>
-
-          <div className="space-y-6 p-5 sm:p-6">
-            {coordonnees.length ? (
-              <section>
-                <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-                  {recapReservation.coordonnees}
-                </p>
-                <div className="mt-3 grid gap-4 sm:grid-cols-2">
-                  {coordonnees.map((c) => (
-                    <Coordonnee key={c.libelle} {...c} />
-                  ))}
-                </div>
-              </section>
-            ) : null}
-
-            {reponses.length ? (
-              <section>
-                <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-                  {recapReservation.reponses}
-                </p>
-                {/* Une liste de définitions : chaque question est le nom de
-                    sa réponse, ce qu'un lecteur d'écran annonce comme tel.
-                    La réponse sous sa question et non à côté : certaines
-                    font trois lignes. */}
-                <dl className="mt-3 divide-y divide-border rounded-md border border-border bg-card">
-                  {reponses.map((q) => (
-                    <div key={q.libelle} className="px-4 py-3">
-                      <dt className="text-xs text-muted-foreground">
-                        {q.libelle}
-                      </dt>
-                      <dd className="mt-0.5 text-sm font-medium break-words whitespace-pre-line text-card-foreground sm:text-base">
-                        {q.reponse}
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-              </section>
-            ) : null}
-          </div>
-        </>
-      ) : null}
-
-      {/* **Le vert de WhatsApp, assombri** : le #25D366 de la marque ne tient
-          que 2:1 sous un texte blanc. #008069 est le vert de ses propres
-          en-têtes, et le blanc y tient 5:1. En dur, parce que c'est la
-          couleur d'une marque, pas une surface du site. */}
-      {lien ? (
-        <div
-          className={cn(
-            "flex justify-center p-5 sm:p-6",
-            aDuContenu && "border-t border-border",
-          )}
-        >
-          <BoutonScintillant href={lien} fond="#008069" encre="#ffffff">
-            <svg
-              aria-hidden
-              viewBox="0 0 24 24"
-              className="size-5 shrink-0 fill-current"
-            >
-              <path d={siWhatsapp.path} />
-            </svg>
-            {recapReservation.bouton}
-          </BoutonScintillant>
         </div>
-      ) : null}
-    </div>
+
+        <p>
+          <span className="font-semibold text-primary">2.</span>{" "}
+          {sansWhatsapp.etape2.avant}
+          <strong className="font-semibold text-card-foreground">
+            {sansWhatsapp.etape2.invitation}
+          </strong>
+          {sansWhatsapp.etape2.milieu}
+          <strong className="font-semibold text-card-foreground">
+            {sansWhatsapp.etape2.oui}
+          </strong>
+          {sansWhatsapp.etape2.apres}
+        </p>
+      </div>
+    </details>
   );
 }

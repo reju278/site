@@ -17,6 +17,15 @@ export default {
    */
   distDir: process.env.NEXT_DIST_DIR || ".next",
 
+  /* Le serveur de développement ouvert depuis l'iPhone de Rémy, sur le même
+   * réseau. Next 16 bloque par défaut les ressources de développement
+   * demandées depuis une autre origine que `localhost` : la page s'affichait,
+   * mais son JavaScript ne chargeait pas et aucun bouton ne répondait. Les
+   * adresses privées des réseaux domestiques et du partage de connexion de
+   * l'iPhone (`172.20.10.x`). Sans effet en production.
+   */
+  allowedDevOrigins: ["172.20.10.*", "192.168.*.*", "10.*.*.*"],
+
   /* La politique de confidentialité vit à `/confidentialites`, au pluriel.
    *
    * Ce n'est pas une préférence de style : **c'est l'adresse que Rémy a déjà

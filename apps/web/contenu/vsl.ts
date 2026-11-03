@@ -13,9 +13,12 @@ import { messageRemy } from "@/contenu/site";
 
 /** Le serveur du CRM : l'opt-in et le compteur de visites. */
 export const API_FUNNELS =
-  process.env.NODE_ENV === "production"
+  /* Un CRM lancé en local, pour un essai de bout en bout : jamais posé sur
+     Vercel. */
+  process.env.NEXT_PUBLIC_API_FUNNELS ||
+  (process.env.NODE_ENV === "production"
     ? "https://lovely-pheasant-821.eu-west-1.convex.site"
-    : "https://savory-herring-410.eu-west-1.convex.site";
+    : "https://savory-herring-410.eu-west-1.convex.site");
 
 /**
  * La clé sous laquelle l'opt-in garde prénom et e-mail, pour les titres du
@@ -39,33 +42,53 @@ export const CLE_REPONSES_VSL = "vsl-reponses";
 export const DUREE_CONTACT_VSL = 7 * 24 * 60 * 60 * 1000;
 
 /* **Le tunnel tutoie**, sur décision de Rémy : titres, listes, boutons et
-   fenêtre d'inscription. Les citations des témoignages restent telles
+   fenêtre d'inscription. Sauf le titre, le sous-titre et les trois points de
+   l'opt-in, repris de la page d'origine et gardés au vouvoiement, sur sa
+   décision aussi. Les citations des témoignages restent telles
    qu'elles ont été dites. */
 export const optinVsl = {
-  /* Dicté par Rémy. Les guillemets sont ceux qu'il a demandés, anglais et non
-     français, dans leur forme typographique (“ ”) plutôt que droite. Les deux
-     mises en avant en bleu sont celles du titre précédent, reportées sur les
-     mêmes mots. */
-  /* Dicté par Rémy. Ses guillemets droits sont rendus dans leur forme
-     typographique (“ ”). En bleu : « PARFAIT “tunnel de vente” », « attirer
-     des clients », « formation » et « coaching ».
+  /* Dicté par Rémy, qui a choisi cette version entre deux. En bleu,
+     « PARFAIT tunnel de vente », « offre digitale* » et « publicité en
+     ligne** », ce dernier après un essai en souligné que Rémy a écarté. « Et l’IA », qui
+     finissait le titre, a été retiré par Rémy. Les deux
+     astérisques sont renvoyés sous le titre.
 
-     Espaces insécables dans « tunnel de vente », qui se coupait entre ses
-     guillemets sur téléphone, et dans « n’existe pas encore) », pour que la
-     parenthèse ne finisse jamais sur une ligne trop courte.
+     **Deux coupures écrites**, à partir de `lg` seulement, sur demande de
+     Rémy : trois lignes, « Nous allons mettre en place le », puis « PARFAIT
+     tunnel de vente pour vendre votre », puis « offre digitale* grâce à la
+     publicité en ligne** ». En dessous de `lg`, les lignes ne tiennent plus
+     dans la largeur et le titre retrouve sa coupure naturelle.
 
-     Pas de coupure écrite : elles donnaient un titre étroit. C'est la taille
-     fluide du titre, voir `app/course/page.tsx`, qui lui donne sa forme. */
+     **Ce texte vouvoie, et le reste du tunnel tutoie** : la fenêtre
+     d'inscription, la vidéo et la confirmation. Rémy a décidé de garder le
+     vouvoiement ici.
+
+     Espaces insécables dans « PARFAIT tunnel de vente », qui se coupait
+     après « PARFAIT », dans « offre digitale* » et « en ligne** », pour qu'un
+     astérisque ne passe jamais seul à la ligne. Hors de la coupure ci-dessus, c'est la
+     taille fluide du titre, voir `app/course/page.tsx`, qui lui donne sa
+     forme. */
   titre: [
     { texte: "Nous allons mettre en place le " },
-    { texte: "PARFAIT “tunnel\u00a0de\u00a0vente”", accent: true },
-    { texte: " pour " },
-    { texte: "attirer des clients", accent: true },
-    { texte: " et vendre ta " },
-    { texte: "formation", accent: true },
-    { texte: " ou ton " },
-    { texte: "coaching", accent: true },
-    { texte: " (même si ton offre n’existe\u00a0pas\u00a0encore)" },
+    { coupure: true },
+    { texte: "PARFAIT\u00a0tunnel\u00a0de\u00a0vente", accent: true },
+    { texte: " pour vendre votre " },
+    { coupure: true },
+    { texte: "offre\u00a0digitale*", accent: true },
+    { texte: " grâce à la " },
+    { texte: "publicité en\u00a0ligne**", accent: true },
+  ],
+  /* Les renvois des astérisques du titre, un par ligne. */
+  renvois: [
+    {
+      accent: "*Offre digitale",
+      suite: " : formation en ligne, coaching\u00a0ou\u00a0consulting",
+    },
+    {
+      accent: "**Publicité en ligne",
+      suite:
+        " : attirer des clients à vous sans prospection ni création\u00a0de\u00a0contenu",
+    },
   ],
   /* L'aperçu de la vidéo : une image tirée de la vidéo en 4K. */
   apercu: {
@@ -103,26 +126,28 @@ export const optinVsl = {
     ],
   },
   intro: "Vidéo gratuite qui présente la solution pour :",
-  /* Les trois points, en morceaux pour que les mots clés passent en gras,
-     sur demande de Rémy. Le texte est le sien, mot pour mot ; seule la
-     ponctuation est uniformisée : plus de point final sur le premier, les
-     deux autres n'en avaient pas. */
+  /* Les trois points, dictés par Rémy, en morceaux pour que les mots clés
+     passent en gras, sur sa demande. Le texte est le sien, mot pour mot ;
+     seule la ponctuation est uniformisée : pas de point final, le premier en
+     avait un et pas les deux autres. */
   points: [
     [
-      { gras: "Valider ta niche" },
-      ", définir ton positionnement et identifier parfaitement ",
-      { gras: "ton client de rêve" },
+      { gras: "Valider votre niche" },
+      ", définir votre positionnement et identifier parfaitement ",
+      { gras: "votre client de rêve" },
     ],
     [
       { gras: "Créer une offre digitale" },
-      " de A à Z ou à améliorer celle que tu as déjà afin d'",
-      { gras: "augmenter tes prix" },
-      " jusqu'à plusieurs milliers d'euros, même si tu démarres de zéro",
+      " de A à Z ou améliorer celle que vous avez déjà afin d’",
+      { gras: "augmenter vos prix" },
+      " jusqu’à plusieurs milliers d’euros, même si vous démarrez de zéro",
     ],
     [
-      { gras: "Vendre ton offre digitale" },
+      { gras: "Vendre votre offre digitale" },
       " grâce au ",
       { gras: "parfait tunnel de vente" },
+      " et attirer des clients à vous grâce à des ",
+      { gras: "publicités en ligne qui tournent 24\u00a0h/24 et 7\u00a0j/7" },
     ],
   ],
   bouton: "Accéder à la vidéo GRATUITE",

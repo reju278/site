@@ -7,24 +7,17 @@ import {
   API_FUNNELS,
   CLE_CONTACT_VSL,
   optinVsl,
-  questionnaireVsl,
-  videoVsl,
 } from "@/contenu/vsl";
-import { enregistrerReponsesVsl, type ReponsesVsl } from "@/lib/prenom-vsl";
-import { insecables } from "@/lib/typographie";
-import { cn } from "@repo/ui/lib/utils";
 import { Dialog, DialogContent, DialogTitle } from "@repo/ui/components/dialog";
 import { Input } from "@repo/ui/components/input";
 import {
-  ArrowLeft,
   Check,
   LoaderCircle,
-  Lock,
   Play,
-  Volume2,
+  Scan,
+  Settings,
 } from "lucide-react";
-import { flushSync } from "react-dom";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * L'opt-in de la formation gratuite : l'aperçu de la vidéo et le bouton
@@ -52,7 +45,7 @@ export function ListePointsVsl() {
           <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-[var(--icone-resultats)] text-white">
             <Check className="size-3.5" strokeWidth={3.5} />
           </span>
-          <span className="text-base leading-snug text-foreground/85 sm:text-[17px]">
+          <span className="text-base leading-snug text-foreground/85 sm:text-[17px] lg:text-xl">
             {point.map((morceau, i) =>
               typeof morceau === "string" ? (
                 morceau
@@ -71,7 +64,6 @@ export function ListePointsVsl() {
 
 export function InscriptionVsl() {
   const [ouvert, setOuvert] = useState(false);
-  const [annonce, setAnnonce] = useState<string | null>(null);
   useZoneVisible(ouvert);
 
   /* Les liens de la lettre de Rémy, plus bas sur la page, ouvrent aussi la
@@ -85,14 +77,13 @@ export function InscriptionVsl() {
 
   return (
     <>
-      {/* La photo garde toujours son 16/9, sur décision de Rémy : la vidéo
-          doit se montrer sous son meilleur jour, pas rognée pour remplir une
-          hauteur. Pour qu'il n'y ait pas de blanc à côté d'elle sur
-          ordinateur, c'est la largeur des colonnes qui s'ajuste : la photo
-          prend un peu plus de place, et sa hauteur rejoint celle de la
-          liste. Mesuré à 1280 px : carte de 72 rem, 1,5 part pour la photo,
-          361 px de haut pour 347 de liste. */}
-      <div className="grid items-center gap-4 rounded-[var(--radius-lg)] border bg-card p-3 sm:gap-6 shadow-[0_30px_70px_-35px_rgba(0,0,0,0.35)] sm:p-6 md:grid-cols-[1.5fr_1fr] md:gap-8">
+      {/* Sur ordinateur, photo et texte se partagent la carte à parts
+          égales, comme sur la page ClickFunnels d'origine, sur demande de
+          Rémy. La photo y passe en 4/3, sur sa demande aussi : plus haute,
+          elle rejoint la hauteur du texte ; ses côtés sont recadrés, pas
+          ses commandes, qui sont dessinées par-dessus. Sur téléphone, elle
+          garde son 16/9. */}
+      <div className="grid items-center gap-4 rounded-[var(--radius-lg)] border bg-card p-3 sm:gap-6 shadow-[0_30px_70px_-35px_rgba(0,0,0,0.35)] sm:p-6 md:grid-cols-2 md:gap-8">
         <ApercuVideo ouvrir={() => setOuvert(true)} />
 
         <div className="flex flex-col gap-4">
@@ -106,7 +97,7 @@ export function InscriptionVsl() {
           >
             <TexteRoulant>{optinVsl.bouton}</TexteRoulant>
           </BoutonScintillant>
-          <p className="text-lg font-bold text-foreground sm:text-xl">
+          <p className="text-lg font-bold text-foreground sm:text-xl lg:text-2xl">
             {optinVsl.intro}
           </p>
           {/* Les trois points, précédés d'une coche verte, choisie par Rémy
@@ -116,7 +107,7 @@ export function InscriptionVsl() {
           <ListePointsVsl />
           <BoutonScintillant
             action={() => setOuvert(true)}
-            className="mt-2 min-h-16 w-full text-lg sm:text-xl"
+            className="mt-2 min-h-16 w-full text-lg sm:text-xl lg:min-h-[4.5rem] lg:text-[1.625rem] lg:font-bold xl:text-[2rem]"
           >
             <TexteRoulant>{optinVsl.bouton}</TexteRoulant>
           </BoutonScintillant>
@@ -138,68 +129,25 @@ export function InscriptionVsl() {
         >
           {/* Le titre seul, sans phrase dessous ni trait de séparation, sur
               demande de Rémy : le formulaire suit directement. */}
-          {/* Pendant les questions, le titre devient l'annonce des trois
-              questions, sur demande de Rémy : « Juste un instant Prénom… ».
-              Le formulaire le fait savoir par `annoncer`. */}
           <div className="px-6 pt-5 text-center sm:pt-7">
             <DialogTitle className="titre text-xl text-balance sm:text-2xl">
-              {annonce ? insecables(annonce) : fenetre.titre}
+              {fenetre.titre}
             </DialogTitle>
           </div>
-          <Formulaire annoncer={setAnnonce} />
+          <Formulaire />
         </DialogContent>
       </Dialog>
     </>
   );
 }
 
-function Formulaire({
-  annoncer,
-}: {
-  /** Le titre de la fenêtre pendant les questions, `null` avant. */
-  annoncer: (titre: string | null) => void;
-}) {
+function Formulaire() {
   const { fenetre } = optinVsl;
   const [prenom, setPrenom] = useState("");
   const [email, setEmail] = useState("");
   const [envoi, setEnvoi] = useState(false);
   const [erreur, setErreur] = useState<string | null>(null);
-  /* `-1` : prénom, e-mail et consentement. `0` à `2` : les trois questions,
-     une à la fois, à la place des champs. Voir `questionnaireVsl`. */
-  const [etape, setEtape] = useState(-1);
-  const [reponses, setReponses] = useState<ReponsesVsl>({});
   const formulaire = useRef<HTMLFormElement>(null);
-  const { questions } = questionnaireVsl;
-  const question = etape >= 0 ? questions[etape] : undefined;
-
-  /* Le titre de la fenêtre suit l'étape, et revient au sien quand la
-     fenêtre se ferme (le formulaire est alors démonté). */
-  const questionsEnCours = etape >= 0;
-  const prenomSaisi = prenom.trim();
-  useEffect(() => {
-    annoncer(
-      questionsEnCours
-        ? prenomSaisi
-          ? questionnaireVsl.introAvecPrenom.replace("{prenom}", prenomSaisi)
-          : questionnaireVsl.intro
-        : null,
-    );
-  }, [annoncer, questionsEnCours, prenomSaisi]);
-  useEffect(() => () => annoncer(null), [annoncer]);
-
-  /* Un choix fait avancer ; le dernier envoie le formulaire. `flushSync`
-     écrit la réponse dans son champ caché avant l'envoi : sans lui, le SDK
-     lirait la valeur d'avant. */
-  const choisir = (choix: string) => {
-    if (!question || envoi) return;
-    const suite = { ...reponses, [question.cle]: choix };
-    flushSync(() => setReponses(suite));
-    if (etape < questions.length - 1) {
-      setEtape(etape + 1);
-      return;
-    }
-    formulaire.current?.requestSubmit();
-  };
 
   /* Deux chemins, et le SDK décide lequel.
 
@@ -217,10 +165,6 @@ function Formulaire({
      renverrait sur la page avec le prénom et l'e-mail dans l'adresse. */
   const valider = async (evenement: React.FormEvent<HTMLFormElement>) => {
     const parLeSdk = evenement.currentTarget.dataset.cfSdkEnhanced === "true";
-    /* Les réponses, pour pré-remplir Calendly et régler la stratégie de
-       `/video-vsl`. Elles partent aussi à ClickFunnels, par leurs champs
-       cachés. */
-    enregistrerReponsesVsl(reponses);
     try {
       localStorage.setItem(
         CLE_CONTACT_VSL,
@@ -274,38 +218,13 @@ function Formulaire({
       onFocus={recentrer}
       className="flex flex-col gap-3 px-6 pt-5 pb-6"
     >
-      {/* Les trois réponses, en champs personnalisés de la fiche du contact
-          ClickFunnels, sur demande de Rémy. Un `input` caché est un élément
-          que le SDK accepte pour `custom-attribute:` ; le champ se crée chez
-          ClickFunnels à la première valeur reçue. */}
-      {questions.map((q) => (
-        <input
-          key={q.cle}
-          type="hidden"
-          data-cf-element={`custom-attribute:${q.champ}`}
-          name={q.champ}
-          value={reponses[q.cle] ?? ""}
-        />
-      ))}
-
-      {question ? (
-        <EtapeQuestion
-          rang={etape}
-          total={questions.length}
-          titre={question.titre}
-          choix={question.choix}
-          emojis={question.emojis}
-          choisi={reponses[question.cle]}
-          envoi={envoi}
-          choisir={choisir}
-          retour={() => setEtape(etape - 1)}
-        />
-      ) : null}
-
-      {/* **Les champs restent dans le formulaire pendant les questions**,
-          cachés et non démontés : c'est ce formulaire-là que le SDK envoie à
-          la dernière réponse, prénom et e-mail compris. */}
-      <div hidden={etape >= 0} className="flex flex-col gap-3">
+      {/* **Plus de questions après le prénom et l'e-mail**, sur demande de
+          Rémy : le bouton envoie le formulaire, et ClickFunnels renvoie
+          directement vers la vidéo. Le questionnaire de `questionnaireVsl`
+          reste écrit, Calendly et `/video-vsl` savent lire ses réponses, mais
+          plus rien ne le pose : la stratégie chiffrée de `/video-vsl`, qui en
+          dépend, ne s'affiche donc plus. */}
+      <div className="flex flex-col gap-3">
         {/* Les trois champs portent leur `data-cf-element` : c'est ce que le
           SDK lit, et rien d'autre. Aucun champ du formulaire n'en est
           dépourvu, la documentation de ClickFunnels l'interdisant. */}
@@ -314,6 +233,10 @@ function Formulaire({
           data-cf-element="first-name"
           name="first_name"
           autoComplete="given-name"
+          /* Majuscule au prénom, comme sur `/appel` : avec un vrai
+             formulaire et des champs nommés, c'est ce qui fait proposer à
+             l'iPhone et à Android le prénom enregistré sur le téléphone. */
+          autoCapitalize="words"
           placeholder="Prénom"
           value={prenom}
           onChange={(e) => setPrenom(e.target.value)}
@@ -330,7 +253,11 @@ function Formulaire({
           data-cf-element="email"
           name="email"
           type="email"
+          inputMode="email"
           autoComplete="email"
+          autoCapitalize="none"
+          autoCorrect="off"
+          spellCheck={false}
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -375,160 +302,64 @@ function Formulaire({
           </p>
         ) : null}
         <BoutonScintillant
-          /* Le bouton du site est un `type="button"`. **Il n'envoie plus** :
-           il vérifie les champs avec les contrôles natifs, puis passe aux
-           questions, sur décision de Rémy. L'envoi part à la dernière
-           réponse. */
+          /* Le bouton du site est un `type="button"` : il envoie par
+             `requestSubmit`, qui passe par les contrôles natifs puis par
+             l'événement `submit` que le SDK de ClickFunnels écoute. Texte
+             plus grand, sur demande de Rémy. */
           action={() => {
-            if (!envoi && formulaire.current?.reportValidity()) setEtape(0);
+            if (!envoi) formulaire.current?.requestSubmit();
           }}
-          className="mt-2 w-full text-lg"
+          className="mt-2 min-h-14 w-full text-xl font-bold sm:text-2xl"
         >
           {envoi ? (
-            <LoaderCircle className="size-5 animate-spin" />
+            <LoaderCircle className="size-6 animate-spin" />
           ) : (
             <TexteRoulant>{fenetre.bouton}</TexteRoulant>
           )}
         </BoutonScintillant>
-        <p className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
-          <Lock className="size-3" />
-          Vos informations restent confidentielles.
-        </p>
       </div>
     </form>
   );
 }
 
 /**
- * Une question du questionnaire, à la place des champs de la fenêtre : la
- * fenêtre et son titre ne changent pas, sur demande de Rémy, pour qu'on ne
- * se sente pas ailleurs.
+ * L'icône son du lecteur Wistia : un haut-parleur plein et deux ondes en
+ * parenthèses. Les ondes s'allument et s'éteignent l'une après l'autre, sur
+ * demande de Rémy, pour dire que le son est là. `anime` les fige, pour la
+ * barre du bas, où Wistia ne les anime pas.
+ *
+ * L'animation ne joue que si le mouvement réduit n'est pas demandé : arrêtée
+ * par la règle globale, elle figerait une onde à moitié éteinte.
  */
-function EtapeQuestion({
-  rang,
-  total,
-  titre,
-  choix,
-  emojis,
-  choisi,
-  envoi,
-  choisir,
-  retour,
+function IconeSon({
+  className = "size-[45%]",
+  anime = true,
 }: {
-  rang: number;
-  total: number;
-  titre: string;
-  choix: readonly string[];
-  emojis: readonly string[];
-  choisi: string | undefined;
-  envoi: boolean;
-  choisir: (choix: string) => void;
-  retour: () => void;
+  className?: string;
+  anime?: boolean;
 }) {
-  /* **La hauteur ne fait que grandir**, sur demande de Rémy : la fenêtre
-     prend la taille de la question la plus haute vue jusque-là et la garde.
-     Sans cela, elle se redimensionnait à chaque question, la première ayant
-     cinq choix et les suivantes quatre. Mesurée avant que le navigateur
-     peigne, donc sans saut visible. */
-  const bloc = useRef<HTMLDivElement>(null);
-  const [hauteurMin, setHauteurMin] = useState(0);
-  useLayoutEffect(() => {
-    const hauteur = bloc.current?.offsetHeight ?? 0;
-    setHauteurMin((avant) => Math.max(avant, hauteur));
-  }, [rang]);
-
+  const onde = anime
+    ? "motion-safe:animate-[onde-son_1.2s_ease-in-out_infinite]"
+    : "";
   return (
-    <div
-      ref={bloc}
-      style={{ minHeight: hauteurMin || undefined }}
-      className="flex flex-col gap-4"
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2.2}
+      strokeLinecap="round"
+      className={className}
     >
-      {/* La progression : une barre et « 1 / 3 ». */}
-      <div className="flex items-center gap-3">
-        <div
-          role="progressbar"
-          aria-valuemin={0}
-          aria-valuemax={total}
-          aria-valuenow={rang + 1}
-          aria-label="Progression"
-          className="h-2 flex-1 overflow-hidden rounded-full bg-foreground/10"
-        >
-          <div
-            className="h-full rounded-full bg-primary transition-[width] duration-500 ease-out"
-            style={{ width: `${((rang + 1) / total) * 100}%` }}
-          />
-        </div>
-        <span className="text-sm font-medium text-muted-foreground tabular-nums">
-          {rang + 1} / {total}
-        </span>
-      </div>
-
-      {/* La `key` remonte le bloc à chaque question : l'apparition se
-          rejoue. */}
-      <fieldset
-        key={titre}
-        disabled={envoi}
-        className="animate-in fade-in-0 slide-in-from-right-4 duration-300"
-      >
-        <legend className="text-lg font-semibold text-balance text-foreground">
-          {insecables(titre)}
-        </legend>
-        <div className="mt-4 flex flex-col gap-2.5">
-          {choix.map((c, i) => (
-            <button
-              key={c}
-              type="button"
-              onClick={() => choisir(c)}
-              aria-pressed={choisi === c}
-              className={cn(
-                "flex min-h-13 w-full items-center justify-between gap-3 rounded-md border bg-card px-4 py-3 text-left text-base font-medium text-foreground shadow-sm transition-colors hover:border-primary hover:bg-primary/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-                choisi === c
-                  ? "border-primary bg-primary/5"
-                  : "border-foreground/20",
-              )}
-            >
-              {/* L'émoji à l'écran seulement : la valeur choisie reste `c`. */}
-              <span className="flex items-center gap-3">
-                <span aria-hidden className="text-xl leading-none">
-                  {emojis[i]}
-                </span>
-                {c}
-              </span>
-              {envoi && choisi === c && rang === total - 1 ? (
-                <LoaderCircle
-                  aria-hidden
-                  className="size-5 shrink-0 animate-spin"
-                />
-              ) : null}
-            </button>
-          ))}
-        </div>
-      </fieldset>
-
-      {/* Présent dès la première question, mais invisible et hors du
-          clavier : sa place est réservée, sinon la fenêtre grandirait à la
-          deuxième question, quand il apparaît. */}
-      <button
-        type="button"
-        onClick={retour}
-        disabled={envoi || rang === 0}
-        aria-hidden={rang === 0 || undefined}
-        tabIndex={rang === 0 ? -1 : undefined}
-        className={cn(
-          "inline-flex min-h-10 items-center gap-1.5 self-start rounded-md text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-          rang === 0 && "invisible",
-        )}
-      >
-        <ArrowLeft aria-hidden className="size-4" />
-        {questionnaireVsl.retour}
-      </button>
-    </div>
+      <path d="M3 9.5h3.5L11 5.5v13l-4.5-4H3z" fill="currentColor" stroke="none" />
+      <path d="M15 9a4.5 4.5 0 0 1 0 6" className={onde} />
+      <path
+        d="M18.5 6a8.5 8.5 0 0 1 0 12"
+        className={onde}
+        style={anime ? { animationDelay: "0.3s" } : undefined}
+      />
+    </svg>
   );
 }
-
-/** Une durée en secondes, écrite comme un lecteur l'affiche : « 16:16 ». */
-const duree = (secondes: number) =>
-  `${Math.floor(secondes / 60)}:${String(Math.round(secondes % 60)).padStart(2, "0")}`;
 
 /**
  * L'aperçu de la vidéo : une photo, qui ouvre la fenêtre d'inscription.
@@ -536,7 +367,7 @@ const duree = (secondes: number) =>
  * **Une photo et non un extrait vidéo**, sur décision de Rémy : un extrait
  * assez léger pour le haut de page ne rendait pas justice à la qualité de la
  * vidéo. L'image est tirée de la vidéo en 4K, ramenée à 1920 et à 1080 px en
- * WebP (52 et 24 Ko) : le navigateur prend la plus petite qui suffit à son
+ * WebP (41 et 19 Ko) : le navigateur prend la plus petite qui suffit à son
  * écran.
  *
  * **Le bouton de lecture et la barre sont dessinés par la page**, pas dans
@@ -554,7 +385,7 @@ function ApercuVideo({ ouvrir }: { ouvrir: () => void }) {
       type="button"
       onClick={ouvrir}
       aria-label="Voir la vidéo gratuite"
-      className="group relative block aspect-video w-full overflow-hidden rounded-md bg-black text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+      className="group @container relative block aspect-video w-full md:aspect-[4/3] overflow-hidden rounded-md bg-black text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
     >
       {/* L'image du haut de page : `fetchPriority="high"`, et la largeur
           qu'elle occupe pour que le navigateur choisisse bien. Elle fait
@@ -573,32 +404,61 @@ function ApercuVideo({ ouvrir }: { ouvrir: () => void }) {
         className="absolute inset-0 size-full object-cover"
       />
 
-      {/* Le bouton de lecture est translucide, comme celui de Wistia, sur
-          demande de Rémy : le visage reste visible au travers. Il se remplit
-          au survol. Pas d'ombre portée : sur un fond qu'on voit au travers,
-          elle salirait l'image au lieu de détacher le bouton. */}
-      <span className="absolute top-[46%] left-1/2 flex h-12 w-[4.5rem] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-md bg-primary/70 text-primary-foreground transition-colors group-hover:bg-primary/90">
-        <Play className="size-6 fill-current" />
+      {/* Les trois commandes reprennent le lecteur Wistia de la page
+          d'origine, sur capture fournie par Rémy, « exactement comme ça » :
+          un bouton de lecture rectangulaire au centre, un rond noir pour le
+          son en haut à droite, une barre bleue pleine en bas. Toutes
+          décoratives : c'est le bouton entier qui ouvre l'inscription.
+
+          **Leurs cotes sont des proportions de la largeur du cadre**, en
+          `cqw`, relevées sur la capture de 2000 px de large : elles gardent
+          le même rapport à l'image à toutes les tailles. Chacune a un
+          plancher, sans quoi la barre tomberait à 10 px sur téléphone. */}
+      <span className="absolute top-[46.7%] left-1/2 flex h-[max(3rem,8.4cqw)] w-[max(4.75rem,13.15cqw)] -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-hidden bg-primary/85 text-white transition-colors group-hover:bg-primary">
+        {/* Le reflet du bouton Wistia : une ellipse plus claire qui en
+            couvre le haut. */}
+        <span
+          aria-hidden
+          className="absolute -top-[45%] -left-[15%] h-[120%] w-[110%] rounded-[50%] bg-white/10"
+        />
+        <Play className="relative size-[max(1.5rem,2.9cqw)] fill-current" strokeWidth={0} />
       </span>
 
-      {/* L'icône son, en haut à droite comme sur le lecteur de Wistia, sur
-          demande de Rémy : elle dit que la vidéo est parlée. Décorative, le
-          bouton entier portant déjà son libellé. */}
+      {/* Le son se déplie vers la gauche au survol, comme celui de Wistia,
+          sur demande de Rémy : « Cliquez pour activer le son ». Replié, c'est
+          un rond ; déplié, une pilule ancrée à droite dont le libellé
+          s'ouvre en largeur. Sur téléphone, sans survol, il reste rond. */}
       <span
         aria-hidden
-        className="absolute top-3 right-3 flex size-9 items-center justify-center rounded-full bg-black/55 text-white"
+        className="group/son absolute top-[2cqw] right-[1.6cqw] flex h-[max(2.25rem,5.9cqw)] min-w-[max(2.25rem,5.9cqw)] items-center justify-end rounded-full bg-black/85 text-[max(0.8125rem,1.5cqw)] text-white"
       >
-        <Volume2 className="size-[18px]" />
+        <span className="max-w-0 overflow-hidden whitespace-nowrap opacity-0 transition-[max-width,opacity,padding] duration-300 ease-out group-hover/son:max-w-[20rem] group-hover/son:pl-[1.1em] group-hover/son:opacity-100">
+          Cliquez pour activer le son
+        </span>
+        <span className="flex aspect-square h-full shrink-0 items-center justify-center">
+          <IconeSon />
+        </span>
       </span>
 
-      {/* La barre du lecteur : elle dit que c'est une vidéo, et sa durée. */}
-      <span className="absolute inset-x-0 bottom-0 flex h-9 items-center gap-2 bg-gradient-to-t from-black/65 to-transparent px-3 text-xs text-white">
-        <Play className="size-3.5 fill-current" />
-        <span>0:00</span>
-        <span className="relative h-1 flex-1 rounded-full bg-white/35">
-          <span className="absolute inset-y-0 left-0 w-[3%] rounded-full bg-primary" />
+      {/* La barre : lecture, temps écoulé, piste fine et son curseur, puis
+          sous-titres, son, réglages et plein écran. Pas de durée, comme sur
+          l'original. Les sous-titres et les réglages s'effacent sur
+          téléphone, où la barre n'a pas la place de tout porter. */}
+      <span
+        aria-hidden
+        className="absolute inset-x-0 bottom-0 flex h-[max(1.75rem,3.25cqw)] items-center gap-[max(0.625rem,1.6cqw)] bg-primary px-[max(0.5rem,1cqw)] text-[max(0.75rem,1.6cqw)] font-medium text-white"
+      >
+        <Play className="aspect-square h-[55%] w-auto shrink-0 fill-current" strokeWidth={0} />
+        <span className="tabular-nums">0:00</span>
+        <span className="relative h-0.5 flex-1 rounded-full bg-white/70">
+          <span className="absolute top-1/2 left-0 size-[max(0.5rem,0.55cqw)] -translate-y-1/2 rounded-full bg-white" />
         </span>
-        <span>{duree(videoVsl.video.secondes)}</span>
+        <span className="hidden h-[55%] items-center rounded-[3px] border-[1.5px] border-current px-[0.2em] text-[0.7em] leading-none font-bold sm:flex">
+          cc
+        </span>
+        <IconeSon className="aspect-square h-[60%] w-auto shrink-0" anime={false} />
+        <Settings className="hidden aspect-square h-[60%] w-auto shrink-0 sm:block" />
+        <Scan className="aspect-square h-[60%] w-auto shrink-0" />
       </span>
     </button>
   );
@@ -638,10 +498,14 @@ function useZoneVisible(actif: boolean) {
 /**
  * Ramène au milieu de la fenêtre le champ qu'on vient de toucher, une fois le
  * clavier sorti : iOS fait défiler la page, pas la fenêtre, et le champ
- * suivant pouvait rester sous le clavier. Sur ordinateur, la fenêtre ne
- * défile pas, donc rien ne bouge.
+ * suivant pouvait rester sous le clavier.
+ *
+ * **Sur écran tactile seulement.** Sur ordinateur, il n'y a pas de clavier à
+ * éviter, et ce défilement faisait bouger la page derrière la fenêtre à
+ * chaque champ touché, ce que Rémy a relevé.
  */
 function recentrer(evenement: React.FocusEvent<HTMLFormElement>) {
+  if (!window.matchMedia("(pointer: coarse)").matches) return;
   const champ = evenement.target;
   if (!(champ instanceof HTMLElement)) return;
   window.setTimeout(() => {

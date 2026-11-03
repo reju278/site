@@ -32,9 +32,14 @@ export type EntretienPile = {
 export function PileEntretiens({
   entretiens,
   className,
+  rayonBoutons = "25px",
 }: {
   entretiens: readonly EntretienPile[];
   className?: string;
+  /** Le rayon des boutons « Découvrir… » et « Fermer ». 25 px, celui du mur
+   *  de la communauté, par défaut ; `/thanks` les veut carrés comme le reste
+   *  du tunnel VSL, sur demande de Rémy. */
+  rayonBoutons?: string;
 }) {
   /* Combien de paquets de trois sont ouverts sous le premier entretien. */
   const [paliers, setPaliers] = useState(0);
@@ -150,7 +155,7 @@ export function PileEntretiens({
                pas sur un fond clair. */
             <BoutonScintillant
               action={refermer}
-              rayon="25px"
+              rayon={rayonBoutons}
               fond="color-mix(in oklab, var(--muted), var(--foreground) 9%)"
               encre="var(--foreground)"
               scintille={false}
@@ -165,13 +170,15 @@ export function PileEntretiens({
           {prochains > 0 ? (
             <BoutonScintillant
               action={ouvrir}
-              rayon="25px"
+              rayon={rayonBoutons}
               className={cn(OMBRE, "max-sm:w-full ring-1 ring-black/10")}
             >
               <TexteRoulant>
+                {/* « en vidéo », sur demande de Rémy : ce sont des
+                    entretiens filmés, pas des textes. */}
                 {prochains > 1
-                  ? `Découvrir ${prochains} autres histoires`
-                  : "Découvrir une autre histoire"}
+                  ? `Découvrir ${prochains} autres histoires en vidéo`
+                  : "Découvrir une autre histoire en vidéo"}
               </TexteRoulant>
               <ChevronDown aria-hidden className="size-4 shrink-0" />
             </BoutonScintillant>

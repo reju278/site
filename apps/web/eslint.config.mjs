@@ -11,7 +11,7 @@ export default [
        pas celui-là : le lint partait alors analyser le JavaScript compilé et
        rendait des centaines d'avertissements sur du code qui n'est pas le
        nôtre. C'est arrivé trois fois avant d'être écrit ici. */
-    ignores: [".next-verif/**"],
+    ignores: [".next-verif/**", ".next-3001/**"],
   },
   ...nextJsConfig,
   {

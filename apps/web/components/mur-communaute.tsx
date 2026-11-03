@@ -67,10 +67,14 @@ const FOND = "color-mix(in srgb, currentColor 4%, transparent)";
 
 export function MurCommunaute({
   defilant = false,
+  entete = true,
 }: {
   /** Le mur qui défile en colonnes, extraits chiffrés seulement (voir
    *  `MurDefilant`). `/form-funnel-thanks` ; `/immersion` garde les posts. */
   defilant?: boolean;
+  /** Les portraits flottants, la marque, le titre et le chapô au-dessus du
+   *  mur. `/thanks` s'en passe, sur demande de Rémy : le mur seul. */
+  entete?: boolean;
 } = {}) {
   /* **Les deux premiers posts ouvrent les deux colonnes**, dans l'ordre du
      fichier, sur décision de Rémy : François en haut à gauche, Judith en haut à
@@ -130,7 +134,8 @@ export function MurCommunaute({
        la section : le rembourrage de la section est ce qui place les portraits,
        et l'augmenter les aurait écartés du titre au lieu d'écarter le bloc de
        ses voisins. */
-    <div className="px-5 pt-16 pb-0 sm:pt-24">
+    <div className={entete ? "px-5 pt-16 pb-0 sm:pt-24" : "px-5"}>
+      {entete ? (
       <PortraitsFlottants
         portraits={portraits}
         /* Le bas de la section est resserré, sur demande de Rémy : depuis que
@@ -170,6 +175,7 @@ export function MurCommunaute({
         </p>
       </div>
       </PortraitsFlottants>
+      ) : null}
 
       {/* Le mur, en **deux colonnes réelles** et non en `columns` CSS.
 

@@ -1,22 +1,10 @@
 import { CompteurVue } from "@/components/compteur-vue";
-import { InscriptionVsl, ListePointsVsl } from "@/components/inscription-vsl";
-import { PreuveTrustpilot } from "@/components/preuve-trustpilot";
-import { TemoignagesVsl } from "@/components/temoignages-vsl";
-import { MessageRemy } from "@/components/message-remy";
-import {
-  BoutonOuvrirInscription,
-  OuvrirInscription,
-} from "@/components/ouvrir-inscription";
-import {
-  messageRemyOptin,
-  ouvertureOptin,
-  finOptin,
-  surlignesOptin,
-  optinVsl,
-} from "@/contenu/vsl";
+import { InscriptionVsl } from "@/components/inscription-vsl";
+import { optinVsl } from "@/contenu/vsl";
 import { avecReglages } from "@/lib/reglages-seo";
+import { SdkClickFunnels } from "@/components/sdk-clickfunnels";
 import type { Metadata } from "next";
-import Script from "next/script";
+import { partageTunnel } from "@/lib/partage";
 
 /**
  * L'opt-in du VSL Funnel : la promesse, l'aperçu de la vidéo, et la fenêtre
@@ -33,6 +21,13 @@ const metadonnees: Metadata = {
      qui couvre aussi les pages légales de `/course` : elles seraient sinon
      comptées comme des visites de l'inscription. */
   other: { "cf-page-token": "cfp_RZaldUb55ckllKCJnqLN9TPk" },
+  ...partageTunnel({
+    titre: "La formation gratuite · Funnels Club",
+    description:
+      "La vidéo gratuite qui présente le parfait tunnel de vente pour vendre votre offre digitale grâce à la publicité en ligne.",
+    image: "course",
+    alt: "La formation gratuite Funnels Club : le parfait tunnel de vente pour vendre votre offre digitale",
+  }),
 };
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -52,27 +47,22 @@ export default function Course() {
           sans défiler, même sur un petit iPhone dont les barres du navigateur
           mangent une centaine de pixels. */}
       <div className="mx-auto flex max-w-6xl flex-col gap-4 sm:gap-10">
-        <header className="mx-auto flex max-w-4xl flex-col gap-2 text-center sm:gap-4">
+        <header className="mx-auto flex max-w-6xl flex-col gap-2 text-center sm:gap-4">
           <h1
             /* **Une taille fluide sur téléphone**, proportionnelle à la
-               largeur de l'écran : mesuré de 320 à 430 px, c'est ce qui
-               garde la même forme de titre partout, en remplissant la
-               largeur, sans mot isolé. Interligne serré sur téléphone pour
-               que le bouton reste visible au chargement, et titre un peu
-               plus petit sur les écrans peu hauts (iPhone SE et
-               semblables), où il le poussait sous le bord. */
-            className="titre text-[clamp(1.75rem,7.7vw,2.4rem)] leading-[1.15] [@media(max-height:720px)]:text-[clamp(1.5rem,7.25vw,2.4rem)] [@media(max-height:720px)]:leading-[1.12] text-balance text-foreground sm:text-[2.6rem] sm:leading-[1.22]"
+               largeur de l'écran. Réduite avec le titre repris de la page
+               d'origine, plus long que le précédent, sur demande de Rémy : à
+               375 px il tient sur six lignes sans mot isolé, et le bouton
+               reste visible au chargement, y compris sur un écran de 667 px
+               de haut (iPhone SE). En large, l'en-tête s'élargit pour que le
+               titre tienne sur trois lignes. */
+            className="titre text-[clamp(1.4rem,6.2vw,2rem)] leading-[1.15] [@media(max-height:720px)]:text-[clamp(1.3rem,5.8vw,2rem)] [@media(max-height:720px)]:leading-[1.12] text-balance text-foreground sm:text-[2.6rem] sm:leading-[1.22]"
           >
             {optinVsl.titre.map((morceau, rang) =>
-              "accent" in morceau ? (
+              "coupure" in morceau ? (
+                <br key={rang} className="hidden lg:inline" />
+              ) : "accent" in morceau ? (
                 <span key={rang} className="text-primary">
-                  {morceau.texte}
-                </span>
-              ) : "souligne" in morceau ? (
-                <span
-                  key={rang}
-                  className="underline decoration-primary/40 decoration-2 underline-offset-4"
-                >
                   {morceau.texte}
                 </span>
               ) : (
@@ -80,52 +70,24 @@ export default function Course() {
               ),
             )}
           </h1>
+          <div className="flex flex-col gap-1 text-base text-pretty text-foreground/85 sm:text-xl lg:text-2xl">
+            {optinVsl.renvois.map((renvoi) => (
+              <p key={renvoi.accent}>
+                <span className="font-semibold text-primary">
+                  {renvoi.accent}
+                </span>
+                {renvoi.suite}
+              </p>
+            ))}
+          </div>
         </header>
         <InscriptionVsl />
-        <PreuveTrustpilot />
       </div>
 
-      {/* La lettre de Rémy, reprise de l'accueil, sous la note des avis. Ses
-          deux liens ouvrent la fenêtre d'inscription : la vidéo est fermée
-          tant qu'on ne s'est pas inscrit. La marge négative rend le
-          rembourrage que la lettre porte déjà, pour qu'il ne s'ajoute pas à
-          celui de la page. */}
-      {/* Sur téléphone, le titre de la lettre tient sur une ligne à côté de la
-          photo, sur demande de Rémy : il se coupait avant « Rémy ! ». Taille
-          fluide, comme le titre de la page, et réglée ici et non dans la
-          lettre, que l'accueil garde telle quelle. */}
-      <div className="-mx-5 mt-16 sm:mt-24 [&_[data-titre-roulant]]:text-[1.75rem] sm:[&_[data-titre-roulant]]:text-4xl">
-        <MessageRemy
-          contenu={messageRemyOptin}
-          lien={(libelle) => <OuvrirInscription>{libelle}</OuvrirInscription>}
-          signature={false}
-          surlignes={surlignesOptin}
-          ouverture={ouvertureOptin}
-          fin={
-            <div className="flex flex-col gap-6">
-              <p>
-                {finOptin.avant}
-                <OuvrirInscription>{finOptin.lien}</OuvrirInscription>
-                {finOptin.apres}
-              </p>
-              <ListePointsVsl />
-              <div>
-                <BoutonOuvrirInscription>
-                  {optinVsl.bouton}
-                </BoutonOuvrirInscription>
-              </div>
-            </div>
-          }
-        />
-      </div>
-      <TemoignagesVsl />
       {/* Le SDK de ClickFunnels, qui compte la visite dans l'étape du tunnel.
           `afterInteractive`, comme sur `/thanks` : rien ne doit retarder le
           rendu. */}
-      <Script
-        src="https://sdk.myclickfunnels.com/sdk.js"
-        strategy="afterInteractive"
-      />
+      <SdkClickFunnels />
     </main>
   );
 }

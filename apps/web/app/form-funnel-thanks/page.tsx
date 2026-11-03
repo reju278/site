@@ -1,15 +1,11 @@
-import { PileEntretiens, type EntretienPile } from "@/components/pile-entretiens";
-import { temoignages } from "@/contenu/site";
+import { PileEntretiens } from "@/components/pile-entretiens";
+import { entretiensPile } from "@/contenu/entretiens-pile";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { NoteManuscrite } from "@/components/note-manuscrite";
 import { MurCommunaute } from "@/components/mur-communaute";
 import { TitreRoulant } from "@/components/titre-roulant";
 import { RangeeEquipe } from "@/components/rangee-equipe";
-import {
-  confirmationFormFunnel,
-  entretiensImmersion,
-  equipeImmersion,
-} from "@/contenu/immersion";
+import { confirmationFormFunnel, equipeImmersion } from "@/contenu/immersion";
 import { scriptCapture } from "@/lib/reservation-capture";
 import { TitreConfirmationForm } from "@/components/titre-confirmation-form";
 
@@ -34,46 +30,6 @@ const metadonnees: Metadata = {
   title: confirmationFormFunnel.titrePage,
   description: confirmationFormFunnel.description,
 };
-
-/** Les titres dictés par Rémy ; les autres entretiens gardent leur ligne. */
-const TITRES_PILE: Record<string, string> = {
-  rgio4y4o8f:
-    "Découvre l'histoire de Roland, qui est passé de 0 à 109 778 € en 6 mois avec ce système",
-};
-
-/** La note au feutre de Roland, à gauche de sa vidéo sur ordinateur. */
-const NOTES_PILE: Record<string, string> = {
-  rgio4y4o8f: "Notre success story la plus appréciée !",
-};
-
-/** Les entretiens de la pile, dans l'ordre ci-dessus. */
-/** L'ordre de tête, dicté par Rémy ; les autres suivent dans l'ordre
- *  d'`/immersion`. Posé ici pour ne pas changer celui d'`/immersion`. */
-const TETE_PILE = [
-  "rgio4y4o8f", // Roland
-  "j0vbkt570k", // Christian
-  "b5taio9plc", // François
-  "2xege6bt0u", // Yannick et Sylvie
-  "vtfaka0m80", // Olga
-];
-const ordrePile = [
-  ...TETE_PILE,
-  ...entretiensImmersion.filter((id) => !TETE_PILE.includes(id)),
-];
-
-const entretiensPile: EntretienPile[] = ordrePile.flatMap((id) => {
-  const t = temoignages.find((x) => x.id === id);
-  if (!t) return [];
-  const entretien: EntretienPile = {
-    id,
-    nom: t.nom,
-    description: t.description,
-    secondes: t.secondes,
-    titre: TITRES_PILE[id],
-    note: NOTES_PILE[id],
-  };
-  return [entretien];
-});
 
 export default function ConfirmationFormFunnel() {
   return (

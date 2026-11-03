@@ -1987,7 +1987,7 @@ garantie.
 
 ## Un tunnel n'est pas une page du site
 
-`/hub`, `/immersion`, `/preparation`, `/appel`, `/thanks`, `/strategie` et les pages de témoignage (`/roland`, `/francois` et les autres, voir `lib/pages-temoignage.ts`) sont des **tunnels** : on y arrive par un lien qu'on a
+`/hub`, `/immersion`, `/preparation`, `/appel`, `/thanks`, `/prochaine-etape`, `/strategie` et les pages de témoignage (`/roland`, `/francois` et les autres, voir `lib/pages-temoignage.ts`) sont des **tunnels** : on y arrive par un lien qu'on a
 reçu, et la règle est qu'on n'en sort que par l'appel. La liste des racines vit
 dans `lib/tunnels.ts`, et `HorsTunnel` la lit pour retirer l'en-tête et le pied
 de page du site, qui offriraient sinon une trentaine de portes de sortie.
@@ -2019,26 +2019,41 @@ correction faite sur l'un de ces blocs vaut donc pour les deux pages, et
 c'est voulu. Les trois mesures de la vidéo, en revanche, sont recopiées dans
 les deux gabarits : le jour où l'une change, elle change aux deux.
 
-**`/appel` est `/preparation` avec le formulaire de Calendly à la place de la
-vidéo**, servie sur `go.funnels.club/appel`. **Il n'y reste que le
-formulaire**, sur décision de Rémy : le message et la galerie, qui y ont été,
-vivent sur `/thanks`. Sur demande de Rémy, elle n'a ni
-la notification de consigne, ni l'équipe, et son en-tête ne garde que la
-marque : `EnTeteImmersion` reçoit une liste d'ancres vide et `bascule={false}`.
+**`/appel` est notre propre réservation, sur fond neutre** (issue #7),
+servie sur `go.funnels.club/appel` : ni marque ni photo, comme `/video-vsl`,
+dont le bouton y mène dans un nouvel onglet. Deux étapes : le jour et
+l'heure, lus en direct chez Calendly, puis les coordonnées (prénom et e-mail
+repris de l'inscription de `/course`) et les questions de l'événement.
+**Le rendez-vous part à Calendly par son API**, côté serveur
+(`app/appel/actions.ts`, `CALENDLY_API_TOKEN`, sans préfixe public) ; sans
+jeton, la page retombe sur le formulaire de Calendly intégré. Puis `/thanks`,
+avec les noms de paramètres que Calendly emploie.
+
+**Les questions sont recopiées de Calendly**, dans `reservationYt` de
+`contenu/appel.ts` : l'intitulé exact (`question`) est ce qui part à
+Calendly, l'intitulé affiché (`libelle`) est tutoyé. **L'API de Calendly lit
+les questions mais ne les modifie pas** : quand Rémy les change chez
+Calendly, on relit l'événement et on recopie, rien de plus, rien de moins.
+Le lieu du rendez-vous n'est pas transmis, et c'est voulu.
 **La page est forcée au thème clair** par `FournisseurTheme`, qui enveloppe le
 fournisseur racine : `next-themes` ignore un fournisseur imbriqué, un
 `forcedTheme` posé dans le gabarit de la page n'aurait rien fait.
 
 **`/thanks` suit la structure de `www.funnels.club/thanks-confirmation-2026`
-dans le dessin du site**, servie sur `go.funnels.club/thanks` : c'est la
-confirmation qu'on reçoit après avoir réservé. Titre et alerte, étape 1 (sa
-vidéo dans le hero, ses consignes dessous), étape 2 et la vidéo de
-`/preparation`, puis la galerie sans boutons de réservation, l'appel étant
-déjà pris. L'étape 1 est une seule carte (vidéo, consignes, signature avec le
-portrait de Rémy) posée à cheval sur la photographie, et la section du hero
-s'arrête à une hauteur connue pour placer la jonction. Pas de notification
-`ConsigneVideo` : elle y a été, Rémy l'a retirée. Elle est forcée au clair
-comme `/appel`, avec le même pied de page.
+dans le dessin du tunnel**, servie sur `go.funnels.club/thanks` : c'est la
+confirmation qu'on reçoit après avoir réservé. **Son haut est celui de
+`/form-funnel-thanks`**, sur demande de Rémy, et c'est le même composant,
+`TitreConfirmationForm` : ni photographie ni logo, « Félicitations Rémy, ton
+appel est réservé pour le samedi 7 novembre à 17 h 30 ! », puis l'alerte
+rouge. Ensuite l'étape 1 (une seule carte : vidéo, bouton vert « Confirmer
+mon rendez-vous » vers le WhatsApp de l'hôte, récapitulatif ; les consignes
+écrites ont été retirées par Rémy),
+l'étape 2 et la vidéo de `/preparation`, puis la pile d'entretiens de
+`/form-funnel-thanks` (Roland en grand, puis « Découvrir 3 autres
+histoires »), sans boutons de réservation, l'appel étant déjà pris. Sa liste
+vit une fois, dans `contenu/entretiens-pile.ts`, pour les deux pages. Pas de notification `ConsigneVideo` :
+elle y a été, Rémy l'a retirée. Elle est forcée au clair comme `/appel`, avec
+le même pied de page.
 
 **`/thanks` lit la réservation que Calendly met dans son adresse**
 (`invitee_*`, `event_start_time`, `assigned_to`, `answer_N`), pour tutoyer la
@@ -2064,6 +2079,29 @@ qui dure deux secondes : une capture prise juste après le clic montre la
 colonne qui déborde, à toutes les largeurs. Il déclare l'iframe
 `color-scheme: light` : sans cela, en thème sombre, le navigateur peint un fond
 blanc opaque autour de la carte de Calendly.
+
+**`/prochaine-etape` est la page de qui répond « NON, je n'ai PAS accès aux
+ressources financières »** dans le formulaire d'`/appel`, sur décision de
+Rémy : ce choix porte `bloquant` dans `reservationYt`, et le formulaire part
+vers cette page **sans rien envoyer à Calendly**, avec le seul prénom en
+`invitee_first_name`, que le relevé de `/thanks` retire avant GTM. L'adresse
+dit ce qu'on propose et pas ce qu'on refuse, pour ne pas vexer. Le dessin est
+celui de `/thanks` en rouge (titre, gélule d'alerte), puis une carte du Funnel
+Challenge avec sa maquette, `public/challenge/coffret.webp`, relevée sur
+`challenge.funnels.club`, et un bouton vers ce site, balisé par `avecTag`.
+**Pas de prix** : Rémy a dit « un tarif imbattable », pas un chiffre.
+**La candidature refusée laisse sa trace dans le CRM**, sur demande de Rémy :
+avant la redirection, le formulaire envoie tout ce qu'il a rempli à
+`API_FUNNELS/vsl/refus`, et le CRM l'écrit comme une réservation dans le
+tableau « Refusée », sous Sourcing (`calendly.enregistrerRefus` du dépôt
+`Funnels-Club`). L'envoi part en `keepalive` et sans attendre : un CRM
+injoignable ne retient personne sur le formulaire. Forcée au
+clair, sans le SDK de ClickFunnels.
+
+**Les aperçus de partage du tunnel VSL** (`/course`, `/video-vsl`, `/appel`,
+`/thanks`) viennent de `lib/partage.ts` et de `public/partage/`. **Le CRM passe
+devant** : `avecReglages` remplace l'image et le titre quand Funnels Club en a
+réglé, ce qui est le cas d'`/appel` et de `/thanks`.
 
 **`/strategie` est le hero de `/preparation`, réduit à la vidéo et à un
 bouton**, servie sur `go.funnels.club/strategie`. On y arrive par l'e-mail S25
@@ -2352,6 +2390,29 @@ première page cesse d'être publique.
 
 ---
 
+## Jamais `pnpm`, `npx` ni `turbo` depuis Claude : `node` directement
+
+**Lancé depuis l'app Claude, `pnpm` couvre l'écran de fenêtres macOS**
+« « pnpm » souhaite accéder aux fichiers de votre dossier Documents », une
+par processus, et « Autoriser » n'y change rien. La cause : le dépôt vit
+dans `~/Documents`, que macOS protège, et `pnpm` est ici un exécutable
+autonome signé ad hoc, dont macOS ne retient pas l'autorisation. `turbo run
+dev` en lance plusieurs, en boucle. La règle était écrite dans le dépôt
+Funnels-Club et pas ici : elle a coûté la même rafale à Rémy une seconde
+fois.
+
+- **Les serveurs** passent par `.claude/launch.json`, qui appelle `node` sur
+  le point d'entrée de Next : `node node_modules/next/dist/bin/next dev`,
+  depuis `apps/web`. Ne jamais y remettre `pnpm` ni `turbo`.
+- **Les vérifications** suivent la même règle, depuis `apps/web` :
+  `node node_modules/typescript/bin/tsc --noEmit` et
+  `node_modules/.bin/eslint . --max-warnings 0` (le relais local, qui pose le `NODE_PATH` de pnpm ; appelé par `node` directement, ESLint ne trouve plus ses greffons). Le build de
+  vérification : `NEXT_DIST_DIR=.next-verif node node_modules/next/dist/bin/next build`.
+- **Installer un paquet** (`pnpm add`, `shadcn add`) reste à Rémy, dans son
+  terminal.
+- **Au premier signe de fenêtre**, arrêter les serveurs avant toute autre
+  chose.
+
 ## Ne jamais construire dans le dossier que sert le serveur de Rémy
 
 `next dev` et `next build` écrivent tous les deux dans `apps/web/.next`. Lancer
@@ -2365,7 +2426,7 @@ D'où `distDir: process.env.NEXT_DIST_DIR || ".next"` dans `next.config.mjs`. Un
 build de vérification s'écrit donc :
 
 ```sh
-NEXT_DIST_DIR=.next-verif pnpm turbo run build
+cd apps/web && NEXT_DIST_DIR=.next-verif node node_modules/next/dist/bin/next build
 ```
 
 Vercel ne pose pas cette variable, donc rien ne change pour lui.
@@ -2492,7 +2553,12 @@ ne se déclenche que sur les lettres et non sur l'entrée entière.
 
 ## Vérifications avant de conclure
 
+Depuis `apps/web`, et jamais par `pnpm` depuis Claude (voir plus haut) :
+
 ```sh
-pnpm turbo run lint check-types
-pnpm turbo run build
+node_modules/.bin/eslint . --max-warnings 0
+node node_modules/typescript/bin/tsc --noEmit
+NEXT_DIST_DIR=.next-verif node node_modules/next/dist/bin/next build
 ```
+
+Rémy, dans son terminal, peut garder `pnpm turbo run lint check-types build`.

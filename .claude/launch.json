@@ -3,9 +3,52 @@
   "configurations": [
     {
       "name": "web",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["turbo", "run", "dev", "--filter=web"],
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd ./apps/web && exec node node_modules/next/dist/bin/next dev --port 3000"
+      ],
       "port": 3000,
+      "autoPort": false
+    },
+    {
+      "name": "web-3001",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd ./apps/web && exec node node_modules/next/dist/bin/next dev --port 3001"
+      ],
+      "port": 3001,
+      "autoPort": false
+    },
+    {
+      "name": "crm-backend",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd ../Funnels-Club/packages/backend && exec node node_modules/convex/bin/main.js dev"
+      ],
+      "port": 3210,
+      "autoPort": false
+    },
+    {
+      "name": "crm",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd ../Funnels-Club/apps/web && exec node node_modules/next/dist/bin/next dev --port 3005"
+      ],
+      "port": 3005,
+      "autoPort": false
+    },
+    {
+      "name": "web-crm-local",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd ./apps/web && NEXT_PUBLIC_API_FUNNELS=http://127.0.0.1:3211 NEXT_DIST_DIR=.next-3001 exec node node_modules/next/dist/bin/next dev --port 3001"
+      ],
+      "port": 3001,
       "autoPort": false
     }
   ]

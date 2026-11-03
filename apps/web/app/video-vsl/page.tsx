@@ -7,8 +7,10 @@ import { TexteRoulant } from "@/components/texte-roulant";
 import { AppelVideoVsl, TitreVideoVsl } from "@/components/titre-video-vsl";
 import { strategieVsl, videoVsl } from "@/contenu/vsl";
 import { avecReglages } from "@/lib/reglages-seo";
+import { SdkClickFunnels } from "@/components/sdk-clickfunnels";
 import type { Metadata } from "next";
-import Script from "next/script";
+import { partageTunnel } from "@/lib/partage";
+import { ArrowRight } from "lucide-react";
 import { preload } from "react-dom";
 
 /**
@@ -30,6 +32,13 @@ const metadonnees: Metadata = {
      après l'opt-in de `/course`. Le SDK chargé plus bas le lit dans le
      `head`. */
   other: { "cf-page-token": "cfp_l60xdzWdOgmVukEK736PxYux" },
+  ...partageTunnel({
+    titre: "Ta vidéo de formation offerte · Funnels Club",
+    description:
+      "La vidéo de formation gratuite de Funnels Club, puis ton appel gratuit de 30 minutes avec l'équipe.",
+    image: "video-vsl",
+    alt: "Voici ta vidéo de formation offerte, Funnels Club",
+  }),
 };
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -46,7 +55,11 @@ export default function Video() {
   });
 
   return (
-    <main className="px-5 pt-16 sm:pt-24">
+    <main
+      /* Le haut de page ne dégage plus la marque, retirée sur demande de
+         Rémy : même marge que `/course`. */
+      className="px-5 pt-5 sm:pt-12"
+    >
       {/* Les domaines que le lecteur de Wistia contacte, relevés en ouvrant
           son iframe : la page du lecteur, son script, l'affiche et les
           segments de la vidéo. Ouvrir ces connexions pendant la lecture du
@@ -80,11 +93,14 @@ export default function Video() {
             y lit au chargement le prénom et l'e-mail laissés par l'opt-in,
             dans le `localStorage`, que le nouvel onglet partage (voir
             `CLE_CONTACT_VSL`). */}
+        {/* Plus grand et suivi d'une flèche, sur demande de Rémy. `externe`
+            est le défaut du bouton : `target="_blank"`, `rel="noreferrer"`. */}
         <BoutonScintillant
           href="/appel"
-          className="min-h-16 w-full px-10 text-lg sm:w-auto sm:text-xl"
+          className="min-h-18 w-full gap-2.5 px-5 text-lg font-bold sm:w-auto sm:min-h-20 sm:gap-3 sm:px-12 sm:text-2xl"
         >
           <TexteRoulant>{videoVsl.bouton}</TexteRoulant>
+          <ArrowRight aria-hidden className="size-6 shrink-0 sm:size-7" strokeWidth={2.5} />
         </BoutonScintillant>
 
         {/* La stratégie personnalisée, sous le bouton, sur demande de Rémy :
@@ -107,10 +123,7 @@ export default function Video() {
 
       {/* Le SDK de ClickFunnels, qui compte la visite dans l'étape du tunnel.
           `afterInteractive`, comme sur `/course` et `/thanks`. */}
-      <Script
-        src="https://sdk.myclickfunnels.com/sdk.js"
-        strategy="afterInteractive"
-      />
+      <SdkClickFunnels />
     </main>
   );
 }

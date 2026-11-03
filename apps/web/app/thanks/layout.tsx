@@ -1,17 +1,17 @@
-import { EnTeteImmersion } from "@/components/en-tete-immersion";
 import { MentionsLegales } from "@/components/mentions-legales";
 import { PiedImmersion } from "@/components/pied-immersion";
 import { PoliceTunnel } from "@/components/police-tunnel";
+import { SdkClickFunnels } from "@/components/sdk-clickfunnels";
 import type { Metadata } from "next";
-import Script from "next/script";
 
 /**
  * Le cadre de la page de confirmation.
  *
  * **C'est celui d'`/appel`** : un tunnel, retiré de l'en-tête et du pied de
  * page du site par `lib/tunnels.ts`, interdit d'index ici, absent de
- * `sitemap.ts`. L'en-tête ne garde que la marque, et la page est forcée au
- * clair par `FournisseurTheme`.
+ * `sitemap.ts`. Plus d'en-tête du tout, sur demande de Rémy : la page suit
+ * le dessin du tunnel, sans marque en haut. Elle est forcée au clair par
+ * `FournisseurTheme`.
  */
 export const metadata: Metadata = {
   /* Absolu et non relatif : voir le gabarit d'`/immersion`. */
@@ -34,24 +34,18 @@ export default function LayoutThanks({
   return (
     <div
       data-police-tunnel
-      /* `--largeur-video` est la largeur de la carte de l'étape 1, et
-         `--video-h` la hauteur de sa vidéo, rembourrage de la carte déduit
-         (1,5 rem de chaque côté en grand ; un demi-rem d'écart sur
-         téléphone, qui ne déplace la jonction que de quelques pixels). Le
-         hero place sa jonction avec elle.
+      /* `--largeur-video` est la largeur de la carte de l'étape 1.
 
          **56 rem**, réduits depuis 64 sur demande de Rémy : deux vidéos se
-         suivent, et chacune prenait presque un écran. Elles ne basculent
-         pas, donc `--part-cachee` n'est pas déclarée. */
+         suivent, et chacune prenait presque un écran. Il n'y a plus de
+         photographie en haut, donc plus de jonction à placer. */
       style={
         {
           "--largeur-video": "min(100vw - 2.5rem, 56rem)",
-          "--video-h": "calc((var(--largeur-video) - 3rem) * 9 / 16)",
         } as React.CSSProperties
       }
     >
       <PoliceTunnel />
-      <EnTeteImmersion ancres={[]} bascule={false} />
       {children}
       {/* Le pied de page d'`/appel` : la marque, un filet, les mentions du
           site. La page source les porte aussi. */}
@@ -61,10 +55,7 @@ export default function LayoutThanks({
       </PiedImmersion>
       {/* Le SDK de ClickFunnels, qui compte la visite dans l'étape du tunnel.
           `afterInteractive`, comme GTM : rien ne doit retarder le rendu. */}
-      <Script
-        src="https://sdk.myclickfunnels.com/sdk.js"
-        strategy="afterInteractive"
-      />
+      <SdkClickFunnels />
     </div>
   );
 }

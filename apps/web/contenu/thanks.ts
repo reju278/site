@@ -1,3 +1,5 @@
+import { reservationYt } from "@/contenu/appel";
+
 /**
  * Le texte de la page de confirmation, `go.funnels.club/thanks`, celle qu'on
  * reçoit après avoir réservé l'appel.
@@ -16,7 +18,7 @@
 export const identiteThanks = {
   titrePage: "Ton appel est réservé",
   description:
-    "Ton appel avec l'équipe Funnels Club est réservé. Regarde les deux vidéos de cette page et confirme ton rendez-vous en répondant à l'e-mail reçu.",
+    "Ton appel avec l'équipe Funnels Club est réservé. Regarde la vidéo de cette page, puis confirme ton rendez-vous sur WhatsApp ou par l'e-mail d'invitation.",
 } as const;
 
 export const confirmationThanks = {
@@ -29,12 +31,29 @@ export const confirmationThanks = {
      **Toute la page est au tutoiement**, sur demande de Rémy : la page
      source vouvoie, les textes relevés sur elle sont donc passés au « tu »,
      sans autre changement. */
+  /* L'alerte de `/thanks` depuis qu'il n'y reste qu'une vidéo, dictée par
+     Rémy : « Regarde la vidéo ci-dessous et confirme ton rendez-vous ».
+     `/form-funnel-thanks`, qui en a deux, garde `alerte`. */
+  alerteUneVideo: {
+    important: "Important",
+    avant: " : regarde ",
+    videos: "la vidéo",
+    milieu: " ci\u2011dessous et ",
+    confirmez: "confirme ton rendez\u2011vous",
+    apres: " !",
+  },
+
+  /* Dicté par Rémy : le titre du mur de la communauté qui défile. */
+  titreMur: "Quelques résultats clients partagés dans notre groupe privé",
+
   alerte: {
     important: "Important",
     avant: " : regarde les ",
     videos: "2 vidéos",
-    milieu: " ci-dessous et ",
-    confirmez: "confirme ton rendez-vous",
+    /* Traits d'union insécables : sur téléphone, « ci- » puis « rendez- »
+       restaient seuls en fin de ligne. */
+    milieu: " ci\u2011dessous et ",
+    confirmez: "confirme ton rendez\u2011vous",
     apres: " !",
   },
 
@@ -138,41 +157,70 @@ export function consignesRendezVous(r: {
 
 /**
  * Les champs que Calendly envoie sous `answer_N`, dans l'ordre des questions
- * du formulaire, **relevés sur une vraie redirection** : `answer_1` est le
- * téléphone, les quatre suivants les questions de qualification.
+ * de l'événement « Candidature Funnels Club » (`appel-decouverte-l-clone`),
+ * celui de `/appel` : `answer_1` est le téléphone, les suivants ses
+ * questions. Notre réservation les transmet sous les mêmes noms (voir
+ * `ReservationAppel`), et le formulaire de Calendly intégré en repli aussi.
  *
- * **Les libellés sont écrits par l'agent, à valider par Rémy.** Calendly
- * n'envoie que les réponses ; les questions du formulaire, au « vous » et
- * longues de deux lignes, sont ramenées à un libellé de récapitulatif. Si
- * l'ordre des questions change dans Calendly, il change ici.
+ * **Les libellés sont les vraies questions**, sur demande de Rémy : celles
+ * que la personne a lues en répondant, tirées de `reservationYt`, donc
+ * tutoyées comme sur `/appel`. Écrites une fois : une question changée chez
+ * Calendly se recopie dans `reservationYt`, et le détail suit.
  */
-export const questionsReservation = [
+export const questionsReservation: readonly {
+  cle: string;
+  role: "telephone" | "question";
+  libelle: string;
+}[] = [
   { cle: "answer_1", role: "telephone", libelle: "Téléphone / WhatsApp" },
-  { cle: "answer_2", role: "question", libelle: "Offre à développer" },
-  { cle: "answer_3", role: "question", libelle: "Objectif de revenu à 6 mois" },
-  {
-    cle: "answer_4",
-    role: "question",
-    libelle: "Ton produit ou service, et tes clients idéaux",
-  },
-  { cle: "answer_5", role: "question", libelle: "Capacité à investir" },
-] as const;
+  ...reservationYt.questions.map((q) => ({
+    cle: `answer_${q.position + 1}`,
+    role: "question" as const,
+    libelle: q.libelle,
+  })),
+];
 
 /** Les libellés du récapitulatif. À valider par Rémy. */
+/**
+ * Le bloc « Tu n'as pas WhatsApp ? », sous le rendez-vous, sur demande de
+ * Rémy : confirmer par l'e-mail d'invitation. Repris de son script de vidéo
+ * (`labo/confirmer-appel.html`), au nom de l'hôte qui envoie l'invitation.
+ */
+export const sansWhatsapp = {
+  titre: "Tu n'as pas WhatsApp ?",
+  /* « Va dans tes e-mails : Geoffrey t'a envoyé une invitation. » */
+  etape1: (hote?: string) =>
+    hote
+      ? `Va dans tes e-mails : ${hote} t'a envoyé une invitation.`
+      : "Va dans tes e-mails : tu as reçu une invitation.",
+  etape2: {
+    avant: "Dans l'",
+    invitation: "e-mail d'invitation",
+    milieu: ", clique sur « ",
+    oui: "Oui",
+    apres: " » pour confirmer ton rendez-vous.",
+  },
+} as const;
+
 export const recapReservation = {
   surtitre: "Ton rendez-vous",
-  /* « Ton appel avec Geoffrey », ou avec l'équipe quand Calendly ne nomme
-     pas l'hôte. */
-  appelAvec: (hote?: string) =>
-    hote ? `Ton appel avec ${hote}` : "Ton appel avec l'équipe Funnels Club",
-  /* Dicté par Rémy. */
-  statut: "En attente de confirmation",
-  coordonnees: "Tes coordonnées",
-  nom: "Nom",
+  /* Dicté par Rémy : « Rémy Test avec Geoffrey Bonniot », comme l'intitulé
+     d'une vraie réservation. Chaque nom tombe s'il manque. */
+  avec: (invite?: string, hote?: string) =>
+    invite && hote
+      ? `${invite} avec ${hote}`
+      : hote
+        ? `Ton appel avec ${hote}`
+        : invite
+          ? `${invite} avec l'équipe Funnels Club`
+          : "Ton appel avec l'équipe Funnels Club",
+  /* « Sur WhatsApp au +33 6 00 00 00 00 », dicté par Rémy. */
+  lieu: "Sur WhatsApp au",
+  /* Dicté par Rémy : l'icône de WhatsApp dit déjà où mène le bouton. */
+  bouton: "Confirmer mon rendez-vous",
+  /* Le volet replié des réponses, demandé par Rémy. */
+  detail: "Détail de l'événement",
   email: "E-mail",
-  telephone: "Téléphone / WhatsApp",
-  reponses: "Tes réponses",
-  bouton: "Confirmer mon rendez-vous sur WhatsApp",
 } as const;
 
 /**
@@ -202,7 +250,8 @@ export const whatsappHotes: {
     },
     {
       nom: "Geoffrey Bonniot",
-      numero: null,
+      /* Donné par Rémy le 3 novembre 2026 : +33 6 81 38 55 89. */
+      numero: "33681385589",
       photo: "/immersion/equipe-geoffrey-bonniot.jpg",
     },
   ],
@@ -210,18 +259,21 @@ export const whatsappHotes: {
 };
 
 /**
- * Le message préparé dans WhatsApp, dicté par Rémy dans sa forme : « Bonjour,
- * c'est Prénom. Je confirme mon rendez-vous pour… ». Chaque morceau tombe
- * s'il manque.
+ * Le message préparé dans WhatsApp, dicté par Rémy : « Bonjour Geoffrey, c'est
+ * Rémy. Je confirme simplement mon rendez-vous le samedi 7 novembre à
+ * 17 h 30. ». Chaque morceau tombe s'il manque.
  */
 export function messageWhatsapp(r: {
   prenom?: string;
   hote?: string;
-  date?: string;
+  jour?: string;
+  heure?: string;
 }) {
   const salut = r.hote ? `Bonjour ${r.hote}` : "Bonjour";
   const qui = r.prenom ? `, c'est ${r.prenom}.` : ",";
-  const quand = r.date ? ` du ${r.date}` : "";
-  return `${salut}${qui} ${r.prenom ? "Je" : "je"} confirme mon rendez-vous${quand}.`;
+  const quand = [r.jour && ` le ${r.jour}`, r.heure && ` à ${r.heure}`]
+    .filter(Boolean)
+    .join("");
+  return `${salut}${qui} ${r.prenom ? "Je" : "je"} confirme simplement mon rendez-vous${quand}.`;
 }
 

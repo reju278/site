@@ -1,19 +1,17 @@
-import { EnTeteImmersion } from "@/components/en-tete-immersion";
 import { MentionsLegales } from "@/components/mentions-legales";
 import { PiedImmersion } from "@/components/pied-immersion";
-import { reservationAppel } from "@/contenu/appel";
 import { PoliceTunnel } from "@/components/police-tunnel";
+import { SdkClickFunnels } from "@/components/sdk-clickfunnels";
 import type { Metadata } from "next";
-import Script from "next/script";
 
 /**
  * Le cadre de la page de réservation d'appel.
  *
  * **C'est celui de `/preparation`**, et donc d'`/immersion` : un tunnel,
  * retiré de l'en-tête et du pied de page du site par `lib/tunnels.ts`,
- * interdit d'index ici, absent de `sitemap.ts`. L'en-tête ne garde que la
- * marque, sur demande de Rémy : ni ancres, ni bascule de thème, la page étant
- * forcée au clair par `FournisseurTheme`.
+ * interdit d'index ici, absent de `sitemap.ts`. Plus d'en-tête du tout, sur
+ * demande de Rémy : la marque est partie avec le titre, comme sur
+ * `/video-vsl`. La page est forcée au clair par `FournisseurTheme`.
  */
 export const metadata: Metadata = {
   /* Absolu et non relatif : voir le gabarit d'`/immersion`. */
@@ -37,14 +35,7 @@ export default function LayoutAppel({
   return (
     <div
       data-police-tunnel
-      /* Les mêmes noms que les gabarits des deux autres pages, que lisent le
-         hero et `[data-hero]` dans `globals.css`. La « vidéo » est ici le
-         formulaire de Calendly à sa hauteur minimale, et la jonction tombe
-         donc à son milieu ; quand il grandit, `--surplus-formulaire` la
-         garde en place. Le formulaire ne bascule pas, donc rien ne dépasse
-         sous l'écran et `--part-cachee` n'est pas déclarée.
-
-         **72 rem et non 64**, parce qu'une fois le jour choisi Calendly
+      /* **72 rem et non 64**, parce qu'une fois le jour choisi Calendly
          ajoute la colonne des horaires et que sa carte demande alors près de
          1 100 px. À 1 024, il gardait trois colonnes en les tassant : la date
          passait sur deux lignes et les horaires étaient coupés à droite,
@@ -53,19 +44,10 @@ export default function LayoutAppel({
       style={
         {
           "--largeur-video": "min(100vw - 2.5rem, 72rem)",
-          "--video-h": `${reservationAppel.hauteurMin}px`,
         } as React.CSSProperties
       }
     >
       <PoliceTunnel />
-      {/* `absolute` et non `fixed`, sur demande de Rémy : la marque reste en
-          haut de la page et ne suit pas le défilement. */}
-      <EnTeteImmersion
-        ancres={[]}
-        bascule={false}
-        /* Plus petite sur téléphone, sur demande de Rémy. */
-        className="absolute origin-top max-sm:top-1 max-sm:scale-[0.8]"
-      />
       {children}
       {/* **Le pied de page, loin sous le formulaire**, sur demande de Rémy :
           la marque, un filet, puis les mentions du pied de page du site.
@@ -78,10 +60,7 @@ export default function LayoutAppel({
       </PiedImmersion>
       {/* Le SDK de ClickFunnels, qui compte la visite dans l'étape du tunnel.
           `afterInteractive`, comme sur les autres étapes. */}
-      <Script
-        src="https://sdk.myclickfunnels.com/sdk.js"
-        strategy="afterInteractive"
-      />
+      <SdkClickFunnels />
     </div>
   );
 }

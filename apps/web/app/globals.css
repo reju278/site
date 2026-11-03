@@ -1442,6 +1442,20 @@ body:has([role="dialog"][data-state="open"]) :is([data-barre-appel], [data-tache
   }
 }
 
+/* Les ondes de l'icône son de l'aperçu de `/course`, qui s'allument et
+   s'éteignent comme celles du lecteur Wistia. Posée par `motion-safe:` et non
+   neutralisée par la règle globale : arrêtée, elle figerait une onde à moitié
+   éteinte. */
+@keyframes onde-son {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.2;
+  }
+}
+
 /* Les animations s'arrêtent quand elles sortent de l'écran.
 
    **Sur demande de Rémy, et c'est mesuré.** La page d'immersion fait quatre

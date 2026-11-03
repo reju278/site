@@ -8,7 +8,8 @@ import { dateLisible, useReservation } from "@/lib/reservation";
 import { insecables } from "@/lib/typographie";
 
 /**
- * Le haut de `/form-funnel-thanks` : « Félicitations Rémy, ton appel est
+ * Le haut de `/form-funnel-thanks`, et de `/thanks` depuis que Rémy l'y a
+ * demandé : « Félicitations Rémy, ton appel est
  * réservé pour le mardi 3 novembre à 11 h », puis l'alerte de `/thanks`,
  * reprise à l'identique sur demande de Rémy : la gélule rouge, son point qui
  * pulse et son liseré qui tourne.
@@ -19,15 +20,29 @@ import { insecables } from "@/lib/typographie";
  * (voir `lib/reservation-capture.ts`). Rien n'arrive au rendu serveur : le
  * titre générique s'affiche, puis la version personnelle le remplace.
  */
-export function TitreConfirmationForm() {
+export function TitreConfirmationForm({
+  classeTitre = "text-[2rem] sm:text-5xl lg:text-6xl",
+  alerte = confirmationThanks.alerte,
+}: {
+  /** La taille du titre. `/thanks` le veut plus petit, sur demande de Rémy. */
+  classeTitre?: string;
+  /** Le texte de l'alerte : `/thanks` n'a plus qu'une vidéo. */
+  alerte?: {
+    important: string;
+    avant: string;
+    videos: string;
+    milieu: string;
+    confirmez: string;
+    apres: string;
+  };
+} = {}) {
   const reservation = useReservation();
   const quand = dateLisible(reservation?.debut);
   const prenom = reservation?.prenom;
-  const { alerte } = confirmationThanks;
 
   return (
     <>
-      <h1 className="titre text-[2rem] text-balance text-foreground sm:text-5xl lg:text-6xl">
+      <h1 className={`titre text-balance text-foreground ${classeTitre}`}>
         {prenom || quand ? (
           <>
             Félicitations{prenom ? ` ${prenom}` : ""}, ton appel est réservé
@@ -47,11 +62,12 @@ export function TitreConfirmationForm() {
         )}
       </h1>
       {/* `div` et non `p` : `ShineBorder` rend une `div`, qu'un paragraphe
-          ne peut pas contenir (voir `app/thanks/page.tsx`). */}
+          ne peut pas contenir (voir `app/thanks/page.tsx`). 16 px sur
+          téléphone et non 14, sur demande de Rémy. */}
       <div
         role="note"
         style={{ "--teinte": "#ffffff" } as React.CSSProperties}
-        className="relative mt-6 inline-flex max-w-full items-center gap-3 overflow-hidden rounded-[1.25rem] bg-[#dc2626] px-5 py-2.5 text-left text-sm leading-snug font-medium text-white shadow-[0_14px_34px_-14px_rgba(220,38,38,0.65)] sm:mt-7 sm:rounded-full sm:px-6 sm:py-3 sm:text-lg"
+        className="relative mt-6 inline-flex max-w-full items-center gap-3 overflow-hidden rounded-[1.25rem] bg-[#dc2626] px-5 py-3 text-left text-base leading-snug font-medium text-white shadow-[0_14px_34px_-14px_rgba(220,38,38,0.65)] sm:mt-7 sm:rounded-full sm:px-6 sm:py-3 sm:text-lg"
       >
         {/* Le liseré en rouges clairs, et non dans les rouges presque noirs
             de /thanks : sur ce fond crème, ils se lisaient comme une ombre
