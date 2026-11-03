@@ -1,6 +1,7 @@
 import { Apparition } from "@/components/apparition";
 import { LogoFunnels } from "@/components/logo-funnels";
 import { MurDepliable } from "@/components/mur-depliable";
+import { MurDefilant } from "@/components/mur-defilant";
 import {
   PLACES_PORTRAITS,
   PortraitsFlottants,
@@ -64,7 +65,13 @@ import Image from "next/image";
 /** Le fond de carte relevé chez eux, rendu aux deux thèmes. */
 const FOND = "color-mix(in srgb, currentColor 4%, transparent)";
 
-export function MurCommunaute() {
+export function MurCommunaute({
+  defilant = false,
+}: {
+  /** Le mur qui défile en colonnes, extraits chiffrés seulement (voir
+   *  `MurDefilant`). `/form-funnel-thanks` ; `/immersion` garde les posts. */
+  defilant?: boolean;
+} = {}) {
   /* **Les deux premiers posts ouvrent les deux colonnes**, dans l'ordre du
      fichier, sur décision de Rémy : François en haut à gauche, Judith en haut à
      droite. Ce sont les deux récits les plus longs et les plus forts, et ce sont
@@ -198,6 +205,9 @@ export function MurCommunaute() {
           pixels par clic demandaient dix appuis d'un côté et vingt de l'autre.
           `MurDepliable` découvre la moitié de ce qui reste, donc le compte
           tient à toutes les largeurs. */}
+      {defilant ? (
+        <MurDefilant />
+      ) : (
       <div className="mt-12">
       <MurDepliable hauteur={760} posts={2} clics={2}>
         {colonnes.map((colonne, i) => (
@@ -312,6 +322,7 @@ export function MurCommunaute() {
         ))}
       </MurDepliable>
       </div>
+      )}
     </div>
   );
 }

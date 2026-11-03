@@ -1,22 +1,18 @@
-import { SemisPoints } from "@/components/semis-points";
-import { GalerieEntretiens } from "@/components/galerie-entretiens";
+import { PileEntretiens, type EntretienPile } from "@/components/pile-entretiens";
+import { temoignages } from "@/contenu/site";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { NoteManuscrite } from "@/components/note-manuscrite";
 import { MurCommunaute } from "@/components/mur-communaute";
 import { TitreRoulant } from "@/components/titre-roulant";
 import { RangeeEquipe } from "@/components/rangee-equipe";
 import {
-  ancreEntretien,
   confirmationFormFunnel,
-  avisImmersion,
   entretiensImmersion,
   equipeImmersion,
 } from "@/contenu/immersion";
-import { insecables } from "@/lib/typographie";
 import { scriptCapture } from "@/lib/reservation-capture";
 import { TitreConfirmationForm } from "@/components/titre-confirmation-form";
 
-import { cn } from "@repo/ui/lib/utils";
 import type { Metadata } from "next";
 import { avecReglages } from "@/lib/reglages-seo";
 
@@ -39,6 +35,46 @@ const metadonnees: Metadata = {
   description: confirmationFormFunnel.description,
 };
 
+/** Les titres dictés par Rémy ; les autres entretiens gardent leur ligne. */
+const TITRES_PILE: Record<string, string> = {
+  rgio4y4o8f:
+    "Découvre l'histoire de Roland, qui est passé de 0 à 109 778 € en 6 mois avec ce système",
+};
+
+/** La note au feutre de Roland, à gauche de sa vidéo sur ordinateur. */
+const NOTES_PILE: Record<string, string> = {
+  rgio4y4o8f: "Notre success story la plus appréciée !",
+};
+
+/** Les entretiens de la pile, dans l'ordre ci-dessus. */
+/** L'ordre de tête, dicté par Rémy ; les autres suivent dans l'ordre
+ *  d'`/immersion`. Posé ici pour ne pas changer celui d'`/immersion`. */
+const TETE_PILE = [
+  "rgio4y4o8f", // Roland
+  "j0vbkt570k", // Christian
+  "b5taio9plc", // François
+  "2xege6bt0u", // Yannick et Sylvie
+  "vtfaka0m80", // Olga
+];
+const ordrePile = [
+  ...TETE_PILE,
+  ...entretiensImmersion.filter((id) => !TETE_PILE.includes(id)),
+];
+
+const entretiensPile: EntretienPile[] = ordrePile.flatMap((id) => {
+  const t = temoignages.find((x) => x.id === id);
+  if (!t) return [];
+  const entretien: EntretienPile = {
+    id,
+    nom: t.nom,
+    description: t.description,
+    secondes: t.secondes,
+    titre: TITRES_PILE[id],
+    note: NOTES_PILE[id],
+  };
+  return [entretien];
+});
+
 export default function ConfirmationFormFunnel() {
   return (
     <>
@@ -59,7 +95,11 @@ export default function ConfirmationFormFunnel() {
           image, ni voile, ni particules, ni lèvre. La page est la suite du
           sondage et en garde l'habit, le fond crème du formulaire, avec la
           marque seule au-dessus (`layout.tsx`). */}
-      <section id="programme" className="relative flex flex-col px-5 pt-8 sm:pt-12">
+      {/* `overflow-x-clip` : les notes au feutre se posent dans les marges, de
+          biais ; si l'une touchait le bord, elle ne doit jamais faire défiler
+          la page de côté. `clip` et non `hidden`, qui casserait le
+          défilement vertical des éléments collants. */}
+      <section id="programme" className="relative flex flex-col overflow-x-clip px-5 pt-8 sm:pt-12">
         <div className="mx-auto flex w-full max-w-[var(--largeur-video)] flex-1 flex-col">
           {/* **`mt-auto` et non `my-auto` : tout l'espace libre passe
               au-dessus du titre**, sur demande de Rémy, qui le veut « vraiment
@@ -120,7 +160,7 @@ export default function ConfirmationFormFunnel() {
           >
             <NoteManuscrite
               legende={confirmationFormFunnel.video1.numero}
-              className="mb-2 lg:absolute lg:top-1/4 lg:right-full lg:mr-4 lg:mb-0 lg:w-[27rem]"
+              className="mb-2 lg:absolute lg:top-1/4 lg:right-full lg:mr-4 lg:mb-0 lg:w-72 xl:w-[27rem]"
             >
               {confirmationFormFunnel.video1.consigne}
             </NoteManuscrite>
@@ -147,6 +187,49 @@ export default function ConfirmationFormFunnel() {
               className="shadow-[0_30px_70px_-25px_rgba(0,0,0,0.55),0_2px_10px_rgba(0,0,0,0.18)] ring-1 ring-black/25"
             />
           </div>
+
+          {/* **La seconde vidéo, sous celle de la confirmation**, sur demande
+              de Rémy : son titre, puis le montage en 16/9, au lecteur de
+              Wistia comme la première. */}
+          <div className="mx-auto mt-16 w-full max-w-4xl sm:mt-20">
+            <div className="mx-auto max-w-4xl text-center">
+              <TitreRoulant
+                as="h2"
+                segments={[{ texte: confirmationFormFunnel.video2.titre }]}
+                className="titre text-[1.625rem] text-balance text-foreground sm:text-4xl"
+              />
+            </div>
+            {/* La note au feutre, comme pour la première vidéo, mais **à
+                droite** sur ordinateur, sur demande de Rémy. La vidéo se
+                resserre assez pour lui laisser sa place dans la fenêtre. */}
+            <div className="relative mt-8 lg:mx-auto lg:max-w-[min(48rem,calc(100vw-40rem))]">
+              <NoteManuscrite
+                legende={confirmationFormFunnel.video2.numero}
+                cote="droite"
+                className="mb-2 lg:absolute lg:top-1/4 lg:left-full lg:ml-4 lg:mb-0 lg:w-56 xl:w-64"
+              >
+                {confirmationFormFunnel.video2.consigne}
+              </NoteManuscrite>
+            <LecteurVideo
+              id={confirmationFormFunnel.video2.video.id}
+              titre={confirmationFormFunnel.video2.video.titre}
+              secondes={confirmationFormFunnel.video2.video.secondes}
+              affiche={`/temoignages/${confirmationFormFunnel.video2.video.id}.jpg`}
+              afficheAlt="Rémy présente le système de A à Z"
+              natif
+              className="shadow-[0_30px_70px_-25px_rgba(0,0,0,0.55),0_2px_10px_rgba(0,0,0,0.18)] ring-1 ring-black/25"
+            />
+            </div>
+
+            {/* **Les entretiens en grand, sous la vidéo du système**, sur
+                demande de Rémy : Roland d'emblée, à la même largeur, puis les
+                autres derrière « Voir plus de témoignages ». Ils remplacent la
+                grille de cartes, qui montrait les mêmes vidéos. */}
+            <PileEntretiens
+              entretiens={entretiensPile}
+              className="mt-20 sm:mt-24 lg:mx-auto lg:max-w-[min(48rem,calc(100vw-40rem))]"
+            />
+          </div>
         </div>
       </section>
 
@@ -155,68 +238,6 @@ export default function ConfirmationFormFunnel() {
           (« Voici ta vidéo de formation gratuite… », sur le fond bleuté) sont
           retirées. La page passe de la vidéo du haut à l'extrait de coaching. */}
 
-      {/* **Le semis de points court sur deux sections**, le coaching et les
-          entretiens, sur demande de Rémy. Il était derrière la seule fenêtre
-          Safari, puis il allait jusqu'au mur de la communauté ; Rémy l'a arrêté
-          **juste avant** celui-ci, qui garde donc son fond nu.
-
-          **Une seule couche pour les deux**, et pas une par section : posé deux
-          fois, le semis se serait réaligné à chaque fois, et le raccord se
-          serait vu en travers de la page. Ici la grille est continue d'un bout
-          à l'autre.
-
-          **Le masque croise deux fondus.** L'horizontal est ce que Rémy décrit,
-          des points au centre et un peu sur les côtés, qui s'éteignent avant le
-          bord. Le vertical n'a pas été demandé mais il le fallait : sans lui, la
-          traversée commencerait et finirait sur une ligne de points nette en
-          travers de la page, c'est-à-dire la couture que tout le reste de cette
-          page s'applique à éviter. Il est court, six pour cent à chaque bout.
-
-          `isolate` : le semis est en `-z-10`, il lui faut un contexte
-          d'empilement à lui, sinon il passerait derrière le fond de page. */}
-      <div className="relative isolate">
-        {/* **Un motif CSS et non le `DotPattern` du registre**, et c'est une
-            mesure qui l'a décidé : leur composant dessine un cercle par point,
-            soit 21 252 nœuds sur les 23 550 de la page. Voir `SemisPoints`. */}
-        <SemisPoints
-          className={cn(
-            "pointer-events-none absolute inset-0 -z-10 text-border",
-            "[mask-image:linear-gradient(to_right,transparent,#000_14%,#000_86%,transparent),linear-gradient(to_bottom,transparent,#000_6%,#000_94%,transparent)]",
-            "[mask-composite:intersect] [-webkit-mask-composite:source-in]",
-          )}
-        />
-
-      {/* Plus d'extrait de coaching, sur demande de Rémy : le semis de
-          points ne porte plus que les entretiens. */}
-
-      {/* AVIS : les quatorze entretiens.
-
-          **Ce sont des liens vers les pages d'avis, pas des lecteurs.** C'est
-          la décision déjà prise pour `/resultats`, et elle vaut ici pour les
-          mêmes deux raisons : chaque entretien a sa page, où il est raconté et
-          transcrit ; et quatorze lecteurs Wistia assemblés d'avance, c'est
-          plusieurs mégaoctets de JavaScript pour une page qu'on ouvre depuis un
-          lien qu'on vient de recevoir.
-
-          La carte est celle de `/resultats`, au détail près. */}
-      <SectionImmersion id="avis" className="scroll-mt-24">
-        <div className="mx-auto max-w-3xl text-center">
-          <TitreRoulant
-            as="h2"
-            segments={[{ texte: avisImmersion.titre }]}
-            className="titre text-[1.625rem] text-balance text-foreground sm:text-4xl"
-          />
-          <p className="mt-4 text-lg leading-relaxed text-pretty text-muted-foreground">
-            {insecables(avisImmersion.sousTitre)}
-          </p>
-        </div>
-
-        {/* La galerie : les cartes du sommaire des résultats, qui ouvrent
-            l'entretien dans une fenêtre au lieu de mener à une page. Voir
-            `GalerieEntretiens`. */}
-        <GalerieEntretiens />
-      </SectionImmersion>
-      </div>
 
       {/* LE MUR DE LA COMMUNAUTÉ, entre les entretiens et l'équipe.
 
@@ -224,7 +245,7 @@ export default function ConfirmationFormFunnel() {
           qui sont des récits complets, puis ce que les membres écrivent au
           quotidien, puis qui les accompagne. L'inverse montrerait des citations
           de gens qu'on n'a pas encore vus. */}
-      <MurCommunaute />
+      <MurCommunaute defilant />
 
       {/* L'ÉQUIPE.
 

@@ -63,6 +63,9 @@ const OPTIONS = new URLSearchParams({
   fullscreenButton: "true",
   settingsControl: "true",
   smallPlayButton: "true",
+  /* Le gros bouton de lecture au centre, lui aussi coupé sur certains
+     entretiens côté compte : Roland s'affichait sans rien pour le lancer. */
+  playButton: "true",
 
   /* **Jamais au-delà de 1080p.** Sans plafond, Wistia servait la VSL en 4K
      (3840 × 2160, mesuré) dans un cadre de 375 px de large : le téléphone

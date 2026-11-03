@@ -320,6 +320,28 @@
     }
   }
 
+  /* Le défilement de `Marquee`, de MagicUI : le mur de la communauté de
+     `/form-funnel-thanks`, qui défile en colonnes verticales. */
+  --animate-marquee: marquee var(--duration) infinite linear;
+  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+  @keyframes marquee-vertical {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(calc(-100% - var(--gap)));
+    }
+  }
+
   /* Le liseré de `ShineBorder`, de MagicUI : un dégradé qui glisse le long du
      bord. Ajouté par le CLI de shadcn pour l'alerte de `/thanks`. */
   --animate-shine: shine var(--duration) infinite linear;

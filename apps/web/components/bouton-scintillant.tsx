@@ -61,6 +61,7 @@ export function BoutonScintillant({
    * fonds : le blanc du défaut ne vaut que sur `--primary`.
    */
   encre = "var(--primary-foreground)",
+  scintille = true,
   className,
   children,
 }: {
@@ -74,6 +75,9 @@ export function BoutonScintillant({
   rayon?: string;
   fond?: string;
   encre?: string;
+  /** Le cône lumineux qui tourne autour. Coupé sur un bouton secondaire, qui
+   *  garde tout le reste : relief, ombre, texte qui roule. */
+  scintille?: boolean;
   className?: string;
   children: React.ReactNode;
 }) {
@@ -133,14 +137,16 @@ export function BoutonScintillant({
       )}
     >
       {/* Le cône lumineux qui tourne, sous tout le reste. */}
-      <span
-        aria-hidden
-        className="absolute inset-0 -z-30 overflow-visible blur-[2px] @container-[size]"
-      >
-        <span className="animate-shimmer-slide absolute inset-0 aspect-square h-[100cqh]">
-          <span className="animate-spin-around absolute -inset-full [background:conic-gradient(from_calc(270deg-(var(--spread)*0.5)),transparent_0,white_var(--spread),transparent_var(--spread))]" />
+      {scintille ? (
+        <span
+          aria-hidden
+          className="absolute inset-0 -z-30 overflow-visible blur-[2px] @container-[size]"
+        >
+          <span className="animate-shimmer-slide absolute inset-0 aspect-square h-[100cqh]">
+            <span className="animate-spin-around absolute -inset-full [background:conic-gradient(from_calc(270deg-(var(--spread)*0.5)),transparent_0,white_var(--spread),transparent_var(--spread))]" />
+          </span>
         </span>
-      </span>
+      ) : null}
 
       {children}
 

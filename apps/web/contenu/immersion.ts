@@ -438,9 +438,15 @@ export const confirmationFormFunnel = {
   },
   video2: {
     numero: "Vidéo 2/2",
+    /* La note au feutre, à droite de la vidéo sur ordinateur. */
+    consigne: "Clique sur la vidéo pour la regarder !",
     titre:
       "Voici ta vidéo de formation gratuite qui te présente le système de A à Z, comme promis.",
-    /* Provisoire : la vidéo du modèle d'`/immersion`. */
-    video: modeleImmersion.video,
+    /* Le montage « 145K en 1 mois », hébergé chez Wistia, en 16/9. */
+    video: {
+      id: "9gzil9ktxh",
+      titre: "Le système de A à Z : 145K en 1 mois",
+      secondes: 2292,
+    },
   },
 };

@@ -890,3 +890,93 @@ export const murCommunaute: readonly {
     ],
   },
 ];
+
+/**
+ * Le mur qui défile de `/form-funnel-thanks` : un extrait court par post,
+ * **là où la personne donne un chiffre**, sur demande de Rémy (appels,
+ * ventes, montants). Chaque extrait est recopié mot pour mot du post désigné
+ * par son titre, jamais réécrit ; `chiffre` est le passage surligné, une
+ * sous-chaîne de l'extrait. `MurDefilant` écarte, en développement, tout
+ * extrait qui ne se retrouverait pas dans son post.
+ *
+ * Écartés : les posts sans chiffre, et celui de Guy sur son bêta-testeur, dont
+ * la phrase porte un tiret cadratin que le projet n'affiche pas.
+ */
+export const extraitsChiffres: readonly {
+  /** Le `titre` du post dans `murCommunaute`. */
+  titre: string;
+  extrait: string;
+  chiffre: string;
+}[] = [
+  {
+    titre: "les choses ont complètement explosé cette semaine",
+    extrait: "J’ai signé 5 personnes en 7 jours (9100€).",
+    chiffre: "5 personnes en 7 jours (9100€)",
+  },
+  {
+    titre: "je vis une aventure absolument magnifique",
+    extrait:
+      "En seulement quelques jours, j’ai eu la joie de recevoir 11 appels, et j’ai concrétisé 3 ventes en froid et 3 ventes en chaud, pour un total de 20400 €  !",
+    chiffre: "pour un total de 20400 €",
+  },
+  {
+    titre: "un mandat de 125´000 €",
+    extrait: "Résultat : un mandat de 125´000 € avec un acompte de 37’500 € payable maintenant.",
+    chiffre: "un mandat de 125´000 €",
+  },
+  {
+    titre: "Je ne savais pas encore que je serais la prochaine à écrire le mien.",
+    extrait:
+      "En seulement quelques mois, je suis passée d’environ 5 000 $ de chiffre à plus de 20 000 $, puis aujourd’hui, en plein mois d’août, je suis proche des 50 000 $.",
+    chiffre: "je suis proche des 50 000 $",
+  },
+  {
+    titre: "une mission à 15 000 dollars",
+    extrait: "Résultat : nous sommes partis sur une mission à 15 000 dollars (hors commission)",
+    chiffre: "une mission à 15 000 dollars",
+  },
+  {
+    titre: "j’ai fait une nouvelle vente !",
+    extrait: "Trop content : +2k€ ! Ce qui m’amène à 12ke depuis mon arrivée au Funnels Club (début avril).",
+    chiffre: "12ke depuis mon arrivée",
+  },
+  {
+    titre: "j’ai réalisé mes 2 premiers closings pour ma bêta",
+    extrait:
+      "Aujourd’hui, j’ai réalisé mes 2 premiers closings pour ma bêta :  un premier à 1000 € et  un second à 1500 €",
+    chiffre: "mes 2 premiers closings",
+  },
+  {
+    titre: "mon premier close en 1X à 1800€",
+    extrait: "Victoire qui fait du bien mon premier close en 1X à 1800€.",
+    chiffre: "mon premier close en 1X à 1800€",
+  },
+  {
+    titre: "Maintenant que tout est bien en place, je reviens pour faire décoller l'ensemble pour de bon.",
+    extrait:
+      "31 réservations d'appel avec 40% noshow, 44% des présents poussés en stratégie, et 1 vente à 1050€.",
+    chiffre: "31 réservations d'appel",
+  },
+  {
+    titre: "4h après mon post j’ai ma première vraie vente",
+    extrait: "17 réservations rien que pour la 1ère semaine du mois (planning full 😬)",
+    chiffre: "17 réservations",
+  },
+  {
+    titre: "je vous partage mes récents résultats - j’en suis assez fière",
+    extrait: "Ce qui fait un taux de conversion en rendez-vous de plus de 21% (4/19=21%)",
+    chiffre: "plus de 21%",
+  },
+  {
+    titre: "je viens d’encaisser ce matin un premier paiement pour mon offre Bêta",
+    extrait: "C’est un acompte de 100€ pour une offre à 300€.",
+    chiffre: "un acompte de 100€",
+  },
+  {
+    titre: "je partais de rien, 0 connaissance",
+    extrait:
+      "je partais de rien, 0 connaissance, et maintenant je gagne plusieurs milliers d’euros",
+    chiffre: "je gagne plusieurs milliers d’euros",
+  },
+];
+

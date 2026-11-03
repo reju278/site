@@ -48,23 +48,29 @@ const FlecheDroite = () => (
 export function NoteManuscrite({
   children,
   legende,
+  cote = "gauche",
   className,
 }: {
   children: React.ReactNode;
   /** Une seconde ligne, plus petite : « Vidéo 1/2 ». */
   legende?: React.ReactNode;
+  /** Où se pose la note sur ordinateur, par rapport à la vidéo. À droite,
+   *  la flèche part vers la gauche. Sur téléphone, toujours au-dessus. */
+  cote?: "gauche" | "droite";
   className?: string;
 }) {
+  const aDroite = cote === "droite";
   return (
     <div
       className={cn(
         feutre.className,
         // Au-dessus de la vidéo : la flèche doit rester visible jusqu'à son bord.
-        "relative z-10 flex items-center text-foreground max-lg:flex-col lg:flex-row lg:items-end",
+        "relative z-10 flex items-center text-foreground max-lg:flex-col lg:items-end",
+        aDroite ? "lg:flex-row-reverse" : "lg:flex-row",
         className,
       )}
     >
-      <div className="-rotate-3 text-center lg:text-right">
+      <div className={cn("text-center", aDroite ? "rotate-3 lg:text-left" : "-rotate-3 lg:text-right")}>
         <p className="text-[1.65rem] leading-[1.05] text-balance lg:text-[1.9rem]">
           {children}
         </p>
@@ -77,7 +83,12 @@ export function NoteManuscrite({
           </span>
         </p>
       </div>
-      <span className="hidden shrink-0 lg:-mb-2 lg:ml-1 lg:block">
+      <span
+        className={cn(
+          "hidden shrink-0 lg:-mb-2 lg:block",
+          aDroite ? "lg:mr-1 -scale-x-100" : "lg:ml-1",
+        )}
+      >
         <FlecheDroite />
       </span>
     </div>
