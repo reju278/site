@@ -37,11 +37,11 @@ import { useCallback, useEffect, useMemo, useState } from "react";
  * dans le `localStorage` comme le font les titres du tunnel, et restent
  * modifiables : quelqu'un qui arrive par un lien direct les remplit.
  *
- * `repli` est le formulaire de Calendly intégré : il s'affiche si les
- * créneaux ne se lisent pas (pas de jeton, Calendly qui ne répond pas), pour
- * qu'aucune réservation ne se perde.
+ * **Pas de formulaire Calendly en repli**, sur décision de Rémy : tout passe
+ * par l'API. Si les créneaux ne se lisent pas (jeton absent, Calendly qui ne
+ * répond pas), la page le dit et propose de réessayer.
  */
-export function ReservationAppel({ repli }: { repli: React.ReactNode }) {
+export function ReservationAppel() {
   // `undefined` : en lecture ; `null` : indisponible.
   const [creneaux, setCreneaux] = useState<string[] | null | undefined>();
   const [jour, setJour] = useState<string | undefined>();
@@ -118,7 +118,22 @@ export function ReservationAppel({ repli }: { repli: React.ReactNode }) {
     setErreur("Ce créneau vient d'être pris. Choisis-en un autre.");
   }, [creneaux, heure]);
 
-  if (creneaux === null) return <>{repli}</>;
+  if (creneaux === null)
+    return (
+      <div className="mx-auto flex max-w-md flex-col items-center gap-4 py-24 text-center">
+        {/* Libellés d'interface de l'agent, provisoires : à valider. */}
+        <p className="text-pretty text-muted-foreground">
+          Les créneaux ne se chargent pas pour le moment.
+        </p>
+        <button
+          type="button"
+          onClick={() => void lire()}
+          className="rounded-md border border-border px-4 py-2 text-sm font-medium text-foreground"
+        >
+          Réessayer
+        </button>
+      </div>
+    );
   if (creneaux === undefined)
     return (
       <div className="flex justify-center py-24">

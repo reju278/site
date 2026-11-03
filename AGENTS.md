@@ -2025,8 +2025,10 @@ dont le bouton y mène dans un nouvel onglet. Deux étapes : le jour et
 l'heure, lus en direct chez Calendly, puis les coordonnées (prénom et e-mail
 repris de l'inscription de `/course`) et les questions de l'événement.
 **Le rendez-vous part à Calendly par son API**, côté serveur
-(`app/appel/actions.ts`, `CALENDLY_API_TOKEN`, sans préfixe public) ; sans
-jeton, la page retombe sur le formulaire de Calendly intégré. Puis `/thanks`,
+(`app/appel/actions.ts`, `CALENDLY_API_TOKEN`, sans préfixe public) ; **plus
+aucun formulaire Calendly intégré**, même en repli, sur décision de Rémy :
+sans jeton, la page dit que les créneaux ne se chargent pas et propose de
+réessayer. **Le jeton doit donc être posé sur Vercel**, en Production. Puis `/thanks`,
 avec les noms de paramètres que Calendly emploie.
 
 **Les questions sont recopiées de Calendly**, dans `reservationYt` de
