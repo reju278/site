@@ -2,6 +2,7 @@ import { ReservationAppel } from "@/components/reservation-appel";
 import { identiteAppel } from "@/contenu/appel";
 
 import type { Metadata } from "next";
+import { scriptContactLien } from "@/lib/contact-lien";
 import { partageTunnel } from "@/lib/partage";
 import { avecReglages } from "@/lib/reglages-seo";
 
@@ -37,6 +38,16 @@ export default function Appel() {
          marque en haut, ni photo de fond. */
       className="px-5 pt-8 sm:pt-12"
     >
+      {/* **Le relevé du lien d'e-mail**, en HTML brut et en tête de page : il
+          retire le prénom et l'e-mail de l'adresse pendant la lecture du
+          HTML, avant Google Tag Manager, et le formulaire les retrouve au
+          montage. Voir `lib/contact-lien.ts`. */}
+      <div
+        hidden
+        dangerouslySetInnerHTML={{
+          __html: `<script>${scriptContactLien}</script>`,
+        }}
+      />
       {/* Notre réservation, sur demande de Rémy (issue #7). */}
       <ReservationAppel />
     </main>

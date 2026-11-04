@@ -30,7 +30,8 @@ export const API_FUNNELS =
  * ouvre, et Calendly arrivait vide. Le contact porte sa date (`t`) et n'est
  * plus lu après `DUREE_CONTACT_VSL` : de quoi revenir d'un e-mail de la
  * séquence, sans garder indéfiniment un e-mail dans le navigateur. Jamais
- * dans l'adresse, où GTM le lirait.
+ * dans l'adresse, où GTM le lirait : un lien d'e-mail vers `/appel` l'y
+ * dépose, et `lib/contact-lien.ts` l'en retire avant GTM.
  */
 export const CLE_CONTACT_VSL = "vsl-contact";
 

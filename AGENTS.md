@@ -2031,6 +2031,14 @@ sans jeton, la page dit que les créneaux ne se chargent pas et propose de
 réessayer. **Le jeton doit donc être posé sur Vercel**, en Production. Puis `/thanks`,
 avec les noms de paramètres que Calendly emploie.
 
+**Un lien d'e-mail ClickFunnels préremplit le formulaire** :
+`go.funnels.club/appel?prenom={{contact.first_name}}&email={{contact.email}}`.
+Comme sur `/thanks`, ce sont des données personnelles dans une adresse, sur un
+site qui charge GTM : un script en HTML brut, `lib/contact-lien.ts`, les relève
+et les retire de l'adresse pendant la lecture du HTML. Il les range dans le
+contact de `/course` (sept jours), que le lien remplace, et ne touche à rien
+d'autre : `el` et les `utm_*` restent.
+
 **Les questions sont recopiées de Calendly**, dans `reservationYt` de
 `contenu/appel.ts` : l'intitulé exact (`question`) est ce qui part à
 Calendly, l'intitulé affiché (`libelle`) est tutoyé. **L'API de Calendly lit
