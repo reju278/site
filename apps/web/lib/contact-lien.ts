@@ -1,6 +1,6 @@
 /**
  * Le prénom et l'e-mail qu'un lien d'e-mail ClickFunnels porte vers `/appel` :
- * `go.funnels.club/appel?prenom={{contact.first_name}}&email={{contact.email}}`.
+ * `go.funnels.club/appel?prenom={{contact.first_name}}&email={{contact.email_address}}`.
  *
  * **Ce sont des données personnelles dans une adresse, et le site charge
  * GTM** : même précaution que `reservation-capture.ts`. Le script les relève
