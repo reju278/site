@@ -39,9 +39,22 @@ function Morceaux({ morceaux }: { morceaux: readonly Morceau[] }) {
   ));
 }
 
-function Etape({ numero, texte }: { numero: string; texte: string }) {
+function Etape({
+  numero,
+  texte,
+  className,
+}: {
+  numero: string;
+  texte: string;
+  className?: string;
+}) {
   return (
-    <p className="max-w-2xl text-lg leading-relaxed text-pretty text-foreground sm:text-xl">
+    <p
+      className={cn(
+        "max-w-4xl text-xl leading-relaxed text-balance text-foreground sm:text-2xl",
+        className,
+      )}
+    >
       <strong className="underline underline-offset-4">{numero}</strong>
       {" : "}
       {texte}
@@ -61,11 +74,11 @@ export default function AppelRelanceNewsletter() {
           __html: `<script>${scriptContactLien}</script>`,
         }}
       />
-      <div className="mx-auto mb-12 flex max-w-4xl flex-col items-center gap-6 text-center sm:mb-16">
-        <p className="max-w-3xl text-sm leading-relaxed text-foreground sm:text-base">
+      <div className="mx-auto mb-12 flex max-w-6xl flex-col items-center gap-6 text-center sm:mb-16">
+        <p className="max-w-[52rem] text-base leading-relaxed text-balance text-foreground sm:text-[1.375rem]">
           <Morceaux morceaux={accroche} />
         </p>
-        <h1 className="titre max-w-3xl text-3xl text-balance text-foreground sm:text-5xl">
+        <h1 className="titre text-3xl text-balance text-foreground sm:text-4xl">
           <Morceaux morceaux={titre} />
         </h1>
         <Etape numero={etape1.numero} texte={etape1.texte} />
@@ -78,9 +91,13 @@ export default function AppelRelanceNewsletter() {
           afficheAlt={video.titre}
           natif
           prioritaire
-          className="w-full shadow-[0_30px_70px_-25px_rgba(0,0,0,0.45)]"
+          className="w-full max-w-4xl shadow-[0_30px_70px_-25px_rgba(0,0,0,0.45)]"
         />
-        <Etape numero={etape2.numero} texte={etape2.texte} />
+        <Etape
+          numero={etape2.numero}
+          texte={etape2.texte}
+          className="mt-2 sm:mt-4"
+        />
       </div>
       {/* Encadré sur demande de Rémy, pour détacher le formulaire de ce qui le
           précède. Sur cette page seulement : `/appel` n'a que lui à montrer. */}
