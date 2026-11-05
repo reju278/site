@@ -82,7 +82,14 @@ export default function AppelRelanceNewsletter() {
         />
         <Etape numero={etape2.numero} texte={etape2.texte} />
       </div>
-      <ReservationAppel niveauTitre="h2" />
+      {/* Encadré sur demande de Rémy, pour détacher le formulaire de ce qui le
+          précède. Sur cette page seulement : `/appel` n'a que lui à montrer. */}
+      <section
+        aria-label="Réserver votre appel"
+        className="mx-auto max-w-2xl rounded-md border border-border bg-card px-5 py-8 shadow-[0_30px_70px_-25px_rgba(0,0,0,0.25)] sm:px-10 sm:py-10"
+      >
+        <ReservationAppel niveauTitre="h2" />
+      </section>
     </main>
   );
 }
