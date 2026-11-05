@@ -87,7 +87,7 @@ html #cookiescript_description {
 
 /* Le titre, écrit ici, faute de champ pour lui dans le HTML de CookieScript. */
 html #cookiescript_description::before {
-  content: "Un petit cookie\00A0?";
+  content: "Information cookie";
   display: block;
   padding-bottom: 0.75rem;
   font-family: var(--font-sans, inherit);
