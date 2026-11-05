@@ -5,7 +5,6 @@ import {
   reserverAppel,
   type DemandeReservation,
 } from "@/app/appel/actions";
-import { BoutonDictee } from "@/components/bouton-dictee";
 import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { TexteRoulant } from "@/components/texte-roulant";
 import { reservationYt } from "@/contenu/appel";
@@ -41,11 +40,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
  * par l'API. Si les créneaux ne se lisent pas (jeton absent, Calendly qui ne
  * répond pas), la page le dit et propose de réessayer.
  */
-/** La première question à réponse libre : son micro porte la bulle d'aide. */
-const premiereQuestionTexte = reservationYt.questions.find(
-  (question) => question.type === "texte",
-)?.cle;
-
 export function ReservationAppel({
   niveauTitre: TitreFormulaire = "h1",
 }: {
@@ -647,45 +641,28 @@ export function ReservationAppel({
                 {question.obligatoire ? <Obligatoire /> : null}
               </legend>
               {question.type === "texte" ? (
-                /* Le micro en bas à droite de la zone, sur demande de Rémy :
-                   la dictée s'ajoute à ce qui est déjà écrit. La marge basse
-                   du champ lui laisse la place, le texte ne passe pas
-                   dessous. */
-                <div className="relative">
-                  <textarea
-                    aria-label={question.libelle}
-                    aria-required={question.obligatoire}
-                    aria-invalid={`question-${question.cle}` in fautifs}
-                    rows={4}
-                    value={reponses[question.cle]?.[0] ?? ""}
-                    onChange={(e) => {
-                      corrige(`question-${question.cle}`);
-                      setReponses((avant) => ({
-                        ...avant,
-                        [question.cle]: [e.target.value],
-                      }));
-                    }}
-                    className={cn(
-                      CHAMP,
-                      "block h-auto w-full resize-none rounded-md border px-3 pt-2 pb-12",
-                      `question-${question.cle}` in fautifs &&
-                        "border-destructive ring-[3px] ring-destructive/20 dark:border-destructive",
-                    )}
-                  />
-                  <BoutonDictee
-                    /* La bulle d'aide, sur le premier micro seulement. */
-                    aide={question.cle === premiereQuestionTexte}
-                    libelle={question.libelle}
-                    valeur={reponses[question.cle]?.[0] ?? ""}
-                    changer={(texte) => {
-                      corrige(`question-${question.cle}`);
-                      setReponses((avant) => ({
-                        ...avant,
-                        [question.cle]: [texte],
-                      }));
-                    }}
-                  />
-                </div>
+                /* Deux lignes au départ, et la zone grandit avec la réponse là où
+                   le navigateur connaît `field-sizing`. Sinon, elle défile. */
+                <textarea
+                  aria-label={question.libelle}
+                  aria-required={question.obligatoire}
+                  aria-invalid={`question-${question.cle}` in fautifs}
+                  rows={2}
+                  value={reponses[question.cle]?.[0] ?? ""}
+                  onChange={(e) => {
+                    corrige(`question-${question.cle}`);
+                    setReponses((avant) => ({
+                      ...avant,
+                      [question.cle]: [e.target.value],
+                    }));
+                  }}
+                  className={cn(
+                    CHAMP,
+                    "block h-auto min-h-20 w-full resize-none rounded-md border px-3 py-2 field-sizing-content",
+                    `question-${question.cle}` in fautifs &&
+                      "border-destructive ring-[3px] ring-destructive/20 dark:border-destructive",
+                  )}
+                />
               ) : (
                 question.choix.map((choix) => {
                   const multiple = question.type === "multi";
