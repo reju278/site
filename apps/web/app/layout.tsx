@@ -170,6 +170,11 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${nunito.variable} ${fraunces.variable} ${signature.variable}`}
     >
+      <head>
+        {/* La carte de cookies, écrite hors du CSS du site parce que les autres
+            domaines de GTM la reçoivent du même fichier. */}
+        <link rel="stylesheet" href="/cookies.css" />
+      </head>
       <body className="font-sans antialiased">
         {/* Google Tag Manager.
 

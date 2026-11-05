@@ -13,7 +13,7 @@ export function BlocReservation({
   return (
     <section
       aria-label="Réservation de l'appel"
-      className="mx-auto max-w-2xl rounded-md border border-border bg-card px-5 py-8 shadow-[0_30px_70px_-25px_rgba(0,0,0,0.25)] sm:px-10 sm:py-10"
+      className="-mx-2 rounded-md border border-border bg-card px-4 py-8 shadow-[0_30px_70px_-25px_rgba(0,0,0,0.25)] sm:mx-auto sm:max-w-2xl sm:px-10 sm:py-10"
     >
       <ReservationAppel niveauTitre={niveauTitre} />
     </section>

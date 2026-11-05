@@ -1478,13 +1478,13 @@ au-dessus de l'image du hero, et c'est le flou qui les fait tenir. L'exception n
 couvre **que** les deux capsules : à l'intérieur, les entrées, le bouton et le
 panneau déroulant sont à 5 px comme partout.
 
-**Seconde exception : la carte de cookies**, habillée dans
-`apps/web/app/globals.css`. Elle reprend le verre des capsules au pixel, sur
-décision de Rémy : même `card/85`, même flou de 12 px, même filet intérieur en
-`--border`, même rayon de 12 px et même ombre. Son bouton, lui, est celui de
-l'en-tête, donc à 5 px. Elle flotte au-dessus du contenu de la page comme les
-capsules au-dessus du hero, et c'est la même raison qui justifie le même
-traitement.
+**Seconde exception : la notification de `/preparation`**, décrite plus bas.
+La carte de cookies en a longtemps été une, et elle ne l'est plus : c'est
+désormais une carte opaque collée au bas de l'écran, sur le modèle fourni par
+Rémy. Son dessin vit **dans `public/cookies.css` et nulle part ailleurs** : GTM
+pose CookieScript sur plusieurs domaines, dont ClickFunnels, où le CSS de ce site
+n'existe pas. Une balise de GTM y charge ce fichier, qui ne doit donc dépendre de
+rien : chaque jeton y a sa valeur de repli.
 
 **Troisième exception : le panneau des menus déroulants de l'en-tête.** Même
 `card/85`, même flou de douze pixels, sur insistance de Rémy. C'est celle des
@@ -1501,10 +1501,8 @@ voile du dialogue, et c'est le verre qui le fait tenir sur un fond dont on ne
 sait rien. Il est **sous** le panneau et non au-dessus : on ferme une fenêtre
 quand on a fini de lire, et on finit de lire en bas.
 
-**La notification de `/preparation` relève de la deuxième**, celle de la carte
-de cookies : c'est l'autre carte qui flotte en bas de l'écran, elle en porte le
-verre au pixel, et deux dessins pour la même famille d'objets se liraient comme
-une inattention. Deux essais l'ont précédée et ont été écartés par Rémy, une
+**La notification de `/preparation`** flotte en bas de l'écran et porte le verre
+des capsules au pixel : `card/85`, flou de 12 px, filet intérieur en `--border`. Deux essais l'ont précédée et ont été écartés par Rémy, une
 bande bleue fixée en haut puis la gélule du hero posée au-dessus de l'en-tête :
 le haut appartient à l'en-tête. Elle est faite de briques de registre, sur
 demande de Rémy : Sonner pour la notification, et pour « Fermer » le bouton

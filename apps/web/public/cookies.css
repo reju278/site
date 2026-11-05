@@ -1,0 +1,189 @@
+/* La carte de cookies de CookieScript, sur tous les sites où GTM la pose.
+
+   **Ce fichier est la seule écriture de son dessin.** Il est chargé par le
+   gabarit du site, et les autres domaines le reçoivent d'une balise de GTM :
+   <link rel="stylesheet" href="https://go.funnels.club/cookies.css">
+   Il ne doit donc dépendre de rien : chaque jeton du site a sa valeur de repli,
+   parce que ClickFunnels ne les connaît pas.
+
+   Le dessin est celui du modèle fourni par Rémy : une carte blanche, l'image
+   du cookie, un titre, le texte centré, puis les boutons. Elle est collée au
+   bas de l'écran : pleine largeur sur téléphone, à gauche sur ordinateur, où
+   elle ne recouvre pas le milieu de la page.
+
+   Son HTML vient de CookieScript : on l'habille, sans toucher à sa mécanique.
+   Le préfixe `html` passe devant la feuille que CookieScript injecte après la
+   nôtre.
+
+   Le bouton de refus attend d'être activé chez CookieScript : son dessin est
+   prêt, il apparaîtra à côté de « Fermer ». Le titre est écrit ici, faute de
+   champ pour lui dans leur HTML, et n'est donc lu que par l'œil. */
+
+html #cookiescript_injected {
+  position: fixed;
+  inset: auto auto 0 1.5rem;
+  z-index: 999999;
+  box-sizing: border-box;
+  width: 24rem;
+  max-width: calc(100vw - 3rem);
+  margin: 0;
+  padding: 1.5rem;
+
+  font-family: var(--font-sans, inherit);
+  font-size: 0.875rem;
+  text-align: center;
+  color: var(--muted-foreground, #6b7280);
+
+  opacity: 1;
+  background-color: var(--card, #fff);
+  border: 1px solid var(--border, rgb(107 114 128 / 0.3));
+  border-bottom: none;
+  border-radius: 0.5rem 0.5rem 0 0;
+  box-shadow: 0 -8px 30px rgb(0 0 0 / 0.1);
+}
+
+@media (max-width: 639px) {
+  html #cookiescript_injected {
+    inset: auto 0 0 0;
+    width: 100%;
+    max-width: none;
+    padding: 1.25rem 1.25rem calc(1.25rem + env(safe-area-inset-bottom));
+    border-inline: none;
+  }
+}
+
+html #cookiescript_toppart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+html #cookiescript_leftpart,
+html #cookiescript_rightpart {
+  display: block;
+  flex: none;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* L'image du cookie, celle du modèle, servie à côté de ce fichier. */
+html #cookiescript_leftpart::before {
+  content: "";
+  display: block;
+  width: 3.5rem;
+  height: 3.5rem;
+  margin: 0 auto 0.5rem;
+  background: url("cookie.svg") center / contain no-repeat;
+}
+
+html #cookiescript_description {
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+html #cookiescript_description::before {
+  content: "Votre vie privée compte";
+  display: block;
+  padding-bottom: 0.75rem;
+  font-family: var(--font-sans, inherit);
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--card-foreground, #1f2937);
+}
+
+html #cookiescript_description span {
+  display: block;
+  padding: 0;
+  margin: 0;
+  font-family: var(--font-sans, inherit);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  text-align: center;
+  text-wrap: balance;
+  color: var(--muted-foreground, #6b7280);
+}
+
+html #cookiescript_buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+html #cookiescript_accept,
+html #cookiescript_reject {
+  display: inline-flex;
+  flex: 1 1 0;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: auto;
+  min-width: 0;
+  max-width: none;
+  height: 2.75rem;
+  min-height: 0;
+  padding: 0 1rem;
+  margin: 0;
+
+  font-family: var(--font-sans, inherit);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  white-space: nowrap;
+  text-transform: none;
+  letter-spacing: normal;
+
+  border-radius: var(--radius, 5px);
+  cursor: pointer;
+  transition:
+    background-color 300ms ease,
+    transform 150ms ease;
+}
+
+html #cookiescript_accept {
+  color: var(--primary-foreground, #fff);
+  background-color: var(--primary, #2563eb);
+  border: none;
+}
+
+/* Le survol du site. Sans cette règle, CookieScript reprend la main et le
+   bouton vire au jaune de sa palette. */
+html #cookiescript_accept:hover {
+  background-color: color-mix(in oklab, var(--primary, #2563eb) 90%, transparent);
+}
+
+html #cookiescript_reject {
+  color: var(--card-foreground, #1f2937);
+  background-color: transparent;
+  border: 1px solid var(--border, rgb(107 114 128 / 0.3));
+}
+
+html #cookiescript_reject:hover {
+  background-color: color-mix(in oklab, var(--primary, #2563eb) 10%, transparent);
+}
+
+html #cookiescript_accept:active,
+html #cookiescript_reject:active {
+  transform: scale(0.95);
+}
+
+/* La croix reste retirée, sur décision de Rémy : « Fermer » dit la même chose
+   et offre une plus grande cible. */
+html #cookiescript_injected .cookiescript_pre_header,
+html #cookiescript_close {
+  display: none;
+}
+
+/* Vide, le conteneur du bas ne doit pas creuser un blanc sous le bouton. */
+html #cookiescript_bottompart:empty {
+  display: none;
+}
