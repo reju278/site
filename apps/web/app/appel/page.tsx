@@ -1,4 +1,4 @@
-import { ReservationAppel } from "@/components/reservation-appel";
+import { BlocReservation } from "@/components/bloc-reservation";
 import { identiteAppel } from "@/contenu/appel";
 
 import type { Metadata } from "next";
@@ -49,7 +49,7 @@ export default function Appel() {
         }}
       />
       {/* Notre réservation, sur demande de Rémy (issue #7). */}
-      <ReservationAppel />
+      <BlocReservation />
     </main>
   );
 }

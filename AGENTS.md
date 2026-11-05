@@ -2044,7 +2044,7 @@ contact de `/course` (sept jours), que le lien remplace, et ne touche à rien
 d'autre : `el` et les `utm_*` restent.
 
 **`/appel-relance-newsletter` est `/appel` avec une vidéo au-dessus**, sur
-demande de Rémy : le formulaire est le même composant, et les textes et la vidéo
+demande de Rémy : le formulaire est le même, `BlocReservation`, et les textes et la vidéo
 de `funnels.club/appel-relance-newsletter` y sont recopiés au mot près, vouvoiement
 compris, dans `relanceNewsletter` de `contenu/appel.ts`. Elle n'a ni jeton de page
 ni SDK de ClickFunnels, qui compteraient la visite dans l'étape « Appel » du

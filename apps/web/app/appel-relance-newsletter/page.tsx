@@ -1,5 +1,5 @@
+import { BlocReservation } from "@/components/bloc-reservation";
 import { LecteurVideo } from "@/components/lecteur-video";
-import { ReservationAppel } from "@/components/reservation-appel";
 import { relanceNewsletter, type Morceau } from "@/contenu/appel";
 import { scriptContactLien } from "@/lib/contact-lien";
 import { partageTunnel } from "@/lib/partage";
@@ -99,14 +99,7 @@ export default function AppelRelanceNewsletter() {
           className="mt-2 sm:mt-4"
         />
       </div>
-      {/* Encadré sur demande de Rémy, pour détacher le formulaire de ce qui le
-          précède. Sur cette page seulement : `/appel` n'a que lui à montrer. */}
-      <section
-        aria-label="Réserver votre appel"
-        className="mx-auto max-w-2xl rounded-md border border-border bg-card px-5 py-8 shadow-[0_30px_70px_-25px_rgba(0,0,0,0.25)] sm:px-10 sm:py-10"
-      >
-        <ReservationAppel niveauTitre="h2" />
-      </section>
+      <BlocReservation niveauTitre="h2" />
     </main>
   );
 }

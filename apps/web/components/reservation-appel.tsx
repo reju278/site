@@ -30,8 +30,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
  *
  * L'écran reprend celui du formulaire de réservation du CRM Funnels-Club
  * (`formulaire-public.tsx`), sur demande de Rémy : les jours en liste,
- * « Demain (mercredi 4 novembre) », puis les heures en grille. Posé à même la
- * page, sans carte ni ombre.
+ * « Demain (mercredi 4 novembre) », puis les heures en grille. Le bloc qui le
+ * porte est `BlocReservation`.
  *
  * **Le prénom et l'e-mail sont repris de l'inscription de `/course`**, lus
  * dans le `localStorage` comme le font les titres du tunnel, et restent
