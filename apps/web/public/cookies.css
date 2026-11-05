@@ -7,9 +7,9 @@
    parce que ClickFunnels ne les connaît pas.
 
    Le dessin est celui du modèle fourni par Rémy : une carte blanche, l'image
-   du cookie en petit à côté du titre, le texte, puis les boutons en pleine largeur. Elle est collée au
-   bas de l'écran : pleine largeur sur téléphone, à gauche sur ordinateur, où
-   elle ne recouvre pas le milieu de la page.
+   du cookie en petit à côté du titre, le texte, puis les boutons. Elle est collée au
+   bas de l'écran et prend toute sa largeur : carte sur téléphone, bouton en
+   pleine largeur, et barre sur ordinateur, le bouton à droite.
 
    Son HTML vient de CookieScript : on l'habille, sans toucher à sa mécanique.
    Le préfixe `html` passe devant la feuille que CookieScript injecte après la
@@ -189,4 +189,45 @@ html #cookiescript_close {
 /* Vide, le conteneur du bas ne doit pas creuser un blanc sous le bouton. */
 html #cookiescript_bottompart:empty {
   display: none;
+}
+
+/* Sur ordinateur, une barre sur toute la largeur de l'écran, le texte à gauche
+   et « Fermer » à droite, sur demande de Rémy. Le contenu reste dans une
+   colonne de 72 rem, pour que le bouton ne parte pas au bout d'un grand écran. */
+@media (min-width: 640px) {
+  html #cookiescript_injected {
+    inset: auto 0 0 0;
+    width: 100%;
+    max-width: none;
+    padding: 0.75rem max(1.5rem, calc((100% - 72rem) / 2));
+    border-inline: none;
+    border-radius: 0;
+  }
+
+  html #cookiescript_toppart {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  html #cookiescript_leftpart {
+    flex: 1 1 auto;
+    width: auto;
+  }
+
+  html #cookiescript_rightpart {
+    flex: 0 0 auto;
+    width: auto;
+  }
+
+  html #cookiescript_buttons {
+    width: auto;
+  }
+
+  html #cookiescript_accept,
+  html #cookiescript_reject {
+    flex: 0 0 auto;
+    padding: 0 2rem;
+  }
 }

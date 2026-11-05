@@ -1480,8 +1480,8 @@ panneau déroulant sont à 5 px comme partout.
 
 **Seconde exception : la notification de `/preparation`**, décrite plus bas.
 La carte de cookies en a longtemps été une, et elle ne l'est plus : c'est
-désormais une carte opaque collée au bas de l'écran, sur le modèle fourni par
-Rémy. Son dessin vit **dans `public/cookies.css` et nulle part ailleurs** : GTM
+désormais une bannière opaque collée au bas de l'écran, sur le modèle fourni par
+Rémy : une carte pleine largeur sur téléphone, une barre sur ordinateur. Son dessin vit **dans `public/cookies.css` et nulle part ailleurs** : GTM
 pose CookieScript sur plusieurs domaines, dont ClickFunnels, où le CSS de ce site
 n'existe pas. Une balise de GTM y charge ce fichier, qui ne doit donc dépendre de
 rien : chaque jeton y a sa valeur de repli.
