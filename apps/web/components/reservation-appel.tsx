@@ -677,14 +677,10 @@ export function ReservationAppel({
                         corrige(`question-${question.cle}`);
                         basculer(question.cle, choix, multiple);
                       }}
-                      className={cn(
-                        "flex items-center gap-3 rounded-md border bg-card px-4 py-2 text-left text-base transition-colors hover:border-primary",
-                        actif
-                          ? "border-primary bg-primary/10"
-                          : `question-${question.cle}` in fautifs
-                            ? "border-destructive"
-                            : "border-foreground/15",
-                      )}
+                      /* Sans cadre, comme Calendly, sur demande de Rémy : toute
+                         la ligne reste cliquable, et seul le champ « Autre »
+                         garde son encadré. */
+                      className="flex w-full items-center gap-3 rounded-md py-1.5 text-left text-base text-foreground"
                     >
                       {/* La case dans la case, sur demande de Rémy : vide,
                           puis cochée d'un V. Carrée pour plusieurs choix,
@@ -696,7 +692,9 @@ export function ReservationAppel({
                           multiple ? "rounded-[5px]" : "rounded-full",
                           actif
                             ? "border-primary bg-primary text-primary-foreground"
-                            : "border-foreground/30 bg-card",
+                            : `question-${question.cle}` in fautifs
+                              ? "border-destructive bg-card"
+                              : "border-foreground/30 bg-card",
                         )}
                       >
                         {actif ? (
