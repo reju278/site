@@ -7,7 +7,7 @@
    parce que ClickFunnels ne les connaît pas.
 
    Le dessin est celui du modèle fourni par Rémy : une carte blanche, l'image
-   du cookie, un titre, le texte centré, puis les boutons. Elle est collée au
+   du cookie en petit à côté du titre, le texte, puis les boutons à droite. Elle est collée au
    bas de l'écran : pleine largeur sur téléphone, à gauche sur ordinateur, où
    elle ne recouvre pas le milieu de la page.
 
@@ -30,7 +30,7 @@ html #cookiescript_injected {
 
   font-family: var(--font-sans, inherit);
   font-size: 0.875rem;
-  text-align: center;
+  text-align: left;
   color: var(--muted-foreground, #6b7280);
 
   opacity: 1;
@@ -54,12 +54,13 @@ html #cookiescript_injected {
 html #cookiescript_toppart {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   gap: 1.25rem;
 }
 
 html #cookiescript_leftpart,
 html #cookiescript_rightpart {
+  position: relative;
   display: block;
   flex: none;
   width: 100%;
@@ -69,32 +70,34 @@ html #cookiescript_rightpart {
   margin: 0;
 }
 
-/* L'image du cookie, celle du modèle, servie à côté de ce fichier. */
+/* L'image du cookie, celle du modèle, servie à côté de ce fichier : en petit,
+   à gauche du titre. Elle est calée sur le titre, qui lui laisse sa place. */
 html #cookiescript_leftpart::before {
   content: "";
-  display: block;
-  width: 3.5rem;
-  height: 3.5rem;
-  margin: 0 auto 0.5rem;
+  position: absolute;
+  top: 0.125rem;
+  left: 0;
+  width: 1.5rem;
+  height: 1.5rem;
   background: url("cookie.svg") center / contain no-repeat;
 }
 
 html #cookiescript_description {
   padding: 0;
   margin: 0;
-  text-align: center;
+  text-align: left;
 }
 
 /* Le titre, écrit ici, faute de champ pour lui dans le HTML de CookieScript. */
 html #cookiescript_description::before {
   content: "Information cookie";
   display: block;
-  padding-bottom: 0.75rem;
+  padding: 0 0 0.75rem 2rem;
   font-family: var(--font-sans, inherit);
   font-size: 1.25rem;
   font-weight: 500;
-  line-height: 1.4;
-  text-align: center;
+  line-height: 1.75rem;
+  text-align: left;
   color: var(--card-foreground, #1f2937);
 }
 
@@ -105,15 +108,15 @@ html #cookiescript_description span {
   font-family: var(--font-sans, inherit);
   font-size: 0.875rem;
   line-height: 1.5;
-  text-align: center;
-  text-wrap: balance;
+  text-align: left;
+  text-wrap: pretty;
   color: var(--muted-foreground, #6b7280);
 }
 
 html #cookiescript_buttons {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   gap: 1rem;
   width: 100%;
   padding: 0;
@@ -123,7 +126,7 @@ html #cookiescript_buttons {
 html #cookiescript_accept,
 html #cookiescript_reject {
   display: inline-flex;
-  flex: 1 1 0;
+  flex: 0 0 auto;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
@@ -132,7 +135,7 @@ html #cookiescript_reject {
   max-width: none;
   height: 2.75rem;
   min-height: 0;
-  padding: 0 1rem;
+  padding: 0 1.75rem;
   margin: 0;
 
   font-family: var(--font-sans, inherit);
