@@ -98,7 +98,7 @@ export function ChoixJour({
       {/* La `key` rejoue l'entrée quand la semaine change. */}
       <div
         key={semaine}
-        className="grid grid-cols-7 justify-items-center transition-[opacity,translate] duration-300 starting:translate-x-2 starting:opacity-0"
+        className="-mx-3 grid grid-cols-7 justify-items-center transition-[opacity,translate] sm:mx-0 duration-300 starting:translate-x-2 starting:opacity-0"
       >
         {septJours.map((date) => {
           const cle = cleDuJour(date);
@@ -116,12 +116,12 @@ export function ChoixJour({
               )}`}
               disabled={!libre}
               onClick={() => choisir(cle)}
-              className="group flex flex-col items-center gap-1"
+              className="group flex w-full flex-col items-center gap-1 px-px"
             >
               <span
                 aria-hidden
                 className={cn(
-                  "text-xs font-semibold",
+                  "text-sm font-semibold",
                   libre ? "text-muted-foreground" : "text-foreground/30",
                 )}
               >
@@ -129,7 +129,7 @@ export function ChoixJour({
               </span>
               <span
                 className={cn(
-                  "relative flex size-10 items-center justify-center rounded-full text-base tabular-nums transition-colors sm:size-11",
+                  "relative flex aspect-square w-full max-w-12 items-center justify-center rounded-full text-lg tabular-nums transition-colors",
                   choisi && "bg-primary font-bold text-primary-foreground",
                   !choisi &&
                     libre &&
