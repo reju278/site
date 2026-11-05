@@ -7,7 +7,7 @@
    parce que ClickFunnels ne les connaît pas.
 
    Le dessin est celui du modèle fourni par Rémy : une carte blanche, l'image
-   du cookie en petit à côté du titre, le texte, puis les boutons à droite. Elle est collée au
+   du cookie en petit à côté du titre, le texte, puis les boutons en pleine largeur. Elle est collée au
    bas de l'écran : pleine largeur sur téléphone, à gauche sur ordinateur, où
    elle ne recouvre pas le milieu de la page.
 
@@ -126,7 +126,7 @@ html #cookiescript_buttons {
 html #cookiescript_accept,
 html #cookiescript_reject {
   display: inline-flex;
-  flex: 0 0 auto;
+  flex: 1 1 0;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
@@ -135,7 +135,7 @@ html #cookiescript_reject {
   max-width: none;
   height: 2.75rem;
   min-height: 0;
-  padding: 0 1.75rem;
+  padding: 0 1rem;
   margin: 0;
 
   font-family: var(--font-sans, inherit);
