@@ -375,13 +375,16 @@ export function ReservationAppel({
             {/* Le fuseau juste sous la question, sur demande de Rémy : c'est
                 en lisant les heures qu'on se demande à quelle heure elles
                 sont. */}
-            <div className="flex flex-col gap-1.5 pt-2">
-              <h2 className="text-lg font-bold text-foreground">
+            <div className="flex flex-col gap-1.5 pt-2 text-center">
+              <h2 className="text-lg font-bold text-balance text-foreground">
                 {reservationYt.choisirHeure(jourLisible(jourActif))}
               </h2>
-              <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <Globe aria-hidden className="size-3.5 shrink-0" />
-                {reservationYt.fuseau} : {fuseauLisible()}.
+              <p className="text-xs text-balance text-muted-foreground">
+                <Globe
+                  aria-hidden
+                  className="mr-1.5 inline-block size-3.5 align-[-0.15em]"
+                />
+                {reservationYt.fuseau}{"\u00a0:"} {fuseauLisible()}.
               </p>
             </div>
             <div className="grid grid-cols-3 gap-2">

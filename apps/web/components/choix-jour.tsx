@@ -69,33 +69,31 @@ export function ChoixJour({
 
   return (
     <div role="radiogroup" aria-label={libelle} className="flex flex-col gap-2">
-      <div className="flex min-h-10 items-center justify-between">
+      {/* Le mois au centre, entre ses deux flèches, comme chez Calendly. Elles
+          restent visibles, éteintes quand il n'y a rien de ce côté. */}
+      <div className="flex min-h-10 items-center justify-center gap-4">
+        <button
+          type="button"
+          aria-label="Semaine précédente"
+          disabled={rang <= 0}
+          onClick={() => allerA(semaines[rang - 1])}
+          className={FLECHE}
+        >
+          <ChevronLeft aria-hidden className="size-5" />
+        </button>
         {/* Le mois du jeudi, qui est celui de la plus grande part de la semaine. */}
         <h2 className="text-lg font-bold text-foreground first-letter:uppercase">
           {mise({ month: "long", year: "numeric" }, septJours[3] as Date)}
         </h2>
-        {semaines.length > 1 ? (
-          <div className="flex items-center">
-            <button
-              type="button"
-              aria-label="Semaine précédente"
-              disabled={rang <= 0}
-              onClick={() => allerA(semaines[rang - 1])}
-              className={FLECHE}
-            >
-              <ChevronLeft aria-hidden className="size-5" />
-            </button>
-            <button
-              type="button"
-              aria-label="Semaine suivante"
-              disabled={rang >= semaines.length - 1}
-              onClick={() => allerA(semaines[rang + 1])}
-              className={FLECHE}
-            >
-              <ChevronRight aria-hidden className="size-5" />
-            </button>
-          </div>
-        ) : null}
+        <button
+          type="button"
+          aria-label="Semaine suivante"
+          disabled={rang >= semaines.length - 1}
+          onClick={() => allerA(semaines[rang + 1])}
+          className={FLECHE}
+        >
+          <ChevronRight aria-hidden className="size-5" />
+        </button>
       </div>
       {/* La `key` rejoue l'entrée quand la semaine change. */}
       <div
@@ -123,11 +121,11 @@ export function ChoixJour({
               <span
                 aria-hidden
                 className={cn(
-                  "text-xs font-semibold uppercase",
+                  "text-xs font-semibold",
                   libre ? "text-muted-foreground" : "text-foreground/30",
                 )}
               >
-                {mise({ weekday: "narrow" }, date)}
+                {mise({ weekday: "short" }, date)}
               </span>
               <span
                 className={cn(
