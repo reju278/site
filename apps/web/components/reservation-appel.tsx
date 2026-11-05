@@ -21,7 +21,7 @@ import {
   Globe,
   LoaderCircle,
 } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 /**
  * La réservation de l'appel, chez nous (issue #7) : nos créneaux, un jour
@@ -53,6 +53,7 @@ export function ReservationAppel({
   niveauTitre?: "h1" | "h2";
 }) {
   // `undefined` : en lecture ; `null` : indisponible.
+  const racine = useRef<HTMLDivElement>(null);
   const [creneaux, setCreneaux] = useState<string[] | null | undefined>();
   const [jour, setJour] = useState<string | undefined>();
   const [heure, setHeure] = useState<string | undefined>();
@@ -331,7 +332,10 @@ export function ReservationAppel({
   };
 
   return (
-    <div className="mx-auto flex w-full max-w-xl flex-col gap-8">
+    <div
+      ref={racine}
+      className="mx-auto flex w-full max-w-xl scroll-mt-16 flex-col gap-8"
+    >
       {/* L'en-tête : photo, marque, titre, durée. Pas de description. */}
       <header className="flex flex-col items-center gap-2 text-center">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -441,7 +445,10 @@ export function ReservationAppel({
             if (!heure) return setErreur("Choisis une heure.");
             setErreur(undefined);
             setEtape("infos");
-            window.scrollTo({ top: 0 });
+            /* Le haut du formulaire et non celui de la page : sur
+               `/appel-relance-newsletter`, une vidéo le précède. Sur `/appel`,
+               il est en tête de page et la marge ramène au premier pixel. */
+            racine.current?.scrollIntoView({ block: "start" });
           }}
           className="mt-2 min-h-16 w-full gap-3 text-xl font-bold sm:text-2xl"
         >
