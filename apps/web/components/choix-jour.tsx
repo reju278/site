@@ -4,12 +4,17 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 /**
  * Le choix du jour de la réservation, en bande de semaine, sur demande de
  * Rémy : repris de `BookingSlotCalendar` (21st.dev), dont il a collé le code,
- * mais **dans le dessin du formulaire**, et non comme une carte de plus. La
- * semaine commence le lundi, et seuls les jours qui ont un créneau se cliquent.
+ * mais **dans le dessin du formulaire**, et non comme une carte de plus. Seuls
+ * les jours qui ont un créneau se cliquent.
  *
- * **La semaine affichée se déduit du jour choisi**, sans état à elle : une
- * flèche choisit le premier jour libre de la semaine voisine, ce qui saute les
- * semaines vides et garde les heures du dessous accordées à ce qu'on voit.
+ * **La bande commence aujourd'hui, tout à gauche**, sur demande de Rémy, et non
+ * le lundi : sept jours à partir d'aujourd'hui, puis les sept suivants. Un
+ * lundi au bord gauche grisait les jours déjà passés et ne laissait que le
+ * bout de la semaine à choisir.
+ *
+ * **La bande affichée se déduit du jour choisi**, sans état à elle : une flèche
+ * choisit le premier jour libre de la bande voisine, ce qui saute les bandes
+ * vides et garde les heures du dessous accordées à ce qu'on voit.
  */
 
 /** Un jour, au fuseau du navigateur : la clé qui groupe les créneaux. */
@@ -33,8 +38,6 @@ export function dateDuJour(cle: string) {
 const plusJours = (date: Date, jours: number) =>
   new Date(date.getFullYear(), date.getMonth(), date.getDate() + jours, 12);
 
-const lundiDe = (date: Date) => plusJours(date, -((date.getDay() + 6) % 7));
-
 const mise = (options: Intl.DateTimeFormatOptions, date: Date) =>
   new Intl.DateTimeFormat("fr-FR", options).format(date);
 
@@ -53,17 +56,23 @@ export function ChoixJour({
   choisir: (cle: string) => void;
   libelle: string;
 }) {
-  const semaines = [...new Set(jours.map((j) => cleDuJour(lundiDe(dateDuJour(j)))))];
-  const semaine = cleDuJour(lundiDe(dateDuJour(actif)));
-  const rang = semaines.indexOf(semaine);
-  const lundi = dateDuJour(semaine);
-  const septJours = Array.from({ length: 7 }, (_, i) => plusJours(lundi, i));
   const aujourdhui = cleDuJour(new Date());
-
-  const allerA = (autre: string | undefined) => {
-    const premier = jours.find(
-      (j) => cleDuJour(lundiDe(dateDuJour(j))) === autre,
+  const depart = dateDuJour(aujourdhui);
+  /* Le numéro de la bande d'un jour : 0 pour les sept jours à partir
+     d'aujourd'hui. `round` : un changement d'heure décale l'écart d'une heure. */
+  const bandeDe = (cle: string) =>
+    Math.floor(
+      Math.round((dateDuJour(cle).getTime() - depart.getTime()) / 86_400_000) / 7,
     );
+  const bandes = [...new Set(jours.map(bandeDe))];
+  const bande = bandeDe(actif);
+  const rang = bandes.indexOf(bande);
+  const septJours = Array.from({ length: 7 }, (_, i) =>
+    plusJours(depart, bande * 7 + i),
+  );
+
+  const allerA = (autre: number | undefined) => {
+    const premier = jours.find((j) => bandeDe(j) === autre);
     if (premier) choisir(premier);
   };
 
@@ -76,28 +85,28 @@ export function ChoixJour({
           type="button"
           aria-label="Semaine précédente"
           disabled={rang <= 0}
-          onClick={() => allerA(semaines[rang - 1])}
+          onClick={() => allerA(bandes[rang - 1])}
           className={FLECHE}
         >
           <ChevronLeft aria-hidden className="size-5" />
         </button>
-        {/* Le mois du jeudi, qui est celui de la plus grande part de la semaine. */}
+        {/* Le mois du quatrième jour, celui de la plus grande part de la bande. */}
         <h2 className="text-lg font-bold text-foreground first-letter:uppercase">
           {mise({ month: "long", year: "numeric" }, septJours[3] as Date)}
         </h2>
         <button
           type="button"
           aria-label="Semaine suivante"
-          disabled={rang >= semaines.length - 1}
-          onClick={() => allerA(semaines[rang + 1])}
+          disabled={rang >= bandes.length - 1}
+          onClick={() => allerA(bandes[rang + 1])}
           className={FLECHE}
         >
           <ChevronRight aria-hidden className="size-5" />
         </button>
       </div>
-      {/* La `key` rejoue l'entrée quand la semaine change. */}
+      {/* La `key` rejoue l'entrée quand la bande change. */}
       <div
-        key={semaine}
+        key={bande}
         className="-mx-3 grid grid-cols-7 justify-items-center transition-[opacity,translate] sm:mx-0 duration-300 starting:translate-x-2 starting:opacity-0"
       >
         {septJours.map((date) => {
