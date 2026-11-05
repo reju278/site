@@ -150,7 +150,7 @@ export const messageRemyAppel: ContenuMessage = {
  * **L'événement est « Candidature Funnels Club »** (`appel-decouverte-l-clone`,
  * anciennement « Appel découverte (YT) »), en tourniquet sur l'équipe.
  * **Ses questions sont recopiées au caractère près**, relevées par l'API le
- * 3 novembre 2026 après leur refonte par Rémy : c'est sous ces intitulés que
+ * 5 novembre 2026 après leur refonte par Rémy, espaces insécables comprises : c'est sous ces intitulés que
  * Calendly range les réponses, et un intitulé réécrit ici créerait une
  * réponse orpheline. Le jour où elles changent dans Calendly, elles changent
  * ici. L'API de Calendly lit les questions mais ne les modifie pas. Ce que
@@ -222,8 +222,8 @@ export const reservationYt = {
       autre: true,
       obligatoire: true,
       question:
-        "Quelle offre digitale voulez-vous développer grâce au tunnel de vente ?",
-      libelle: "Quelle offre digitale veux-tu développer grâce au tunnel de vente ?",
+        "Quel produit digital veux-tu développer grâce au tunnel de vente ?",
+      libelle: "Quel produit digital veux-tu développer grâce au tunnel de vente ?",
       choix: ["Formation en ligne", "Coaching / consulting", "Prestation de service"],
     },
     {
@@ -232,8 +232,8 @@ export const reservationYt = {
       type: "texte",
       autre: false,
       obligatoire: true,
-      question: "Quel est votre objectif avec cette activité ? Donnez des détails.",
-      libelle: "Quel est ton objectif avec cette activité ? Donne des détails.",
+      question: "Quel est ton objectif avec cette activité\u202f\u202f? Donne-nous des détails.",
+      libelle: "Quel est ton objectif avec cette activité ? Donne-nous des détails.",
       choix: [],
     },
     {
@@ -243,33 +243,21 @@ export const reservationYt = {
       autre: false,
       obligatoire: true,
       question:
-        "Quel est votre principal obstacle à l'atteinte de cet objectif ? Donnez des détails.",
+        "Quel est ton principal obstacle à l'atteinte de cet objectif\u202f ? Donne-nous des détails.",
       libelle:
-        "Quel est ton principal obstacle à l'atteinte de cet objectif ? Donne des détails.",
-      choix: [],
-    },
-    {
-      cle: "produit",
-      position: 4,
-      type: "texte",
-      autre: false,
-      obligatoire: true,
-      question:
-        "Quel produit ou service proposez-vous, et qui sont vos clients idéaux ? (Soyez le plus précis possible)",
-      libelle:
-        "Quel produit ou service proposes-tu, et qui sont tes clients idéaux ? (Sois le plus précis possible)",
+        "Quel est ton principal obstacle à l'atteinte de cet objectif ? Donne-nous des détails.",
       choix: [],
     },
     {
       cle: "investir",
-      position: 5,
+      position: 4,
       type: "unique",
       autre: false,
       obligatoire: true,
       question:
-        "Êtes-vous disposé et apte à investir pour être accompagné et rejoindre Funnels Club ?",
+        "Es-tu disposé et apte à investir pour être accompagné et développer ton activité\u202f?",
       libelle:
-        "Es-tu disposé et apte à investir pour être accompagné et rejoindre Funnels Club ?",
+        "Es-tu disposé et apte à investir pour être accompagné et développer ton activité ?",
       choix: [
         "OUI, j'ai les ressources financières pour me faire accompagner",
         "J'ai accès aux moyens financiers pour investir dans la croissance de mon activité",
