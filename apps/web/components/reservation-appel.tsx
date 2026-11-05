@@ -357,9 +357,6 @@ export function ReservationAppel({
       {/* Étape 1 : le jour, puis l'heure, puis « Suivant ». */}
       {etape === "creneau" ? (
       <section className="flex flex-col gap-4">
-        <h2 className="text-lg font-bold text-foreground">
-          {reservationYt.choisirJour}
-        </h2>
         {jourActif ? (
           <ChoixJour
             jours={[...parJour.keys()]}

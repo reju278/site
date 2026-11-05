@@ -71,9 +71,9 @@ export function ChoixJour({
     <div role="radiogroup" aria-label={libelle} className="flex flex-col gap-2">
       <div className="flex min-h-10 items-center justify-between">
         {/* Le mois du jeudi, qui est celui de la plus grande part de la semaine. */}
-        <p className="text-base font-semibold text-foreground first-letter:uppercase">
+        <h2 className="text-lg font-bold text-foreground first-letter:uppercase">
           {mise({ month: "long", year: "numeric" }, septJours[3] as Date)}
-        </p>
+        </h2>
         {semaines.length > 1 ? (
           <div className="flex items-center">
             <button
