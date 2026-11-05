@@ -13,6 +13,7 @@ import { usePathname } from "next/navigation";
  */
 const PAGES_CLAIRES = [
   "/appel",
+  "/appel-relance-newsletter",
   "/thanks",
   "/course",
   "/video-vsl",

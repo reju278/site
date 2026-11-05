@@ -23,6 +23,7 @@ export const TUNNELS = [
   "/immersion",
   "/preparation",
   "/appel",
+  "/appel-relance-newsletter",
   "/thanks",
   "/course",
   "/video-vsl",

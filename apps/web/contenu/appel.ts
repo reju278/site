@@ -45,6 +45,73 @@ export const reservationAppel = {
   hauteurMin: 800,
 } as const;
 
+/** Un morceau de phrase, avec sa couleur éventuelle. */
+export type Morceau = { texte: string; ton?: "vert" | "bleu" };
+
+/**
+ * `/appel-relance-newsletter` : les textes et la vidéo de la page du même nom
+ * sur `funnels.club`, **recopiés au mot près**, vouvoiement et coquille de
+ * l'accroche (« ET VOUS VOUS SOUHAITEZ ») compris. Le titre d'onglet et la
+ * description sont écrits par l'agent, à valider par Rémy.
+ */
+export const relanceNewsletter: {
+  titrePage: string;
+  description: string;
+  accroche: readonly Morceau[];
+  titre: readonly Morceau[];
+  etape1: { numero: string; texte: string };
+  etape2: { numero: string; texte: string };
+  video: {
+    id: string;
+    titre: string;
+    secondes: number;
+    affiche: string;
+    afficheMobile: string;
+  };
+} = {
+  titrePage: "Réservez votre appel découverte",
+  description:
+    "Regardez la vidéo qui présente l'objectif de cet appel gratuit de 30 minutes, puis choisissez votre créneau avec l'équipe Funnels Club.",
+  accroche: [
+    { texte: "SI VOUS AVEZ DES " },
+    { texte: "CONNAISSANCES", ton: "vert" },
+    { texte: ", UN " },
+    { texte: "TALENT", ton: "vert" },
+    { texte: " OU DES " },
+    { texte: "COMPÉTENCES", ton: "vert" },
+    { texte: ", ET VOUS VOUS SOUHAITEZ LES " },
+    { texte: "MONÉTISER", ton: "vert" },
+    { texte: " POUR EN " },
+    { texte: "VIVRE PLEINEMENT", ton: "vert" },
+    { texte: "\u00a0:" },
+  ],
+  titre: [
+    { texte: "Réservez votre \"" },
+    { texte: "Appel Découverte", ton: "bleu" },
+    { texte: "\" pour découvrir notre stratégie à " },
+    { texte: "+100K€\u00a0/an", ton: "bleu" },
+    { texte: " et comment l'adapter à votre activité" },
+  ],
+  etape1: {
+    numero: "Étape 1/2",
+    texte: "Comprendre l'objectif de cet appel gratuit.",
+  },
+  etape2: {
+    numero: "Étape 2/2",
+    texte:
+      "Réservez votre appel GRATUIT de 30 minutes afin de savoir si vous êtes admissible au programme et au coaching \"Funnels Club\"",
+  },
+  /* Le lecteur de la page d'origine. La durée et l'affiche sont relevées sur
+     le média chez Wistia. */
+  video: {
+    id: "bkk0963bo2",
+    titre: "Proposition d'appel gratuit pour développer ta formation",
+    secondes: 169,
+    affiche: "/vsl/affiche-relance.jpg",
+    afficheMobile: "/vsl/affiche-relance-640.jpg",
+  },
+};
+
 /**
  * Le bouton de réservation de la galerie des entretiens, dicté par Rémy : sous
  * la vidéo de chaque entretien ouvert, au milieu de la galerie et en bas. Il

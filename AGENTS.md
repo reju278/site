@@ -2039,6 +2039,13 @@ et les retire de l'adresse pendant la lecture du HTML. Il les range dans le
 contact de `/course` (sept jours), que le lien remplace, et ne touche à rien
 d'autre : `el` et les `utm_*` restent.
 
+**`/appel-relance-newsletter` est `/appel` avec une vidéo au-dessus**, sur
+demande de Rémy : le formulaire est le même composant, et les textes et la vidéo
+de `funnels.club/appel-relance-newsletter` y sont recopiés au mot près, vouvoiement
+compris, dans `relanceNewsletter` de `contenu/appel.ts`. Elle n'a ni jeton de page
+ni SDK de ClickFunnels, qui compteraient la visite dans l'étape « Appel » du
+tunnel VSL. Son `h1` est le titre de la page, celui du formulaire descend en `h2`.
+
 **Les questions sont recopiées de Calendly**, dans `reservationYt` de
 `contenu/appel.ts` : l'intitulé exact (`question`) est ce qui part à
 Calendly, l'intitulé affiché (`libelle`) est tutoyé. **L'API de Calendly lit

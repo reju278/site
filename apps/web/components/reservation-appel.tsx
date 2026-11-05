@@ -46,7 +46,12 @@ const premiereQuestionTexte = reservationYt.questions.find(
   (question) => question.type === "texte",
 )?.cle;
 
-export function ReservationAppel() {
+export function ReservationAppel({
+  niveauTitre: TitreFormulaire = "h1",
+}: {
+  /** `h2` quand la page porte déjà son propre `h1`. */
+  niveauTitre?: "h1" | "h2";
+}) {
   // `undefined` : en lecture ; `null` : indisponible.
   const [creneaux, setCreneaux] = useState<string[] | null | undefined>();
   const [jour, setJour] = useState<string | undefined>();
@@ -341,9 +346,9 @@ export function ReservationAppel() {
         <p className="text-sm font-semibold text-muted-foreground">
           {reservationYt.marque}
         </p>
-        <h1 className="titre text-3xl text-balance text-foreground sm:text-4xl">
+        <TitreFormulaire className="titre text-3xl text-balance text-foreground sm:text-4xl">
           {reservationYt.titre}
-        </h1>
+        </TitreFormulaire>
         <p className="flex items-center gap-1.5 text-base font-semibold text-muted-foreground">
           <Clock aria-hidden className="size-4" />
           {reservationYt.duree}
