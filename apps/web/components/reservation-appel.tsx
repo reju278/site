@@ -372,21 +372,9 @@ export function ReservationAppel({
 
         {jourActif ? (
           <>
-            {/* Le fuseau juste sous la question, sur demande de Rémy : c'est
-                en lisant les heures qu'on se demande à quelle heure elles
-                sont. */}
-            <div className="flex flex-col gap-1.5 pt-2 text-center">
-              <h2 className="text-lg font-bold text-balance text-foreground">
-                {reservationYt.choisirHeure(jourLisible(jourActif))}
-              </h2>
-              <p className="text-xs text-balance text-muted-foreground">
-                <Globe
-                  aria-hidden
-                  className="mr-1.5 inline-block size-3.5 align-[-0.15em]"
-                />
-                {reservationYt.fuseau}{"\u00a0:"} {fuseauLisible()}.
-              </p>
-            </div>
+            <h2 className="pt-2 text-center text-lg font-bold text-balance text-foreground">
+              {reservationYt.choisirHeure(jourLisible(jourActif))}
+            </h2>
             <div className="grid grid-cols-3 gap-2">
               {heures.map((creneau) => (
                 <button
@@ -408,6 +396,15 @@ export function ReservationAppel({
                 </button>
               ))}
             </div>
+            {/* Le fuseau sous les heures et avant « Suivant », sur demande de
+                Rémy. */}
+            <p className="text-center text-xs text-balance text-muted-foreground">
+              <Globe
+                aria-hidden
+                className="mr-1.5 inline-block size-3.5 align-[-0.15em]"
+              />
+              {reservationYt.fuseau}{"\u00a0:"} {fuseauLisible()}.
+            </p>
           </>
         ) : null}
         {erreur ? (
