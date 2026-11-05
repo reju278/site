@@ -463,21 +463,6 @@ export function ReservationAppel({
               {reservationYt.modifier}
             </button>
           </div>
-          {/* La consigne, juste sous le créneau, sur demande de Rémy : on
-              lit le formulaire avant l'appel, et c'est ce qui le rend
-              utile. Une note grise et non une alerte : rien n'est en erreur.
-              L'icône est pleine, sur sa demande, et la note a une bordure
-              grise comme le bandeau du créneau au-dessus. */}
-          <p className="-mt-3 flex items-start gap-2.5 rounded-md border border-foreground/15 bg-foreground/[0.03] px-4 py-3 text-sm leading-snug text-foreground/80">
-            <IconeInfo />
-            <span>
-              {reservationYt.consigne.avant(prenom.trim())}
-              <strong className="font-semibold text-foreground">
-                {reservationYt.consigne.gras}
-              </strong>
-              {reservationYt.consigne.apres}
-            </span>
-          </p>
           {/* Le prénom, déjà rempli, et le nom à côté, sur une ligne, sur
               demande de Rémy. */}
           <div className="grid grid-cols-2 gap-3">
@@ -772,25 +757,6 @@ function Champ({
         <p className="text-xs text-muted-foreground">{aide}</p>
       ) : null}
     </div>
-  );
-}
-
-/**
- * Un « i » plein : un disque bleu, et le « i » découpé en blanc dedans.
- * L'icône de Lucide, remplie, gardait son trait autour du disque, qui
- * dessinait un anneau blanc sur le gris de la note.
- */
-function IconeInfo() {
-  return (
-    <svg
-      aria-hidden
-      viewBox="0 0 24 24"
-      className="mt-px size-[18px] shrink-0 text-primary"
-    >
-      <circle cx="12" cy="12" r="11" fill="currentColor" />
-      <rect x="10.75" y="10" width="2.5" height="7.5" rx="1.25" fill="white" />
-      <circle cx="12" cy="7" r="1.5" fill="white" />
-    </svg>
   );
 }
 

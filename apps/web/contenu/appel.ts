@@ -192,20 +192,6 @@ export const reservationYt = {
   /* « À quelle heure le jeudi 5 novembre ? » */
   choisirHeure: (jour: string) => `À quelle heure le ${jour} ?`,
   modifier: "Modifier",
-  /* La consigne sous le créneau, dictée par Rémy et légèrement resserrée à
-     sa demande : « objectif » n'y revient plus deux fois. */
-  /* « sérieusement » en gras, tutoyée et ouverte sur le prénom de
-     l'inscription, sur demande de Rémy : « Rémy, prends le temps… ». Sans
-     prénom, elle commence à « Prends ». */
-  consigne: {
-    avant: (prenom: string) =>
-      prenom
-        ? `${prenom}, prends le temps de remplir ce formulaire `
-        : "Prends le temps de remplir ce formulaire ",
-    gras: "sérieusement",
-    apres:
-      " : il sera lu attentivement par notre équipe avant ton appel, afin de le préparer au mieux pour t'aider à atteindre ton objectif.",
-  },
   suivant: "Suivant",
   /* Sous le bouton, quand des champs sont en défaut. */
   aCompleter: (n: number) =>
