@@ -659,8 +659,12 @@ functionhealth.com et le pied de page du même site :
   shadcn lui-même et qu'on ne corrige donc pas,
 - les **pastilles de réseaux** du pied de page.
 
-Ces trois-là sont des commandes rondes qui forment un même vocabulaire. Rien
-d'autre n'a le droit d'être rond, et une quatrième famille se décide et s'écrit
+- les **jours et les flèches de semaine** de `ChoixJour`, dans la réservation,
+  sur une référence collée par Rémy, `BookingSlotCalendar` : son dessin est
+  repris dans celui du formulaire, le composant n'est pas installé.
+
+Ces quatre-là sont des commandes rondes qui forment un même vocabulaire. Rien
+d'autre n'a le droit d'être rond, et une cinquième famille se décide et s'écrit
 ici.
 
 ### Le flou du disque de lecture est la troisième exception

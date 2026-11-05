@@ -6,6 +6,7 @@ import {
   type DemandeReservation,
 } from "@/app/appel/actions";
 import { BoutonScintillant } from "@/components/bouton-scintillant";
+import { ChoixJour, cleDuJour, dateDuJour } from "@/components/choix-jour";
 import { TexteRoulant } from "@/components/texte-roulant";
 import { reservationYt } from "@/contenu/appel";
 import { API_FUNNELS } from "@/contenu/vsl";
@@ -359,38 +360,18 @@ export function ReservationAppel({
         <h2 className="text-lg font-bold text-foreground">
           {reservationYt.choisirJour}
         </h2>
-        <div
-          role="radiogroup"
-          aria-label={reservationYt.choisirJour}
-          className="flex flex-col gap-2"
-        >
-          {[...parJour.keys()].map((cle) => {
-            const actif = cle === jourActif;
-            const { repere, date } = jourLisible(cle);
-            return (
-              <button
-                key={cle}
-                type="button"
-                role="radio"
-                aria-checked={actif}
-                onClick={() => {
-                  setJour(cle);
-                  setHeure(undefined);
-                  setErreur(undefined);
-                }}
-                className={cn(
-                  "rounded-md border bg-card px-4 py-2.5 text-left text-base transition-colors hover:border-primary",
-                  actif
-                    ? "border-primary bg-primary/10"
-                    : "border-foreground/15",
-                )}
-              >
-                <strong className="font-extrabold">{repere}</strong>{" "}
-                <span className="font-normal">({date})</span>
-              </button>
-            );
-          })}
-        </div>
+        {jourActif ? (
+          <ChoixJour
+            jours={[...parJour.keys()]}
+            actif={jourActif}
+            libelle={reservationYt.choisirJour}
+            choisir={(cle) => {
+              setJour(cle);
+              setHeure(undefined);
+              setErreur(undefined);
+            }}
+          />
+        ) : null}
 
         {jourActif ? (
           <>
@@ -399,7 +380,7 @@ export function ReservationAppel({
                 sont. */}
             <div className="flex flex-col gap-1.5 pt-2">
               <h2 className="text-lg font-bold text-foreground">
-                {reservationYt.choisirHeure(jourLisible(jourActif).date)}
+                {reservationYt.choisirHeure(jourLisible(jourActif))}
               </h2>
               <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
                 <Globe aria-hidden className="size-3.5 shrink-0" />
@@ -889,38 +870,13 @@ function numeroInternational(pays: string, saisie: string): string | null {
   return /^\+\d{8,15}$/.test(numero) ? numero : null;
 }
 
-/** Un jour, au fuseau du navigateur : la clé qui groupe les créneaux. */
-const cleDuJour = (date: Date) =>
-  new Intl.DateTimeFormat("fr-CA", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).format(date);
-
-/**
- * Un jour de créneaux, dit comme on le dit : un repère (« Aujourd'hui »,
- * « Demain », « Après-demain », « Dans 3 jours »), et la date à côté.
- */
+/** Un jour de créneaux, dit comme on le dit : « jeudi 5 novembre ». */
 function jourLisible(cle: string) {
-  const [annee, mois, jour] = cle.split("-").map(Number) as [
-    number,
-    number,
-    number,
-  ];
-  const date = new Date(annee, mois - 1, jour, 12);
-  const ecart = Math.round(
-    (date.getTime() - new Date(new Date().setHours(12, 0, 0, 0)).getTime()) /
-      86_400_000,
-  );
-  return {
-    repere:
-      ["Aujourd'hui", "Demain", "Après-demain"][ecart] ?? `Dans ${ecart} jours`,
-    date: new Intl.DateTimeFormat("fr-FR", {
-      weekday: "long",
-      day: "numeric",
-      month: "long",
-    }).format(date),
-  };
+  return new Intl.DateTimeFormat("fr-FR", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  }).format(dateDuJour(cle));
 }
 
 const heureLisible = (iso: string) =>
