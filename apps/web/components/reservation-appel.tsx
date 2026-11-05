@@ -59,6 +59,9 @@ export function ReservationAppel({
   const [pays, setPays] = useState<string>(PAYS[0].code);
   const [reponses, setReponses] = useState<Record<string, string[]>>({});
   const [autres, setAutres] = useState<Record<string, string>>({});
+  /* La case de « Autre », cochée avant même qu'on ait écrit. Du texte la coche
+     d'office : voir `autreCoche`. */
+  const [autresCoches, setAutresCoches] = useState<Record<string, boolean>>({});
   const [envoi, setEnvoi] = useState(false);
   const [erreur, setErreur] = useState<string | undefined>();
   /* Deux étapes, sur demande de Rémy : le jour et l'heure, puis
@@ -156,7 +159,10 @@ export function ReservationAppel({
   const basculer = (cle: string, choix: string, multiple: boolean) => {
     setErreur(undefined);
     /* Un seul choix possible : en cocher un efface le champ « Autre ». */
-    if (!multiple) setAutres((avant) => ({ ...avant, [cle]: "" }));
+    if (!multiple) {
+      setAutres((avant) => ({ ...avant, [cle]: "" }));
+      setAutresCoches((avant) => ({ ...avant, [cle]: false }));
+    }
     setReponses((avant) => {
       const actuels = avant[cle] ?? [];
       if (!multiple) return { ...avant, [cle]: [choix] };
@@ -167,6 +173,21 @@ export function ReservationAppel({
           : [...actuels, choix],
       };
     });
+  };
+
+  const autreCoche = (cle: string) =>
+    Boolean(autresCoches[cle] || autres[cle]?.trim());
+
+  const basculerAutre = (cle: string, multiple: boolean) => {
+    setErreur(undefined);
+    if (autreCoche(cle)) {
+      setAutres((avant) => ({ ...avant, [cle]: "" }));
+      setAutresCoches((avant) => ({ ...avant, [cle]: false }));
+      return;
+    }
+    setAutresCoches((avant) => ({ ...avant, [cle]: true }));
+    if (!multiple) setReponses((avant) => ({ ...avant, [cle]: [] }));
+    document.getElementById(`${cle}-autre`)?.focus();
   };
 
   const confirmer = async () => {
@@ -645,53 +666,66 @@ export function ReservationAppel({
                          garde son encadré. */
                       className="flex w-full items-center gap-3 rounded-md py-1.5 text-left text-base text-foreground"
                     >
-                      {/* La case dans la case, sur demande de Rémy : vide,
-                          puis cochée d'un V. Carrée pour plusieurs choix,
-                          ronde pour un seul, comme partout ailleurs. */}
-                      <span
-                        aria-hidden
-                        className={cn(
-                          "flex size-5 shrink-0 items-center justify-center border-2 transition-colors",
-                          multiple ? "rounded-[5px]" : "rounded-full",
-                          actif
-                            ? "border-primary bg-primary text-primary-foreground"
-                            : `question-${question.cle}` in fautifs
-                              ? "border-destructive bg-card"
-                              : "border-foreground/30 bg-card",
-                        )}
-                      >
-                        {actif ? (
-                          <Check className="size-3.5" strokeWidth={3.5} />
-                        ) : null}
-                      </span>
+                      <CaseChoix
+                        multiple={multiple}
+                        actif={actif}
+                        erreur={`question-${question.cle}` in fautifs}
+                      />
                       {choix}
                     </button>
                   );
                 })
               )}
-              {/* « Autre » est un champ qu'on remplit directement, sur
-                  demande de Rémy, sans case à cocher d'abord. Pour une
-                  question à un seul choix, y écrire décoche le choix fait. */}
+              {/* « Autre » porte sa case, sur demande de Rémy, alignée sur celles
+                  du dessus. La cocher donne la main au champ, la décocher le
+                  vide, et y écrire la coche. Pour une question à un seul
+                  choix, elle décoche le choix fait. */}
               {question.autre ? (
-                <Input
-                  name={`${question.cle}-autre`}
-                  aria-label={`${question.libelle} : ${reservationYt.autre}`}
-                  placeholder={reservationYt.autre}
-                  autoComplete="off"
-                  value={autres[question.cle] ?? ""}
-                  onChange={(e) => {
-                    const valeur = e.target.value;
-                    corrige(`question-${question.cle}`);
-                    setAutres((avant) => ({ ...avant, [question.cle]: valeur }));
-                    if (question.type !== "multi" && valeur.trim())
-                      setReponses((avant) => ({ ...avant, [question.cle]: [] }));
-                  }}
-                  className={cn(
-                    CHAMP,
-                    `question-${question.cle}` in fautifs &&
-                      "border-destructive dark:border-destructive",
-                  )}
-                />
+                <div className="flex items-center gap-0.5">
+                  <button
+                    type="button"
+                    role={question.type === "multi" ? "checkbox" : "radio"}
+                    aria-checked={autreCoche(question.cle)}
+                    aria-label={reservationYt.autre}
+                    onClick={() =>
+                      basculerAutre(question.cle, question.type === "multi")
+                    }
+                    className="-ml-2.5 flex size-10 shrink-0 items-center justify-center"
+                  >
+                    <CaseChoix
+                      multiple={question.type === "multi"}
+                      actif={autreCoche(question.cle)}
+                      erreur={`question-${question.cle}` in fautifs}
+                    />
+                  </button>
+                  <Input
+                    id={`${question.cle}-autre`}
+                    name={`${question.cle}-autre`}
+                    aria-label={`${question.libelle} : ${reservationYt.autre}`}
+                    placeholder={reservationYt.autre}
+                    autoComplete="off"
+                    value={autres[question.cle] ?? ""}
+                    onChange={(e) => {
+                      const valeur = e.target.value;
+                      corrige(`question-${question.cle}`);
+                      setAutres((avant) => ({
+                        ...avant,
+                        [question.cle]: valeur,
+                      }));
+                      if (question.type !== "multi" && valeur.trim())
+                        setReponses((avant) => ({
+                          ...avant,
+                          [question.cle]: [],
+                        }));
+                    }}
+                    className={cn(
+                      CHAMP,
+                      "min-w-0 flex-1",
+                      `question-${question.cle}` in fautifs &&
+                        "border-destructive dark:border-destructive",
+                    )}
+                  />
+                </div>
               ) : null}
               {fautifs[`question-${question.cle}`] ? (
                 <p className="text-sm font-medium text-destructive">
@@ -726,6 +760,37 @@ export function ReservationAppel({
         </form>
       ) : null}
     </div>
+  );
+}
+
+/**
+ * La case d'un choix : vide, puis cochée d'un V. Carrée pour plusieurs choix,
+ * ronde pour un seul, comme partout ailleurs.
+ */
+function CaseChoix({
+  multiple,
+  actif,
+  erreur,
+}: {
+  multiple: boolean;
+  actif: boolean;
+  erreur: boolean;
+}) {
+  return (
+    <span
+      aria-hidden
+      className={cn(
+        "flex size-5 shrink-0 items-center justify-center border-2 transition-colors",
+        multiple ? "rounded-[5px]" : "rounded-full",
+        actif
+          ? "border-primary bg-primary text-primary-foreground"
+          : erreur
+            ? "border-destructive bg-card"
+            : "border-foreground/30 bg-card",
+      )}
+    >
+      {actif ? <Check className="size-3.5" strokeWidth={3.5} /> : null}
+    </span>
   );
 }
 
