@@ -112,10 +112,10 @@ export function ChoixJour({
               type="button"
               role="radio"
               aria-checked={choisi}
-              aria-label={mise(
+              aria-label={`${cle === aujourdhui ? "Aujourd'hui, " : ""}${mise(
                 { weekday: "long", day: "numeric", month: "long" },
                 date,
-              )}
+              )}`}
               disabled={!libre}
               onClick={() => choisir(cle)}
               className="group flex flex-col items-center gap-1"
@@ -131,18 +131,23 @@ export function ChoixJour({
               </span>
               <span
                 className={cn(
-                  "flex size-10 items-center justify-center rounded-full text-base tabular-nums transition-colors sm:size-11",
+                  "relative flex size-10 items-center justify-center rounded-full text-base tabular-nums transition-colors sm:size-11",
                   choisi && "bg-primary font-bold text-primary-foreground",
                   !choisi &&
                     libre &&
                     "bg-primary/10 font-semibold text-primary group-hover:bg-primary/20",
                   !libre && "text-foreground/30",
-                  !choisi &&
-                    cle === aujourdhui &&
-                    "ring-1 ring-foreground/30",
                 )}
               >
                 {date.getDate()}
+                {/* Le point d'aujourd'hui, comme chez Calendly. Il prend la
+                    couleur du chiffre, donc reste lisible sur le bleu plein. */}
+                {cle === aujourdhui ? (
+                  <span
+                    aria-hidden
+                    className="absolute bottom-1 left-1/2 size-1 -translate-x-1/2 rounded-full bg-current sm:bottom-1.5"
+                  />
+                ) : null}
               </span>
             </button>
           );
