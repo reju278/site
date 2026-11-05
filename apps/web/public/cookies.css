@@ -7,7 +7,7 @@
    parce que ClickFunnels ne les connaît pas.
 
    Le dessin est celui du modèle fourni par Rémy : une carte blanche, l'image
-   du cookie, le texte centré, puis les boutons. Son titre a été retiré par Rémy. Elle est collée au
+   du cookie, un titre, le texte centré, puis les boutons. Elle est collée au
    bas de l'écran : pleine largeur sur téléphone, à gauche sur ordinateur, où
    elle ne recouvre pas le milieu de la page.
 
@@ -83,6 +83,19 @@ html #cookiescript_description {
   padding: 0;
   margin: 0;
   text-align: center;
+}
+
+/* Le titre, écrit ici, faute de champ pour lui dans le HTML de CookieScript. */
+html #cookiescript_description::before {
+  content: "Un petit cookie\00A0?";
+  display: block;
+  padding-bottom: 0.75rem;
+  font-family: var(--font-sans, inherit);
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--card-foreground, #1f2937);
 }
 
 html #cookiescript_description span {
