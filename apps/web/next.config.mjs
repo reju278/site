@@ -37,6 +37,19 @@ export default {
    * et c'est ce que `permanent: true` dit aux moteurs comme aux navigateurs.
    * Les deux adresses ne peuvent pas diverger, puisqu'il n'y a qu'une page.
    */
+  /* Le quiz vit dans l'application du CRM (dépôt Funnels-Club) et s'ouvre sous
+   * go.funnels.club/quizz : ce site relaie l'adresse et les fichiers de
+   * l'application, rangés sous `/crm-zone` pour ne pas croiser ses `/_next`.
+   * `ZONE_CRM` pointe vers le CRM local en développement.
+   */
+  async rewrites() {
+    const zone = process.env.ZONE_CRM || "https://form.funnels.club";
+    return [
+      { source: "/quizz", destination: `${zone}/quizz` },
+      { source: "/crm-zone/:chemin+", destination: `${zone}/crm-zone/:chemin+` },
+    ];
+  },
+
   async redirects() {
     return [
       {
