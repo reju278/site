@@ -379,7 +379,7 @@ export function ReservationAppel({
                   setErreur(undefined);
                 }}
                 className={cn(
-                  "rounded-md border bg-card px-4 py-3 text-left text-lg transition-colors hover:border-primary",
+                  "rounded-md border bg-card px-4 py-2.5 text-left text-base transition-colors hover:border-primary",
                   actif
                     ? "border-primary bg-primary/10"
                     : "border-foreground/15",
@@ -417,7 +417,7 @@ export function ReservationAppel({
                     setErreur(undefined);
                   }}
                   className={cn(
-                    "min-h-12 rounded-md border text-base tabular-nums transition-colors",
+                    "min-h-11 rounded-md border text-base tabular-nums transition-colors",
                     heure === creneau
                       ? "border-primary bg-primary text-primary-foreground"
                       : "border-foreground/15 bg-card hover:border-primary",
@@ -468,7 +468,7 @@ export function ReservationAppel({
             evenement.preventDefault();
             void confirmer();
           }}
-          className="flex flex-col gap-6"
+          className="flex flex-col gap-5"
         >
           <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 rounded-md border border-primary bg-primary/10 px-4 py-3">
             <span className="text-base font-semibold text-foreground">
@@ -580,7 +580,7 @@ export function ReservationAppel({
                 roue du système qui s'ouvre. */}
             <div
               className={cn(
-                "flex h-13 overflow-hidden rounded-md border border-foreground/20 bg-card shadow-sm focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 dark:border-foreground/25",
+                "flex h-11 overflow-hidden rounded-md border border-foreground/20 bg-card shadow-sm focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 dark:border-foreground/25",
                 "telephone-appel" in fautifs &&
                   "border-destructive ring-[3px] ring-destructive/20 dark:border-destructive",
               )}
@@ -658,7 +658,7 @@ export function ReservationAppel({
                   }}
                   className={cn(
                     CHAMP,
-                    "block h-auto min-h-20 w-full resize-none rounded-md border px-3 py-2 field-sizing-content",
+                    "block h-auto min-h-16 w-full resize-none rounded-md border px-3 py-2 field-sizing-content",
                     `question-${question.cle}` in fautifs &&
                       "border-destructive ring-[3px] ring-destructive/20 dark:border-destructive",
                   )}
@@ -678,7 +678,7 @@ export function ReservationAppel({
                         basculer(question.cle, choix, multiple);
                       }}
                       className={cn(
-                        "flex items-center gap-3 rounded-md border bg-card px-4 py-3 text-left text-base transition-colors hover:border-primary",
+                        "flex items-center gap-3 rounded-md border bg-card px-4 py-2 text-left text-base transition-colors hover:border-primary",
                         actif
                           ? "border-primary bg-primary/10"
                           : `question-${question.cle}` in fautifs
@@ -836,7 +836,7 @@ function Obligatoire() {
    `dark:` : la variante du registre pose `dark:bg-input/30`, que `cn()` ne
    voit pas comme un conflit. */
 const CHAMP =
-  "h-13 border-foreground/20 bg-card text-base shadow-sm placeholder:text-foreground/50 md:text-base dark:border-foreground/25 dark:bg-card";
+  "h-11 border-foreground/20 bg-card text-base shadow-sm placeholder:text-foreground/50 md:text-base dark:border-foreground/25 dark:bg-card";
 
 /**
  * Les pays du menu, la France en tête : les pays francophones d'abord, les
