@@ -18,6 +18,8 @@ const PAGES_CLAIRES = [
   "/thanks-quizz",
   "/course",
   "/video-vsl",
+  "/debuts",
+  "/stable",
   ...CHEMINS_TEMOIGNAGE,
   "/form-funnel-thanks",
   "/prochaine-etape",

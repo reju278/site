@@ -29,6 +29,8 @@ export const TUNNELS = [
   "/course",
   "/video-vsl",
   "/strategie",
+  "/debuts",
+  "/stable",
   ...CHEMINS_TEMOIGNAGE,
   "/form-funnel-thanks",
   "/prochaine-etape",
