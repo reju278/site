@@ -25,6 +25,7 @@ export const TUNNELS = [
   "/appel",
   "/appel-relance-newsletter",
   "/thanks",
+  "/thanks-quizz",
   "/course",
   "/video-vsl",
   "/strategie",
