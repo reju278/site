@@ -106,6 +106,17 @@ export const confirmationThanks = {
 } as const;
 
 /**
+ * La vidéo de qui démarre de zéro, au-dessus de Roland, sur demande de Rémy.
+ * `reponse` est un morceau du choix du quiz, « 🐣 0 €, je souhaite me lancer ».
+ */
+export const videoDepartZero = {
+  id: "9LIDgdSCqjo",
+  reponse: "je souhaite me lancer",
+  titre: (prenom?: string) =>
+    `Voici une vidéo spécialement pour toi${prenom ? ` ${prenom},` : ""} qui démarres de zéro`,
+} as const;
+
+/**
  * Les consignes de la vidéo 1, **au tutoiement**, sur demande de Rémy, et
  * complétées de ce que la réservation transmet : l'e-mail, la date, le
  * téléphone. Elles ont remplacé le récapitulatif et le bouton WhatsApp.

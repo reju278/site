@@ -1,5 +1,6 @@
 import { LecteurVideo } from "@/components/lecteur-video";
 import { LecteurYoutube } from "@/components/lecteur-youtube";
+import { VideoDepartZero } from "@/components/video-depart-zero";
 import { MurCommunaute } from "@/components/mur-communaute";
 import { RangeeEquipe } from "@/components/rangee-equipe";
 import { TitreRoulant } from "@/components/titre-roulant";
@@ -161,6 +162,8 @@ export default function Thanks() {
           </div>
         </section>
       </div>
+
+      <VideoDepartZero />
 
       {/* LES ENTRETIENS, la pile de `/form-funnel-thanks`, sur demande de
           Rémy : Roland en grand, avec son titre et sa note au feutre, puis
