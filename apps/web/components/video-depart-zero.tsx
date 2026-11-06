@@ -1,6 +1,6 @@
 "use client";
 
-import { LecteurYoutube } from "@/components/lecteur-youtube";
+import { LecteurVideo } from "@/components/lecteur-video";
 import { videoDepartZero } from "@/contenu/thanks";
 import { useReservation } from "@/lib/reservation";
 import type { CSSProperties } from "react";
@@ -36,13 +36,15 @@ export function VideoDepartZero() {
             {videoDepartZero.surligne}
           </span>
         </h2>
-        <div className="mt-6 rounded-md shadow-[0_30px_70px_-25px_rgba(0,0,0,0.55),0_2px_10px_rgba(0,0,0,0.18)] ring-1 ring-black/25">
-          <LecteurYoutube
-            id={videoDepartZero.id}
-            titre={titre}
-            affiche={`/temoignages/${videoDepartZero.id}.jpg`}
-          />
-        </div>
+        <LecteurVideo
+          id={videoDepartZero.id}
+          titre={titre}
+          secondes={videoDepartZero.secondes}
+          affiche={`/temoignages/${videoDepartZero.id}.jpg`}
+          afficheAlt={titre}
+          natif
+          className="mt-6 shadow-[0_30px_70px_-25px_rgba(0,0,0,0.55),0_2px_10px_rgba(0,0,0,0.18)] ring-1 ring-black/25"
+        />
       </div>
     </section>
   );

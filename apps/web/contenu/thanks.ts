@@ -88,10 +88,12 @@ export const confirmationThanks = {
 
   /* La seconde vidéo de la page, sous la carte de la première, sur demande
      de Rémy. Le titre est dicté par lui. */
-  videoYoutube: {
+  video2: {
     numero: "Vidéo 2/2",
     titre: "Étape par étape, comment j'ai gagné mon premier million",
-    id: "baJcGKBycQc",
+    /* Reprise de YouTube sur Wistia, pour le lecteur de la vidéo 1/2. */
+    id: "h4z4g82lyi",
+    secondes: 1653,
   },
 
   /* Le titre et le sous-titre des entretiens, ceux d'`/immersion`
@@ -110,7 +112,8 @@ export const confirmationThanks = {
  * `reponse` est un morceau du choix du quiz, « 🐣 0 €, je souhaite me lancer ».
  */
 export const videoDepartZero = {
-  id: "9LIDgdSCqjo",
+  id: "vkvffo2189",
+  secondes: 2751,
   reponse: "je souhaite me lancer",
   titre: (prenom?: string) =>
     `Voici une vidéo spécialement pour toi${prenom ? ` ${prenom},` : ""} qui`,
