@@ -139,12 +139,20 @@ export function RecapRendezVous() {
   const fin = heureLisible(r?.fin);
   const creneau = debut ? (fin ? `${debut} – ${fin}` : debut) : undefined;
 
+  /* Deux blocs dans le détail : qui l'on est, puis ce qu'on a répondu, le
+     quiz d'abord et les questions de la réservation ensuite. */
   const detail = [
-    ...(r?.email
-      ? [{ libelle: recapReservation.email, reponse: r.email }]
-      : []),
-    ...(r?.reponses ?? []),
-  ];
+    {
+      titre: recapReservation.coordonnees,
+      lignes: r?.email
+        ? [{ libelle: recapReservation.email, reponse: r.email }]
+        : [],
+    },
+    {
+      titre: recapReservation.reponses,
+      lignes: [...(r?.reponsesQuiz ?? []), ...(r?.reponses ?? [])],
+    },
+  ].filter((bloc) => bloc.lignes.length);
 
   const aDuContenu = Boolean(r && (invite || nomHote || jour || r.telephone));
   if (!aDuContenu && !lien) return null;
@@ -242,16 +250,27 @@ export function RecapRendezVous() {
               className="size-4 transition-transform group-open:rotate-180"
             />
           </summary>
-          <dl className="mt-4 divide-y divide-border rounded-md border border-border bg-card">
-            {detail.map((q) => (
-              <div key={q.libelle} className="px-4 py-3">
-                <dt className="text-xs text-muted-foreground">{q.libelle}</dt>
-                <dd className="mt-0.5 text-sm font-medium break-words whitespace-pre-line text-card-foreground sm:text-base">
-                  {q.reponse}
-                </dd>
-              </div>
+          <div className="mt-4 space-y-4 text-left">
+            {detail.map((bloc) => (
+              <section key={bloc.titre}>
+                <h3 className="mb-2 text-sm font-semibold text-card-foreground">
+                  {bloc.titre}
+                </h3>
+                <dl className="divide-y divide-border rounded-md border border-border bg-card">
+                  {bloc.lignes.map((q) => (
+                    <div key={q.libelle} className="px-4 py-3">
+                      <dt className="text-xs text-muted-foreground">
+                        {q.libelle}
+                      </dt>
+                      <dd className="mt-0.5 text-sm font-medium break-words whitespace-pre-line text-card-foreground sm:text-base">
+                        {q.reponse}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </section>
             ))}
-          </dl>
+          </div>
         </details>
       ) : null}
     </div>

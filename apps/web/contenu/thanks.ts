@@ -220,6 +220,10 @@ export const recapReservation = {
   bouton: "Confirmer mon rendez-vous",
   /* Le volet replié des réponses, demandé par Rémy. */
   detail: "Détail de l'événement",
+  /* Les deux blocs du volet, sur demande de Rémy : qui l'on est, puis ce
+     qu'on a répondu. À valider par Rémy. */
+  coordonnees: "Tes coordonnées",
+  reponses: "Tes réponses au formulaire",
   email: "E-mail",
 } as const;
 

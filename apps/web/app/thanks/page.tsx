@@ -89,7 +89,7 @@ export default function Thanks() {
                 sur demande de Rémy. */}
             <TitreConfirmationForm
               classeTitre="text-[1.625rem] sm:text-4xl lg:text-[2.75rem] lg:leading-tight"
-              alerte={confirmationThanks.alerteUneVideo}
+              alerte={confirmationThanks.alerte}
             />
           </div>
         </section>
@@ -104,9 +104,10 @@ export default function Thanks() {
                 de section du site, qu'il trouvait trop gros ici : ce sont des
                 légendes de vidéo, pas des titres de page. */}
             <h2 className="titre mx-auto max-w-3xl px-1 pt-1 text-center text-[1.375rem] leading-tight text-balance text-card-foreground sm:pt-2 sm:text-3xl">
-              {/* Sans la pastille « Vidéo 1/2 », retirée par Rémy : il n'y a
-                  plus qu'une vidéo d'étape sur la page. */}
-              {insecables(etape1.titre)}
+              {/* « Vidéo 1/2 » devant le titre, sur demande de Rémy : il
+                  répond aux « 2 vidéos » de l'alerte, la seconde étant celle
+                  de Roland. */}
+              {insecables(`${etape1.numero} : ${etape1.titre}`)}
             </h2>
 
             <div className="mt-4 w-full sm:mt-6">

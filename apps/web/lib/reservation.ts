@@ -37,6 +37,8 @@ export type Reservation = {
   fin?: string;
   /** Les réponses aux questions du formulaire, dans l'ordre de `questionsReservation`. */
   reponses: { libelle: string; reponse: string }[];
+  /** Les réponses au quiz, dans son ordre, quand on arrive d'un quiz. */
+  reponsesQuiz: { libelle: string; reponse: string }[];
 };
 
 /**
@@ -61,6 +63,25 @@ function propre(valeur: unknown): string | undefined {
   }
   const nette = texte.trim();
   return nette ? nette : undefined;
+}
+
+/**
+ * Les réponses du quiz, `reponses_formulaire` : du JSON posé par notre propre
+ * page de réservation, pas par Calendly. Une valeur illisible n'affiche rien.
+ */
+function lireReponsesQuiz(brut: string | undefined) {
+  if (!brut) return [];
+  try {
+    const liste = JSON.parse(brut) as unknown;
+    if (!Array.isArray(liste)) return [];
+    return liste.flatMap((ligne: { question?: unknown; reponse?: unknown }) => {
+      const libelle = propre(ligne?.question);
+      const reponse = propre(ligne?.reponse);
+      return libelle && reponse ? [{ libelle, reponse }] : [];
+    });
+  } catch {
+    return [];
+  }
 }
 
 function lire(): Reservation | null {
@@ -99,6 +120,7 @@ function lire(): Reservation | null {
     debut: propre(releve.event_start_time),
     fin: propre(releve.event_end_time),
     reponses,
+    reponsesQuiz: lireReponsesQuiz(releve.reponses_formulaire),
   };
 }
 
