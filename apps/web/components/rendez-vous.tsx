@@ -17,7 +17,16 @@ import {
   type Reservation,
 } from "@/lib/reservation";
 import { cn } from "@repo/ui/lib/utils";
-import { CalendarCheck, CalendarDays, ChevronDown } from "lucide-react";
+import {
+  BellRing,
+  CalendarCheck,
+  CalendarDays,
+  ChevronDown,
+  Clock,
+  Mail,
+  MessageCircle,
+} from "lucide-react";
+import Image from "next/image";
 import { siWhatsapp } from "simple-icons";
 
 /**
@@ -136,7 +145,7 @@ function LogoWhatsapp({ className }: { className?: string }) {
  */
 export function ConsignesRendezVous() {
   const r = useReservation();
-  const { paragraphes, gras, signature } = consignesRendezVous({
+  const { salutation, lignes, gras, cloture, signature } = consignesRendezVous({
     prenom: r?.prenom,
     email: r?.email,
     date: dateLisible(r?.debut),
@@ -144,19 +153,72 @@ export function ConsignesRendezVous() {
   });
 
   return (
-    <div className="px-1 pt-5 sm:px-2 sm:pt-6">
-      <div className="space-y-3 text-base leading-relaxed text-card-foreground">
-        {paragraphes.map((paragraphe) => (
-          <p key={paragraphe}>
-            <AvecGras texte={paragraphe} gras={gras} />
-          </p>
-        ))}
-        <p className="font-semibold">{signature}</p>
+    <div className="pt-6 sm:pt-8">
+      {salutation ? (
+        <p className="titre px-1 text-xl text-card-foreground sm:text-2xl">
+          {salutation}
+        </p>
+      ) : null}
+
+      <ul className="mt-4 divide-y divide-border rounded-md border border-border bg-background">
+        {lignes.map((ligne) => {
+          const Icone = ICONES_CONSIGNES[ligne.icone];
+          return (
+            <li key={ligne.icone} className="flex gap-3.5 p-4 sm:gap-4">
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
+                <Icone aria-hidden className="size-[18px]" />
+              </span>
+              <p className="min-w-0 self-center text-[15px] leading-relaxed break-words text-card-foreground sm:text-base">
+                <AvecGras texte={ligne.texte} gras={gras} />
+                {"action" in ligne ? (
+                  <>
+                    {" "}
+                    <span
+                      className="surlignage"
+                      style={
+                        {
+                          "--surlignage-fond":
+                            "color-mix(in srgb, var(--surlignage-jaune) 45%, transparent)",
+                        } as React.CSSProperties
+                      }
+                    >
+                      {ligne.action}
+                    </span>
+                  </>
+                ) : null}
+              </p>
+            </li>
+          );
+        })}
+      </ul>
+
+      <div className="mt-5 flex items-center gap-3 px-1">
+        <Image
+          src="/remy.webp"
+          alt=""
+          width={44}
+          height={44}
+          className="size-11 shrink-0 rounded-full object-cover"
+        />
+        <p className="text-[15px] leading-snug text-card-foreground sm:text-base">
+          {cloture}
+          <span className="block text-sm text-muted-foreground">
+            {signature}
+          </span>
+        </p>
       </div>
+
       <DetailEvenement reservation={r} />
     </div>
   );
 }
+
+const ICONES_CONSIGNES = {
+  email: Mail,
+  whatsapp: MessageCircle,
+  rappel: BellRing,
+  heure: Clock,
+};
 
 /** Le texte, avec en gras les valeurs propres à la personne. */
 function AvecGras({ texte, gras }: { texte: string; gras: string[] }) {
@@ -202,25 +264,33 @@ function DetailEvenement({ reservation: r }: { reservation: Reservation | null }
   if (!blocs.length) return null;
 
   return (
-    <details className="group mt-6">
-      <summary className="flex cursor-pointer list-none items-center justify-center gap-1 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground [&::-webkit-details-marker]:hidden">
+    <details className="group mt-5 rounded-md border border-border bg-background">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-sm font-semibold text-card-foreground transition-colors hover:bg-muted/50 [&::-webkit-details-marker]:hidden">
         {recapReservation.detail}
         <ChevronDown
           aria-hidden
-          className="size-3.5 transition-transform group-open:rotate-180"
+          className="size-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-180"
         />
       </summary>
-      <div className="mt-4 space-y-4 text-left">
+      <div className="space-y-5 border-t border-border p-4 text-left">
         {blocs.map((bloc) => (
           <section key={bloc.titre}>
-            <h3 className="mb-2 text-sm font-semibold text-card-foreground">
+            <h3 className="mb-2.5 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
               {bloc.titre}
             </h3>
-            <dl className="divide-y divide-border rounded-md border border-border bg-card">
+            <dl
+              className={
+                bloc.titre === recapReservation.coordonnees
+                  ? "grid gap-x-6 gap-y-3 sm:grid-cols-2"
+                  : "space-y-3"
+              }
+            >
               {bloc.lignes.map((q) => (
-                <div key={q.libelle} className="px-4 py-3">
-                  <dt className="text-xs text-muted-foreground">{q.libelle}</dt>
-                  <dd className="mt-0.5 text-sm font-medium break-words whitespace-pre-line text-card-foreground">
+                <div key={q.libelle}>
+                  <dt className="text-[13px] leading-snug text-muted-foreground">
+                    {q.libelle}
+                  </dt>
+                  <dd className="mt-0.5 text-[15px] font-medium break-words whitespace-pre-line text-card-foreground">
                     {q.reponse}
                   </dd>
                 </div>

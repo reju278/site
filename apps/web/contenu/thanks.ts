@@ -140,19 +140,40 @@ export function consignesRendezVous(r: {
   telephone?: string;
   date?: string;
 }) {
-  const paragraphes = [
-    ...(r.prenom ? [`${r.prenom},`] : []),
-    `Nous t'avons envoyé un e-mail${r.email ? ` à ${r.email}` : ""} confirmant la date et l'heure de ton appel${r.date ? `, le ${r.date}` : ""}. Pense à le confirmer en répondant simplement à cet e-mail. Nous te contacterons via WhatsApp ${r.telephone ? `au ${r.telephone}` : "sur ton numéro de téléphone"} à la date et l'heure sélectionnées.`,
-    "Un rappel de la date et de l'heure du rendez-vous se trouve dans l'e-mail que tu viens de recevoir.",
-    "Présente-toi à l'heure, dans une pièce calme, sans distractions – nous promettons de faire de même.",
-    "Nous avons hâte de te rencontrer et de t'aider\u00a0!",
-  ];
+  const lignes = [
+    {
+      icone: "email",
+      texte: `Nous t'avons envoyé un e-mail${r.email ? ` à ${r.email}` : ""} confirmant la date et l'heure de ton appel${r.date ? `, le ${r.date}` : ""}.`,
+      /* Le geste à faire, surligné. */
+      action: "Pense à le confirmer en répondant simplement à cet e-mail.",
+    },
+    {
+      icone: "whatsapp",
+      texte: `Nous te contacterons via WhatsApp ${r.telephone ? `au ${r.telephone}` : "sur ton numéro de téléphone"} à la date et l'heure sélectionnées.`,
+    },
+    {
+      icone: "rappel",
+      texte:
+        "Un rappel de la date et de l'heure du rendez-vous se trouve dans l'e-mail que tu viens de recevoir.",
+    },
+    {
+      icone: "heure",
+      texte:
+        "Présente-toi à l'heure, dans une pièce calme, sans distractions – nous promettons de faire de même.",
+    },
+  ] as const;
 
-  const gras = [r.prenom, r.email, r.date, r.telephone].filter(
-    (v): v is string => Boolean(v),
+  const gras = [r.email, r.date, r.telephone].filter((v): v is string =>
+    Boolean(v),
   );
 
-  return { paragraphes, gras, signature: "- Rémy et l'équipe Funnels Club" };
+  return {
+    salutation: r.prenom ? `${r.prenom},` : undefined,
+    lignes,
+    gras,
+    cloture: "Nous avons hâte de te rencontrer et de t'aider\u00a0!",
+    signature: "Rémy et l'équipe Funnels Club",
+  };
 }
 
 /**
