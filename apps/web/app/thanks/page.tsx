@@ -6,10 +6,7 @@ import { TitreRoulant } from "@/components/titre-roulant";
 import { equipeImmersion } from "@/contenu/immersion";
 import { PileEntretiens } from "@/components/pile-entretiens";
 import { entretiensPile } from "@/contenu/entretiens-pile";
-import {
-  RecapRendezVous,
-  SansWhatsapp,
-} from "@/components/rendez-vous";
+import { ConsignesRendezVous } from "@/components/rendez-vous";
 import { TitreConfirmationForm } from "@/components/titre-confirmation-form";
 import { confirmationThanks, identiteThanks } from "@/contenu/thanks";
 import { scriptCapture } from "@/lib/reservation-capture";
@@ -121,13 +118,9 @@ export default function Thanks() {
               />
             </div>
 
-            {/* Le rendez-vous, dessiné comme une vraie réservation, avec le
-                bouton WhatsApp qui le confirme à l'intérieur, sur demande de
-                Rémy. Voir `components/rendez-vous.tsx`. */}
-            <div className="px-1 pt-6 pb-2 sm:px-2 sm:pt-8 sm:pb-4">
-              <RecapRendezVous />
-              <SansWhatsapp />
-            </div>
+            {/* Les consignes personnelles et le détail replié, à la place du
+                récapitulatif et du bouton WhatsApp, sur demande de Rémy. */}
+            <ConsignesRendezVous />
           </div>
         </section>
 

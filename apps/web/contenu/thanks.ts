@@ -107,60 +107,36 @@ export const confirmationThanks = {
 
 /**
  * Les consignes de la vidéo 1, **au tutoiement**, sur demande de Rémy, et
- * complétées de ce que Calendly transmet : l'e-mail, la date, le téléphone.
+ * complétées de ce que la réservation transmet : l'e-mail, la date, le
+ * téléphone. Elles ont remplacé le récapitulatif et le bouton WhatsApp.
  *
  * C'est le texte de la page source, mot pour mot, passé du « vous » au « tu ».
  * **Chaque ajout est facultatif** : sans e-mail, la phrase s'arrête à « un
  * e-mail » ; sans téléphone, on garde « sur ton numéro de téléphone ». La page
  * ne montre jamais un trou.
  *
- * **Le message s'ouvre sur le prénom**, seul sur sa ligne, et « Pense à le
- * confirmer » commence un paragraphe, sur demande de Rémy : c'est le geste à
- * faire, il ne doit pas se perdre au milieu d'une phrase sur l'e-mail.
- *
- * `surligne` porte les gestes à faire, sous-chaînes exactes des paragraphes,
- * choisis par l'agent et à valider par Rémy. `gras` porte les valeurs propres
- * à la personne : **en gras et non surlignées**, sur demande de Rémy, pour
- * que le surlignage reste réservé à ce qu'il faut faire.
+ * **Le message s'ouvre sur le prénom**, seul sur sa ligne. `gras` porte les
+ * valeurs propres à la personne.
  */
-/** Le libellé du lien WhatsApp dans les consignes, écrit une fois. */
-const LIEN_WHATSAPP = "ce lien";
-
 export function consignesRendezVous(r: {
   prenom?: string;
   email?: string;
   telephone?: string;
   date?: string;
-  /** Un numéro WhatsApp d'hôte est connu : la phrase du lien peut s'écrire. */
-  whatsapp?: boolean;
 }) {
   const paragraphes = [
     ...(r.prenom ? [`${r.prenom},`] : []),
-    `Nous t'avons envoyé un e-mail${r.email ? ` à ${r.email}` : ""} confirmant la date et l'heure de ton appel${r.date ? `, le ${r.date}` : ""}.`,
-    `Pense à le confirmer en répondant simplement à cet e-mail. Nous te contacterons via WhatsApp ${r.telephone ? `au ${r.telephone}` : "sur ton numéro de téléphone"} à la date et l'heure sélectionnées.`,
-    /* **À la place du rappel de l'e-mail**, retiré par Rémy, qui a dicté
-       celle-ci. Elle n'existe que si le lien mène quelque part : sans numéro
-       d'hôte, « ce lien » serait un texte qui ne s'ouvre pas. */
-    ...(r.whatsapp
-      ? [
-          `Si tu es vraiment motivé, tu peux également confirmer ton rendez-vous directement via WhatsApp en passant par ${LIEN_WHATSAPP}.`,
-        ]
-      : []),
+    `Nous t'avons envoyé un e-mail${r.email ? ` à ${r.email}` : ""} confirmant la date et l'heure de ton appel${r.date ? `, le ${r.date}` : ""}. Pense à le confirmer en répondant simplement à cet e-mail. Nous te contacterons via WhatsApp ${r.telephone ? `au ${r.telephone}` : "sur ton numéro de téléphone"} à la date et l'heure sélectionnées.`,
+    "Un rappel de la date et de l'heure du rendez-vous se trouve dans l'e-mail que tu viens de recevoir.",
     "Présente-toi à l'heure, dans une pièce calme, sans distractions – nous promettons de faire de même.",
     "Nous avons hâte de te rencontrer et de t'aider\u00a0!",
-  ];
-
-  const surligne = [
-    "Pense à le confirmer en répondant simplement à cet e-mail.",
-    "via WhatsApp",
-    "Présente-toi à l'heure",
   ];
 
   const gras = [r.prenom, r.email, r.date, r.telephone].filter(
     (v): v is string => Boolean(v),
   );
 
-  return { paragraphes, surligne, gras, lien: LIEN_WHATSAPP };
+  return { paragraphes, gras, signature: "- Rémy et l'équipe Funnels Club" };
 }
 
 /**
@@ -231,6 +207,9 @@ export const recapReservation = {
   /* Les deux blocs du volet, sur demande de Rémy : qui l'on est, puis ce
      qu'on a répondu. À valider par Rémy. */
   coordonnees: "Tes coordonnées",
+  prenom: "Prénom",
+  nom: "Nom",
+  telephone: "Téléphone",
   reponses: "Tes réponses au formulaire",
   email: "E-mail",
 } as const;

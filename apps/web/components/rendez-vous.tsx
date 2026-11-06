@@ -3,12 +3,14 @@
 import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { TexteRoulant } from "@/components/texte-roulant";
 import {
+  consignesRendezVous,
   messageWhatsapp,
   recapReservation,
   sansWhatsapp,
   whatsappHotes,
 } from "@/contenu/thanks";
 import {
+  dateLisible,
   heureLisible,
   jourLisible,
   useReservation,
@@ -127,6 +129,110 @@ function LogoWhatsapp({ className }: { className?: string }) {
  * que le bouton : une carte de cases vides ne dirait rien, confirmer reste
  * utile sans prénom.
  */
+/**
+ * Les consignes sous la vidéo 1/2, personnelles dès que la réservation dit
+ * de quoi : le prénom, l'e-mail, la date et le téléphone. Sans réservation
+ * connue, le texte générique, sans trou.
+ */
+export function ConsignesRendezVous() {
+  const r = useReservation();
+  const { paragraphes, gras, signature } = consignesRendezVous({
+    prenom: r?.prenom,
+    email: r?.email,
+    date: dateLisible(r?.debut),
+    telephone: r?.telephone ? numeroLisible(r.telephone) : undefined,
+  });
+
+  return (
+    <div className="px-1 pt-5 sm:px-2 sm:pt-6">
+      <div className="space-y-3 text-base leading-relaxed text-card-foreground">
+        {paragraphes.map((paragraphe) => (
+          <p key={paragraphe}>
+            <AvecGras texte={paragraphe} gras={gras} />
+          </p>
+        ))}
+        <p className="font-semibold">{signature}</p>
+      </div>
+      <DetailEvenement reservation={r} />
+    </div>
+  );
+}
+
+/** Le texte, avec en gras les valeurs propres à la personne. */
+function AvecGras({ texte, gras }: { texte: string; gras: string[] }) {
+  if (!gras.length) return texte;
+  const motif = new RegExp(
+    `(${gras.map((g) => g.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})`,
+  );
+  return texte
+    .split(motif)
+    .map((morceau, i) =>
+      i % 2 ? <strong key={i}>{morceau}</strong> : morceau,
+    );
+}
+
+/**
+ * « Détail de l'événement », replié et discret, sur demande de Rémy : qui
+ * l'on est, puis ce qu'on a répondu. `details` natif : le texte est dans le
+ * document dès le premier octet, et il s'ouvre au clavier sans rien écrire.
+ */
+function DetailEvenement({ reservation: r }: { reservation: Reservation | null }) {
+  const coordonnees = [
+    ...(r?.prenom ? [{ libelle: recapReservation.prenom, reponse: r.prenom }] : []),
+    ...(r?.nom ? [{ libelle: recapReservation.nom, reponse: r.nom }] : []),
+    ...(r?.email ? [{ libelle: recapReservation.email, reponse: r.email }] : []),
+    ...(r?.telephone
+      ? [
+          {
+            libelle: recapReservation.telephone,
+            reponse: numeroLisible(r.telephone),
+          },
+        ]
+      : []),
+  ];
+  /* Le quiz d'abord, les questions de la réservation ensuite. */
+  const blocs = [
+    { titre: recapReservation.coordonnees, lignes: coordonnees },
+    {
+      titre: recapReservation.reponses,
+      lignes: [...(r?.reponsesQuiz ?? []), ...(r?.reponses ?? [])],
+    },
+  ].filter((bloc) => bloc.lignes.length);
+
+  if (!blocs.length) return null;
+
+  return (
+    <details className="group mt-6">
+      <summary className="flex cursor-pointer list-none items-center justify-center gap-1 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground [&::-webkit-details-marker]:hidden">
+        {recapReservation.detail}
+        <ChevronDown
+          aria-hidden
+          className="size-3.5 transition-transform group-open:rotate-180"
+        />
+      </summary>
+      <div className="mt-4 space-y-4 text-left">
+        {blocs.map((bloc) => (
+          <section key={bloc.titre}>
+            <h3 className="mb-2 text-sm font-semibold text-card-foreground">
+              {bloc.titre}
+            </h3>
+            <dl className="divide-y divide-border rounded-md border border-border bg-card">
+              {bloc.lignes.map((q) => (
+                <div key={q.libelle} className="px-4 py-3">
+                  <dt className="text-xs text-muted-foreground">{q.libelle}</dt>
+                  <dd className="mt-0.5 text-sm font-medium break-words whitespace-pre-line text-card-foreground">
+                    {q.reponse}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        ))}
+      </div>
+    </details>
+  );
+}
+
 export function RecapRendezVous() {
   const r = useReservation();
   const lien = lienWhatsapp(r);
@@ -138,21 +244,6 @@ export function RecapRendezVous() {
   const debut = heureLisible(r?.debut);
   const fin = heureLisible(r?.fin);
   const creneau = debut ? (fin ? `${debut} – ${fin}` : debut) : undefined;
-
-  /* Deux blocs dans le détail : qui l'on est, puis ce qu'on a répondu, le
-     quiz d'abord et les questions de la réservation ensuite. */
-  const detail = [
-    {
-      titre: recapReservation.coordonnees,
-      lignes: r?.email
-        ? [{ libelle: recapReservation.email, reponse: r.email }]
-        : [],
-    },
-    {
-      titre: recapReservation.reponses,
-      lignes: [...(r?.reponsesQuiz ?? []), ...(r?.reponses ?? [])],
-    },
-  ].filter((bloc) => bloc.lignes.length);
 
   const aDuContenu = Boolean(r && (invite || nomHote || jour || r.telephone));
   if (!aDuContenu && !lien) return null;
@@ -237,42 +328,7 @@ export function RecapRendezVous() {
 
       {bouton ? <div className="mt-7">{bouton}</div> : null}
 
-      {/* « Détail de l'événement », replié par défaut, sur demande de Rémy :
-          l'e-mail et les réponses au formulaire, pour qui veut vérifier.
-          `details` natif : le texte est dans le document dès le premier
-          octet, et il s'ouvre au clavier sans rien écrire. */}
-      {detail.length ? (
-        <details className="group mt-5 border-t border-border pt-4">
-          <summary className="flex cursor-pointer list-none items-center justify-center gap-1.5 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground [&::-webkit-details-marker]:hidden">
-            {recapReservation.detail}
-            <ChevronDown
-              aria-hidden
-              className="size-4 transition-transform group-open:rotate-180"
-            />
-          </summary>
-          <div className="mt-4 space-y-4 text-left">
-            {detail.map((bloc) => (
-              <section key={bloc.titre}>
-                <h3 className="mb-2 text-sm font-semibold text-card-foreground">
-                  {bloc.titre}
-                </h3>
-                <dl className="divide-y divide-border rounded-md border border-border bg-card">
-                  {bloc.lignes.map((q) => (
-                    <div key={q.libelle} className="px-4 py-3">
-                      <dt className="text-xs text-muted-foreground">
-                        {q.libelle}
-                      </dt>
-                      <dd className="mt-0.5 text-sm font-medium break-words whitespace-pre-line text-card-foreground sm:text-base">
-                        {q.reponse}
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-              </section>
-            ))}
-          </div>
-        </details>
-      ) : null}
+      <DetailEvenement reservation={r} />
     </div>
   );
 }
