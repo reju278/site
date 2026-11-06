@@ -86,6 +86,14 @@ export const confirmationThanks = {
     },
   },
 
+  /* La seconde vidéo de la page, sous la carte de la première, sur demande
+     de Rémy. Le titre est dicté par lui. */
+  videoYoutube: {
+    numero: "Vidéo 2/2",
+    titre: "Étape par étape, comment j'ai gagné mon premier million",
+    id: "baJcGKBycQc",
+  },
+
   /* Le titre et le sous-titre des entretiens, ceux d'`/immersion`
      (`avisImmersion`), le second passé au tutoiement : « pour te partager »
      et non « pour vous partager ». Recopiés parce qu'`/immersion` garde le

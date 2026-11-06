@@ -1,4 +1,5 @@
 import { LecteurVideo } from "@/components/lecteur-video";
+import { LecteurYoutube } from "@/components/lecteur-youtube";
 import { MurCommunaute } from "@/components/mur-communaute";
 import { RangeeEquipe } from "@/components/rangee-equipe";
 import { TitreRoulant } from "@/components/titre-roulant";
@@ -50,7 +51,7 @@ const metadonnees: Metadata = {
 };
 
 export default function Thanks() {
-  const { etape1 } = confirmationThanks;
+  const { etape1, videoYoutube } = confirmationThanks;
 
   return (
     <>
@@ -105,8 +106,7 @@ export default function Thanks() {
                 légendes de vidéo, pas des titres de page. */}
             <h2 className="titre mx-auto max-w-3xl px-1 pt-1 text-center text-[1.375rem] leading-tight text-balance text-card-foreground sm:pt-2 sm:text-3xl">
               {/* « Vidéo 1/2 » devant le titre, sur demande de Rémy : il
-                  répond aux « 2 vidéos » de l'alerte, la seconde étant celle
-                  de Roland. */}
+                  répond aux « 2 vidéos » de l'alerte. */}
               {insecables(`${etape1.numero} : ${etape1.titre}`)}
             </h2>
 
@@ -127,6 +127,23 @@ export default function Thanks() {
             <div className="px-1 pt-6 pb-2 sm:px-2 sm:pt-8 sm:pb-4">
               <RecapRendezVous />
               <SansWhatsapp />
+            </div>
+          </div>
+        </section>
+
+        {/* La vidéo 2/2, dans une carte comme la première, sur demande de
+            Rémy. */}
+        <section className="relative px-5 pt-8 sm:pt-10">
+          <div className="mx-auto max-w-[var(--largeur-video)] rounded-[var(--rayon-jonction)] border border-border bg-card p-4 text-card-foreground shadow-[0_30px_70px_-25px_rgba(0,0,0,0.45)] sm:p-6">
+            <h2 className="titre mx-auto max-w-3xl px-1 pt-1 text-center text-[1.375rem] leading-tight text-balance text-card-foreground sm:pt-2 sm:text-3xl">
+              {insecables(`${videoYoutube.numero} : ${videoYoutube.titre}`)}
+            </h2>
+            <div className="mt-4 w-full sm:mt-6">
+              <LecteurYoutube
+                id={videoYoutube.id}
+                titre={videoYoutube.titre}
+                affiche={`/temoignages/${videoYoutube.id}.jpg`}
+              />
             </div>
           </div>
         </section>
