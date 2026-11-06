@@ -143,7 +143,7 @@ export function consignesRendezVous(r: {
       icone: "email",
       texte: `Nous t'avons envoyé un e-mail${r.email ? ` à ${r.email}` : ""} confirmant la date et l'heure de ton appel${r.date ? `, le ${r.date}` : ""}.`,
       /* Le geste à faire, surligné. */
-      action: "Pense à le confirmer en répondant simplement à cet e-mail.",
+      action: "Réponds à l'e-mail de confirmation pour confirmer ton rendez-vous.",
     },
     {
       icone: "whatsapp",
