@@ -131,11 +131,9 @@ export const videoDepartZero = {
  * e-mail » ; sans téléphone, on garde « sur ton numéro de téléphone ». La page
  * ne montre jamais un trou.
  *
- * **Le message s'ouvre sur le prénom**, seul sur sa ligne. `gras` porte les
- * valeurs propres à la personne.
+ * `gras` porte les valeurs propres à la personne.
  */
 export function consignesRendezVous(r: {
-  prenom?: string;
   email?: string;
   telephone?: string;
   date?: string;
@@ -168,7 +166,6 @@ export function consignesRendezVous(r: {
   );
 
   return {
-    salutation: r.prenom ? `${r.prenom},` : undefined,
     lignes,
     gras,
     cloture: "Nous avons hâte de te rencontrer et de t'aider\u00a0!",

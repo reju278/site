@@ -145,23 +145,43 @@ function LogoWhatsapp({ className }: { className?: string }) {
  */
 export function ConsignesRendezVous() {
   const r = useReservation();
-  const { salutation, lignes, gras, cloture, signature } = consignesRendezVous({
-    prenom: r?.prenom,
+  const { lignes, gras, cloture, signature } = consignesRendezVous({
     email: r?.email,
     date: dateLisible(r?.debut),
     telephone: r?.telephone ? numeroLisible(r.telephone) : undefined,
   });
 
+  const [premiere, ...suivantes] = lignes;
+
   return (
     <div className="pt-6 sm:pt-8">
-      {salutation ? (
-        <p className="titre px-1 text-xl text-card-foreground sm:text-2xl">
-          {salutation}
-        </p>
-      ) : null}
+      {/* Le geste à faire, à part des autres consignes, sur demande de Rémy. */}
+      <div className="flex gap-3.5 rounded-md border border-primary/25 bg-primary/5 p-4 sm:gap-4 sm:p-5">
+        <span className="flex size-11 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
+          <Mail aria-hidden className="size-5" />
+        </span>
+        <div className="min-w-0 self-center text-card-foreground">
+          <p className="text-[15px] leading-relaxed break-words sm:text-base">
+            <AvecGras texte={premiere.texte} gras={gras} />
+          </p>
+          <p className="mt-2 text-base font-semibold leading-relaxed sm:text-lg">
+            <span
+              className="surlignage"
+              style={
+                {
+                  "--surlignage-fond":
+                    "color-mix(in srgb, var(--surlignage-jaune) 45%, transparent)",
+                } as React.CSSProperties
+              }
+            >
+              {premiere.action}
+            </span>
+          </p>
+        </div>
+      </div>
 
-      <ul className="mt-4 divide-y divide-border rounded-md border border-border bg-background">
-        {lignes.map((ligne) => {
+      <ul className="mt-3 divide-y divide-border rounded-md border border-border bg-background">
+        {suivantes.map((ligne) => {
           const Icone = ICONES_CONSIGNES[ligne.icone];
           return (
             <li key={ligne.icone} className="flex gap-3.5 p-4 sm:gap-4">
@@ -170,22 +190,6 @@ export function ConsignesRendezVous() {
               </span>
               <p className="min-w-0 self-center text-[15px] leading-relaxed break-words text-card-foreground sm:text-base">
                 <AvecGras texte={ligne.texte} gras={gras} />
-                {"action" in ligne ? (
-                  <>
-                    {" "}
-                    <span
-                      className="surlignage"
-                      style={
-                        {
-                          "--surlignage-fond":
-                            "color-mix(in srgb, var(--surlignage-jaune) 45%, transparent)",
-                        } as React.CSSProperties
-                      }
-                    >
-                      {ligne.action}
-                    </span>
-                  </>
-                ) : null}
               </p>
             </li>
           );
@@ -214,7 +218,6 @@ export function ConsignesRendezVous() {
 }
 
 const ICONES_CONSIGNES = {
-  email: Mail,
   whatsapp: MessageCircle,
   rappel: BellRing,
   heure: Clock,
