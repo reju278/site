@@ -12,10 +12,28 @@ import { confirmationThanks, identiteThanks } from "@/contenu/thanks";
 import { scriptCapture } from "@/lib/reservation-capture";
 import { insecables } from "@/lib/typographie";
 
+import type { CSSProperties, ReactNode } from "react";
 import type { Metadata } from "next";
 import { partageTunnel } from "@/lib/partage";
 import { avecReglages } from "@/lib/reglages-seo";
 import { CompteurVue } from "@/components/compteur-vue";
+
+/** « Vidéo 1/2 », surligné en jaune pour sauter aux yeux, demandé par Rémy. */
+function NumeroVideo({ children }: { children: ReactNode }) {
+  return (
+    <span
+      className="surlignage"
+      style={
+        {
+          "--surlignage-fond":
+            "color-mix(in srgb, var(--surlignage-jaune) 45%, transparent)",
+        } as CSSProperties
+      }
+    >
+      {children}
+    </span>
+  );
+}
 
 /**
  * La page de confirmation, servie sur `go.funnels.club/thanks`.
@@ -103,8 +121,9 @@ export default function Thanks() {
                 légendes de vidéo, pas des titres de page. */}
             <h2 className="titre mx-auto max-w-3xl px-1 pt-1 text-center text-[1.375rem] leading-tight text-balance text-card-foreground sm:pt-2 sm:text-3xl">
               {/* « Vidéo 1/2 » devant le titre, sur demande de Rémy : il
-                  répond aux « 2 vidéos » de l'alerte. */}
-              {insecables(`${etape1.numero} : ${etape1.titre}`)}
+                  répond aux « 2 vidéos » de l'alerte, et surligné pour se voir. */}
+              <NumeroVideo>{etape1.numero}</NumeroVideo>
+              {insecables(`: ${etape1.titre}`)}
             </h2>
 
             <div className="mt-4 w-full sm:mt-6">
@@ -129,7 +148,8 @@ export default function Thanks() {
         <section className="relative px-5 pt-8 sm:pt-10">
           <div className="mx-auto max-w-[var(--largeur-video)] rounded-[var(--rayon-jonction)] border border-border bg-card p-4 text-card-foreground shadow-[0_30px_70px_-25px_rgba(0,0,0,0.45)] sm:p-6">
             <h2 className="titre mx-auto max-w-3xl px-1 pt-1 text-center text-[1.375rem] leading-tight text-balance text-card-foreground sm:pt-2 sm:text-3xl">
-              {insecables(`${videoYoutube.numero} : ${videoYoutube.titre}`)}
+              <NumeroVideo>{videoYoutube.numero}</NumeroVideo>
+              {insecables(`: ${videoYoutube.titre}`)}
             </h2>
             <div className="mt-4 w-full sm:mt-6">
               <LecteurYoutube
