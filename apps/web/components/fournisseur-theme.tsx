@@ -15,6 +15,7 @@ const PAGES_CLAIRES = [
   "/appel",
   "/appel-relance-newsletter",
   "/thanks",
+  "/thanks-quizz",
   "/course",
   "/video-vsl",
   ...CHEMINS_TEMOIGNAGE,
