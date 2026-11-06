@@ -3,6 +3,7 @@
 import { LecteurYoutube } from "@/components/lecteur-youtube";
 import { videoDepartZero } from "@/contenu/thanks";
 import { useReservation } from "@/lib/reservation";
+import type { CSSProperties } from "react";
 
 /**
  * La vidéo réservée à qui démarre de zéro, sur demande de Rémy : elle ne paraît
@@ -16,12 +17,24 @@ export function VideoDepartZero() {
   );
   if (!concerne) return null;
 
-  const titre = videoDepartZero.titre(r?.prenom);
+  const debut = videoDepartZero.titre(r?.prenom);
+  const titre = `${debut} ${videoDepartZero.surligne}`;
   return (
     <section className="px-5 pt-20 sm:pt-24">
       <div className="mx-auto w-full max-w-[calc(var(--largeur-video)-2rem)] sm:max-w-[calc(var(--largeur-video)-3rem)]">
         <h2 className="titre mx-auto max-w-3xl text-center text-2xl text-balance text-foreground sm:text-3xl">
-          {titre}
+          {debut}{" "}
+          <span
+            className="surlignage"
+            style={
+              {
+                "--surlignage-fond":
+                  "color-mix(in srgb, var(--surlignage-jaune) 45%, transparent)",
+              } as CSSProperties
+            }
+          >
+            {videoDepartZero.surligne}
+          </span>
         </h2>
         <div className="mt-6 rounded-md shadow-[0_30px_70px_-25px_rgba(0,0,0,0.55),0_2px_10px_rgba(0,0,0,0.18)] ring-1 ring-black/25">
           <LecteurYoutube

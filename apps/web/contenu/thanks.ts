@@ -113,7 +113,9 @@ export const videoDepartZero = {
   id: "9LIDgdSCqjo",
   reponse: "je souhaite me lancer",
   titre: (prenom?: string) =>
-    `Voici une vidéo spécialement pour toi${prenom ? ` ${prenom},` : ""} qui démarres de zéro`,
+    `Voici une vidéo spécialement pour toi${prenom ? ` ${prenom},` : ""} qui`,
+  /* Surligné, sur demande de Rémy. */
+  surligne: "démarres de zéro",
 } as const;
 
 /**
