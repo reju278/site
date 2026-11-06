@@ -1,4 +1,5 @@
 import { LecteurVideo } from "@/components/lecteur-video";
+import { LogoFunnels } from "@/components/logo-funnels";
 import { PreuvesTunnel } from "@/components/preuves-tunnel";
 import { insecables } from "@/lib/typographie";
 
@@ -19,6 +20,12 @@ export function PageVideo({
     <>
       <section className="px-5 pt-8 sm:pt-12">
         <div className="mx-auto max-w-[var(--largeur-video)]">
+          {/* La marque, sur demande de Rémy. Sans lien : un tunnel ne se quitte
+              pas par son logo. */}
+          <p className="titre mb-6 flex items-center justify-center gap-2 text-xl text-foreground sm:mb-8 sm:text-2xl">
+            <LogoFunnels className="size-[1.05em]" />
+            Funnels.Club
+          </p>
           <h1 className="titre mx-auto max-w-3xl text-center text-[1.625rem] leading-tight text-balance text-foreground sm:text-4xl lg:text-[2.75rem]">
             {insecables(titre)}
           </h1>
