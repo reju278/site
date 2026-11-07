@@ -5,6 +5,7 @@ import { avecReglages } from "@/lib/reglages-seo";
 import { SdkClickFunnels } from "@/components/sdk-clickfunnels";
 import type { Metadata } from "next";
 import { partageTunnel } from "@/lib/partage";
+import { Badge } from "@repo/ui/components/badge";
 
 /**
  * L'opt-in du VSL Funnel : la promesse, l'aperçu de la vidéo, et la fenêtre
@@ -48,29 +49,83 @@ export default function Course() {
           mangent une centaine de pixels. */}
       <div className="mx-auto flex max-w-6xl flex-col gap-4 sm:gap-10">
         <header className="mx-auto flex max-w-6xl flex-col gap-2 text-center sm:gap-4">
+          {/* Le sur-titre est une pilule d'en-tête, sur demande de Rémy : la
+              pastille du socle, neutre, sans couleur ni effet au survol. Le texte
+              passe à la ligne sur téléphone, où il ne tient pas sur une seule. */}
+          <Badge
+            asChild
+            variant="outline"
+            className="mb-1 max-w-full shrink self-center bg-background px-4 py-1.5 text-center text-sm leading-snug font-medium whitespace-normal shadow-sm sm:mb-2 sm:text-lg"
+          >
+            <p>
+              <span className="block text-balance">
+                {optinVsl.surtitre.map((ligne) =>
+                  ligne.map((morceau, rang) =>
+                    "gras" in morceau ? (
+                      <strong key={rang} className="font-extrabold">
+                        {morceau.texte}
+                      </strong>
+                    ) : (
+                      <span key={rang}>{morceau.texte}</span>
+                    ),
+                  ),
+                )}
+              </span>
+            </p>
+          </Badge>
           <h1
             /* **Une taille fluide sur téléphone**, proportionnelle à la
-               largeur de l'écran. Réduite avec le titre repris de la page
-               d'origine, plus long que le précédent, sur demande de Rémy : à
-               375 px il tient sur six lignes sans mot isolé, et le bouton
-               reste visible au chargement, y compris sur un écran de 667 px
-               de haut (iPhone SE). En large, l'en-tête s'élargit pour que le
-               titre tienne sur trois lignes. */
+               largeur de l'écran. Le titre s'y lit par blocs, sur demande de
+               Rémy : la promesse, la parenthèse à part et plus petite, puis
+               une ligne par chose qu'on évite. Le bouton reste visible au
+               chargement sur un écran de 667 px de haut (iPhone SE), barres
+               du navigateur non comprises. En large, le titre tient sur
+               quatre lignes. */
             className="titre text-[clamp(1.4rem,6.2vw,2rem)] leading-[1.15] [@media(max-height:720px)]:text-[clamp(1.3rem,5.8vw,2rem)] [@media(max-height:720px)]:leading-[1.12] text-balance text-foreground sm:text-[2.6rem] sm:leading-[1.22]"
           >
             {optinVsl.titre.map((morceau, rang) =>
               "coupure" in morceau ? (
-                <br key={rang} className="hidden lg:inline" />
+                <br key={rang} className="sm:hidden" />
               ) : "accent" in morceau ? (
                 <span key={rang} className="text-primary">
                   {morceau.texte}
                 </span>
+              ) : "italique" in morceau ? (
+                <em
+                  key={rang}
+                  className="max-sm:my-1 max-sm:block max-sm:text-[0.72em] max-sm:font-medium"
+                >
+                  {morceau.texte}
+                </em>
+              ) : "rouge" in morceau ? (
+                <span
+                  key={rang}
+                  className={
+                    "telephone" in morceau
+                      ? "text-[color:var(--livre-texte)] sm:hidden"
+                      : "text-[color:var(--livre-texte)]"
+                  }
+                >
+                  {morceau.texte}
+                </span>
+              ) : "souligne" in morceau ? (
+                <span
+                  key={rang}
+                  className="underline decoration-[var(--livre-texte)] decoration-2 underline-offset-4 sm:decoration-[3px]"
+                >
+                  {morceau.texte}
+                </span>
               ) : (
-                <span key={rang}>{morceau.texte}</span>
+                <span
+                  key={rang}
+                  className={"ordinateur" in morceau ? "max-sm:hidden" : undefined}
+                >
+                  {morceau.texte}
+                </span>
               ),
             )}
           </h1>
-          <div className="flex flex-col gap-1 text-base text-pretty text-foreground/85 sm:text-xl lg:text-2xl">
+          <div className="flex flex-col gap-1 text-[clamp(13px,3.85vw,15px)] text-pretty text-foreground/85 max-sm:-mx-3 max-sm:mt-3 sm:text-xl lg:text-2xl">
             {optinVsl.renvois.map((renvoi) => (
               <p key={renvoi.accent}>
                 <span className="font-semibold text-primary">

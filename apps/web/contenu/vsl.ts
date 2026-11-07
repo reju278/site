@@ -48,47 +48,58 @@ export const DUREE_CONTACT_VSL = 7 * 24 * 60 * 60 * 1000;
    décision aussi. Les citations des témoignages restent telles
    qu'elles ont été dites. */
 export const optinVsl = {
-  /* Dicté par Rémy, qui a choisi cette version entre deux. En bleu,
-     « PARFAIT tunnel de vente », « offre digitale* » et « publicité en
-     ligne** », ce dernier après un essai en souligné que Rémy a écarté. « Et l’IA », qui
-     finissait le titre, a été retiré par Rémy. Les deux
-     astérisques sont renvoyés sous le titre.
-
-     **Deux coupures écrites**, à partir de `lg` seulement, sur demande de
-     Rémy : trois lignes, « Nous allons mettre en place le », puis « PARFAIT
-     tunnel de vente pour vendre votre », puis « offre digitale* grâce à la
-     publicité en ligne** ». En dessous de `lg`, les lignes ne tiennent plus
-     dans la largeur et le titre retrouve sa coupure naturelle.
+  /* Dicté par Rémy : à qui s'adresse la page, posé au-dessus du titre, puis la
+     promesse. En bleu, les mêmes repères que dans le titre précédent :
+     « tunnel de vente », « publicités en ligne » et « offre digitale* ».
 
      **Ce texte vouvoie, et le reste du tunnel tutoie** : la fenêtre
      d'inscription, la vidéo et la confirmation. Rémy a décidé de garder le
      vouvoiement ici.
 
-     Espaces insécables dans « PARFAIT tunnel de vente », qui se coupait
-     après « PARFAIT », dans « offre digitale* » et « en ligne** », pour qu'un
-     astérisque ne passe jamais seul à la ligne. Hors de la coupure ci-dessus, c'est la
-     taille fluide du titre, voir `app/course/page.tsx`, qui lui donne sa
-     forme. */
-  titre: [
-    { texte: "Nous allons mettre en place le " },
-    { coupure: true },
-    { texte: "PARFAIT\u00a0tunnel\u00a0de\u00a0vente", accent: true },
-    { texte: " pour vendre votre " },
-    { coupure: true },
-    { texte: "offre\u00a0digitale*", accent: true },
-    { texte: " grâce à la " },
-    { texte: "publicité en\u00a0ligne**", accent: true },
+     Espaces insécables dans « tunnel de vente », « offre digitale* » et
+     « bouche à oreille », pour qu'un astérisque ou un mot ne passe jamais
+     seul à la ligne. C'est la taille fluide du titre, voir
+     `app/course/page.tsx`, qui lui donne sa forme. */
+  /* Dicté par Rémy : à qui s'adresse la page, avant la promesse du titre. */
+  surtitre: [
+    [
+      { texte: "Si vous souhaitez développer une activité en ligne autour de vos " },
+      { texte: "connaissances", gras: true },
+      { texte: " ou " },
+      { texte: "compétences", gras: true },
+    ],
   ],
-  /* Les renvois des astérisques du titre, un par ligne. */
+  titre: [
+    { texte: "Nous allons mettre en place un " },
+    { texte: "tunnel de vente", accent: true },
+    { texte: " et des " },
+    { texte: "publicités en ligne", accent: true },
+    { texte: " pour vendre votre " },
+    { texte: "offre digitale*", accent: true },
+    { texte: " " },
+    { texte: "(même si vous ne l’avez pas encore créée)", italique: true },
+    { texte: " " },
+    { texte: "SANS", rouge: true },
+    { texte: " " },
+    { texte: "prospection", souligne: true },
+    { texte: ", ", ordinateur: true },
+    /* Sur téléphone, une ligne par chose qu'on évite, chacune avec son « SANS » :
+       la virgule, le « ou » et le point ne servent qu'à la phrase d'ordinateur. */
+    { coupure: true },
+    { texte: "SANS ", rouge: true, telephone: true },
+    { texte: "création\u00a0de\u00a0contenu", souligne: true },
+    { texte: " " },
+    { coupure: true },
+    { texte: "ou ", ordinateur: true },
+    { texte: "SANS ", rouge: true, telephone: true },
+    { texte: "bouche\u00a0à\u00a0oreille", souligne: true },
+    { texte: ".", ordinateur: true },
+  ],
+  /* Le renvoi de l'astérisque du titre. */
   renvois: [
     {
       accent: "*Offre digitale",
-      suite: " : formation en ligne, coaching\u00a0ou\u00a0consulting",
-    },
-    {
-      accent: "**Publicité en ligne",
-      suite:
-        " : attirer des clients à vous sans prospection ni création\u00a0de\u00a0contenu",
+      suite: " : formation en ligne, coaching ou consulting",
     },
   ],
   /* L'aperçu de la vidéo : une image tirée de la vidéo en 4K. */

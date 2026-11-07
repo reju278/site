@@ -347,10 +347,10 @@ function Formulaire() {
  * par la règle globale, elle figerait une onde à moitié éteinte.
  */
 function IconeSon({
-  className = "size-[45%]",
+  className,
   anime = true,
 }: {
-  className?: string;
+  className: string;
   anime?: boolean;
 }) {
   const onde = anime
@@ -450,8 +450,11 @@ function ApercuVideo({ ouvrir }: { ouvrir: () => void }) {
         <span className="max-w-0 overflow-hidden whitespace-nowrap opacity-0 transition-[max-width,opacity,padding] duration-300 ease-out group-hover/son:max-w-[20rem] group-hover/son:pl-[1.1em] group-hover/son:opacity-100">
           Cliquez pour activer le son
         </span>
-        <span className="flex aspect-square h-full shrink-0 items-center justify-center">
-          <IconeSon />
+        {/* Des cotes écrites, et non `h-full` et un pourcentage : une taille
+            en pourcentage dans une boîte qui tient sa largeur d'`aspect-square`
+            ne se résout pas de la même façon d'un navigateur à l'autre. */}
+        <span className="flex size-[max(2.25rem,5.9cqw)] shrink-0 items-center justify-center">
+          <IconeSon className="size-[max(1rem,2.65cqw)] shrink-0" />
         </span>
       </span>
 
