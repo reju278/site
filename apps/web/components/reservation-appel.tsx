@@ -9,7 +9,6 @@ import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { ChoixJour, cleDuJour, dateDuJour } from "@/components/choix-jour";
 import { TexteRoulant } from "@/components/texte-roulant";
 import { reservationYt } from "@/contenu/appel";
-import { API_FUNNELS } from "@/contenu/vsl";
 import { lireContactVsl } from "@/lib/prenom-vsl";
 import { Input } from "@repo/ui/components/input";
 import { cn } from "@repo/ui/lib/utils";
@@ -243,57 +242,8 @@ export function ReservationAppel({
     setErreur(undefined);
     const adresse = new URLSearchParams(window.location.search);
 
-    /* **Le « NON » ne réserve pas**, sur décision de Rémy : la personne qui
-       dit ne pas avoir les moyens de se faire accompagner n'occupe pas un
-       créneau de l'équipe. Elle part vers `/prochaine-etape`, avec son seul
-       prénom, sous le nom que lit le relevé de `/thanks`, qui l'y retire de
-       l'adresse avant GTM. Rien n'est envoyé à Calendly. */
-    const bloque = reservationYt.questions.find(
-      (question) =>
-        question.bloquant &&
-        (reponses[question.cle] ?? []).includes(question.bloquant),
-    );
-    if (bloque) {
-      /* **La trace dans le CRM**, sur demande de Rémy : la candidature
-         rejoint le tableau « Refusée » sous Sourcing, écrite comme une
-         réservation, avec le créneau choisi et toutes les réponses sous
-         leurs intitulés Calendly. `keepalive` pour que l'envoi survive au
-         changement de page, et sans attendre : un CRM injoignable ne doit
-         pas retenir la personne sur le formulaire.
-
-         En `text/plain` plutôt qu'en JSON : la requête part sans
-         vérification préalable (CORS), que certains navigateurs refusent
-         sur un envoi `keepalive`. Le serveur lit le corps en JSON quel que
-         soit son type. */
-      void fetch(`${API_FUNNELS}/vsl/refus`, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=UTF-8" },
-        keepalive: true,
-        body: JSON.stringify({
-          prenom: prenom.trim(),
-          nom: nom.trim(),
-          email: email.trim(),
-          telephone: numero,
-          debut: heure,
-          /* Le nom de l'événement dans le CRM, dicté par Rémy : on lit
-             d'un coup d'œil que ce n'est pas un rendez-vous. */
-          evenement: `${reservationYt.titre} (refusé)`,
-          questions: [
-            { question: reservationYt.questionTelephone, answer: numero },
-            ...reservationYt.questions.map((question) => ({
-              question: question.question,
-              answer: final[question.cle] ?? "",
-            })),
-          ],
-        }),
-      }).catch(() => {});
-      const ailleurs = new URL("/prochaine-etape", window.location.origin);
-      ailleurs.searchParams.set("invitee_first_name", prenom.trim());
-      for (const [cle, valeur] of adresse.entries())
-        if (cle.startsWith("utm_")) ailleurs.searchParams.set(cle, valeur);
-      window.location.assign(ailleurs.toString());
-      return;
-    }
+    /* Le « NON » réserve comme les autres réponses, sur décision de Rémy :
+       plus de détour par `/prochaine-etape`. */
     const demande: DemandeReservation = {
       prenom,
       nom,

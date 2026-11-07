@@ -175,9 +175,6 @@ type QuestionReservation = {
    *  Rémy. Il peut différer de `question` : Calendly ne le voit jamais. */
   libelle: string;
   choix: readonly string[];
-  /** Le choix qui ne réserve pas : la personne est envoyée vers
-   *  `/prochaine-etape` au lieu de prendre un créneau, sur décision de Rémy. */
-  bloquant?: string;
 };
 
 export const reservationYt = {
@@ -263,8 +260,6 @@ export const reservationYt = {
         "J'ai accès aux moyens financiers pour investir dans la croissance de mon activité",
         "NON, je n'ai PAS accès aux ressources financières pour me faire accompagner",
       ],
-      bloquant:
-        "NON, je n'ai PAS accès aux ressources financières pour me faire accompagner",
     },
     /* Typées une à une plutôt que figées : la page doit savoir traiter tout
        type de question, même celui qu'aucune ne porte aujourd'hui. */
