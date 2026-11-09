@@ -24,6 +24,7 @@ const PAGES_CLAIRES = [
   "/stable-appel",
   "/lancement",
   "/lancement-appel",
+  "/info-consulting",
   ...CHEMINS_TEMOIGNAGE,
   "/form-funnel-thanks",
   "/prochaine-etape",
