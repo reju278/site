@@ -33,6 +33,8 @@ export const TUNNELS = [
   "/debuts-appel",
   "/stable",
   "/stable-appel",
+  "/lancement",
+  "/lancement-appel",
   ...CHEMINS_TEMOIGNAGE,
   "/form-funnel-thanks",
   "/prochaine-etape",

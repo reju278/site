@@ -8,10 +8,10 @@ import { insecables } from "@/lib/typographie";
  * Une page de `go.funnels.club` faite d'une vidéo, sur le modèle de `/thanks`,
  * sur demande de Rémy : le titre tout en haut, la vidéo sans carte blanche,
  * puis la suite de la page telle quelle, de Roland à l'équipe.
- * Sert à `/debuts`, `/stable` et à leurs versions `-appel`, hors du Quizz Funnel.
+ * Sert à `/debuts`, `/stable`, `/lancement` et à leurs versions `-appel`, hors du Quizz Funnel.
  *
  * `appel`, facultatif, pose un bouton sous la vidéo : c'est ce qui distingue
- * `/stable-appel` de `/stable`, et `/debuts-appel` de `/debuts`, sur demande de Rémy. Il s'ouvre dans un nouvel
+ * la version `-appel` de sa page, sur demande de Rémy. Il s'ouvre dans un nouvel
  * onglet, le défaut de `BoutonScintillant`, pour que la vidéo continue, et
  * relaie le `el` et l'e-mail reçus : voir `BoutonAppelRelaye`.
  */

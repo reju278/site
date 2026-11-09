@@ -2138,11 +2138,15 @@ geste de la page, vers `liens.appel`. Pas de galerie, pas d'équipe, pas de
 consigne. Le titre et le sous-titre sont de l'agent, d'après l'e-mail : à
 valider par Rémy.
 
-**`/debuts-appel` et `/stable-appel` sont `/debuts` et `/stable` avec un
-bouton sous la vidéo**, sur demande de Rémy : le même `PageVideo`, dont la
+**`/lancement` est le troisième de la famille**, sur la vidéo
+`vkvffo2189` (celle de qui démarre de zéro sur `/thanks-quizz`), avec sa
+version `/lancement-appel`.
+
+**`/debuts-appel`, `/stable-appel` et `/lancement-appel` sont leur page sans
+suffixe avec un bouton sous la vidéo**, sur demande de Rémy : le même `PageVideo`, dont la
 propriété `appel` pose le `BoutonScintillant` en grand, vers `liens.appel`,
-dans un nouvel onglet pour que la vidéo continue. Le libellé est celui de
-`/strategie`. Les deux versions sans bouton restent servies telles quelles.
+dans un nouvel onglet pour que la vidéo continue. Le libellé dit « appel
+de candidature » et non « découverte », sur demande de Rémy. Les deux versions sans bouton restent servies telles quelles.
 
 **Leur bouton relaie le `el` et l'`email` reçus**, et les `utm_*`
 (`BoutonAppelRelaye`). Rémy envoie ces pages par e-mail avec

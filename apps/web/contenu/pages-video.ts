@@ -1,5 +1,5 @@
 /**
- * Les pages `go.funnels.club/debuts` et `/stable`, sur demande de Rémy : une
+ * Les pages `go.funnels.club/debuts`, `/stable` et `/lancement`, sur demande de Rémy : une
  * vidéo Wistia et son titre. La description est à valider par Rémy.
  */
 export const videoDebuts = {
@@ -19,12 +19,28 @@ export const videoStable = {
 } as const;
 
 /**
- * `go.funnels.club/debuts-appel` et `/stable-appel` : `/debuts` et `/stable`
- * avec un bouton sous la vidéo vers l'appel, sur demande de Rémy. Le libellé
- * est celui de `/strategie`, écrit une fois pour les deux pages.
+ * `go.funnels.club/lancement`. Le titre est le nom de la vidéo dans Wistia,
+ * sans son préfixe « Confirmation · » ; la vidéo est aussi celle de qui démarre
+ * de zéro sur `/thanks-quizz`. La description est à valider par Rémy.
+ */
+export const videoLancement = {
+  id: "vkvffo2189",
+  /* 2 738,73 secondes, relevées sur l'API de Wistia. */
+  secondes: 2739,
+  titre: "Comment lancer une formation en ligne en 2026",
+  description:
+    "La vidéo où Rémy Jupille explique comment lancer une formation en ligne en 2026, étape par étape.",
+} as const;
+
+/**
+ * `go.funnels.club/debuts-appel`, `/stable-appel` et `/lancement-appel` : `/debuts` et `/stable`
+ * avec un bouton sous la vidéo vers l'appel, sur demande de Rémy. « Appel de
+ * candidature » et non « découverte », sur sa demande : écrit une fois pour
+ * les trois pages.
  */
 const appelVideo = {
-  libelle: "Réserver mon appel découverte",
+  libelle: "Réserver mon appel de candidature",
 } as const;
 export const appelDebuts = appelVideo;
 export const appelStable = appelVideo;
+export const appelLancement = appelVideo;
