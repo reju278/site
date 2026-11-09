@@ -1,10 +1,8 @@
-import { BoutonScintillant } from "@/components/bouton-scintillant";
+import { BoutonAppelRelaye } from "@/components/bouton-appel-relaye";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { LogoFunnels } from "@/components/logo-funnels";
 import { PreuvesTunnel } from "@/components/preuves-tunnel";
-import { TexteRoulant } from "@/components/texte-roulant";
 import { insecables } from "@/lib/typographie";
-import { ArrowRight } from "lucide-react";
 
 /**
  * Une page de `go.funnels.club` faite d'une vidéo, sur le modèle de `/thanks`,
@@ -14,7 +12,8 @@ import { ArrowRight } from "lucide-react";
  *
  * `appel`, facultatif, pose un bouton sous la vidéo : c'est ce qui distingue
  * `/stable-appel` de `/stable`, et `/debuts-appel` de `/debuts`, sur demande de Rémy. Il s'ouvre dans un nouvel
- * onglet, le défaut de `BoutonScintillant`, pour que la vidéo continue.
+ * onglet, le défaut de `BoutonScintillant`, pour que la vidéo continue, et
+ * relaie le `el` et l'e-mail reçus : voir `BoutonAppelRelaye`.
  */
 export function PageVideo({
   titre,
@@ -50,13 +49,7 @@ export function PageVideo({
           />
           {appel ? (
             <div className="mt-8 flex justify-center sm:mt-10">
-              <BoutonScintillant
-                href={appel.href}
-                className="min-h-16 w-full text-lg sm:w-auto sm:px-12 sm:text-xl"
-              >
-                <TexteRoulant>{appel.libelle}</TexteRoulant>
-                <ArrowRight aria-hidden className="size-5 shrink-0" />
-              </BoutonScintillant>
+              <BoutonAppelRelaye href={appel.href} libelle={appel.libelle} />
             </div>
           ) : null}
         </div>

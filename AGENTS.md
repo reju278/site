@@ -2144,6 +2144,13 @@ propriété `appel` pose le `BoutonScintillant` en grand, vers `liens.appel`,
 dans un nouvel onglet pour que la vidéo continue. Le libellé est celui de
 `/strategie`. Les deux versions sans bouton restent servies telles quelles.
 
+**Leur bouton relaie le `el` et l'`email` reçus**, et les `utm_*`
+(`BoutonAppelRelaye`). Rémy envoie ces pages par e-mail avec
+`?email={{contact.email_address}}&el=email-…` : l'e-mail est ce qui fait
+reconnaître la personne par Hyros, **il reste donc dans l'adresse, sur sa
+décision**, contrairement à `/appel`, où `contact-lien.ts` le retire avant GTM.
+Sans paramètre, le bouton garde `el=site`.
+
 **Les pages de témoignage, `go.funnels.club/<clé>`, sont `/thanks` réduit à
 une vidéo et un bouton** (issue #6) : une par entretien du site, vingt-deux, sur
 demande de Rémy. Le dessin vit **une fois** dans `components/page-temoignage.tsx`
