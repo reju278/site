@@ -2569,6 +2569,28 @@ Sur demande de Rémy, et par deux mécanismes, parce qu'il en faut deux :
 **L'attribut est retiré et non ajouté à l'entrée**, pour qu'une page servie sans
 JavaScript garde ses animations plutôt que de les perdre.
 
+### Les affiches de Wistia se relaient, elles ne se recopient plus
+
+Rémy a vu sur `/debuts` « une frame, puis la miniature ». C'était **l'ancienne
+miniature** : les affiches étaient des copies figées dans `public/temoignages`,
+et il change ses miniatures dans Wistia. Mesuré le 9 novembre 2026 : trois sur
+trente-quatre ne correspondaient plus, et celle de `/lancement` a changé
+pendant la mesure. Le site montrait sa copie, puis le lecteur peignait la vraie.
+
+`app/affiches/[fichier]/route.ts` sert donc l'affiche **telle que Wistia
+l'affiche**, en WebP et en trois largeurs (640, 960, 1 280), figée au build et
+revalidée toutes les dix minutes : aucune requête ne part chez Wistia à
+l'ouverture d'une page. `LecteurVideo` s'y branche tout seul dès que
+l'affiche est `/temoignages/<id>.jpg` ; une affiche choisie exprès (accueil,
+hub) reste servie telle quelle. Les copies locales restent, comme repli si
+Wistia ne répond pas et comme vignette des données structurées.
+
+Mesuré sur `/debuts` au téléphone : 327 Ko de JPEG avant, 69 Ko de WebP après.
+**L'en-tête `Cache-Control` de `next.config.mjs` n'est pas décoratif** : sans
+`max-age`, la réponse ISR ne se gardait pas dans le navigateur et chaque
+affiche se téléchargeait deux fois. En mode natif, le lecteur préconnecte aussi
+les trois serveurs de Wistia, et l'affiche hors du haut de page est différée.
+
 ### L'iframe de Wistia attend d'approcher de l'écran
 
 `natif` sert le lecteur de Wistia d'emblée, sur décision de Rémy, et rien ne

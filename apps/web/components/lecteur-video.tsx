@@ -3,6 +3,7 @@
 import { cn } from "@repo/ui/lib/utils";
 import { Play } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { preconnect } from "react-dom";
 
 /**
  * Un lecteur vidéo Wistia, habillé par nous.
@@ -105,6 +106,27 @@ const OPTIONS_NATIF = (() => {
  * notification de `/preparation`, n'a aucun lien de parenté avec le lecteur.
  */
 export const LIRE_VIDEO = "lecteur-video:lire";
+
+/**
+ * Les sources de l'affiche, **relayées depuis Wistia** quand l'affiche est la
+ * copie de `public/temoignages` de cette même vidéo : voir
+ * `app/affiches/[fichier]/route.ts`. La copie avait cessé de correspondre à la
+ * miniature de Wistia sur trois vidéos, et le site montrait l'ancienne image
+ * avant que le lecteur ne peigne la nouvelle.
+ *
+ * Toute autre affiche, choisie exprès (celle de l'accueil, celles du hub
+ * nettoyées de leurs montants), reste servie telle quelle.
+ */
+function sourcesAffiche(id: string, affiche: string) {
+  if (affiche !== `/temoignages/${id}.jpg`) return null;
+  return {
+    src: `/affiches/${id}.webp`,
+    srcSet: `/affiches/${id}-640.webp 640w, /affiches/${id}-960.webp 960w, /affiches/${id}.webp 1280w`,
+  };
+}
+
+/** La largeur d'affichage la plus grande d'un lecteur : la vidéo la plus large du site fait 76 rem. */
+const TAILLES = "(min-width: 1216px) 1216px, 100vw";
 
 /** « 981 » devient « 16:21 ». */
 export function duree(secondes: number): string {
@@ -250,6 +272,19 @@ export function LecteurVideo({
   }, [natif, prioritaire]);
 
   const options = natif && !demandee ? OPTIONS_NATIF : OPTIONS;
+  const relais = sourcesAffiche(id, affiche);
+
+  /* **La préconnexion aux serveurs de Wistia**, en mode natif seulement, là où
+     l'iframe part sans clic. Elle ouvre la connexion (DNS, TCP, TLS) pendant
+     que la page se charge au lieu d'attendre que l'iframe la demande : c'est
+     plusieurs allers-retours de gagnés sur un téléphone en 4G. `fast.wistia.net`
+     sert l'iframe, `fast.wistia.com` ses scripts, `embed-ssl.wistia.com` les
+     morceaux de vidéo. React les remonte dans le `head` au rendu serveur. */
+  if (natif) {
+    preconnect("https://fast.wistia.net");
+    preconnect("https://fast.wistia.com");
+    preconnect("https://embed-ssl.wistia.com");
+  }
 
   return (
     <div
@@ -310,22 +345,32 @@ export function LecteurVideo({
         {natif ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={affiche}
+            src={relais?.src ?? affiche}
             /* Sur téléphone, la version de 640 px : quatre fois moins de pixels
              pour un cadre de 375 px de large. */
             srcSet={
-              afficheMobile
+              relais?.srcSet ??
+              (afficheMobile
                 ? `${afficheMobile} 640w, ${affiche} 1280w`
-                : undefined
+                : undefined)
             }
             sizes={
-              afficheMobile ? "(min-width: 896px) 832px, 100vw" : undefined
+              relais
+                ? TAILLES
+                : afficheMobile
+                  ? "(min-width: 896px) 832px, 100vw"
+                  : undefined
             }
             alt=""
             aria-hidden
             width={1280}
             height={720}
             fetchPriority={prioritaire ? "high" : undefined}
+            /* Différée hors du haut de page : sans cela, l'affiche de Roland,
+               deux écrans plus bas sur `/debuts`, partait à la même
+               milliseconde que celle du haut et lui prenait la bande passante
+               de l'image que Google chronomètre. */
+            loading={prioritaire ? undefined : "lazy"}
             className="absolute inset-0 size-full object-cover"
           />
         ) : null}
@@ -368,12 +413,14 @@ export function LecteurVideo({
               `overflow-hidden` sur le parent la recadre, ce qui donne un
               mouvement contenu au lieu d'un bloc qui pousse ses voisins. */}
             <picture>
-              {afficheMobile ? (
+              {afficheMobile && !relais ? (
                 <source media="(min-width: 768px)" srcSet={affiche} />
               ) : null}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={afficheMobile ?? affiche}
+                src={relais?.src ?? afficheMobile ?? affiche}
+                srcSet={relais?.srcSet}
+                sizes={relais ? TAILLES : undefined}
                 alt={afficheAlt ?? ""}
                 width={1280}
                 height={720}

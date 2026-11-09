@@ -27,9 +27,9 @@ export const videoLancement = {
   id: "vkvffo2189",
   /* 2 738,73 secondes, relevées sur l'API de Wistia. */
   secondes: 2739,
-  titre: "Comment lancer une formation en ligne en 2026",
+  titre: "Comment lancer une formation en ligne en 2027",
   description:
-    "La vidéo où Rémy Jupille explique comment lancer une formation en ligne en 2026, étape par étape.",
+    "La vidéo où Rémy Jupille explique comment lancer une formation en ligne en 2027, étape par étape.",
 } as const;
 
 /**

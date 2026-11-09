@@ -50,6 +50,25 @@ export default {
     ];
   },
 
+  /* Les affiches relayées depuis Wistia (`app/affiches`) : sans durée de vie
+   * pour le navigateur, la réponse ISR (`s-maxage` seul) ne se gardait pas, et
+   * chaque affiche était téléchargée deux fois par page, mesuré. Dix minutes,
+   * comme la revalidation de la route.
+   */
+  async headers() {
+    return [
+      {
+        source: "/affiches/:fichier",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=600, s-maxage=600, stale-while-revalidate=86400",
+          },
+        ],
+      },
+    ];
+  },
+
   async redirects() {
     return [
       {
