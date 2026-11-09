@@ -2138,6 +2138,12 @@ geste de la page, vers `liens.appel`. Pas de galerie, pas d'équipe, pas de
 consigne. Le titre et le sous-titre sont de l'agent, d'après l'e-mail : à
 valider par Rémy.
 
+**`/debuts-appel` et `/stable-appel` sont `/debuts` et `/stable` avec un
+bouton sous la vidéo**, sur demande de Rémy : le même `PageVideo`, dont la
+propriété `appel` pose le `BoutonScintillant` en grand, vers `liens.appel`,
+dans un nouvel onglet pour que la vidéo continue. Le libellé est celui de
+`/strategie`. Les deux versions sans bouton restent servies telles quelles.
+
 **Les pages de témoignage, `go.funnels.club/<clé>`, sont `/thanks` réduit à
 une vidéo et un bouton** (issue #6) : une par entretien du site, vingt-deux, sur
 demande de Rémy. Le dessin vit **une fois** dans `components/page-temoignage.tsx`

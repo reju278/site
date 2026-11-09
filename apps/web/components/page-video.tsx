@@ -1,20 +1,29 @@
+import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { LogoFunnels } from "@/components/logo-funnels";
 import { PreuvesTunnel } from "@/components/preuves-tunnel";
+import { TexteRoulant } from "@/components/texte-roulant";
 import { insecables } from "@/lib/typographie";
+import { ArrowRight } from "lucide-react";
 
 /**
  * Une page de `go.funnels.club` faite d'une vidéo, sur le modèle de `/thanks`,
  * sur demande de Rémy : le titre tout en haut, la vidéo sans carte blanche,
  * puis la suite de la page telle quelle, de Roland à l'équipe.
- * Sert à `/debuts` et `/stable`, hors du Quizz Funnel.
+ * Sert à `/debuts`, `/stable` et à leurs versions `-appel`, hors du Quizz Funnel.
+ *
+ * `appel`, facultatif, pose un bouton sous la vidéo : c'est ce qui distingue
+ * `/stable-appel` de `/stable`, et `/debuts-appel` de `/debuts`, sur demande de Rémy. Il s'ouvre dans un nouvel
+ * onglet, le défaut de `BoutonScintillant`, pour que la vidéo continue.
  */
 export function PageVideo({
   titre,
   video,
+  appel,
 }: {
   titre: string;
   video: { id: string; secondes: number };
+  appel?: { href: string; libelle: string };
 }) {
   return (
     <>
@@ -39,6 +48,17 @@ export function PageVideo({
             prioritaire
             className="mt-6 shadow-[0_30px_70px_-25px_rgba(0,0,0,0.55),0_2px_10px_rgba(0,0,0,0.18)] ring-1 ring-black/25 sm:mt-10"
           />
+          {appel ? (
+            <div className="mt-8 flex justify-center sm:mt-10">
+              <BoutonScintillant
+                href={appel.href}
+                className="min-h-16 w-full text-lg sm:w-auto sm:px-12 sm:text-xl"
+              >
+                <TexteRoulant>{appel.libelle}</TexteRoulant>
+                <ArrowRight aria-hidden className="size-5 shrink-0" />
+              </BoutonScintillant>
+            </div>
+          ) : null}
         </div>
       </section>
       <PreuvesTunnel />

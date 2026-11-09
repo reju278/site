@@ -17,3 +17,14 @@ export const videoStable = {
   description:
     "La vidéo où Rémy Jupille explique comment créer un business en ligne stable et profitable.",
 } as const;
+
+/**
+ * `go.funnels.club/debuts-appel` et `/stable-appel` : `/debuts` et `/stable`
+ * avec un bouton sous la vidéo vers l'appel, sur demande de Rémy. Le libellé
+ * est celui de `/strategie`, écrit une fois pour les deux pages.
+ */
+const appelVideo = {
+  libelle: "Réserver mon appel découverte",
+} as const;
+export const appelDebuts = appelVideo;
+export const appelStable = appelVideo;
