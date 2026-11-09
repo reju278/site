@@ -2591,6 +2591,26 @@ Mesuré sur `/debuts` au téléphone : 327 Ko de JPEG avant, 69 Ko de WebP aprè
 affiche se téléchargeait deux fois. En mode natif, le lecteur préconnecte aussi
 les trois serveurs de Wistia, et l'affiche hors du haut de page est différée.
 
+**Ça ne suffisait pas, et Rémy l'a revu sur `/lancement-appel`.** Le lecteur de
+Wistia a deux couches : un `<video>` sans affiche (`blank.gif`), qui montre sa
+première image dès qu'il a des données, et la miniature, une image séparée qui
+arrive en fondu par-dessus. Selon ce qui sort du cache en premier, on voit la
+première image un quart de seconde. **L'iframe reste donc à `opacity-0`** jusqu'à
+ce que Wistia envoie `transitiondone` par `postMessage`, avec notre affiche
+identique dessous. Trois pièges rencontrés :
+
+- **`transitiondone` n'arrive qu'une fois le lecteur dans l'écran.** Un secours
+  parti dès la création montrait trop tôt une iframe hors champ ; il part donc
+  à l'entrée dans l'écran (2,5 s), plus un dernier recours absolu à 5 s.
+- **L'iframe du haut est rendue par le serveur** et peut finir avant
+  l'hydratation : l'écoute est un script en HTML brut posé juste avant elle
+  (`ECOUTE_WISTIA`), qui range les identifiants prêts dans `window.__wistiaPret`.
+- **Un onglet en arrière-plan ne se dessine pas** : ni l'observateur ni Wistia ne
+  s'y déclenchent. Un test qui y tourne conclut à tort que rien ne marche.
+
+Mesuré en local : affiche à 95 ms, iframe révélée à 817 ms, aucune image
+intermédiaire ; Roland, plus bas, révélé 345 ms après qu'on a défilé jusqu'à lui.
+
 ### L'iframe de Wistia attend d'approcher de l'écran
 
 `natif` sert le lecteur de Wistia d'emblée, sur décision de Rémy, et rien ne

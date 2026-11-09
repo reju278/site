@@ -128,6 +128,24 @@ function sourcesAffiche(id: string, affiche: string) {
 /** La largeur d'affichage la plus grande d'un lecteur : la vidéo la plus large du site fait 76 rem. */
 const TAILLES = "(min-width: 1216px) 1216px, 100vw";
 
+/**
+ * L'écoute des iframes Wistia prêtes, **écrite dans le HTML** et non par React.
+ *
+ * L'iframe du haut de page est rendue par le serveur : elle peut finir de se
+ * mettre en place avant l'hydratation, donc avant qu'un effet React n'écoute,
+ * et son `transitiondone` serait perdu. Ce script, posé juste avant elle, note
+ * dans `window.__wistiaPret` l'identifiant de chaque iframe prête et prévient
+ * par un événement `wistia-pret`. Idempotent : posé deux fois, il ne s'installe
+ * qu'une.
+ */
+const ECOUTE_WISTIA = `(function(){if(window.__wistiaPret)return;var p=window.__wistiaPret=new Set();window.addEventListener("message",function(e){if(typeof e.data!=="string"||e.data.indexOf('"transitiondone"')<0)return;var f=document.querySelectorAll("iframe[data-wistia]");for(var i=0;i<f.length;i++){if(f[i].contentWindow===e.source){var id=f[i].getAttribute("data-wistia");if(!p.has(id))(window.__wistiaPretA=window.__wistiaPretA||{})[id]=Math.round(performance.now());p.add(id);window.dispatchEvent(new CustomEvent("wistia-pret",{detail:id}));}}});})();`;
+
+declare global {
+  interface Window {
+    __wistiaPret?: Set<string>;
+  }
+}
+
 /** « 981 » devient « 16:21 ». */
 export function duree(secondes: number): string {
   const m = Math.floor(secondes / 60);
@@ -221,6 +239,8 @@ export function LecteurVideo({
   /* En mode natif, la lecture demandée de l'extérieur par `LIRE_VIDEO`. */
   const [demandee, setDemandee] = useState(false);
   const cadre = useRef<HTMLDivElement>(null);
+  /* L'iframe a fini de se mettre en place : voir l'effet plus bas. */
+  const [pret, setPret] = useState(false);
 
   useEffect(() => {
     if (!natif) return;
@@ -270,6 +290,64 @@ export function LecteurVideo({
     observateur.observe(el);
     return () => observateur.disconnect();
   }, [natif, prioritaire]);
+
+  /* **L'iframe reste invisible jusqu'à ce que Wistia ait fini de peindre.**
+
+     C'est la réparation du saut que Rémy a vu sur `/lancement-appel` : « pendant
+     un quart de seconde, on voit très bien le truc, et après, la miniature ».
+     En se chargeant, le lecteur démarre son moteur vidéo et peint **une image
+     de la vidéo**, puis pose sa miniature par-dessus. Relevé sur les messages
+     que l'iframe envoie à la page : le moteur part (`engine-initialized`), et
+     c'est environ 180 ms plus tard qu'arrive `transitiondone`, une fois la
+     miniature en place. Le saut vit entre les deux.
+
+     Notre affiche, dessous, est **la même image que la miniature de Wistia**
+     (`app/affiches`) : tant que l'iframe est transparente, on voit donc déjà
+     l'état final, et son apparition ne change rien à l'écran. Un clic reçu
+     pendant ce temps atteint quand même l'iframe, l'opacité ne coupe pas les
+     clics.
+
+     **Un délai de secours** la montre deux secondes et demie après son entrée
+     dans l'écran si le message n'arrive jamais, un changement de Wistia par exemple : une vidéo qu'on ne
+     voit plus serait pire que le saut. La lecture demandée (`demandee`) la
+     montre tout de suite, puisque c'est un rechargement qui démarre. */
+  useEffect(() => {
+    if (!natif || !(proche || lance)) return;
+    /* L'écoute est installée ici aussi pour les iframes créées après coup
+       (celles qui attendent d'approcher de l'écran) : le script est idempotent. */
+    if (!window.__wistiaPret) new Function(ECOUTE_WISTIA)();
+    if (window.__wistiaPret?.has(id)) {
+      setPret(true);
+      return;
+    }
+    const ecouter = (evenement: Event) => {
+      if ((evenement as CustomEvent<string>).detail === id) setPret(true);
+    };
+    window.addEventListener("wistia-pret", ecouter);
+    /* Le secours ne compte qu'à partir du moment où le lecteur est **dans
+       l'écran** : Wistia n'envoie `transitiondone` qu'une fois entré dans la
+       fenêtre, et une iframe préparée trois cents pixels plus bas l'attend
+       légitimement. Un délai parti dès la création la montrait trop tôt, et le
+       saut se produisait sous les yeux de qui défilait jusqu'à elle. */
+    let secours = 0;
+    const visible = new IntersectionObserver((entrees) => {
+      if (entrees.some((e) => e.isIntersecting) && !secours) {
+        secours = window.setTimeout(() => setPret(true), 2500);
+        visible.disconnect();
+      }
+    });
+    if (cadre.current) visible.observe(cadre.current);
+    /* Et un dernier recours absolu, qui ne dépend de rien : un onglet qui ne
+       se dessine pas ne déclenche ni l'observateur ni le message de Wistia, et
+       une vidéo ne doit jamais pouvoir rester invisible. */
+    const dernier = window.setTimeout(() => setPret(true), 5000);
+    return () => {
+      window.removeEventListener("wistia-pret", ecouter);
+      visible.disconnect();
+      window.clearTimeout(secours);
+      window.clearTimeout(dernier);
+    };
+  }, [natif, proche, lance, id]);
 
   const options = natif && !demandee ? OPTIONS_NATIF : OPTIONS;
   const relais = sourcesAffiche(id, affiche);
@@ -388,16 +466,25 @@ export function LecteurVideo({
           // lui-même cette zone. Le faire déborder est la seule prise qui reste.
           //
           // Le prix est un rognage de moins d'un pour cent de l'image.
+          <>
+          {natif && prioritaire ? (
+            <script dangerouslySetInnerHTML={{ __html: ECOUTE_WISTIA }} />
+          ) : null}
           <iframe
             /* Une lecture demandée change la clé, donc remonte l'iframe avec
              `autoPlay` : c'est le rechargement qui la fait démarrer. */
             key={demandee ? "lecture" : "repos"}
+            data-wistia={id}
             src={`https://fast.wistia.net/embed/iframe/${id}?${options}`}
             title={titre}
             allow="autoplay; fullscreen"
             allowFullScreen
-            className="absolute -inset-[3px] size-[calc(100%+6px)] border-0"
+            className={cn(
+              "absolute -inset-[3px] size-[calc(100%+6px)] border-0",
+              natif && !pret && !demandee && "opacity-0",
+            )}
           />
+          </>
         ) : null}
 
         {!natif && !lance ? (
