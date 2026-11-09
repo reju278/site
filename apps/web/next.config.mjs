@@ -46,6 +46,7 @@ export default {
     const zone = process.env.ZONE_CRM || "https://form.funnels.club";
     return [
       { source: "/quizz", destination: `${zone}/quizz` },
+      { source: "/quizz-fb", destination: `${zone}/quizz-fb` },
       { source: "/crm-zone/:chemin+", destination: `${zone}/crm-zone/:chemin+` },
     ];
   },
