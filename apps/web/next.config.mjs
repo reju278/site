@@ -47,6 +47,7 @@ export default {
     return [
       { source: "/quizz", destination: `${zone}/quizz` },
       { source: "/quizz-fb", destination: `${zone}/quizz-fb` },
+      { source: "/quizz-yt", destination: `${zone}/quizz-yt` },
       { source: "/crm-zone/:chemin+", destination: `${zone}/crm-zone/:chemin+` },
     ];
   },
