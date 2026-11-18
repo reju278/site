@@ -2,6 +2,7 @@ import { BanniereGenesis } from "@/components/banniere-genesis";
 import { InscriptionGenesis } from "@/components/inscription-genesis";
 import { Emplacement } from "@/components/section";
 import { optinGenesis, partiesGenesis } from "@/contenu/formation-genesis";
+import { insecables } from "@/lib/typographie";
 import type { Metadata } from "next";
 
 /**
@@ -11,10 +12,11 @@ import type { Metadata } from "next";
  * **Le dessin est celui de l'optin ClickFunnels de Rémy**,
  * `funnels.club/course-2027-fb-2`, sur sa demande : la barre et la bannière,
  * le titre en PT Serif gras, le sous-titre surligné en bleu pâle, puis deux
- * colonnes, le visuel à gauche et à droite l'accroche, la liste à puces et le
- * bouton bleu qui ouvre la fenêtre d'inscription.
+ * colonnes. **Elles ne sont plus celles de la référence**, sur demande de
+ * Rémy : le mockup de la vidéo à gauche, et à droite directement le
+ * formulaire en trois étapes (`InscriptionGenesis`), sans fenêtre.
  *
- * Tout ce qui attend un texte de Rémy est un `<Emplacement>`.
+ * Tout ce qui attend un texte ou une image de Rémy est un `<Emplacement>`.
  */
 export const metadata: Metadata = {
   title: { absolute: `${optinGenesis.titrePage} · Funnels Club` },
@@ -25,13 +27,15 @@ export const metadata: Metadata = {
 };
 
 export default function FormationGenesis() {
-  const { etiquette, titre, accroche, points } = optinGenesis;
+  const { etiquette, titre } = optinGenesis;
   /* Les quatre derniers mots sont liés par des espaces insécables : sans
      cela, « ligne » finit seul sur sa ligne à 375 px, et `text-pretty` ne
      l'empêche pas. En large, ils sont déjà sur la même ligne. */
-  const sousTitre = optinGenesis
-    .sousTitre(partiesGenesis.filter((p) => !p.bonus).length)
-    .replace(/ (\S+) (\S+) (\S+)$/, " $1 $2 $3");
+  const sousTitre = insecables(
+    optinGenesis
+      .sousTitre(partiesGenesis.filter((p) => !p.bonus).length)
+      .replace(/ (\S+) (\S+) (\S+)$/, " $1 $2 $3"),
+  );
 
   return (
     <main className="bg-[var(--genesis-fond)] text-[var(--genesis-encre)]">
@@ -48,9 +52,14 @@ export default function FormationGenesis() {
           {etiquette}
         </p>
         {/* Le seul `h1` de la page : le titre de Rémy, ou le nom de la
-            formation tant qu'il n'est pas écrit. */}
-        <h1 className="text-[clamp(1.75rem,7.5vw,2.75rem)] leading-[1.1] font-bold tracking-[0.02em] text-balance">
-          {titre ?? optinGenesis.titrePage}
+            formation tant qu'il n'est pas écrit.
+            **Deux lignes à partir de `sm`**, sur demande de Rémy : le titre
+            mesure 45,9 fois son corps sur une ligne, la colonne fait au plus
+            896 px, donc deux lignes équilibrées tiennent jusqu'à 4 % de la
+            largeur d'écran moins 3 px, plafonné à 36 px. Sur téléphone, il
+            n'y a pas de corps lisible qui tienne en deux lignes. */}
+        <h1 className="text-[clamp(1.75rem,7.5vw,2.75rem)] leading-[1.1] font-bold tracking-[0.02em] text-balance sm:text-[clamp(1.75rem,calc(4vw-3px),2.25rem)]">
+          {insecables(titre ?? optinGenesis.titrePage)}
         </h1>
         {titre ? null : (
           <Emplacement
@@ -65,49 +74,19 @@ export default function FormationGenesis() {
         </p>
       </header>
 
-      {/* Le visuel à gauche, l'accroche, la liste et le bouton à droite.
-          Empilés sur téléphone, le visuel en premier comme sur la
-          référence. */}
+      {/* Le mockup de la vidéo à gauche, le formulaire à droite, sans
+          fenêtre, sur demande de Rémy. Empilés sur téléphone, le visuel en
+          premier comme sur la référence. Centrés l'un sur l'autre en
+          large : le formulaire change de hauteur d'une étape à l'autre. */}
       <section
         aria-label="Inscription"
-        className="mx-auto grid max-w-[1065px] grid-cols-1 gap-6 px-5 pt-6 sm:px-8 md:grid-cols-2 md:gap-8 md:pt-8"
+        className="mx-auto grid max-w-[1065px] grid-cols-1 items-center gap-6 px-5 pt-6 sm:px-8 md:grid-cols-2 md:gap-8 md:pt-8"
       >
         <Emplacement
-          attendu="un visuel de la formation, une photo de Rémy ou un aperçu de la vidéo"
+          attendu="le mockup de la vidéo de la formation"
           className="aspect-video min-h-0"
         />
-        <div className="flex flex-col gap-4 text-[17px] leading-[1.5] sm:text-xl">
-          {accroche ? (
-            <p className="text-pretty">{accroche}</p>
-          ) : (
-            <Emplacement
-              attendu="l'accroche : ce que la formation permet de construire"
-              className="min-h-0 py-4"
-            />
-          )}
-          {points.length ? (
-            <ul className="flex list-disc flex-col gap-1 pl-7 marker:text-[var(--genesis-encre)]">
-              {points.map((point) => (
-                <li key={point.suite} className="text-pretty">
-                  {point.surligne ? (
-                    <>
-                      <span className="bg-[var(--genesis-rose)] box-decoration-clone">
-                        {point.surligne}
-                      </span>{" "}
-                    </>
-                  ) : null}
-                  {point.suite}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <Emplacement
-              attendu="la liste à puces, quatre lignes environ, avec les mots à surligner en rose"
-              className="min-h-28 py-4"
-            />
-          )}
-          <InscriptionGenesis />
-        </div>
+        <InscriptionGenesis />
       </section>
     </main>
   );

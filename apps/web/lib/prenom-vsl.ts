@@ -47,7 +47,7 @@ function lireApercu() {
     return question?.choix[rang];
   };
   return {
-    contact: { prenom: parametres.get("prenom") ?? "", email: "" },
+    contact: { prenom: parametres.get("prenom") ?? "", nom: "", email: "" },
     reponses: {
       activite: choix("activite"),
       objectif: choix("objectif"),
@@ -59,7 +59,9 @@ function lireApercu() {
 export function lireContactVsl() {
   const apercu = lireApercu();
   if (apercu) return apercu.contact;
-  return lireFrais<{ prenom?: unknown; email?: unknown }>(CLE_CONTACT_VSL);
+  return lireFrais<{ prenom?: unknown; nom?: unknown; email?: unknown }>(
+    CLE_CONTACT_VSL,
+  );
 }
 
 export function lireReponsesVsl() {

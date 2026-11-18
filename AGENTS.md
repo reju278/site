@@ -2222,14 +2222,30 @@ bleu pâle et mots évités en rose. Les jetons `--genesis-*` sont dans
 `globals.css`, **sans valeur sombre** : le tunnel est forcé au clair. En haut
 de chaque page, `BanniereGenesis` : barre de 42 px, paysage `fond-hero` cadré
 par le bas sur 200 px (le même tableau que la référence), tuile du logo à
-cheval. L'optin ouvre l'inscription dans une fenêtre, comme la référence.
+cheval.
+
+**L'optin n'a plus de fenêtre** : sur demande de Rémy, le mockup de la vidéo
+est à gauche et le formulaire directement à droite, en trois étapes (prénom
+et nom, e-mail et consentement, téléphone), dans `InscriptionGenesis`.
+**L'inscription part à l'étape de l'e-mail, en arrière-plan** : Rémy veut
+qu'on passe au téléphone « instantanément », et le contact est gardé même si
+la personne s'arrête là. L'étape du téléphone attend la réponse, la retente
+une fois si elle a échoué, puis ajoute le numéro au même contact
+(`completerGenesis`). Prénom, nom et téléphone arrivent dans les champs
+natifs de ClickFunnels, le consentement dans le champ personnalisé
+« consentement », comme pour `/course`. Le téléphone reprend la règle
+d'`/appel`, sortie pour l'occasion dans `lib/telephone.ts`.
+
+**Les champs ne sont pas ceux de la référence**, que Rémy n'aimait pas
+(ombre intérieure, libellé en texte d'exemple) : `Input` de shadcn, 56 px,
+bordure à 45 % de noir (le seuil de 3:1 d'une bordure de contrôle, que le
+gris à 15 % habituel ne tient pas), focus en bleu du tunnel, et un libellé
+qui remonte à la saisie au lieu de disparaître.
 
 **`BoutonGenesis` a des angles droits**, aplat #438bf7 : une exception à la
 règle des 5 px, décidée par Rémy en demandant que le tunnel colle à sa
 référence, boutons compris. Elle ne vaut que pour ce bouton. Le blanc y tient
-3,35:1, donc son texte ne descend jamais sous 20 px gras. La croix de la
-fenêtre, ronde chez eux, garde 5 px : les commandes rondes du site sont une
-famille fermée.
+3,35:1, donc son texte ne descend jamais sous 20 px gras.
 
 **Ajouter une page** : une clé dans `lib/pages-temoignage.ts`, une entrée dans
 `SOURCES`, et **la même clé dans le catalogue du CRM**,

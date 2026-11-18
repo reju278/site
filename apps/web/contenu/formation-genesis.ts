@@ -35,10 +35,16 @@ export const optinGenesis = {
    *  rendue en capitales par le CSS : un lecteur d'écran épelle parfois un
    *  mot écrit tout en capitales. */
   etiquette: "Formation gratuite disponible maintenant",
-  /** De Rémy. Une seule retouche : « Rémy à générer » est devenu « Rémy a
-   *  généré ». */
+  /**
+   * De Rémy, sa seconde version. La première annonçait que Rémy avait
+   * « généré des millions » : un montant sur une page d'arrivée de
+   * publicité, ce que Meta lit comme une promesse de gain (voir le hub dans
+   * `AGENTS.md`). Celle-ci n'en porte aucun. « OFFERT » est devenu
+   * « GRATUIT » à sa demande. Une seule retouche : « 100% » s'écrit
+   * « 100 % », l'espace rendue insécable à l'affichage.
+   */
   titre:
-    "La stratégie avec laquelle Rémy a généré des millions avec une formation en ligne" as
+    "Créer sa formation, attirer des clients et vendre en ligne : Stratégie complète. 100 % GRATUIT" as
       | string
       | null,
   /**
@@ -51,24 +57,47 @@ export const optinGenesis = {
    */
   sousTitre: (modules: number) =>
     `Accédez à ${modules} modules de formation gratuite pour apprendre à créer, lancer et croitre un business de formation en ligne`,
-  /** Le paragraphe à droite du visuel, au-dessus de la liste. */
-  accroche: null as string | null,
   /**
-   * La liste à puces au-dessus du bouton. `surligne`, facultatif, est le
-   * début de la ligne surligné en rose, comme les « Sans » de la référence ;
-   * `suite` est le reste de la ligne.
+   * Le formulaire en trois étapes, à droite du visuel. Les questions et les
+   * boutons des deux premières étapes sont de Rémy ; le reste est un libellé
+   * d'interface de l'agent, PROVISOIRE, au vouvoiement de Rémy.
    */
-  points: [] as { surligne?: string; suite: string }[],
-  /** La ligne de réassurance sous le bouton de la fenêtre d'inscription. */
-  reassurance: null as string | null,
   formulaire: {
-    /* Libellés d'interface, PROVISOIRES. */
-    titre: "Entre tes informations pour accéder à la formation :",
+    etapes: {
+      nom: {
+        question: "Quel est votre prénom ?",
+        bouton: "Obtenir la formation gratuite",
+      },
+      email: {
+        question: "À quel email dois-je vous l'envoyer ?",
+        bouton: "Continuer",
+      },
+      telephone: {
+        /* PROVISOIRE : Rémy a demandé le numéro sans dicter la question. */
+        question: "Quel est votre numéro de téléphone ?",
+        bouton: "Continuer",
+      },
+    },
+    /* PROVISOIRES. */
     prenom: "Prénom",
-    email: "E-mail",
-    bouton: "Accéder à la formation",
-    envoi: "Inscription…",
-    erreur: "L'inscription n'est pas passée. Vérifie ton e-mail et réessaie.",
+    nom: "Nom",
+    email: "Email",
+    pays: "Pays",
+    telephone: "Numéro de téléphone",
+    retour: "Retour",
+    envoi: "Envoi…",
+    /* La case de `/course`, mot pour mot : c'est le consentement que le
+       tunnel VSL demande déjà, vers la même politique. */
+    consentement:
+      "J'accepte de recevoir les emails de Funnels Club (désabonnement possible à tout moment) et je valide la ",
+    lienConfidentialite: "Politique de confidentialité",
+    /* Les champs vides et l'e-mail mal formé sont signalés par le
+       navigateur (`required`, `type="email"`) ; restent le numéro, qu'il ne
+       sait pas lire, et l'échec de l'envoi. */
+    erreurs: {
+      telephone: "Indiquez votre numéro de téléphone complet.",
+      envoi: "L'envoi n'est pas passé. Vérifiez votre email et réessayez.",
+    },
   },
 };
 
