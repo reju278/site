@@ -235,7 +235,8 @@ export const espaceGenesis = {
   titreBonus: "Bonus",
   suivante: "Module suivant",
   /** La carte d'appel, à droite sur ordinateur, sous la vidéo sur
-   *  téléphone. Elle mène à `/formation-genesis/appel`. */
+   *  téléphone. Elle mène à `/reservation`, avec les balises du module :
+   *  voir `lienReservation`. */
   carte: {
     /* Les trois textes sont de Rémy. « /an » est lié à « chiffres » par
        une espace insécable, pour ne jamais ouvrir une ligne. **Le titre est
@@ -258,12 +259,63 @@ export const espaceGenesis = {
   },
 };
 
-/** Les textes de la réservation, `/formation-genesis/appel`. */
-export const appelGenesis = {
-  titrePage: "Formation Genesis · Réserver ton appel",
-  titre: null as string | null,
-  /** La vidéo de Rémy, sous les témoignages. */
-  video: null as { id: string; secondes: number; titre: string } | null,
-  /** La description de Funnels Club, à côté de la vidéo. */
-  description: null as string | null,
+/**
+ * La réservation de l'appel de la Formation Genesis,
+ * `go.funnels.club/reservation`, sur demande de Rémy : le formulaire
+ * Calendly qu'il a donné, préremplie avec ce qu'on a laissé à l'optin.
+ *
+ * Elle remplace `/formation-genesis/appel`, qui réservait par l'API et
+ * n'a jamais été en ligne.
+ */
+export const reservationGenesis = {
+  chemin: "/reservation",
+  /* Le formulaire donné par Rémy, sans requête : `FormulaireCalendly`
+     ajoute `hide_gdpr_banner`, les balises `utm_*` et le préremplissage. */
+  calendly: "https://calendly.com/funnels-club/candidature-funnels-club-fb-clone",
+  /**
+   * La question de l'événement qui reçoit le téléphone : « Téléphone /
+   * WhatsApp » est la première, `a1`, relevée par l'API de Calendly le
+   * 18 novembre 2026. **Si Rémy déplace la question dans Calendly, ce
+   * numéro change avec elle.**
+   */
+  questionTelephone: "a1",
+  /* PROVISOIRES, de l'agent : Rémy n'a pas donné de texte pour cette page. */
+  titrePage: "Formation Genesis · Réserver votre appel",
+  barre: "Réservation de votre appel",
+  titre: "Réservez votre appel",
+  titreFormulaire: "Formulaire de réservation de l'appel",
 };
+
+/**
+ * Le lien vers la réservation depuis un module, **avec ses balises de
+ * campagne**, sur demande de Rémy : Calendly les garde avec le rendez-vous,
+ * et on sait ainsi de quel module est parti l'appel.
+ *
+ * - `utm_source=formation-genesis` : le tunnel ;
+ * - `utm_medium=espace-membre` : la page d'où part le clic ;
+ * - `utm_campaign=appel-formation-genesis` : l'appel à l'action ;
+ * - `utm_content` : le module, par sa clé d'adresse (`module-1`… `bonus`) ;
+ * - `utm_term` : son titre, en minuscules et sans accent (`positionnement`),
+ *   pour le lire sans table de correspondance.
+ *
+ * `FormulaireCalendly` reprend toute balise `utm_*` de la page et la passe à
+ * Calendly. Elles ne disent rien de la personne : seul le module voyage dans
+ * l'adresse, le contact reste dans le navigateur.
+ */
+export function lienReservation(partie: PartieGenesis): string {
+  const lisible = (texte: string) =>
+    texte
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+  const balises = new URLSearchParams({
+    utm_source: "formation-genesis",
+    utm_medium: "espace-membre",
+    utm_campaign: "appel-formation-genesis",
+    utm_content: partie.bonus ? partie.cle : `module-${partie.cle}`,
+    utm_term: lisible(partie.titre ?? partie.etiquette),
+  });
+  return `${reservationGenesis.chemin}?${balises.toString()}`;
+}

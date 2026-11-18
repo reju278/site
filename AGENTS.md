@@ -2180,8 +2180,35 @@ GA4, LinkedIn) viennent du gabarit racine, vérifié dans le navigateur.
 
 **`/formation-genesis` est un tunnel à trois étages** (issue #8) : l'optin,
 l'espace membre (`/espace/<partie>`, une adresse par partie parce que chaque
-e-mail de la séquence en envoie une), puis la réservation (`/appel`), qui pose
-le carrousel des témoignages de l'accueil au-dessus de `BlocReservation`.
+e-mail de la séquence en envoie une), puis la réservation,
+**`go.funnels.club/reservation`**, à la racine parce que Rémy a donné cette
+adresse, au même cadre (`GabaritGenesis`). Elle remplace
+`/formation-genesis/appel`, qui réservait par l'API et n'a jamais été en
+ligne.
+
+**La réservation est le Calendly de Rémy
+(`candidature-funnels-club-fb-clone`) intégré par `FormulaireCalendly`**,
+avec ses réglages éprouvés sur le VSL : l'iframe part pendant la lecture du
+HTML, et son cadre prend la hauteur que Calendly annonce, donc on ne défile
+jamais dedans. Elle s'ouvre préremplie avec le contact de l'optin, gardé dans
+le navigateur : prénom et nom (champs séparés sur cet événement), e-mail, et
+téléphone dans la question `a1` (« Téléphone / WhatsApp », relevée par
+l'API ; si Rémy la déplace, `questionTelephone` suit). Les réponses du
+questionnaire VSL ne sont pas reversées ici : sur cet événement, `a5` n'est
+pas la même question.
+
+**Chaque bouton « Réserver mon appel » d'un module porte ses UTM**
+(`lienReservation`) : `utm_source=formation-genesis`,
+`utm_medium=espace-membre`, `utm_campaign=appel-formation-genesis`,
+`utm_content=module-2` (ou `bonus`) et `utm_term=offre-ideale`.
+`FormulaireCalendly` les passe à Calendly, qui les garde avec le rendez-vous.
+
+**Piège rencontré : une navigation côté client perdait tout.** Le script qui
+construit l'adresse de l'iframe ne tourne qu'au chargement complet ; un clic
+sur un `Link` de Next posait la page sans l'exécuter, et Calendly s'ouvrait
+vide et sans UTM. `RelaisCalendly` refait l'adresse au montage quand
+`embed_domain` manque. Vérifié dans les deux cas, et sur le formulaire de
+Calendly lui-même.
 Les références d'acquisition.com n'ont donné que la structure. **L'optin
 inscrit par l'API de ClickFunnels**, et non par le SDK comme `/course` :
 `app/formation-genesis/actions.ts` crée ou retrouve le contact

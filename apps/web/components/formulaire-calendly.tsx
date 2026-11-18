@@ -1,71 +1,11 @@
 import { CadreCalendly } from "@/components/cadre-calendly";
+import { RelaisCalendly } from "@/components/relais-calendly";
+import { adresseCalendly } from "@/lib/adresse-calendly";
+import { cn } from "@repo/ui/lib/utils";
 import { LoaderCircle } from "lucide-react";
 
-/**
- * L'adresse du formulaire, avec les balises de campagne de la page.
- *
- * **Elle se construit avant React, dans un script posé juste après l'iframe**,
- * et c'est tout le gain de vitesse : l'iframe part pendant la lecture du HTML,
- * sans attendre que la page s'hydrate ni que le `widget.js` de Calendly se
- * télécharge. Mesuré en local, elle partait à 205 ms ; sur un téléphone,
- * l'hydratation coûte une à deux secondes de plus.
- *
- * **La fonction est donc recopiée telle quelle dans ce script**, par
- * `toString()` : elle ne doit rien importer ni rien lire hors de son argument
- * et de `location`.
- *
- * Les balises `utm_*` de la page sont transmises pour que la réservation soit
- * attribuée à la bonne source, comme le faisait `widget.js`. `embed_domain` et
- * `embed_type` sont ceux qu'il posait aussi.
- */
-function adresseCalendly(base: string): string {
-  const adresse = new URL(base);
-  adresse.searchParams.set("embed_domain", location.host);
-  adresse.searchParams.set("embed_type", "Inline");
-  adresse.searchParams.set("hide_gdpr_banner", "1");
-
-  new URLSearchParams(location.search).forEach((valeur, cle) => {
-    if (cle.indexOf("utm_") === 0) adresse.searchParams.set(cle, valeur);
-  });
-
-  /* Le prénom et l'e-mail laissés par l'opt-in du VSL Funnel (`/course`),
-     pour que Calendly s'ouvre déjà rempli. Gardés dans le navigateur, jamais
-     dans l'adresse de la page. Littéral recopié de `CLE_CONTACT_VSL` : la
-     fonction ne doit rien importer. */
-  try {
-    const contact = JSON.parse(localStorage.getItem("vsl-contact") || "null");
-    /* Sept jours, recopié de `DUREE_CONTACT_VSL`. */
-    const frais =
-      contact && Date.now() - (contact.t || 0) < 7 * 24 * 60 * 60 * 1000;
-    if (frais && typeof contact.email === "string") {
-      adresse.searchParams.set("email", contact.email);
-      if (typeof contact.prenom === "string" && contact.prenom)
-        adresse.searchParams.set("name", contact.prenom);
-    }
-    /* Les réponses au questionnaire de `/video-vsl`, aux questions de
-       Calendly qu'elles reprennent mot pour mot. Les numéros sont ceux de
-       `questionnaireVsl`, recopiés : la fonction ne doit rien importer. */
-    const reponses = JSON.parse(localStorage.getItem("vsl-reponses") || "null");
-    if (
-      frais &&
-      reponses &&
-      Date.now() - (reponses.t || 0) < 7 * 24 * 60 * 60 * 1000
-    ) {
-      if (typeof reponses.activite === "string")
-        adresse.searchParams.set("a2", reponses.activite);
-      if (typeof reponses.objectif === "string")
-        adresse.searchParams.set("a3", reponses.objectif);
-      if (typeof reponses.prix === "string")
-        adresse.searchParams.set("a5", reponses.prix);
-    }
-  } catch (e) {
-    /* Stockage bloqué : le formulaire reste vide. */
-  }
-
-  return adresse.toString();
-}
-
-/** Une seule iframe par page : l'identifiant peut être fixe. */
+/** Une seule iframe par page : l'identifiant peut être fixe. Recopié dans
+ *  `RelaisCalendly`, qui ne peut pas importer ce fichier qui l'importe. */
 const ID = "formulaire-calendly";
 
 /**
@@ -119,6 +59,9 @@ export function FormulaireCalendly({
   url,
   titre,
   hauteurMin,
+  telephone = null,
+  reponsesVsl = true,
+  clair = false,
   className,
 }: {
   url: string;
@@ -126,12 +69,26 @@ export function FormulaireCalendly({
   hauteurMin: number;
   /** Le titre de l'iframe, pour les lecteurs d'écran. */
   titre: string;
+  /** La question de l'événement qui reçoit le téléphone de l'opt-in, `a1`
+   *  par exemple. Sans elle, le numéro n'est pas transmis. */
+  telephone?: string | null;
+  /** Reverser les réponses du questionnaire de `/video-vsl`. Vrai par
+   *  défaut, pour l'événement du VSL ; faux pour tout autre. */
+  reponsesVsl?: boolean;
+  /** Posé sur un fond clair, et non sur la photographie d'`/appel` : le
+   *  cercle de chargement passe en gris à toutes les largeurs, et la carte
+   *  qu'on rend à Calendly sur téléphone est carrée, bordée d'un filet et
+   *  à l'ombre douce du tunnel Formation Genesis. */
+  clair?: boolean;
   className?: string;
 }) {
   /* L'adresse sans ce que seul le navigateur connaît : elle sert si le script
      ne tourne pas, par exemple après une navigation côté client, où React
-     pose ce HTML sans en exécuter les scripts. Le formulaire marche alors,
-     sans les balises de campagne. */
+     pose ce HTML sans en exécuter les scripts. **`RelaisCalendly` la
+     remplace alors par la bonne**, balises et préremplissage compris : sans
+     lui, un clic sur un lien Next vers la page (le bouton d'un module de
+     la Formation Genesis, par exemple) ouvrait Calendly vide et sans
+     `utm_*`. Relevé le 18 novembre 2026. */
   const parDefaut = new URL(url);
   parDefaut.searchParams.set("embed_type", "Inline");
   parDefaut.searchParams.set("hide_gdpr_banner", "1");
@@ -144,20 +101,35 @@ export function FormulaireCalendly({
      leurs attributs. */
   const html =
     `<iframe id="${ID}" title="${titre.replace(/&/g, "&amp;").replace(/"/g, "&quot;")}" src="${parDefaut.toString().replace(/&/g, "&amp;")}" class="block size-full [color-scheme:light]"></iframe>` +
-    `<script>document.getElementById(${JSON.stringify(ID)}).src=(${adresseCalendly.toString()})(${JSON.stringify(url)});</script>`;
+    `<script>document.getElementById(${JSON.stringify(ID)}).src=(${adresseCalendly.toString()})(${JSON.stringify(url)},${JSON.stringify({ telephone, reponsesVsl })});</script>`;
 
   return (
     <CadreCalendly hauteurMin={hauteurMin} className={className}>
       <div
         aria-hidden
-        className="absolute inset-0 -z-20 @max-3xl:rounded-[var(--rayon-jonction)] @max-3xl:bg-white"
+        className={cn(
+          "absolute inset-0 -z-20 @max-3xl:bg-white",
+          !clair && "@max-3xl:rounded-[var(--rayon-jonction)]",
+        )}
       />
       <LoaderCircle
         aria-hidden
-        className="absolute top-28 left-1/2 -z-10 size-6 -translate-x-1/2 animate-spin text-white/70 @max-3xl:text-black/30"
+        className={cn(
+          "absolute top-28 left-1/2 -z-10 size-6 -translate-x-1/2 animate-spin @max-3xl:text-black/30",
+          clair ? "text-black/30" : "text-white/70",
+        )}
+      />
+      <RelaisCalendly
+        url={url}
+        options={{ telephone, reponsesVsl }}
       />
       <div
-        className="size-full @max-3xl:overflow-hidden @max-3xl:rounded-[var(--rayon-jonction)] @max-3xl:shadow-[0_30px_70px_-25px_rgba(0,0,0,0.55)] @max-3xl:ring-1 @max-3xl:ring-border"
+        className={cn(
+          "size-full @max-3xl:overflow-hidden",
+          clair
+            ? "@max-3xl:shadow-[0_0_39px_-8px_rgba(0,0,0,0.15)] @max-3xl:ring-1 @max-3xl:ring-black/10"
+            : "@max-3xl:rounded-[var(--rayon-jonction)] @max-3xl:shadow-[0_30px_70px_-25px_rgba(0,0,0,0.55)] @max-3xl:ring-1 @max-3xl:ring-border",
+        )}
         /* Le script change l'adresse de l'iframe avant l'hydratation : le
            HTML que React retrouve n'est donc plus celui qu'il a envoyé, et
            c'est voulu. */

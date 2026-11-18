@@ -29,6 +29,7 @@ const PAGES_CLAIRES = [
   "/form-funnel-thanks",
   "/prochaine-etape",
   "/formation-genesis",
+  "/reservation",
 ] as const;
 
 /**

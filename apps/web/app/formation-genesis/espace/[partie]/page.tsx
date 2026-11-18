@@ -5,6 +5,7 @@ import { LogoFunnels } from "@/components/logo-funnels";
 import { Emplacement } from "@/components/section";
 import {
   espaceGenesis,
+  lienReservation,
   partiesGenesis,
   RACINE_GENESIS,
   type PartieGenesis as Partie,
@@ -219,7 +220,7 @@ export default async function PartieGenesis({ params }: Props) {
               />
             ) : null}
             <BoutonGenesis
-              href={`${RACINE_GENESIS}/appel`}
+              href={lienReservation(courante)}
               className="mt-6 sm:w-auto sm:px-8"
             >
               {carte.bouton}

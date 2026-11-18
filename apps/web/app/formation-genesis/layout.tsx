@@ -1,13 +1,11 @@
-import { MentionsLegales } from "@/components/mentions-legales";
-import { PiedImmersion } from "@/components/pied-immersion";
-import { PoliceGenesis } from "@/components/police-genesis";
-import { legalesVsl } from "@/contenu/vsl";
+import { GabaritGenesis } from "@/components/gabarit-genesis";
 import type { Metadata } from "next";
 
 /**
  * Le cadre du tunnel « Formation Genesis » (issue #8), servi sur
- * `go.funnels.club/formation-genesis` : l'optin, l'espace membre
- * (`/espace/<partie>`) et la réservation (`/appel`).
+ * `go.funnels.club/formation-genesis` : l'optin et l'espace membre
+ * (`/espace/<partie>`). La réservation est à `/reservation`, au même cadre :
+ * voir `GabaritGenesis`.
  *
  * Un tunnel : hors de l'en-tête et du pied du site (`lib/tunnels.ts`),
  * interdit d'index ici pour ses trois pages, absent de `sitemap.ts`, thème
@@ -30,22 +28,5 @@ export const metadata: Metadata = {
 export default function LayoutFormationGenesis({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  return (
-    <div
-      data-genesis
-      /* La largeur des vidéos et des cartes, celle de `/appel`. */
-      style={
-        {
-          "--largeur-video": "min(100vw - 2.5rem, 72rem)",
-        } as React.CSSProperties
-      }
-    >
-      <PoliceGenesis />
-      {children}
-      <div aria-hidden className="h-16 sm:h-24" />
-      <PiedImmersion>
-        <MentionsLegales nouvelOnglet liens={legalesVsl} />
-      </PiedImmersion>
-    </div>
-  );
+  return <GabaritGenesis>{children}</GabaritGenesis>;
 }

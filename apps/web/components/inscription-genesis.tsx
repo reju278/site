@@ -51,7 +51,8 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
  *
  * Prénom, nom, e-mail et numéro sont aussi gardés dans le navigateur, sous
  * la clé du tunnel VSL (sept jours, jamais dans l'adresse) : la réservation
- * de `/formation-genesis/appel` s'en préremplit.
+ * de `/reservation` (Calendly) s'en préremplit : prénom, nom, e-mail et
+ * téléphone.
  */
 export function InscriptionGenesis() {
   const { formulaire } = optinGenesis;
