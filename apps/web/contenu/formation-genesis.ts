@@ -24,6 +24,9 @@ export const RACINE_GENESIS = "/formation-genesis";
  */
 export const TAG_GENESIS = { id: 481456, nom: "formation genesis" } as const;
 
+/** Un morceau de phrase : du texte, ou un passage en gras ou souligné. */
+export type SegmentGenesis = string | { gras: string } | { souligne: string };
+
 /** Les textes de l'optin, `/formation-genesis`. */
 export const optinGenesis = {
   /* Titre d'onglet et description : PROVISOIRES, de l'agent. Une page de
@@ -54,9 +57,21 @@ export const optinGenesis = {
    * **Le nombre de modules est calculé**, jamais écrit : c'est celui de
    * `partiesGenesis`, bonus exclus. Rémy a écrit « 4 modules » ; la phrase
    * suit la liste le jour où elle change, comme le veut `AGENTS.md`.
+   *
+   * En segments, pour la mise en forme de Rémy : « 4 modules » en gras,
+   * « créer », « lancer » et « développer » soulignés.
    */
-  sousTitre: (modules: number) =>
-    `Accédez à ${modules} modules de formation gratuite qui dévoilent la stratégie étape par étape pour créer, lancer et développer un business de formation profitable`,
+  sousTitre: (modules: number): SegmentGenesis[] => [
+    "Accédez à ",
+    { gras: `${modules}\u00a0modules` },
+    " de formation gratuite qui dévoilent la stratégie étape par étape pour ",
+    { souligne: "créer" },
+    ", ",
+    { souligne: "lancer" },
+    " et ",
+    { souligne: "développer" },
+    " un business de formation profitable",
+  ],
   /**
    * La maquette du lecteur, à gauche du formulaire : une carte au dessin du
    * lecteur Wistia, et deux derrière elle. **Les trois images sont celles

@@ -5,6 +5,7 @@ import { Emplacement } from "@/components/section";
 import { optinGenesis, partiesGenesis } from "@/contenu/formation-genesis";
 import { insecables } from "@/lib/typographie";
 import type { Metadata } from "next";
+import { Fragment } from "react";
 
 /**
  * L'optin de la Formation Genesis, `go.funnels.club/formation-genesis`
@@ -31,12 +32,28 @@ export default function FormationGenesis() {
   const { etiquette, titre } = optinGenesis;
   /* Les quatre derniers mots sont liés par des espaces insécables : sans
      cela, le dernier mot finit seul sur sa ligne à 375 px, et `text-pretty`
-     ne l'empêche pas. */
-  const sousTitre = insecables(
-    optinGenesis
-      .sousTitre(partiesGenesis.filter((p) => !p.bonus).length)
-      .replace(/ (\S+) (\S+) (\S+)$/, " $1 $2 $3"),
+     ne l'empêche pas. Ils sont dans le dernier segment, qui est du texte. */
+  const segments = optinGenesis.sousTitre(
+    partiesGenesis.filter((p) => !p.bonus).length,
   );
+  const sousTitre = segments.map((segment, i) => {
+    if (typeof segment !== "string")
+      return "gras" in segment ? (
+        <strong key={i}>{segment.gras}</strong>
+      ) : (
+        <span
+          key={i}
+          className="underline decoration-[0.08em] underline-offset-[0.18em]"
+        >
+          {segment.souligne}
+        </span>
+      );
+    const texte =
+      i === segments.length - 1
+        ? segment.replace(/ (\S+) (\S+) (\S+)$/, " $1 $2 $3")
+        : segment;
+    return <Fragment key={i}>{insecables(texte)}</Fragment>;
+  });
 
   return (
     <main className="bg-[var(--genesis-fond)] text-[var(--genesis-encre)]">
