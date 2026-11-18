@@ -2201,7 +2201,9 @@ pas la même question.
 (`lienReservation`) : `utm_source=formation-genesis`,
 `utm_medium=espace-membre`, `utm_campaign=appel-formation-genesis`,
 `utm_content=module-2` (ou `bonus`) et `utm_term=offre-ideale`.
-`FormulaireCalendly` les passe à Calendly, qui les garde avec le rendez-vous.
+`FormulaireCalendly` les passe à Calendly, qui les garde avec le rendez-vous. Le
+bouton ouvre la réservation **dans un nouvel onglet**, sur demande de Rémy
+(`nouvelOnglet` de `BoutonGenesis`) : le module reste ouvert derrière.
 
 **Le titre de `/reservation` porte le prénom de l'optin**, lu dans le
 navigateur : « Réservez votre appel ci-dessous, Rémy ».

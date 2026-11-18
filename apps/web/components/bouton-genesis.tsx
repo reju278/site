@@ -20,9 +20,16 @@ import Link from "next/link";
  * Trois formes, une seule apparence : un lien interne (`href`), un bouton
  * d'envoi (`soumettre`) ou un bouton qui agit (`onClick`). Ce qui navigue est
  * un lien, ce qui agit est un bouton.
+ *
+ * **`nouvelOnglet`** ouvre le lien dans un autre onglet, par un `<a>` natif
+ * et non un `Link` : la page d'origine reste ouverte (la vidéo d'un module
+ * continue), et la page d'arrivée se charge en entier, donc ses scripts
+ * d'avant l'hydratation tournent. Le lecteur d'écran l'apprend par une
+ * mention masquée.
  */
 export function BoutonGenesis({
   href,
+  nouvelOnglet,
   soumettre,
   onClick,
   disabled,
@@ -30,6 +37,7 @@ export function BoutonGenesis({
   children,
 }: {
   href?: string;
+  nouvelOnglet?: boolean;
   soumettre?: boolean;
   onClick?: () => void;
   disabled?: boolean;
@@ -45,6 +53,14 @@ export function BoutonGenesis({
     "flex min-h-14 w-full items-center justify-center rounded-none bg-[var(--genesis-bleu)] px-6 py-3 text-center font-[family-name:var(--font-genesis-bouton)] text-[19px] leading-tight font-bold tracking-[0.04em] text-white uppercase transition-[filter,scale] duration-150 hover:brightness-[0.96] active:brightness-90 disabled:opacity-70 motion-safe:active:scale-[0.98]",
     className,
   );
+  if (href && nouvelOnglet) {
+    return (
+      <a href={href} target="_blank" rel="noopener" className={classes}>
+        {children}
+        <span className="sr-only"> (nouvel onglet)</span>
+      </a>
+    );
+  }
   if (href) {
     return (
       <Link href={href} className={classes}>

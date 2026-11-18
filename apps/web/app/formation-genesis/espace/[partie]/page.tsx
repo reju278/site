@@ -223,6 +223,9 @@ export default async function PartieGenesis({ params }: Props) {
             ) : null}
             <BoutonGenesis
               href={lienReservation(courante)}
+              /* Dans un nouvel onglet, sur demande de Rémy : le module reste
+                 ouvert derrière la réservation. */
+              nouvelOnglet
               className="mt-6 sm:w-auto sm:px-8"
             >
               {carte.bouton}
