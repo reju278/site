@@ -68,7 +68,7 @@ export default function FormationGenesis() {
             Un `p` et non un titre : elle ne décrit pas une section. L'espace
             entre les lettres est resserré sur téléphone, mesuré : à 0,08 em
             elle demande 336 px et passe sur deux lignes à 375 px de large. */}
-        <p className="mb-3 inline-block rounded-[5px] bg-[var(--genesis-jaune)] px-2.5 py-1 font-[family-name:var(--font-genesis-bouton)] text-xs font-bold tracking-[0.04em] uppercase sm:text-sm sm:tracking-[0.08em]">
+        <p className="mb-3 inline-block bg-[var(--genesis-jaune)] px-2.5 py-1 font-[family-name:var(--font-genesis-bouton)] text-xs font-bold tracking-[0.04em] uppercase sm:text-sm sm:tracking-[0.08em]">
           {etiquette}
         </p>
         {/* Le seul `h1` de la page : le titre de Rémy, ou le nom de la

@@ -165,6 +165,7 @@ export function LecteurVideo({
   prioritaire = false,
   afficheAlt,
   format,
+  carre = false,
   className,
 }: {
   id: string;
@@ -173,6 +174,10 @@ export function LecteurVideo({
   affiche: string;
   /** Une seconde source, plus légère, pour les écrans étroits. */
   afficheMobile?: string;
+  /** Angles droits au lieu des 5 px du site : le tunnel Formation Genesis,
+   *  où Rémy veut tout carré. Le rayon est écrit à deux endroits (le cadre
+   *  et l'enfant qui rogne), d'où une propriété plutôt qu'une classe. */
+  carre?: boolean;
   /**
    * Un bloc posé en bas de l'affiche, sur un voile qui garantit son contraste.
    *
@@ -376,7 +381,8 @@ export function LecteurVideo({
         // Le rapport est toujours 16/9, celui dans lequel Wistia sert ses
         // vidéos. Un cadre de 2,4/1 a été essayé pour masquer les bandes
         // noires des enregistrements ; Rémy a tranché pour le 16/9.
-        "relative isolate rounded-md",
+        "relative isolate",
+        carre ? "rounded-none" : "rounded-md",
         format ? "mx-auto" : "aspect-16/9",
         className,
       )}
@@ -409,7 +415,12 @@ export function LecteurVideo({
 
           Le rayon est écrit aux deux endroits : dehors pour que l'ombre portée
           suive la forme, dedans pour rogner. */}
-      <div className="absolute inset-0 overflow-hidden rounded-md bg-black">
+      <div
+        className={cn(
+          "absolute inset-0 overflow-hidden bg-black",
+          carre ? "rounded-none" : "rounded-md",
+        )}
+      >
         {/* **L'affiche tient la place tant que l'iframe n'est pas là**, en mode
           natif : sans elle, on verrait un rectangle noir le temps que Wistia
           réponde. Elle est déjà servie par nous, donc elle ne coûte rien de

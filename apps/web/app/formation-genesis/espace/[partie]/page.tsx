@@ -1,6 +1,7 @@
 import { BanniereGenesis } from "@/components/banniere-genesis";
 import { BoutonGenesis } from "@/components/bouton-genesis";
 import { LecteurVideo } from "@/components/lecteur-video";
+import { LogoFunnels } from "@/components/logo-funnels";
 import { Emplacement } from "@/components/section";
 import {
   espaceGenesis,
@@ -14,6 +15,7 @@ import { ArrowRight, Star } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Fragment } from "react";
 
 /**
  * L'espace membre de la Formation Genesis, un module par adresse :
@@ -120,6 +122,7 @@ export default async function PartieGenesis({ params }: Props) {
               affiche={`/temoignages/${courante.video.id}.jpg`}
               afficheAlt={titre}
               natif
+              carre
             />
           ) : (
             <Emplacement
@@ -139,57 +142,85 @@ export default async function PartieGenesis({ params }: Props) {
             </Link>
           ) : null}
 
-          {/* La carte d'appel : l'unique sortie de l'espace, sous la vidéo.
-              **Sa composition est celle du bloc « CTA section » d'Arc UI**
-              (`uiarc.dev`), variante centrée, sur demande de Rémy, qui
-              trouvait la carte précédente (photo, texte et bouton sur une
-              ligne) mal fichue : une surface calme et bordée, tout centré, le
-              titre équilibré et borné en largeur, puis l'action. Leur
-              fichier n'est pas installé (`.module.css`), la composition est
-              reprise en Tailwind. Ce qui reste à nous : les angles de 5 px, le
-              bleu pâle du tunnel en fond, et la photo de Rémy au-dessus, à la
-              place des visages de leur version.
+          {/* L'appel : l'unique sortie de l'espace, sous la vidéo.
+              **Discret et petit, comme un passage d'un document Notion**, sur
+              demande de Rémy, après deux cartes qu'il trouvait trop grosses :
+              une ligne légère le sépare du lien vers le module suivant, puis
+              tout est ferré à gauche, sans cadre ni fond, la petite photo
+              comprise, et le bouton vient en dessous du texte. Une version aux
+              polices et aux encres de Notion a été essayée ; Rémy a validé
+              celle-ci, dans le PT Serif du tunnel.
               Ses textes ne sont pas des titres : un bloc d'appel n'entre pas
               dans le plan de la page (voir `AGENTS.md`). */}
+          {/* Deux groupes et non une pile : en tête, une ligne d'auteur (les
+              deux avatars et le sur-titre côte à côte) ; puis, après un vrai
+              blanc, le contenu (titre, texte, bouton). Empilés à espacement
+              presque égal, Rémy les trouvait « pas harmonieux » : rien ne
+              disait où commençait le propos. */}
+          {/* **Sur téléphone, un fond gris très clair**, #f8f8f8, d'un bord
+              à l'autre de l'écran, sur demande de Rémy : la zone d'appel y
+              suit la vidéo et précède la liste des modules, et le filet seul
+              ne la détachait pas assez. Le fond remplace le filet, et le
+              liseré des avatars prend sa couleur. */}
           <aside
             aria-label="Réserver un appel"
-            className="mt-2 grid justify-items-center gap-3 rounded-[5px] border border-black/10 bg-[color-mix(in_srgb,var(--genesis-surligne)_55%,white)] px-5 py-9 text-center sm:px-10 sm:py-12"
+            className="mt-2 flex flex-col items-start border-t border-black/10 pt-8 max-sm:-mx-5 max-sm:border-t-0 max-sm:bg-[#f8f8f8] max-sm:px-5 max-sm:pb-8"
           >
-            {/* La photo de Rémy, ronde : c'est une photo de profil, la
-                seule famille qui y a droit sans exception. Le liseré blanc
-                la détache du fond. */}
-            <img
-              src={carte.photo.src}
-              alt={carte.photo.alt}
-              width={256}
-              height={256}
-              loading="lazy"
-              className="mb-1 size-16 rounded-full object-cover ring-4 ring-white sm:size-[72px]"
-            />
-            {carte.surtitre ? (
-              <p className="font-[family-name:var(--font-genesis-bouton)] text-xs font-bold tracking-[0.12em] text-[#60606b] uppercase">
-                {carte.surtitre}
-              </p>
-            ) : null}
+            <div className="flex items-center gap-3">
+              {/* La photo de Rémy devant le logo de Funnels Club, tous deux
+                  ronds, comme un groupe d'avatars, sur sa demande. Ce sont
+                  deux photos de profil, la personne et sa maison : la seule
+                  famille qui a droit au rond sans exception. Le logo est la
+                  tuile de `LogoFunnels` réduite à 80 % dans un cercle de son
+                  noir : à pleine taille, la photo qui la chevauche cachait la
+                  moitié du F. Un liseré de la couleur de page détache la
+                  photo du logo. */}
+              <div className="flex shrink-0 items-center">
+                <span className="grid size-10 place-items-center overflow-hidden rounded-full bg-[#101013] ring-2 ring-[var(--genesis-fond)] max-sm:ring-[#f8f8f8]">
+                  <LogoFunnels className="size-[80%]" />
+                </span>
+                <img
+                  src={carte.photo.src}
+                  alt={carte.photo.alt}
+                  width={256}
+                  height={256}
+                  loading="lazy"
+                  className="relative z-10 -ml-3 size-10 rounded-full object-cover ring-2 ring-[var(--genesis-fond)] max-sm:ring-[#f8f8f8]"
+                />
+              </div>
+              {carte.surtitre ? (
+                <p className="font-[family-name:var(--font-genesis-bouton)] text-[11px] leading-snug font-bold tracking-[0.1em] text-[#60606b] uppercase">
+                  {carte.surtitre}
+                </p>
+              ) : null}
+            </div>
             {carte.titre ? (
-              <p className="max-w-[26ch] text-[1.375rem] leading-tight font-bold text-balance sm:max-w-[34ch] sm:text-[1.75rem]">
-                {insecables(carte.titre)}
+              /* Une ligne par entrée de `carte.titre`, à partir de `sm` :
+                 la coupure est celle de Rémy. Sur téléphone, la première
+                 ligne est trop longue pour tenir seule ; le texte coule. */
+              <p className="mt-6 text-xl leading-snug font-bold text-pretty">
+                {carte.titre.map((ligne, i) => (
+                  <Fragment key={ligne}>
+                    {i > 0 ? " " : null}
+                    <span className="sm:block">{insecables(ligne)}</span>
+                  </Fragment>
+                ))}
               </p>
             ) : null}
             {carte.texte ? (
-              <p className="max-w-[34rem] text-base leading-[1.5] text-pretty text-[#60606b] sm:text-lg">
+              <p className="mt-2 text-base leading-relaxed text-pretty text-[#60606b]">
                 {carte.texte}
               </p>
             ) : null}
             {!carte.titre || !carte.texte ? (
               <Emplacement
                 attendu="le sur-titre, le titre et le texte de la carte d'appel"
-                className="min-h-24 w-full px-4 py-5"
+                className="mt-3 min-h-24 w-full px-4 py-5"
               />
             ) : null}
             <BoutonGenesis
               href={`${RACINE_GENESIS}/appel`}
-              className="mt-3 sm:w-auto sm:px-10"
+              className="mt-6 sm:w-auto sm:px-8"
             >
               {carte.bouton}
             </BoutonGenesis>
@@ -199,7 +230,7 @@ export default async function PartieGenesis({ params }: Props) {
         {/* La liste des modules, puis les bonus, dans une carte. */}
         <nav
           aria-label={espaceGenesis.titreListe}
-          className="h-fit rounded-[5px] bg-white p-4 shadow-[0_0_39px_-8px_rgba(0,0,0,0.15)] lg:order-1"
+          className="h-fit bg-white p-4 shadow-[0_0_39px_-8px_rgba(0,0,0,0.15)] lg:order-1"
         >
           <TitreGroupe>{espaceGenesis.titreListe}</TitreGroupe>
           <ol className="flex flex-col gap-1">
@@ -263,16 +294,16 @@ function EntreeModule({
       href={`${RACINE_GENESIS}/espace/${partie.cle}`}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "relative flex min-h-12 items-center gap-3 rounded-[5px] px-3 py-2 text-base transition-colors",
+        "relative flex min-h-12 items-center gap-3 px-3 py-2 text-base transition-colors",
         active
-          ? "bg-[var(--genesis-surligne)] font-bold before:absolute before:inset-y-2 before:left-0 before:w-[3px] before:rounded-[5px] before:bg-[var(--genesis-bleu)]"
+          ? "bg-[var(--genesis-surligne)] font-bold before:absolute before:inset-y-2 before:left-0 before:w-[3px] before:bg-[var(--genesis-bleu)]"
           : "hover:bg-black/[0.04]",
       )}
     >
       <span
         aria-hidden
         className={cn(
-          "flex size-7 shrink-0 items-center justify-center rounded-[5px] font-[family-name:var(--font-genesis-bouton)] text-xs font-bold",
+          "flex size-7 shrink-0 items-center justify-center font-[family-name:var(--font-genesis-bouton)] text-xs font-bold",
           active
             ? "bg-[var(--genesis-encre)] text-white"
             : "bg-black/[0.06] text-[var(--genesis-encre)]",

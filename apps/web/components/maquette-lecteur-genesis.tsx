@@ -83,7 +83,7 @@ export function MaquetteLecteurGenesis() {
       {/* Une carte-conteneur : ses textes et sa barre se mesurent en
           largeur de carte (`cqw`), pas d'écran, pour garder les
           proportions du lecteur à toutes les tailles. */}
-      <div className="@container relative z-10 mx-auto w-[80%] overflow-hidden sm:w-[72%] rounded-[5px] bg-black shadow-[0_24px_48px_-16px_rgba(0,0,0,0.45)]">
+      <div className="@container relative z-10 mx-auto w-[80%] overflow-hidden sm:w-[72%] rounded-none bg-black shadow-[0_24px_48px_-16px_rgba(0,0,0,0.45)]">
         <div className="relative aspect-video">
           <img
             src={maquette.principale}
@@ -103,7 +103,7 @@ export function MaquetteLecteurGenesis() {
           {premier ? (
             <span
               aria-hidden
-              className="absolute top-[5%] left-[3.5%] rounded-[5px] bg-[#1d1d24]/85 px-[1.6cqw] py-[0.8cqw] font-[family-name:var(--font-genesis-bouton)] text-[2.8cqw] leading-none font-bold text-white"
+              className="absolute top-[5%] left-[3.5%] rounded-none bg-[#1d1d24]/85 px-[1.6cqw] py-[0.8cqw] font-[family-name:var(--font-genesis-bouton)] text-[2.8cqw] leading-none font-bold text-white"
             >
               {premier.etiquette}
             </span>
@@ -184,7 +184,7 @@ function CarteArriere({
     <div
       aria-hidden
       className={cn(
-        "@container absolute top-1/2 z-0 w-[44%] -translate-y-1/2 overflow-hidden rounded-[5px] bg-[#d9d9de] shadow-[0_16px_32px_-16px_rgba(0,0,0,0.35)]",
+        "@container absolute top-1/2 z-0 w-[44%] -translate-y-1/2 overflow-hidden rounded-none bg-[#d9d9de] shadow-[0_16px_32px_-16px_rgba(0,0,0,0.35)]",
         cote === "gauche" ? "left-0" : "right-0",
       )}
     >
@@ -200,7 +200,7 @@ function CarteArriere({
         {legende ? (
           <span
             className={cn(
-              "absolute bottom-[6%] rounded-[5px] whitespace-nowrap bg-[#1d1d24]/85 px-[2cqw] py-[1cqw] font-[family-name:var(--font-genesis-bouton)] text-[4cqw] leading-none font-bold text-white",
+              "absolute bottom-[6%] rounded-none whitespace-nowrap bg-[#1d1d24]/85 px-[2cqw] py-[1cqw] font-[family-name:var(--font-genesis-bouton)] text-[4cqw] leading-none font-bold text-white",
               cote === "gauche" ? "left-[4%]" : "right-[4%]",
             )}
           >

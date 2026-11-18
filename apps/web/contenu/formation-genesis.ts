@@ -238,12 +238,15 @@ export const espaceGenesis = {
    *  téléphone. Elle mène à `/formation-genesis/appel`. */
   carte: {
     /* Les trois textes sont de Rémy. « /an » est lié à « chiffres » par
-       une espace insécable, pour ne jamais ouvrir une ligne. */
+       une espace insécable, pour ne jamais ouvrir une ligne. **Le titre est
+       écrit ligne par ligne** : Rémy veut la coupure après « formation »
+       (une première version la mettait après « /an »), et la laisser au
+       hasard de la largeur la mettait au milieu de « avec l'équipe ». */
     surtitre: "Pour les créateurs de formation ou de coaching" as string | null,
-    titre:
-      "Développez votre business de formation entre 6 et 7 chiffres\u00a0/an avec l'équipe Funnels Club" as
-        | string
-        | null,
+    titre: [
+      "Développez votre business de formation",
+      "entre 6 et 7 chiffres\u00a0/an avec l'équipe Funnels Club",
+    ] as string[] | null,
     texte:
       "Formation, accompagnement, coaching, outils et IA spécialisée." as
         | string

@@ -2249,11 +2249,13 @@ Un champ qui manque se borde de rouge, et **une phrase rouge sous le bouton**
 le dit, traduite de la référence de Rémy : la vérification est la nôtre
 (`noValidate`), les bulles du navigateur ne se placent pas.
 
-**Les angles droits valent pour `BoutonGenesis` et pour les champs du
-tunnel**, aplat #438bf7 pour le premier : une exception à la règle des 5 px,
+**Les angles droits valent pour tout le tunnel**, bouton, champs, cartes,
+maquette et lecteur vidéo (`LecteurVideo` a pour cela une propriété
+`carre`, son rayon étant écrit à deux endroits),, aplat #438bf7 pour le premier : une exception à la règle des 5 px,
 décidée par Rémy en demandant que le tunnel colle à sa référence, boutons
 compris, puis étendue aux champs (« tu gardes nos bordures : c'est des
-bordures carrées »). Elle ne vaut que dans ce tunnel. Le blanc sur le bleu
+bordures carrées », puis « faut que tout soit carré »). Elle ne vaut que
+dans ce tunnel ; restent ronds les photos de profil et le logo en avatar. Le blanc sur le bleu
 tient 3,35:1, donc le texte du bouton ne descend jamais sous 19 px gras (le
 grand texte gras commence à 18,66 px). **Le bouton est un aplat sans
 ombre** : l'ombre bleue portée et la montée au survol ont été essayées puis
@@ -2271,12 +2273,13 @@ mène au premier champ du formulaire, un bouton de lecture qui ne lirait rien
 
 **Une flèche faite à la main, en noir, désigne le formulaire**
 (`FlecheGenesis`), sur un croquis de Rémy qu'il ne fallait pas recopier : un
-trait de feutre, une petite boucle, une pointe en deux traits inégaux. Une
-version « au pinceau », calculée et régulière, a été refusée comme trop
-mécanique. Deux tracés et non un étiré : en large, elle part de la
-dernière ligne du sous-titre et pique dans la marge haute du formulaire ; sur
-téléphone, où la maquette s'intercale, elle se loge dans l'écart au-dessus du
-formulaire, que la grille élargit pour elle (`gap-14`).
+trait de feutre, une courbe simple, une pointe en deux traits inégaux. Une
+version « au pinceau » (trop mécanique) puis une avec une boucle (qui
+passait sur le sous-titre) ont été refusées. **Elle est placée par la
+mesure** : à partir de 1 065 px, la mise en page ne bouge plus, et la fin du
+sous-titre est toujours 324 px à droite et 69 px au-dessus du coin du
+formulaire. Entre 768 et 1 065 px, elle s'efface ; sur téléphone, une petite
+flèche se loge au milieu de l'écart au-dessus du formulaire (`gap-14`).
 
 **Un service worker étranger peut casser les images en local.**
 `customer-image-cache-sw.js`, enregistré sur `localhost:3000` par un autre
@@ -2294,10 +2297,14 @@ groupes « Modules » et « Bonus » en capitales espacées, numéro en pastille
 carrée, module ouvert surligné avec un filet bleu. **Deux colonnes en
 large** : la liste à gauche, la vidéo à droite, et la carte d'appel sous la
 vidéo, sur demande de Rémy ; elle était une troisième colonne qui
-rétrécissait la vidéo. **La carte d'appel suit la variante centrée du bloc « CTA
-section » d'Arc UI** : surface bleu pâle bordée, photo de Rémy, sur-titre,
-titre équilibré, texte, bouton, tout centré. Reprise en Tailwind, comme les
-champs. **Les vidéos des modules
+rétrécissait la vidéo. **L'appel sous la vidéo est un passage de document, pas une
+carte** : deux cartes (une ligne, puis la variante centrée du bloc « CTA
+section » d'Arc UI) ont été refusées comme trop grosses. Un filet le sépare
+du lien vers le module suivant, puis deux groupes ferrés à gauche : une
+ligne d'auteur (la photo de Rémy devant le logo rond de Funnels Club, et le
+sur-titre), et après un blanc le titre, coupé là où Rémy l'a dit (il est
+écrit ligne par ligne dans `carte.titre`), le texte et le bouton. Sur
+téléphone, un fond #f8f8f8 d'un bord à l'autre remplace le filet. **Les vidéos des modules
 sont des vidéos d'essai** (`/lancement`, `/stable`, `/debuts`, le
 consulting), posées pour voir l'intégration : à remplacer par les morceaux
 de la formation avant la mise en ligne.

@@ -2,61 +2,64 @@ import { cn } from "@repo/ui/lib/utils";
 
 /**
  * La flèche qui désigne le formulaire de l'optin, sur demande de Rémy :
- * elle part de la fin du sous-titre et plonge vers le haut du formulaire.
+ * elle part de la fin du sous-titre et pique dans le formulaire.
  *
  * **Une flèche faite à la main, en noir**, à sa demande, et pas son croquis
- * recopié : un trait de feutre d'épaisseur constante, une petite boucle au
- * milieu du trajet, des courbes un peu irrégulières, et une pointe en deux
- * traits inégaux, comme on la tracerait d'un geste. Une première version au
- * pinceau, fine au départ et pleine à la pointe, a été refusée : trop
- * mécanique.
+ * recopié : un trait de feutre d'épaisseur constante, une courbe simple et
+ * une pointe en deux traits inégaux, comme d'un seul geste. Deux versions
+ * ont été refusées : une au pinceau, trop mécanique, puis une avec une
+ * boucle, qui partait au niveau de la première ligne du sous-titre et passait
+ * sur son texte.
  *
- * **Deux tracés et non un tracé étiré.** Sur ordinateur, le formulaire est
- * en face du sous-titre, de l'autre côté de la maquette : la flèche part à
- * hauteur de la dernière ligne du sous-titre et pique dans la marge haute du
- * formulaire, sans toucher la question. Mesuré à 1 200 px de large. Sur
- * téléphone, tout s'empile et la maquette s'intercale ; une flèche qui
- * partirait du sous-titre la traverserait. Elle se loge donc dans l'écart
- * entre la maquette et le formulaire, plus courte, sans boucle faute de
- * place, et pique vers le formulaire depuis la droite. Étirer un seul tracé
- * aurait déformé son épaisseur et sa pointe.
+ * **Elle est placée par la mesure, pas à l'œil.** À partir de 1 065 px de
+ * large, l'en-tête et la grille ont atteint leur largeur maximale : la mise
+ * en page ne bouge plus, elle se décale seulement d'un bloc. La fin du
+ * sous-titre est alors toujours 324 px à droite et 69 px au-dessus du coin
+ * du formulaire, la fin de sa première ligne 376 px à droite et 92 px
+ * au-dessus, la question du formulaire s'arrête 373 px à droite. La flèche
+ * part 12 px après « profitable », à mi-hauteur de la ligne, passe sous la
+ * fin de la première ligne et pique à droite de la question. Mesuré à 1 080,
+ * 1 200 et 1 440 px.
+ *
+ * **Entre 768 et 1 065 px, il n'y en a pas** : ces écarts y varient avec la
+ * largeur, et une flèche qui part du mauvais endroit est pire que pas de
+ * flèche. **Sur téléphone**, tout s'empile et la maquette s'intercale ; une
+ * petite flèche se loge au milieu de l'écart au-dessus du formulaire.
  *
  * Décorative (`aria-hidden`) : le formulaire se trouve sans elle.
  */
+const trait = {
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 2.2,
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+} as const;
+
 export function FlecheGenesis({ className }: { className?: string }) {
-  const trait = {
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: 2.4,
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
-  } as const;
   return (
     <>
-      {/* Ordinateur : du sous-titre au formulaire, avec sa boucle. */}
+      {/* Large : de la fin du sous-titre au formulaire. La boîte commence
+          330 px à droite et 84 px au-dessus du coin du formulaire. */}
       <svg
         aria-hidden
-        viewBox="0 0 80 110"
+        viewBox="0 0 90 84"
         className={cn(
-          "pointer-events-none absolute hidden text-[var(--genesis-encre)] md:block",
-          "-top-[92px] right-[5%] h-[110px] w-[80px]",
+          "pointer-events-none absolute -top-[84px] left-[330px] hidden h-[84px] w-[90px] text-[var(--genesis-encre)] min-[1065px]:block",
           className,
         )}
       >
-        <path
-          {...trait}
-          d="M6 16C19 9 38 6.5 51.5 13.5 64 21 66.5 39 55 45.5 43.5 52 35.5 41 45.5 34.5 57.5 27.5 66.5 43 62.5 61.5 59.5 75.5 52.5 88 44 98"
-        />
-        <path {...trait} d="M54.5 93.6Q49.2 96.4 44 98Q44.5 93.2 45.9 88.3" />
+        <path {...trait} d="M6 15C28 4 62 2 77 22C88 37 84 58 74 76" />
+        <path {...trait} d="M82.6 70.4Q78 73.6 74 76Q73.6 71.8 74.3 67.4" />
       </svg>
-      {/* Téléphone : dans l'écart au-dessus du formulaire. */}
+      {/* Téléphone : au milieu de l'écart au-dessus du formulaire. */}
       <svg
         aria-hidden
-        viewBox="0 0 64 56"
-        className="pointer-events-none absolute -top-[50px] right-6 h-[56px] w-[64px] text-[var(--genesis-encre)] md:hidden"
+        viewBox="0 0 40 52"
+        className="pointer-events-none absolute -top-[52px] left-1/2 h-[52px] w-[40px] -translate-x-1/2 text-[var(--genesis-encre)] md:hidden"
       >
-        <path {...trait} d="M58 6.5C46.5 3.5 31 8 25 19.5 20.5 28 20.5 38.5 22 48" />
-        <path {...trait} d="M16.7 42Q19.6 45.2 22 48Q23.4 44 24.9 40.2" />
+        <path {...trait} d="M16 4C8 18 10 34 22 46" />
+        <path {...trait} d="M19.4 37.2Q20.8 41.8 22 46Q17.8 45 14.3 43.8" />
       </svg>
     </>
   );
