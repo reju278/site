@@ -147,23 +147,35 @@ export default async function PartieGenesis({ params }: Props) {
             aria-label="Réserver un appel"
             className="mt-2 flex flex-col gap-4 rounded-[5px] bg-white p-5 shadow-[0_0_39px_-8px_rgba(0,0,0,0.15)] sm:flex-row sm:items-center sm:gap-6"
           >
-            <div className="flex min-w-0 flex-1 flex-col gap-2">
+            {/* La photo de Rémy, ronde : c'est une photo de profil, la
+                seule famille qui y a droit sans exception. */}
+            <img
+              src={carte.photo.src}
+              alt={carte.photo.alt}
+              width={256}
+              height={256}
+              loading="lazy"
+              className="size-16 shrink-0 rounded-full object-cover sm:size-20"
+            />
+            <div className="flex min-w-0 flex-1 flex-col gap-1.5">
               {carte.surtitre ? (
-                <p className="text-sm font-bold tracking-wide uppercase">
+                <p className="font-[family-name:var(--font-genesis-bouton)] text-xs font-bold tracking-[0.06em] text-[#60606b] uppercase">
                   {carte.surtitre}
                 </p>
               ) : null}
               {carte.titre ? (
-                <p className="text-xl leading-snug font-bold">{carte.titre}</p>
+                <p className="text-lg leading-snug font-bold text-pretty sm:text-xl">
+                  {insecables(carte.titre)}
+                </p>
               ) : null}
               {carte.texte ? (
-                <p className="text-base leading-[1.5] text-pretty">
+                <p className="text-base leading-[1.5] text-pretty text-[#60606b]">
                   {carte.texte}
                 </p>
               ) : null}
               {!carte.titre || !carte.texte ? (
                 <Emplacement
-                  attendu="le sur-titre, le titre et le texte de la carte d'appel, et une photo"
+                  attendu="le sur-titre, le titre et le texte de la carte d'appel"
                   className="min-h-24 px-4 py-5"
                 />
               ) : null}

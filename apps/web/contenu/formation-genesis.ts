@@ -237,9 +237,18 @@ export const espaceGenesis = {
   /** La carte d'appel, à droite sur ordinateur, sous la vidéo sur
    *  téléphone. Elle mène à `/formation-genesis/appel`. */
   carte: {
-    surtitre: null as string | null,
-    titre: null as string | null,
-    texte: null as string | null,
+    /* Les trois textes sont de Rémy. */
+    surtitre: "Pour les créateurs de formation ou de coaching" as string | null,
+    titre:
+      "Développez votre business de formation entre 6 et 7 chiffres par an avec l'équipe Funnels Club" as
+        | string
+        | null,
+    texte:
+      "Formation, accompagnement, coaching, outils et IA spécialisée." as
+        | string
+        | null,
+    /** Sa photo de profil, fournie par Rémy, en 256 × 256. */
+    photo: { src: "/genesis/remy.jpg", alt: "Rémy Jupille" },
     /* PROVISOIRE. */
     bouton: "Réserver mon appel",
   },
