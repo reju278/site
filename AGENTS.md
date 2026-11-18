@@ -2266,8 +2266,11 @@ mène au premier champ du formulaire, un bouton de lecture qui ne lirait rien
 étant un piège. Ses trois images sont celles de Rémy, dans
 `public/genesis/`, recadrées en 16/9 et compressées (moins de 100 Ko).
 
-**Une flèche tracée à la main désigne le formulaire** (`FlecheGenesis`), sur
-un croquis de Rémy. Deux tracés et non un étiré : en large, elle part de la
+**Une flèche faite à la main, en noir, désigne le formulaire**
+(`FlecheGenesis`), sur un croquis de Rémy qu'il ne fallait pas recopier : un
+trait de feutre, une petite boucle, une pointe en deux traits inégaux. Une
+version « au pinceau », calculée et régulière, a été refusée comme trop
+mécanique. Deux tracés et non un étiré : en large, elle part de la
 dernière ligne du sous-titre et pique dans la marge haute du formulaire ; sur
 téléphone, où la maquette s'intercale, elle se loge dans l'écart au-dessus du
 formulaire, que la grille élargit pour elle (`gap-14`).
@@ -2285,7 +2288,10 @@ titres de Rémy), sans sur-titre ni description. La barre de la bannière suit
 la page, « Funnels.club : Leçon 1 », sur son exemple. La liste des modules
 est une carte blanche à ombre détachée, relevée sur une référence de Rémy :
 groupes « Modules » et « Bonus » en capitales espacées, numéro en pastille
-carrée, module ouvert surligné avec un filet bleu. **Les vidéos des modules
+carrée, module ouvert surligné avec un filet bleu. **Deux colonnes en
+large** : la liste à gauche, la vidéo à droite, et la carte d'appel sous la
+vidéo, sur demande de Rémy ; elle était une troisième colonne qui
+rétrécissait la vidéo. **Les vidéos des modules
 sont des vidéos d'essai** (`/lancement`, `/stable`, `/debuts`, le
 consulting), posées pour voir l'intégration : à remplacer par les morceaux
 de la formation avant la mise en ligne.

@@ -104,8 +104,13 @@ export default async function PartieGenesis({ params }: Props) {
         ) : null}
       </header>
 
-      <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-6 px-5 sm:px-8 lg:grid-cols-[16rem_minmax(0,1fr)_18rem] lg:gap-8">
-        {/* La vidéo et le lien vers la suite. */}
+      {/* Deux colonnes en large, sur demande de Rémy : la liste des modules
+          à gauche, et à droite la vidéo, plus large qu'avant, avec la carte
+          d'appel en dessous. La carte était une troisième colonne, qui
+          rétrécissait la vidéo. Sur téléphone : la vidéo, la carte, puis la
+          liste. */}
+      <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-6 px-5 sm:px-8 lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-8">
+        {/* La vidéo, le lien vers la suite et la carte d'appel. */}
         <section aria-label="Vidéo" className="flex flex-col gap-4 lg:order-2">
           {courante.video ? (
             <LecteurVideo
@@ -133,36 +138,44 @@ export default async function PartieGenesis({ params }: Props) {
               <ArrowRight aria-hidden className="size-4" />
             </Link>
           ) : null}
-        </section>
 
-        {/* La carte d'appel : l'unique sortie de l'espace. Ses textes ne
-            sont pas des titres : un bloc d'appel n'entre pas dans le plan
-            de la page (voir `AGENTS.md`). */}
-        <aside
-          aria-label="Réserver un appel"
-          className="flex h-fit flex-col gap-3 rounded-[5px] bg-white p-[15px] shadow-[0_0_39px_-8px_rgba(0,0,0,0.15)] lg:order-3"
-        >
-          {carte.surtitre ? (
-            <p className="text-sm font-bold tracking-wide uppercase">
-              {carte.surtitre}
-            </p>
-          ) : null}
-          {carte.titre ? (
-            <p className="text-xl leading-snug font-bold">{carte.titre}</p>
-          ) : null}
-          {carte.texte ? (
-            <p className="text-base leading-[1.5] text-pretty">{carte.texte}</p>
-          ) : null}
-          {!carte.titre || !carte.texte ? (
-            <Emplacement
-              attendu="le sur-titre, le titre et le texte de la carte d'appel, et une photo"
-              className="min-h-28 px-4 py-6"
-            />
-          ) : null}
-          <BoutonGenesis href={`${RACINE_GENESIS}/appel`}>
-            {carte.bouton}
-          </BoutonGenesis>
-        </aside>
+          {/* La carte d'appel : l'unique sortie de l'espace. Sous la vidéo,
+              son texte à gauche et le bouton à droite dès `sm`. Ses textes
+              ne sont pas des titres : un bloc d'appel n'entre pas dans le
+              plan de la page (voir `AGENTS.md`). */}
+          <aside
+            aria-label="Réserver un appel"
+            className="mt-2 flex flex-col gap-4 rounded-[5px] bg-white p-5 shadow-[0_0_39px_-8px_rgba(0,0,0,0.15)] sm:flex-row sm:items-center sm:gap-6"
+          >
+            <div className="flex min-w-0 flex-1 flex-col gap-2">
+              {carte.surtitre ? (
+                <p className="text-sm font-bold tracking-wide uppercase">
+                  {carte.surtitre}
+                </p>
+              ) : null}
+              {carte.titre ? (
+                <p className="text-xl leading-snug font-bold">{carte.titre}</p>
+              ) : null}
+              {carte.texte ? (
+                <p className="text-base leading-[1.5] text-pretty">
+                  {carte.texte}
+                </p>
+              ) : null}
+              {!carte.titre || !carte.texte ? (
+                <Emplacement
+                  attendu="le sur-titre, le titre et le texte de la carte d'appel, et une photo"
+                  className="min-h-24 px-4 py-5"
+                />
+              ) : null}
+            </div>
+            <BoutonGenesis
+              href={`${RACINE_GENESIS}/appel`}
+              className="sm:w-auto sm:shrink-0 sm:px-8"
+            >
+              {carte.bouton}
+            </BoutonGenesis>
+          </aside>
+        </section>
 
         {/* La liste des modules, puis les bonus, dans une carte. */}
         <nav
