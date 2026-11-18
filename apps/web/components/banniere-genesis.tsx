@@ -17,8 +17,8 @@ import { LogoFunnels } from "@/components/logo-funnels";
  * bandeau. Elle est en haut de page, donc `fetchPriority="high"` et pas de
  * chargement différé.
  *
- * Le nom dans la barre est un libellé de l'agent, PROVISOIRE : la référence
- * y porte « Funnels.club : formation gratuite », en image.
+ * Le nom dans la barre est celui de Rémy, « Funnels.club : Formation
+ * gratuite », comme sur la référence.
  */
 export function BanniereGenesis() {
   return (
@@ -26,7 +26,7 @@ export function BanniereGenesis() {
       <div className="bg-[var(--genesis-fond)]">
         <p className="mx-auto flex h-[42px] max-w-[960px] items-center gap-1.5 px-5 font-[family-name:var(--font-genesis-bouton)] text-[13px] text-[var(--genesis-encre)] sm:px-8">
           <LogoFunnels className="size-[18px]" />
-          Funnels.club&nbsp;: Formation Genesis
+          Funnels.club&nbsp;: Formation gratuite
         </p>
       </div>
       <div className="relative h-[120px] overflow-hidden bg-[var(--fond-hero)] sm:h-[200px]">
