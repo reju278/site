@@ -1,3 +1,4 @@
+import { CompteurVue } from "@/components/compteur-vue";
 import { BanniereGenesis } from "@/components/banniere-genesis";
 import { FormulaireCalendly } from "@/components/formulaire-calendly";
 import { TitreReservationGenesis } from "@/components/titre-reservation-genesis";
@@ -36,6 +37,8 @@ export const metadata: Metadata = {
 export default function Reservation() {
   return (
     <main className="bg-[var(--genesis-fond)] text-[var(--genesis-encre)]">
+      {/* La visite compte dans le tunnel « Formation Genesis » du CRM. */}
+      <CompteurVue tunnel="formation-genesis" etape="reservation" />
       <BanniereGenesis libelle={reservationGenesis.barre} />
       <header className="mx-auto max-w-[960px] px-5 pt-5 sm:px-8 sm:pt-6">
         <TitreReservationGenesis className="text-[clamp(1.75rem,7.5vw,2.75rem)] leading-[1.1] font-bold tracking-[0.02em] text-balance" />

@@ -1,3 +1,4 @@
+import { CompteurVue } from "@/components/compteur-vue";
 import { BanniereGenesis } from "@/components/banniere-genesis";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { PreuvesTunnel } from "@/components/preuves-tunnel";
@@ -54,6 +55,8 @@ export default function ReservationThanks() {
         } as React.CSSProperties
       }
     >
+      {/* La visite compte dans le tunnel « Formation Genesis » du CRM. */}
+      <CompteurVue tunnel="formation-genesis" etape="merci" />
       {/* **Le relevé de la réservation**, en HTML brut et en tête de page,
           comme sur `/thanks` : il lit ce que Calendly a mis dans l'adresse et
           l'en retire pendant la lecture du HTML, donc avant Google Tag

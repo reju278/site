@@ -1,3 +1,4 @@
+import { CompteurVue } from "@/components/compteur-vue";
 import { BanniereGenesis } from "@/components/banniere-genesis";
 import { InscriptionGenesis } from "@/components/inscription-genesis";
 import { FlecheGenesis } from "@/components/fleche-genesis";
@@ -59,6 +60,8 @@ export default function FormationGenesis() {
 
   return (
     <main className="bg-[var(--genesis-fond)] text-[var(--genesis-encre)]">
+      {/* La visite compte dans le tunnel « Formation Genesis » du CRM. */}
+      <CompteurVue tunnel="formation-genesis" etape="optin" />
       <BanniereGenesis />
 
       <header className="mx-auto max-w-[960px] px-5 pt-5 sm:px-8 sm:pt-6">

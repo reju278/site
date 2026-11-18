@@ -8,9 +8,11 @@ import type { Metadata } from "next";
  *
  * Un tunnel : hors de l'en-tête et du pied du site (`lib/tunnels.ts`),
  * interdit d'index, absent de `sitemap.ts`, thème clair forcé par
- * `FournisseurTheme`. **Ni jeton de page ni SDK de ClickFunnels, ni
- * `CompteurVue`**, contrairement à `/thanks` : ils comptent la visite dans les
- * étapes du VSL Funnel, et une réservation Genesis fausserait ses chiffres.
+ * `FournisseurTheme`. **Ni jeton de page ni SDK de ClickFunnels**,
+ * contrairement à `/thanks` : ils compteraient la visite dans les étapes du
+ * VSL Funnel. La page compte la sienne dans le tunnel « Formation Genesis »
+ * du CRM (`CompteurVue`, étape `merci`) : un visiteur de cette page est un
+ * appel réservé.
  */
 export const metadata: Metadata = {
   alternates: { canonical: "https://go.funnels.club/reservation-thanks" },

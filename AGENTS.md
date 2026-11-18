@@ -2405,6 +2405,23 @@ que `tailwind-merge` ne voit pas comme un conflit. Et Radix active un onglet
 à l'appui du pointeur, pas au `click()` : un test qui clique en JavaScript
 conclut à tort que rien ne marche.
 
+**Formation Genesis remonte dans le CRM comme le challenge**, sur demande
+de Rémy : un tunnel « Formation Genesis » dans l'onglet Funnels (dépôt
+`Funnels-Club`, `funnels.ts`), avec visiteurs, opt-ins, taux d'opt-in, appels
+réservés et la liste des opt-ins. Le site envoie :
+
+- **une vue par page**, `CompteurVue tunnel="formation-genesis"`, étapes
+  `optin`, `espace` (tous les modules et le bonus), `reservation` et
+  `merci` (`/reservation-thanks` : un visiteur y est un appel réservé) ;
+- **l'opt-in deux fois**, depuis `InscriptionGenesis`, en tâche de fond et
+  sans retenir personne : à l'e-mail puis au téléphone, vers
+  `API_FUNNELS/genesis/optin`. Le CRM ne compte qu'un opt-in par adresse.
+
+L'inscription chez ClickFunnels ne change pas : elle reste dans
+`actions.ts`. **Une étape de plus dans le tunnel se déclare des deux côtés** :
+son `CompteurVue` ici, et `ETAPES_MESUREES` et `TUNNELS` dans le CRM, faute
+de quoi le CRM refuse la vue.
+
 **Ajouter une page** : une clé dans `lib/pages-temoignage.ts`, une entrée dans
 `SOURCES`, et **la même clé dans le catalogue du CRM**,
 `PAGES_TEMOIGNAGE` de `packages/backend/convex/funnels.ts` du dépôt

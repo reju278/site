@@ -11,7 +11,7 @@ import {
   partiesGenesis,
   RACINE_GENESIS,
 } from "@/contenu/formation-genesis";
-import { CLE_CONTACT_VSL, legalesVsl } from "@/contenu/vsl";
+import { API_FUNNELS, CLE_CONTACT_VSL, legalesVsl } from "@/contenu/vsl";
 import { numeroInternational, PAYS } from "@/lib/telephone";
 import { Input } from "@repo/ui/components/input";
 import { cn } from "@repo/ui/lib/utils";
@@ -98,6 +98,29 @@ export function InscriptionGenesis() {
         return resultat;
       });
 
+  /**
+   * Le CRM Funnels Club (onglet Funnels, tunnel « Formation Genesis ») :
+   * l'opt-in à l'e-mail, puis le téléphone. **En tâche de fond et sans
+   * jamais retenir personne** : un CRM injoignable ne bloque pas
+   * l'inscription, qui part chez ClickFunnels par ailleurs. `keepalive`
+   * laisse le dernier envoi finir pendant que la page change.
+   */
+  const signaler = (etapeCrm: "email" | "telephone", numero?: string) => {
+    void fetch(`${API_FUNNELS}/genesis/optin`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      keepalive: true,
+      body: JSON.stringify({
+        etape: etapeCrm,
+        prenom: prenom.trim(),
+        nom: nom.trim(),
+        email: email.trim(),
+        consentement: consenti,
+        ...(numero ? { telephone: numero } : {}),
+      }),
+    }).catch(() => {});
+  };
+
   const ranger = (numero?: string) => {
     try {
       localStorage.setItem(
@@ -152,6 +175,7 @@ export function InscriptionGenesis() {
          arrière-plan et l'étape du téléphone s'affiche tout de suite. Le
          temps de taper un numéro, ClickFunnels a répondu. */
       inscription.current = inscrire();
+      signaler("email");
       ranger();
       aller("telephone");
       return;
@@ -184,6 +208,7 @@ export function InscriptionGenesis() {
       setErreur(formulaire.erreurs.envoi);
       return;
     }
+    signaler("telephone", numero);
     ranger(numero);
     window.location.assign(
       `${RACINE_GENESIS}/espace/${partiesGenesis[0]?.cle ?? "1"}`,
