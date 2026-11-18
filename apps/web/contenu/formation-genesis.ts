@@ -65,7 +65,7 @@ export const optinGenesis = {
   formulaire: {
     etapes: {
       nom: {
-        question: "Quel est votre prénom ?",
+        question: "Comment vous appelez-vous ?",
         bouton: "Obtenir la formation gratuite",
       },
       email: {
@@ -79,6 +79,13 @@ export const optinGenesis = {
       },
     },
     /* PROVISOIRES. */
+    /* Les textes grisés dans les champs, demandés par Rémy : PROVISOIRES.
+       Le téléphone prend l'exemple de numéro du pays choisi. */
+    exemples: {
+      prenom: "Votre prénom",
+      nom: "Votre nom",
+      email: "Votre adresse email",
+    },
     prenom: "Prénom",
     nom: "Nom",
     email: "Email",

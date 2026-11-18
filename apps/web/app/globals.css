@@ -1380,6 +1380,8 @@ body:has([role="dialog"][data-state="open"])
    - `--genesis-rose` : le surlignage rose des mots qu'on évite (« Sans »).
    - `--genesis-jaune` : le fond de l'étiquette au-dessus du titre de
      l'optin, le jaune de Notion donné par Rémy, #f9f3e2.
+   - `--genesis-gris` : le texte grisé dans les champs, #767680. Gris, mais
+     à 4,5:1 sur le blanc : un texte d'exemple reste du texte.
    - `--genesis-encre` : le texte, noir, comme la référence. */
 :root:has([data-genesis]) {
   --genesis-fond: #fdfdfd;
@@ -1387,6 +1389,7 @@ body:has([role="dialog"][data-state="open"])
   --genesis-surligne: #e8f1fb;
   --genesis-rose: #faecea;
   --genesis-jaune: #f9f3e2;
+  --genesis-gris: #767680;
   --genesis-encre: #000;
 }
 

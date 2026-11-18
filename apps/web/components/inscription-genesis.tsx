@@ -216,6 +216,7 @@ export function InscriptionGenesis() {
                 ref={premierChamp}
                 id="genesis-prenom"
                 libelle={formulaire.prenom}
+                placeholder={formulaire.exemples.prenom}
                 name="prenom"
                 autoComplete="given-name"
                 aria-required
@@ -226,6 +227,7 @@ export function InscriptionGenesis() {
               <Champ
                 id="genesis-nom"
                 libelle={formulaire.nom}
+                placeholder={formulaire.exemples.nom}
                 name="nom"
                 autoComplete="family-name"
                 aria-required
@@ -242,6 +244,7 @@ export function InscriptionGenesis() {
                 ref={premierChamp}
                 id="genesis-email"
                 libelle={formulaire.email}
+                placeholder={formulaire.exemples.email}
                 name="email"
                 type="email"
                 autoComplete="email"
@@ -253,14 +256,17 @@ export function InscriptionGenesis() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-              <label className="flex cursor-pointer items-start gap-2.5 text-sm leading-relaxed text-[#60606b]">
+              {/* 12 px, sur demande de Rémy, pour tenir en deux lignes dans la
+                  colonne du formulaire en large : mesuré, la phrase fait 701 px
+                  à ce corps et 760 à 13, pour deux lignes de 402. */}
+              <label className="flex cursor-pointer items-start gap-2.5 text-xs leading-relaxed text-[#60606b]">
                 <input
                   type="checkbox"
                   aria-required
                   aria-invalid={tente && manque.consentement}
                   checked={consenti}
                   onChange={(e) => setConsenti(e.target.checked)}
-                  className="mt-1 size-4 shrink-0 cursor-pointer accent-[var(--genesis-bleu)] aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive"
+                  className="mt-0.5 size-4 shrink-0 cursor-pointer accent-[var(--genesis-bleu)] aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive"
                 />
                 <span>
                   {formulaire.consentement}
@@ -330,7 +336,7 @@ export function InscriptionGenesis() {
                   aria-invalid={telephoneFaux}
                   value={telephone}
                   onChange={(e) => setTelephone(e.target.value)}
-                  className="min-w-0 flex-1 bg-transparent px-4 text-[17px] text-[var(--genesis-encre)] outline-none placeholder:text-[#8a8a93] focus-visible:outline-none"
+                  className="min-w-0 flex-1 bg-transparent px-4 text-[17px] text-[var(--genesis-encre)] outline-none placeholder:text-[var(--genesis-gris)] focus-visible:outline-none"
                 />
               </div>
             </div>
@@ -413,7 +419,7 @@ function Champ({
         id={id}
         className={cn(
           CADRE,
-          "px-4 text-[17px] shadow-none focus-visible:ring-0 aria-invalid:ring-0 md:text-[17px] dark:bg-white text-[var(--genesis-encre)] outline-none focus-visible:border-[var(--genesis-encre)] focus-visible:shadow-[0_0_0_1px_var(--genesis-encre)] focus-visible:outline-none aria-invalid:border-destructive aria-invalid:hover:border-destructive aria-invalid:focus-visible:border-destructive aria-invalid:focus-visible:shadow-[0_0_0_1px_var(--destructive)]",
+          "px-4 text-[17px] shadow-none placeholder:text-[var(--genesis-gris)] focus-visible:ring-0 aria-invalid:ring-0 md:text-[17px] dark:bg-white text-[var(--genesis-encre)] outline-none focus-visible:border-[var(--genesis-encre)] focus-visible:shadow-[0_0_0_1px_var(--genesis-encre)] focus-visible:outline-none aria-invalid:border-destructive aria-invalid:hover:border-destructive aria-invalid:focus-visible:border-destructive aria-invalid:focus-visible:shadow-[0_0_0_1px_var(--destructive)]",
           className,
         )}
         {...props}
