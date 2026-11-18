@@ -18,7 +18,8 @@
         "!.next-verif/cache/**"
       ],
       "env": [
-        "NEXT_DIST_DIR"
+        "NEXT_DIST_DIR",
+        "ZONE_CRM"
       ]
     },
     "lint": {
