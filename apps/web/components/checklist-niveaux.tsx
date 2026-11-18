@@ -41,6 +41,12 @@ import { temoignages } from "@/contenu/site";
  * `site.ts`, d'où viennent les témoignages, n'entre pas dans le JavaScript
  * de la page. Un onglet fermé est démonté par Radix : une vidéo qu'on quitte
  * s'arrête d'elle-même.
+ *
+ * **Les témoignages sont servis par le lecteur de Wistia lui-même**, sans
+ * l'affiche, le disque et la durée du site par-dessus, sur demande de Rémy.
+ * C'est `natif`, et son prix se connaît : une iframe par témoignage visible,
+ * créée à l'approche de l'écran. Les onglets le bornent, un seul est monté à
+ * la fois : huit lecteurs au plus, ceux du niveau 4.
  */
 export function ChecklistNiveaux({ reservation }: { reservation: string }) {
   const onglets: OngletNiveaux[] = [
@@ -280,6 +286,7 @@ function Niveau({ niveau: n }: { niveau: NiveauBusiness }) {
                   secondes={t.secondes}
                   affiche={`/temoignages/${t.id}.jpg`}
                   afficheAlt={`${t.nom}, en entretien`}
+                  natif
                   carre
                 />
                 <p className="mt-2.5 font-[family-name:var(--font-genesis-bouton)] text-[15px] font-bold">{t.nom}</p>
