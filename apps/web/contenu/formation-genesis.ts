@@ -31,6 +31,10 @@ export const optinGenesis = {
      voient. */
   titrePage: "Formation Genesis",
   description: null as string | null,
+  /** L'étiquette au-dessus du titre, de Rémy. Écrite en minuscules et
+   *  rendue en capitales par le CSS : un lecteur d'écran épelle parfois un
+   *  mot écrit tout en capitales. */
+  etiquette: "Formation gratuite disponible maintenant",
   titre: null as string | null,
   /** La phrase sous le titre, surlignée en bleu pâle comme sur la
    *  référence. */

@@ -25,13 +25,21 @@ export const metadata: Metadata = {
 };
 
 export default function FormationGenesis() {
-  const { titre, sousTitre, accroche, points } = optinGenesis;
+  const { etiquette, titre, sousTitre, accroche, points } = optinGenesis;
 
   return (
     <main className="bg-[var(--genesis-fond)] text-[var(--genesis-encre)]">
       <BanniereGenesis />
 
       <header className="mx-auto max-w-[960px] px-5 pt-5 sm:px-8 sm:pt-6">
+        {/* L'étiquette au-dessus du titre, demandée par Rémy : capitales en
+            Roboto, la police des boutons, sur le bleu pâle du sous-titre.
+            Un `p` et non un titre : elle ne décrit pas une section. L'espace
+            entre les lettres est resserré sur téléphone, mesuré : à 0,08 em
+            elle demande 336 px et passe sur deux lignes à 375 px de large. */}
+        <p className="mb-3 inline-block rounded-[5px] bg-[var(--genesis-surligne)] px-2.5 py-1 font-[family-name:var(--font-genesis-bouton)] text-xs font-bold tracking-[0.04em] uppercase sm:text-sm sm:tracking-[0.08em]">
+          {etiquette}
+        </p>
         {/* Le seul `h1` de la page : le titre de Rémy, ou le nom de la
             formation tant qu'il n'est pas écrit. */}
         <h1 className="text-[clamp(1.75rem,7.5vw,2.75rem)] leading-[1.1] font-bold tracking-[0.02em] text-balance">
