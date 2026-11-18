@@ -6,7 +6,9 @@ import {
   espaceGenesis,
   partiesGenesis,
   RACINE_GENESIS,
+  type PartieGenesis as Partie,
 } from "@/contenu/formation-genesis";
+import { insecables } from "@/lib/typographie";
 import { cn } from "@repo/ui/lib/utils";
 import { ArrowRight, Star } from "lucide-react";
 import type { Metadata } from "next";
@@ -14,22 +16,31 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 /**
- * L'espace membre de la Formation Genesis, une partie par adresse :
- * `go.funnels.club/formation-genesis/espace/<partie>` (issue #8).
+ * L'espace membre de la Formation Genesis, un module par adresse :
+ * `go.funnels.club/formation-genesis/espace/<cle>` (issue #8).
  *
- * **Une adresse par partie**, parce que chaque e-mail de la séquence en
- * envoie une : le lien du jour 3 ouvre la partie 3, pas la première.
+ * **Une adresse par module**, parce que chaque e-mail de la séquence en
+ * envoie une : le lien du jour 3 ouvre le module 3, pas le premier.
  *
- * **La structure vient d'une page de cours relevée par Rémy** : le titre de
- * la partie en tête, la liste des parties à gauche (les bonus en dessous,
- * marqués d'une étoile), la vidéo au centre suivie d'un lien vers la partie
- * suivante, et une carte d'appel à droite. Sur téléphone, tout s'empile : la
+ * **La structure vient d'une page de cours relevée par Rémy** : le titre du
+ * module en tête, la liste des modules à gauche (les bonus en dessous,
+ * marqués d'une étoile), la vidéo au centre suivie d'un lien vers le module
+ * suivant, et une carte d'appel à droite. Sur téléphone, tout s'empile : la
  * vidéo d'abord, puis la carte, puis la liste.
  *
- * **Le dessin est celui de l'optin**, sur demande de Rémy : la même bannière,
- * le titre en PT Serif gras ferré à gauche, la partie en cours surlignée en
- * bleu pâle, et le bouton bleu à angles droits dans une carte à l'ombre de la
- * fenêtre d'inscription.
+ * **Le haut est réduit au titre**, sur demande de Rémy : ni sur-titre ni
+ * description, « Module #1 : Positionnement » et rien d'autre. La barre de
+ * la bannière, elle, suit la page : « Funnels.club : Leçon 1 ».
+ *
+ * **La liste est une carte qui ressort**, sur une référence de Rémy : fond
+ * blanc et ombre détachée, comme le formulaire de l'optin, les titres de
+ * groupe en capitales espacées, un numéro par module dans sa pastille, le
+ * module ouvert surligné en bleu pâle avec un filet bleu à gauche. Les
+ * pastilles de la référence sont rondes ; les nôtres gardent 5 px, les
+ * commandes rondes du site étant une famille fermée (voir `AGENTS.md`). Sa
+ * couleur d'accent, un violet, devient le bleu du tunnel, et le numéro du
+ * module ouvert passe en noir : le blanc sur ce bleu ne tient que 3,35:1,
+ * trop peu pour un chiffre de 12 px.
  *
  * **Aucune protection** : le site n'a pas d'authentification, et c'est la
  * règle du dépôt. L'espace n'est qu'une adresse non indexée qu'on reçoit
@@ -45,12 +56,17 @@ export function generateStaticParams() {
 
 type Props = { params: Promise<{ partie: string }> };
 
+/** « Module #1 : Positionnement », ou le rang seul tant qu'il n'a pas de
+ *  titre. */
+const titreComplet = (p: Partie) =>
+  p.titre && !p.bonus ? `${p.etiquette} : ${p.titre}` : (p.titre ?? p.etiquette);
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { partie } = await params;
   const p = partiesGenesis.find((x) => x.cle === partie);
   return {
     title: {
-      absolute: `${p?.titre ?? p?.etiquette ?? ""} · ${espaceGenesis.titrePage}`,
+      absolute: `${p ? titreComplet(p) : ""} · ${espaceGenesis.titrePage}`,
     },
   };
 }
@@ -62,26 +78,22 @@ export default async function PartieGenesis({ params }: Props) {
   if (!courante) notFound();
   const suivante = partiesGenesis[rang + 1];
   const { carte } = espaceGenesis;
+  const modules = partiesGenesis.filter((p) => !p.bonus);
+  const bonus = partiesGenesis.filter((p) => p.bonus);
+  const barre = courante.bonus
+    ? courante.etiquette
+    : espaceGenesis.barre(modules.indexOf(courante) + 1);
+  const titre = titreComplet(courante);
 
   return (
     <main className="bg-[var(--genesis-fond)] text-[var(--genesis-encre)]">
-      <BanniereGenesis />
+      <BanniereGenesis libelle={barre} />
 
-      {/* L'en-tête de la partie, ferré à gauche sur la colonne de la
-          bannière, comme l'optin. */}
+      {/* Le titre du module, ferré à gauche sur la colonne de la bannière,
+          comme l'optin. */}
       <header className="mx-auto max-w-[960px] px-5 pt-5 pb-6 sm:px-8 sm:pt-6 sm:pb-8">
-        {espaceGenesis.surtitre ? (
-          <p className="text-sm font-bold tracking-wide uppercase">
-            {espaceGenesis.surtitre}
-          </p>
-        ) : (
-          <Emplacement
-            attendu="le sur-titre de l'espace membre"
-            className="mb-3 min-h-0 py-3"
-          />
-        )}
-        <h1 className="text-[clamp(1.75rem,7.5vw,2.75rem)] leading-[1.1] font-bold tracking-[0.02em] text-balance">
-          {courante.titre ?? courante.etiquette}
+        <h1 className="text-[clamp(1.75rem,7.5vw,2.75rem)] leading-[1.1] font-bold tracking-[0.02em] text-pretty">
+          {insecables(titre)}
         </h1>
         {courante.description ? (
           <p className="mt-2 text-lg leading-[1.6] tracking-[0.02em] text-pretty sm:text-2xl">
@@ -89,29 +101,24 @@ export default async function PartieGenesis({ params }: Props) {
               {courante.description}
             </span>
           </p>
-        ) : (
-          <Emplacement
-            attendu={`le titre et la description de « ${courante.etiquette} »`}
-            className="mt-3 min-h-0 py-3"
-          />
-        )}
+        ) : null}
       </header>
 
-      <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-6 px-5 sm:px-8 lg:grid-cols-[14rem_minmax(0,1fr)_18rem] lg:gap-8">
+      <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-6 px-5 sm:px-8 lg:grid-cols-[16rem_minmax(0,1fr)_18rem] lg:gap-8">
         {/* La vidéo et le lien vers la suite. */}
         <section aria-label="Vidéo" className="flex flex-col gap-4 lg:order-2">
           {courante.video ? (
             <LecteurVideo
               id={courante.video.id}
-              titre={courante.titre ?? courante.etiquette}
+              titre={titre}
               secondes={courante.video.secondes}
               affiche={`/temoignages/${courante.video.id}.jpg`}
-              afficheAlt={courante.titre ?? courante.etiquette}
+              afficheAlt={titre}
               natif
             />
           ) : (
             <Emplacement
-              attendu={`la vidéo Wistia de « ${courante.etiquette} »`}
+              attendu={`la vidéo Wistia de « ${titre} »`}
               className="aspect-video min-h-0"
             />
           )}
@@ -120,16 +127,20 @@ export default async function PartieGenesis({ params }: Props) {
               href={`${RACINE_GENESIS}/espace/${suivante.cle}`}
               className="inline-flex min-h-10 items-center gap-2 self-end text-base font-bold underline-offset-4 hover:underline"
             >
-              {espaceGenesis.suivante} : {suivante.titre ?? suivante.etiquette}
+              {insecables(
+                `${espaceGenesis.suivante} : ${suivante.titre ?? suivante.etiquette}`,
+              )}
               <ArrowRight aria-hidden className="size-4" />
             </Link>
           ) : null}
         </section>
 
-        {/* La carte d'appel : l'unique sortie de l'espace. */}
+        {/* La carte d'appel : l'unique sortie de l'espace. Ses textes ne
+            sont pas des titres : un bloc d'appel n'entre pas dans le plan
+            de la page (voir `AGENTS.md`). */}
         <aside
           aria-label="Réserver un appel"
-          className="flex h-fit flex-col gap-3 rounded-[5px] bg-[var(--genesis-fond)] p-[15px] shadow-[0_0_39px_-8px_rgba(0,0,0,0.15)] lg:order-3"
+          className="flex h-fit flex-col gap-3 rounded-[5px] bg-white p-[15px] shadow-[0_0_39px_-8px_rgba(0,0,0,0.15)] lg:order-3"
         >
           {carte.surtitre ? (
             <p className="text-sm font-bold tracking-wide uppercase">
@@ -137,14 +148,10 @@ export default async function PartieGenesis({ params }: Props) {
             </p>
           ) : null}
           {carte.titre ? (
-            <h2 className="text-xl leading-snug font-bold">
-              {carte.titre}
-            </h2>
+            <p className="text-xl leading-snug font-bold">{carte.titre}</p>
           ) : null}
           {carte.texte ? (
-            <p className="text-base leading-[1.5] text-pretty">
-              {carte.texte}
-            </p>
+            <p className="text-base leading-[1.5] text-pretty">{carte.texte}</p>
           ) : null}
           {!carte.titre || !carte.texte ? (
             <Emplacement
@@ -157,43 +164,91 @@ export default async function PartieGenesis({ params }: Props) {
           </BoutonGenesis>
         </aside>
 
-        {/* La liste des parties, puis les bonus. */}
-        <nav aria-label={espaceGenesis.titreListe} className="lg:order-1">
-          <h2 className="mb-3 text-sm font-bold tracking-wide uppercase">
-            {espaceGenesis.titreListe}
-          </h2>
+        {/* La liste des modules, puis les bonus, dans une carte. */}
+        <nav
+          aria-label={espaceGenesis.titreListe}
+          className="h-fit rounded-[5px] bg-white p-4 shadow-[0_0_39px_-8px_rgba(0,0,0,0.15)] lg:order-1"
+        >
+          <TitreGroupe>{espaceGenesis.titreListe}</TitreGroupe>
           <ol className="flex flex-col gap-1">
-            {partiesGenesis.map((p, i) => {
-              const active = p.cle === courante.cle;
-              return (
-                <li key={p.cle}>
-                  <Link
-                    href={`${RACINE_GENESIS}/espace/${p.cle}`}
-                    aria-current={active ? "page" : undefined}
-                    className={cn(
-                      "flex min-h-10 items-center gap-3 rounded-[5px] px-3 py-2 text-base transition-colors",
-                      active
-                        ? "bg-[var(--genesis-surligne)] font-bold"
-                        : "hover:bg-[var(--genesis-surligne)]/60",
-                      p.bonus && "mt-3",
-                    )}
-                  >
-                    <span
-                      aria-hidden
-                      className={cn(
-                        "flex size-6 shrink-0 items-center justify-center rounded-[5px] bg-[var(--genesis-encre)] font-[family-name:var(--font-genesis-bouton)] text-xs font-bold text-white",
-                      )}
-                    >
-                      {p.bonus ? <Star className="size-3.5" /> : i + 1}
-                    </span>
-                    <span className="min-w-0">{p.titre ?? p.etiquette}</span>
-                  </Link>
-                </li>
-              );
-            })}
+            {modules.map((p, i) => (
+              <li key={p.cle}>
+                <EntreeModule partie={p} numero={i + 1} courante={courante} />
+              </li>
+            ))}
           </ol>
+          {bonus.length ? (
+            <>
+              <TitreGroupe className="mt-6">{espaceGenesis.titreBonus}</TitreGroupe>
+              <ul className="flex flex-col gap-1">
+                {bonus.map((p) => (
+                  <li key={p.cle}>
+                    <EntreeModule partie={p} courante={courante} />
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : null}
         </nav>
       </div>
     </main>
+  );
+}
+
+/** « MODULES », « BONUS » : capitales espacées en Roboto, comme les
+ *  boutons du tunnel. */
+function TitreGroupe({
+  className,
+  children,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <h2
+      className={cn(
+        "mb-2 px-3 font-[family-name:var(--font-genesis-bouton)] text-xs font-bold tracking-[0.18em] uppercase",
+        className,
+      )}
+    >
+      {children}
+    </h2>
+  );
+}
+
+function EntreeModule({
+  partie,
+  numero,
+  courante,
+}: {
+  partie: Partie;
+  numero?: number;
+  courante: Partie;
+}) {
+  const active = partie.cle === courante.cle;
+  return (
+    <Link
+      href={`${RACINE_GENESIS}/espace/${partie.cle}`}
+      aria-current={active ? "page" : undefined}
+      className={cn(
+        "relative flex min-h-12 items-center gap-3 rounded-[5px] px-3 py-2 text-base transition-colors",
+        active
+          ? "bg-[var(--genesis-surligne)] font-bold before:absolute before:inset-y-2 before:left-0 before:w-[3px] before:rounded-[5px] before:bg-[var(--genesis-bleu)]"
+          : "hover:bg-black/[0.04]",
+      )}
+    >
+      <span
+        aria-hidden
+        className={cn(
+          "flex size-7 shrink-0 items-center justify-center rounded-[5px] font-[family-name:var(--font-genesis-bouton)] text-xs font-bold",
+          active
+            ? "bg-[var(--genesis-encre)] text-white"
+            : "bg-black/[0.06] text-[var(--genesis-encre)]",
+        )}
+      >
+        {partie.bonus ? <Star className="size-3.5" /> : numero}
+      </span>
+      <span className="min-w-0 text-pretty">{partie.titre ?? partie.etiquette}</span>
+    </Link>
   );
 }

@@ -19,6 +19,8 @@ import { useEffect, useRef, useState } from "react";
 
 type Etape = "nom" | "email" | "telephone";
 
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 /**
  * Le formulaire de l'optin de la Formation Genesis, **posé dans la page et
  * non dans une fenêtre**, en trois étapes, sur demande de Rémy :
@@ -41,10 +43,10 @@ type Etape = "nom" | "email" | "telephone";
  * place le curseur dans le premier champ de la suivante, sauf au chargement,
  * où ça ferait défiler la page sur téléphone.
  *
- * Les champs sont ceux de la fenêtre qu'il remplace, relevés sur la
- * référence ClickFunnels : 53 px, angles de 5 px, une ombre intérieure. Le
- * téléphone reprend la règle d'`/appel` (`lib/telephone.ts`) : le pays au
- * drapeau, puis le numéro comme on l'écrit chez soi.
+ * **La vérification est la nôtre, pas celle du navigateur** (`noValidate`) :
+ * Rémy veut une phrase rouge sous le bouton quand un champ manque, sur une
+ * référence, et les bulles natives ne se placent ni ne se rédigent. Un champ
+ * qui manque prend aussi la bordure rouge (`aria-invalid`).
  *
  * Prénom, nom, e-mail et numéro sont aussi gardés dans le navigateur, sous
  * la clé du tunnel VSL (sept jours, jamais dans l'adresse) : la réservation
@@ -60,6 +62,9 @@ export function InscriptionGenesis() {
   const [pays, setPays] = useState<string>(PAYS[0].code);
   const [telephone, setTelephone] = useState("");
   const [envoi, setEnvoi] = useState(false);
+  /** Vrai après un essai de l'étape en cours : les champs vides passent au
+   *  rouge. Remis à zéro à chaque changement d'étape. */
+  const [tente, setTente] = useState(false);
   const [erreur, setErreur] = useState<string | null>(null);
   const premierChamp = useRef<HTMLInputElement>(null);
   const aChange = useRef(false);
@@ -71,11 +76,12 @@ export function InscriptionGenesis() {
   const aller = (suivante: Etape) => {
     aChange.current = true;
     setErreur(null);
+    setTente(false);
     setEtape(suivante);
   };
 
   /** L'inscription en cours ou faite, lancée à la validation de l'e-mail.
-   *  Le signal « lead » ne part qu'une fois le contact créé. */
+   *  Le signal « lead » ne part qu'une fois, le contact créé. */
   const inscription = useRef<Promise<{ ok: boolean }> | null>(null);
   const leadEnvoye = useRef(false);
   const inscrire = () =>
@@ -107,17 +113,39 @@ export function InscriptionGenesis() {
     }
   };
 
+  /* Ce qui manque à l'étape en cours, pour la phrase rouge et les bordures. */
+  const manque = {
+    prenom: !prenom.trim(),
+    nom: !nom.trim(),
+    email: !email.trim(),
+    consentement: !consenti,
+    telephone: !telephone.trim(),
+  };
+
   const valider = async (evenement: React.FormEvent<HTMLFormElement>) => {
     evenement.preventDefault();
     if (envoi) return;
+    setTente(true);
     setErreur(null);
 
     if (etape === "nom") {
+      if (manque.prenom || manque.nom) {
+        setErreur(formulaire.erreurs.champs);
+        return;
+      }
       aller("email");
       return;
     }
 
     if (etape === "email") {
+      if (manque.email || manque.consentement) {
+        setErreur(formulaire.erreurs.champs);
+        return;
+      }
+      if (!EMAIL.test(email.trim())) {
+        setErreur(formulaire.erreurs.email);
+        return;
+      }
       /* **Instantané**, sur demande de Rémy : l'inscription part en
          arrière-plan et l'étape du téléphone s'affiche tout de suite. Le
          temps de taper un numéro, ClickFunnels a répondu. */
@@ -127,6 +155,10 @@ export function InscriptionGenesis() {
       return;
     }
 
+    if (manque.telephone) {
+      setErreur(formulaire.erreurs.champs);
+      return;
+    }
     const numero = numeroInternational(pays, telephone);
     if (!numero) {
       setErreur(formulaire.erreurs.telephone);
@@ -160,39 +192,44 @@ export function InscriptionGenesis() {
   const precedente: Etape | null =
     etape === "telephone" ? "email" : etape === "email" ? "nom" : null;
   const choisi = PAYS.find((p) => p.code === pays) ?? PAYS[0];
+  const telephoneFaux =
+    (tente && manque.telephone) || erreur === formulaire.erreurs.telephone;
 
   return (
-    <div className="rounded-[5px] bg-[var(--genesis-fond)] p-4 shadow-[0_0_39px_-8px_rgba(0,0,0,0.15)] sm:p-6">
+    <div className="bg-white p-5 shadow-[0_0_39px_-8px_rgba(0,0,0,0.15)] sm:p-7">
       <form
+        noValidate
         onSubmit={valider}
         aria-describedby={erreur ? "erreur-genesis" : undefined}
       >
-        <fieldset className="flex flex-col gap-[15px]" disabled={envoi}>
+        <fieldset className="flex flex-col gap-4" disabled={envoi}>
           {/* La question est la légende du groupe : un lecteur d'écran la
               lit avec le champ, et elle n'entre pas dans le plan des
               titres. */}
-          <legend className="mb-[15px] text-2xl leading-snug font-bold text-pretty">
+          <legend className="mb-5 text-2xl leading-snug font-bold text-pretty">
             {question}
           </legend>
 
           {etape === "nom" ? (
-            <div className="grid grid-cols-1 gap-[15px] sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2">
-              <ChampFlottant
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2">
+              <Champ
                 ref={premierChamp}
                 id="genesis-prenom"
                 libelle={formulaire.prenom}
                 name="prenom"
                 autoComplete="given-name"
-                required
+                aria-required
+                aria-invalid={tente && manque.prenom}
                 value={prenom}
                 onChange={(e) => setPrenom(e.target.value)}
               />
-              <ChampFlottant
+              <Champ
                 id="genesis-nom"
                 libelle={formulaire.nom}
                 name="nom"
                 autoComplete="family-name"
-                required
+                aria-required
+                aria-invalid={tente && manque.nom}
                 value={nom}
                 onChange={(e) => setNom(e.target.value)}
               />
@@ -201,7 +238,7 @@ export function InscriptionGenesis() {
 
           {etape === "email" ? (
             <>
-              <ChampFlottant
+              <Champ
                 ref={premierChamp}
                 id="genesis-email"
                 libelle={formulaire.email}
@@ -209,17 +246,21 @@ export function InscriptionGenesis() {
                 type="email"
                 autoComplete="email"
                 inputMode="email"
-                required
+                aria-required
+                aria-invalid={
+                  (tente && manque.email) || erreur === formulaire.erreurs.email
+                }
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
               <label className="flex cursor-pointer items-start gap-2.5 text-sm leading-relaxed text-[#60606b]">
                 <input
                   type="checkbox"
-                  required
+                  aria-required
+                  aria-invalid={tente && manque.consentement}
                   checked={consenti}
                   onChange={(e) => setConsenti(e.target.checked)}
-                  className="mt-1 size-4 shrink-0 cursor-pointer accent-[var(--genesis-bleu)]"
+                  className="mt-1 size-4 shrink-0 cursor-pointer accent-[var(--genesis-bleu)] aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-destructive"
                 />
                 <span>
                   {formulaire.consentement}
@@ -238,43 +279,45 @@ export function InscriptionGenesis() {
           ) : null}
 
           {etape === "telephone" ? (
-            /* Un seul cadre autour du pays et du numéro, qui s'éclaire en
-               entier au focus. Le menu est un `select` natif posé sur le
-               drapeau : sur téléphone, c'est la roue du système qui
-               s'ouvre. */
-            <div
-              className={cn(
-                CADRE,
-                "flex overflow-hidden focus-within:border-[var(--genesis-bleu)] focus-within:ring-[3px] focus-within:ring-[var(--genesis-bleu)]/20",
-              )}
-            >
-              <div className="relative flex shrink-0 items-center gap-1.5 border-r border-black/15 px-3">
-                <span aria-hidden className="text-xl leading-none">
-                  {choisi.drapeau}
-                </span>
-                <span aria-hidden className="text-base tabular-nums">
-                  {choisi.indicatif}
-                </span>
-                <ChevronDown aria-hidden className="size-4 text-[#60606b]" />
-                <select
-                  name="country"
-                  autoComplete="country"
-                  aria-label={formulaire.pays}
-                  value={pays}
-                  onChange={(e) => setPays(e.target.value)}
-                  className="absolute inset-0 cursor-pointer opacity-0"
-                >
-                  {PAYS.map((p) => (
-                    <option key={p.code} value={p.code}>
-                      {p.drapeau} {p.nom} ({p.indicatif})
-                    </option>
-                  ))}
-                </select>
-              </div>
-              {/* Le numéro a son libellé flottant comme les autres champs ;
-                  l'exemple du pays n'apparaît qu'au focus, une fois le
-                  libellé remonté, pour ne pas s'écrire par-dessus. */}
-              <div className="relative min-w-0 flex-1">
+            <div className="grid">
+              <label htmlFor="genesis-telephone" className={LIBELLE}>
+                {formulaire.telephone}
+              </label>
+              {/* Un seul cadre autour du pays et du numéro, qui répond au
+                  focus comme les autres champs. Le menu est un `select`
+                  natif posé sur le drapeau : sur téléphone, c'est la roue
+                  du système qui s'ouvre. */}
+              <div
+                className={cn(
+                  CADRE,
+                  "flex focus-within:border-[var(--genesis-encre)] focus-within:shadow-[0_0_0_1px_var(--genesis-encre)]",
+                  telephoneFaux &&
+                    "border-destructive focus-within:border-destructive focus-within:shadow-[0_0_0_1px_var(--destructive)] hover:border-destructive",
+                )}
+              >
+                <div className="relative flex shrink-0 items-center gap-1.5 border-r border-black/15 px-3">
+                  <span aria-hidden className="text-xl leading-none">
+                    {choisi.drapeau}
+                  </span>
+                  <span aria-hidden className="text-base tabular-nums">
+                    {choisi.indicatif}
+                  </span>
+                  <ChevronDown aria-hidden className="size-4 text-[#60606b]" />
+                  <select
+                    name="country"
+                    autoComplete="country"
+                    aria-label={formulaire.pays}
+                    value={pays}
+                    onChange={(e) => setPays(e.target.value)}
+                    className="absolute inset-0 cursor-pointer opacity-0"
+                  >
+                    {PAYS.map((p) => (
+                      <option key={p.code} value={p.code}>
+                        {p.drapeau} {p.nom} ({p.indicatif})
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <input
                   ref={premierChamp}
                   id="genesis-telephone"
@@ -282,31 +325,20 @@ export function InscriptionGenesis() {
                   type="tel"
                   inputMode="tel"
                   autoComplete="tel-national"
-                  required
+                  aria-required
                   placeholder={choisi.exemple}
-                  aria-invalid={erreur === formulaire.erreurs.telephone}
+                  aria-invalid={telephoneFaux}
                   value={telephone}
                   onChange={(e) => setTelephone(e.target.value)}
-                  className="peer size-full bg-transparent px-4 pt-5 pb-1 text-[17px] text-[var(--genesis-encre)] outline-none placeholder:text-transparent focus:placeholder:text-[#8a8a93]"
+                  className="min-w-0 flex-1 bg-transparent px-4 text-[17px] text-[var(--genesis-encre)] outline-none placeholder:text-[#8a8a93] focus-visible:outline-none"
                 />
-                <label htmlFor="genesis-telephone" className={LIBELLE}>
-                  {formulaire.telephone}
-                </label>
               </div>
             </div>
           ) : null}
 
-          {erreur ? (
-            <p
-              id="erreur-genesis"
-              role="alert"
-              className="text-sm font-bold text-destructive"
-            >
-              {erreur}
-            </p>
-          ) : null}
-
-          <BoutonGenesis soumettre disabled={envoi}>
+          {/* 20 px et non 24 : « Obtenir la formation gratuite » passait sur
+              deux lignes dans la colonne du formulaire. */}
+          <BoutonGenesis soumettre disabled={envoi} className="mt-1 sm:text-xl">
             {envoi ? (
               <span className="inline-flex items-center gap-2">
                 <LoaderCircle aria-hidden className="size-5 animate-spin" />
@@ -317,11 +349,22 @@ export function InscriptionGenesis() {
             )}
           </BoutonGenesis>
 
+          {/* La phrase rouge sous le bouton, sur la référence de Rémy. */}
+          {erreur ? (
+            <p
+              id="erreur-genesis"
+              role="alert"
+              className="text-center text-sm font-bold text-destructive"
+            >
+              {erreur}
+            </p>
+          ) : null}
+
           {precedente ? (
             <button
               type="button"
               onClick={() => aller(precedente)}
-              className="inline-flex min-h-10 items-center gap-1.5 self-start text-sm text-[#60606b] underline-offset-4 hover:text-[var(--genesis-encre)] hover:underline"
+              className="inline-flex min-h-10 items-center gap-1.5 self-center text-sm text-[#60606b] underline-offset-4 hover:text-[var(--genesis-encre)] hover:underline"
             >
               <ArrowLeft aria-hidden className="size-4" />
               {formulaire.retour}
@@ -334,51 +377,47 @@ export function InscriptionGenesis() {
 }
 
 /*
- * Les champs, refaits sur demande de Rémy, qui n'aimait pas ceux relevés sur
- * la référence (ombre intérieure, libellé en texte d'exemple). Ils partent de
- * l'`Input` de shadcn, déjà dans `packages/ui`.
+ * Les champs, refaits deux fois sur demande de Rémy. La seconde fois, sur
+ * le dessin du champ d'Arc UI (`uiarc.dev`) : **un libellé au-dessus, un
+ * cadre d'un pixel, aucune ombre, et le focus qui ne répond que par la
+ * bordure**. Leur fichier n'est pas installé : il est écrit en `.module.css`,
+ * que ce dépôt n'admet pas. Le dessin est donc repris en Tailwind, sur
+ * l'`Input` de shadcn déjà présent, dont on retire l'ombre et l'anneau.
  *
- * - **Un vrai cadre** : 56 px, angles de 5 px, fond blanc, bordure à 45 %
- *   de noir. C'est le seuil : une bordure de contrôle doit tenir 3:1 sur son
- *   fond, et le gris clair habituel (15 %) n'en tient que 1,4.
- * - **Le focus en bleu du tunnel**, bordure pleine (3,35:1) et halo à 20 %.
- * - **Un libellé qui reste** : au repos il occupe le champ, à la saisie il
- *   remonte en petit dans le haut du cadre. Un texte d'exemple disparaissait
- *   à la première lettre et ne nommait rien aux lecteurs d'écran ; celui-ci
- *   est un `label` relié au champ. Le mécanisme est en CSS seul, par
- *   `:placeholder-shown` sur un texte d'exemple fait d'une espace.
- * - **17 px de corps** : en dessous de 16, l'iPhone zoome sur le champ.
+ * Ce qui reste à nous : **les angles droits**, ceux du bouton, que Rémy a
+ * demandé de garder ; le blanc ; et la bordure à 45 % de noir, le seuil de
+ * 3:1 d'une bordure de contrôle. Au focus, elle passe au noir et double
+ * d'épaisseur par une ombre d'un pixel, sans changer la taille du champ :
+ * c'est l'indicateur qui remplace, ici seulement, le contour bleu global.
  *
- * Les couleurs sont écrites en dur, comme le reste du tunnel : il est forcé
- * au clair, et ses jetons n'ont pas de valeur sombre.
+ * 17 px de corps : en dessous de 16, l'iPhone zoome sur le champ.
  */
 const CADRE =
-  "h-14 rounded-[5px] border border-black/45 bg-white shadow-[0_1px_2px_rgba(0,0,0,0.06)] transition-[border-color,box-shadow] hover:border-black/60";
+  "h-[52px] w-full min-w-0 rounded-none border border-black/45 bg-white transition-[border-color,box-shadow] hover:border-[var(--genesis-encre)]";
 
 const LIBELLE =
-  "pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 font-[family-name:var(--font-genesis-bouton)] text-[17px] text-[#60606b] transition-[top,translate,font-size] peer-focus:top-2 peer-focus:translate-y-0 peer-focus:text-xs peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-xs";
+  "mb-2 font-[family-name:var(--font-genesis-bouton)] text-sm font-medium text-[var(--genesis-encre)]";
 
-function ChampFlottant({
+function Champ({
   id,
   libelle,
   className,
   ...props
 }: React.ComponentProps<"input"> & { id: string; libelle: string }) {
   return (
-    <div className="relative">
+    <div className="grid min-w-0">
+      <label htmlFor={id} className={LIBELLE}>
+        {libelle}
+      </label>
       <Input
         id={id}
-        placeholder=" "
         className={cn(
           CADRE,
-          "peer w-full px-4 pt-5 pb-1 text-[17px] text-[var(--genesis-encre)] focus-visible:border-[var(--genesis-bleu)] focus-visible:ring-[3px] focus-visible:ring-[var(--genesis-bleu)]/20 md:text-[17px] dark:bg-white",
+          "px-4 text-[17px] shadow-none focus-visible:ring-0 aria-invalid:ring-0 md:text-[17px] dark:bg-white text-[var(--genesis-encre)] outline-none focus-visible:border-[var(--genesis-encre)] focus-visible:shadow-[0_0_0_1px_var(--genesis-encre)] focus-visible:outline-none aria-invalid:border-destructive aria-invalid:hover:border-destructive aria-invalid:focus-visible:border-destructive aria-invalid:focus-visible:shadow-[0_0_0_1px_var(--destructive)]",
           className,
         )}
         {...props}
       />
-      <label htmlFor={id} className={LIBELLE}>
-        {libelle}
-      </label>
     </div>
   );
 }

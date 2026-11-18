@@ -56,7 +56,7 @@ export const optinGenesis = {
    * suit la liste le jour où elle change, comme le veut `AGENTS.md`.
    */
   sousTitre: (modules: number) =>
-    `Accédez à ${modules} modules de formation gratuite pour apprendre à créer, lancer et croitre un business de formation en ligne`,
+    `Accédez à ${modules} modules de formation gratuite qui dévoilent la stratégie étape par étape pour créer, lancer et développer un business de formation profitable`,
   /**
    * Le formulaire en trois étapes, à droite du visuel. Les questions et les
    * boutons des deux premières étapes sont de Rémy ; le reste est un libellé
@@ -91,11 +91,13 @@ export const optinGenesis = {
     consentement:
       "J'accepte de recevoir les emails de Funnels Club (désabonnement possible à tout moment) et je valide la ",
     lienConfidentialite: "Politique de confidentialité",
-    /* Les champs vides et l'e-mail mal formé sont signalés par le
-       navigateur (`required`, `type="email"`) ; restent le numéro, qu'il ne
-       sait pas lire, et l'échec de l'envoi. */
+    /* La phrase rouge sous le bouton. `champs` est celle de la référence
+       de Rémy (« Please complete all required fields to continue. »),
+       traduite ; les autres sont de l'agent, PROVISOIRES. */
     erreurs: {
-      telephone: "Indiquez votre numéro de téléphone complet.",
+      champs: "Veuillez remplir tous les champs obligatoires pour continuer.",
+      email: "Veuillez indiquer une adresse email valide.",
+      telephone: "Veuillez indiquer un numéro de téléphone complet.",
       envoi: "L'envoi n'est pas passé. Vérifiez votre email et réessayez.",
     },
   },
@@ -109,11 +111,15 @@ export type PartieGenesis = {
   /** Le segment d'adresse : `/formation-genesis/espace/<cle>`. Une adresse
    *  distribuée par e-mail ne se renomme plus : choisir la clé une fois. */
   cle: string;
-  /** Le libellé court de la liste, PROVISOIRE tant que `titre` est vide. */
+  /** Le rang du module, « Module #1 », de Rémy. Devant le titre dans le
+   *  `h1`, et seul dans la liste, où le numéro est déjà dans sa pastille. */
   etiquette: string;
+  /** Le titre du module, de Rémy : « Positionnement ». */
   titre: string | null;
+  /** Une phrase sous le titre, si Rémy en écrit une. Rien ne s'affiche
+   *  tant qu'elle est vide : il a demandé « uniquement le titre ». */
   description: string | null;
-  /** La vidéo Wistia : identifiant, durée en secondes, titre du lecteur. */
+  /** La vidéo Wistia : identifiant et durée en secondes. */
   video: { id: string; secondes: number } | null;
   /** Une partie bonus se range sous les autres, avec une étoile. */
   bonus?: true;
@@ -132,18 +138,49 @@ export type PartieGenesis = {
  * 1 à 4. Changer le nombre de modules oblige à y ajouter ou retirer un
  * e-mail ; le bonus n'a pas d'e-mail.
  */
+/*
+ * **VIDÉOS D'ESSAI**, sur demande de Rémy, pour voir l'intégration : ce sont
+ * des vidéos de Rémy déjà sur le site (`/lancement`, `/stable`, `/debuts`,
+ * le consulting), et non les modules. **À remplacer avant la mise en ligne**
+ * par les morceaux de la formation, avec leur copie d'affiche dans
+ * `public/temoignages/<id>.jpg`.
+ */
 export const partiesGenesis: PartieGenesis[] = [
-  { cle: "1", etiquette: "Module 1", titre: null, description: null, video: null },
-  { cle: "2", etiquette: "Module 2", titre: null, description: null, video: null },
-  { cle: "3", etiquette: "Module 3", titre: null, description: null, video: null },
-  { cle: "4", etiquette: "Module 4", titre: null, description: null, video: null },
+  {
+    cle: "1",
+    etiquette: "Module #1",
+    titre: "Positionnement",
+    description: null,
+    video: { id: "vkvffo2189", secondes: 2739 },
+  },
+  {
+    cle: "2",
+    etiquette: "Module #2",
+    titre: "Offre idéale",
+    description: null,
+    video: { id: "04wqsqzo30", secondes: 7238 },
+  },
+  {
+    cle: "3",
+    etiquette: "Module #3",
+    titre: "Acquisition",
+    description: null,
+    video: { id: "h4z4g82lyi", secondes: 1653 },
+  },
+  {
+    cle: "4",
+    etiquette: "Module #4",
+    titre: "Vente",
+    description: null,
+    video: { id: "8dynngktko", secondes: 1411 },
+  },
   /* Les bonus viendront plus tard : une ligne par bonus, `bonus: true`. */
   {
     cle: "bonus",
     etiquette: "Bonus",
     titre: null,
     description: null,
-    video: null,
+    video: { id: "vkvffo2189", secondes: 2739 },
     bonus: true,
   },
 ];
@@ -151,9 +188,15 @@ export const partiesGenesis: PartieGenesis[] = [
 /** Les textes de l'espace membre, `/formation-genesis/espace`. */
 export const espaceGenesis = {
   titrePage: "Formation Genesis · Espace membre",
-  surtitre: null as string | null,
-  /* Libellés d'interface, PROVISOIRES. */
-  titreListe: "Les modules",
+  /**
+   * Ce que dit la barre du haut sur chaque page de l'espace, à la place de
+   * « Formation gratuite » : elle suit l'adresse, sur demande de Rémy, qui a
+   * donné « Funnels Club Leçon 1 » en exemple. Le bonus garde son nom.
+   */
+  barre: (rang: number) => `Leçon ${rang}`,
+  /* Libellés d'interface, PROVISOIRES, sur la liste de référence de Rémy. */
+  titreListe: "Modules",
+  titreBonus: "Bonus",
   suivante: "Module suivant",
   /** La carte d'appel, à droite sur ordinateur, sous la vidéo sur
    *  téléphone. Elle mène à `/formation-genesis/appel`. */

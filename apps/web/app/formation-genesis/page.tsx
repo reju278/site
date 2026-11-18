@@ -29,8 +29,8 @@ export const metadata: Metadata = {
 export default function FormationGenesis() {
   const { etiquette, titre } = optinGenesis;
   /* Les quatre derniers mots sont liés par des espaces insécables : sans
-     cela, « ligne » finit seul sur sa ligne à 375 px, et `text-pretty` ne
-     l'empêche pas. En large, ils sont déjà sur la même ligne. */
+     cela, le dernier mot finit seul sur sa ligne à 375 px, et `text-pretty`
+     ne l'empêche pas. */
   const sousTitre = insecables(
     optinGenesis
       .sousTitre(partiesGenesis.filter((p) => !p.bonus).length)

@@ -2236,16 +2236,35 @@ natifs de ClickFunnels, le consentement dans le champ personnalisé
 « consentement », comme pour `/course`. Le téléphone reprend la règle
 d'`/appel`, sortie pour l'occasion dans `lib/telephone.ts`.
 
-**Les champs ne sont pas ceux de la référence**, que Rémy n'aimait pas
-(ombre intérieure, libellé en texte d'exemple) : `Input` de shadcn, 56 px,
-bordure à 45 % de noir (le seuil de 3:1 d'une bordure de contrôle, que le
-gris à 15 % habituel ne tient pas), focus en bleu du tunnel, et un libellé
-qui remonte à la saisie au lieu de disparaître.
+**Les champs et le bouton suivent Arc UI (`uiarc.dev`)**, sur demande de
+Rémy, après deux versions qu'il n'aimait pas (l'ombre intérieure de la
+référence, puis un libellé flottant cerclé d'un halo). Un libellé au-dessus,
+un cadre d'un pixel, aucune ombre, et le focus qui ne répond que par la
+bordure, passée au noir et doublée. **Leurs fichiers ne s'installent pas** :
+ils sont écrits en `.module.css`, que ce dépôt refuse. Le dessin est donc
+repris en Tailwind sur l'`Input` de shadcn. La bordure au repos est à 45 % de
+noir, le seuil de 3:1 d'une bordure de contrôle. Le bouton prend leur geste
+(il s'enfonce à l'appui) et une ombre bleue portée, pour ressortir du blanc.
+Un champ qui manque se borde de rouge, et **une phrase rouge sous le bouton**
+le dit, traduite de la référence de Rémy : la vérification est la nôtre
+(`noValidate`), les bulles du navigateur ne se placent pas.
 
-**`BoutonGenesis` a des angles droits**, aplat #438bf7 : une exception à la
-règle des 5 px, décidée par Rémy en demandant que le tunnel colle à sa
-référence, boutons compris. Elle ne vaut que pour ce bouton. Le blanc y tient
-3,35:1, donc son texte ne descend jamais sous 20 px gras.
+**Les angles droits valent pour `BoutonGenesis` et pour les champs du
+tunnel**, aplat #438bf7 pour le premier : une exception à la règle des 5 px,
+décidée par Rémy en demandant que le tunnel colle à sa référence, boutons
+compris, puis étendue aux champs (« tu gardes nos bordures : c'est des
+bordures carrées »). Elle ne vaut que dans ce tunnel. Le blanc sur le bleu
+tient 3,35:1, donc le texte du bouton ne descend jamais sous 20 px gras.
+
+**L'espace membre** porte le titre seul (« Module #1 : Positionnement »,
+titres de Rémy), sans sur-titre ni description. La barre de la bannière suit
+la page, « Funnels.club : Leçon 1 », sur son exemple. La liste des modules
+est une carte blanche à ombre détachée, relevée sur une référence de Rémy :
+groupes « Modules » et « Bonus » en capitales espacées, numéro en pastille
+carrée, module ouvert surligné avec un filet bleu. **Les vidéos des modules
+sont des vidéos d'essai** (`/lancement`, `/stable`, `/debuts`, le
+consulting), posées pour voir l'intégration : à remplacer par les morceaux
+de la formation avant la mise en ligne.
 
 **Ajouter une page** : une clé dans `lib/pages-temoignage.ts`, une entrée dans
 `SOURCES`, et **la même clé dans le catalogue du CRM**,

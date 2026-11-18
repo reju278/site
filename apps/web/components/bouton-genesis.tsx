@@ -33,8 +33,17 @@ export function BoutonGenesis({
   className?: string;
   children: React.ReactNode;
 }) {
+  /* **Plus de présence**, sur demande de Rémy, qui le trouvait trop
+     effacé, et sur le geste du bouton d'Arc UI (`uiarc.dev`) : il
+     s'enfonce de 2 % à l'appui et gagne une ombre au survol. L'ombre est
+     bleue et portée sous le bouton, comme sur sa référence, pour qu'il se
+     détache du blanc ; elle prend la couleur du bouton par `color-mix` et
+     ne peut donc pas s'en écarter. Angles droits et aplat inchangés.
+     L'enfoncement et la montée sont des translations et des échelles,
+     posées sur `scale` et `translate` (Tailwind v4) et seulement sans
+     mouvement réduit. */
   const classes = cn(
-    "flex min-h-[52px] w-full items-center justify-center rounded-none bg-[var(--genesis-bleu)] px-5 py-3 text-center font-[family-name:var(--font-genesis-bouton)] text-xl leading-tight font-bold text-white uppercase transition-[filter] hover:brightness-95 disabled:opacity-70 sm:text-2xl",
+    "flex min-h-14 w-full items-center justify-center rounded-none bg-[var(--genesis-bleu)] px-5 py-3 text-center font-[family-name:var(--font-genesis-bouton)] text-xl leading-tight font-bold tracking-[0.02em] text-white uppercase shadow-[0_12px_24px_-12px_color-mix(in_srgb,var(--genesis-bleu)_80%,transparent)] transition-[filter,box-shadow,scale,translate] duration-150 hover:shadow-[0_16px_32px_-12px_color-mix(in_srgb,var(--genesis-bleu)_95%,transparent)] hover:brightness-[0.96] active:brightness-90 disabled:opacity-70 motion-safe:hover:-translate-y-px motion-safe:active:translate-y-0 motion-safe:active:scale-[0.98] sm:text-2xl",
     className,
   );
   if (href) {

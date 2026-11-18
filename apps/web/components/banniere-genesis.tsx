@@ -18,15 +18,20 @@ import { LogoFunnels } from "@/components/logo-funnels";
  * chargement différé.
  *
  * Le nom dans la barre est celui de Rémy, « Funnels.club : Formation
- * gratuite », comme sur la référence.
+ * gratuite », comme sur la référence. **Dans l'espace membre, il suit la
+ * page**, sur sa demande : « Funnels.club : Leçon 1 », d'où `libelle`.
  */
-export function BanniereGenesis() {
+export function BanniereGenesis({
+  libelle = "Formation gratuite",
+}: {
+  libelle?: string;
+}) {
   return (
     <div>
       <div className="bg-[var(--genesis-fond)]">
         <p className="mx-auto flex h-[42px] max-w-[960px] items-center gap-1.5 px-5 font-[family-name:var(--font-genesis-bouton)] text-[13px] text-[var(--genesis-encre)] sm:px-8">
           <LogoFunnels className="size-[18px]" />
-          Funnels.club&nbsp;: Formation gratuite
+          Funnels.club&nbsp;: {libelle}
         </p>
       </div>
       <div className="relative h-[120px] overflow-hidden bg-[var(--fond-hero)] sm:h-[200px]">
