@@ -29,6 +29,15 @@
  * colonnes, lues rangée par rangée) ; leurs titres sont relevés sur YouTube.
  */
 
+import { partiesGenesis } from "@/contenu/formation-genesis";
+
+/** Les modules de la formation, dans l'ordre : « Positionnement → Offre
+ *  idéale → Acquisition → Vente ». */
+const ETAPES_FORMATION = partiesGenesis
+  .filter((p) => !p.bonus && p.titre)
+  .map((p) => p.titre)
+  .join(" → ");
+
 /** Un bloc de texte, dans l'ordre de la page Notion. */
 export type BlocNiveaux =
   | { type: "h2"; texte: string }
@@ -189,7 +198,11 @@ export const niveauxBusiness: NiveauBusiness[] = [
       "<mb><b>Vise 10 clients à 1000€, pas 100 clients à 100€</b></mb><b> : </b>Une offre haut de gamme est plus simple à vendre qu'une offre pas chère. Tu n'as besoin que de 10 personnes pour atteindre 10 000€.",
       "<mb><b>Choisis UN modèle, UNE offre, UN canal</b></mb><b> : </b>La plupart des gens perdent 2 ans à zapper d'une idée à l'autre (prestation, formation, coaching…). Décide une fois, et tiens-toi-y 12 mois.",
       "<mb><b>Tes connaissances ont déjà de la valeur</b></mb><b> : </b>Tu en sais plus que tu ne le crois. Quelqu'un est prêt à te payer 1000€ aujourd'hui pour ce que tu sais déjà faire.",
-      "<mb><b>Mets en place le système TFCV dès le premier jour</b></mb><b> : </b>Trafic → Filtre → Conversion → Vente. Ne construis pas un business qui dépend de toi pour aller chercher chaque client à la main.",
+      /* Sur demande de Rémy, le système TFCV de sa page Notion laisse la place
+         aux étapes de la formation, celles de la vidéo. Le titre est de
+         l'agent, PROVISOIRE ; les étapes sont lues dans `partiesGenesis`,
+         pour qu'un module renommé le soit ici aussi. */
+      `<mb><b>Mets en place les étapes de la formation dès le premier jour</b></mb><b> : </b>${ETAPES_FORMATION}, dans l'ordre de la vidéo. Ne construis pas un business qui dépend de toi pour aller chercher chaque client à la main.`,
       "<mb><b>Décide de ne PAS prospecter</b></mb><b> : </b>Construis dès le départ un système où les clients viennent à toi (publicité ciblée + tunnel + appel). Pas de DM, pas de cold call.",
       "<mb><b>Crée une offre simple à livrer, avec beaucoup de marge</b></mb><b> : </b>Pas un produit complexe avec 47 modules. Une transformation claire, livrée simplement. Format : formation, consulting, ou prestation cadrée.",
       "<mb><b>Arrête de consommer, commence à publier</b></mb><b> : </b>Chaque heure sur une formation que tu n'appliques pas est une heure perdue. Le marché récompense ceux qui agissent, pas ceux qui savent.",
@@ -239,12 +252,15 @@ export const niveauxBusiness: NiveauBusiness[] = [
     recoTitre: "Recommandations pour le niveau #2",
     recos: [
       "<mb><b>Augmente progressivement ton budget pub</b></mb><b> : </b>Passe de 5€/jour à 50€/jour, puis 100€/jour. Plus de cannes à pêche = plus de poissons.",
-      "<mb><b>Mesure ton ROAS, pas seulement ton chiffre d'affaires</b></mb><b> : </b>Si tu mets 1€ et tu sors 5€, scale. Si c'est 1 pour 2, optimise avant de scaler.",
+      /* Sur demande de Rémy, plus de termes techniques au niveau 2 : « profit »
+         au lieu de ROAS, « webinaire » au lieu de VSL, « commercial » au lieu
+         de closer, et « investis plus » au lieu de « scale ». */
+      "<mb><b>Mesure ton profit, pas seulement ton chiffre d'affaires</b></mb><b> : </b>Si tu mets 1€ et tu sors 5€, investis plus. Si c'est 1 pour 2, améliore avant d'investir plus.",
       "<mb><b>Démarre ta création de contenu maintenant</b></mb><b> : </b>Choisis UN format (YouTube long, Instagram court, ou LinkedIn) et publie au moins 1 fois par semaine. Pas avant, pas plus.",
       "<mb><b>Augmente tes prix</b></mb><b> : </b>Au Niveau 2, vendre à 3 000€ est plus simple que vendre à 300€. Tes premiers clients t'ont validé, ton offre vaut plus cher.",
       "<mb><b>Diversifie une source à la fois</b></mb><b> : </b>N'ouvre pas LinkedIn + YouTube + Insta + TikTok en même temps. Maîtrise un canal avant d'en ajouter un autre.",
-      "<mb><b>Renforce ton tunnel</b></mb><b> : </b>VSL, page de capture, page de prise de RDV. Un tunnel propre vaut mieux qu'un tunnel beau.",
-      "<mb><b>Embauche un closer si tu fais beaucoup d'appels</b></mb><b> : </b>C'est ton premier vrai goulot d'étranglement.",
+      "<mb><b>Renforce ton tunnel</b></mb><b> : </b>Webinaire, page de capture, page de prise de RDV. Un tunnel propre vaut mieux qu'un tunnel beau.",
+      "<mb><b>Embauche un commercial si tu fais beaucoup d'appels</b></mb><b> : </b>C'est ton premier vrai goulot d'étranglement.",
       "<mb><b>Documente tout ce que tu fais</b></mb><b> : </b>Tu ne pourras pas déléguer plus tard si rien n'est écrit."
     ],
     videos: [
@@ -442,7 +458,7 @@ export const exerciceNiveaux: BlocNiveaux[] = [
     /* PROVISOIRE (agent) : les réponses les plus fréquentes, tirées des
        recommandations des niveaux 2 à 5 de Rémy. */
     options: [
-      "J'embauche (closer, assistant) alors que je n'ai pas encore de ventes régulières",
+      "J'embauche (commercial, assistant) alors que je n'ai pas encore de ventes régulières",
       "Je publie sur plusieurs réseaux en même temps",
       "Je crée plusieurs offres au lieu d'en maîtriser une seule",
       "J'augmente mon budget publicitaire sans connaître mes chiffres",
