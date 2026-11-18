@@ -1,5 +1,7 @@
 import { BanniereGenesis } from "@/components/banniere-genesis";
 import { LecteurVideo } from "@/components/lecteur-video";
+import { PreuvesTunnel } from "@/components/preuves-tunnel";
+import { VideoDepartZero } from "@/components/video-depart-zero";
 import { ConsignesRendezVous } from "@/components/rendez-vous";
 import { TitreConfirmationForm } from "@/components/titre-confirmation-form";
 import { confirmationGenesis } from "@/contenu/formation-genesis";
@@ -21,11 +23,15 @@ import type { Metadata } from "next";
  * confirmation et ses consignes personnelles (`ConsignesRendezVous`). Ce
  * sont les mêmes composants, donc la même logique.
  *
- * **Ce qui change** : la seule vidéo de confirmation, sans « Vidéo 1/2 » ni
- * la vidéo 2/2, retirée par Rémy, d'où l'alerte « regarde la vidéo »
- * (`alerteUneVideo`) ; ni entretiens ni mur, puisqu'il ne reste que cette
- * vidéo ; et le dessin de Genesis : bannière et logo, titres en PT Serif,
- * angles droits, la carte blanche à ombre douce du formulaire de l'optin.
+ * **Ce qui change : la vidéo 2/2 est retirée, et rien d'autre**, sur demande
+ * de Rémy. Une première version avait aussi retiré les entretiens, le mur et
+ * l'équipe ; il les voulait, et ils sont revenus : la vidéo réservée à qui
+ * démarre de zéro (`VideoDepartZero`, conditionnelle) et toute la suite de
+ * `/thanks` (`PreuvesTunnel` : la pile d'entretiens, le mur qui défile,
+ * l'équipe). Sans la vidéo 2/2, l'alerte dit « regarde la vidéo »
+ * (`alerteUneVideo`) et l'étape 1 perd son « Vidéo 1/2 ». Et le dessin de
+ * Genesis : bannière et logo, titres en PT Serif, angles droits, la carte
+ * blanche à ombre douce du formulaire de l'optin.
  * Les titres et les angles des deux composants partagés passent par deux
  * règles de `globals.css` limitées à `[data-genesis]`, et non par une copie.
  */
@@ -38,7 +44,16 @@ export default function ReservationThanks() {
   const { etape1 } = confirmationThanks;
 
   return (
-    <main className="bg-[var(--genesis-fond)] text-[var(--genesis-encre)]">
+    <main
+      className="bg-[var(--genesis-fond)] text-[var(--genesis-encre)]"
+      /* La largeur de `/thanks`, 56 rem, que ses blocs de preuves
+         attendent, au lieu des 72 du reste du tunnel. */
+      style={
+        {
+          "--largeur-video": "min(100vw - 2.5rem, 56rem)",
+        } as React.CSSProperties
+      }
+    >
       {/* **Le relevé de la réservation**, en HTML brut et en tête de page,
           comme sur `/thanks` : il lit ce que Calendly a mis dans l'adresse et
           l'en retire pendant la lecture du HTML, donc avant Google Tag
@@ -80,6 +95,12 @@ export default function ReservationThanks() {
           <ConsignesRendezVous />
         </div>
       </section>
+
+      {/* Tout ce qui suit l'étape 1 sur `/thanks`, à l'identique : la
+          vidéo de qui démarre de zéro (si le quiz le dit), puis les
+          entretiens, le mur de la communauté qui défile et l'équipe. */}
+      <VideoDepartZero />
+      <PreuvesTunnel />
     </main>
   );
 }

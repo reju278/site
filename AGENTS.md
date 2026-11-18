@@ -2213,8 +2213,12 @@ Rémy, pour qu'on ne se sente pas ailleurs en sortant de la réservation : la
 bannière et le logo, les titres en PT Serif, les angles droits, la carte
 blanche de l'optin. Elle garde la personnalisation de `/thanks` à
 l'identique, par les mêmes composants (`scriptCapture`,
-`TitreConfirmationForm`, `ConsignesRendezVous`), et n'a qu'une vidéo, celle
-de confirmation : ni « Vidéo 1/2 », ni vidéo 2/2, ni entretiens. Ni jeton
+`TitreConfirmationForm`, `ConsignesRendezVous`), et **ne retire que la
+vidéo 2/2** : la pile d'entretiens, le mur qui défile et l'équipe
+(`PreuvesTunnel`), et la vidéo de qui démarre de zéro (`VideoDepartZero`,
+conditionnelle), sont gardés, à 56 rem de large comme sur `/thanks`. Une
+première version avait tout retiré après l'étape 1, et Rémy a refusé : ne
+pas retirer plus que ce qu'il nomme. Ni jeton
 ClickFunnels ni `CompteurVue` : ils comptent dans le VSL Funnel. **Calendly
 doit y renvoyer**, réglage de l'événement à faire par Rémy (page de
 confirmation externe, détails transmis).
