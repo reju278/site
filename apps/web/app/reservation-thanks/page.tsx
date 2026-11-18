@@ -100,7 +100,8 @@ export default function ReservationThanks() {
           vidéo de qui démarre de zéro (si le quiz le dit), puis les
           entretiens, le mur de la communauté qui défile et l'équipe. */}
       <VideoDepartZero />
-      <PreuvesTunnel />
+      {/* Les boutons de la pile au dessin du tunnel, sur demande de Rémy. */}
+      <PreuvesTunnel boutonsGenesis />
     </main>
   );
 }

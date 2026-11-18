@@ -11,7 +11,12 @@ import { confirmationThanks } from "@/contenu/thanks";
  * communauté et l'équipe. Un seul composant, partagé avec `/debuts` et
  * `/stable`, pour que ces pages ne divergent pas.
  */
-export function PreuvesTunnel() {
+export function PreuvesTunnel({
+  boutonsGenesis = false,
+}: {
+  /** Les boutons de la pile au dessin Genesis : voir `PileEntretiens`. */
+  boutonsGenesis?: boolean;
+} = {}) {
   return (
     <>
       {/* LES ENTRETIENS, la pile de `/form-funnel-thanks`, sur demande de
@@ -28,6 +33,7 @@ export function PreuvesTunnel() {
           /* Les boutons au rayon du tunnel, 5 px, comme ceux de `/course`,
              `/video-vsl` et `/appel`, sur demande de Rémy. */
           rayonBoutons="var(--radius-md)"
+          boutonsGenesis={boutonsGenesis}
           className="mx-auto w-full max-w-[calc(var(--largeur-video)-2rem)] sm:max-w-[calc(var(--largeur-video)-3rem)]"
         />
       </section>

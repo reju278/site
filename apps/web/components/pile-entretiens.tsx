@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { BoutonGenesis } from "@/components/bouton-genesis";
 import { BoutonScintillant } from "@/components/bouton-scintillant";
 import { TexteRoulant } from "@/components/texte-roulant";
 import { cn } from "@repo/ui/lib/utils";
@@ -33,9 +34,15 @@ export function PileEntretiens({
   entretiens,
   className,
   rayonBoutons = "25px",
+  boutonsGenesis = false,
 }: {
   entretiens: readonly EntretienPile[];
   className?: string;
+  /** Les boutons « Découvrir… » et « Fermer » au dessin du tunnel Formation
+   *  Genesis (`BoutonGenesis`, plein et creux), sur demande de Rémy, pour
+   *  `/reservation-thanks` seule : les autres pages gardent les boutons qui
+   *  scintillent. */
+  boutonsGenesis?: boolean;
   /** Le rayon des boutons « Découvrir… » et « Fermer ». 25 px, celui du mur
    *  de la communauté, par défaut ; `/thanks` les veut carrés comme le reste
    *  du tunnel VSL, sur demande de Rémy. */
@@ -147,7 +154,29 @@ export function PileEntretiens({
         >
           {/* À gauche, tout refermer : « Fermer » après le premier paquet,
               « Tout fermer » dès le deuxième. */}
-          {paliers > 0 ? (
+          {boutonsGenesis ? (
+            <>
+              {paliers > 0 ? (
+                <BoutonGenesis
+                  creux
+                  onClick={refermer}
+                  className="gap-2 sm:w-auto"
+                >
+                  <ChevronUp aria-hidden className="size-5 shrink-0" />
+                  {paliers > 1 ? "Tout fermer" : "Fermer"}
+                </BoutonGenesis>
+              ) : null}
+              {prochains > 0 ? (
+                <BoutonGenesis onClick={ouvrir} className="gap-2 sm:w-auto">
+                  {prochains > 1
+                    ? `Découvrir ${prochains} autres histoires en vidéo`
+                    : "Découvrir une autre histoire en vidéo"}
+                  <ChevronDown aria-hidden className="size-5 shrink-0" />
+                </BoutonGenesis>
+              ) : null}
+            </>
+          ) : null}
+          {!boutonsGenesis && paliers > 0 ? (
             /* Le même bouton que le bleu, en gris et sans la lumière qui
                tourne : relief, ombre et texte qui roule restent. Un gris un
                peu plus soutenu que le fond, un liseré et un reflet en haut
@@ -167,7 +196,7 @@ export function PileEntretiens({
           ) : null}
           {/* Le bouton du mur de la communauté, repris tel quel : même
               lumière qui tourne, même rayon de 25 px, une ombre plus marquée. */}
-          {prochains > 0 ? (
+          {!boutonsGenesis && prochains > 0 ? (
             <BoutonScintillant
               action={ouvrir}
               rayon={rayonBoutons}

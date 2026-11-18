@@ -21,6 +21,11 @@ import Link from "next/link";
  * d'envoi (`soumettre`) ou un bouton qui agit (`onClick`). Ce qui navigue est
  * un lien, ce qui agit est un bouton.
  *
+ * **`creux`** en fait le second d'une paire : blanc, bordé à 45 % de noir (le
+ * seuil de 3:1 d'une bordure de contrôle), texte noir, même hauteur et mêmes
+ * angles droits. C'est le « Fermer » de la pile d'entretiens de
+ * `/reservation-thanks`, à côté du plein.
+ *
  * **`nouvelOnglet`** ouvre le lien dans un autre onglet, par un `<a>` natif
  * et non un `Link` : la page d'origine reste ouverte (la vidéo d'un module
  * continue), et la page d'arrivée se charge en entier, donc ses scripts
@@ -29,6 +34,7 @@ import Link from "next/link";
  */
 export function BoutonGenesis({
   href,
+  creux,
   nouvelOnglet,
   soumettre,
   onClick,
@@ -37,6 +43,7 @@ export function BoutonGenesis({
   children,
 }: {
   href?: string;
+  creux?: boolean;
   nouvelOnglet?: boolean;
   soumettre?: boolean;
   onClick?: () => void;
@@ -50,7 +57,10 @@ export function BoutonGenesis({
      à l'appui, posé sur `scale` (Tailwind v4) et seulement sans mouvement
      réduit. */
   const classes = cn(
-    "flex min-h-14 w-full items-center justify-center rounded-none bg-[var(--genesis-bleu)] px-6 py-3 text-center font-[family-name:var(--font-genesis-bouton)] text-[19px] leading-tight font-bold tracking-[0.04em] text-white uppercase transition-[filter,scale] duration-150 hover:brightness-[0.96] active:brightness-90 disabled:opacity-70 motion-safe:active:scale-[0.98]",
+    "flex min-h-14 w-full items-center justify-center rounded-none px-6 py-3 text-center font-[family-name:var(--font-genesis-bouton)] text-[19px] leading-tight font-bold tracking-[0.04em] uppercase transition-[filter,scale,background-color] duration-150 disabled:opacity-70 motion-safe:active:scale-[0.98]",
+    creux
+      ? "border border-black/45 bg-white text-[var(--genesis-encre)] hover:bg-black/[0.03]"
+      : "bg-[var(--genesis-bleu)] text-white hover:brightness-[0.96] active:brightness-90",
     className,
   );
   if (href && nouvelOnglet) {

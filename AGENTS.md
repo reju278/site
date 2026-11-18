@@ -2218,7 +2218,12 @@ vidéo 2/2** : la pile d'entretiens, le mur qui défile et l'équipe
 (`PreuvesTunnel`), et la vidéo de qui démarre de zéro (`VideoDepartZero`,
 conditionnelle), sont gardés, à 56 rem de large comme sur `/thanks`. Une
 première version avait tout retiré après l'étape 1, et Rémy a refusé : ne
-pas retirer plus que ce qu'il nomme. Ni jeton
+pas retirer plus que ce qu'il nomme. Les boutons de la pile d'entretiens y prennent le
+dessin du tunnel (`boutonsGenesis` de `PreuvesTunnel` et `PileEntretiens`) :
+« Découvrir… » en `BoutonGenesis` plein, « Fermer » en creux (blanc, bordé,
+texte noir). `/thanks`, `/debuts` et `/stable` gardent leurs boutons qui
+scintillent. Sur téléphone, « Découvrir 3 autres histoires en vidéo » tient
+sur deux lignes : à 19 px, le plancher du bouton, la phrase demande 430 px. Ni jeton
 ClickFunnels ni `CompteurVue` : ils comptent dans le VSL Funnel. **Calendly
 doit y renvoyer**, réglage de l'événement à faire par Rémy (page de
 confirmation externe, détails transmis).
