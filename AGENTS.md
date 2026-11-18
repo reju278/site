@@ -2358,6 +2358,33 @@ sont des vidéos d'essai** (`/lancement`, `/stable`, `/debuts`, le
 consulting), posées pour voir l'intégration : à remplacer par les morceaux
 de la formation avant la mise en ligne.
 
+**Le bonus est la checklist des niveaux de business de Rémy**, posée à la
+place de la vidéo (`/espace/bonus`), sur sa demande : « Bonus » dans la
+liste, « Bonus : Niveaux de business digital » en titre. Le champ
+`checklist` de `PartieGenesis` dit quoi poser à la place du lecteur. **Le
+texte est recopié mot pour mot** de sa page Notion
+`docs.funnels.club/niveaux-business`, dans `contenu/niveaux-business.ts`,
+fautes comprises (elles sont listées en tête du fichier) ; **le dessin est
+celui de l'espace**, pas celui de Notion : PT Serif, angles droits, les
+surlignages bleu et jaune de l'optin, la carte blanche à ombre détachée de la
+liste pour chaque niveau. Un onglet par partie (diagnostic, cinq niveaux,
+exercice), chaque niveau avec ses vidéos YouTube de la page Notion et des
+témoignages du site. **La répartition des témoignages par niveau est de
+l'agent**, à valider par Rémy, et le niveau 5 n'en a aucun : aucun entretien
+n'annonce plus d'un million par an.
+
+`Tabs`, `Checkbox` et `Textarea` viennent du registre shadcn `new-york-v4`,
+écrits depuis son JSON plutôt que par `shadcn add` (pas de `pnpm` depuis
+Claude), `cn` corrigé. Le contenu des onglets est rendu par le serveur et
+passé tout fait à `OngletsNiveaux`, pour que `site.ts` n'entre pas dans le
+JavaScript ; les cases et les réponses restent dans `localStorage`. **Un
+`TabsTrigger` repeint garde le préfixe du registre** :
+`data-[state=active]:bg-…` perd contre
+`group-data-[variant=line]/tabs-list:data-[state=active]:bg-transparent`,
+que `tailwind-merge` ne voit pas comme un conflit. Et Radix active un onglet
+à l'appui du pointeur, pas au `click()` : un test qui clique en JavaScript
+conclut à tort que rien ne marche.
+
 **Ajouter une page** : une clé dans `lib/pages-temoignage.ts`, une entrée dans
 `SOURCES`, et **la même clé dans le catalogue du CRM**,
 `PAGES_TEMOIGNAGE` de `packages/backend/convex/funnels.ts` du dépôt

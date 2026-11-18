@@ -159,6 +159,9 @@ export type PartieGenesis = {
   video: { id: string; secondes: number } | null;
   /** Une partie bonus se range sous les autres, avec une étoile. */
   bonus?: true;
+  /** Un document à la place de la vidéo : `niveaux` pose la checklist des
+   *  niveaux de business (`contenu/niveaux-business.ts`). */
+  checklist?: "niveaux";
 };
 
 /**
@@ -210,14 +213,19 @@ export const partiesGenesis: PartieGenesis[] = [
     description: null,
     video: { id: "8dynngktko", secondes: 1411 },
   },
-  /* Les bonus viendront plus tard : une ligne par bonus, `bonus: true`. */
+  /* Une ligne par bonus, `bonus: true`. Le premier est la checklist des
+     niveaux de business de Rémy, posée à la place de la vidéo, sur sa
+     demande : « Bonus » dans la liste, « Bonus : Niveaux de business
+     digital » en titre. Le titre est de Rémy, dicté (« bonus deux-points ») ;
+     le pluriel de « Niveaux » est celui de sa page Notion. */
   {
     cle: "bonus",
     etiquette: "Bonus",
-    titre: null,
+    titre: "Niveaux de business digital",
     description: null,
-    video: { id: "vkvffo2189", secondes: 2739 },
+    video: null,
     bonus: true,
+    checklist: "niveaux",
   },
 ];
 

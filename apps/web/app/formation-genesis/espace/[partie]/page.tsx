@@ -1,5 +1,6 @@
 import { BanniereGenesis } from "@/components/banniere-genesis";
 import { BoutonGenesis } from "@/components/bouton-genesis";
+import { ChecklistNiveaux } from "@/components/checklist-niveaux";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { LogoFunnels } from "@/components/logo-funnels";
 import { Emplacement } from "@/components/section";
@@ -60,10 +61,10 @@ export function generateStaticParams() {
 
 type Props = { params: Promise<{ partie: string }> };
 
-/** « Module #1 : Positionnement », ou le rang seul tant qu'il n'a pas de
- *  titre. */
+/** « Module #1 : Positionnement », « Bonus : Niveaux de business digital »,
+ *  ou le rang seul tant qu'il n'a pas de titre. */
 const titreComplet = (p: Partie) =>
-  p.titre && !p.bonus ? `${p.etiquette} : ${p.titre}` : (p.titre ?? p.etiquette);
+  p.titre ? `${p.etiquette} : ${p.titre}` : p.etiquette;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { partie } = await params;
@@ -115,8 +116,15 @@ export default async function PartieGenesis({ params }: Props) {
           liste. */}
       <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-6 px-5 sm:px-8 lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-8">
         {/* La vidéo, le lien vers la suite et la carte d'appel. */}
-        <section aria-label="Vidéo" className="flex flex-col gap-4 lg:order-2">
-          {courante.video ? (
+        <section
+          aria-label={courante.checklist ? "Checklist" : "Vidéo"}
+          className="flex min-w-0 flex-col gap-4 lg:order-2"
+        >
+          {/* Un bonus peut porter un document à la place de la vidéo : la
+              checklist des niveaux de business, sur demande de Rémy. */}
+          {courante.checklist === "niveaux" ? (
+            <ChecklistNiveaux reservation={lienReservation(courante)} />
+          ) : courante.video ? (
             <LecteurVideo
               id={courante.video.id}
               titre={titre}
@@ -318,7 +326,12 @@ function EntreeModule({
       >
         {partie.bonus ? <Star className="size-3.5" /> : numero}
       </span>
-      <span className="min-w-0 text-pretty">{partie.titre ?? partie.etiquette}</span>
+      {/* Un module se nomme par son titre, son numéro est dans la pastille ;
+          un bonus garde « Bonus », sur demande de Rémy, son titre étant
+          dans le `h1`. */}
+      <span className="min-w-0 text-pretty">
+        {partie.bonus ? partie.etiquette : (partie.titre ?? partie.etiquette)}
+      </span>
     </Link>
   );
 }
