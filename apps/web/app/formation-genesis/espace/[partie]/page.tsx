@@ -177,7 +177,9 @@ export default async function PartieGenesis({ params }: Props) {
                   moitié du F. Un liseré de la couleur de page détache la
                   photo du logo. */}
               <div className="flex shrink-0 items-center">
-                <span className="grid size-10 place-items-center overflow-hidden rounded-full bg-[#101013] ring-2 ring-[var(--genesis-fond)] max-sm:ring-[#f8f8f8]">
+                <span
+                  data-rond
+                  className="grid size-10 place-items-center overflow-hidden rounded-full bg-[#101013] ring-2 ring-[var(--genesis-fond)] max-sm:ring-[#f8f8f8]">
                   <LogoFunnels className="size-[80%]" />
                 </span>
                 <img

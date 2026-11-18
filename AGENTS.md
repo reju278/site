@@ -2203,6 +2203,25 @@ pas la même question.
 `utm_content=module-2` (ou `bonus`) et `utm_term=offre-ideale`.
 `FormulaireCalendly` les passe à Calendly, qui les garde avec le rendez-vous.
 
+**Le titre de `/reservation` porte le prénom de l'optin**, lu dans le
+navigateur : « Réservez votre appel ci-dessous, Rémy ».
+
+**`/reservation-thanks` est `/thanks` aux codes de Genesis**, sur demande de
+Rémy, pour qu'on ne se sente pas ailleurs en sortant de la réservation : la
+bannière et le logo, les titres en PT Serif, les angles droits, la carte
+blanche de l'optin. Elle garde la personnalisation de `/thanks` à
+l'identique, par les mêmes composants (`scriptCapture`,
+`TitreConfirmationForm`, `ConsignesRendezVous`), et n'a qu'une vidéo, celle
+de confirmation : ni « Vidéo 1/2 », ni vidéo 2/2, ni entretiens. Ni jeton
+ClickFunnels ni `CompteurVue` : ils comptent dans le VSL Funnel. **Calendly
+doit y renvoyer**, réglage de l'événement à faire par Rémy (page de
+confirmation externe, détails transmis).
+
+**Deux règles de `globals.css` adaptent les composants partagés** sans les
+recopier : sous `[data-genesis]`, tout `.titre` passe en PT Serif gras, et
+toute classe `rounded*` devient un angle droit, sauf les images (photos de
+profil) et ce qui porte `data-rond` (le logo en avatar).
+
 **Piège rencontré : une navigation côté client perdait tout.** Le script qui
 construit l'adresse de l'iframe ne tourne qu'au chargement complet ; un clic
 sur un `Link` de Next posait la page sans l'exécuter, et Calendly s'ouvrait

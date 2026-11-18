@@ -1400,3 +1400,28 @@ body:has([role="dialog"][data-state="open"])
   font-family: var(--font-genesis), Georgia, serif;
   background-color: var(--genesis-fond);
 }
+
+/* **Les composants partagés prennent le dessin de Genesis sans être
+   recopiés.** `/reservation-thanks` reprend le titre et les consignes de
+   `/thanks` (`TitreConfirmationForm`, `ConsignesRendezVous`), pour en garder
+   la personnalisation ; Rémy veut « tous les titres » en PT Serif et « tout
+   carré ». Deux règles, écrites une fois pour tout le tunnel, plutôt qu'une
+   propriété dans chaque composant :
+
+   - **Tout `.titre` y passe en PT Serif gras**, comme les titres écrits pour
+     le tunnel. Hors couche, la règle passe devant l'utilitaire `titre`.
+   - **Tout angle arrondi y devient droit**, sauf les images (les photos de
+     profil, rondes par exception) et ce qui porte `data-rond` (le logo de
+     Funnels Club en avatar, à côté de la photo de Rémy). Le sélecteur vise
+     la classe et non chaque rayon : une classe de registre ajoutée plus
+     tard sera carrée sans qu'on y pense. La tuile du logo de la bannière
+     porte son rayon en style en ligne, hors de portée : c'est une marque. */
+:root:has([data-genesis]) .titre {
+  font-family: var(--font-genesis), Georgia, serif;
+  font-weight: 700;
+  font-variation-settings: normal;
+  letter-spacing: 0.01em;
+}
+[data-genesis] [class*="rounded"]:not(img):not([data-rond]) {
+  border-radius: 0;
+}

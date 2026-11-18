@@ -30,6 +30,7 @@ const PAGES_CLAIRES = [
   "/prochaine-etape",
   "/formation-genesis",
   "/reservation",
+  "/reservation-thanks",
 ] as const;
 
 /**

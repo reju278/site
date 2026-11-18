@@ -279,11 +279,30 @@ export const reservationGenesis = {
    * numéro change avec elle.**
    */
   questionTelephone: "a1",
-  /* PROVISOIRES, de l'agent : Rémy n'a pas donné de texte pour cette page. */
+  /* PROVISOIRES, de l'agent. */
   titrePage: "Formation Genesis · Réserver votre appel",
   barre: "Réservation de votre appel",
-  titre: "Réservez votre appel",
+  /** Le titre de Rémy, suivi du prénom de l'optin quand on l'a :
+   *  « Réservez votre appel ci-dessous, Rémy ». Il l'a dicté
+   *  « Réserver votre appel ci-dessous prénom » ; l'impératif reprend le
+   *  vouvoiement du tunnel, et la virgule précède le prénom. */
+  titre: "Réservez votre appel ci-dessous",
   titreFormulaire: "Formulaire de réservation de l'appel",
+};
+
+/**
+ * La confirmation après la réservation, `go.funnels.club/reservation-thanks`,
+ * sur demande de Rémy : `/thanks` refaite aux codes du tunnel Genesis, avec
+ * la seule vidéo de confirmation. **Calendly doit y renvoyer** : c'est un
+ * réglage de l'événement (`candidature-funnels-club-fb-clone`), page de
+ * confirmation externe avec transmission des détails de la réservation.
+ *
+ * Les textes sont ceux de `/thanks` (`contenu/thanks.ts`), au tutoiement de
+ * Rémy ; seul le libellé de la barre est de l'agent, PROVISOIRE.
+ */
+export const confirmationGenesis = {
+  chemin: "/reservation-thanks",
+  barre: "Votre appel est réservé",
 };
 
 /**

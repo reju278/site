@@ -1,5 +1,6 @@
 import { BanniereGenesis } from "@/components/banniere-genesis";
 import { FormulaireCalendly } from "@/components/formulaire-calendly";
+import { TitreReservationGenesis } from "@/components/titre-reservation-genesis";
 import { reservationGenesis } from "@/contenu/formation-genesis";
 import { reservationAppel } from "@/contenu/appel";
 import type { Metadata } from "next";
@@ -25,7 +26,7 @@ import type { Metadata } from "next";
  * par l'adresse de la page ; seules les balises `utm_*` du module d'origine y
  * sont, et Calendly les garde avec le rendez-vous.
  *
- * Le titre est un libellé de l'agent, PROVISOIRE.
+ * Le titre est celui de Rémy, au prénom de l'optin : `TitreReservationGenesis`.
  */
 export const metadata: Metadata = {
   title: { absolute: `${reservationGenesis.titrePage} · Funnels Club` },
@@ -37,9 +38,7 @@ export default function Reservation() {
     <main className="bg-[var(--genesis-fond)] text-[var(--genesis-encre)]">
       <BanniereGenesis libelle={reservationGenesis.barre} />
       <header className="mx-auto max-w-[960px] px-5 pt-5 sm:px-8 sm:pt-6">
-        <h1 className="text-[clamp(1.75rem,7.5vw,2.75rem)] leading-[1.1] font-bold tracking-[0.02em] text-balance">
-          {reservationGenesis.titre}
-        </h1>
+        <TitreReservationGenesis className="text-[clamp(1.75rem,7.5vw,2.75rem)] leading-[1.1] font-bold tracking-[0.02em] text-balance" />
       </header>
       <div className="mx-auto max-w-[72rem] px-5 pt-6 sm:px-8 sm:pt-8">
         <FormulaireCalendly
