@@ -1,5 +1,6 @@
 import { BanniereGenesis } from "@/components/banniere-genesis";
 import { InscriptionGenesis } from "@/components/inscription-genesis";
+import { MaquetteLecteurGenesis } from "@/components/maquette-lecteur-genesis";
 import { Emplacement } from "@/components/section";
 import { optinGenesis, partiesGenesis } from "@/contenu/formation-genesis";
 import { insecables } from "@/lib/typographie";
@@ -80,12 +81,9 @@ export default function FormationGenesis() {
           large : le formulaire change de hauteur d'une étape à l'autre. */}
       <section
         aria-label="Inscription"
-        className="mx-auto grid max-w-[1065px] grid-cols-1 items-center gap-6 px-5 pt-6 sm:px-8 md:grid-cols-2 md:gap-8 md:pt-8"
+        className="mx-auto grid max-w-[1065px] grid-cols-1 items-center gap-6 px-5 pt-6 sm:px-8 md:grid-cols-[1.15fr_1fr] md:gap-8 md:pt-8"
       >
-        <Emplacement
-          attendu="le mockup de la vidéo de la formation"
-          className="aspect-video min-h-0"
-        />
+        <MaquetteLecteurGenesis />
         <InscriptionGenesis />
       </section>
     </main>

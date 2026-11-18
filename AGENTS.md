@@ -2256,6 +2256,24 @@ compris, puis étendue aux champs (« tu gardes nos bordures : c'est des
 bordures carrées »). Elle ne vaut que dans ce tunnel. Le blanc sur le bleu
 tient 3,35:1, donc le texte du bouton ne descend jamais sous 20 px gras.
 
+**À gauche du formulaire, une maquette du lecteur Wistia**
+(`MaquetteLecteurGenesis`), sur demande de Rémy : sa composition vient
+d'acquisition.com (la carte du module 1 devant, deux derrière), son dessin du
+lecteur Wistia (grand bouton rectangulaire, barre de commandes), en bleu du
+tunnel et sans la durée. Rien n'y est rond, les jalons des chapitres sont
+des traits. **Ce n'est pas un lecteur** : toute la maquette est un bouton qui
+mène au premier champ du formulaire, un bouton de lecture qui ne lirait rien
+étant un piège. Ses trois images sont celles de Rémy, dans
+`public/genesis/`, recadrées en 16/9 et compressées (moins de 100 Ko).
+
+**Un service worker étranger peut casser les images en local.**
+`customer-image-cache-sw.js`, enregistré sur `localhost:3000` par un autre
+projet, faisait échouer toutes les images de `/temoignages/` dans
+l'aperçu, alors que le serveur les rendait en 200. Rien à voir avec le site,
+qui n'en a pas : on le désinscrit dans le navigateur
+(`navigator.serviceWorker.getRegistrations()`), et la production n'est pas
+touchée.
+
 **L'espace membre** porte le titre seul (« Module #1 : Positionnement »,
 titres de Rémy), sans sur-titre ni description. La barre de la bannière suit
 la page, « Funnels.club : Leçon 1 », sur son exemple. La liste des modules

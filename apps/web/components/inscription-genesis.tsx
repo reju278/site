@@ -5,6 +5,7 @@ import {
   inscrireGenesis,
 } from "@/app/formation-genesis/actions";
 import { BoutonGenesis } from "@/components/bouton-genesis";
+import { ID_FORMULAIRE_GENESIS } from "@/components/maquette-lecteur-genesis";
 import {
   optinGenesis,
   partiesGenesis,
@@ -196,7 +197,10 @@ export function InscriptionGenesis() {
     (tente && manque.telephone) || erreur === formulaire.erreurs.telephone;
 
   return (
-    <div className="bg-white p-5 shadow-[0_0_39px_-8px_rgba(0,0,0,0.15)] sm:p-7">
+    <div
+      id={ID_FORMULAIRE_GENESIS}
+      className="scroll-mt-6 bg-white p-5 shadow-[0_0_39px_-8px_rgba(0,0,0,0.15)] sm:p-7"
+    >
       <form
         noValidate
         onSubmit={valider}
@@ -206,7 +210,9 @@ export function InscriptionGenesis() {
           {/* La question est la légende du groupe : un lecteur d'écran la
               lit avec le champ, et elle n'entre pas dans le plan des
               titres. */}
-          <legend className="mb-5 text-2xl leading-snug font-bold text-pretty">
+          {/* 20 px sur téléphone : à 24, « Comment vous appelez-vous ? » se
+              coupait au trait d'union. */}
+          <legend className="mb-5 text-xl leading-snug font-bold text-pretty sm:text-2xl">
             {question}
           </legend>
 

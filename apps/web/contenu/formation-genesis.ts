@@ -58,6 +58,20 @@ export const optinGenesis = {
   sousTitre: (modules: number) =>
     `Accédez à ${modules} modules de formation gratuite qui dévoilent la stratégie étape par étape pour créer, lancer et développer un business de formation profitable`,
   /**
+   * La maquette du lecteur, à gauche du formulaire : une carte au dessin du
+   * lecteur Wistia, et deux derrière elle. **Les trois images sont celles
+   * de Rémy**, recadrées en 16/9 et compressées : 1280 × 720 pour celle de
+   * devant, 640 × 360 pour celles de derrière, qui s'affichent petites.
+   */
+  maquette: {
+    principale: "/genesis/maquette-principale.jpg",
+    gauche: "/genesis/maquette-gauche.jpg",
+    droite: "/genesis/maquette-droite.jpg",
+    /* PROVISOIRE : le nom donné au clic sur la maquette, qui mène au
+       formulaire. */
+    action: "Remplir le formulaire pour accéder à la formation",
+  },
+  /**
    * Le formulaire en trois étapes, à droite du visuel. Les questions et les
    * boutons des deux premières étapes sont de Rémy ; le reste est un libellé
    * d'interface de l'agent, PROVISOIRE, au vouvoiement de Rémy.
