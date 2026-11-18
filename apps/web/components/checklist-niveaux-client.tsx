@@ -3,9 +3,16 @@
 import { TexteMarque } from "@/components/texte-marque";
 import { checklistNiveaux } from "@/contenu/niveaux-business";
 import { Checkbox } from "@repo/ui/components/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/components/tabs";
 import { Textarea } from "@repo/ui/components/textarea";
 import { cn } from "@repo/ui/lib/utils";
+import { ChevronDown } from "lucide-react";
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 
 /**
@@ -19,13 +26,19 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState } f
  * casserait la page au lieu de l'oublier simplement.
  */
 const CLE = "genesis-niveaux-business";
-type Etat = { cases: Record<string, boolean>; reponses: Record<string, string> };
-const VIDE: Etat = { cases: {}, reponses: {} };
+type Etat = {
+  cases: Record<string, boolean>;
+  reponses: Record<string, string>;
+  /** Les réponses cochées dans un champ à choix, par leur texte. */
+  choix: Record<string, string[]>;
+};
+const VIDE: Etat = { cases: {}, reponses: {}, choix: {} };
 
 const Memoire = createContext<{
   etat: Etat;
   cocher: (id: string, oui: boolean) => void;
   repondre: (id: string, texte: string) => void;
+  choisir: (id: string, choisis: string[]) => void;
   effacer: () => void;
   ouvrir: (onglet: string) => void;
 } | null>(null);
@@ -61,7 +74,7 @@ export function OngletsNiveaux({ onglets }: { onglets: OngletNiveaux[] }) {
   useEffect(() => {
     try {
       const lu = JSON.parse(localStorage.getItem(CLE) ?? "null") as Etat | null;
-      if (lu) setEtat({ cases: lu.cases ?? {}, reponses: lu.reponses ?? {} });
+      if (lu) setEtat({ cases: lu.cases ?? {}, reponses: lu.reponses ?? {}, choix: lu.choix ?? {} });
     } catch {}
     /* L'adresse garde l'onglet : `#niveau-2` ouvre le niveau 2, à
        l'ouverture comme quand l'adresse change sans recharger la page. */
@@ -94,6 +107,7 @@ export function OngletsNiveaux({ onglets }: { onglets: OngletNiveaux[] }) {
     etat,
     cocher: (id: string, oui: boolean) => garder({ ...etat, cases: { ...etat.cases, [id]: oui } }),
     repondre: (id: string, texte: string) => garder({ ...etat, reponses: { ...etat.reponses, [id]: texte } }),
+    choisir: (id: string, choisis: string[]) => garder({ ...etat, choix: { ...etat.choix, [id]: choisis } }),
     effacer: () => {
       if (window.confirm(checklistNiveaux.confirmer)) garder(VIDE);
     },
@@ -255,6 +269,107 @@ export function SyntheseNiveaux({
         );
       })}
     </ol>
+  );
+}
+
+/**
+ * Un champ qui ouvre une liste de réponses à cocher, sur demande de Rémy : on
+ * clique, le menu s'ouvre, on coche ce dans quoi on se reconnaît. Le champ
+ * montre ensuite les réponses cochées, sur le bleu pâle des surlignages.
+ *
+ * C'est le `DropdownMenu` du registre, déjà installé, repeint au dessin du
+ * tunnel : angles droits, cases carrées bleues une fois cochées, PT Serif. Le
+ * menu reste ouvert entre deux cases quand on peut en cocher plusieurs, et se
+ * ferme au choix quand il n'en faut qu'un (`unique`). Il n'est pas modal :
+ * la page ne se fige pas pendant qu'il est ouvert.
+ */
+export function ChoixNiveau({
+  id,
+  nom,
+  question,
+  options,
+  unique,
+  autre,
+}: {
+  id: string;
+  /** Le nom du champ pour un lecteur d'écran : la question, ou le titre au
+   *  dessus quand le champ n'a pas de question à lui. */
+  nom: string;
+  question: string | null;
+  options: string[];
+  unique?: boolean;
+  autre?: boolean;
+}) {
+  const { etat, choisir, repondre } = useMemoire();
+  const choisis = etat.choix[id] ?? [];
+  const basculer = (o: string) =>
+    choisir(
+      id,
+      unique
+        ? choisis.includes(o) ? [] : [o]
+        : choisis.includes(o) ? choisis.filter((x) => x !== o) : [...choisis, o],
+    );
+  return (
+    <div className="my-4 grid gap-3 bg-[var(--genesis-jaune)] p-5">
+      {question ? (
+        <p className="text-pretty">
+          <TexteMarque texte={question} />
+        </p>
+      ) : null}
+      <DropdownMenu modal={false}>
+        <DropdownMenuTrigger asChild>
+          <button
+            type="button"
+            aria-label={nom}
+            className="flex min-h-14 w-full items-center gap-3 border border-black/45 bg-white px-4 py-3 text-left text-[17px] leading-snug text-[var(--genesis-encre)] outline-none focus-visible:border-[var(--genesis-encre)] focus-visible:shadow-[0_0_0_1px_var(--genesis-encre)] data-[state=open]:border-[var(--genesis-encre)] data-[state=open]:shadow-[0_0_0_1px_var(--genesis-encre)] [&[data-state=open]>svg]:rotate-180"
+          >
+            <span className="flex min-w-0 flex-1 flex-wrap gap-1.5">
+              {choisis.length ? (
+                choisis.map((o) => (
+                  <span key={o} className="bg-[var(--genesis-surligne)] px-2 py-0.5 text-[15px] leading-snug">
+                    <TexteMarque texte={o} />
+                  </span>
+                ))
+              ) : (
+                <span className="text-[var(--genesis-gris)] italic">
+                  {unique ? checklistNiveaux.choisir : checklistNiveaux.choisirPlusieurs}
+                </span>
+              )}
+            </span>
+            <ChevronDown aria-hidden className="size-5 shrink-0 transition-transform duration-200" />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          align="start"
+          className="max-h-[min(26rem,var(--radix-dropdown-menu-content-available-height))] w-(--radix-dropdown-menu-trigger-width) rounded-none border-black/10 bg-white p-1 text-[var(--genesis-encre)] shadow-[0_0_39px_-8px_rgba(0,0,0,0.3)]"
+        >
+          {options.map((o) => (
+            <DropdownMenuCheckboxItem
+              key={o}
+              checked={choisis.includes(o)}
+              onCheckedChange={() => basculer(o)}
+              onSelect={unique ? undefined : (e) => e.preventDefault()}
+              className="cursor-pointer items-start rounded-none py-2.5 pr-3 pl-10 text-[16px] leading-snug text-[var(--genesis-encre)] focus:bg-[var(--genesis-surligne)] focus:text-[var(--genesis-encre)] [&>span:first-child]:top-[11px] [&>span:first-child]:left-3 [&>span:first-child]:size-[18px] [&>span:first-child]:border-[1.5px] [&>span:first-child]:border-black/45 [&>span:first-child]:bg-white data-[state=checked]:[&>span:first-child]:border-[var(--genesis-bleu)] data-[state=checked]:[&>span:first-child]:bg-[var(--genesis-bleu)] [&>span:first-child_svg]:size-3.5 [&>span:first-child_svg]:text-white"
+            >
+              <span className="text-pretty">
+                <TexteMarque texte={o} />
+              </span>
+            </DropdownMenuCheckboxItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+      {autre ? (
+        <Textarea
+          id={`${id}-autre`}
+          value={etat.reponses[`${id}-autre`] ?? ""}
+          onChange={(e) => repondre(`${id}-autre`, e.target.value)}
+          placeholder={checklistNiveaux.autre}
+          aria-label={`${nom} : ${checklistNiveaux.autre}`}
+          rows={1}
+          className="min-h-12 rounded-none border-black/45 bg-white px-4 py-3 text-[16px] leading-[1.5] text-[var(--genesis-encre)] shadow-none placeholder:text-[var(--genesis-gris)] placeholder:italic focus-visible:border-[var(--genesis-encre)] focus-visible:shadow-[0_0_0_1px_var(--genesis-encre)] focus-visible:ring-0 md:text-[16px] dark:bg-white"
+        />
+      ) : null}
+    </div>
   );
 }
 

@@ -2373,7 +2373,13 @@ témoignages du site. **La répartition des témoignages par niveau est de
 l'agent**, à valider par Rémy, et le niveau 5 n'en a aucun : aucun entretien
 n'annonce plus d'un million par an. **Toujours un nombre pair par niveau**,
 sur demande de Rémy : ils vont deux par rangée, et un impair laisse une case
-vide. `ChecklistNiveaux` jette au build sinon. **Les témoignages y sont en lecteur
+vide. `ChecklistNiveaux` jette au build sinon. **L'exercice se remplit par
+des champs à choix**, sur demande de Rémy, et non par des cases en liste ni
+du texte libre : on clique, le `DropdownMenu` du registre s'ouvre, on coche
+ce dans quoi on se reconnaît (un seul choix pour le niveau et le blocage).
+Les réponses proposées aux trois questions ouvertes sont de l'agent,
+tirées des recommandations des niveaux, PROVISOIRES ; un champ libre reste
+dessous pour le reste. **Les témoignages y sont en lecteur
 Wistia natif**, sans l'affiche ni le disque du site, sur demande de Rémy :
 c'est une exception `natif` de plus, bornée par les onglets (un seul monté à
 la fois, donc huit iframes au plus, celles du niveau 4).

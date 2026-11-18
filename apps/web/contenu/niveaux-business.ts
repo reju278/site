@@ -41,6 +41,16 @@ export type BlocNiveaux =
   | { type: "synthese" }
   /** Des cases à cocher ; `groupe` les nomme pour la mémoire du navigateur. */
   | { type: "cases"; groupe: string; items: string[] }
+  /** Un champ qui ouvre une liste de réponses à cocher : une seule si
+   *  `unique`, et un champ libre en dessous si `autre`. */
+  | {
+      type: "choix";
+      id: string;
+      question: string | null;
+      options: string[];
+      unique?: boolean;
+      autre?: boolean;
+    }
   /** Un encadré de réponse : la question (ou rien) et un champ libre. */
   | { type: "reponse"; id: string; question: string | null }
   | { type: "tableau"; lignes: string[][] }
@@ -76,6 +86,11 @@ export const checklistNiveaux = {
   titreTemoignages: (n: number) => `Quelques témoignages de “niveau #${n}”`,
   badge: "Ton niveau",
   reponse: "Réponse :",
+  /** Le champ à choix, vide. */
+  choisir: "Clique pour choisir",
+  choisirPlusieurs: "Clique pour cocher ce qui te ressemble",
+  /** Le champ libre sous un choix. */
+  autre: "Autre chose, ou ton pourquoi : écris-le ici",
   memoire: "Tes cases et tes réponses restent dans ce navigateur, rien n’est envoyé.",
   effacer: "Tout effacer",
   confirmer: "Décocher toutes les cases et effacer tes réponses ?",
@@ -393,6 +408,9 @@ export const niveauxBusiness: NiveauBusiness[] = [
   }
 ];
 
+/** Les cinq niveaux, en réponses possibles à « quel est ton niveau ? ». */
+const NIVEAUX_EN_OPTIONS = niveauxBusiness.map((n) => `${n.emoji} ${n.titre}`);
+
 export const exerciceNiveaux: BlocNiveaux[] = [
   {
     type: "h2",
@@ -403,9 +421,11 @@ export const exerciceNiveaux: BlocNiveaux[] = [
     texte: "Parmi les niveaux listés ci-dessus, à quel niveau penses-tu appartenir ?"
   },
   {
-    type: "reponse",
+    type: "choix",
     id: "ex-niveau",
-    question: null
+    question: null,
+    unique: true,
+    options: NIVEAUX_EN_OPTIONS
   },
   {
     type: "h2",
@@ -416,19 +436,53 @@ export const exerciceNiveaux: BlocNiveaux[] = [
     texte: "C'est ici que la plupart des gens se plantent. Ils utilisent des actions qui sont faites pour deux niveaux au-dessus du leur. Réponds honnêtement, en quelques phrases :"
   },
   {
-    type: "reponse",
+    type: "choix",
     id: "ex-actions",
-    question: "<b>Quelles actions d'un niveau plus haut essaies-tu d'utiliser, alors que tu n'as pas encore les bases de ton niveau actuel ?</b>"
+    question: "<b>Quelles actions d'un niveau plus haut essaies-tu d'utiliser, alors que tu n'as pas encore les bases de ton niveau actuel ?</b>",
+    /* PROVISOIRE (agent) : les réponses les plus fréquentes, tirées des
+       recommandations des niveaux 2 à 5 de Rémy. */
+    options: [
+      "J'embauche (closer, assistant) alors que je n'ai pas encore de ventes régulières",
+      "Je publie sur plusieurs réseaux en même temps",
+      "Je crée plusieurs offres au lieu d'en maîtriser une seule",
+      "J'augmente mon budget publicitaire sans connaître mes chiffres",
+      "J'installe des outils et des automatisations avant d'avoir des clients",
+      "Je travaille ma marque personnelle avant d'avoir une offre qui vend",
+      "Je pense déjà à un logiciel, une communauté ou d'autres revenus"
+    ],
+    autre: true
   },
   {
-    type: "reponse",
+    type: "choix",
     id: "ex-responsabilites",
-    question: "<b>Quelles responsabilités de ton niveau actuel évites-tu de prendre ?</b>"
+    question: "<b>Quelles responsabilités de ton niveau actuel évites-tu de prendre ?</b>",
+    /* PROVISOIRE (agent) : tirées des recommandations des niveaux 1 à 4. */
+    options: [
+      "Choisir une seule offre, un seul canal, et m'y tenir",
+      "Lancer mon offre avant qu'elle soit parfaite",
+      "Investir vraiment en publicité",
+      "Augmenter mes prix",
+      "Publier du contenu chaque semaine",
+      "Regarder mes chiffres en face",
+      "Dire non aux clients et aux projets qui ne me correspondent pas",
+      "Écrire mes process pour pouvoir déléguer",
+      "Lâcher la livraison et faire confiance à une équipe"
+    ],
+    autre: true
   },
   {
-    type: "reponse",
+    type: "choix",
     id: "ex-copier",
-    question: "<b>Qui es-tu en train de copier (t’inspirer) en ce moment, et pourquoi ?</b>"
+    question: "<b>Qui es-tu en train de copier (t’inspirer) en ce moment, et pourquoi ?</b>",
+    /* PROVISOIRE (agent). Le « pourquoi » s'écrit dans le champ libre. */
+    options: [
+      "Des formateurs que je suis sur YouTube ou Instagram",
+      "Des entrepreneurs qui ont plusieurs niveaux d'avance sur moi",
+      "Des concurrents de ma niche",
+      "Des proches ou des amis entrepreneurs",
+      "Personne : je fais à ma façon"
+    ],
+    autre: true
   },
   {
     type: "h2",
@@ -439,9 +493,11 @@ export const exerciceNiveaux: BlocNiveaux[] = [
     texte: "Choisis <b>UN SEUL</b> blocage. Celui qui te parle le plus."
   },
   {
-    type: "cases",
-    groupe: "blocage",
-    items: [
+    type: "choix",
+    id: "blocage",
+    question: null,
+    unique: true,
+    options: [
       "<mb><b>La preuve par l'action</b></mb> : j'hésite, je remets, je n'ose pas vraiment me lancer <i>(Niveau 1)</i>",
       "<mb><b>Le passage à l'échelle</b></mb> : j'ai peur d'investir en publicité et de me montrer <i>(Niveau 2)</i>",
       "<mb><b>Le grand tri</b></mb> : je n'arrive pas à dire non, à supprimer, à choisir <i>(Niveau 3)</i>",
@@ -454,9 +510,10 @@ export const exerciceNiveaux: BlocNiveaux[] = [
     texte: "La vraie peur derrière"
   },
   {
-    type: "cases",
-    groupe: "peur",
-    items: [
+    type: "choix",
+    id: "peur",
+    question: null,
+    options: [
       "Peur de ne pas être <mb>légitime</mb>",
       "Peur <mb>d'investir</mb> de l'argent",
       "Peur d'être <mb>visible</mb>",
@@ -469,9 +526,10 @@ export const exerciceNiveaux: BlocNiveaux[] = [
     texte: "Ce qui te bloque"
   },
   {
-    type: "cases",
-    groupe: "bloque",
-    items: [
+    type: "choix",
+    id: "bloque",
+    question: null,
+    options: [
       "Je <mb>ne sais pas quoi faire</mb>, ni par où commencer",
       "Je sais quoi faire, mais <mb>je n'arrive pas à prioriser</mb>",
       "Je ne fais <mb>pas vraiment confiance</mb> à mon propre diagnostic",

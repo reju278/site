@@ -1,6 +1,7 @@
 import { BoutonGenesis } from "@/components/bouton-genesis";
 import {
   CaseNiveau,
+  ChoixNiveau,
   EffacerNiveaux,
   LienOnglet,
   OngletsNiveaux,
@@ -139,9 +140,13 @@ function ListeNumerotee({ items }: { items: string[] }) {
 }
 
 function Blocs({ blocs, reservation }: { blocs: BlocNiveaux[]; reservation: string }) {
+  /* Un champ à choix sans question se nomme par le titre qui le précède,
+     pour un lecteur d'écran. */
+  let titre = "";
   return (
     <>
       {blocs.map((b, i) => {
+        if (b.type === "h2") titre = texteNu(b.texte);
         switch (b.type) {
           case "h2":
             return (
@@ -185,6 +190,18 @@ function Blocs({ blocs, reservation }: { blocs: BlocNiveaux[]; reservation: stri
                   <CaseNiveau key={t} id={`${b.groupe}-${j}`} texte={t} />
                 ))}
               </ul>
+            );
+          case "choix":
+            return (
+              <ChoixNiveau
+                key={i}
+                id={b.id}
+                nom={b.question ? texteNu(b.question) : titre}
+                question={b.question}
+                options={b.options}
+                unique={b.unique}
+                autre={b.autre}
+              />
             );
           case "reponse":
             return <ReponseNiveau key={i} id={b.id} question={b.question} />;
