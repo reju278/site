@@ -1,3 +1,4 @@
+import { BanniereGenesis } from "@/components/banniere-genesis";
 import { BlocReservation } from "@/components/bloc-reservation";
 import { CarrouselTemoignages } from "@/components/carrousel-temoignages";
 import { LecteurVideo } from "@/components/lecteur-video";
@@ -21,6 +22,11 @@ import type { Metadata } from "next";
  *   questions, le même rendez-vous Calendly par l'API, et la même suite,
  *   `/thanks`. Il se préremplit du prénom et de l'e-mail donnés à l'optin.
  *
+ * **Le haut est celui de l'optin**, sur demande de Rémy : la bannière, et
+ * le titre en PT Serif gras ferré à gauche. Le formulaire, lui, garde son
+ * dessin : c'est le composant d'`/appel`, partagé, et il passe seulement en
+ * PT Serif avec le reste de la page.
+ *
  * Pas de jeton de page ClickFunnels ni de SDK : cette page n'est l'étape
  * d'aucun tunnel ClickFunnels, et compter ses visites dans « Appel »
  * fausserait celles du VSL.
@@ -36,15 +42,16 @@ export default function AppelGenesis() {
   const { titre, video, description } = appelGenesis;
 
   return (
-    <main className="pt-8 sm:pt-12">
-      <header className="px-5 text-center">
-        <h1 className="titre mx-auto max-w-3xl text-[clamp(1.6rem,7vw,2.25rem)] leading-tight text-balance text-foreground sm:text-5xl">
+    <main className="bg-[var(--genesis-fond)] text-[var(--genesis-encre)]">
+      <BanniereGenesis />
+      <header className="mx-auto max-w-[960px] px-5 pt-5 sm:px-8 sm:pt-6">
+        <h1 className="text-[clamp(1.75rem,7.5vw,2.75rem)] leading-[1.1] font-bold tracking-[0.02em] text-balance">
           {titre ?? "Réserve ton appel"}
         </h1>
         {titre ? null : (
           <Emplacement
             attendu="le titre de la page de réservation"
-            className="mx-auto mt-3 min-h-0 max-w-3xl py-3"
+            className="mt-3 min-h-0 py-3"
           />
         )}
       </header>
@@ -75,7 +82,7 @@ export default function AppelGenesis() {
           />
         )}
         {description ? (
-          <p className="text-lg text-pretty text-foreground/85">
+          <p className="text-lg leading-[1.6] text-pretty sm:text-xl">
             {description}
           </p>
         ) : (

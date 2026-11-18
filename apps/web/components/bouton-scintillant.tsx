@@ -49,7 +49,6 @@ import type { CSSProperties } from "react";
 export function BoutonScintillant({
   href,
   action,
-  soumettre = false,
   externe = true,
   vitesse = "3s",
   rayon = "var(--radius-md)",
@@ -70,9 +69,6 @@ export function BoutonScintillant({
   href?: string;
   /** Ce que le clic déclenche, pour la version bouton. Exclusif de `href`. */
   action?: () => void;
-  /** Le bouton d'envoi d'un formulaire, `type="submit"`, sans `onClick` :
-   *  c'est le `onSubmit` du formulaire qui agit. Exclusif des deux autres. */
-  soumettre?: boolean;
   externe?: boolean;
   vitesse?: string;
   /** Le rayon des angles, en valeur CSS. Le défaut est le 5 px du projet. */
@@ -88,13 +84,11 @@ export function BoutonScintillant({
   /* La balise suit ce que fait la commande, jamais l'inverse : un `button` qui
      navigue n'est pas suivi par les robots et perd le clic du milieu, et un `a`
      sans destination n'est pas une commande. */
-  const Balise = action || soumettre ? "button" : "a";
+  const Balise = action ? "button" : "a";
 
   return (
     <Balise
-      {...(soumettre
-        ? { type: "submit" as const }
-        : action
+      {...(action
         ? { type: "button" as const, onClick: action }
         : {
             href,

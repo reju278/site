@@ -1,7 +1,7 @@
+import { BanniereGenesis } from "@/components/banniere-genesis";
+import { BoutonGenesis } from "@/components/bouton-genesis";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { Emplacement } from "@/components/section";
-import { BoutonScintillant } from "@/components/bouton-scintillant";
-import { TexteRoulant } from "@/components/texte-roulant";
 import {
   espaceGenesis,
   partiesGenesis,
@@ -25,6 +25,11 @@ import { notFound } from "next/navigation";
  * marqués d'une étoile), la vidéo au centre suivie d'un lien vers la partie
  * suivante, et une carte d'appel à droite. Sur téléphone, tout s'empile : la
  * vidéo d'abord, puis la carte, puis la liste.
+ *
+ * **Le dessin est celui de l'optin**, sur demande de Rémy : la même bannière,
+ * le titre en PT Serif gras ferré à gauche, la partie en cours surlignée en
+ * bleu pâle, et le bouton bleu à angles droits dans une carte à l'ombre de la
+ * fenêtre d'inscription.
  *
  * **Aucune protection** : le site n'a pas d'authentification, et c'est la
  * règle du dépôt. L'espace n'est qu'une adresse non indexée qu'on reçoit
@@ -59,37 +64,40 @@ export default async function PartieGenesis({ params }: Props) {
   const { carte } = espaceGenesis;
 
   return (
-    <main>
-      {/* L'en-tête de la partie. */}
-      <header className="px-5 pt-8 pb-6 text-center sm:pt-12 sm:pb-10">
-        <div className="mx-auto flex max-w-3xl flex-col items-center gap-3">
-          {espaceGenesis.surtitre ? (
-            <p className="text-sm font-semibold tracking-wide text-primary uppercase">
-              {espaceGenesis.surtitre}
-            </p>
-          ) : (
-            <Emplacement
-              attendu="le sur-titre de l'espace membre"
-              className="min-h-0 w-full py-3"
-            />
-          )}
-          <h1 className="titre text-[clamp(1.6rem,7vw,2.25rem)] leading-tight text-balance text-foreground sm:text-5xl">
-            {courante.titre ?? courante.etiquette}
-          </h1>
-          {courante.description ? (
-            <p className="text-lg text-pretty text-foreground/85">
+    <main className="bg-[var(--genesis-fond)] text-[var(--genesis-encre)]">
+      <BanniereGenesis />
+
+      {/* L'en-tête de la partie, ferré à gauche sur la colonne de la
+          bannière, comme l'optin. */}
+      <header className="mx-auto max-w-[960px] px-5 pt-5 pb-6 sm:px-8 sm:pt-6 sm:pb-8">
+        {espaceGenesis.surtitre ? (
+          <p className="text-sm font-bold tracking-wide uppercase">
+            {espaceGenesis.surtitre}
+          </p>
+        ) : (
+          <Emplacement
+            attendu="le sur-titre de l'espace membre"
+            className="mb-3 min-h-0 py-3"
+          />
+        )}
+        <h1 className="text-[clamp(1.75rem,7.5vw,2.75rem)] leading-[1.1] font-bold tracking-[0.02em] text-balance">
+          {courante.titre ?? courante.etiquette}
+        </h1>
+        {courante.description ? (
+          <p className="mt-2 text-lg leading-[1.6] tracking-[0.02em] text-pretty sm:text-2xl">
+            <span className="bg-[var(--genesis-surligne)] box-decoration-clone">
               {courante.description}
-            </p>
-          ) : (
-            <Emplacement
-              attendu={`le titre et la description de « ${courante.etiquette} »`}
-              className="min-h-0 w-full py-3"
-            />
-          )}
-        </div>
+            </span>
+          </p>
+        ) : (
+          <Emplacement
+            attendu={`le titre et la description de « ${courante.etiquette} »`}
+            className="mt-3 min-h-0 py-3"
+          />
+        )}
       </header>
 
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-5 lg:grid-cols-[14rem_minmax(0,1fr)_18rem] lg:gap-8">
+      <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-6 px-5 sm:px-8 lg:grid-cols-[14rem_minmax(0,1fr)_18rem] lg:gap-8">
         {/* La vidéo et le lien vers la suite. */}
         <section aria-label="Vidéo" className="flex flex-col gap-4 lg:order-2">
           {courante.video ? (
@@ -110,7 +118,7 @@ export default async function PartieGenesis({ params }: Props) {
           {suivante ? (
             <Link
               href={`${RACINE_GENESIS}/espace/${suivante.cle}`}
-              className="inline-flex min-h-10 items-center gap-2 self-end text-sm font-semibold text-primary hover:underline"
+              className="inline-flex min-h-10 items-center gap-2 self-end text-base font-bold underline-offset-4 hover:underline"
             >
               {espaceGenesis.suivante} : {suivante.titre ?? suivante.etiquette}
               <ArrowRight aria-hidden className="size-4" />
@@ -121,20 +129,20 @@ export default async function PartieGenesis({ params }: Props) {
         {/* La carte d'appel : l'unique sortie de l'espace. */}
         <aside
           aria-label="Réserver un appel"
-          className="flex h-fit flex-col gap-3 rounded-md border bg-card p-5 shadow-[0_30px_70px_-35px_rgba(0,0,0,0.35)] lg:order-3"
+          className="flex h-fit flex-col gap-3 rounded-[5px] bg-[var(--genesis-fond)] p-[15px] shadow-[0_0_39px_-8px_rgba(0,0,0,0.15)] lg:order-3"
         >
           {carte.surtitre ? (
-            <p className="text-xs font-semibold tracking-wide text-primary uppercase">
+            <p className="text-sm font-bold tracking-wide uppercase">
               {carte.surtitre}
             </p>
           ) : null}
           {carte.titre ? (
-            <h2 className="titre text-xl leading-snug text-card-foreground">
+            <h2 className="text-xl leading-snug font-bold">
               {carte.titre}
             </h2>
           ) : null}
           {carte.texte ? (
-            <p className="text-sm text-pretty text-muted-foreground">
+            <p className="text-base leading-[1.5] text-pretty">
               {carte.texte}
             </p>
           ) : null}
@@ -144,18 +152,14 @@ export default async function PartieGenesis({ params }: Props) {
               className="min-h-28 px-4 py-6"
             />
           ) : null}
-          <BoutonScintillant
-            href={`${RACINE_GENESIS}/appel`}
-            externe={false}
-            className="w-full"
-          >
-            <TexteRoulant>{carte.bouton}</TexteRoulant>
-          </BoutonScintillant>
+          <BoutonGenesis href={`${RACINE_GENESIS}/appel`}>
+            {carte.bouton}
+          </BoutonGenesis>
         </aside>
 
         {/* La liste des parties, puis les bonus. */}
         <nav aria-label={espaceGenesis.titreListe} className="lg:order-1">
-          <h2 className="mb-3 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+          <h2 className="mb-3 text-sm font-bold tracking-wide uppercase">
             {espaceGenesis.titreListe}
           </h2>
           <ol className="flex flex-col gap-1">
@@ -167,20 +171,17 @@ export default async function PartieGenesis({ params }: Props) {
                     href={`${RACINE_GENESIS}/espace/${p.cle}`}
                     aria-current={active ? "page" : undefined}
                     className={cn(
-                      "flex min-h-10 items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
+                      "flex min-h-10 items-center gap-3 rounded-[5px] px-3 py-2 text-base transition-colors",
                       active
-                        ? "bg-primary text-primary-foreground"
-                        : "text-foreground hover:bg-accent",
+                        ? "bg-[var(--genesis-surligne)] font-bold"
+                        : "hover:bg-[var(--genesis-surligne)]/60",
                       p.bonus && "mt-3",
                     )}
                   >
                     <span
                       aria-hidden
                       className={cn(
-                        "flex size-6 shrink-0 items-center justify-center rounded-md text-xs font-semibold",
-                        active
-                          ? "bg-primary-foreground/20"
-                          : "bg-muted text-muted-foreground",
+                        "flex size-6 shrink-0 items-center justify-center rounded-[5px] bg-[var(--genesis-encre)] font-[family-name:var(--font-genesis-bouton)] text-xs font-bold text-white",
                       )}
                     >
                       {p.bonus ? <Star className="size-3.5" /> : i + 1}

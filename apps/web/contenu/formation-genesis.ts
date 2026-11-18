@@ -31,16 +31,23 @@ export const optinGenesis = {
      voient. */
   titrePage: "Formation Genesis",
   description: null as string | null,
-  /** Le petit texte au-dessus du titre. */
-  surtitre: null as string | null,
   titre: null as string | null,
+  /** La phrase sous le titre, surlignée en bleu pâle comme sur la
+   *  référence. */
   sousTitre: null as string | null,
-  /** Les trois blocs de ce qu'on apprend, sous le formulaire. */
-  points: [null, null, null] as (string | null)[],
-  /** La ligne de réassurance sous le formulaire. */
+  /** Le paragraphe à droite du visuel, au-dessus de la liste. */
+  accroche: null as string | null,
+  /**
+   * La liste à puces au-dessus du bouton. `surligne`, facultatif, est le
+   * début de la ligne surligné en rose, comme les « Sans » de la référence ;
+   * `suite` est le reste de la ligne.
+   */
+  points: [] as { surligne?: string; suite: string }[],
+  /** La ligne de réassurance sous le bouton de la fenêtre d'inscription. */
   reassurance: null as string | null,
   formulaire: {
     /* Libellés d'interface, PROVISOIRES. */
+    titre: "Entre tes informations pour accéder à la formation :",
     prenom: "Prénom",
     email: "E-mail",
     bouton: "Accéder à la formation",

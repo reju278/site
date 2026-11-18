@@ -1,32 +1,39 @@
 "use client";
 
 import { inscrireGenesis } from "@/app/formation-genesis/actions";
-import { BoutonScintillant } from "@/components/bouton-scintillant";
-import { TexteRoulant } from "@/components/texte-roulant";
+import { BoutonGenesis } from "@/components/bouton-genesis";
+import { Emplacement } from "@/components/section";
 import {
   optinGenesis,
   partiesGenesis,
   RACINE_GENESIS,
 } from "@/contenu/formation-genesis";
 import { CLE_CONTACT_VSL } from "@/contenu/vsl";
-import { Input } from "@repo/ui/components/input";
-import { Label } from "@repo/ui/components/label";
-import { LoaderCircle } from "lucide-react";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogTitle,
+} from "@repo/ui/components/dialog";
+import { LoaderCircle, X } from "lucide-react";
 import { useState } from "react";
 
 /**
- * Le formulaire d'optin de la Formation Genesis : prénom et e-mail, puis
- * l'espace membre.
+ * Le bouton de l'optin de la Formation Genesis et sa fenêtre d'inscription :
+ * prénom et e-mail, puis l'espace membre.
+ *
+ * **La fenêtre est celle de la référence ClickFunnels**, sur demande de Rémy :
+ * le bouton bleu ouvre une carte blanc cassé à grande ombre douce, son titre
+ * en PT Serif gras, deux champs hauts de 53 px au creux d'une ombre
+ * intérieure, et le même bouton bleu pour envoyer. La croix de la référence
+ * est un disque ; la nôtre garde 5 px, parce que les commandes rondes du site
+ * sont une famille fermée (voir `AGENTS.md`).
  *
  * **L'inscription part à ClickFunnels par la server action**, qui crée le
  * contact et lui pose le tag « formation genesis » : c'est le tag qui lance
- * la séquence e-mail. Pas de SDK de ClickFunnels ici, contrairement à
- * `/course` : la page n'est l'étape d'aucun tunnel ClickFunnels, et c'est
- * l'API qui inscrit.
- *
- * **On n'entre dans l'espace qu'une fois l'inscription passée.** Sinon la
- * personne verrait la première partie sans jamais recevoir les suivantes, et
- * personne ne le saurait.
+ * la séquence e-mail. **On n'entre dans l'espace qu'une fois l'inscription
+ * passée** : sinon la personne verrait la première partie sans jamais
+ * recevoir les suivantes, et personne ne le saurait.
  *
  * Prénom et e-mail sont aussi gardés dans le navigateur, sous la clé du
  * tunnel VSL (sept jours, jamais dans l'adresse) : la réservation de
@@ -34,6 +41,39 @@ import { useState } from "react";
  */
 export function InscriptionGenesis() {
   const { formulaire } = optinGenesis;
+  const [ouvert, setOuvert] = useState(false);
+
+  return (
+    <>
+      <BoutonGenesis onClick={() => setOuvert(true)}>
+        {formulaire.bouton}
+      </BoutonGenesis>
+      <Dialog open={ouvert} onOpenChange={setOuvert}>
+        <DialogContent
+          aria-describedby={undefined}
+          showCloseButton={false}
+          className="max-w-[calc(100%-2rem)] gap-0 rounded-[5px] border-0 bg-[var(--genesis-fond)] p-0 text-[var(--genesis-encre)] shadow-[0_0_39px_-8px_rgba(0,0,0,0.15)] sm:max-w-[352px]"
+        >
+          <div className="px-4 pt-5 pr-12 sm:px-[15px]">
+            <DialogTitle className="text-xl leading-snug font-bold text-balance">
+              {formulaire.titre}
+            </DialogTitle>
+          </div>
+          <Formulaire />
+          <DialogClose
+            aria-label="Fermer"
+            className="absolute top-3 right-3 flex size-10 items-center justify-center rounded-md bg-[var(--genesis-encre)] text-white sm:size-9"
+          >
+            <X aria-hidden className="size-4" />
+          </DialogClose>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
+
+function Formulaire() {
+  const { formulaire, reassurance } = optinGenesis;
   const [prenom, setPrenom] = useState("");
   const [email, setEmail] = useState("");
   const [envoi, setEnvoi] = useState(false);
@@ -71,60 +111,68 @@ export function InscriptionGenesis() {
     );
   };
 
+  /* Le champ de la référence : 53 px, angles de 5 px, pas de bordure, une
+     ombre intérieure. Le libellé est dans le champ, en PT Serif 16 px ; ici
+     il reste un `placeholder` doublé d'un `aria-label`, puisqu'un texte
+     d'exemple disparaît à la saisie et ne nomme rien aux lecteurs d'écran. */
+  const champ =
+    "h-[53px] w-full rounded-[5px] border border-transparent bg-white px-[13px] text-base text-[var(--genesis-encre)] shadow-[inset_0_0_5px_rgba(0,0,0,0.21)] placeholder:text-[#151517]/70";
+
   return (
     <form
       onSubmit={valider}
-      className="flex flex-col gap-4"
+      className="flex flex-col gap-[15px] px-4 pt-4 pb-5 sm:px-[15px]"
       aria-describedby={erreur ? "erreur-genesis" : undefined}
     >
-      <div className="flex flex-col gap-1.5">
-        <Label htmlFor="prenom-genesis">{formulaire.prenom}</Label>
-        <Input
-          id="prenom-genesis"
-          name="prenom"
-          autoComplete="given-name"
-          required
-          value={prenom}
-          onChange={(e) => setPrenom(e.target.value)}
-          className="h-12 text-base"
-        />
-      </div>
-      <div className="flex flex-col gap-1.5">
-        <Label htmlFor="email-genesis">{formulaire.email}</Label>
-        <Input
-          id="email-genesis"
-          name="email"
-          type="email"
-          autoComplete="email"
-          inputMode="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="h-12 text-base"
-        />
-      </div>
+      <input
+        name="prenom"
+        autoComplete="given-name"
+        required
+        placeholder={formulaire.prenom}
+        aria-label={formulaire.prenom}
+        value={prenom}
+        onChange={(e) => setPrenom(e.target.value)}
+        className={champ}
+      />
+      <input
+        name="email"
+        type="email"
+        autoComplete="email"
+        inputMode="email"
+        required
+        placeholder={formulaire.email}
+        aria-label={formulaire.email}
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        className={champ}
+      />
       {erreur ? (
         <p
           id="erreur-genesis"
           role="alert"
-          className="text-sm font-medium text-destructive"
+          className="text-sm font-bold text-destructive"
         >
           {formulaire.erreur}
         </p>
       ) : null}
-      <BoutonScintillant
-        soumettre
-        className="mt-1 min-h-14 w-full text-lg sm:text-xl"
-      >
+      <BoutonGenesis soumettre disabled={envoi}>
         {envoi ? (
           <span className="inline-flex items-center gap-2">
             <LoaderCircle aria-hidden className="size-5 animate-spin" />
             {formulaire.envoi}
           </span>
         ) : (
-          <TexteRoulant>{formulaire.bouton}</TexteRoulant>
+          formulaire.bouton
         )}
-      </BoutonScintillant>
+      </BoutonGenesis>
+      {reassurance ? (
+        <p className="text-center text-sm text-[#60606b]">{reassurance}</p>
+      ) : (
+        <Emplacement
+          attendu="la ligne de réassurance sous le bouton"
+          className="min-h-0 px-3 py-3"
+        />
+      )}
     </form>
   );
 }

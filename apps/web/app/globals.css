@@ -1361,3 +1361,36 @@ body:has([role="dialog"][data-state="open"])
     line-height: 2rem;
   }
 }
+
+/* Le tunnel Formation Genesis, au dessin de l'optin ClickFunnels de
+   référence (`funnels.club/course-2027-fb-2`), sur demande de Rémy. Les
+   valeurs sont lues dans sa feuille de style, pas approchées à l'œil.
+
+   **Une seule série de valeurs, et pas de `.dark`** : le tunnel est forcé au
+   thème clair par `FournisseurTheme`, comme le reste des tunnels, et la
+   référence n'a qu'un thème. Le jour où ces pages passent aux deux thèmes,
+   ces jetons se doublent.
+
+   - `--genesis-fond` : le blanc cassé des sections, #fdfdfd.
+   - `--genesis-bleu` : le bouton, #438bf7. Le blanc dessus tient 3,35:1,
+     donc seulement en grand corps gras (24 px en large, 20 px sur
+     téléphone, au-dessus des 18,66 px gras du seuil) : il ne porte jamais un
+     texte courant.
+   - `--genesis-surligne` : le surlignage bleu pâle du sous-titre.
+   - `--genesis-rose` : le surlignage rose des mots qu'on évite (« Sans »).
+   - `--genesis-encre` : le texte, noir, comme la référence. */
+:root:has([data-genesis]) {
+  --genesis-fond: #fdfdfd;
+  --genesis-bleu: #438bf7;
+  --genesis-surligne: #e8f1fb;
+  --genesis-rose: #faecea;
+  --genesis-encre: #000;
+}
+
+/* Sur le `body` et non sur le gabarit : la fenêtre d'inscription vit dans un
+   portail. Le texte du site y passe donc en PT Serif, formulaire de
+   réservation compris. */
+:root:has([data-genesis]) body {
+  font-family: var(--font-genesis), Georgia, serif;
+  background-color: var(--genesis-fond);
+}

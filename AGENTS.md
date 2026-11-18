@@ -2195,6 +2195,25 @@ Tout le texte et toutes les vidéos sont des `<Emplacement>` dans
 de départ, Rémy le fixe en coupant la vidéo. Une vidéo de partie demande aussi
 sa copie d'affiche dans `public/temoignages/<id>.jpg`, comme les autres.
 
+**Son dessin n'est pas celui du tunnel VSL : c'est celui de l'optin
+ClickFunnels de Rémy**, `funnels.club/course-2027-fb-2`, sur sa demande, et
+les valeurs sont lues dans leur feuille de style. PT Serif pour tout le texte
+(`PoliceGenesis`, posé sur le `body` par `:root:has([data-genesis])` pour
+atteindre la fenêtre d'inscription, rendue dans un portail), Roboto 700 en
+capitales pour les boutons, fond #fdfdfd, texte noir, sous-titre surligné en
+bleu pâle et mots évités en rose. Les jetons `--genesis-*` sont dans
+`globals.css`, **sans valeur sombre** : le tunnel est forcé au clair. En haut
+de chaque page, `BanniereGenesis` : barre de 42 px, paysage `fond-hero` cadré
+par le bas sur 200 px (le même tableau que la référence), tuile du logo à
+cheval. L'optin ouvre l'inscription dans une fenêtre, comme la référence.
+
+**`BoutonGenesis` a des angles droits**, aplat #438bf7 : une exception à la
+règle des 5 px, décidée par Rémy en demandant que le tunnel colle à sa
+référence, boutons compris. Elle ne vaut que pour ce bouton. Le blanc y tient
+3,35:1, donc son texte ne descend jamais sous 20 px gras. La croix de la
+fenêtre, ronde chez eux, garde 5 px : les commandes rondes du site sont une
+famille fermée.
+
 **Ajouter une page** : une clé dans `lib/pages-temoignage.ts`, une entrée dans
 `SOURCES`, et **la même clé dans le catalogue du CRM**,
 `PAGES_TEMOIGNAGE` de `packages/backend/convex/funnels.ts` du dépôt
