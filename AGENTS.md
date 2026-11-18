@@ -2342,7 +2342,8 @@ titres de Rémy), sans sur-titre ni description. La barre de la bannière suit
 la page, « Funnels.club : Leçon 1 », sur son exemple. La liste des modules
 est une carte blanche à ombre détachée, relevée sur une référence de Rémy :
 groupes « Modules » et « Bonus » en capitales espacées, numéro en pastille
-carrée, module ouvert surligné avec un filet bleu. **Deux colonnes en
+carrée, module ouvert sur le bleu du bouton d'action (texte noir : le
+blanc n'y tient que 3,35:1 à 16 px), pastille blanche. **Deux colonnes en
 large** : la liste à gauche, la vidéo à droite, et la carte d'appel sous la
 vidéo, sur demande de Rémy ; elle était une troisième colonne qui
 rétrécissait la vidéo. **L'appel sous la vidéo est un passage de document, pas une

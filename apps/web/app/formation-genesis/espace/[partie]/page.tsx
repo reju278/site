@@ -37,13 +37,14 @@ import { Fragment } from "react";
  *
  * **La liste est une carte qui ressort**, sur une référence de Rémy : fond
  * blanc et ombre détachée, comme le formulaire de l'optin, les titres de
- * groupe en capitales espacées, un numéro par module dans sa pastille, le
- * module ouvert surligné en bleu pâle avec un filet bleu à gauche. Les
- * pastilles de la référence sont rondes ; les nôtres gardent 5 px, les
- * commandes rondes du site étant une famille fermée (voir `AGENTS.md`). Sa
- * couleur d'accent, un violet, devient le bleu du tunnel, et le numéro du
- * module ouvert passe en noir : le blanc sur ce bleu ne tient que 3,35:1,
- * trop peu pour un chiffre de 12 px.
+ * groupe en capitales espacées, un numéro par module dans sa pastille, et le
+ * module ouvert **sur le bleu du bouton d'action**, sur demande de Rémy (il
+ * était en bleu pâle, avec ce bleu en filet à gauche). Son texte reste noir :
+ * le blanc ne tient que 3,35:1 sur ce bleu, trop peu pour 16 px, quand le
+ * noir en tient 6,2. Sa pastille passe en blanc pour ressortir. Les
+ * pastilles de la référence sont rondes ; les nôtres sont carrées, comme
+ * tout le tunnel. Sa couleur d'accent, un violet, devient le bleu du
+ * tunnel.
  *
  * **Aucune protection** : le site n'a pas d'authentification, et c'est la
  * règle du dépôt. L'espace n'est qu'une adresse non indexée qu'on reçoit
@@ -302,7 +303,7 @@ function EntreeModule({
       className={cn(
         "relative flex min-h-12 items-center gap-3 px-3 py-2 text-base transition-colors",
         active
-          ? "bg-[var(--genesis-surligne)] font-bold before:absolute before:inset-y-2 before:left-0 before:w-[3px] before:bg-[var(--genesis-bleu)]"
+          ? "bg-[var(--genesis-bleu)] font-bold"
           : "hover:bg-black/[0.04]",
       )}
     >
@@ -311,7 +312,7 @@ function EntreeModule({
         className={cn(
           "flex size-7 shrink-0 items-center justify-center font-[family-name:var(--font-genesis-bouton)] text-xs font-bold",
           active
-            ? "bg-[var(--genesis-encre)] text-white"
+            ? "bg-white text-[var(--genesis-encre)]"
             : "bg-black/[0.06] text-[var(--genesis-encre)]",
         )}
       >
