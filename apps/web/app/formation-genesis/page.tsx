@@ -1,7 +1,7 @@
 import { BanniereGenesis } from "@/components/banniere-genesis";
 import { InscriptionGenesis } from "@/components/inscription-genesis";
 import { Emplacement } from "@/components/section";
-import { optinGenesis } from "@/contenu/formation-genesis";
+import { optinGenesis, partiesGenesis } from "@/contenu/formation-genesis";
 import type { Metadata } from "next";
 
 /**
@@ -25,7 +25,13 @@ export const metadata: Metadata = {
 };
 
 export default function FormationGenesis() {
-  const { etiquette, titre, sousTitre, accroche, points } = optinGenesis;
+  const { etiquette, titre, accroche, points } = optinGenesis;
+  /* Les quatre derniers mots sont liés par des espaces insécables : sans
+     cela, « ligne » finit seul sur sa ligne à 375 px, et `text-pretty` ne
+     l'empêche pas. En large, ils sont déjà sur la même ligne. */
+  const sousTitre = optinGenesis
+    .sousTitre(partiesGenesis.filter((p) => !p.bonus).length)
+    .replace(/ (\S+) (\S+) (\S+)$/, " $1 $2 $3");
 
   return (
     <main className="bg-[var(--genesis-fond)] text-[var(--genesis-encre)]">
@@ -33,11 +39,12 @@ export default function FormationGenesis() {
 
       <header className="mx-auto max-w-[960px] px-5 pt-5 sm:px-8 sm:pt-6">
         {/* L'étiquette au-dessus du titre, demandée par Rémy : capitales en
-            Roboto, la police des boutons, sur le bleu pâle du sous-titre.
+            Roboto, la police des boutons, sur le jaune de Notion qu'il a
+            donné (`--genesis-jaune`).
             Un `p` et non un titre : elle ne décrit pas une section. L'espace
             entre les lettres est resserré sur téléphone, mesuré : à 0,08 em
             elle demande 336 px et passe sur deux lignes à 375 px de large. */}
-        <p className="mb-3 inline-block rounded-[5px] bg-[var(--genesis-surligne)] px-2.5 py-1 font-[family-name:var(--font-genesis-bouton)] text-xs font-bold tracking-[0.04em] uppercase sm:text-sm sm:tracking-[0.08em]">
+        <p className="mb-3 inline-block rounded-[5px] bg-[var(--genesis-jaune)] px-2.5 py-1 font-[family-name:var(--font-genesis-bouton)] text-xs font-bold tracking-[0.04em] uppercase sm:text-sm sm:tracking-[0.08em]">
           {etiquette}
         </p>
         {/* Le seul `h1` de la page : le titre de Rémy, ou le nom de la
@@ -51,18 +58,11 @@ export default function FormationGenesis() {
             className="mt-3 min-h-0 py-4"
           />
         )}
-        {sousTitre ? (
-          <p className="mt-2 text-lg leading-[1.6] tracking-[0.02em] text-pretty sm:text-2xl">
-            <span className="bg-[var(--genesis-surligne)] box-decoration-clone">
-              {sousTitre}
-            </span>
-          </p>
-        ) : (
-          <Emplacement
-            attendu="le sous-titre, surligné en bleu pâle sous le titre"
-            className="mt-3 min-h-0 py-4"
-          />
-        )}
+        <p className="mt-2 text-lg leading-[1.6] tracking-[0.02em] text-pretty sm:text-2xl">
+          <span className="bg-[var(--genesis-surligne)] box-decoration-clone">
+            {sousTitre}
+          </span>
+        </p>
       </header>
 
       {/* Le visuel à gauche, l'accroche, la liste et le bouton à droite.

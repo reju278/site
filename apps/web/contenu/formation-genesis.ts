@@ -35,10 +35,22 @@ export const optinGenesis = {
    *  rendue en capitales par le CSS : un lecteur d'écran épelle parfois un
    *  mot écrit tout en capitales. */
   etiquette: "Formation gratuite disponible maintenant",
-  titre: null as string | null,
-  /** La phrase sous le titre, surlignée en bleu pâle comme sur la
-   *  référence. */
-  sousTitre: null as string | null,
+  /** De Rémy. Une seule retouche : « Rémy à générer » est devenu « Rémy a
+   *  généré ». */
+  titre:
+    "La stratégie avec laquelle Rémy a généré des millions avec une formation en ligne" as
+      | string
+      | null,
+  /**
+   * La phrase sous le titre, surlignée en bleu pâle comme sur la référence.
+   * De Rémy, majuscule initiale ajoutée.
+   *
+   * **Le nombre de modules est calculé**, jamais écrit : c'est celui de
+   * `partiesGenesis`, bonus exclus. Rémy a écrit « 4 modules » ; la phrase
+   * suit la liste le jour où elle change, comme le veut `AGENTS.md`.
+   */
+  sousTitre: (modules: number) =>
+    `Accédez à ${modules} modules de formation gratuite pour apprendre à créer, lancer et croitre un business de formation en ligne`,
   /** Le paragraphe à droite du visuel, au-dessus de la liste. */
   accroche: null as string | null,
   /**
@@ -81,23 +93,21 @@ export type PartieGenesis = {
 /**
  * Les parties, dans l'ordre de la séquence e-mail.
  *
- * **Leur nombre n'est pas décidé** : il dépend de la façon dont Rémy coupe
- * la vidéo. Cinq est une valeur de départ pour voir la page ; il suffit
- * d'ajouter ou de retirer des lignes, la liste, la navigation et les adresses
- * suivent. Chaque e-mail de la séquence pointe vers
+ * **Quatre modules**, d'après le sous-titre de Rémy (« 4 modules »). Il suffit
+ * d'ajouter ou de retirer des lignes : la liste, la navigation, les adresses
+ * et le nombre du sous-titre suivent. Chaque e-mail de la séquence pointe vers
  * `go.funnels.club/formation-genesis/espace/<cle>`.
  *
  * **La séquence ne suit pas toute seule** : c'est le workflow ClickFunnels
- * « Formation Genesis : séquence » (id 2000255), un e-mail par partie de
- * 1 à 5. Changer le nombre de parties oblige à y ajouter ou retirer un
+ * « Formation Genesis : séquence » (id 2000255), un e-mail par module de
+ * 1 à 4. Changer le nombre de modules oblige à y ajouter ou retirer un
  * e-mail ; le bonus n'a pas d'e-mail.
  */
 export const partiesGenesis: PartieGenesis[] = [
-  { cle: "1", etiquette: "Partie 1", titre: null, description: null, video: null },
-  { cle: "2", etiquette: "Partie 2", titre: null, description: null, video: null },
-  { cle: "3", etiquette: "Partie 3", titre: null, description: null, video: null },
-  { cle: "4", etiquette: "Partie 4", titre: null, description: null, video: null },
-  { cle: "5", etiquette: "Partie 5", titre: null, description: null, video: null },
+  { cle: "1", etiquette: "Module 1", titre: null, description: null, video: null },
+  { cle: "2", etiquette: "Module 2", titre: null, description: null, video: null },
+  { cle: "3", etiquette: "Module 3", titre: null, description: null, video: null },
+  { cle: "4", etiquette: "Module 4", titre: null, description: null, video: null },
   /* Les bonus viendront plus tard : une ligne par bonus, `bonus: true`. */
   {
     cle: "bonus",
@@ -114,8 +124,8 @@ export const espaceGenesis = {
   titrePage: "Formation Genesis · Espace membre",
   surtitre: null as string | null,
   /* Libellés d'interface, PROVISOIRES. */
-  titreListe: "Les parties",
-  suivante: "Partie suivante",
+  titreListe: "Les modules",
+  suivante: "Module suivant",
   /** La carte d'appel, à droite sur ordinateur, sous la vidéo sur
    *  téléphone. Elle mène à `/formation-genesis/appel`. */
   carte: {

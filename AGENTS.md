@@ -2205,8 +2205,11 @@ emplacements « [À ÉCRIRE PAR RÉMY] » ; c'est lui qui l'active. **Elle compt
 autant d'e-mails que `partiesGenesis` a de parties** : en ajouter ou en
 retirer une oblige à toucher les deux. L'espace n'est protégé par rien : le site n'a pas d'authentification.
 Tout le texte et toutes les vidéos sont des `<Emplacement>` dans
-`contenu/formation-genesis.ts` ; le nombre de parties (cinq) est une valeur
-de départ, Rémy le fixe en coupant la vidéo. Une vidéo de partie demande aussi
+`contenu/formation-genesis.ts`, sauf le titre et le sous-titre de l'optin,
+dictés par Rémy ; le sous-titre annonce « 4 modules », et ce nombre est
+calculé depuis `partiesGenesis`, jamais écrit. Le nombre de modules (quatre)
+vient de cette phrase, et la séquence a été ramenée à quatre e-mails en
+même temps. Une vidéo de module demande aussi
 sa copie d'affiche dans `public/temoignages/<id>.jpg`, comme les autres.
 
 **Son dessin n'est pas celui du tunnel VSL : c'est celui de l'optin
