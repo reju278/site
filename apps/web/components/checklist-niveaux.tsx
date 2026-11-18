@@ -167,7 +167,7 @@ function Blocs({ blocs, reservation }: { blocs: BlocNiveaux[]; reservation: stri
             );
           case "bouton":
             return (
-              <BoutonGenesis key={i} href={reservation} className="my-5 sm:w-auto sm:px-8">
+              <BoutonGenesis key={i} href={reservation} className="my-5 sm:w-auto sm:px-8 sm:whitespace-nowrap">
                 {boutonAppelNiveaux}
               </BoutonGenesis>
             );

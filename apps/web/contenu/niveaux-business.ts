@@ -575,5 +575,12 @@ export const exerciceNiveaux: BlocNiveaux[] = [
   }
 ];
 
-/** Le libellé du bouton d’appel, de Rémy, recopié de sa page. */
-export const boutonAppelNiveaux = "Clique ici pour réserver ton \"appel stratégique\" (gratuit) (sans pression)";
+/**
+ * Le libellé du bouton d’appel. Sur la page Notion, Rémy écrit « Clique ici
+ * pour réserver ton "appel stratégique" (gratuit) (sans pression) » ; il a
+ * demandé moins de texte, une seule ligne sur ordinateur et le moins de
+ * lignes possible sur téléphone. C’est donc le libellé du bouton de la carte
+ * d’appel de l’espace, le seul qui tienne sur une ligne à 375 px dans le
+ * bleu du tunnel à 19 px. PROVISOIRE, comme lui.
+ */
+export const boutonAppelNiveaux = "Réserver mon appel";
