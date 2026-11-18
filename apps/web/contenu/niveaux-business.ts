@@ -15,7 +15,11 @@
  *
  * **Ce qui n'est pas de Rémy**, et reste à valider par lui :
  * - les libellés de `checklistNiveaux`, marqués PROVISOIRES ;
- * - **la répartition des témoignages par niveau**, faite par l'agent d'après
+ * - **la répartition des témoignages par niveau**, toujours en nombre pair
+ *   (deux par rangée : un nombre impair laisse une case vide, sur demande de
+ *   Rémy, et `ChecklistNiveaux` refuse de construire sinon). Joël en est
+ *   sorti ; Corentin aussi au niveau 3, son second entretien restant au 4.
+ *   Elle est faite par l'agent d'après
  *   la phrase de chaque entretien dans `temoignages` (`site.ts`) : le palier
  *   que raconte l'entretien, ramené à l'année. **Aucun au niveau 5** : aucun
  *   entretien n'annonce plus d'un million par an, et en poser un laisserait
@@ -249,7 +253,6 @@ export const niveauxBusiness: NiveauBusiness[] = [
     temoignages: [
       "f2ie1v99b8",
       "ive07co9xm",
-      "brvvtbkmfo",
       "2vtsinplyx",
       "2xege6bt0u"
     ]
@@ -298,7 +301,6 @@ export const niveauxBusiness: NiveauBusiness[] = [
     ],
     temoignages: [
       "b5taio9plc",
-      "iy3jgcijgu",
       "fbtr4dqoji"
     ]
   },

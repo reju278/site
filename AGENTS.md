@@ -2371,7 +2371,9 @@ liste pour chaque niveau. Un onglet par partie (diagnostic, cinq niveaux,
 exercice), chaque niveau avec ses vidéos YouTube de la page Notion et des
 témoignages du site. **La répartition des témoignages par niveau est de
 l'agent**, à valider par Rémy, et le niveau 5 n'en a aucun : aucun entretien
-n'annonce plus d'un million par an. **Les témoignages y sont en lecteur
+n'annonce plus d'un million par an. **Toujours un nombre pair par niveau**,
+sur demande de Rémy : ils vont deux par rangée, et un impair laisse une case
+vide. `ChecklistNiveaux` jette au build sinon. **Les témoignages y sont en lecteur
 Wistia natif**, sans l'affiche ni le disque du site, sur demande de Rémy :
 c'est une exception `natif` de plus, bornée par les onglets (un seul monté à
 la fois, donc huit iframes au plus, celles du niveau 4).

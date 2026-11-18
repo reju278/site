@@ -234,6 +234,11 @@ function Niveau({ niveau: n }: { niveau: NiveauBusiness }) {
     if (!t) throw new Error(`Témoignage absent de site.ts : ${id}`);
     return t;
   });
+  /* Deux par rangée : un nombre impair laisse une case vide en large, ce que
+     Rémy ne veut pas. La règle jette au build plutôt que de compter sur une
+     relecture. */
+  if (temoins.length % 2)
+    throw new Error(`Niveau ${n.n} : ${temoins.length} témoignages, il en faut un nombre pair`);
   return (
     <section aria-labelledby={`titre-niveau-${n.n}`} className="bg-white p-5 shadow-[0_0_39px_-8px_rgba(0,0,0,0.15)] sm:p-8">
       <h2 id={`titre-niveau-${n.n}`} className="flex items-start gap-3 text-2xl leading-tight font-bold text-pretty sm:text-[1.75rem]">
