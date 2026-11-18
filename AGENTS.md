@@ -2244,7 +2244,7 @@ bordure, passée au noir et doublée. **Leurs fichiers ne s'installent pas** :
 ils sont écrits en `.module.css`, que ce dépôt refuse. Le dessin est donc
 repris en Tailwind sur l'`Input` de shadcn. La bordure au repos est à 45 % de
 noir, le seuil de 3:1 d'une bordure de contrôle. Le bouton prend leur geste
-(il s'enfonce à l'appui) et une ombre bleue portée, pour ressortir du blanc.
+(il s'enfonce à l'appui).
 Un champ qui manque se borde de rouge, et **une phrase rouge sous le bouton**
 le dit, traduite de la référence de Rémy : la vérification est la nôtre
 (`noValidate`), les bulles du navigateur ne se placent pas.
@@ -2254,7 +2254,10 @@ tunnel**, aplat #438bf7 pour le premier : une exception à la règle des 5 px,
 décidée par Rémy en demandant que le tunnel colle à sa référence, boutons
 compris, puis étendue aux champs (« tu gardes nos bordures : c'est des
 bordures carrées »). Elle ne vaut que dans ce tunnel. Le blanc sur le bleu
-tient 3,35:1, donc le texte du bouton ne descend jamais sous 20 px gras.
+tient 3,35:1, donc le texte du bouton ne descend jamais sous 19 px gras (le
+grand texte gras commence à 18,66 px). **Le bouton est un aplat sans
+ombre** : l'ombre bleue portée et la montée au survol ont été essayées puis
+retirées par Rémy, qui trouvait surtout le texte trop gros à 24 px.
 
 **À gauche du formulaire, une maquette du lecteur Wistia**
 (`MaquetteLecteurGenesis`), sur demande de Rémy : sa composition vient
@@ -2291,7 +2294,10 @@ groupes « Modules » et « Bonus » en capitales espacées, numéro en pastille
 carrée, module ouvert surligné avec un filet bleu. **Deux colonnes en
 large** : la liste à gauche, la vidéo à droite, et la carte d'appel sous la
 vidéo, sur demande de Rémy ; elle était une troisième colonne qui
-rétrécissait la vidéo. **Les vidéos des modules
+rétrécissait la vidéo. **La carte d'appel suit la variante centrée du bloc « CTA
+section » d'Arc UI** : surface bleu pâle bordée, photo de Rémy, sur-titre,
+titre équilibré, texte, bouton, tout centré. Reprise en Tailwind, comme les
+champs. **Les vidéos des modules
 sont des vidéos d'essai** (`/lancement`, `/stable`, `/debuts`, le
 consulting), posées pour voir l'intégration : à remplacer par les morceaux
 de la formation avant la mise en ligne.

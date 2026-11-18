@@ -348,9 +348,7 @@ export function InscriptionGenesis() {
             </div>
           ) : null}
 
-          {/* 20 px et non 24 : « Obtenir la formation gratuite » passait sur
-              deux lignes dans la colonne du formulaire. */}
-          <BoutonGenesis soumettre disabled={envoi} className="mt-1 sm:text-xl">
+          <BoutonGenesis soumettre disabled={envoi} className="mt-1">
             {envoi ? (
               <span className="inline-flex items-center gap-2">
                 <LoaderCircle aria-hidden className="size-5 animate-spin" />

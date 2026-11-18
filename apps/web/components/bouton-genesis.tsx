@@ -4,15 +4,18 @@ import Link from "next/link";
 /**
  * Le bouton du tunnel Formation Genesis, relevé sur l'optin ClickFunnels de
  * référence (`elButton`), sur demande de Rémy : aplat bleu #438bf7, **angles
- * droits**, texte blanc en Roboto 700 et en capitales, 24 px en large.
+ * droits**, texte blanc en Roboto 700 et en capitales.
  *
  * **Les angles droits sont une exception à la règle des 5 px**, décidée par
  * Rémy en demandant que le tunnel colle à sa référence, boutons compris. Elle
  * ne s'étend à rien d'autre : voir `AGENTS.md`.
  *
- * Le blanc sur ce bleu tient 3,35:1, c'est-à-dire le seuil du grand texte
- * gras et pas celui du texte courant : le corps ne descend donc jamais sous
- * 20 px gras, téléphone compris.
+ * **Le texte est à 19 px, et c'est un plancher.** Rémy le trouvait trop gros
+ * pour le bouton à 24 px. Mais le blanc sur ce bleu ne tient que 3,35:1, le
+ * seuil du grand texte gras et pas celui du texte courant ; le grand texte
+ * gras commence à 18,66 px (14 pt). En dessous de 19 px, le bouton deviendrait
+ * illisible au sens des règles d'accessibilité. Pour le réduire encore, il
+ * faudrait foncer le bleu, ce qui est une décision de Rémy.
  *
  * Trois formes, une seule apparence : un lien interne (`href`), un bouton
  * d'envoi (`soumettre`) ou un bouton qui agit (`onClick`). Ce qui navigue est
@@ -33,17 +36,13 @@ export function BoutonGenesis({
   className?: string;
   children: React.ReactNode;
 }) {
-  /* **Plus de présence**, sur demande de Rémy, qui le trouvait trop
-     effacé, et sur le geste du bouton d'Arc UI (`uiarc.dev`) : il
-     s'enfonce de 2 % à l'appui et gagne une ombre au survol. L'ombre est
-     bleue et portée sous le bouton, comme sur sa référence, pour qu'il se
-     détache du blanc ; elle prend la couleur du bouton par `color-mix` et
-     ne peut donc pas s'en écarter. Angles droits et aplat inchangés.
-     L'enfoncement et la montée sont des translations et des échelles,
-     posées sur `scale` et `translate` (Tailwind v4) et seulement sans
-     mouvement réduit. */
+  /* **Un aplat sans ombre**, sur demande de Rémy : l'ombre bleue portée et
+     la montée au survol ont été essayées et retirées. Il garde le geste du
+     bouton d'Arc UI (`uiarc.dev`), invisible au repos : il s'enfonce de 2 %
+     à l'appui, posé sur `scale` (Tailwind v4) et seulement sans mouvement
+     réduit. */
   const classes = cn(
-    "flex min-h-14 w-full items-center justify-center rounded-none bg-[var(--genesis-bleu)] px-5 py-3 text-center font-[family-name:var(--font-genesis-bouton)] text-xl leading-tight font-bold tracking-[0.02em] text-white uppercase shadow-[0_12px_24px_-12px_color-mix(in_srgb,var(--genesis-bleu)_80%,transparent)] transition-[filter,box-shadow,scale,translate] duration-150 hover:shadow-[0_16px_32px_-12px_color-mix(in_srgb,var(--genesis-bleu)_95%,transparent)] hover:brightness-[0.96] active:brightness-90 disabled:opacity-70 motion-safe:hover:-translate-y-px motion-safe:active:translate-y-0 motion-safe:active:scale-[0.98] sm:text-2xl",
+    "flex min-h-14 w-full items-center justify-center rounded-none bg-[var(--genesis-bleu)] px-6 py-3 text-center font-[family-name:var(--font-genesis-bouton)] text-[19px] leading-tight font-bold tracking-[0.04em] text-white uppercase transition-[filter,scale] duration-150 hover:brightness-[0.96] active:brightness-90 disabled:opacity-70 motion-safe:active:scale-[0.98]",
     className,
   );
   if (href) {

@@ -139,50 +139,57 @@ export default async function PartieGenesis({ params }: Props) {
             </Link>
           ) : null}
 
-          {/* La carte d'appel : l'unique sortie de l'espace. Sous la vidéo,
-              son texte à gauche et le bouton à droite dès `sm`. Ses textes
-              ne sont pas des titres : un bloc d'appel n'entre pas dans le
-              plan de la page (voir `AGENTS.md`). */}
+          {/* La carte d'appel : l'unique sortie de l'espace, sous la vidéo.
+              **Sa composition est celle du bloc « CTA section » d'Arc UI**
+              (`uiarc.dev`), variante centrée, sur demande de Rémy, qui
+              trouvait la carte précédente (photo, texte et bouton sur une
+              ligne) mal fichue : une surface calme et bordée, tout centré, le
+              titre équilibré et borné en largeur, puis l'action. Leur
+              fichier n'est pas installé (`.module.css`), la composition est
+              reprise en Tailwind. Ce qui reste à nous : les angles de 5 px, le
+              bleu pâle du tunnel en fond, et la photo de Rémy au-dessus, à la
+              place des visages de leur version.
+              Ses textes ne sont pas des titres : un bloc d'appel n'entre pas
+              dans le plan de la page (voir `AGENTS.md`). */}
           <aside
             aria-label="Réserver un appel"
-            className="mt-2 flex flex-col gap-4 rounded-[5px] bg-white p-5 shadow-[0_0_39px_-8px_rgba(0,0,0,0.15)] sm:flex-row sm:items-center sm:gap-6"
+            className="mt-2 grid justify-items-center gap-3 rounded-[5px] border border-black/10 bg-[color-mix(in_srgb,var(--genesis-surligne)_55%,white)] px-5 py-9 text-center sm:px-10 sm:py-12"
           >
             {/* La photo de Rémy, ronde : c'est une photo de profil, la
-                seule famille qui y a droit sans exception. */}
+                seule famille qui y a droit sans exception. Le liseré blanc
+                la détache du fond. */}
             <img
               src={carte.photo.src}
               alt={carte.photo.alt}
               width={256}
               height={256}
               loading="lazy"
-              className="size-16 shrink-0 rounded-full object-cover sm:size-20"
+              className="mb-1 size-16 rounded-full object-cover ring-4 ring-white sm:size-[72px]"
             />
-            <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-              {carte.surtitre ? (
-                <p className="font-[family-name:var(--font-genesis-bouton)] text-xs font-bold tracking-[0.06em] text-[#60606b] uppercase">
-                  {carte.surtitre}
-                </p>
-              ) : null}
-              {carte.titre ? (
-                <p className="text-lg leading-snug font-bold text-pretty sm:text-xl">
-                  {insecables(carte.titre)}
-                </p>
-              ) : null}
-              {carte.texte ? (
-                <p className="text-base leading-[1.5] text-pretty text-[#60606b]">
-                  {carte.texte}
-                </p>
-              ) : null}
-              {!carte.titre || !carte.texte ? (
-                <Emplacement
-                  attendu="le sur-titre, le titre et le texte de la carte d'appel"
-                  className="min-h-24 px-4 py-5"
-                />
-              ) : null}
-            </div>
+            {carte.surtitre ? (
+              <p className="font-[family-name:var(--font-genesis-bouton)] text-xs font-bold tracking-[0.12em] text-[#60606b] uppercase">
+                {carte.surtitre}
+              </p>
+            ) : null}
+            {carte.titre ? (
+              <p className="max-w-[26ch] text-[1.375rem] leading-tight font-bold text-balance sm:max-w-[34ch] sm:text-[1.75rem]">
+                {insecables(carte.titre)}
+              </p>
+            ) : null}
+            {carte.texte ? (
+              <p className="max-w-[34rem] text-base leading-[1.5] text-pretty text-[#60606b] sm:text-lg">
+                {carte.texte}
+              </p>
+            ) : null}
+            {!carte.titre || !carte.texte ? (
+              <Emplacement
+                attendu="le sur-titre, le titre et le texte de la carte d'appel"
+                className="min-h-24 w-full px-4 py-5"
+              />
+            ) : null}
             <BoutonGenesis
               href={`${RACINE_GENESIS}/appel`}
-              className="sm:w-auto sm:shrink-0 sm:px-8"
+              className="mt-3 sm:w-auto sm:px-10"
             >
               {carte.bouton}
             </BoutonGenesis>
