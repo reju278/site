@@ -39,6 +39,7 @@ export const TUNNELS = [
   ...CHEMINS_TEMOIGNAGE,
   "/form-funnel-thanks",
   "/prochaine-etape",
+  "/formation-genesis",
 ] as const;
 
 /** L'adresse est-elle dans un tunnel, racine ou sous-page ? */

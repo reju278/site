@@ -28,6 +28,7 @@ const PAGES_CLAIRES = [
   ...CHEMINS_TEMOIGNAGE,
   "/form-funnel-thanks",
   "/prochaine-etape",
+  "/formation-genesis",
 ] as const;
 
 /**

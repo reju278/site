@@ -1989,7 +1989,7 @@ garantie.
 
 ## Un tunnel n'est pas une page du site
 
-`/hub`, `/immersion`, `/preparation`, `/appel`, `/thanks`, `/prochaine-etape`, `/strategie` et les pages de témoignage (`/roland`, `/francois` et les autres, voir `lib/pages-temoignage.ts`) sont des **tunnels** : on y arrive par un lien qu'on a
+`/hub`, `/immersion`, `/preparation`, `/appel`, `/thanks`, `/prochaine-etape`, `/strategie`, `/formation-genesis` et les pages de témoignage (`/roland`, `/francois` et les autres, voir `lib/pages-temoignage.ts`) sont des **tunnels** : on y arrive par un lien qu'on a
 reçu, et la règle est qu'on n'en sort que par l'appel. La liste des racines vit
 dans `lib/tunnels.ts`, et `HorsTunnel` la lit pour retirer l'en-tête et le pied
 de page du site, qui offriraient sinon une trentaine de portes de sortie.
@@ -2177,6 +2177,23 @@ dans `--jonction-temoignage`, recopiée dans `--jonction` par le style en ligne,
 seul à battre la règle globale de `[data-hero]`. Le bouton envoie `el=<clé>` à
 Hyros, voir la section Hyros. GTM et ce qu'il charge (Hyros, Meta, Google Ads,
 GA4, LinkedIn) viennent du gabarit racine, vérifié dans le navigateur.
+
+**`/formation-genesis` est un tunnel à trois étages** (issue #8) : l'optin,
+l'espace membre (`/espace/<partie>`, une adresse par partie parce que chaque
+e-mail de la séquence en envoie une), puis la réservation (`/appel`), qui pose
+le carrousel des témoignages de l'accueil au-dessus de `BlocReservation`.
+Les références d'acquisition.com n'ont donné que la structure. **L'optin
+inscrit par l'API de ClickFunnels**, et non par le SDK comme `/course` :
+`app/formation-genesis/actions.ts` crée ou retrouve le contact
+(`contacts/upsert`), puis lui applique le tag « formation genesis »
+(id 481456, `TAG_GENESIS`) par un second appel, pour ne pas remplacer les tags
+qu'un contact connu porte déjà. C'est ce tag qui lance la séquence e-mail
+montée dans ClickFunnels. On n'entre dans l'espace qu'une fois l'inscription
+passée. L'espace n'est protégé par rien : le site n'a pas d'authentification.
+Tout le texte et toutes les vidéos sont des `<Emplacement>` dans
+`contenu/formation-genesis.ts` ; le nombre de parties (cinq) est une valeur
+de départ, Rémy le fixe en coupant la vidéo. Une vidéo de partie demande aussi
+sa copie d'affiche dans `public/temoignages/<id>.jpg`, comme les autres.
 
 **Ajouter une page** : une clé dans `lib/pages-temoignage.ts`, une entrée dans
 `SOURCES`, et **la même clé dans le catalogue du CRM**,
