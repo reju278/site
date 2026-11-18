@@ -2189,7 +2189,14 @@ inscrit par l'API de ClickFunnels**, et non par le SDK comme `/course` :
 (id 481456, `TAG_GENESIS`) par un second appel, pour ne pas remplacer les tags
 qu'un contact connu porte déjà. C'est ce tag qui lance la séquence e-mail
 montée dans ClickFunnels. On n'entre dans l'espace qu'une fois l'inscription
-passée. L'espace n'est protégé par rien : le site n'a pas d'authentification.
+passée. **Le corps de ce second appel s'écrit `contacts_applied_tag`, au
+pluriel** : la première version écrivait `contact_applied_tag`, ClickFunnels
+répondait 400 et toute inscription échouait. Le tag n'est posé que s'il
+manque, par une lecture filtrée sur lui (`filter[tag_id]`), la liste entière
+étant paginée par vingt. **Pour un essai, les valeurs ClickFunnels se lisent
+dans Convex Cloud**, celles du CRM (`convex env get`, dépôt `Funnels-Club`),
+sur consigne de Rémy : c'est le même workspace que le site. Un essai crée un
+vrai contact. L'espace n'est protégé par rien : le site n'a pas d'authentification.
 Tout le texte et toutes les vidéos sont des `<Emplacement>` dans
 `contenu/formation-genesis.ts` ; le nombre de parties (cinq) est une valeur
 de départ, Rémy le fixe en coupant la vidéo. Une vidéo de partie demande aussi

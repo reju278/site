@@ -12,10 +12,18 @@ import { TAG_GENESIS } from "@/contenu/formation-genesis";
  * ceux qu'un contact déjà connu porte ; l'appliquer à part ne touche à rien
  * d'autre. C'est le tag qui déclenche la séquence e-mail dans ClickFunnels.
  *
- * Un contact qui porte déjà le tag (deuxième inscription) fait répondre 422
- * au second appel : ce n'est pas un échec, la séquence est déjà lancée.
+ * **Le corps s'écrit `contacts_applied_tag`, au pluriel.** La première
+ * version écrivait `contact_applied_tag` : ClickFunnels répondait 400
+ * (« param is missing: contacts_applied_tag ») et **toute inscription
+ * échouait** après avoir créé le contact. Relevé le 18 novembre 2026 sur un
+ * contact de test, avec les valeurs de Convex Cloud ; c'est l'écriture du
+ * CRM (`clickfunnels.ts` du dépôt `Funnels-Club`), qui tourne en production.
  *
- * Les trois variables sont celles de `.env.example`, déjà posées sur Vercel.
+ * **Le tag n'est posé que s'il manque**, comme dans le CRM : une personne qui
+ * s'inscrit deux fois ne relance pas la séquence. Le reposer ferait répondre
+ * 422 (« Tag has already been taken »), relevé lui aussi.
+ *
+ * Les trois variables sont celles de `.env.example`, posées sur Vercel.
  */
 
 type Resultat = { ok: true } | { ok: false; raison: string };
@@ -73,13 +81,32 @@ export async function inscrireGenesis(
     const { id } = (await contact.json()) as { id?: number };
     if (!id) return { ok: false, raison: "clickfunnels" };
 
+    /* Filtré sur le tag, et non la liste entière : elle est paginée par
+       vingt, et un contact ancien porte plus de vingt tags. */
+    const posees = await fetch(
+      `${base}/contacts/${id}/applied_tags?filter[tag_id]=${TAG_GENESIS.id}`,
+      { headers: entetes, cache: "no-store" },
+    );
+    if (!posees.ok) {
+      console.error(
+        "Formation Genesis : tags posés",
+        posees.status,
+        await posees.text(),
+      );
+      return { ok: false, raison: "clickfunnels" };
+    }
+    const liste = (await posees.json()) as { tag_id?: number }[];
+    if (liste.some((t) => t.tag_id === TAG_GENESIS.id)) return { ok: true };
+
     const tag = await fetch(`${base}/contacts/${id}/applied_tags`, {
       method: "POST",
       headers: entetes,
-      body: JSON.stringify({ contact_applied_tag: { tag_id: TAG_GENESIS.id } }),
+      body: JSON.stringify({
+        contacts_applied_tag: { tag_id: TAG_GENESIS.id },
+      }),
       cache: "no-store",
     });
-    if (!tag.ok && tag.status !== 422) {
+    if (!tag.ok) {
       console.error("Formation Genesis : tag", tag.status, await tag.text());
       return { ok: false, raison: "clickfunnels" };
     }
