@@ -1,5 +1,6 @@
 import { BanniereGenesis } from "@/components/banniere-genesis";
 import { InscriptionGenesis } from "@/components/inscription-genesis";
+import { FlecheGenesis } from "@/components/fleche-genesis";
 import { MaquetteLecteurGenesis } from "@/components/maquette-lecteur-genesis";
 import { Emplacement } from "@/components/section";
 import { optinGenesis, partiesGenesis } from "@/contenu/formation-genesis";
@@ -30,9 +31,10 @@ export const metadata: Metadata = {
 
 export default function FormationGenesis() {
   const { etiquette, titre } = optinGenesis;
-  /* Les quatre derniers mots sont liés par des espaces insécables : sans
-     cela, le dernier mot finit seul sur sa ligne à 375 px, et `text-pretty`
-     ne l'empêche pas. Ils sont dans le dernier segment, qui est du texte. */
+  /* Les deux derniers mots sont liés par une espace insécable : sans elle,
+     le dernier mot finit seul sur sa ligne à 375 px, et `text-pretty` ne
+     l'empêche pas. En lier quatre laissait « développer un » seul sur une
+     ligne courte. Ils sont dans le dernier segment, qui est du texte. */
   const segments = optinGenesis.sousTitre(
     partiesGenesis.filter((p) => !p.bonus).length,
   );
@@ -50,7 +52,7 @@ export default function FormationGenesis() {
       );
     const texte =
       i === segments.length - 1
-        ? segment.replace(/ (\S+) (\S+) (\S+)$/, " $1 $2 $3")
+        ? segment.replace(/ (\S+)$/, " $1")
         : segment;
     return <Fragment key={i}>{insecables(texte)}</Fragment>;
   });
@@ -98,10 +100,16 @@ export default function FormationGenesis() {
           large : le formulaire change de hauteur d'une étape à l'autre. */}
       <section
         aria-label="Inscription"
-        className="mx-auto grid max-w-[1065px] grid-cols-1 items-center gap-6 px-5 pt-6 sm:px-8 md:grid-cols-[1.15fr_1fr] md:gap-8 md:pt-8"
+        className="mx-auto grid max-w-[1065px] grid-cols-1 items-center gap-14 px-5 pt-6 sm:px-8 md:grid-cols-[1.15fr_1fr] md:gap-8 md:pt-8"
       >
         <MaquetteLecteurGenesis />
-        <InscriptionGenesis />
+        {/* Le formulaire porte la flèche qui le désigne depuis le
+            sous-titre : elle se mesure depuis son haut, à toutes les
+            largeurs. */}
+        <div className="relative">
+          <FlecheGenesis />
+          <InscriptionGenesis />
+        </div>
       </section>
     </main>
   );

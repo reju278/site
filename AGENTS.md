@@ -2266,6 +2266,12 @@ mène au premier champ du formulaire, un bouton de lecture qui ne lirait rien
 étant un piège. Ses trois images sont celles de Rémy, dans
 `public/genesis/`, recadrées en 16/9 et compressées (moins de 100 Ko).
 
+**Une flèche tracée à la main désigne le formulaire** (`FlecheGenesis`), sur
+un croquis de Rémy. Deux tracés et non un étiré : en large, elle part de la
+dernière ligne du sous-titre et pique dans la marge haute du formulaire ; sur
+téléphone, où la maquette s'intercale, elle se loge dans l'écart au-dessus du
+formulaire, que la grille élargit pour elle (`gap-14`).
+
 **Un service worker étranger peut casser les images en local.**
 `customer-image-cache-sw.js`, enregistré sur `localhost:3000` par un autre
 projet, faisait échouer toutes les images de `/temoignages/` dans
