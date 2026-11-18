@@ -2196,7 +2196,14 @@ manque, par une lecture filtrée sur lui (`filter[tag_id]`), la liste entière
 étant paginée par vingt. **Pour un essai, les valeurs ClickFunnels se lisent
 dans Convex Cloud**, celles du CRM (`convex env get`, dépôt `Funnels-Club`),
 sur consigne de Rémy : c'est le même workspace que le site. Un essai crée un
-vrai contact. L'espace n'est protégé par rien : le site n'a pas d'authentification.
+vrai contact. **La séquence est le workflow « Formation Genesis : séquence »**
+(id 2000255), monté par l'API le 18 novembre 2026 en brouillon désactivé :
+déclenché par le tag, une fois par contact (`one_time`), un e-mail par partie
+avec le lien de `/espace/<n>`, un jour d'écart réglé comme les séquences de
+Rémy (Paris, 9 h - 11 h, du lundi au samedi). Objets et textes sont des
+emplacements « [À ÉCRIRE PAR RÉMY] » ; c'est lui qui l'active. **Elle compte
+autant d'e-mails que `partiesGenesis` a de parties** : en ajouter ou en
+retirer une oblige à toucher les deux. L'espace n'est protégé par rien : le site n'a pas d'authentification.
 Tout le texte et toutes les vidéos sont des `<Emplacement>` dans
 `contenu/formation-genesis.ts` ; le nombre de parties (cinq) est une valeur
 de départ, Rémy le fixe en coupant la vidéo. Une vidéo de partie demande aussi

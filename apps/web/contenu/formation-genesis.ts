@@ -86,6 +86,11 @@ export type PartieGenesis = {
  * d'ajouter ou de retirer des lignes, la liste, la navigation et les adresses
  * suivent. Chaque e-mail de la séquence pointe vers
  * `go.funnels.club/formation-genesis/espace/<cle>`.
+ *
+ * **La séquence ne suit pas toute seule** : c'est le workflow ClickFunnels
+ * « Formation Genesis : séquence » (id 2000255), un e-mail par partie de
+ * 1 à 5. Changer le nombre de parties oblige à y ajouter ou retirer un
+ * e-mail ; le bonus n'a pas d'e-mail.
  */
 export const partiesGenesis: PartieGenesis[] = [
   { cle: "1", etiquette: "Partie 1", titre: null, description: null, video: null },
