@@ -237,10 +237,11 @@ export const espaceGenesis = {
   /** La carte d'appel, à droite sur ordinateur, sous la vidéo sur
    *  téléphone. Elle mène à `/formation-genesis/appel`. */
   carte: {
-    /* Les trois textes sont de Rémy. */
+    /* Les trois textes sont de Rémy. « /an » est lié à « chiffres » par
+       une espace insécable, pour ne jamais ouvrir une ligne. */
     surtitre: "Pour les créateurs de formation ou de coaching" as string | null,
     titre:
-      "Développez votre business de formation entre 6 et 7 chiffres par an avec l'équipe Funnels Club" as
+      "Développez votre business de formation entre 6 et 7 chiffres\u00a0/an avec l'équipe Funnels Club" as
         | string
         | null,
     texte:
