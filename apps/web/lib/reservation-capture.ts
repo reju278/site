@@ -23,7 +23,11 @@ function capturer(cle: string) {
     let trouve = false;
 
     adresse.searchParams.forEach((valeur, nom) => {
-      if (nom.indexOf("utm_") === 0) {
+      /* `apercu` reste aussi : c'est la marque d'une ouverture depuis le CRM
+         ou d'une capture, que `CompteurVue` lit pour ne pas compter la
+         visite. Retiré, chaque aperçu de la confirmation comptait comme un
+         appel réservé. Ce n'est pas une donnée personnelle. */
+      if (nom.indexOf("utm_") === 0 || nom === "apercu") {
         garde.append(nom, valeur);
         return;
       }
