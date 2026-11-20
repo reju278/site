@@ -2224,10 +2224,14 @@ dessin du tunnel (`boutonsGenesis` de `PreuvesTunnel` et `PileEntretiens`) :
 « Découvrir… » en `BoutonGenesis` plein, « Fermer » en creux (blanc, bordé,
 texte noir). `/thanks`, `/debuts` et `/stable` gardent leurs boutons qui
 scintillent. Sur téléphone, « Découvrir 3 autres histoires en vidéo » tient
-sur deux lignes : à 19 px, le plancher du bouton, la phrase demande 430 px. Ni jeton
-ClickFunnels ni `CompteurVue` : ils comptent dans le VSL Funnel. **Calendly
-doit y renvoyer**, réglage de l'événement à faire par Rémy (page de
-confirmation externe, détails transmis).
+sur deux lignes : à 19 px, le plancher du bouton, la phrase demande 430 px. Pas de
+jeton ClickFunnels : il compterait dans le VSL Funnel ; son `CompteurVue` est
+celui du tunnel Genesis. **Calendly doit y renvoyer**, réglage de l'événement
+à faire par Rémy (page de confirmation externe, détails transmis).
+**L'étiquette ClickFunnels « Appel réservé » ne dépend pas de cette page** :
+sans jeton, le workflow ClickFunnels qui la pose ailleurs ne la voit pas, donc
+c'est le CRM qui la pose à la réservation, par le crochet Calendly (dépôt
+`Funnels-Club`, `clickfunnels.appelReserve`).
 
 **Deux règles de `globals.css` adaptent les composants partagés** sans les
 recopier : sous `[data-genesis]`, tout `.titre` passe en PT Serif gras, et
