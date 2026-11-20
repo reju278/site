@@ -2335,8 +2335,9 @@ version « au pinceau » (trop mécanique) puis une avec une boucle (qui
 passait sur le sous-titre) ont été refusées. **Elle est placée par la
 mesure** : à partir de 1 065 px, la mise en page ne bouge plus, et la fin du
 sous-titre est toujours 324 px à droite et 69 px au-dessus du coin du
-formulaire. Entre 768 et 1 065 px, elle s'efface ; sur téléphone, une petite
-flèche se loge au milieu de l'écart au-dessus du formulaire (`gap-14`).
+formulaire. En dessous de 1 065 px, il n'y en a pas : la petite flèche du
+téléphone a été retirée par Rémy, et l'écart élargi pour elle est revenu à
+`gap-6`.
 
 **Un service worker étranger peut casser les images en local.**
 `customer-image-cache-sw.js`, enregistré sur `localhost:3000` par un autre

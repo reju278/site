@@ -103,7 +103,7 @@ export default function FormationGenesis() {
           large : le formulaire change de hauteur d'une étape à l'autre. */}
       <section
         aria-label="Inscription"
-        className="mx-auto grid max-w-[1065px] grid-cols-1 items-center gap-14 px-5 pt-6 sm:px-8 md:grid-cols-[1.15fr_1fr] md:gap-8 md:pt-8"
+        className="mx-auto grid max-w-[1065px] grid-cols-1 items-center gap-6 px-5 pt-6 sm:px-8 md:grid-cols-[1.15fr_1fr] md:gap-8 md:pt-8"
       >
         <MaquetteLecteurGenesis />
         {/* Le formulaire porte la flèche qui le désigne depuis le

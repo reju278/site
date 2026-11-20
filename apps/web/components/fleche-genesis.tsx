@@ -23,8 +23,9 @@ import { cn } from "@repo/ui/lib/utils";
  *
  * **Entre 768 et 1 065 px, il n'y en a pas** : ces écarts y varient avec la
  * largeur, et une flèche qui part du mauvais endroit est pire que pas de
- * flèche. **Sur téléphone**, tout s'empile et la maquette s'intercale ; une
- * petite flèche se loge au milieu de l'écart au-dessus du formulaire.
+ * flèche. **Sur téléphone non plus**, sur demande de Rémy : une petite
+ * flèche s'y logeait entre la maquette et le formulaire, il l'a retirée, et
+ * l'écart qu'on avait élargi pour elle est revenu à `gap-6`.
  *
  * Décorative (`aria-hidden`) : le formulaire se trouve sans elle.
  */
@@ -51,15 +52,6 @@ export function FlecheGenesis({ className }: { className?: string }) {
       >
         <path {...trait} d="M6 15C28 4 62 2 77 22C88 37 84 58 74 76" />
         <path {...trait} d="M82.6 70.4Q78 73.6 74 76Q73.6 71.8 74.3 67.4" />
-      </svg>
-      {/* Téléphone : au milieu de l'écart au-dessus du formulaire. */}
-      <svg
-        aria-hidden
-        viewBox="0 0 40 52"
-        className="pointer-events-none absolute -top-[52px] left-1/2 h-[52px] w-[40px] -translate-x-1/2 text-[var(--genesis-encre)] md:hidden"
-      >
-        <path {...trait} d="M16 4C8 18 10 34 22 46" />
-        <path {...trait} d="M19.4 37.2Q20.8 41.8 22 46Q17.8 45 14.3 43.8" />
       </svg>
     </>
   );
