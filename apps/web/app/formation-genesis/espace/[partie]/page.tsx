@@ -136,6 +136,16 @@ export default async function PartieGenesis({ params }: Props) {
               afficheAlt={titre}
               natif
               carre
+              /* La vidéo est le sujet de la page, en haut sur les deux
+                 largeurs : l'iframe part dans le HTML du serveur et
+                 l'affiche en priorité, au lieu d'attendre l'hydratation.
+                 Mesuré en production avant : l'iframe partait à 539 ms.
+                 Une seule vidéo par page : les autres modules ne sont
+                 préchargés qu'en texte, sans contact avec Wistia. */
+              prioritaire
+              /* La couleur du lecteur et l'appel à l'action de fin sont
+                 réglés par Rémy dans Wistia, vidéo par vidéo. */
+              reglagesWistia
             />
           ) : (
             <Emplacement

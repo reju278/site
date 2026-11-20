@@ -92,6 +92,20 @@ const OPTIONS_NATIF = (() => {
   return o;
 })();
 
+/* **Ce que Wistia décide quand ses réglages l'emportent** (`reglagesWistia`) :
+ * la couleur du lecteur, et ce qui se passe à la fin. Forcer `reset` ramenait
+ * l'affiche à la dernière seconde, là où Rémy pose son appel à l'action de fin
+ * (`postRoll`). Le reste ne bouge pas : la transparence, la lecture dans la
+ * page et le plafond de 1080p sont des contraintes du site, pas des goûts. */
+const sansReglagesForces = (o: URLSearchParams) => {
+  const c = new URLSearchParams(o);
+  c.delete("playerColor");
+  c.delete("endVideoBehavior");
+  return c;
+};
+const OPTIONS_WISTIA = sansReglagesForces(OPTIONS);
+const OPTIONS_NATIF_WISTIA = sansReglagesForces(OPTIONS_NATIF);
+
 /**
  * L'événement qui demande à un lecteur `natif` de démarrer, avec l'identifiant
  * Wistia de la vidéo en `detail.id`.
@@ -165,6 +179,7 @@ export function LecteurVideo({
   prioritaire = false,
   afficheAlt,
   format,
+  reglagesWistia = false,
   carre = false,
   className,
 }: {
@@ -237,6 +252,13 @@ export function LecteurVideo({
    * téléphone) tient alors dans la hauteur de l'écran, centrée.
    */
   format?: { largeur: number; hauteur: number };
+  /**
+   * Laisse à Wistia la couleur du lecteur et la fin de la vidéo, réglées
+   * vidéo par vidéo dans son interface, au lieu du bleu du site et du retour à
+   * l'affiche. Pour les modules de Formation Genesis, sur demande de Rémy, qui
+   * y règle sa couleur et ses appels à l'action.
+   */
+  reglagesWistia?: boolean;
   className?: string;
 }) {
   const [lance, setLance] = useState(false);
@@ -354,7 +376,14 @@ export function LecteurVideo({
     };
   }, [natif, proche, lance, id]);
 
-  const options = natif && !demandee ? OPTIONS_NATIF : OPTIONS;
+  const options =
+    natif && !demandee
+      ? reglagesWistia
+        ? OPTIONS_NATIF_WISTIA
+        : OPTIONS_NATIF
+      : reglagesWistia
+        ? OPTIONS_WISTIA
+        : OPTIONS;
   const relais = sourcesAffiche(id, affiche);
 
   /* **La préconnexion aux serveurs de Wistia**, en mode natif seulement, là où
