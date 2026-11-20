@@ -4,6 +4,7 @@ import { FormulaireCalendly } from "@/components/formulaire-calendly";
 import { TitreReservationGenesis } from "@/components/titre-reservation-genesis";
 import { reservationGenesis } from "@/contenu/formation-genesis";
 import { reservationAppel } from "@/contenu/appel";
+import { scriptContactEspace } from "@/lib/contact-lien";
 import type { Metadata } from "next";
 
 /**
@@ -23,9 +24,12 @@ import type { Metadata } from "next";
  *   horaires ne s'écrase pas.
  *
  * **Il s'ouvre prérempli** avec ce que l'optin a gardé dans le navigateur :
- * prénom, nom, e-mail et téléphone (question `a1`). Rien de tout ça ne passe
- * par l'adresse de la page ; seules les balises `utm_*` du module d'origine y
- * sont, et Calendly les garde avec le rendez-vous.
+ * prénom, nom, e-mail et téléphone (question `a1`). Un lien d'e-mail peut
+ * aussi les porter (`?prenom=…&nom=…&email=…&telephone=…`) : relevés en tête
+ * de page, avant le formulaire, par `lib/contact-lien.ts`. Le prénom, le nom
+ * et le téléphone sortent alors de l'adresse avant GTM, l'e-mail y reste
+ * pour Hyros. Les balises `utm_*` passent à Calendly, qui les garde avec le
+ * rendez-vous.
  *
  * Le titre est celui de Rémy, au prénom de l'optin : `TitreReservationGenesis`.
  */
@@ -37,6 +41,15 @@ export const metadata: Metadata = {
 export default function Reservation() {
   return (
     <main className="bg-[var(--genesis-fond)] text-[var(--genesis-encre)]">
+      {/* **Le relevé du lien d'e-mail**, en HTML brut et avant le formulaire :
+          Calendly lit le contact pendant la lecture du HTML, il doit donc y
+          être rangé avant. Voir `lib/contact-lien.ts`. */}
+      <div
+        hidden
+        dangerouslySetInnerHTML={{
+          __html: `<script>${scriptContactEspace}</script>`,
+        }}
+      />
       {/* La visite compte dans le tunnel « Formation Genesis » du CRM. */}
       <CompteurVue tunnel="formation-genesis" etape="reservation" />
       <BanniereGenesis libelle={reservationGenesis.barre} />

@@ -95,10 +95,10 @@ export default async function PartieGenesis({ params }: Props) {
   return (
     <main className="bg-[var(--genesis-fond)] text-[var(--genesis-encre)]">
       {/* **Le relevé du lien d'e-mail**, en HTML brut et en tête de page :
-          les e-mails de la séquence portent le prénom, le nom et l'e-mail du
-          contact, rangés pour que la réservation s'ouvre préremplie. Le
-          prénom et le nom sortent de l'adresse avant GTM ; l'e-mail y reste
-          pour Hyros. Voir `lib/contact-lien.ts`. */}
+          les e-mails de la séquence portent le prénom, le nom, l'e-mail et
+          le téléphone du contact, rangés pour que la réservation s'ouvre
+          préremplie. Le prénom, le nom et le téléphone sortent de l'adresse
+          avant GTM ; l'e-mail y reste pour Hyros. Voir `lib/contact-lien.ts`. */}
       <div
         hidden
         dangerouslySetInnerHTML={{

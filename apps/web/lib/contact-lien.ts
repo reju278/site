@@ -1,8 +1,9 @@
 /**
  * Le contact qu'un lien d'e-mail ClickFunnels porte vers une page du site :
  * `go.funnels.club/appel?prenom={{contact.first_name}}&email={{contact.email_address}}`,
- * et l'espace de la Formation Genesis, qui reçoit aussi le nom
- * (`nom={{contact.last_name}}`).
+ * et l'espace et la réservation de la Formation Genesis, qui reçoivent aussi
+ * le nom et le téléphone (`nom={{contact.last_name}}`,
+ * `telephone={{contact.phone_number}}`).
  *
  * **Ce sont des données personnelles dans une adresse, et le site charge
  * GTM** : même précaution que `reservation-capture.ts`. Le script les relève
@@ -37,7 +38,7 @@ import { CLE_CONTACT_VSL } from "@/contenu/vsl";
 function capturer(cle: string, garder: string[]) {
   try {
     const adresse = new URL(location.href);
-    const champs = ["prenom", "nom", "email"];
+    const champs = ["prenom", "nom", "email", "telephone"];
     if (!champs.some((champ) => adresse.searchParams.has(champ))) return;
 
     const lue = (nom: string, longueur: number) => {
@@ -54,7 +55,22 @@ function capturer(cle: string, garder: string[]) {
     const email = lue("email", 200).replace(/ /g, "+");
     const emailValide = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-    if (prenom || nom || emailValide) {
+    /* Le téléphone, au format international que Calendly attend dans sa
+       question de téléphone (`+33612345678`), comme celui de l'opt-in. Le `+`
+       de l'indicatif arrive en espace s'il n'est pas encodé : il est rendu.
+       Un numéro français écrit à la française (0 et neuf chiffres) prend
+       +33 ; tout autre numéro sans indicatif est ignoré, la personne le
+       tapera. */
+    const brut = adresse.searchParams.get("telephone") || "";
+    let telephone =
+      brut.indexOf("{{") < 0
+        ? brut.replace(/^\s/, "+").replace(/[\s.\-()]/g, "")
+        : "";
+    if (telephone.indexOf("00") === 0) telephone = "+" + telephone.slice(2);
+    if (/^0\d{9}$/.test(telephone)) telephone = "+33" + telephone.slice(1);
+    if (!/^\+\d{8,15}$/.test(telephone)) telephone = "";
+
+    if (prenom || nom || emailValide || telephone) {
       try {
         let ancien: Record<string, unknown> | null = null;
         try {
@@ -72,6 +88,7 @@ function capturer(cle: string, garder: string[]) {
         if (prenom) contact.prenom = prenom;
         if (nom) contact.nom = nom;
         if (emailValide) contact.email = email;
+        if (telephone) contact.telephone = telephone;
         localStorage.setItem(cle, JSON.stringify(contact));
       } catch {
         /* Stockage bloqué : la personne remplira le formulaire elle-même. */
@@ -100,7 +117,9 @@ function capturer(cle: string, garder: string[]) {
 export const scriptContactLien = `(${capturer.toString()})(${JSON.stringify(CLE_CONTACT_VSL)},[]);`;
 
 /**
- * Le script à poser en tête de l'espace Genesis : le prénom et le nom sortent
- * de l'adresse, l'e-mail y reste pour Hyros.
+ * Le script à poser en tête de l'espace et de la réservation Genesis : le
+ * prénom, le nom et le téléphone sortent de l'adresse, l'e-mail y reste pour
+ * Hyros. Sur la réservation, il doit précéder le formulaire Calendly, dont
+ * l'adresse se construit pendant la lecture du HTML.
  */
 export const scriptContactEspace = `(${capturer.toString()})(${JSON.stringify(CLE_CONTACT_VSL)},["email"]);`;

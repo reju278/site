@@ -2267,11 +2267,12 @@ emplacements « [À ÉCRIRE PAR RÉMY] » ; c'est lui qui l'active. **Elle compt
 autant d'e-mails que `partiesGenesis` a de parties** : en ajouter ou en
 retirer une oblige à toucher les deux. L'espace n'est protégé par rien : le site n'a pas d'authentification.
 **Le lien d'un e-mail porte le contact et la provenance** :
-`/espace/<n>?prenom={{contact.first_name}}&nom={{contact.last_name}}&email={{contact.email_address}}&el=email-genesis-module-<n>`.
+`/espace/<n>?prenom={{contact.first_name}}&nom={{contact.last_name}}&email={{contact.email_address}}&telephone={{contact.phone_number}}&el=email-genesis-module-<n>` ; la réservation, `/reservation`, prend les mêmes.
 `lib/contact-lien.ts` (`scriptContactEspace`) les range dans le contact de
 l'opt-in pendant la lecture du HTML, donc la réservation s'ouvre préremplie
 même sur un autre appareil que celui de l'inscription, et un contact au même
-e-mail garde son téléphone. Le prénom et le nom sortent de l'adresse avant
+e-mail garde son téléphone. Le téléphone est ramené à `+33…`, le format de
+Calendly. Le prénom, le nom et le téléphone sortent de l'adresse avant
 GTM ; **l'e-mail y reste pour Hyros**, comme sur les pages vidéo envoyées par
 e-mail, sur décision de Rémy.
 Tout le texte et toutes les vidéos sont des `<Emplacement>` dans
