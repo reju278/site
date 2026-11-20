@@ -1330,6 +1330,14 @@ body:has([role="dialog"][data-state="open"]) :is([data-barre-appel], [data-tache
   [data-sonner-toaster]:has(.consigne-video) {
     --width: min(48rem, 100vw - 2rem) !important;
   }
+  /* La notification de l'e-mail envoyé de Formation Genesis : plus large que
+     les 356 px de Sonner, pour qu'une adresse tienne sur la ligne du titre et
+     que le texte tienne en deux lignes. Elle reste jusqu'à ce qu'on la ferme,
+     posée en bas de l'écran : moins elle est haute, moins elle couvre le bas
+     de la vidéo du module. */
+  [data-sonner-toaster]:has(.bienvenue-genesis) {
+    --width: min(42rem, 100vw - 2rem) !important;
+  }
 }
 
 /* La notification de `/preparation` s'efface quand une fenêtre d'entretien est

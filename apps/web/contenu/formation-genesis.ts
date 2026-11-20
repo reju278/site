@@ -231,8 +231,33 @@ export const partiesGenesis: PartieGenesis[] = [
 ];
 
 /** Les textes de l'espace membre, `/formation-genesis/espace`. */
+/**
+ * La marque posée par l'inscription juste avant d'ouvrir l'espace, que
+ * `BienvenueGenesis` lit et efface : la notification de l'e-mail envoyé ne
+ * s'affiche qu'à cette arrivée-là, une fois. Ici et non dans un module
+ * `"use client"`, parce que deux composants la partagent.
+ */
+export const CLE_BIENVENUE_GENESIS = "genesis-bienvenue";
+
 export const espaceGenesis = {
   titrePage: "Formation Genesis · Espace membre",
+  /**
+   * La notification posée en bas, au milieu, à l'arrivée dans l'espace juste
+   * après l'inscription (`BienvenueGenesis`). Le fond est celui que Rémy a
+   * dicté : un e-mail est parti, il peut tomber dans les spams ou l'onglet
+   * Promotions, et c'est par lui qu'on retrouve la formation. La tournure est
+   * de l'agent, au vouvoiement de l'optin : à valider par Rémy.
+   */
+  bienvenue: {
+    /* L'adresse suit le titre : sur la même ligne en large, sur la sienne au
+       téléphone (`BienvenueGenesis`). */
+    titre: "Un e-mail vient de vous être envoyé à",
+    titreSansAdresse: "Un e-mail vient de vous être envoyé",
+    texte:
+      "Il peut arriver dans vos spams ou dans l'onglet Promotions : vérifiez bien, c'est dans cet e-mail que vous retrouverez facilement l'accès à cette formation.",
+    /* Libellé d'interface, PROVISOIRE. */
+    fermer: "Fermer",
+  },
   /**
    * Ce que dit la barre du haut sur chaque page de l'espace, à la place de
    * « Formation gratuite » : elle suit l'adresse, sur demande de Rémy, qui a

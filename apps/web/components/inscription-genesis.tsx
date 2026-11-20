@@ -7,6 +7,7 @@ import {
 import { BoutonGenesis } from "@/components/bouton-genesis";
 import { ID_FORMULAIRE_GENESIS } from "@/components/maquette-lecteur-genesis";
 import {
+  CLE_BIENVENUE_GENESIS,
   optinGenesis,
   partiesGenesis,
   RACINE_GENESIS,
@@ -210,6 +211,14 @@ export function InscriptionGenesis() {
     }
     signaler("telephone", numero);
     ranger(numero);
+    /* La marque de l'arrivée qui suit l'inscription : l'espace l'efface en
+       la lisant et affiche une fois la notification de l'e-mail envoyé
+       (`BienvenueGenesis`). Un onglet, une fois : `sessionStorage`. */
+    try {
+      sessionStorage.setItem(CLE_BIENVENUE_GENESIS, "1");
+    } catch {
+      /* Stockage refusé : pas de notification, l'espace s'ouvre quand même. */
+    }
     window.location.assign(
       `${RACINE_GENESIS}/espace/${partiesGenesis[0]?.cle ?? "1"}`,
     );

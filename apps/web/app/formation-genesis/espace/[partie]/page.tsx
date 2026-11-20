@@ -1,5 +1,6 @@
 import { CompteurVue } from "@/components/compteur-vue";
 import { BanniereGenesis } from "@/components/banniere-genesis";
+import { BienvenueGenesis } from "@/components/bienvenue-genesis";
 import { BoutonGenesis } from "@/components/bouton-genesis";
 import { ChecklistNiveaux } from "@/components/checklist-niveaux";
 import { LecteurVideo } from "@/components/lecteur-video";
@@ -107,6 +108,9 @@ export default async function PartieGenesis({ params }: Props) {
       />
       {/* La visite compte dans le tunnel « Formation Genesis » du CRM. */}
       <CompteurVue tunnel="formation-genesis" etape="espace" />
+      {/* La notification de l'e-mail envoyé, à l'arrivée qui suit
+          l'inscription seulement. */}
+      <BienvenueGenesis />
       <BanniereGenesis libelle={barre} />
 
       {/* Le titre du module, ferré à gauche sur la colonne de la bannière,

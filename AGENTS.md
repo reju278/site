@@ -2304,6 +2304,16 @@ e-mail garde son téléphone. Le téléphone est ramené à `+33…`, le format 
 Calendly. Le prénom, le nom et le téléphone sortent de l'adresse avant
 GTM ; **l'e-mail y reste pour Hyros**, comme sur les pages vidéo envoyées par
 e-mail, sur décision de Rémy.
+**À l'arrivée dans l'espace juste après l'inscription, une notification
+Sonner**, en bas au milieu (`BienvenueGenesis`), sur demande de Rémy : elle
+dit à quelle adresse l'e-mail est parti, qu'il peut tomber dans les spams ou
+l'onglet Promotions, et que c'est par lui qu'on retrouve la formation
+(tournure de l'agent, à valider). Une fois : l'inscription pose une marque
+dans `sessionStorage` (`CLE_BIENVENUE_GENESIS`), effacée **à l'affichage** et
+non au montage, React montant l'effet deux fois en développement. Elle reste
+jusqu'à ce qu'on la ferme. Sonner pose sa propre police sans empattement :
+le PT Serif s'écrit sur la carte. Au téléphone, l'adresse passe sur sa ligne,
+sinon « envoyé à » restait seul.
 Tout le texte et toutes les vidéos sont des `<Emplacement>` dans
 `contenu/formation-genesis.ts`, sauf le titre et le sous-titre de l'optin,
 dictés par Rémy ; le sous-titre annonce « 4 modules », et ce nombre est
