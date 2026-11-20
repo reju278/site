@@ -1,20 +1,29 @@
 /**
- * Le prénom et l'e-mail qu'un lien d'e-mail ClickFunnels porte vers `/appel` :
- * `go.funnels.club/appel?prenom={{contact.first_name}}&email={{contact.email_address}}`.
+ * Le contact qu'un lien d'e-mail ClickFunnels porte vers une page du site :
+ * `go.funnels.club/appel?prenom={{contact.first_name}}&email={{contact.email_address}}`,
+ * et l'espace de la Formation Genesis, qui reçoit aussi le nom
+ * (`nom={{contact.last_name}}`).
  *
  * **Ce sont des données personnelles dans une adresse, et le site charge
  * GTM** : même précaution que `reservation-capture.ts`. Le script les relève
  * pendant la lecture du HTML, avant l'hydratation donc avant GTM, et les
- * retire de l'adresse. Seuls ces deux paramètres partent : `el` et les `utm_*`
- * restent pour Hyros et pour la réservation.
+ * retire de l'adresse. `el` et les `utm_*` restent pour Hyros et pour la
+ * réservation.
+ *
+ * **L'e-mail reste dans l'adresse de l'espace Genesis**, sur décision de
+ * Rémy : c'est par lui qu'Hyros reconnaît la personne, comme sur les pages
+ * vidéo envoyées par e-mail (`BoutonAppelRelaye`). `/appel` le retire.
  *
  * **Ils sont rangés là où l'opt-in de `/course` range les siens**, avec une
- * date, pour que tout ce qui lit déjà ce contact en profite sans changer. Le
- * lien remplace le contact précédent : c'est la donnée la plus récente, et un
- * navigateur peut être partagé.
+ * date, pour que tout ce qui lit déjà ce contact en profite sans changer :
+ * c'est ce qui ouvre la réservation préremplie, même sur un autre appareil
+ * que celui de l'inscription. Le lien remplace le contact précédent, c'est la
+ * donnée la plus récente et un navigateur peut être partagé ; **sauf s'il
+ * porte le même e-mail**, auquel cas ce que le contact savait déjà (le
+ * téléphone de l'opt-in Genesis) est gardé.
  *
  * **Ce fichier n'importe pas React**, comme `reservation-capture.ts` : la page,
- * rendue par le serveur, en lit `scriptContactLien`.
+ * rendue par le serveur, en lit le script.
  */
 
 import { CLE_CONTACT_VSL } from "@/contenu/vsl";
@@ -22,11 +31,15 @@ import { CLE_CONTACT_VSL } from "@/contenu/vsl";
 /**
  * Le relevé, exécuté **dans le HTML** et non par React. Il est recopié par
  * `toString()`, donc il ne lit rien hors de ses arguments, de `location`, de
- * `history` et de `localStorage`.
+ * `history` et de `localStorage`. `garder` liste les paramètres relevés qui
+ * restent dans l'adresse.
  */
-function capturer(cle: string) {
+function capturer(cle: string, garder: string[]) {
   try {
     const adresse = new URL(location.href);
+    const champs = ["prenom", "nom", "email"];
+    if (!champs.some((champ) => adresse.searchParams.has(champ))) return;
+
     const lue = (nom: string, longueur: number) => {
       const valeur = (adresse.searchParams.get(nom) || "").trim();
       /* `{{` : une variable que ClickFunnels n'a pas remplacée, dans un
@@ -35,20 +48,29 @@ function capturer(cle: string) {
     };
 
     const prenom = lue("prenom", 60);
+    const nom = lue("nom", 60);
     /* Un `+` non encodé arrive en espace, et une adresse n'en contient
        jamais : `jean+pro@gmail.com` retrouve le sien. */
     const email = lue("email", 200).replace(/ /g, "+");
     const emailValide = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-    if (!adresse.searchParams.has("prenom") && !adresse.searchParams.has("email"))
-      return;
-
-    if (prenom || emailValide) {
+    if (prenom || nom || emailValide) {
       try {
-        const contact: { prenom?: string; email?: string; t: number } = {
-          t: Date.now(),
-        };
+        let ancien: Record<string, unknown> | null = null;
+        try {
+          ancien = JSON.parse(localStorage.getItem(cle) || "null");
+        } catch {
+          ancien = null;
+        }
+        const meme =
+          emailValide &&
+          ancien !== null &&
+          typeof ancien.email === "string" &&
+          ancien.email.toLowerCase() === email.toLowerCase();
+        const contact: Record<string, unknown> = meme ? { ...ancien } : {};
+        contact.t = Date.now();
         if (prenom) contact.prenom = prenom;
+        if (nom) contact.nom = nom;
         if (emailValide) contact.email = email;
         localStorage.setItem(cle, JSON.stringify(contact));
       } catch {
@@ -56,17 +78,29 @@ function capturer(cle: string) {
       }
     }
 
-    adresse.searchParams.delete("prenom");
-    adresse.searchParams.delete("email");
-    history.replaceState(
-      history.state,
-      "",
-      adresse.pathname + adresse.search + adresse.hash,
-    );
+    let retire = false;
+    for (const champ of champs) {
+      if (garder.indexOf(champ) < 0 && adresse.searchParams.has(champ)) {
+        adresse.searchParams.delete(champ);
+        retire = true;
+      }
+    }
+    if (retire)
+      history.replaceState(
+        history.state,
+        "",
+        adresse.pathname + adresse.search + adresse.hash,
+      );
   } catch {
     /* Un navigateur trop ancien pour `URL` : le formulaire reste vide. */
   }
 }
 
-/** Le script à poser en tête de `/appel`. */
-export const scriptContactLien = `(${capturer.toString()})(${JSON.stringify(CLE_CONTACT_VSL)});`;
+/** Le script à poser en tête de `/appel` : tout ce qu'il relève sort de l'adresse. */
+export const scriptContactLien = `(${capturer.toString()})(${JSON.stringify(CLE_CONTACT_VSL)},[]);`;
+
+/**
+ * Le script à poser en tête de l'espace Genesis : le prénom et le nom sortent
+ * de l'adresse, l'e-mail y reste pour Hyros.
+ */
+export const scriptContactEspace = `(${capturer.toString()})(${JSON.stringify(CLE_CONTACT_VSL)},["email"]);`;

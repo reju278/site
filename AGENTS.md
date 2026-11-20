@@ -2038,8 +2038,9 @@ avec les noms de paramètres que Calendly emploie.
 Comme sur `/thanks`, ce sont des données personnelles dans une adresse, sur un
 site qui charge GTM : un script en HTML brut, `lib/contact-lien.ts`, les relève
 et les retire de l'adresse pendant la lecture du HTML. Il les range dans le
-contact de `/course` (sept jours), que le lien remplace, et ne touche à rien
-d'autre : `el` et les `utm_*` restent.
+contact de `/course` (sept jours), que le lien remplace (sauf au même e-mail,
+où il complète), et ne touche à rien d'autre : `el` et les `utm_*` restent.
+L'espace Genesis se sert du même relevé, l'e-mail en moins à retirer.
 
 **`/appel-relance-newsletter` est `/appel` avec une vidéo au-dessus**, sur
 demande de Rémy : le formulaire est le même, `BlocReservation`, et les textes et la vidéo
@@ -2261,6 +2262,14 @@ Rémy (Paris, 9 h - 11 h, du lundi au samedi). Objets et textes sont des
 emplacements « [À ÉCRIRE PAR RÉMY] » ; c'est lui qui l'active. **Elle compte
 autant d'e-mails que `partiesGenesis` a de parties** : en ajouter ou en
 retirer une oblige à toucher les deux. L'espace n'est protégé par rien : le site n'a pas d'authentification.
+**Le lien d'un e-mail porte le contact et la provenance** :
+`/espace/<n>?prenom={{contact.first_name}}&nom={{contact.last_name}}&email={{contact.email_address}}&el=email-genesis-module-<n>`.
+`lib/contact-lien.ts` (`scriptContactEspace`) les range dans le contact de
+l'opt-in pendant la lecture du HTML, donc la réservation s'ouvre préremplie
+même sur un autre appareil que celui de l'inscription, et un contact au même
+e-mail garde son téléphone. Le prénom et le nom sortent de l'adresse avant
+GTM ; **l'e-mail y reste pour Hyros**, comme sur les pages vidéo envoyées par
+e-mail, sur décision de Rémy.
 Tout le texte et toutes les vidéos sont des `<Emplacement>` dans
 `contenu/formation-genesis.ts`, sauf le titre et le sous-titre de l'optin,
 dictés par Rémy ; le sous-titre annonce « 4 modules », et ce nombre est

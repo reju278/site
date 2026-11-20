@@ -12,6 +12,7 @@ import {
   RACINE_GENESIS,
   type PartieGenesis as Partie,
 } from "@/contenu/formation-genesis";
+import { scriptContactEspace } from "@/lib/contact-lien";
 import { insecables } from "@/lib/typographie";
 import { cn } from "@repo/ui/lib/utils";
 import { ArrowRight, Star } from "lucide-react";
@@ -93,6 +94,17 @@ export default async function PartieGenesis({ params }: Props) {
 
   return (
     <main className="bg-[var(--genesis-fond)] text-[var(--genesis-encre)]">
+      {/* **Le relevé du lien d'e-mail**, en HTML brut et en tête de page :
+          les e-mails de la séquence portent le prénom, le nom et l'e-mail du
+          contact, rangés pour que la réservation s'ouvre préremplie. Le
+          prénom et le nom sortent de l'adresse avant GTM ; l'e-mail y reste
+          pour Hyros. Voir `lib/contact-lien.ts`. */}
+      <div
+        hidden
+        dangerouslySetInnerHTML={{
+          __html: `<script>${scriptContactEspace}</script>`,
+        }}
+      />
       {/* La visite compte dans le tunnel « Formation Genesis » du CRM. */}
       <CompteurVue tunnel="formation-genesis" etape="espace" />
       <BanniereGenesis libelle={barre} />
