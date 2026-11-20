@@ -2363,9 +2363,9 @@ ligne d'auteur (la photo de Rémy devant le logo rond de Funnels Club, et le
 sur-titre), et après un blanc le titre, coupé là où Rémy l'a dit (il est
 écrit ligne par ligne dans `carte.titre`), le texte et le bouton. Sur
 téléphone, un fond #f8f8f8 d'un bord à l'autre remplace le filet. **Les vidéos des modules
-sont des vidéos d'essai** (`/lancement`, `/stable`, `/debuts`, le
-consulting), posées pour voir l'intégration : à remplacer par les morceaux
-de la formation avant la mise en ligne.
+sont celles du dossier Wistia « Formation Funnels Club »** (`p201yarjeq`),
+une par module, à la place des vidéos d'essai du début. Chacune a sa copie
+d'affiche dans `public/temoignages/<id>.jpg`.
 
 **Le bonus est la checklist des niveaux de business de Rémy**, posée à la
 place de la vidéo (`/espace/bonus`), sur sa demande : « Bonus » dans la

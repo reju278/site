@@ -178,11 +178,12 @@ export type PartieGenesis = {
  * e-mail ; le bonus n'a pas d'e-mail.
  */
 /*
- * **VIDÉOS D'ESSAI**, sur demande de Rémy, pour voir l'intégration : ce sont
- * des vidéos de Rémy déjà sur le site (`/lancement`, `/stable`, `/debuts`,
- * le consulting), et non les modules. **À remplacer avant la mise en ligne**
- * par les morceaux de la formation, avec leur copie d'affiche dans
- * `public/temoignages/<id>.jpg`.
+ * **Les vidéos sont celles du dossier Wistia « Formation Funnels Club »**
+ * (`p201yarjeq`), une par module, données par Rémy le 20 novembre 2026. Elles
+ * remplacent les vidéos d'essai posées pour voir l'intégration. Une vidéo
+ * changée demande sa copie d'affiche dans `public/temoignages/<id>.jpg`, sans
+ * quoi la route des affiches ne la sert pas. La durée est celle de Wistia,
+ * arrondie à la seconde.
  */
 export const partiesGenesis: PartieGenesis[] = [
   {
@@ -190,28 +191,28 @@ export const partiesGenesis: PartieGenesis[] = [
     etiquette: "Module #1",
     titre: "Positionnement",
     description: null,
-    video: { id: "vkvffo2189", secondes: 2739 },
+    video: { id: "5yb52o7c7l", secondes: 3369 },
   },
   {
     cle: "2",
     etiquette: "Module #2",
     titre: "Offre idéale",
     description: null,
-    video: { id: "04wqsqzo30", secondes: 7238 },
+    video: { id: "ji3ihdy1gw", secondes: 2879 },
   },
   {
     cle: "3",
     etiquette: "Module #3",
     titre: "Acquisition",
     description: null,
-    video: { id: "h4z4g82lyi", secondes: 1653 },
+    video: { id: "v3cwhtyev8", secondes: 3352 },
   },
   {
     cle: "4",
     etiquette: "Module #4",
     titre: "Vente",
     description: null,
-    video: { id: "8dynngktko", secondes: 1411 },
+    video: { id: "x85desu8hj", secondes: 1973 },
   },
   /* Une ligne par bonus, `bonus: true`. Le premier est la checklist des
      niveaux de business de Rémy, posée à la place de la vidéo, sur sa
