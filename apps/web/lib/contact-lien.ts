@@ -1,9 +1,9 @@
 /**
  * Le contact qu'un lien d'e-mail ClickFunnels porte vers une page du site :
- * `go.funnels.club/appel?prenom={{contact.first_name}}&email={{contact.email_address}}`,
+ * `go.funnels.club/appel?prenom={{contact.first_name | url_encode}}&email={{contact.email_address | url_encode}}`,
  * et l'espace et la réservation de la Formation Genesis, qui reçoivent aussi
- * le nom et le téléphone (`nom={{contact.last_name}}`,
- * `telephone={{contact.phone_number}}`).
+ * le nom et le téléphone (`nom={{contact.last_name | url_encode}}`,
+ * `telephone={{contact.phone_number | url_encode}}`).
  *
  * **Ce sont des données personnelles dans une adresse, et le site charge
  * GTM** : même précaution que `reservation-capture.ts`. Le script les relève

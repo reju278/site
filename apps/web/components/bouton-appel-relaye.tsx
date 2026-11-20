@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
  * (`el=email-…`) et que le bouton posait `el=site` en dur : Hyros voyait
  * l'e-mail à l'arrivée puis « site » au clic qui compte. **`email`**, parce
  * que c'est par lui qu'Hyros reconnaît la personne, sur décision de Rémy :
- * `go.funnels.club/stable-appel?email={{contact.email_address}}&el=email-…`.
+ * `go.funnels.club/stable-appel?email={{contact.email_address | url_encode}}&el=email-…`.
  * Les `utm_*` suivent pour la même raison que `el`.
  */
 const TRANSMIS = ["el", "email"];

@@ -146,6 +146,35 @@ justifie en commentaire à côté du lien.
 
 ---
 
+## Une variable ClickFunnels dans un lien s'écrit avec `| url_encode`
+
+Règle écrite aussi dans les consignes globales (`~/.claude/CLAUDE.md`) et dans
+le CRM, parce qu'elle vaut partout où un lien part dans un e-mail ClickFunnels.
+
+```text
+?prenom={{contact.first_name | url_encode}}&email={{contact.email_address | url_encode}}
+```
+
+**Jamais la variable nue.** ClickFunnels la remplace à l'envoi telle quelle :
+« Rémy » arrive brut dans l'adresse, son compteur de clics
+(`www.funnels.club/_tracking/email_click/…`) la rejette et le clic finit sur
+`www.funnels.club/404`. Le lien a l'air juste et la page marche quand on
+l'ouvre directement : rien ne le signale avant qu'un contact accentué clique.
+Constaté le 20 novembre 2026 sur Formation Genesis, réparé par le filtre et
+testé par Rémy.
+
+Le filtre vaut pour **toutes** les variables, le `+` d'un e-mail ou d'un
+indicatif se lisant sinon comme une espace. Un accent tapé à la main dans un
+lien passe, l'éditeur l'encode à l'enregistrement. L'aperçu de l'éditeur
+échoue de toute façon : un lien se vérifie par un vrai e-mail de test. Côté
+site, rien à faire : `lib/contact-lien.ts` lit l'adresse par `URLSearchParams`,
+qui décode.
+
+**Tout exemple de lien d'e-mail écrit dans ce dépôt porte le filtre**, ici
+comme dans les commentaires de code : un exemple nu se recopie tel quel.
+
+---
+
 ## Le SEO n'est pas une passe de fin, c'est une contrainte d'écriture
 
 Un site vitrine sert à être trouvé. Ce qui suit n'est pas une liste de bonnes
@@ -2034,7 +2063,7 @@ réessayer. **Le jeton doit donc être posé sur Vercel**, en Production. Puis `
 avec les noms de paramètres que Calendly emploie.
 
 **Un lien d'e-mail ClickFunnels préremplit le formulaire** :
-`go.funnels.club/appel?prenom={{contact.first_name}}&email={{contact.email_address}}`.
+`go.funnels.club/appel?prenom={{contact.first_name | url_encode}}&email={{contact.email_address | url_encode}}`.
 Comme sur `/thanks`, ce sont des données personnelles dans une adresse, sur un
 site qui charge GTM : un script en HTML brut, `lib/contact-lien.ts`, les relève
 et les retire de l'adresse pendant la lecture du HTML. Il les range dans le
@@ -2151,7 +2180,7 @@ de candidature » et non « découverte », sur demande de Rémy. Les deux versi
 
 **Leur bouton relaie le `el` et l'`email` reçus**, et les `utm_*`
 (`BoutonAppelRelaye`). Rémy envoie ces pages par e-mail avec
-`?email={{contact.email_address}}&el=email-…` : l'e-mail est ce qui fait
+`?email={{contact.email_address | url_encode}}&el=email-…` : l'e-mail est ce qui fait
 reconnaître la personne par Hyros, **il reste donc dans l'adresse, sur sa
 décision**, contrairement à `/appel`, où `contact-lien.ts` le retire avant GTM.
 Sans paramètre, le bouton garde `el=site`.
@@ -2267,7 +2296,7 @@ emplacements « [À ÉCRIRE PAR RÉMY] » ; c'est lui qui l'active. **Elle compt
 autant d'e-mails que `partiesGenesis` a de parties** : en ajouter ou en
 retirer une oblige à toucher les deux. L'espace n'est protégé par rien : le site n'a pas d'authentification.
 **Le lien d'un e-mail porte le contact et la provenance** :
-`/espace/<n>?prenom={{contact.first_name}}&nom={{contact.last_name}}&email={{contact.email_address}}&telephone={{contact.phone_number}}&el=email-genesis-module-<n>` ; la réservation, `/reservation`, prend les mêmes.
+`/espace/<n>?prenom={{contact.first_name | url_encode}}&nom={{contact.last_name | url_encode}}&email={{contact.email_address | url_encode}}&telephone={{contact.phone_number | url_encode}}&el=email-genesis-module-<n>` ; la réservation, `/reservation`, prend les mêmes.
 `lib/contact-lien.ts` (`scriptContactEspace`) les range dans le contact de
 l'opt-in pendant la lecture du HTML, donc la réservation s'ouvre préremplie
 même sur un autre appareil que celui de l'inscription, et un contact au même
