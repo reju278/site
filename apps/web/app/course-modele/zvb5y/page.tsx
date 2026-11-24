@@ -83,14 +83,16 @@ export default function CourseModeleB() {
                   className="aspect-video w-full object-cover"
                 />
                 {/* « Cliquez pour activer le son », comme sur la référence,
-                    sur demande de Rémy : la photo se lit comme une vidéo. */}
+                    sur demande de Rémy : la photo se lit comme une vidéo.
+                    **En bas à droite et plus petite sur téléphone** : en
+                    haut, elle masquait le visage. */}
                 <span
                   aria-hidden
                   data-rond
-                  className="absolute top-3 right-3 flex items-center gap-2 rounded-full bg-black/75 px-3 py-1.5 text-[12px] font-medium text-white sm:top-4 sm:right-4 sm:text-sm"
+                  className="absolute right-2 bottom-2 flex items-center gap-1.5 rounded-full bg-black/75 px-2.5 py-1 text-[11px] font-medium text-white sm:top-4 sm:right-4 sm:bottom-auto sm:gap-2 sm:px-3 sm:py-1.5 sm:text-sm"
                 >
                   Cliquez pour activer le son
-                  <svg viewBox="0 0 24 24" className="size-4 shrink-0">
+                  <svg viewBox="0 0 24 24" className="size-3.5 shrink-0 sm:size-4">
                     <path
                       d="M4 9v6h4l5 4V5L8 9H4zm12.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"
                       fill="currentColor"
@@ -106,6 +108,14 @@ export default function CourseModeleB() {
                   </svg>
                 </span>
               </OuvreInscription>
+              {/* Sur téléphone, un premier bouton juste sous l'image, comme
+                  sur la version A, sur demande de Rémy. */}
+              <div className="md:hidden">
+                <InscriptionCourseModele
+                  libelle={bouton}
+                  className="min-h-14 px-4 text-[18px] normal-case"
+                />
+              </div>
 
               <div className="flex flex-col gap-3">
                 <p className="text-lg leading-snug font-bold sm:text-xl">
@@ -126,7 +136,7 @@ export default function CourseModeleB() {
                 </ul>
                 <InscriptionCourseModele
                   libelle={bouton}
-                  className="mt-2 min-h-16 text-[21px] normal-case sm:text-2xl"
+                  className="mt-2 min-h-14 px-4 text-[18px] normal-case sm:min-h-16 sm:text-2xl"
                 />
               </div>
             </div>
