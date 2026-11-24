@@ -32,13 +32,21 @@ export const TAG_COURSE_MODELE = { id: 483167, nom: "course-2025" } as const;
 export const TAG_HYROS_COURSE_MODELE = "!course-2025";
 
 /**
- * Où l'on arrive après l'inscription. **PROVISOIRE, à confirmer par Rémy** :
- * sur ClickFunnels, « Voir la vidéo » mène à l'étape suivante du tunnel,
- * qu'on ne voit pas depuis la page. En attendant, la VSL du site, qui est
- * celle de `/course` (la version sans « -fb » de la même page) : elle se
- * préremplit avec le prénom et l'e-mail gardés par l'inscription.
+ * Le parcours, de page en page, sur le modèle de ClickFunnels
+ * (`course-2025-fb`, `vsl-2025-fb`, `appel-2025-fb`, `thanks`), sur demande
+ * de Rémy : l'opt-in, la vidéo, la prise d'appel, la confirmation. Tout sous
+ * la racine du tunnel, donc dans son gabarit, hors de l'en-tête du site,
+ * interdit d'index et forcé au clair.
  */
-export const APRES_INSCRIPTION = "/video-vsl";
+export const CHEMINS_COURSE_MODELE = {
+  optin: RACINE_COURSE_MODELE,
+  video: `${RACINE_COURSE_MODELE}/video`,
+  appel: `${RACINE_COURSE_MODELE}/appel`,
+  merci: `${RACINE_COURSE_MODELE}/merci`,
+} as const;
+
+/** Où l'on arrive après l'inscription : la vidéo. */
+export const APRES_INSCRIPTION = CHEMINS_COURSE_MODELE.video;
 
 /** Un morceau de phrase : du texte, ou un passage en gras. */
 export type Segment = string | { gras: string };
@@ -102,4 +110,51 @@ export const optinCourseModele = {
       envoi: "L'envoi n'est pas passé. Vérifiez votre email et réessayez.",
     },
   },
+};
+
+/**
+ * La vidéo, `/course-modele/video` : la page de `funnels.club/vsl-2025-fb`,
+ * au mot près (vouvoiement compris), sur le dessin de Genesis. La vidéo est
+ * celle de `/video-vsl` (`videoVsl.video`, Wistia `di3bzcmi50`), la même que
+ * sur la page ClickFunnels.
+ */
+export const videoCourseModele = {
+  titrePage: "Vidéo de formation gratuite",
+  titre: "Votre formation offerte",
+  appel: [
+    "Postulez maintenant pour un appel gratuit de 30 min afin de savoir si vous êtes admissible au programme et au coaching ",
+    { gras: "“Funnels Club”" },
+  ] as Segment[],
+  bouton: "Réservez votre appel gratuit",
+};
+
+/**
+ * La prise d'appel, `/course-modele/appel` : Calendly intégré, prérempli
+ * avec ce que l'opt-in a gardé dans le navigateur (prénom, e-mail ; nom et
+ * téléphone quand on les a), comme `/reservation` de Genesis.
+ */
+export const appelCourseModele = {
+  titrePage: "Réservez votre appel",
+  /* PROVISOIRE, de l'agent, sur le titre de Genesis : la page ClickFunnels
+     n'a que le formulaire. Suivi du prénom de l'opt-in. */
+  titre: "Réservez votre appel ci-dessous",
+  titreFormulaire: "Formulaire de réservation de l'appel",
+  /**
+   * **PROVISOIRE : l'événement de `funnels.club/appel-2025-fb`**,
+   * « Candidature Funnels Club (FB) », en attendant celui que Rémy crée pour
+   * ce tunnel. Le jour où il change : la nouvelle adresse ici, sa question
+   * du téléphone dessous, et chez Calendly sa page de confirmation réglée
+   * sur `go.funnels.club/course-modele/merci`, détails de l'événement
+   * transmis, sans quoi la confirmation ne connaît ni la date ni l'hôte.
+   */
+  calendly: "https://calendly.com/funnels-club/appel-decouverte-yt-clone-3",
+  /** « Téléphone / WhatsApp », la première question (`a1`), relevée par
+   *  l'API de Calendly le 24 novembre 2026. */
+  questionTelephone: "a1",
+};
+
+/** La confirmation, `/course-modele/merci` : `/thanks`, au dessin du tunnel. */
+export const confirmationCourseModele = {
+  titrePage: "Votre appel est réservé",
+  barre: "Votre appel est réservé",
 };

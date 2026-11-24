@@ -5,6 +5,7 @@ import { PointGelule } from "@/components/pilules-hero";
 import { confirmationThanks } from "@/contenu/thanks";
 import { confirmationFormFunnel } from "@/contenu/immersion";
 import { dateLisible, useReservation } from "@/lib/reservation";
+import { usePrenomVsl } from "@/lib/prenom-vsl";
 import { insecables } from "@/lib/typographie";
 
 /**
@@ -23,9 +24,16 @@ import { insecables } from "@/lib/typographie";
 export function TitreConfirmationForm({
   classeTitre = "text-[2rem] sm:text-5xl lg:text-6xl",
   alerte = confirmationThanks.alerte,
+  prenomOptin = false,
 }: {
   /** La taille du titre. `/thanks` le veut plus petit, sur demande de Rémy. */
   classeTitre?: string;
+  /**
+   * À défaut du prénom transmis par Calendly, celui que l'opt-in a gardé
+   * dans le navigateur (`usePrenomVsl`), sur demande de Rémy pour Course
+   * modèle : la personne est saluée même si l'événement ne transmet rien.
+   */
+  prenomOptin?: boolean;
   /** Le texte de l'alerte : `/thanks` n'a plus qu'une vidéo. */
   alerte?: {
     important: string;
@@ -38,7 +46,9 @@ export function TitreConfirmationForm({
 } = {}) {
   const reservation = useReservation();
   const quand = dateLisible(reservation?.debut);
-  const prenom = reservation?.prenom;
+  const prenomContact = usePrenomVsl();
+  const prenom =
+    reservation?.prenom ?? (prenomOptin ? prenomContact : undefined) ?? undefined;
 
   return (
     <>

@@ -7,28 +7,11 @@ import { confirmationThanks, identiteThanks } from "@/contenu/thanks";
 import { scriptCapture } from "@/lib/reservation-capture";
 import { insecables } from "@/lib/typographie";
 
-import type { CSSProperties, ReactNode } from "react";
 import type { Metadata } from "next";
 import { partageTunnel } from "@/lib/partage";
 import { avecReglages } from "@/lib/reglages-seo";
 import { CompteurVue } from "@/components/compteur-vue";
-
-/** « Vidéo 1/2 », surligné en jaune pour sauter aux yeux, demandé par Rémy. */
-function NumeroVideo({ children }: { children: ReactNode }) {
-  return (
-    <span
-      className="surlignage"
-      style={
-        {
-          "--surlignage-fond":
-            "color-mix(in srgb, var(--surlignage-jaune) 45%, transparent)",
-        } as CSSProperties
-      }
-    >
-      {children}
-    </span>
-  );
-}
+import { NumeroVideo } from "@/components/numero-video";
 
 /**
  * La page de confirmation, servie sur `go.funnels.club/thanks`.

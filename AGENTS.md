@@ -2510,13 +2510,52 @@ avant d'être posé, `contacts_applied_tag` au pluriel). Un troisième tunnel
 s'y branche au lieu de les recopier. Les champs aussi sont partagés,
 `ChampGenesis` dans `components/champ-genesis.tsx`.
 
-**Où l'on arrive après l'inscription est PROVISOIRE** : `/video-vsl`
-(`APRES_INSCRIPTION`), la VSL de `/course`, préremplie par le contact gardé
-dans le navigateur. Sur ClickFunnels, « Voir la vidéo » mène à l'étape
-suivante du tunnel, qu'on ne voit pas depuis la page : à confirmer par Rémy.
-Dans le CRM, le tunnel « Course modèle » n'a qu'une étape ; une étape de plus
-se déclare ici par son `CompteurVue`, et là-bas dans `TUNNELS` et
-`ETAPES_MESUREES`.
+**Le tunnel a quatre pages, toutes sous `/course-modele`** (donc dans son
+gabarit, `CHEMINS_COURSE_MODELE`), copies de celles de ClickFunnels sur le
+dessin de Genesis, sur demande de Rémy :
+
+- **`/course-modele`**, l'opt-in, qui mène à la vidéo ;
+- **`/course-modele/video`**, `vsl-2025-fb` au mot près : le titre, la
+  vidéo de `/video-vsl` (`di3bzcmi50`, la même que la page ClickFunnels),
+  la phrase d'appel et le bouton, qui ouvre la prise d'appel **dans un
+  nouvel onglet** (la vidéo continue). Sur ClickFunnels, ce bouton ouvrait
+  une ancienne fenêtre d'opt-in, un reste qu'on ne reprend pas ;
+- **`/course-modele/appel`**, `appel-2025-fb` (le Calendly seul) sur la
+  structure de `/reservation` : `FormulaireCalendly` **prérempli par le
+  contact de l'opt-in** (prénom et e-mail ; nom et téléphone en `a1` quand on
+  les a), le relevé des liens d'e-mail (`scriptContactEspace`), le titre au
+  prénom. **L'événement est provisoire** : celui d'`appel-2025-fb`
+  (`appel-decouverte-yt-clone-3`), en attendant celui que Rémy crée. Le jour
+  où il change : son adresse et sa question du téléphone dans
+  `appelCourseModele`, et chez Calendly sa confirmation réglée sur
+  `/course-modele/merci`, détails de l'événement transmis ;
+- **`/course-modele/merci`**, `/thanks` sous une autre adresse, au dessin du
+  tunnel : le relevé de la réservation (`scriptCapture`), le titre et
+  l'alerte (`TitreConfirmationForm`), les consignes personnelles, **les deux
+  vidéos de `/thanks`** (`NumeroVideo`, sorti de `/thanks` pour servir aux
+  deux) et les preuves. **À défaut du prénom de Calendly, celui de
+  l'opt-in** (`prenomOptin`). En développement, `?apercu=1` remplace le
+  contact par celui de l'adresse et le relevé avale `prenom` : ce repli se
+  teste sans `apercu`.
+
+**La vidéo a sa vitesse de lecture**, sous le lecteur, sur demande de Rémy
+(`VitesseVideo`) : 1x, 1,25x, 1,5x, 2x, et c'est **le lecteur de Wistia
+lui-même** qui change d'allure. L'iframe étant d'une autre origine, le
+chemin est celui-ci, relevé et mesuré : l'iframe porte `wistia_embed`
+**dès sa création** (`LecteurVideo pilotable`), le script de Wistia
+(`E-v1.js`) n'est chargé qu'au premier choix et la reconnaît, puis la
+vitesse part par le canal de la poignée, `postMessage("playbackRate", r)` :
+**une poignée d'iframe n'a pas de méthode `playbackRate()`**, mais ce canal
+la relaie (6,1 s de vidéo en 3 s à 2x). **Wistia repart à 1x au
+lancement** : la vitesse est reposée à chaque `play`. Une iframe marquée
+après le chargement du script n'est jamais reconnue. Le groupe de bascules
+vient du registre shadcn `new-york-v4` (`toggle`, `toggle-group`), écrit
+depuis son JSON, `cn` corrigé, au dessin du tunnel (choix courant sur le
+bleu, texte noir).
+
+Chaque page compte sa visite (`CompteurVue tunnel="course-modele"`, étapes
+`optin`, `video`, `appel`, `merci`). Une étape de plus se déclare ici par son
+`CompteurVue`, et dans le CRM dans `TUNNELS` et `ETAPES_MESUREES`.
 
 **Ajouter une page** : une clé dans `lib/pages-temoignage.ts`, une entrée dans
 `SOURCES`, et **la même clé dans le catalogue du CRM**,

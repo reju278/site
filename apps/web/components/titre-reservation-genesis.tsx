@@ -11,16 +11,20 @@ import { insecables } from "@/lib/typographie";
  * **Le prénom est lu dans le navigateur, après le rendu** (`usePrenomVsl`) :
  * le serveur ne le connaît pas, il ne passe jamais par l'adresse. Sans lui,
  * le titre reste juste : « Réservez votre appel ci-dessous ».
+ *
+ * Servi aussi à la prise d'appel de Course modèle, qui passe son `titre`.
  */
-export function TitreReservationGenesis({ className }: { className?: string }) {
+export function TitreReservationGenesis({
+  className,
+  titre = reservationGenesis.titre,
+}: {
+  className?: string;
+  titre?: string;
+}) {
   const prenom = usePrenomVsl();
   return (
     <h1 className={className}>
-      {insecables(
-        prenom
-          ? `${reservationGenesis.titre}, ${prenom}`
-          : reservationGenesis.titre,
-      )}
+      {insecables(prenom ? `${titre}, ${prenom}` : titre)}
     </h1>
   );
 }

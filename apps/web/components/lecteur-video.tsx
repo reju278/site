@@ -181,8 +181,17 @@ export function LecteurVideo({
   format,
   reglagesWistia = false,
   carre = false,
+  pilotable = false,
   className,
 }: {
+  /**
+   * L'iframe se laisse piloter par l'API de Wistia (`E-v1.js`), pour la
+   * vitesse de lecture de la vidéo de Course modèle (`VitesseVideo`). Elle
+   * porte alors la classe et le nom `wistia_embed` **dès sa création** : le
+   * script ne reconnaît que les iframes ainsi marquées quand il démarre, et
+   * il démarre au premier choix d'une vitesse, pas avant.
+   */
+  pilotable?: boolean;
   id: string;
   titre: string;
   secondes: number;
@@ -519,7 +528,9 @@ export function LecteurVideo({
             title={titre}
             allow="autoplay; fullscreen"
             allowFullScreen
+            name={pilotable ? "wistia_embed" : undefined}
             className={cn(
+              pilotable && "wistia_embed",
               "absolute -inset-[3px] size-[calc(100%+6px)] border-0",
               natif && !pret && !demandee && "opacity-0",
             )}
