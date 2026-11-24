@@ -32,9 +32,9 @@ import {
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-/** Le petit chargement après le choix, en millisecondes : assez pour lire
- *  la phrase, pas assez pour qu'on se demande si ça marche. */
-const DUREE_CHARGEMENT = 2800;
+/** Le petit chargement après le choix, en millisecondes : le temps de lire
+ *  ses deux phrases (2,8 s passaient trop vite, Rémy). */
+const DUREE_CHARGEMENT = 5500;
 
 /**
  * Les boutons « Apprendre » de Course modèle et leur fenêtre d'inscription,
