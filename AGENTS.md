@@ -2496,7 +2496,10 @@ une fenêtre**, comme sur la référence. **Une seule fenêtre par page**
 la tuile du logo l'ouvrent (`OuvreInscription` ; la bannière prend
 `autourDuLogo`). **Elle a les trois temps de l'optin de Genesis**, sur
 demande de Rémy le 24 novembre 2026 : le prénom et le nom, l'e-mail et le
-consentement, le téléphone. La question de chaque temps est son titre, le
+consentement, le téléphone. Son premier titre est celui de la référence
+(« Entrez vos informations / pour découvrir la stratégie : »), les deux
+suivants les questions de Genesis ; chaque champ, tous obligatoires, porte
+un astérisque rouge (`obligatoire` de `ChampGenesis`). Le
 bouton est partout « Voir la vidéo GRATUITE » (jamais « Continuer »), sans
 bouton « Retour »,
 et libellés, exemples et erreurs sont ceux de Genesis (`optinGenesis.formulaire`).

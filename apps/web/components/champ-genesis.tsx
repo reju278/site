@@ -30,16 +30,36 @@ export const CADRE_GENESIS =
 export const LIBELLE_GENESIS =
   "mb-2 font-[family-name:var(--font-genesis-bouton)] text-sm font-medium text-[var(--genesis-encre)]";
 
+/**
+ * L'astérisque d'un champ obligatoire, en rouge, à côté du libellé. Muet
+ * pour les lecteurs d'écran : le champ dit déjà `aria-required`.
+ */
+export function Obligatoire() {
+  return (
+    <span aria-hidden className="text-destructive">
+      {" "}
+      *
+    </span>
+  );
+}
+
 export function ChampGenesis({
   id,
   libelle,
+  obligatoire = false,
   className,
   ...props
-}: React.ComponentProps<"input"> & { id: string; libelle: string }) {
+}: React.ComponentProps<"input"> & {
+  id: string;
+  libelle: string;
+  /** Un astérisque rouge après le libellé (fenêtre de Course modèle). */
+  obligatoire?: boolean;
+}) {
   return (
     <div className="grid min-w-0">
       <label htmlFor={id} className={LIBELLE_GENESIS}>
         {libelle}
+        {obligatoire ? <Obligatoire /> : null}
       </label>
       <Input
         id={id}
@@ -73,8 +93,11 @@ export function ChampTelephoneGenesis({
   valeur,
   onValeur,
   faux,
+  obligatoire = false,
 }: {
   ref?: React.Ref<HTMLInputElement>;
+  /** Un astérisque rouge après le libellé. */
+  obligatoire?: boolean;
   id: string;
   libelle: string;
   libellePays: string;
@@ -91,6 +114,7 @@ export function ChampTelephoneGenesis({
     <div className="grid">
       <label htmlFor={id} className={LIBELLE_GENESIS}>
         {libelle}
+        {obligatoire ? <Obligatoire /> : null}
       </label>
       <div
         className={cn(

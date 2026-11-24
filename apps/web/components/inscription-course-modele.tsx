@@ -8,6 +8,7 @@ import { BoutonGenesis } from "@/components/bouton-genesis";
 import {
   ChampGenesis,
   ChampTelephoneGenesis,
+  Obligatoire,
 } from "@/components/champ-genesis";
 import {
   APRES_INSCRIPTION,
@@ -25,6 +26,7 @@ import { numeroInternational, PAYS } from "@/lib/telephone";
 import { LoaderCircle, X } from "lucide-react";
 import {
   createContext,
+  Fragment,
   useCallback,
   useContext,
   useEffect,
@@ -180,6 +182,7 @@ type Etape = "nom" | "email" | "telephone";
  * La question de chaque temps est le titre de la fenêtre, centré (la croix
  * est hors du cadre).
  * **Pas de bouton « Retour »**, sur demande de Rémy : on ne fait qu'avancer.
+ * Chaque champ, tous obligatoires, porte un astérisque rouge (`obligatoire`).
  * Le changement de temps place le curseur dans le premier champ du suivant.
  */
 function Formulaire() {
@@ -358,8 +361,17 @@ function Formulaire() {
   return (
     <>
       <div className="px-5 pt-6 sm:px-6">
+        {/* **Sur téléphone, la coupure saute** : à 375 px, « pour découvrir
+            la stratégie : » ne tenait pas sur une ligne et le titre en
+            prenait trois ; `text-balance` en fait deux égales. */}
         <DialogTitle className="text-center text-lg leading-snug font-bold text-balance sm:text-xl">
-          {question}
+          {question.map((ligne, rang) => (
+            <Fragment key={ligne}>
+              {rang > 0 ? <br className="max-sm:hidden" /> : null}
+              {rang > 0 ? " " : null}
+              {ligne}
+            </Fragment>
+          ))}
         </DialogTitle>
       </div>
       <form
@@ -376,6 +388,7 @@ function Formulaire() {
               <ChampGenesis
                 ref={premierChamp}
                 id="course-modele-prenom"
+                obligatoire
                 libelle={fenetre.prenom}
                 placeholder={fenetre.exemples.prenom}
                 name="prenom"
@@ -387,6 +400,7 @@ function Formulaire() {
               />
               <ChampGenesis
                 id="course-modele-nom"
+                obligatoire
                 libelle={fenetre.nom}
                 placeholder={fenetre.exemples.nom}
                 name="nom"
@@ -404,6 +418,7 @@ function Formulaire() {
               <ChampGenesis
                 ref={premierChamp}
                 id="course-modele-email"
+                obligatoire
                 libelle={fenetre.email}
                 placeholder={fenetre.exemples.email}
                 name="email"
@@ -437,6 +452,7 @@ function Formulaire() {
                     {fenetre.lienConfidentialite}
                   </a>
                   .
+                  <Obligatoire />
                 </span>
               </label>
             </>
@@ -446,6 +462,7 @@ function Formulaire() {
             <ChampTelephoneGenesis
               ref={premierChamp}
               id="course-modele-telephone"
+              obligatoire
               libelle={fenetre.telephone}
               libellePays={fenetre.pays}
               pays={pays}

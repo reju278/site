@@ -105,18 +105,21 @@ export const optinCourseModele = {
    * La fenêtre d'inscription, **en trois temps comme l'optin de Genesis**, sur
    * demande de Rémy le 24 novembre 2026 : le prénom et le nom, l'e-mail et le
    * consentement, le téléphone. Ses libellés, exemples, consentement et
-   * erreurs sont ceux de Genesis, écrits une seule fois ; seul le bouton est
-   * à elle. La question de chaque temps est le titre de la fenêtre (il
-   * remplace « Entrez vos informations pour découvrir la stratégie : »).
+   * erreurs sont ceux de Genesis, écrits une seule fois ; le bouton et le
+   * premier titre sont à elle. La question de chaque temps est le titre de
+   * la fenêtre ; au premier, le titre de la référence.
    */
   fenetre: {
     ...optinGenesis.formulaire,
     /* Le même bouton aux trois temps, sur demande de Rémy : « Voir la vidéo
        GRATUITE », jamais « Continuer ». */
     etapes: {
-      nom: { question: optinGenesis.formulaire.etapes.nom.question, bouton: "Voir la vidéo GRATUITE" },
-      email: { question: optinGenesis.formulaire.etapes.email.question, bouton: "Voir la vidéo GRATUITE" },
-      telephone: { question: optinGenesis.formulaire.etapes.telephone.question, bouton: "Voir la vidéo GRATUITE" },
+      /* Le premier titre est celui de la page ClickFunnels, sur deux
+         lignes coupées là où elle les coupe, sur demande de Rémy ; les deux
+         suivants sont les questions de Genesis. */
+      nom: { question: ["Entrez vos informations", "pour découvrir la stratégie :"], bouton: "Voir la vidéo GRATUITE" },
+      email: { question: [optinGenesis.formulaire.etapes.email.question], bouton: "Voir la vidéo GRATUITE" },
+      telephone: { question: [optinGenesis.formulaire.etapes.telephone.question], bouton: "Voir la vidéo GRATUITE" },
     },
     fermer: "Fermer",
   },
