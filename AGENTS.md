@@ -2018,7 +2018,7 @@ garantie.
 
 ## Un tunnel n'est pas une page du site
 
-`/hub`, `/immersion`, `/preparation`, `/appel`, `/thanks`, `/prochaine-etape`, `/strategie`, `/formation-genesis` et les pages de témoignage (`/roland`, `/francois` et les autres, voir `lib/pages-temoignage.ts`) sont des **tunnels** : on y arrive par un lien qu'on a
+`/hub`, `/immersion`, `/preparation`, `/appel`, `/thanks`, `/prochaine-etape`, `/strategie`, `/formation-genesis`, `/course-modele` et les pages de témoignage (`/roland`, `/francois` et les autres, voir `lib/pages-temoignage.ts`) sont des **tunnels** : on y arrive par un lien qu'on a
 reçu, et la règle est qu'on n'en sort que par l'appel. La liste des racines vit
 dans `lib/tunnels.ts`, et `HorsTunnel` la lit pour retirer l'en-tête et le pied
 de page du site, qui offriraient sinon une trentaine de portes de sortie.
@@ -2475,6 +2475,48 @@ L'inscription chez ClickFunnels ne change pas : elle reste dans
 `actions.ts`. **Une étape de plus dans le tunnel se déclare des deux côtés** :
 son `CompteurVue` ici, et `ETAPES_MESUREES` et `TUNNELS` dans le CRM, faute
 de quoi le CRM refuse la vue.
+
+**`/course-modele` est la copie de `funnels.club/course-2025-fb` sur la
+structure de Formation Genesis**, sur demande de Rémy : le gabarit, la
+bannière, les polices, le bouton bleu, les champs d'Arc UI et le compteur de
+visites de Genesis ; le titre, le sous-titre, l'accroche, les quatre points
+et la photo de la page ClickFunnels, recopiés au mot près dans
+`contenu/course-modele.ts`. La mise en page est celle de la première version
+de Genesis, relevée sur la même famille de pages : la photo à gauche,
+l'accroche, la liste et le bouton à droite. **Le bouton « Apprendre » ouvre
+une fenêtre**, comme sur la référence (`InscriptionCourseModele`) : prénom,
+e-mail, consentement, « Voir la vidéo ». Rendue dans un portail, hors de
+`[data-genesis]`, elle écrit ses `rounded-none` elle-même. La photo vient du
+fichier d'origine de ClickFunnels, réduite à 1 120 px (89 Ko). Sur téléphone,
+la coupure du titre de la fenêtre saute, sinon il prenait trois lignes.
+
+**L'inscription part à quatre endroits**, dans cet ordre : Hyros
+(`hrs.addLeadTag("!course-2025")` puis l'événement `hyros_email`, les deux
+points d'entrée de son script universel ; il ne lit pas seul les champs d'une
+fenêtre née après son passage), le CRM (`API_FUNNELS/course-modele/optin`, en
+tâche de fond), ClickFunnels (le contact et le tag « course-2025 », id 483167,
+`TAG_COURSE_MODELE`, qui déclenche l'automatisation de Rémy), puis GTM
+(`lead`). **ClickFunnels passe par `after`** (`app/course-modele/actions.ts`) :
+mesuré, un contact neuf demandait 9,7 s, et la fenêtre restait sur « Envoi… ».
+La server action vérifie et répond, la page passe à la suite, l'inscription
+suit côté serveur, retentée une fois, et un échec se lit dans le journal de
+Vercel. La page attend au moins 0,8 s avant de changer, le temps que Hyros
+envoie. **Hyros ne s'initialise pas sur `localhost`** : ce volet ne se
+vérifie qu'en ligne.
+
+**Les appels à l'API de ClickFunnels vivent dans `lib/clickfunnels.ts`**,
+partagés par Genesis et Course modèle : l'`upsert` et la pose du tag (lu
+avant d'être posé, `contacts_applied_tag` au pluriel). Un troisième tunnel
+s'y branche au lieu de les recopier. Les champs aussi sont partagés,
+`ChampGenesis` dans `components/champ-genesis.tsx`.
+
+**Où l'on arrive après l'inscription est PROVISOIRE** : `/video-vsl`
+(`APRES_INSCRIPTION`), la VSL de `/course`, préremplie par le contact gardé
+dans le navigateur. Sur ClickFunnels, « Voir la vidéo » mène à l'étape
+suivante du tunnel, qu'on ne voit pas depuis la page : à confirmer par Rémy.
+Dans le CRM, le tunnel « Course modèle » n'a qu'une étape ; une étape de plus
+se déclare ici par son `CompteurVue`, et là-bas dans `TUNNELS` et
+`ETAPES_MESUREES`.
 
 **Ajouter une page** : une clé dans `lib/pages-temoignage.ts`, une entrée dans
 `SOURCES`, et **la même clé dans le catalogue du CRM**,

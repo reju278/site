@@ -42,6 +42,7 @@ export const TUNNELS = [
   "/formation-genesis",
   "/reservation",
   "/reservation-thanks",
+  "/course-modele",
 ] as const;
 
 /** L'adresse est-elle dans un tunnel, racine ou sous-page ? */
