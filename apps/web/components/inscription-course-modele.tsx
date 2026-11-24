@@ -199,7 +199,7 @@ function Prechargement() {
   );
 }
 
-type Etape = "nom" | "email" | "situation" | "chargement";
+type Etape = "nom" | "email" | "situation" | "ca" | "chargement";
 
 /**
  * Le formulaire de la fenêtre, **en trois temps comme l'optin de Genesis**
@@ -215,7 +215,12 @@ type Etape = "nom" | "email" | "situation" | "chargement";
  *    le choix s'ajoute au contact (CRM, colonne « Situation » ; ClickFunnels,
  *    `course_modele_situation`), « Chargement de la formation… » et sa barre,
  *    une phrase qui suit le choix (5,5 s, le temps de la lire, pendant
- *    lesquelles la vidéo se précharge : `Prechargement`), puis la vidéo.
+ *    lesquelles la vidéo se précharge : `Prechargement`), puis la vidéo ;
+ * 4. **pour qui a déjà une activité seulement**, sur demande de Rémy : « À
+ *    quel niveau de chiffre d'affaires es-tu actuellement ? », quatre
+ *    réponses au même dessin, puis le chargement. Le chiffre d'affaires
+ *    s'ajoute au contact (CRM, deuxième étiquette de la colonne
+ *    « Situation » ; ClickFunnels, `course_modele_ca`).
  *
  * La question de chaque temps est le titre de la fenêtre, centré (la croix
  * est hors du cadre).
@@ -249,7 +254,8 @@ function Formulaire() {
 
   useEffect(() => {
     if (aChange.current) {
-      if (etape === "situation") premierBouton.current?.focus();
+      if (etape === "situation" || etape === "ca")
+        premierBouton.current?.focus();
       else premierChamp.current?.focus();
     }
     // La barre du chargement part de zéro, puis se remplit (transition CSS).
@@ -271,7 +277,11 @@ function Formulaire() {
    * puis le choix. En tâche de fond et sans jamais retenir personne ;
    * `keepalive` laisse le dernier envoi finir pendant que la page change.
    */
-  const signalerCrm = (etapeCrm: "email" | "situation", choix?: string) => {
+  const signalerCrm = (
+    etapeCrm: "email" | "situation",
+    choix?: string,
+    ca?: string,
+  ) => {
     void fetch(`${API_FUNNELS}/course-modele/optin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -283,6 +293,7 @@ function Formulaire() {
         email: email.trim(),
         consentement: consenti,
         ...(choix ? { situation: choix } : {}),
+        ...(ca ? { ca } : {}),
       }),
     }).catch(() => {});
   };
@@ -378,10 +389,24 @@ function Formulaire() {
    * quand la barre est pleine. L'inscription partie à l'e-mail doit avoir
    * été acceptée ; refusée deux fois, on revient à l'e-mail avec l'erreur.
    */
-  const choisir = async (valeur: string) => {
+  const choisir = (valeur: string) => {
+    if (envoi) return;
+    setSituation(valeur);
+    // Qui a déjà une activité dit encore son chiffre d'affaires. Sa
+    // situation part au CRM sans attendre : s'il s'arrête là, on la garde.
+    if (valeur === "activite") {
+      signalerCrm("situation", valeur);
+      aller("ca");
+      return;
+    }
+    void terminer(valeur);
+  };
+
+  /** Le chargement, puis la vidéo ; la situation (et le chiffre d'affaires)
+   *  partent au CRM et à ClickFunnels une fois l'inscription acceptée. */
+  const terminer = async (valeur: string, ca?: string) => {
     if (envoi) return;
     setEnvoi(true);
-    setSituation(valeur);
     aller("chargement");
     const plein = new Promise((fin) => setTimeout(fin, DUREE_CHARGEMENT));
     let inscrit = await (inscription.current ?? inscrire());
@@ -393,8 +418,8 @@ function Formulaire() {
       setErreur(fenetre.erreurs.envoi);
       return;
     }
-    signalerCrm("situation", valeur);
-    void situerCourseModele(email.trim(), valeur).catch(() => {});
+    signalerCrm("situation", valeur, ca);
+    void situerCourseModele(email.trim(), valeur, ca).catch(() => {});
     ranger();
     await plein;
     window.location.assign(APRES_INSCRIPTION);
@@ -537,6 +562,27 @@ function Formulaire() {
                       ),
                     )}
                   </span>
+                  <ArrowRight aria-hidden className="size-5 shrink-0" />
+                </button>
+              ))}
+            </div>
+          ) : null}
+
+          {etape === "ca" ? (
+            // Le chiffre d'affaires : quatre réponses, au dessin de celles
+            // du temps d'avant. On touche, et c'est parti.
+            <div role="group" className="flex flex-col gap-3">
+              {fenetre.chiffresAffaires.map((reponse, rang) => (
+                <button
+                  key={reponse.valeur}
+                  ref={rang === 0 ? premierBouton : undefined}
+                  type="button"
+                  onClick={() =>
+                    situation && void terminer(situation, reponse.valeur)
+                  }
+                  className="flex min-h-[56px] w-full items-center gap-3 rounded-none border border-black/45 bg-white px-4 py-3 text-left text-[17px] leading-snug text-pretty text-[var(--genesis-encre)] transition-[border-color,box-shadow,background-color] hover:border-[var(--genesis-encre)] hover:bg-[var(--genesis-surligne)] focus-visible:border-[var(--genesis-encre)] focus-visible:shadow-[0_0_0_1px_var(--genesis-encre)] focus-visible:outline-none"
+                >
+                  <span className="min-w-0 flex-1">{reponse.libelle}</span>
                   <ArrowRight aria-hidden className="size-5 shrink-0" />
                 </button>
               ))}

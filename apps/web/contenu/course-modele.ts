@@ -126,6 +126,9 @@ export const optinCourseModele = {
       /* Le dernier temps, de Rémy : un choix à la place du téléphone,
          tutoyé et au prénom. Pas de bouton : on choisit, et c'est parti. */
       situation: { question: ["Dernière étape, qu'est-ce qui te décrit le mieux, {prenom} ?"], bouton: "Voir la vidéo GRATUITE" },
+      /* Pour qui a déjà une activité seulement, de Rémy : son chiffre
+         d'affaires, puis le chargement. */
+      ca: { question: ["À quel niveau de chiffre d'affaires es-tu actuellement ?"], bouton: "Voir la vidéo GRATUITE" },
     },
     /** Les deux réponses du dernier temps, de Rémy, « PAS » et « DÉJÀ » en
      *  gras à sa demande. `libelle` est ce que
@@ -147,6 +150,15 @@ export const optinCourseModele = {
         suite:
           "Cette formation va te présenter la stratégie exacte pour développer ton activité, regarde-la attentivement pour passer au niveau supérieur avec ton activité.",
       },
+    ],
+    /** Les réponses de la question du chiffre d'affaires, de Rémy. `valeur`
+     *  part au CRM, qui la range en étiquette dans la colonne « Situation »,
+     *  et à ClickFunnels (`course_modele_ca`, le `libelle`). */
+    chiffresAffaires: [
+      { valeur: "moins-5k", libelle: "Moins de 5\u00a0000\u00a0€ / mois" },
+      { valeur: "5k-10k", libelle: "Entre 5\u00a0000\u00a0€ et 10\u00a0000\u00a0€ / mois" },
+      { valeur: "10k-50k", libelle: "Entre 10\u00a0000\u00a0€ et 50\u00a0000\u00a0€ / mois" },
+      { valeur: "plus-50k", libelle: "Plus de 50\u00a0000\u00a0€ / mois" },
     ],
     /** Le chargement après le choix, de Rémy : le titre, la barre, puis la
      *  phrase de la réponse choisie (`suite`). La vidéo de la page suivante

@@ -91,17 +91,23 @@ export async function inscrireCourseModele(
 /**
  * Ce qui décrit le mieux la personne, au dernier temps de la fenêtre : un
  * champ personnalisé du contact, `course_modele_situation`, que ClickFunnels
- * crée au premier envoi (comme les réponses des quiz). Retrouvé par son
+ * crée au premier envoi (comme les réponses des quiz) ; et, pour qui a déjà
+ * une activité, son chiffre d'affaires, `course_modele_ca`. Retrouvé par son
  * adresse, **après la réponse** lui aussi (`after`) : la page passe à la
  * vidéo sans attendre ClickFunnels.
  */
 export async function situerCourseModele(
   email: string,
   situation: string,
+  /** Le chiffre d'affaires, pour qui a déjà une activité. */
+  ca?: string,
 ): Promise<Resultat> {
   const emailPropre = email.trim().toLowerCase().slice(0, 200);
   const choix = optinCourseModele.fenetre.situations.find(
     (s) => s.valeur === situation,
+  );
+  const niveau = optinCourseModele.fenetre.chiffresAffaires.find(
+    (c) => c.valeur === ca,
   );
   if (!EMAIL.test(emailPropre) || !choix)
     return { ok: false, raison: "champs" };
@@ -114,7 +120,12 @@ export async function situerCourseModele(
       try {
         const id = await upsertContact(api, {
           email_address: emailPropre,
-          custom_attributes: { course_modele_situation: choix.libelle },
+          custom_attributes: {
+            course_modele_situation: choix.libelle,
+            // Le chiffre d'affaires, champ `course_modele_ca`, créé par
+            // ClickFunnels au premier envoi comme la situation.
+            ...(niveau ? { course_modele_ca: niveau.libelle } : {}),
+          },
         });
         return typeof id === "number";
       } catch (erreur) {

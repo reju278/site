@@ -2509,7 +2509,13 @@ taille du vrai, avec `doNotTrack` (Wistia ne compte rien) et `preload=auto`
 c'est ce qui fait servir le cache à l'arrivée. Mesuré en local : l'affiche
 sort du cache, le lecteur s'ouvre en 85 ms. Le choix part au CRM (`etape:
 "situation"`, colonne « Situation ») et à ClickFunnels (champ personnalisé
-`course_modele_situation`, `situerCourseModele`, après la réponse). Son premier titre est celui de la référence
+`course_modele_situation`, `situerCourseModele`, après la réponse). **Qui
+choisit « J'ai DÉJÀ une activité » répond encore à « À quel niveau de
+chiffre d'affaires es-tu actuellement ? »** (quatre réponses,
+`chiffresAffaires`), sur demande de Rémy, avant le chargement : CRM
+(`ca`, seconde étiquette de la colonne « Situation ») et ClickFunnels
+(`course_modele_ca`). Sa situation part au CRM dès le choix, pour qui
+s'arrêterait là. Son premier titre est celui de la référence
 (« Entrez vos informations / pour découvrir la stratégie : »), les deux
 suivants les questions de Genesis ; chaque champ, tous obligatoires, porte
 un astérisque rouge (`obligatoire` de `ChampGenesis`). Le
