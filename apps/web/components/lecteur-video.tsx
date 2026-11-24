@@ -92,6 +92,26 @@ const OPTIONS_NATIF = (() => {
   return o;
 })();
 
+/**
+ * L'adresse du lecteur de Wistia d'une vidéo, avec les options du mode
+ * `natif` (celles de la page vidéo de Course modèle), plus `extra`.
+ *
+ * Pour **précharger** une vidéo avant d'arriver sur sa page : la fenêtre
+ * d'inscription de Course modèle pose ce lecteur, caché, pendant son
+ * chargement, avec `doNotTrack` (Wistia ne compte ni chargement ni séance)
+ * et `preload=auto` (le début de la vidéo se met en mémoire). Les scripts du
+ * lecteur, les données de la vidéo et ses premiers morceaux sont alors dans
+ * le cache du navigateur quand la page s'ouvre : elle démarre aussitôt.
+ */
+export const adresseLecteurWistia = (
+  id: string,
+  extra: Record<string, string> = {},
+) => {
+  const o = new URLSearchParams(OPTIONS_NATIF);
+  for (const [cle, valeur] of Object.entries(extra)) o.set(cle, valeur);
+  return `https://fast.wistia.net/embed/iframe/${id}?${o.toString()}`;
+};
+
 /* **Ce que Wistia décide quand ses réglages l'emportent** (`reglagesWistia`) :
  * la couleur du lecteur, et ce qui se passe à la fin. Forcer `reset` ramenait
  * l'affiche à la dernière seconde, là où Rémy pose son appel à l'action de fin

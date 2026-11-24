@@ -2499,8 +2499,15 @@ prénom et le nom, l'e-mail et le consentement, puis **un choix à la place
 du téléphone** : « Dernière étape, qu'est-ce qui te décrit le mieux,
 {prénom} ? », « Je n'ai PAS encore d'offre à vendre, je démarre de zéro » ou
 « J'ai DÉJÀ une activité, et je veux la développer ». On touche, et c'est
-parti : un petit chargement (« Génial {prénom} ! », une phrase qui suit le
-choix, une barre de 2,8 s), puis la vidéo. Le choix part au CRM (`etape:
+parti : « Chargement de la formation… », une barre de 5,5 s et une phrase
+qui suit le choix (textes de Rémy), puis la vidéo. **Pendant ces 5,5 s, la
+page suivante se précharge** (`Prechargement`) : la page et son affiche
+(`prefetch`), et le lecteur de Wistia de la VSL posé hors de l'écran, à la
+taille du vrai, avec `doNotTrack` (Wistia ne compte rien) et `preload=auto`
+(le début de la vidéo en mémoire). Son adresse vient de
+`adresseLecteurWistia` (`lecteur-video.tsx`), les options mêmes de la page :
+c'est ce qui fait servir le cache à l'arrivée. Mesuré en local : l'affiche
+sort du cache, le lecteur s'ouvre en 85 ms. Le choix part au CRM (`etape:
 "situation"`, colonne « Situation ») et à ClickFunnels (champ personnalisé
 `course_modele_situation`, `situerCourseModele`, après la réponse). Son premier titre est celui de la référence
 (« Entrez vos informations / pour découvrir la stratégie : »), les deux

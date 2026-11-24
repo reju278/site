@@ -6,10 +6,12 @@ import {
 } from "@/app/course-modele/actions";
 import { BoutonGenesis } from "@/components/bouton-genesis";
 import { ChampGenesis, Obligatoire } from "@/components/champ-genesis";
+import { adresseLecteurWistia } from "@/components/lecteur-video";
 import {
   APRES_INSCRIPTION,
   optinCourseModele,
   TAG_HYROS_COURSE_MODELE,
+  videoCourseModele,
 } from "@/contenu/course-modele";
 import { API_FUNNELS, CLE_CONTACT_VSL, legalesVsl } from "@/contenu/vsl";
 import {
@@ -18,7 +20,7 @@ import {
   DialogContent,
   DialogTitle,
 } from "@repo/ui/components/dialog";
-import { ArrowRight, LoaderCircle, X } from "lucide-react";
+import { ArrowRight, X } from "lucide-react";
 import {
   createContext,
   Fragment,
@@ -165,6 +167,34 @@ type Hyros = {
   hrs?: { addLeadTag?: (tag: string) => void };
 };
 
+/**
+ * **La page suivante, chargée pendant le chargement**, sur demande de Rémy,
+ * pour que la vidéo démarre aussitôt à l'arrivée : la page elle-même et son
+ * affiche (`prefetch`), et le lecteur de Wistia de la VSL, posé hors de
+ * l'écran, à la taille du vrai, sans suivi (`doNotTrack` : ni chargement ni
+ * séance comptés chez Wistia) et qui met le début de la vidéo en mémoire
+ * (`preload=auto`). À l'arrivée, ses scripts, ses données et ses premiers
+ * morceaux sont dans le cache du navigateur.
+ */
+function Prechargement() {
+  const { id } = videoCourseModele.video;
+  return (
+    <>
+      <link rel="prefetch" href={APRES_INSCRIPTION} as="document" />
+      <link rel="prefetch" href={`/affiches/${id}.webp`} as="image" />
+      <link rel="prefetch" href={`/affiches/${id}-640.webp`} as="image" />
+      <iframe
+        src={adresseLecteurWistia(id, { doNotTrack: "true", preload: "auto" })}
+        title=""
+        aria-hidden
+        tabIndex={-1}
+        allow="autoplay"
+        className="pointer-events-none fixed top-0 -left-[10000px] h-[504px] w-[896px] opacity-0"
+      />
+    </>
+  );
+}
+
 type Etape = "nom" | "email" | "situation" | "chargement";
 
 /**
@@ -179,8 +209,9 @@ type Etape = "nom" | "email" | "situation" | "chargement";
  * 3. « Dernière étape, qu'est-ce qui te décrit le mieux, {prénom} ? » : deux
  *    réponses, de Rémy, à la place du téléphone. On touche, et c'est parti :
  *    le choix s'ajoute au contact (CRM, colonne « Situation » ; ClickFunnels,
- *    `course_modele_situation`), un petit chargement dit « Génial {prénom} ! »
- *    avec une phrase qui suit le choix, puis la vidéo s'ouvre.
+ *    `course_modele_situation`), « Chargement de la formation… » et sa barre,
+ *    une phrase qui suit le choix (5,5 s, le temps de la lire, pendant
+ *    lesquelles la vidéo se précharge : `Prechargement`), puis la vidéo.
  *
  * La question de chaque temps est le titre de la fenêtre, centré (la croix
  * est hors du cadre).
@@ -509,12 +540,10 @@ function Formulaire() {
           ) : null}
 
           {etape === "chargement" ? (
-            // Le petit chargement, de Rémy : la phrase suit le choix, la barre
-            // se remplit, puis la vidéo s'ouvre.
+            // Le chargement, de Rémy : le titre (« Chargement de la
+            // formation… »), la barre qui se remplit, puis la phrase de la
+            // réponse choisie. La vidéo s'ouvre quand la barre est pleine.
             <div role="status" className="flex flex-col gap-4 text-center">
-              <p className="text-[17px] leading-relaxed text-pretty">
-                {choix?.suite} {fenetre.chargement.fin}
-              </p>
               <div className="h-2 w-full overflow-hidden bg-black/10">
                 <div
                   className="h-full bg-[var(--genesis-bleu)] transition-[width] ease-out"
@@ -524,10 +553,10 @@ function Formulaire() {
                   }}
                 />
               </div>
-              <p className="inline-flex items-center justify-center gap-2 text-sm text-[#60606b]">
-                <LoaderCircle aria-hidden className="size-4 animate-spin" />
-                {fenetre.chargement.attente}
+              <p className="text-[17px] leading-relaxed text-pretty">
+                {choix?.suite}
               </p>
+              <Prechargement />
             </div>
           ) : null}
 

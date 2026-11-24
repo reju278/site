@@ -128,28 +128,28 @@ export const optinCourseModele = {
      *  gras à sa demande. `libelle` est ce que
      *  gardent le CRM (colonne « Situation ») et ClickFunnels (champ
      *  personnalisé `course_modele_situation`) ; `suite`, la phrase du
-     *  chargement qui suit. */
+     *  chargement qui suit, de Rémy. */
     situations: [
       {
         valeur: "zero",
         texte: ["Je n'ai ", { gras: "PAS" }, " encore d'offre à vendre, je démarre de zéro"] as Segment[],
         libelle: "Démarre de zéro",
-        suite: "La formation est idéale pour démarrer de zéro.",
+        suite:
+          "Cette formation va te présenter la stratégie exacte pour te lancer, regarde-la attentivement si ce projet est important pour toi.",
       },
       {
         valeur: "activite",
         texte: ["J'ai ", { gras: "DÉJÀ" }, " une activité, et je veux la développer"] as Segment[],
         libelle: "Activité à développer",
-        suite: "La formation est idéale pour développer ton activité.",
+        suite:
+          "Cette formation va te présenter la stratégie exacte pour développer ton activité, regarde-la attentivement pour passer au niveau supérieur avec ton activité.",
       },
     ],
-    /** Le petit chargement après le choix, d'après Rémy (« Génial Rémy, la
-     *  formation est idéale pour toi, regarde-la sérieusement »), ajusté :
-     *  la phrase du milieu suit le choix. */
+    /** Le chargement après le choix, de Rémy : le titre, la barre, puis la
+     *  phrase de la réponse choisie (`suite`). La vidéo de la page suivante
+     *  se charge pendant ce temps. */
     chargement: {
-      titre: "Génial {prenom} !",
-      fin: "Regarde-la sérieusement, jusqu'au bout : c'est là que tout se joue.",
-      attente: "Ta vidéo se prépare…",
+      titre: "Chargement de la formation…",
     },
     fermer: "Fermer",
   },
