@@ -2515,7 +2515,9 @@ gabarit, `CHEMINS_COURSE_MODELE`), copies de celles de ClickFunnels sur le
 dessin de Genesis, sur demande de Rémy :
 
 - **`/course-modele`**, l'opt-in, qui mène à la vidéo ;
-- **`/course-modele/video`**, `vsl-2025-fb` au mot près : le titre, la
+- **`/course-modele/video`**, `vsl-2025-fb` au mot près sauf le titre, de
+  Rémy : « Ta formation offerte Rémy », au tutoiement et au prénom de
+  l'opt-in, sans virgule comme sur `/video-vsl`. Puis la
   vidéo de `/video-vsl` (`di3bzcmi50`, la même que la page ClickFunnels),
   la phrase d'appel et le bouton, qui ouvre la prise d'appel **dans un
   nouvel onglet** (la vidéo continue). Sur ClickFunnels, ce bouton ouvrait
@@ -2523,8 +2525,9 @@ dessin de Genesis, sur demande de Rémy :
 - **`/course-modele/appel`**, `appel-2025-fb` (le Calendly seul) sur la
   structure de `/reservation` : `FormulaireCalendly` **prérempli par le
   contact de l'opt-in** (prénom et e-mail ; nom et téléphone en `a1` quand on
-  les a), le relevé des liens d'e-mail (`scriptContactEspace`), le titre au
-  prénom. **L'événement est provisoire** : celui d'`appel-2025-fb`
+  les a), le relevé des liens d'e-mail (`scriptContactEspace`), et le titre
+  de Rémy, « Réserve ton appel ci-dessous Rémy » (`TitreReservationGenesis`,
+  `separateur=" "`). **L'événement est provisoire** : celui d'`appel-2025-fb`
   (`appel-decouverte-yt-clone-3`), en attendant celui que Rémy crée. Le jour
   où il change : son adresse et sa question du téléphone dans
   `appelCourseModele`, et chez Calendly sa confirmation réglée sur

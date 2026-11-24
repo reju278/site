@@ -120,7 +120,9 @@ export const optinCourseModele = {
  */
 export const videoCourseModele = {
   titrePage: "Vidéo de formation gratuite",
-  titre: "Votre formation offerte",
+  /* De Rémy, au tutoiement, suivi du prénom de l'opt-in : « Ta formation
+     offerte Rémy ». La page ClickFunnels disait « Votre formation offerte ». */
+  titre: "Ta formation offerte",
   appel: [
     "Postulez maintenant pour un appel gratuit de 30 min afin de savoir si vous êtes admissible au programme et au coaching ",
     { gras: "“Funnels Club”" },
@@ -135,9 +137,9 @@ export const videoCourseModele = {
  */
 export const appelCourseModele = {
   titrePage: "Réservez votre appel",
-  /* PROVISOIRE, de l'agent, sur le titre de Genesis : la page ClickFunnels
-     n'a que le formulaire. Suivi du prénom de l'opt-in. */
-  titre: "Réservez votre appel ci-dessous",
+  /* De Rémy, au tutoiement, suivi du prénom de l'opt-in : « Réserve ton
+     appel ci-dessous Rémy ». La page ClickFunnels n'a que le formulaire. */
+  titre: "Réserve ton appel ci-dessous",
   titreFormulaire: "Formulaire de réservation de l'appel",
   /**
    * **PROVISOIRE : l'événement de `funnels.club/appel-2025-fb`**,

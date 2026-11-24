@@ -53,6 +53,7 @@ export default function AppelCourseModele() {
       <header className="mx-auto max-w-[960px] px-5 pt-5 sm:px-8 sm:pt-6">
         <TitreReservationGenesis
           titre={appelCourseModele.titre}
+          separateur=" "
           className="text-[clamp(1.75rem,7.5vw,2.75rem)] leading-[1.1] font-bold tracking-[0.02em] text-balance"
         />
       </header>

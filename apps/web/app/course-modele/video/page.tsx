@@ -2,6 +2,7 @@ import { BanniereGenesis } from "@/components/banniere-genesis";
 import { BoutonGenesis } from "@/components/bouton-genesis";
 import { CompteurVue } from "@/components/compteur-vue";
 import { LecteurVideo } from "@/components/lecteur-video";
+import { TitreReservationGenesis } from "@/components/titre-reservation-genesis";
 import { VitesseVideo } from "@/components/vitesse-video";
 import {
   CHEMINS_COURSE_MODELE,
@@ -67,9 +68,13 @@ export default function VideoCourseModele() {
       <BanniereGenesis />
 
       <div className="mx-auto max-w-[960px] px-5 pt-5 sm:px-8 sm:pt-6">
-        <h1 className="text-[clamp(1.75rem,7.5vw,2.75rem)] leading-[1.1] font-bold tracking-[0.02em] text-balance">
-          {insecables(titre)}
-        </h1>
+        {/* Le titre de Rémy suivi du prénom laissé à l'opt-in, lu dans le
+            navigateur après le rendu : sans lui, « Ta formation offerte ». */}
+        <TitreReservationGenesis
+          titre={titre}
+          separateur=" "
+          className="text-[clamp(1.75rem,7.5vw,2.75rem)] leading-[1.1] font-bold tracking-[0.02em] text-balance"
+        />
         <div className="mt-5 sm:mt-6">
           <LecteurVideo
             id={video.id}
