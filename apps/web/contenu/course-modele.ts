@@ -16,15 +16,17 @@ import { optinGenesis } from "@/contenu/formation-genesis";
 export const RACINE_COURSE_MODELE = "/course-modele";
 
 /**
- * Le tag ClickFunnels posé sur chaque inscription. **C'est lui qui déclenche
- * l'automatisation**, montée dans ClickFunnels par Rémy.
+ * Le tag ClickFunnels posé sur chaque inscription : **« Inscription (N) »**,
+ * jaune, sur demande de Rémy le 24 novembre 2026 (il remplace
+ * « course-2025 », 483167, qui reste dans ClickFunnels sans rien
+ * déclencher). **C'est lui qui déclenche la séquence e-mail**, « Direct
+ * Webinar (N) : séquence email (5 jours) » (workflow `RyKwnB`).
  *
- * Créé par l'API le 24 novembre 2026 dans le workspace « Funnels Club »,
- * depuis le CRM (`clickfunnels:etiquetteNommee`). Comme celui de Genesis, ce
- * n'est pas un secret : c'est l'identifiant qui compte, un renommage du tag
- * là-bas ne casse rien.
+ * Créé par l'API dans le workspace « Funnels Club ». Comme celui de Genesis,
+ * ce n'est pas un secret : c'est l'identifiant qui compte, un renommage du
+ * tag là-bas ne casse rien.
  */
-export const TAG_COURSE_MODELE = { id: 483167, nom: "course-2025" } as const;
+export const TAG_COURSE_MODELE = { id: 483202, nom: "Inscription (N)" } as const;
 
 /**
  * Le tag posé côté Hyros, par son script (`window.hrs.addLeadTag`), sur

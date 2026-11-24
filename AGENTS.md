@@ -2537,8 +2537,10 @@ choix s'affiche aussitôt : Hyros
 (`hrs.addLeadTag("!course-2025")` puis l'événement `hyros_email`, les deux
 points d'entrée de son script universel ; il ne lit pas seul les champs d'une
 fenêtre née après son passage), le CRM (`API_FUNNELS/course-modele/optin`, en
-tâche de fond), ClickFunnels (le contact et le tag « course-2025 », id 483167,
-`TAG_COURSE_MODELE`, qui déclenche l'automatisation de Rémy), puis GTM
+tâche de fond), ClickFunnels (le contact et le tag jaune « Inscription (N) », id 483202,
+`TAG_COURSE_MODELE`, qui déclenche la séquence « Direct Webinar (N) :
+séquence email (5 jours) » ; « course-2025 » jusqu'au 24 novembre 2026),
+puis GTM
 (`lead`). **ClickFunnels passe par `after`** (`app/course-modele/actions.ts`) :
 mesuré, un contact neuf demandait 9,7 s, et la fenêtre restait sur « Envoi… ».
 La server action vérifie et répond, la fenêtre passe au téléphone,
