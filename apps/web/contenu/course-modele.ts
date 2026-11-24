@@ -339,7 +339,7 @@ export const confirmationCourseModele = {
  * fenêtre d'inscription est la même.
  *
  * La durée : la formation fait 33 minutes (`videoCourseModele.secondes`),
- * d'où « 30 min » et non les « 40 min » de la page d'origine.
+ * d'où « 30 minutes » et non les « 40 min » de la page d'origine.
  */
 export const optinCourseModeleB = {
   /* Le titre de Rémy, le 24 novembre 2026 ; l'astérisque renvoie à la
@@ -353,7 +353,8 @@ export const optinCourseModeleB = {
     { gras: "produits digitaux*" },
   ] as Segment[],
   note: "*formation en ligne, service digital ou coaching",
-  promesse: "30 min de formation gratuite pour apprendre à :",
+  /* De Rémy, mot pour mot, puis la liste. */
+  promesse: "30 minutes de formation pour apprendre :",
   points: [
     "Créer une offre digitale irrésistible qui vous ressemble sans avoir besoin d'être un expert.",
     "La méthode simple pour créer le meilleur tunnel de vente pour vous, adapté à votre offre, vos clients et votre marché.",
