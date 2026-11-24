@@ -104,7 +104,8 @@ export const optinCourseModele = {
   /**
    * La fenêtre d'inscription, **en trois temps comme l'optin de Genesis**, sur
    * demande de Rémy le 24 novembre 2026 : le prénom et le nom, l'e-mail et le
-   * consentement, le téléphone. Ses libellés, exemples, consentement et
+   * consentement, puis un choix (« ce qui te décrit le mieux ») à la place du
+   * téléphone, suivi d'un petit chargement. Ses libellés, exemples, consentement et
    * erreurs sont ceux de Genesis, écrits une seule fois ; le bouton et le
    * premier titre sont à elle. La question de chaque temps est le titre de
    * la fenêtre ; au premier, le titre de la référence.
@@ -119,7 +120,35 @@ export const optinCourseModele = {
          suivants sont les questions de Genesis. */
       nom: { question: ["Entrez vos informations", "pour découvrir la stratégie :"], bouton: "Voir la vidéo GRATUITE" },
       email: { question: [optinGenesis.formulaire.etapes.email.question], bouton: "Voir la vidéo GRATUITE" },
-      telephone: { question: [optinGenesis.formulaire.etapes.telephone.question], bouton: "Voir la vidéo GRATUITE" },
+      /* Le dernier temps, de Rémy : un choix à la place du téléphone,
+         tutoyé et au prénom. Pas de bouton : on choisit, et c'est parti. */
+      situation: { question: ["Dernière étape, qu'est-ce qui te décrit le mieux, {prenom} ?"], bouton: "Voir la vidéo GRATUITE" },
+    },
+    /** Les deux réponses du dernier temps, de Rémy. `libelle` est ce que
+     *  gardent le CRM (colonne « Situation ») et ClickFunnels (champ
+     *  personnalisé `course_modele_situation`) ; `suite`, la phrase du
+     *  chargement qui suit. */
+    situations: [
+      {
+        valeur: "zero",
+        texte: "Je n'ai PAS encore d'offre à vendre, je démarre de zéro",
+        libelle: "Démarre de zéro",
+        suite: "La formation est idéale pour démarrer de zéro.",
+      },
+      {
+        valeur: "activite",
+        texte: "J'ai DÉJÀ une activité, et je veux la développer",
+        libelle: "Activité à développer",
+        suite: "La formation est idéale pour développer ton activité.",
+      },
+    ],
+    /** Le petit chargement après le choix, d'après Rémy (« Génial Rémy, la
+     *  formation est idéale pour toi, regarde-la sérieusement »), ajusté :
+     *  la phrase du milieu suit le choix. */
+    chargement: {
+      titre: "Génial {prenom} !",
+      fin: "Regarde-la sérieusement, jusqu'au bout : c'est là que tout se joue.",
+      attente: "Ta vidéo se prépare…",
     },
     fermer: "Fermer",
   },

@@ -2494,17 +2494,23 @@ l'accroche, la liste et le bouton à droite. **Le bouton « Apprendre » ouvre
 une fenêtre**, comme sur la référence. **Une seule fenêtre par page**
 (`FenetreCourseModele`, posée autour de la page) : les boutons, la photo et
 la tuile du logo l'ouvrent (`OuvreInscription` ; la bannière prend
-`autourDuLogo`). **Elle a les trois temps de l'optin de Genesis**, sur
-demande de Rémy le 24 novembre 2026 : le prénom et le nom, l'e-mail et le
-consentement, le téléphone. Son premier titre est celui de la référence
+`autourDuLogo`). **Elle a trois temps**, sur demande de Rémy le 24 novembre 2026 : le
+prénom et le nom, l'e-mail et le consentement, puis **un choix à la place
+du téléphone** : « Dernière étape, qu'est-ce qui te décrit le mieux,
+{prénom} ? », « Je n'ai PAS encore d'offre à vendre, je démarre de zéro » ou
+« J'ai DÉJÀ une activité, et je veux la développer ». On touche, et c'est
+parti : un petit chargement (« Génial {prénom} ! », une phrase qui suit le
+choix, une barre de 2,8 s), puis la vidéo. Le choix part au CRM (`etape:
+"situation"`, colonne « Situation ») et à ClickFunnels (champ personnalisé
+`course_modele_situation`, `situerCourseModele`, après la réponse). Son premier titre est celui de la référence
 (« Entrez vos informations / pour découvrir la stratégie : »), les deux
 suivants les questions de Genesis ; chaque champ, tous obligatoires, porte
 un astérisque rouge (`obligatoire` de `ChampGenesis`). Le
 bouton est partout « Voir la vidéo GRATUITE » (jamais « Continuer »), sans
 bouton « Retour »,
 et libellés, exemples et erreurs sont ceux de Genesis (`optinGenesis.formulaire`).
-Le téléphone est le champ partagé des deux (`ChampTelephoneGenesis`,
-`champ-genesis.tsx`). **Sur téléphone, la fenêtre se pose haut**
+Le champ du téléphone reste partagé (`ChampTelephoneGenesis`,
+`champ-genesis.tsx`), pour Genesis. **Sur téléphone, la fenêtre se pose haut**
 (`top-[10svh]`) : le clavier ne la recouvre pas ; sa croix est hors du
 cadre (au-dessus sur téléphone, à côté sur ordinateur). **Le rouge des
 erreurs est vif** sur les pages au dessin de Genesis (`--destructive`
@@ -2514,7 +2520,7 @@ fichier d'origine de ClickFunnels, réduite à 1 120 px (89 Ko). Sur téléphone
 la coupure du titre de la fenêtre saute, sinon il prenait trois lignes.
 
 **L'inscription part à l'e-mail, à quatre endroits**, dans cet ordre, et le
-téléphone s'affiche aussitôt : Hyros
+choix s'affiche aussitôt : Hyros
 (`hrs.addLeadTag("!course-2025")` puis l'événement `hyros_email`, les deux
 points d'entrée de son script universel ; il ne lit pas seul les champs d'une
 fenêtre née après son passage), le CRM (`API_FUNNELS/course-modele/optin`, en
@@ -2524,10 +2530,10 @@ tâche de fond), ClickFunnels (le contact et le tag « course-2025 », id 483167
 mesuré, un contact neuf demandait 9,7 s, et la fenêtre restait sur « Envoi… ».
 La server action vérifie et répond, la fenêtre passe au téléphone,
 l'inscription suit côté serveur, retentée une fois, et un échec se lit dans
-le journal de Vercel. **Au téléphone**, le numéro part au CRM (`etape:
-"telephone"`) et à ClickFunnels (`completerCourseModele`, après la réponse
-lui aussi : l'`upsert` retrouve le contact par son adresse, dans n'importe
-quel ordre), puis la page passe à la vidéo. **Hyros ne s'initialise pas sur `localhost`** : ce volet ne se
+le journal de Vercel. **Au choix**, la situation part au CRM et à ClickFunnels
+(`situerCourseModele`, après la réponse lui aussi : l'`upsert` retrouve le
+contact par son adresse, dans n'importe quel ordre), puis la page passe à la
+vidéo. Calendly n'a donc plus le téléphone à préremplir. **Hyros ne s'initialise pas sur `localhost`** : ce volet ne se
 vérifie qu'en ligne.
 
 **Les appels à l'API de ClickFunnels vivent dans `lib/clickfunnels.ts`**,

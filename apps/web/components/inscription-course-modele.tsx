@@ -1,15 +1,11 @@
 "use client";
 
 import {
-  completerCourseModele,
   inscrireCourseModele,
+  situerCourseModele,
 } from "@/app/course-modele/actions";
 import { BoutonGenesis } from "@/components/bouton-genesis";
-import {
-  ChampGenesis,
-  ChampTelephoneGenesis,
-  Obligatoire,
-} from "@/components/champ-genesis";
+import { ChampGenesis, Obligatoire } from "@/components/champ-genesis";
 import {
   APRES_INSCRIPTION,
   optinCourseModele,
@@ -22,8 +18,7 @@ import {
   DialogContent,
   DialogTitle,
 } from "@repo/ui/components/dialog";
-import { numeroInternational, PAYS } from "@/lib/telephone";
-import { LoaderCircle, X } from "lucide-react";
+import { ArrowRight, LoaderCircle, X } from "lucide-react";
 import {
   createContext,
   Fragment,
@@ -37,10 +32,15 @@ import {
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+/** Le petit chargement après le choix, en millisecondes : assez pour lire
+ *  la phrase, pas assez pour qu'on se demande si ça marche. */
+const DUREE_CHARGEMENT = 2800;
+
 /**
  * Les boutons « Apprendre » de Course modèle et leur fenêtre d'inscription,
- * en trois temps comme l'optin de Genesis : le prénom et le nom, l'e-mail et
- * le consentement, le téléphone, puis la vidéo (voir `Formulaire`).
+ * en trois temps : le prénom et le nom, l'e-mail et le consentement, puis
+ * ce qui décrit le mieux la personne, un petit chargement et la vidéo (voir
+ * `Formulaire`).
  *
  * **Une fenêtre, comme sur `funnels.club/course-2025-fb`**, sur demande de
  * Rémy, mais **au dessin de Formation Genesis** : la carte blanche à ombre
@@ -51,7 +51,7 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
  * équerre les angles du tunnel ne l'atteint pas, d'où les `rounded-none`
  * écrits ici. Les polices et les jetons, eux, sont posés sur la racine.
  *
- * À l'e-mail, quatre destinataires, dans cet ordre (le téléphone, au temps
+ * À l'e-mail, quatre destinataires, dans cet ordre (le choix, au temps
  * suivant, complète le CRM et ClickFunnels) :
  *
  * 1. **Hyros**, par son script chargé par GTM : le tag `!course-2025` puis
@@ -165,7 +165,7 @@ type Hyros = {
   hrs?: { addLeadTag?: (tag: string) => void };
 };
 
-type Etape = "nom" | "email" | "telephone";
+type Etape = "nom" | "email" | "situation" | "chargement";
 
 /**
  * Le formulaire de la fenêtre, **en trois temps comme l'optin de Genesis**
@@ -174,10 +174,13 @@ type Etape = "nom" | "email" | "telephone";
  * 1. le prénom et le nom ;
  * 2. l'e-mail et le consentement : **c'est ici que la personne est
  *    inscrite**, sans attente (Hyros, le CRM, ClickFunnels, GTM), et le
- *    téléphone s'affiche aussitôt. Qui s'arrête devant le téléphone reçoit
- *    quand même la suite par e-mail ;
- * 3. le téléphone : il s'ajoute au même contact (CRM et ClickFunnels), puis
- *    on passe à la vidéo.
+ *    choix s'affiche aussitôt. Qui s'arrête là reçoit quand même la suite
+ *    par e-mail ;
+ * 3. « Dernière étape, qu'est-ce qui te décrit le mieux, {prénom} ? » : deux
+ *    réponses, de Rémy, à la place du téléphone. On touche, et c'est parti :
+ *    le choix s'ajoute au contact (CRM, colonne « Situation » ; ClickFunnels,
+ *    `course_modele_situation`), un petit chargement dit « Génial {prénom} ! »
+ *    avec une phrase qui suit le choix, puis la vidéo s'ouvre.
  *
  * La question de chaque temps est le titre de la fenêtre, centré (la croix
  * est hors du cadre).
@@ -192,22 +195,33 @@ function Formulaire() {
   const [nom, setNom] = useState("");
   const [email, setEmail] = useState("");
   const [consenti, setConsenti] = useState(false);
-  const [pays, setPays] = useState<string>(PAYS[0].code);
-  const [telephone, setTelephone] = useState("");
+  /** Le choix du dernier temps, qui décide de la phrase du chargement. */
+  const [situation, setSituation] = useState<string | null>(null);
+  /** Le chargement se remplit de 0 à 100 % : vrai une fois lancé. */
+  const [charge, setCharge] = useState(false);
   const [envoi, setEnvoi] = useState(false);
   /** Vrai après un essai du temps en cours : les champs vides passent au
    *  rouge. Remis à zéro à chaque changement de temps. */
   const [tente, setTente] = useState(false);
   const [erreur, setErreur] = useState<string | null>(null);
   const premierChamp = useRef<HTMLInputElement>(null);
+  const premierBouton = useRef<HTMLButtonElement>(null);
   const aChange = useRef(false);
-  /** L'inscription de l'e-mail, en cours ou faite : le téléphone l'attend. */
+  /** L'inscription de l'e-mail, en cours ou faite : le choix l'attend. */
   const inscription = useRef<Promise<{ ok: boolean }> | null>(null);
   /** Le signal « lead » et Hyros ne partent qu'une fois par adresse. */
   const signale = useRef<string | null>(null);
 
   useEffect(() => {
-    if (aChange.current) premierChamp.current?.focus();
+    if (aChange.current) {
+      if (etape === "situation") premierBouton.current?.focus();
+      else premierChamp.current?.focus();
+    }
+    // La barre du chargement part de zéro, puis se remplit (transition CSS).
+    if (etape === "chargement") {
+      const depart = requestAnimationFrame(() => setCharge(true));
+      return () => cancelAnimationFrame(depart);
+    }
   }, [etape]);
 
   const aller = (suivante: Etape) => {
@@ -219,10 +233,10 @@ function Formulaire() {
 
   /**
    * Le CRM (onglet Funnels, tunnel « Course modèle ») : l'opt-in à l'e-mail,
-   * puis le téléphone. En tâche de fond et sans jamais retenir personne ;
+   * puis le choix. En tâche de fond et sans jamais retenir personne ;
    * `keepalive` laisse le dernier envoi finir pendant que la page change.
    */
-  const signalerCrm = (etapeCrm: "email" | "telephone", numero?: string) => {
+  const signalerCrm = (etapeCrm: "email" | "situation", choix?: string) => {
     void fetch(`${API_FUNNELS}/course-modele/optin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -233,13 +247,13 @@ function Formulaire() {
         nom: nom.trim(),
         email: email.trim(),
         consentement: consenti,
-        ...(numero ? { telephone: numero } : {}),
+        ...(choix ? { situation: choix } : {}),
       }),
     }).catch(() => {});
   };
 
   /** Le contact, gardé pour préremplir Calendly sur la prise d'appel. */
-  const ranger = (numero?: string) => {
+  const ranger = () => {
     try {
       localStorage.setItem(
         CLE_CONTACT_VSL,
@@ -247,7 +261,6 @@ function Formulaire() {
           prenom: prenom.trim(),
           nom: nom.trim(),
           email: email.trim(),
-          ...(numero ? { telephone: numero } : {}),
           t: Date.now(),
         }),
       );
@@ -278,7 +291,6 @@ function Formulaire() {
     nom: !nom.trim(),
     email: !email.trim(),
     consentement: !consenti,
-    telephone: !telephone.trim(),
   };
 
   const valider = async (evenement: React.FormEvent<HTMLFormElement>) => {
@@ -308,7 +320,7 @@ function Formulaire() {
       }
       /* Hyros d'abord : le tag, puis l'adresse. Rien ne doit retenir
          l'inscription si son script n'est pas là (bloqueur). Son envoi a
-         tout le temps du téléphone pour partir. */
+         tout le temps du choix pour partir. */
       try {
         (window as unknown as Hyros).hrs?.addLeadTag?.(TAG_HYROS_COURSE_MODELE);
         window.dispatchEvent(
@@ -320,43 +332,53 @@ function Formulaire() {
       inscription.current = inscrire();
       signalerCrm("email");
       ranger();
-      aller("telephone");
+      aller("situation");
       return;
     }
+  };
 
-    if (manque.telephone) {
-      setErreur(fenetre.erreurs.champs);
-      return;
-    }
-    const numero = numeroInternational(pays, telephone);
-    if (!numero) {
-      setErreur(fenetre.erreurs.telephone);
-      premierChamp.current?.focus();
-      return;
-    }
+  /**
+   * Le dernier temps : un choix, et c'est parti. Le chargement s'affiche
+   * aussitôt, le choix part au CRM et à ClickFunnels, et la vidéo s'ouvre
+   * quand la barre est pleine. L'inscription partie à l'e-mail doit avoir
+   * été acceptée ; refusée deux fois, on revient à l'e-mail avec l'erreur.
+   */
+  const choisir = async (valeur: string) => {
+    if (envoi) return;
     setEnvoi(true);
-    /* L'inscription partie au temps précédent doit avoir été acceptée avant
-       qu'on y ajoute le numéro ; refusée, elle est retentée une fois ici. */
+    setSituation(valeur);
+    aller("chargement");
+    const plein = new Promise((fin) => setTimeout(fin, DUREE_CHARGEMENT));
     let inscrit = await (inscription.current ?? inscrire());
     if (!inscrit.ok) inscrit = await inscrire();
-    const resultat = inscrit.ok
-      ? await completerCourseModele(email.trim(), numero).catch(() => ({
-          ok: false as const,
-        }))
-      : inscrit;
-    if (!resultat.ok) {
+    if (!inscrit.ok) {
       setEnvoi(false);
+      setCharge(false);
+      aller("email");
       setErreur(fenetre.erreurs.envoi);
       return;
     }
-    signalerCrm("telephone", numero);
-    ranger(numero);
+    signalerCrm("situation", valeur);
+    void situerCourseModele(email.trim(), valeur).catch(() => {});
+    ranger();
+    await plein;
     window.location.assign(APRES_INSCRIPTION);
   };
 
-  const { question, bouton } = fenetre.etapes[etape];
-  const telephoneFaux =
-    (tente && manque.telephone) || erreur === fenetre.erreurs.telephone;
+  const leNom = prenom.trim();
+  const choix = fenetre.situations.find((s) => s.valeur === situation);
+  const { question, bouton } =
+    etape === "chargement"
+      ? {
+          question: [fenetre.chargement.titre.replace("{prenom}", leNom)],
+          bouton: "",
+        }
+      : {
+          ...fenetre.etapes[etape],
+          question: fenetre.etapes[etape].question.map((ligne) =>
+            ligne.replace("{prenom}", leNom),
+          ),
+        };
 
   return (
     <>
@@ -458,31 +480,54 @@ function Formulaire() {
             </>
           ) : null}
 
-          {etape === "telephone" ? (
-            <ChampTelephoneGenesis
-              ref={premierChamp}
-              id="course-modele-telephone"
-              obligatoire
-              libelle={fenetre.telephone}
-              libellePays={fenetre.pays}
-              pays={pays}
-              onPays={setPays}
-              valeur={telephone}
-              onValeur={setTelephone}
-              faux={telephoneFaux}
-            />
+          {etape === "situation" ? (
+            // Deux grandes réponses, au dessin des champs (cadre d'un pixel,
+            // angles droits) : on touche celle qui nous décrit, et c'est
+            // parti, sans bouton à valider.
+            <div role="group" className="flex flex-col gap-3">
+              {fenetre.situations.map((reponse, rang) => (
+                <button
+                  key={reponse.valeur}
+                  ref={rang === 0 ? premierBouton : undefined}
+                  type="button"
+                  onClick={() => void choisir(reponse.valeur)}
+                  className="flex min-h-[64px] w-full items-center gap-3 rounded-none border border-black/45 bg-white px-4 py-3 text-left text-[17px] leading-snug text-pretty text-[var(--genesis-encre)] transition-[border-color,box-shadow,background-color] hover:border-[var(--genesis-encre)] hover:bg-[var(--genesis-surligne)] focus-visible:border-[var(--genesis-encre)] focus-visible:shadow-[0_0_0_1px_var(--genesis-encre)] focus-visible:outline-none"
+                >
+                  <span className="min-w-0 flex-1">{reponse.texte}</span>
+                  <ArrowRight aria-hidden className="size-5 shrink-0" />
+                </button>
+              ))}
+            </div>
           ) : null}
 
-          <BoutonGenesis soumettre disabled={envoi} className="mt-1">
-            {envoi ? (
-              <span className="inline-flex items-center gap-2">
-                <LoaderCircle aria-hidden className="size-5 animate-spin" />
-                {fenetre.envoi}
-              </span>
-            ) : (
-              bouton
-            )}
-          </BoutonGenesis>
+          {etape === "chargement" ? (
+            // Le petit chargement, de Rémy : la phrase suit le choix, la barre
+            // se remplit, puis la vidéo s'ouvre.
+            <div role="status" className="flex flex-col gap-4 text-center">
+              <p className="text-[17px] leading-relaxed text-pretty">
+                {choix?.suite} {fenetre.chargement.fin}
+              </p>
+              <div className="h-2 w-full overflow-hidden bg-black/10">
+                <div
+                  className="h-full bg-[var(--genesis-bleu)] transition-[width] ease-out"
+                  style={{
+                    width: charge ? "100%" : "0%",
+                    transitionDuration: `${DUREE_CHARGEMENT}ms`,
+                  }}
+                />
+              </div>
+              <p className="inline-flex items-center justify-center gap-2 text-sm text-[#60606b]">
+                <LoaderCircle aria-hidden className="size-4 animate-spin" />
+                {fenetre.chargement.attente}
+              </p>
+            </div>
+          ) : null}
+
+          {etape === "nom" || etape === "email" ? (
+            <BoutonGenesis soumettre disabled={envoi} className="mt-1">
+              {bouton}
+            </BoutonGenesis>
+          ) : null}
 
           {erreur ? (
             <p

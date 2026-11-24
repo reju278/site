@@ -1,6 +1,6 @@
 "use server";
 
-import { TAG_COURSE_MODELE } from "@/contenu/course-modele";
+import { optinCourseModele, TAG_COURSE_MODELE } from "@/contenu/course-modele";
 import {
   type ApiClickFunnels,
   apiClickFunnels,
@@ -9,7 +9,6 @@ import {
   type Resultat,
   upsertContact,
 } from "@/lib/clickfunnels";
-import { NUMERO_INTERNATIONAL } from "@/lib/telephone";
 import { after } from "next/server";
 
 /**
@@ -22,8 +21,9 @@ import { after } from "next/server";
  * (prénom, nom, e-mail) puis lui pose le tag « course-2025 », à part et
  * seulement s'il manque : c'est lui qui déclenche l'automatisation. Le
  * consentement part en champ personnalisé « consentement » à « oui », comme
- * pour `/course` et Genesis. Au téléphone, `completerCourseModele` ajoute le
- * numéro au même contact. Les deux passent par l'`upsert` de ClickFunnels,
+ * pour `/course` et Genesis. Au dernier temps, `situerCourseModele` ajoute ce
+ * qui décrit la personne au même contact. Les deux passent par l'`upsert` de
+ * ClickFunnels,
  * qui retrouve le contact par son adresse : l'ordre où ils aboutissent ne
  * change rien.
  *
@@ -89,16 +89,21 @@ export async function inscrireCourseModele(
 }
 
 /**
- * Le téléphone, au dernier temps de la fenêtre : il s'ajoute au contact
- * retrouvé par son adresse. **Après la réponse, lui aussi** (`after`) : la
- * page passe à la vidéo sans attendre ClickFunnels.
+ * Ce qui décrit le mieux la personne, au dernier temps de la fenêtre : un
+ * champ personnalisé du contact, `course_modele_situation`, que ClickFunnels
+ * crée au premier envoi (comme les réponses des quiz). Retrouvé par son
+ * adresse, **après la réponse** lui aussi (`after`) : la page passe à la
+ * vidéo sans attendre ClickFunnels.
  */
-export async function completerCourseModele(
+export async function situerCourseModele(
   email: string,
-  telephone: string,
+  situation: string,
 ): Promise<Resultat> {
   const emailPropre = email.trim().toLowerCase().slice(0, 200);
-  if (!EMAIL.test(emailPropre) || !NUMERO_INTERNATIONAL.test(telephone))
+  const choix = optinCourseModele.fenetre.situations.find(
+    (s) => s.valeur === situation,
+  );
+  if (!EMAIL.test(emailPropre) || !choix)
     return { ok: false, raison: "champs" };
 
   const api = apiClickFunnels(TUNNEL);
@@ -109,7 +114,7 @@ export async function completerCourseModele(
       try {
         const id = await upsertContact(api, {
           email_address: emailPropre,
-          phone_number: telephone,
+          custom_attributes: { course_modele_situation: choix.libelle },
         });
         return typeof id === "number";
       } catch (erreur) {
@@ -119,7 +124,7 @@ export async function completerCourseModele(
     };
     if (await poser()) return;
     await new Promise((attente) => setTimeout(attente, 2000));
-    if (!(await poser())) console.error(`${TUNNEL} : téléphone perdu`);
+    if (!(await poser())) console.error(`${TUNNEL} : situation perdue`);
   });
   return { ok: true };
 }
