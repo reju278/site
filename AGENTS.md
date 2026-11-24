@@ -2481,7 +2481,14 @@ structure de Formation Genesis**, sur demande de Rémy : le gabarit, la
 bannière, les polices, le bouton bleu, les champs d'Arc UI et le compteur de
 visites de Genesis ; le titre, le sous-titre, l'accroche, les quatre points
 et la photo de la page ClickFunnels, recopiés au mot près dans
-`contenu/course-modele.ts`. La mise en page est celle de la première version
+`contenu/course-modele.ts`. **Le texte fait foi sur
+`funnels.club/course-2025`, version « Stop aux sites »** (donnée par Rémy le
+24 novembre 2026 : « offres digitales* », « *formation en ligne, coaching
+ou prestation de service »). Cette adresse est en test A/B : elle sert aussi
+« Nous allons mettre en place le parfait tunnel de vente… », qui n'est pas
+la nôtre ; recharger jusqu'à tomber sur la bonne. **Sur téléphone, deux
+boutons « Apprendre »**, comme la référence : l'un sous la photo
+(`md:hidden`), l'autre au bout de la liste ; sur ordinateur, un seul. La mise en page est celle de la première version
 de Genesis, relevée sur la même famille de pages : la photo à gauche,
 l'accroche, la liste et le bouton à droite. **Le bouton « Apprendre » ouvre
 une fenêtre**, comme sur la référence (`InscriptionCourseModele`) : prénom,
@@ -2517,10 +2524,17 @@ dessin de Genesis, sur demande de Rémy :
 - **`/course-modele`**, l'opt-in, qui mène à la vidéo ;
 - **`/course-modele/video`**, `vsl-2025-fb` au mot près sauf le titre, de
   Rémy : « Ta formation offerte Rémy », au tutoiement et au prénom de
-  l'opt-in, sans virgule comme sur `/video-vsl`. Puis la
-  vidéo de `/video-vsl` (`di3bzcmi50`, la même que la page ClickFunnels),
+  l'opt-in, sans virgule comme sur `/video-vsl`. Puis la vidéo,
+  **« VSL 2027 (N) » chez Wistia (`58ivuyq0at`)**, donnée par Rémy le 24
+  novembre 2026 à la place de celle de `/video-vsl` (`videoCourseModele.video`),
   la phrase d'appel et le bouton, qui ouvre la prise d'appel **dans un
-  nouvel onglet** (la vidéo continue). Sur ClickFunnels, ce bouton ouvrait
+  nouvel onglet** (la vidéo continue). **Le lecteur reçoit l'adresse de
+  l'opt-in** (`LecteurVideo emailContact` : un petit script posé après
+  l'iframe ajoute `email=` à son adresse, lu dans `vsl-contact`) : Wistia
+  nomme ainsi le visiteur, et le CRM sait qui a vu la vidéo et jusqu'où
+  (colonne « Vidéo vue » et onglet « Vidéo » de la fiche). Le CRM suit cette
+  vidéo par l'étape `video` de son tunnel (`wistia` dans `funnels.ts`) :
+  **changer de vidéo, c'est changer les deux**. Sur ClickFunnels, ce bouton ouvrait
   une ancienne fenêtre d'opt-in, un reste qu'on ne reprend pas ;
 - **`/course-modele/appel`**, `appel-2025-fb` (le Calendly seul) sur la
   structure de `/reservation` : `FormulaireCalendly` **prérempli par le
@@ -2539,9 +2553,14 @@ dessin de Genesis, sur demande de Rémy :
   tunnel. **« thanks » doit rester dans l'adresse**, sur demande expresse de
   Rémy (elle s'appelait d'abord `/merci`). L'étape du CRM garde sa clé
   `merci` (`CompteurVue`, `ETAPES_MESUREES`). On y trouve le relevé de la réservation (`scriptCapture`), le titre et
-  l'alerte (`TitreConfirmationForm`), les consignes personnelles, **les deux
-  vidéos de `/thanks`** (`NumeroVideo`, sorti de `/thanks` pour servir aux
-  deux) et les preuves. **À défaut du prénom de Calendly, celui de
+  l'alerte (`TitreConfirmationForm`), les consignes personnelles, **deux
+  vidéos** (`NumeroVideo`, sorti de `/thanks` pour servir aux deux) et les
+  preuves. **La première est la sienne**, « Page de confirmation : 2027
+  (N) » (`2f33p4uyzi`, `confirmationCourseModele.video1`), donnée par Rémy
+  le 24 novembre 2026 ; la seconde reste celle de `/thanks`. Une vidéo
+  neuve a sa copie d'affiche dans `public/temoignages/<id>.jpg` : c'est ce
+  qui ouvre la route `/affiches` à son relais (relancer le serveur de
+  développement pour qu'il la voie). **À défaut du prénom de Calendly, celui de
   l'opt-in** (`prenomOptin`). En développement, `?apercu=1` remplace le
   contact par celui de l'adresse et le relevé avale `prenom` : ce repli se
   teste sans `apercu`.

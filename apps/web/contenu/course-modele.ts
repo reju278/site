@@ -59,12 +59,15 @@ export const optinCourseModele = {
   description:
     "Comment créer un tunnel de vente, pour vendre des offres digitales sur la durée",
   titre: "Stop aux sites, place aux tunnels de vente",
-  /** Surligné en bleu pâle, sous le titre. */
+  /** Surligné en bleu pâle, sous le titre. Le texte de
+   *  `funnels.club/course-2025`, version « Stop aux sites » (la page est
+   *  en test A/B avec « Nous allons mettre en place… »), donné par Rémy le
+   *  24 novembre 2026. */
   sousTitre: [
     "Comment créer un ",
     { gras: "tunnel de vente" },
-    ", pour vendre une ",
-    { gras: "formation en ligne" },
+    ", pour vendre des ",
+    { gras: "offres digitales*" },
     " sur la durée. Pas de surpromesses, juste du franc-parler, par quelqu’un qui l’a\u00a0fait.",
   ] as Segment[],
   /** La photo de Rémy au micro, celle de la page, recadrée et compressée. */
@@ -74,12 +77,16 @@ export const optinCourseModele = {
     hauteur: 630,
     alt: "Rémy Jupille assis à son bureau, devant un micro",
   },
+  /** L'astérisque des « offres digitales* » du sous-titre se retrouve ici,
+   *  en gras devant « formation en ligne », comme sur la page. */
   accroche: [
     "Comment développer un business de ",
-    { gras: "formation en ligne" },
-    " ou de ",
+    { gras: "*formation en ligne" },
+    ", ",
     { gras: "coaching" },
-    " à partir de ses connaissances, qui dégage des bénéfices en toute saison, et sur la\u00a0durée.",
+    " ou de ",
+    { gras: "prestation de service" },
+    " qui dégage des bénéfices en toute saison, et sur la\u00a0durée.",
   ] as Segment[],
   /** Les quatre points ; `surligne` est le mot posé sur le rose. Partout,
    *  les deux derniers mots sont liés par une espace insécable : sans elle,
@@ -117,10 +124,19 @@ export const optinCourseModele = {
 /**
  * La vidéo, `/course-modele/video` : la page de `funnels.club/vsl-2025-fb`,
  * au mot près (vouvoiement compris), sur le dessin de Genesis. La vidéo est
- * celle de `/video-vsl` (`videoVsl.video`, Wistia `di3bzcmi50`), la même que
- * sur la page ClickFunnels.
+ * « VSL 2027 (N) » chez Wistia (`58ivuyq0at`), donnée par Rémy le 24
+ * novembre 2026 à la place de celle de `/video-vsl` (`di3bzcmi50`). Son
+ * affiche est la copie de `public/temoignages`, relayée depuis Wistia
+ * (`app/affiches`). Le tunnel du CRM suit le visionnage de cette vidéo
+ * (`wistia` de l'étape `video`, `funnels.ts`) : les deux changent ensemble.
  */
 export const videoCourseModele = {
+  video: {
+    id: "58ivuyq0at",
+    titre: "La formation gratuite Funnels Club",
+    secondes: 1963,
+    affiche: "/temoignages/58ivuyq0at.jpg",
+  },
   titrePage: "Vidéo de formation gratuite",
   /* De Rémy, au tutoiement, suivi du prénom de l'opt-in : « Ta formation
      offerte Rémy ». La page ClickFunnels disait « Votre formation offerte ». */
@@ -165,4 +181,13 @@ export const appelCourseModele = {
 export const confirmationCourseModele = {
   titrePage: "Votre appel est réservé",
   barre: "Votre appel est réservé",
+  /* La vidéo de l'étape 1, « Page de confirmation : 2027 (N) » chez Wistia,
+     donnée par Rémy le 24 novembre 2026 à la place de celle de `/thanks`.
+     Le numéro, le titre et les consignes de l'étape restent ceux de
+     `/thanks`. */
+  video1: {
+    id: "2f33p4uyzi",
+    titre: "La vidéo de confirmation de ton appel",
+    secondes: 452,
+  },
 };

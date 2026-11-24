@@ -48,6 +48,7 @@ const CARTE = "bg-white p-4 shadow-[0_0_39px_-8px_rgba(0,0,0,0.15)] sm:p-7";
 
 export default function MerciCourseModele() {
   const { etape1, video2 } = confirmationThanks;
+  const { video1 } = confirmationCourseModele;
 
   return (
     <main
@@ -90,12 +91,13 @@ export default function MerciCourseModele() {
             {insecables(`: ${etape1.titre}`)}
           </h2>
           <div className="mt-4 w-full sm:mt-6">
+            {/* La vidéo de Course modèle, à la place de celle de `/thanks`. */}
             <LecteurVideo
-              id={etape1.video.id}
-              titre={etape1.video.titre}
-              secondes={etape1.video.secondes}
-              affiche={`/temoignages/${etape1.video.id}.jpg`}
-              afficheAlt={etape1.video.titre}
+              id={video1.id}
+              titre={video1.titre}
+              secondes={video1.secondes}
+              affiche={`/temoignages/${video1.id}.jpg`}
+              afficheAlt={video1.titre}
               natif
               carre
             />

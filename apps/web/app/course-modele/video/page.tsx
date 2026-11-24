@@ -9,7 +9,6 @@ import {
   videoCourseModele,
   type Segment,
 } from "@/contenu/course-modele";
-import { videoVsl } from "@/contenu/vsl";
 import { insecables } from "@/lib/typographie";
 import type { Metadata } from "next";
 import { Fragment } from "react";
@@ -21,8 +20,8 @@ import { preload } from "react-dom";
  * sur la structure de Formation Genesis (bannière, PT Serif, angles droits,
  * bouton bleu), sur demande de Rémy.
  *
- * Le titre, la vidéo (celle de `/video-vsl`, la même que la page
- * ClickFunnels), la phrase d'appel et le bouton. **Le bouton mène à la prise
+ * Le titre, la vidéo (« VSL 2027 (N) », `videoCourseModele.video`), la
+ * phrase d'appel et le bouton. **Le bouton mène à la prise
  * d'appel dans un nouvel onglet**, comme sur `/video-vsl` et dans l'espace de
  * Genesis : la vidéo reste ouverte derrière. Le nouvel onglet partage le
  * contact gardé par l'opt-in, dont Calendly se préremplit.
@@ -46,13 +45,14 @@ function Phrase({ segments }: { segments: Segment[] }) {
 }
 
 export default function VideoCourseModele() {
-  const { video } = videoVsl;
-  const { titre, appel, bouton } = videoCourseModele;
-  preload(video.affiche, {
+  const { video, titre, appel, bouton } = videoCourseModele;
+  // L'affiche relayée depuis Wistia (`app/affiches`), celle que le lecteur
+  // demande pour une copie de `public/temoignages`.
+  preload(`/affiches/${video.id}.webp`, {
     as: "image",
     fetchPriority: "high",
-    imageSrcSet: `${video.afficheMobile} 640w, ${video.affiche} 1280w`,
-    imageSizes: "(min-width: 960px) 896px, 100vw",
+    imageSrcSet: `/affiches/${video.id}-640.webp 640w, /affiches/${video.id}-960.webp 960w, /affiches/${video.id}.webp 1280w`,
+    imageSizes: "(min-width: 1216px) 1216px, 100vw",
   });
 
   return (
@@ -81,12 +81,14 @@ export default function VideoCourseModele() {
             titre={video.titre}
             secondes={video.secondes}
             affiche={video.affiche}
-            afficheMobile={video.afficheMobile}
             afficheAlt="La formation gratuite Funnels Club"
             natif
             prioritaire
             carre
             pilotable
+            // L'adresse de l'opt-in au lecteur : le CRM sait ensuite qui a
+            // vu la vidéo, et jusqu'où (tableau Inscription).
+            emailContact
           />
         </div>
         {/* La vitesse de lecture, sous le lecteur, sur demande de Rémy : elle

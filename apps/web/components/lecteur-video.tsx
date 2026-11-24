@@ -154,6 +154,22 @@ const TAILLES = "(min-width: 1216px) 1216px, 100vw";
  */
 const ECOUTE_WISTIA = `(function(){if(window.__wistiaPret)return;var p=window.__wistiaPret=new Set();window.addEventListener("message",function(e){if(typeof e.data!=="string"||e.data.indexOf('"transitiondone"')<0)return;var f=document.querySelectorAll("iframe[data-wistia]");for(var i=0;i<f.length;i++){if(f[i].contentWindow===e.source){var id=f[i].getAttribute("data-wistia");if(!p.has(id))(window.__wistiaPretA=window.__wistiaPretA||{})[id]=Math.round(performance.now());p.add(id);window.dispatchEvent(new CustomEvent("wistia-pret",{detail:id}));}}});})();`;
 
+/**
+ * **L'adresse de l'opt-in donnée au lecteur**, pour que Wistia sache qui
+ * regarde (`emailContact`) : le CRM relit ensuite, personne par personne, la
+ * part de la vidéo vue (dépôt `Funnels-Club`, `wistia.ts`).
+ *
+ * C'est l'option `email` de Wistia, passée comme toutes les options d'une
+ * iframe, dans son adresse. **Écrite dans le HTML, juste après l'iframe**, et
+ * non par React : l'adresse vit dans le navigateur (le contact de l'opt-in,
+ * `vsl-contact`, sept jours, recopiés ici parce que le script ne doit rien
+ * importer), et la poser après l'hydratation rechargerait un lecteur déjà
+ * prêt. Pendant la lecture du HTML, l'iframe n'a encore rien chargé : changer
+ * son adresse ne coûte rien. Même principe que `FormulaireCalendly`.
+ */
+const scriptEmailWistia = (id: string) =>
+  `(function(){try{var c=JSON.parse(localStorage.getItem("vsl-contact")||"null");if(!c||typeof c.email!=="string"||c.email.indexOf("@")<0||Date.now()-(c.t||0)>=6048e5)return;var f=document.querySelector('iframe[data-wistia="${id}"]');if(!f||/[?&]email=/.test(f.src))return;f.src=f.src+(f.src.indexOf("?")<0?"?":"&")+"email="+encodeURIComponent(c.email.trim());}catch(e){}})();`;
+
 declare global {
   interface Window {
     __wistiaPret?: Set<string>;
@@ -182,8 +198,16 @@ export function LecteurVideo({
   reglagesWistia = false,
   carre = false,
   pilotable = false,
+  emailContact = false,
   className,
 }: {
+  /**
+   * Donne au lecteur l'adresse laissée à l'opt-in (option `email` de
+   * Wistia), pour suivre le visionnage par personne : voir
+   * `scriptEmailWistia`. Seulement avec `natif` et `prioritaire`, où l'iframe
+   * est dans le HTML du serveur.
+   */
+  emailContact?: boolean;
   /**
    * L'iframe se laisse piloter par l'API de Wistia (`E-v1.js`), pour la
    * vitesse de lecture de la vidéo de Course modèle (`VitesseVideo`). Elle
@@ -529,12 +553,20 @@ export function LecteurVideo({
             allow="autoplay; fullscreen"
             allowFullScreen
             name={pilotable ? "wistia_embed" : undefined}
+            /* L'adresse de l'iframe change avant l'hydratation quand le
+               contact y est ajouté : voulu, voir `scriptEmailWistia`. */
+            suppressHydrationWarning={emailContact}
             className={cn(
               pilotable && "wistia_embed",
               "absolute -inset-[3px] size-[calc(100%+6px)] border-0",
               natif && !pret && !demandee && "opacity-0",
             )}
           />
+          {emailContact && natif && prioritaire ? (
+            <script
+              dangerouslySetInnerHTML={{ __html: scriptEmailWistia(id) }}
+            />
+          ) : null}
           </>
         ) : null}
 

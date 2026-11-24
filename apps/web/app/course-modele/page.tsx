@@ -76,7 +76,9 @@ export default function CourseModele() {
 
       {/* La photo à gauche, l'accroche, la liste et le bouton à droite.
           Empilés sur téléphone, la photo en premier comme sur la page
-          ClickFunnels. */}
+          ClickFunnels, **et un premier bouton juste sous elle** : sur
+          téléphone, la page en a deux, l'un sous la photo, l'autre au
+          bout de la liste. */}
       <section
         aria-label="Inscription"
         className="mx-auto grid max-w-[1065px] grid-cols-1 items-start gap-6 px-5 pt-6 sm:px-8 md:grid-cols-2 md:gap-8 md:pt-8"
@@ -89,6 +91,9 @@ export default function CourseModele() {
           fetchPriority="high"
           className="aspect-video w-full object-cover"
         />
+        <div className="md:hidden">
+          <InscriptionCourseModele />
+        </div>
         <div className="flex flex-col gap-4 text-[17px] leading-[1.5] sm:text-xl">
           <p className="text-pretty">
             <Phrase segments={accroche} />
