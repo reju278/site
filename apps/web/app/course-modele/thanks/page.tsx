@@ -76,7 +76,7 @@ export default function MerciCourseModele() {
           d'appel, sur demande de Rémy. */}
       <header className="mx-auto max-w-[960px] px-5 pt-8 text-center sm:px-8 sm:pt-12">
         <TitreConfirmationForm
-          classeTitre="text-center text-[clamp(1.75rem,7.5vw,2.75rem)] leading-[1.1]"
+          classeTitre="text-center text-[clamp(1.5rem,6.5vw,2.375rem)] leading-[1.15]"
           alerte={confirmationThanks.alerte}
           prenomOptin
         />
