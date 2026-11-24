@@ -2527,11 +2527,14 @@ dessin de Genesis, sur demande de Rémy :
   contact de l'opt-in** (prénom et e-mail ; nom et téléphone en `a1` quand on
   les a), le relevé des liens d'e-mail (`scriptContactEspace`), et le titre
   de Rémy, « Réserve ton appel ci-dessous Rémy » (`TitreReservationGenesis`,
-  `separateur=" "`). **L'événement est provisoire** : celui d'`appel-2025-fb`
-  (`appel-decouverte-yt-clone-3`), en attendant celui que Rémy crée. Le jour
-  où il change : son adresse et sa question du téléphone dans
-  `appelCourseModele`, et chez Calendly sa confirmation réglée sur
-  `/course-modele/thanks`, détails de l'événement transmis ;
+  `separateur=" "`). **L'événement est « Candidature Funnels Club (N) »**
+  (`candidature-funnels-club-yt-clone-2`), donné par Rémy : téléphone en
+  `a1`, et ses questions dans l'ordre de celui du VSL, que la confirmation
+  sait lire. Chez Calendly, sa confirmation se règle sur
+  `/course-modele/thanks`, détails de l'événement transmis. Le CRM le
+  reconnaît pour poser « Appel réservé » dans ClickFunnels
+  (`EVENEMENTS_APPEL_RESERVE`) : changer d'événement oblige à changer les
+  deux ;
 - **`/course-modele/thanks`**, `/thanks` sous une autre adresse, au dessin du
   tunnel. **« thanks » doit rester dans l'adresse**, sur demande expresse de
   Rémy (elle s'appelait d'abord `/merci`). L'étape du CRM garde sa clé

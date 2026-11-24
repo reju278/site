@@ -144,14 +144,18 @@ export const appelCourseModele = {
   titre: "Réserve ton appel ci-dessous",
   titreFormulaire: "Formulaire de réservation de l'appel",
   /**
-   * **PROVISOIRE : l'événement de `funnels.club/appel-2025-fb`**,
-   * « Candidature Funnels Club (FB) », en attendant celui que Rémy crée pour
-   * ce tunnel. Le jour où il change : la nouvelle adresse ici, sa question
-   * du téléphone dessous, et chez Calendly sa page de confirmation réglée
-   * sur `go.funnels.club/course-modele/thanks`, détails de l'événement
-   * transmis, sans quoi la confirmation ne connaît ni la date ni l'hôte.
+   * **« Candidature Funnels Club (N) »**, l'événement de ce tunnel, donné par
+   * Rémy le 24 novembre 2026. Ses questions sont dans l'ordre de celui du VSL
+   * (téléphone, produit, objectif, obstacle, investissement) : la
+   * confirmation, qui lit les réponses par leur rang (`answer_1`…), les
+   * nomme juste. Chez Calendly, sa page de confirmation se règle sur
+   * `go.funnels.club/course-modele/thanks`, détails de l'événement transmis,
+   * sans quoi la confirmation ne connaît ni la date ni l'hôte. Le CRM
+   * reconnaît l'événement pour poser « Appel réservé » dans ClickFunnels
+   * (`EVENEMENTS_APPEL_RESERVE`, dépôt `Funnels-Club`) : changer d'événement
+   * oblige à changer les deux.
    */
-  calendly: "https://calendly.com/funnels-club/appel-decouverte-yt-clone-3",
+  calendly: "https://calendly.com/funnels-club/candidature-funnels-club-yt-clone-2",
   /** « Téléphone / WhatsApp », la première question (`a1`), relevée par
    *  l'API de Calendly le 24 novembre 2026. */
   questionTelephone: "a1",

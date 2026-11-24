@@ -26,9 +26,9 @@ import type { Metadata } from "next";
  *   Calendly annonce : on ne défile jamais dedans ;
  * - les balises `utm_*` de la page passent à Calendly.
  *
- * **L'événement est provisoire** (voir `appelCourseModele.calendly`) : celui
- * de `appel-2025-fb`, en attendant celui que Rémy crée pour ce tunnel, dont
- * la confirmation renverra sur `/course-modele/thanks`.
+ * **L'événement est celui de ce tunnel**, « Candidature Funnels Club (N) »
+ * (voir `appelCourseModele.calendly`), dont la confirmation renvoie sur
+ * `/course-modele/thanks`.
  */
 export const metadata: Metadata = {
   title: { absolute: `${appelCourseModele.titrePage} · Funnels Club` },
