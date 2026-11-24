@@ -1,4 +1,5 @@
 import { BanniereGenesis } from "@/components/banniere-genesis";
+import { PiedGenesis } from "@/components/gabarit-genesis";
 import { CompteurVue } from "@/components/compteur-vue";
 import {
   FenetreCourseModele,
@@ -57,6 +58,7 @@ export default function CourseModele() {
   const { titre, sousTitre, photo, accroche, points } = optinCourseModele;
 
   return (
+    <>
     <main className="bg-[var(--genesis-fond)] text-[var(--genesis-encre)]">
       {/* Une seule fenêtre d'inscription pour toute la page : les boutons,
           la photo et la tuile du logo l'ouvrent, sur demande de Rémy. */}
@@ -137,5 +139,9 @@ export default function CourseModele() {
       </section>
       </FenetreCourseModele>
     </main>
+    {/* Le pied de page, sur l'opt-in seulement : le gabarit du tunnel ne le
+        pose plus (voir `layout.tsx`). */}
+    <PiedGenesis />
+    </>
   );
 }

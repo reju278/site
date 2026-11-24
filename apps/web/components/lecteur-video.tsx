@@ -216,6 +216,7 @@ export function LecteurVideo({
   afficheAlt,
   format,
   reglagesWistia = false,
+  couleur,
   carre = false,
   pilotable = false,
   emailContact = false,
@@ -312,6 +313,12 @@ export function LecteurVideo({
    * y règle sa couleur et ses appels à l'action.
    */
   reglagesWistia?: boolean;
+  /**
+   * La couleur du lecteur (`playerColor`, sans `#`), quand une page veut la
+   * sienne : la VSL de Course modèle prend le bleu de ses boutons, celui
+   * qui est aussi réglé sur la vidéo chez Wistia.
+   */
+  couleur?: string;
   className?: string;
 }) {
   const [lance, setLance] = useState(false);
@@ -429,7 +436,7 @@ export function LecteurVideo({
     };
   }, [natif, proche, lance, id]);
 
-  const options =
+  const optionsDeBase =
     natif && !demandee
       ? reglagesWistia
         ? OPTIONS_NATIF_WISTIA
@@ -437,6 +444,13 @@ export function LecteurVideo({
       : reglagesWistia
         ? OPTIONS_WISTIA
         : OPTIONS;
+  const options = couleur
+    ? (() => {
+        const o = new URLSearchParams(optionsDeBase);
+        o.set("playerColor", couleur);
+        return o;
+      })()
+    : optionsDeBase;
   const relais = sourcesAffiche(id, affiche);
 
   /* **La préconnexion aux serveurs de Wistia**, en mode natif seulement, là où

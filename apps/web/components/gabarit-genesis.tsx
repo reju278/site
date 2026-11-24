@@ -18,7 +18,19 @@ import { legalesVsl } from "@/contenu/vsl";
  * dans un nouvel onglet : une page commerciale européenne sans elles est
  * moins conforme, et elles restent dans un tunnel.
  */
-export function GabaritGenesis({ children }: { children: React.ReactNode }) {
+export function GabaritGenesis({
+  children,
+  pied = true,
+}: {
+  children: React.ReactNode;
+  /**
+   * Le pied de page (mentions légales et avertissements). Course modèle le
+   * retire de son gabarit et ne le pose que sur son opt-in (`PiedGenesis`),
+   * sur demande de Rémy : la vidéo, la prise d'appel et la confirmation
+   * s'en passent.
+   */
+  pied?: boolean;
+}) {
   return (
     <div
       data-genesis
@@ -31,10 +43,24 @@ export function GabaritGenesis({ children }: { children: React.ReactNode }) {
     >
       <PoliceGenesis />
       {children}
+      {pied ? (
+        <PiedGenesis />
+      ) : (
+        <div aria-hidden className="h-12 sm:h-16" />
+      )}
+    </div>
+  );
+}
+
+/** Le pied des pages au dessin de Genesis : l'air au-dessus, puis les
+ *  mentions légales (ouvertes dans un nouvel onglet) et les avertissements. */
+export function PiedGenesis() {
+  return (
+    <>
       <div aria-hidden className="h-16 sm:h-24" />
       <PiedImmersion>
         <MentionsLegales nouvelOnglet liens={legalesVsl} />
       </PiedImmersion>
-    </div>
+    </>
   );
 }

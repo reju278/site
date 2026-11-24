@@ -1,7 +1,5 @@
-import { BanniereGenesis } from "@/components/banniere-genesis";
 import { CompteurVue } from "@/components/compteur-vue";
 import { FormulaireCalendly } from "@/components/formulaire-calendly";
-import { TitreReservationGenesis } from "@/components/titre-reservation-genesis";
 import { reservationAppel } from "@/contenu/appel";
 import {
   appelCourseModele,
@@ -49,15 +47,9 @@ export default function AppelCourseModele() {
       />
       {/* La visite compte dans le tunnel « Course modèle » du CRM. */}
       <CompteurVue tunnel="course-modele" etape="appel" />
-      <BanniereGenesis />
-      <header className="mx-auto max-w-[960px] px-5 pt-5 sm:px-8 sm:pt-6">
-        <TitreReservationGenesis
-          titre={appelCourseModele.titre}
-          separateur=" "
-          className="text-[clamp(1.75rem,7.5vw,2.75rem)] leading-[1.1] font-bold tracking-[0.02em] text-balance"
-        />
-      </header>
-      <div className="mx-auto max-w-[72rem] px-5 pt-6 sm:px-8 sm:pt-8">
+      {/* Le formulaire d'abord, sans bannière ni logo ni titre, sur demande
+          de Rémy. */}
+      <div className="mx-auto max-w-[72rem] px-5 pt-6 sm:px-8 sm:pt-10">
         <FormulaireCalendly
           url={appelCourseModele.calendly}
           titre={appelCourseModele.titreFormulaire}

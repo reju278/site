@@ -42,7 +42,10 @@ export const TAG_HYROS_COURSE_MODELE = "!course-2025";
  */
 export const CHEMINS_COURSE_MODELE = {
   optin: RACINE_COURSE_MODELE,
-  video: `${RACINE_COURSE_MODELE}/video`,
+  /* **« vsl » doit être dans l'adresse de la vidéo**, sur demande de Rémy
+     (24 novembre 2026). L'ancienne, `/video`, y redirige. La clé reste
+     `video`, comme l'étape du CRM. */
+  video: `${RACINE_COURSE_MODELE}/vsl`,
   appel: `${RACINE_COURSE_MODELE}/appel`,
   /* **« thanks » doit être dans l'adresse de la confirmation**, sur demande
      expresse de Rémy : ne pas la renommer. */
@@ -156,7 +159,7 @@ export const optinCourseModele = {
 };
 
 /**
- * La vidéo, `/course-modele/video` : la page de `funnels.club/vsl-2025-fb`,
+ * La vidéo, `/course-modele/vsl` : la page de `funnels.club/vsl-2025-fb`,
  * au mot près (vouvoiement compris), sur le dessin de Genesis. La vidéo est
  * « VSL 2027 (N) » chez Wistia (`58ivuyq0at`), donnée par Rémy le 24
  * novembre 2026 à la place de celle de `/video-vsl` (`di3bzcmi50`). Son
@@ -170,6 +173,10 @@ export const videoCourseModele = {
     titre: "La formation gratuite Funnels Club",
     secondes: 1963,
     affiche: "/temoignages/58ivuyq0at.jpg",
+    /** La couleur du lecteur et de son cadre, sur demande de Rémy : celle
+     *  qui est réglée sur la vidéo chez Wistia, le bleu des boutons du
+     *  tunnel (`--genesis-bleu`, #438bf7). */
+    couleur: "438bf7",
   },
   titrePage: "Vidéo de formation gratuite",
   /* De Rémy, au tutoiement, suivi du prénom de l'opt-in : « Ta formation
@@ -179,7 +186,8 @@ export const videoCourseModele = {
     "Postulez maintenant pour un appel gratuit de 30 min afin de savoir si vous êtes admissible au programme et au coaching ",
     { gras: "“Funnels Club”" },
   ] as Segment[],
-  bouton: "Réservez votre appel gratuit",
+  /* Tutoyé, sur demande de Rémy. */
+  bouton: "Réserve ton appel gratuit",
 };
 
 /**

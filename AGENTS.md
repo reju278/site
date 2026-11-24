@@ -2551,16 +2551,26 @@ s'y branche au lieu de les recopier. Les champs aussi sont partagés,
 
 **Le tunnel a quatre pages, toutes sous `/course-modele`** (donc dans son
 gabarit, `CHEMINS_COURSE_MODELE`), copies de celles de ClickFunnels sur le
-dessin de Genesis, sur demande de Rémy :
+dessin de Genesis, sur demande de Rémy. **Seul l'opt-in porte la bannière
+et le pied de page** (`PiedGenesis`, le gabarit étant posé avec
+`pied={false}`) : la vidéo et la prise d'appel s'ouvrent sans bannière ni
+logo (la vidéo tout au centre, la prise d'appel directement sur Calendly,
+sans titre), et la confirmation garde sa bannière sans pied de page :
 
 - **`/course-modele`**, l'opt-in, qui mène à la vidéo ;
-- **`/course-modele/video`**, `vsl-2025-fb` au mot près sauf le titre, de
+- **`/course-modele/vsl`** (« vsl » doit être dans l'adresse, sur demande
+  de Rémy ; l'ancienne `/course-modele/video` y redirige), `vsl-2025-fb` au
+  mot près sauf le titre, de
   Rémy : « Ta formation offerte Rémy », au tutoiement et au prénom de
   l'opt-in, sans virgule comme sur `/video-vsl`. Puis la vidéo,
   **« VSL 2027 (N) » chez Wistia (`58ivuyq0at`)**, donnée par Rémy le 24
   novembre 2026 à la place de celle de `/video-vsl` (`videoCourseModele.video`),
-  la phrase d'appel et le bouton, qui ouvre la prise d'appel **dans un
-  nouvel onglet** (la vidéo continue). **Le lecteur reçoit l'adresse de
+  la phrase d'appel et le bouton (« Réserve ton appel gratuit »), qui ouvre
+  la prise d'appel **dans un nouvel onglet** (la vidéo continue). **Le
+  lecteur prend le bleu des boutons** (`couleur` de `LecteurVideo`, #438bf7,
+  la couleur réglée sur la vidéo chez Wistia, au lieu du #045ee6 que le site
+  impose ailleurs) et la vidéo a un cadre fin de ce bleu, sur demande de
+  Rémy. **Le lecteur reçoit l'adresse de
   l'opt-in** (`LecteurVideo emailContact` : un petit script posé après
   l'iframe ajoute `email=` à son adresse, lu dans `vsl-contact`) : Wistia
   nomme ainsi le visiteur, et le CRM sait qui a vu la vidéo et jusqu'où

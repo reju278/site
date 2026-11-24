@@ -177,14 +177,18 @@ type Hyros = {
  * morceaux sont dans le cache du navigateur.
  */
 function Prechargement() {
-  const { id } = videoCourseModele.video;
+  const { id, couleur } = videoCourseModele.video;
   return (
     <>
       <link rel="prefetch" href={APRES_INSCRIPTION} as="document" />
       <link rel="prefetch" href={`/affiches/${id}.webp`} as="image" />
       <link rel="prefetch" href={`/affiches/${id}-640.webp`} as="image" />
       <iframe
-        src={adresseLecteurWistia(id, { doNotTrack: "true", preload: "auto" })}
+        src={adresseLecteurWistia(id, {
+          playerColor: couleur,
+          doNotTrack: "true",
+          preload: "auto",
+        })}
         title=""
         aria-hidden
         tabIndex={-1}

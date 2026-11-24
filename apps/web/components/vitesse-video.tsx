@@ -104,7 +104,7 @@ export function VitesseVideo({
   const etiquette = useId();
 
   return (
-    <div className="flex flex-wrap items-center gap-x-3 gap-y-2 sm:justify-end">
+    <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
       <span
         id={etiquette}
         className="font-[family-name:var(--font-genesis-bouton)] text-sm font-medium"

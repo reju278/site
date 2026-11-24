@@ -3,8 +3,10 @@ import type { Metadata } from "next";
 
 /**
  * Le cadre de « Course modèle », servie sur `go.funnels.club/course-modele` :
- * le gabarit de Formation Genesis, tel quel (polices, jetons, mentions
- * légales et avertissements en pied de page), sur demande de Rémy.
+ * le gabarit de Formation Genesis (polices, jetons), sur demande de Rémy.
+ * **Le pied de page n'est que sur l'opt-in** (`PiedGenesis`, posé par la
+ * page) : la vidéo, la prise d'appel et la confirmation s'en passent, sur
+ * demande de Rémy le 24 novembre 2026.
  *
  * Un tunnel : hors de l'en-tête et du pied du site (`lib/tunnels.ts`),
  * interdit d'index, absent de `sitemap.ts`, thème clair forcé par
@@ -17,5 +19,5 @@ export const metadata: Metadata = {
 export default function LayoutCourseModele({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  return <GabaritGenesis>{children}</GabaritGenesis>;
+  return <GabaritGenesis pied={false}>{children}</GabaritGenesis>;
 }
