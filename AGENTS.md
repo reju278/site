@@ -2623,7 +2623,12 @@ sans titre), et la confirmation garde sa bannière sans pied de page :
   par la poignée Wistia de `lib/wistia-poignee.ts`, partagée avec
   `VitesseVideo`), pas l'adresse e-mail, que le CRM ne relit que toutes les
   demi-heures et qu'une adresse publique ne doit pas exposer. Sans trace,
-  « Finis la vidéo de formation avant ton rendez-vous ». **Le prénom du
+  « Finis la vidéo de formation avant ton rendez-vous ». **La VSL relève aussi un lien
+  d'e-mail** (`scriptContactEspace`, comme la prise d'appel) : la séquence
+  ClickFunnels « Course modèle : séquence email (5 jours) » y mène avec
+  `?prenom=…&email=…&he=…&el=email-cm-sN`, variables en `| url_encode` ;
+  le titre prend le prénom et Wistia l'adresse, même sur un autre appareil.
+  **Le prénom du
   titre est une variable** : celui de Calendly (redirection avec les
   détails), sinon celui de l'opt-in gardé dans ce navigateur, sinon
   « Félicitations, ton appel est réservé ! ». **Sous la vidéo 1, le mot

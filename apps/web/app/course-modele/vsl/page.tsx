@@ -1,4 +1,5 @@
 import { BoutonGenesis } from "@/components/bouton-genesis";
+import { scriptContactEspace } from "@/lib/contact-lien";
 import { SuiviArretVideo } from "@/components/arret-video";
 import { CompteurVue } from "@/components/compteur-vue";
 import {
@@ -89,6 +90,18 @@ export default async function VideoCourseModele() {
       <link rel="preconnect" href="https://fast.wistia.com" />
       <link rel="preconnect" href="https://embed-ssl.wistia.com" />
       <link rel="preconnect" href="https://embed-cloudfront.wistia.com" />
+      {/* **Le relevé d'un lien d'e-mail**, en HTML brut et avant le lecteur,
+          comme sur la prise d'appel : les e-mails de la séquence portent
+          `?prenom=…&email=…` (avec `| url_encode`). Rangé avec le contact de
+          l'opt-in, il donne le prénom au titre et l'adresse à Wistia (le
+          visionnage par personne) même sur un autre appareil. L'e-mail reste
+          dans l'adresse pour Hyros. Voir `lib/contact-lien.ts`. */}
+      <div
+        hidden
+        dangerouslySetInnerHTML={{
+          __html: `<script>${scriptContactEspace}</script>`,
+        }}
+      />
       {/* La visite compte dans le tunnel « Course modèle » du CRM. */}
       <CompteurVue tunnel="course-modele" etape="video" />
       {/* Où la vidéo s'arrête, gardé dans le navigateur : la confirmation
