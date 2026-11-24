@@ -493,7 +493,15 @@ function Formulaire() {
                   onClick={() => void choisir(reponse.valeur)}
                   className="flex min-h-[64px] w-full items-center gap-3 rounded-none border border-black/45 bg-white px-4 py-3 text-left text-[17px] leading-snug text-pretty text-[var(--genesis-encre)] transition-[border-color,box-shadow,background-color] hover:border-[var(--genesis-encre)] hover:bg-[var(--genesis-surligne)] focus-visible:border-[var(--genesis-encre)] focus-visible:shadow-[0_0_0_1px_var(--genesis-encre)] focus-visible:outline-none"
                 >
-                  <span className="min-w-0 flex-1">{reponse.texte}</span>
+                  <span className="min-w-0 flex-1">
+                    {reponse.texte.map((morceau, i) =>
+                      typeof morceau === "string" ? (
+                        <Fragment key={i}>{morceau}</Fragment>
+                      ) : (
+                        <strong key={i}>{morceau.gras}</strong>
+                      ),
+                    )}
+                  </span>
                   <ArrowRight aria-hidden className="size-5 shrink-0" />
                 </button>
               ))}

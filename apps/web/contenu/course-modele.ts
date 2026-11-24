@@ -124,20 +124,21 @@ export const optinCourseModele = {
          tutoyé et au prénom. Pas de bouton : on choisit, et c'est parti. */
       situation: { question: ["Dernière étape, qu'est-ce qui te décrit le mieux, {prenom} ?"], bouton: "Voir la vidéo GRATUITE" },
     },
-    /** Les deux réponses du dernier temps, de Rémy. `libelle` est ce que
+    /** Les deux réponses du dernier temps, de Rémy, « PAS » et « DÉJÀ » en
+     *  gras à sa demande. `libelle` est ce que
      *  gardent le CRM (colonne « Situation ») et ClickFunnels (champ
      *  personnalisé `course_modele_situation`) ; `suite`, la phrase du
      *  chargement qui suit. */
     situations: [
       {
         valeur: "zero",
-        texte: "Je n'ai PAS encore d'offre à vendre, je démarre de zéro",
+        texte: ["Je n'ai ", { gras: "PAS" }, " encore d'offre à vendre, je démarre de zéro"] as Segment[],
         libelle: "Démarre de zéro",
         suite: "La formation est idéale pour démarrer de zéro.",
       },
       {
         valeur: "activite",
-        texte: "J'ai DÉJÀ une activité, et je veux la développer",
+        texte: ["J'ai ", { gras: "DÉJÀ" }, " une activité, et je veux la développer"] as Segment[],
         libelle: "Activité à développer",
         suite: "La formation est idéale pour développer ton activité.",
       },
