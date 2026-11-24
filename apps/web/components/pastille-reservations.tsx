@@ -18,7 +18,7 @@ export function PastilleReservations({ nombre }: { nombre: number }) {
   return (
     <p
       data-rond
-      className="inline-flex items-center gap-2.5 rounded-full border border-black/10 bg-white px-4 py-2 font-[family-name:var(--font-genesis-bouton)] text-sm leading-snug text-[var(--genesis-encre)] shadow-[0_1px_8px_-2px_rgba(0,0,0,0.12)]"
+      className="inline-flex items-center gap-2.5 rounded-full border border-black/10 bg-white px-4 py-2 font-[family-name:var(--font-genesis-bouton)] text-sm leading-snug text-[var(--genesis-encre)] shadow-[0_1px_8px_-2px_rgba(0,0,0,0.12)] max-sm:text-[13px]"
     >
       <span aria-hidden className="relative flex size-2.5 shrink-0">
         <span
@@ -30,13 +30,23 @@ export function PastilleReservations({ nombre }: { nombre: number }) {
           className="relative inline-flex size-2.5 rounded-full bg-[var(--genesis-vert)]"
         />
       </span>
-      <span className="text-left text-pretty">
+      {/* **Sur une ligne sur téléphone**, sur demande de Rémy : la phrase
+          entière y demandait 439 px pour 281 de place (mesuré à 375 px de
+          large), la courte en prend 256 à 13 px. L'ordinateur garde la
+          phrase entière. */}
+      <span className="text-left text-pretty max-sm:hidden">
         <strong>{nombre} personnes</strong> ont réservé leur appel au cours
         des dernières 24&nbsp;heures
+      </span>
+      <span className="text-left sm:hidden">
+        <strong>{nombre} personnes</strong> ont réservé leur appel en
+        24&nbsp;h
       </span>
     </p>
   );
 }
 
-/** En dessous, la pastille se tait : quelques réservations ne disent rien. */
-export const SEUIL_PASTILLE = 10;
+/** En dessous, la pastille se tait : quelques réservations ne disent rien.
+ *  En développement, elle se montre toujours, pour qu'on la voie avec les
+ *  quelques réservations du CRM de développement. */
+export const SEUIL_PASTILLE = process.env.NODE_ENV === "production" ? 10 : 0;

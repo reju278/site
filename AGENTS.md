@@ -2578,7 +2578,10 @@ sans titre), et la confirmation garde sa bannière sans pied de page :
   (`revalidate`). Rémy demandait un chiffre au hasard entre 24 et 35 : un
   chiffre inventé présenté comme réel est une pratique commerciale trompeuse,
   et le vrai tombe dans cette fourchette. La pastille se tait sous
-  `SEUIL_PASTILLE` (10) et quand le CRM ne répond pas. **Le lecteur reçoit l'adresse de
+  `SEUIL_PASTILLE` (10 en production, toujours visible en développement) et
+  quand le CRM ne répond pas. **Sur téléphone, une ligne** : « N personnes
+  ont réservé leur appel en 24 h » à 13 px (la phrase entière ne tenait
+  pas : 439 px pour 281). **Le lecteur reçoit l'adresse de
   l'opt-in** (`LecteurVideo emailContact` : un petit script posé après
   l'iframe ajoute `email=` à son adresse, lu dans `vsl-contact`) : Wistia
   nomme ainsi le visiteur, et le CRM sait qui a vu la vidéo et jusqu'où
