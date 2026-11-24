@@ -1390,8 +1390,12 @@ body:has([role="dialog"][data-state="open"])
      l'optin, le jaune de Notion donné par Rémy, #f9f3e2.
    - `--genesis-gris` : le texte grisé dans les champs, #767680. Gris, mais
      à 4,5:1 sur le blanc : un texte d'exemple reste du texte.
-   - `--genesis-encre` : le texte, noir, comme la référence. */
+   - `--genesis-encre` : le texte, noir, comme la référence.
+   - `--destructive`, redéfini ici : le rouge des erreurs des formulaires
+     (phrase sous le bouton, bordures, case), **vif** sur demande de Rémy
+     au lieu de la brique du site. #e01b24 tient 4,8:1 sur le blanc. */
 :root:has([data-genesis]) {
+  --destructive: #e01b24;
   --genesis-fond: #fdfdfd;
   --genesis-bleu: #438bf7;
   --genesis-surligne: #e8f1fb;

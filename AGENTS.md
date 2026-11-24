@@ -2497,11 +2497,15 @@ la tuile du logo l'ouvrent (`OuvreInscription` ; la bannière prend
 `autourDuLogo`). **Elle a les trois temps de l'optin de Genesis**, sur
 demande de Rémy le 24 novembre 2026 : le prénom et le nom, l'e-mail et le
 consentement, le téléphone. La question de chaque temps est son titre, le
-bouton est partout « Voir la vidéo GRATUITE » (jamais « Continuer »),
+bouton est partout « Voir la vidéo GRATUITE » (jamais « Continuer »), sans
+bouton « Retour »,
 et libellés, exemples et erreurs sont ceux de Genesis (`optinGenesis.formulaire`).
 Le téléphone est le champ partagé des deux (`ChampTelephoneGenesis`,
 `champ-genesis.tsx`). **Sur téléphone, la fenêtre se pose haut**
-(`top-[10svh]`) : le clavier ne la recouvre pas. Rendue dans un portail,
+(`top-[10svh]`) : le clavier ne la recouvre pas ; sa croix est hors du
+cadre (au-dessus sur téléphone, à côté sur ordinateur). **Le rouge des
+erreurs est vif** sur les pages au dessin de Genesis (`--destructive`
+redéfini dans `globals.css`, #e01b24). Rendue dans un portail,
 hors de `[data-genesis]`, elle écrit ses `rounded-none` elle-même. La photo vient du
 fichier d'origine de ClickFunnels, réduite à 1 120 px (89 Ko). Sur téléphone,
 la coupure du titre de la fenêtre saute, sinon il prenait trois lignes.

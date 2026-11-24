@@ -22,7 +22,7 @@ import {
   DialogTitle,
 } from "@repo/ui/components/dialog";
 import { numeroInternational, PAYS } from "@/lib/telephone";
-import { ArrowLeft, LoaderCircle, X } from "lucide-react";
+import { LoaderCircle, X } from "lucide-react";
 import {
   createContext,
   useCallback,
@@ -179,8 +179,8 @@ type Etape = "nom" | "email" | "telephone";
  *
  * La question de chaque temps est le titre de la fenêtre, centré (la croix
  * est hors du cadre).
- * Revenir en arrière retrouve ce qu'on avait tapé. Le changement de temps
- * place le curseur dans le premier champ du suivant.
+ * **Pas de bouton « Retour »**, sur demande de Rémy : on ne fait qu'avancer.
+ * Le changement de temps place le curseur dans le premier champ du suivant.
  */
 function Formulaire() {
   const { fenetre } = optinCourseModele;
@@ -352,8 +352,6 @@ function Formulaire() {
   };
 
   const { question, bouton } = fenetre.etapes[etape];
-  const precedente: Etape | null =
-    etape === "telephone" ? "email" : etape === "email" ? "nom" : null;
   const telephoneFaux =
     (tente && manque.telephone) || erreur === fenetre.erreurs.telephone;
 
@@ -479,16 +477,6 @@ function Formulaire() {
             </p>
           ) : null}
 
-          {precedente ? (
-            <button
-              type="button"
-              onClick={() => aller(precedente)}
-              className="inline-flex min-h-10 items-center gap-1.5 self-center text-sm text-[#60606b] underline-offset-4 hover:text-[var(--genesis-encre)] hover:underline"
-            >
-              <ArrowLeft aria-hidden className="size-4" />
-              {fenetre.retour}
-            </button>
-          ) : null}
         </fieldset>
       </form>
     </>
