@@ -28,7 +28,7 @@ import type { Metadata } from "next";
  *
  * **L'événement est provisoire** (voir `appelCourseModele.calendly`) : celui
  * de `appel-2025-fb`, en attendant celui que Rémy crée pour ce tunnel, dont
- * la confirmation renverra sur `/course-modele/merci`.
+ * la confirmation renverra sur `/course-modele/thanks`.
  */
 export const metadata: Metadata = {
   title: { absolute: `${appelCourseModele.titrePage} · Funnels Club` },

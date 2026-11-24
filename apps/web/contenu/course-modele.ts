@@ -42,7 +42,9 @@ export const CHEMINS_COURSE_MODELE = {
   optin: RACINE_COURSE_MODELE,
   video: `${RACINE_COURSE_MODELE}/video`,
   appel: `${RACINE_COURSE_MODELE}/appel`,
-  merci: `${RACINE_COURSE_MODELE}/merci`,
+  /* **« thanks » doit être dans l'adresse de la confirmation**, sur demande
+     expresse de Rémy : ne pas la renommer. */
+  thanks: `${RACINE_COURSE_MODELE}/thanks`,
 } as const;
 
 /** Où l'on arrive après l'inscription : la vidéo. */
@@ -146,7 +148,7 @@ export const appelCourseModele = {
    * « Candidature Funnels Club (FB) », en attendant celui que Rémy crée pour
    * ce tunnel. Le jour où il change : la nouvelle adresse ici, sa question
    * du téléphone dessous, et chez Calendly sa page de confirmation réglée
-   * sur `go.funnels.club/course-modele/merci`, détails de l'événement
+   * sur `go.funnels.club/course-modele/thanks`, détails de l'événement
    * transmis, sans quoi la confirmation ne connaît ni la date ni l'hôte.
    */
   calendly: "https://calendly.com/funnels-club/appel-decouverte-yt-clone-3",
@@ -155,7 +157,7 @@ export const appelCourseModele = {
   questionTelephone: "a1",
 };
 
-/** La confirmation, `/course-modele/merci` : `/thanks`, au dessin du tunnel. */
+/** La confirmation, `/course-modele/thanks` : `/thanks`, au dessin du tunnel. */
 export const confirmationCourseModele = {
   titrePage: "Votre appel est réservé",
   barre: "Votre appel est réservé",

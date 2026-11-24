@@ -2531,9 +2531,11 @@ dessin de Genesis, sur demande de Rémy :
   (`appel-decouverte-yt-clone-3`), en attendant celui que Rémy crée. Le jour
   où il change : son adresse et sa question du téléphone dans
   `appelCourseModele`, et chez Calendly sa confirmation réglée sur
-  `/course-modele/merci`, détails de l'événement transmis ;
-- **`/course-modele/merci`**, `/thanks` sous une autre adresse, au dessin du
-  tunnel : le relevé de la réservation (`scriptCapture`), le titre et
+  `/course-modele/thanks`, détails de l'événement transmis ;
+- **`/course-modele/thanks`**, `/thanks` sous une autre adresse, au dessin du
+  tunnel. **« thanks » doit rester dans l'adresse**, sur demande expresse de
+  Rémy (elle s'appelait d'abord `/merci`). L'étape du CRM garde sa clé
+  `merci` (`CompteurVue`, `ETAPES_MESUREES`). On y trouve le relevé de la réservation (`scriptCapture`), le titre et
   l'alerte (`TitreConfirmationForm`), les consignes personnelles, **les deux
   vidéos de `/thanks`** (`NumeroVideo`, sorti de `/thanks` pour servir aux
   deux) et les preuves. **À défaut du prénom de Calendly, celui de

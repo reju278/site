@@ -16,7 +16,7 @@ import { insecables } from "@/lib/typographie";
 import type { Metadata } from "next";
 
 /**
- * La confirmation de Course modèle, `go.funnels.club/course-modele/merci`,
+ * La confirmation de Course modèle, `go.funnels.club/course-modele/thanks`,
  * où Calendly renverra une fois l'appel réservé : **`go.funnels.club/thanks`
  * sous une autre adresse**, sur demande de Rémy, au dessin du tunnel (comme
  * `/reservation-thanks` pour Genesis).
@@ -40,7 +40,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: { absolute: `${confirmationCourseModele.titrePage} · Funnels Club` },
   description: identiteThanks.description,
-  alternates: { canonical: `https://go.funnels.club${CHEMINS_COURSE_MODELE.merci}` },
+  alternates: { canonical: `https://go.funnels.club${CHEMINS_COURSE_MODELE.thanks}` },
 };
 
 /** La carte blanche à ombre douce du tunnel, celle de la fenêtre d'inscription. */
