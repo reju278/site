@@ -346,7 +346,7 @@ export const optinCourseModeleB = {
      note. */
   titre: [
     "Comment créer un ",
-    { gras: "tunnel" },
+    { gras: "tunnel de vente" },
     " pour attirer des ",
     { gras: "clients qualifiés" },
     " et vendre des ",
