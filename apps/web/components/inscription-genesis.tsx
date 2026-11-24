@@ -6,9 +6,8 @@ import {
 } from "@/app/formation-genesis/actions";
 import { BoutonGenesis } from "@/components/bouton-genesis";
 import {
-  CADRE_GENESIS as CADRE,
   ChampGenesis as Champ,
-  LIBELLE_GENESIS as LIBELLE,
+  ChampTelephoneGenesis,
 } from "@/components/champ-genesis";
 import { ID_FORMULAIRE_GENESIS } from "@/components/maquette-lecteur-genesis";
 import {
@@ -19,8 +18,7 @@ import {
 } from "@/contenu/formation-genesis";
 import { API_FUNNELS, CLE_CONTACT_VSL, legalesVsl } from "@/contenu/vsl";
 import { numeroInternational, PAYS } from "@/lib/telephone";
-import { cn } from "@repo/ui/lib/utils";
-import { ArrowLeft, ChevronDown, LoaderCircle } from "lucide-react";
+import { ArrowLeft, LoaderCircle } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 type Etape = "nom" | "email" | "telephone";
@@ -231,7 +229,6 @@ export function InscriptionGenesis() {
   const { question, bouton } = formulaire.etapes[etape];
   const precedente: Etape | null =
     etape === "telephone" ? "email" : etape === "email" ? "nom" : null;
-  const choisi = PAYS.find((p) => p.code === pays) ?? PAYS[0];
   const telephoneFaux =
     (tente && manque.telephone) || erreur === formulaire.erreurs.telephone;
 
@@ -330,61 +327,17 @@ export function InscriptionGenesis() {
           ) : null}
 
           {etape === "telephone" ? (
-            <div className="grid">
-              <label htmlFor="genesis-telephone" className={LIBELLE}>
-                {formulaire.telephone}
-              </label>
-              {/* Un seul cadre autour du pays et du numéro, qui répond au
-                  focus comme les autres champs. Le menu est un `select`
-                  natif posé sur le drapeau : sur téléphone, c'est la roue
-                  du système qui s'ouvre. */}
-              <div
-                className={cn(
-                  CADRE,
-                  "flex focus-within:border-[var(--genesis-encre)] focus-within:shadow-[0_0_0_1px_var(--genesis-encre)]",
-                  telephoneFaux &&
-                    "border-destructive focus-within:border-destructive focus-within:shadow-[0_0_0_1px_var(--destructive)] hover:border-destructive",
-                )}
-              >
-                <div className="relative flex shrink-0 items-center gap-1.5 border-r border-black/15 px-3">
-                  <span aria-hidden className="text-xl leading-none">
-                    {choisi.drapeau}
-                  </span>
-                  <span aria-hidden className="text-base tabular-nums">
-                    {choisi.indicatif}
-                  </span>
-                  <ChevronDown aria-hidden className="size-4 text-[#60606b]" />
-                  <select
-                    name="country"
-                    autoComplete="country"
-                    aria-label={formulaire.pays}
-                    value={pays}
-                    onChange={(e) => setPays(e.target.value)}
-                    className="absolute inset-0 cursor-pointer opacity-0"
-                  >
-                    {PAYS.map((p) => (
-                      <option key={p.code} value={p.code}>
-                        {p.drapeau} {p.nom} ({p.indicatif})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <input
-                  ref={premierChamp}
-                  id="genesis-telephone"
-                  name="tel"
-                  type="tel"
-                  inputMode="tel"
-                  autoComplete="tel-national"
-                  aria-required
-                  placeholder={choisi.exemple}
-                  aria-invalid={telephoneFaux}
-                  value={telephone}
-                  onChange={(e) => setTelephone(e.target.value)}
-                  className="min-w-0 flex-1 bg-transparent px-4 text-[17px] text-[var(--genesis-encre)] outline-none placeholder:text-[var(--genesis-gris)] focus-visible:outline-none"
-                />
-              </div>
-            </div>
+            <ChampTelephoneGenesis
+              ref={premierChamp}
+              id="genesis-telephone"
+              libelle={formulaire.telephone}
+              libellePays={formulaire.pays}
+              pays={pays}
+              onPays={setPays}
+              valeur={telephone}
+              onValeur={setTelephone}
+              faux={telephoneFaux}
+            />
           ) : null}
 
           <BoutonGenesis soumettre disabled={envoi} className="mt-1">

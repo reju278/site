@@ -1,6 +1,10 @@
 import { BanniereGenesis } from "@/components/banniere-genesis";
 import { CompteurVue } from "@/components/compteur-vue";
-import { InscriptionCourseModele } from "@/components/inscription-course-modele";
+import {
+  FenetreCourseModele,
+  InscriptionCourseModele,
+  OuvreInscription,
+} from "@/components/inscription-course-modele";
 import { optinCourseModele, type Segment } from "@/contenu/course-modele";
 import { insecables } from "@/lib/typographie";
 import type { Metadata } from "next";
@@ -54,9 +58,18 @@ export default function CourseModele() {
 
   return (
     <main className="bg-[var(--genesis-fond)] text-[var(--genesis-encre)]">
+      {/* Une seule fenêtre d'inscription pour toute la page : les boutons,
+          la photo et la tuile du logo l'ouvrent, sur demande de Rémy. */}
+      <FenetreCourseModele>
       {/* La visite compte dans le tunnel « Course modèle » du CRM. */}
       <CompteurVue tunnel="course-modele" etape="optin" />
-      <BanniereGenesis />
+      <BanniereGenesis
+        autourDuLogo={(tuile) => (
+          <OuvreInscription libelle="Voir la vidéo gratuite">
+            {tuile}
+          </OuvreInscription>
+        )}
+      />
 
       <header className="mx-auto max-w-[960px] px-5 pt-5 sm:px-8 sm:pt-6">
         {/* Le seul `h1` de la page : le titre de la page ClickFunnels.
@@ -88,14 +101,16 @@ export default function CourseModele() {
         aria-label="Inscription"
         className="mx-auto grid max-w-[1142px] grid-cols-1 items-start gap-6 px-5 pt-6 sm:px-8 md:grid-cols-2 md:items-center md:gap-8 md:pt-8"
       >
-        <img
-          src={photo.src}
-          alt={photo.alt}
-          width={photo.largeur}
-          height={photo.hauteur}
-          fetchPriority="high"
-          className="aspect-video w-full object-cover"
-        />
+        <OuvreInscription libelle="Voir la vidéo gratuite" className="w-full">
+          <img
+            src={photo.src}
+            alt={photo.alt}
+            width={photo.largeur}
+            height={photo.hauteur}
+            fetchPriority="high"
+            className="aspect-video w-full object-cover"
+          />
+        </OuvreInscription>
         <div className="md:hidden">
           <InscriptionCourseModele />
         </div>
@@ -120,6 +135,7 @@ export default function CourseModele() {
           <InscriptionCourseModele />
         </div>
       </section>
+      </FenetreCourseModele>
     </main>
   );
 }

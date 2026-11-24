@@ -1,4 +1,5 @@
 import { LogoFunnels } from "@/components/logo-funnels";
+import type { ReactNode } from "react";
 
 /**
  * Le haut des pages du tunnel Formation Genesis, relevé sur l'optin
@@ -23,9 +24,16 @@ import { LogoFunnels } from "@/components/logo-funnels";
  */
 export function BanniereGenesis({
   libelle = "Formation gratuite",
+  autourDuLogo,
 }: {
   libelle?: string;
+  /**
+   * Ce qui entoure la tuile du logo, quand elle fait quelque chose : sur
+   * l'opt-in de Course modèle, elle ouvre la fenêtre d'inscription.
+   */
+  autourDuLogo?: (tuile: ReactNode) => ReactNode;
 }) {
+  const tuile = <LogoFunnels className="size-14 sm:size-[72px]" />;
   return (
     <div>
       <div className="bg-[var(--genesis-fond)]">
@@ -50,7 +58,9 @@ export function BanniereGenesis({
       {/* La tuile, à cheval sur le bas de la bannière : 40 px dedans, le
           reste dessous, comme sur la référence. */}
       <div className="mx-auto max-w-[960px] px-5 sm:px-8">
-        <LogoFunnels className="-mt-7 size-14 sm:-mt-10 sm:size-[72px]" />
+        <div className="-mt-7 flex w-fit sm:-mt-10">
+          {autourDuLogo ? autourDuLogo(tuile) : tuile}
+        </div>
       </div>
     </div>
   );

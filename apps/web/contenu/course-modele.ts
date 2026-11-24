@@ -1,3 +1,5 @@
+import { optinGenesis } from "@/contenu/formation-genesis";
+
 /**
  * « Course modèle », servie sur `go.funnels.club/course-modele` : la copie de
  * l'optin ClickFunnels `funnels.club/course-2025-fb`, sur demande de Rémy,
@@ -99,25 +101,24 @@ export const optinCourseModele = {
   ] as { surligne?: string; suite: string }[],
   /** Écrit en minuscules, rendu en capitales par le bouton. */
   bouton: "Apprendre",
+  /**
+   * La fenêtre d'inscription, **en trois temps comme l'optin de Genesis**, sur
+   * demande de Rémy le 24 novembre 2026 : le prénom et le nom, l'e-mail et le
+   * consentement, le téléphone. Ses libellés, exemples, consentement et
+   * erreurs sont ceux de Genesis, écrits une seule fois ; seul le bouton est
+   * à elle. La question de chaque temps est le titre de la fenêtre (il
+   * remplace « Entrez vos informations pour découvrir la stratégie : »).
+   */
   fenetre: {
-    /** Sur deux lignes, coupées là où la page les coupe. */
-    titre: ["Entrez vos informations", "pour découvrir la stratégie :"],
-    prenom: "Prénom",
-    email: "Email",
-    consentement:
-      "J'accepte de recevoir les emails de Funnels Club (désabonnement possible à tout moment) et je valide la ",
-    lienConfidentialite: "Politique de confidentialité",
-    bouton: "Voir la vidéo",
-    /* PROVISOIRES, de l'agent, sur ceux de Genesis : les textes grisés
-       dans les champs, l'envoi, la croix et les erreurs. */
-    exemples: { prenom: "Votre prénom", email: "Votre adresse email" },
-    envoi: "Envoi…",
-    fermer: "Fermer",
-    erreurs: {
-      champs: "Veuillez remplir tous les champs obligatoires pour continuer.",
-      email: "Veuillez indiquer une adresse email valide.",
-      envoi: "L'envoi n'est pas passé. Vérifiez votre email et réessayez.",
+    ...optinGenesis.formulaire,
+    /* Le même bouton aux trois temps, sur demande de Rémy : « Voir la vidéo
+       GRATUITE », jamais « Continuer ». */
+    etapes: {
+      nom: { question: optinGenesis.formulaire.etapes.nom.question, bouton: "Voir la vidéo GRATUITE" },
+      email: { question: optinGenesis.formulaire.etapes.email.question, bouton: "Voir la vidéo GRATUITE" },
+      telephone: { question: optinGenesis.formulaire.etapes.telephone.question, bouton: "Voir la vidéo GRATUITE" },
     },
+    fermer: "Fermer",
   },
 };
 

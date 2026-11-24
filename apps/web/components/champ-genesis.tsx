@@ -1,10 +1,13 @@
+import { PAYS } from "@/lib/telephone";
 import { Input } from "@repo/ui/components/input";
 import { cn } from "@repo/ui/lib/utils";
+import { ChevronDown } from "lucide-react";
 
 /*
  * Les champs des formulaires au dessin de Formation Genesis : l'optin en
- * trois étapes (`InscriptionGenesis`) et la fenêtre de Course modèle
- * (`InscriptionCourseModele`). Écrits une fois pour les deux.
+ * trois étapes (`InscriptionGenesis`) et la fenêtre de Course modèle, en
+ * trois étapes elle aussi (`InscriptionCourseModele`). Écrits une fois pour
+ * les deux, le téléphone compris (`ChampTelephoneGenesis`).
  *
  * Refaits deux fois sur demande de Rémy. La seconde fois, sur le dessin du
  * champ d'Arc UI (`uiarc.dev`) : **un libellé au-dessus, un cadre d'un
@@ -47,6 +50,94 @@ export function ChampGenesis({
         )}
         {...props}
       />
+    </div>
+  );
+}
+
+/**
+ * Le téléphone, au même dessin : **un seul cadre autour du pays et du
+ * numéro**, qui répond au focus comme les autres champs. Le menu des pays est
+ * un `select` natif posé sur le drapeau : sur téléphone, c'est la roue du
+ * système qui s'ouvre. Le numéro prend l'exemple du pays choisi.
+ *
+ * L'optin de Genesis et la fenêtre de Course modèle, qui demandent tous deux
+ * le numéro au dernier temps.
+ */
+export function ChampTelephoneGenesis({
+  ref,
+  id,
+  libelle,
+  libellePays,
+  pays,
+  onPays,
+  valeur,
+  onValeur,
+  faux,
+}: {
+  ref?: React.Ref<HTMLInputElement>;
+  id: string;
+  libelle: string;
+  libellePays: string;
+  /** Le code du pays choisi (`PAYS`). */
+  pays: string;
+  onPays: (code: string) => void;
+  valeur: string;
+  onValeur: (valeur: string) => void;
+  /** Le numéro manque ou ne tient pas : la bordure passe au rouge. */
+  faux: boolean;
+}) {
+  const choisi = PAYS.find((p) => p.code === pays) ?? PAYS[0];
+  return (
+    <div className="grid">
+      <label htmlFor={id} className={LIBELLE_GENESIS}>
+        {libelle}
+      </label>
+      <div
+        className={cn(
+          CADRE_GENESIS,
+          "flex focus-within:border-[var(--genesis-encre)] focus-within:shadow-[0_0_0_1px_var(--genesis-encre)]",
+          faux &&
+            "border-destructive focus-within:border-destructive focus-within:shadow-[0_0_0_1px_var(--destructive)] hover:border-destructive",
+        )}
+      >
+        <div className="relative flex shrink-0 items-center gap-1.5 border-r border-black/15 px-3">
+          <span aria-hidden className="text-xl leading-none">
+            {choisi.drapeau}
+          </span>
+          <span aria-hidden className="text-base tabular-nums">
+            {choisi.indicatif}
+          </span>
+          <ChevronDown aria-hidden className="size-4 text-[#60606b]" />
+          <select
+            name="country"
+            autoComplete="country"
+            aria-label={libellePays}
+            value={pays}
+            onChange={(e) => onPays(e.target.value)}
+            className="absolute inset-0 cursor-pointer opacity-0"
+          >
+            {PAYS.map((p) => (
+              <option key={p.code} value={p.code}>
+                {p.drapeau} {p.nom} ({p.indicatif})
+              </option>
+            ))}
+          </select>
+        </div>
+        <input
+          ref={ref}
+          id={id}
+          name="tel"
+          type="tel"
+          inputMode="tel"
+          autoComplete="tel-national"
+          aria-required
+          placeholder={choisi.exemple}
+          aria-invalid={faux}
+          value={valeur}
+          onChange={(e) => onValeur(e.target.value)}
+          className="min-w-0 flex-1 bg-transparent px-4 text-[17px] text-[var(--genesis-encre)] outline-none placeholder:text-[var(--genesis-gris)] focus-visible:outline-none"
+        />
+      </div>
     </div>
   );
 }

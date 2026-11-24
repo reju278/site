@@ -2491,13 +2491,23 @@ boutons « Apprendre »**, comme la référence : l'un sous la photo
 (`md:hidden`), l'autre au bout de la liste ; sur ordinateur, un seul. La mise en page est celle de la première version
 de Genesis, relevée sur la même famille de pages : la photo à gauche,
 l'accroche, la liste et le bouton à droite. **Le bouton « Apprendre » ouvre
-une fenêtre**, comme sur la référence (`InscriptionCourseModele`) : prénom,
-e-mail, consentement, « Voir la vidéo ». Rendue dans un portail, hors de
-`[data-genesis]`, elle écrit ses `rounded-none` elle-même. La photo vient du
+une fenêtre**, comme sur la référence. **Une seule fenêtre par page**
+(`FenetreCourseModele`, posée autour de la page) : les boutons, la photo et
+la tuile du logo l'ouvrent (`OuvreInscription` ; la bannière prend
+`autourDuLogo`). **Elle a les trois temps de l'optin de Genesis**, sur
+demande de Rémy le 24 novembre 2026 : le prénom et le nom, l'e-mail et le
+consentement, le téléphone. La question de chaque temps est son titre, le
+bouton est partout « Voir la vidéo GRATUITE » (jamais « Continuer »),
+et libellés, exemples et erreurs sont ceux de Genesis (`optinGenesis.formulaire`).
+Le téléphone est le champ partagé des deux (`ChampTelephoneGenesis`,
+`champ-genesis.tsx`). **Sur téléphone, la fenêtre se pose haut**
+(`top-[10svh]`) : le clavier ne la recouvre pas. Rendue dans un portail,
+hors de `[data-genesis]`, elle écrit ses `rounded-none` elle-même. La photo vient du
 fichier d'origine de ClickFunnels, réduite à 1 120 px (89 Ko). Sur téléphone,
 la coupure du titre de la fenêtre saute, sinon il prenait trois lignes.
 
-**L'inscription part à quatre endroits**, dans cet ordre : Hyros
+**L'inscription part à l'e-mail, à quatre endroits**, dans cet ordre, et le
+téléphone s'affiche aussitôt : Hyros
 (`hrs.addLeadTag("!course-2025")` puis l'événement `hyros_email`, les deux
 points d'entrée de son script universel ; il ne lit pas seul les champs d'une
 fenêtre née après son passage), le CRM (`API_FUNNELS/course-modele/optin`, en
@@ -2505,10 +2515,12 @@ tâche de fond), ClickFunnels (le contact et le tag « course-2025 », id 483167
 `TAG_COURSE_MODELE`, qui déclenche l'automatisation de Rémy), puis GTM
 (`lead`). **ClickFunnels passe par `after`** (`app/course-modele/actions.ts`) :
 mesuré, un contact neuf demandait 9,7 s, et la fenêtre restait sur « Envoi… ».
-La server action vérifie et répond, la page passe à la suite, l'inscription
-suit côté serveur, retentée une fois, et un échec se lit dans le journal de
-Vercel. La page attend au moins 0,8 s avant de changer, le temps que Hyros
-envoie. **Hyros ne s'initialise pas sur `localhost`** : ce volet ne se
+La server action vérifie et répond, la fenêtre passe au téléphone,
+l'inscription suit côté serveur, retentée une fois, et un échec se lit dans
+le journal de Vercel. **Au téléphone**, le numéro part au CRM (`etape:
+"telephone"`) et à ClickFunnels (`completerCourseModele`, après la réponse
+lui aussi : l'`upsert` retrouve le contact par son adresse, dans n'importe
+quel ordre), puis la page passe à la vidéo. **Hyros ne s'initialise pas sur `localhost`** : ce volet ne se
 vérifie qu'en ligne.
 
 **Les appels à l'API de ClickFunnels vivent dans `lib/clickfunnels.ts`**,

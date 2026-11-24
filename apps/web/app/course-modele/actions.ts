@@ -9,6 +9,7 @@ import {
   type Resultat,
   upsertContact,
 } from "@/lib/clickfunnels";
+import { NUMERO_INTERNATIONAL } from "@/lib/telephone";
 import { after } from "next/server";
 
 /**
@@ -16,11 +17,15 @@ import { after } from "next/server";
  * de Formation Genesis (`lib/clickfunnels.ts`). Côté serveur : le jeton ne
  * quitte jamais le serveur.
  *
- * **Un seul temps** : la fenêtre ne demande que le prénom, l'e-mail et le
- * consentement. Le contact est créé ou retrouvé, puis il reçoit le tag
- * « course-2025 », posé à part et seulement s'il manque : c'est lui qui
- * déclenche l'automatisation. Le consentement part en champ personnalisé
- * « consentement » à « oui », comme pour `/course` et Genesis.
+ * **Deux temps, comme Genesis** (la fenêtre en a trois depuis le 24 novembre
+ * 2026) : à l'e-mail, `inscrireCourseModele` crée ou retrouve le contact
+ * (prénom, nom, e-mail) puis lui pose le tag « course-2025 », à part et
+ * seulement s'il manque : c'est lui qui déclenche l'automatisation. Le
+ * consentement part en champ personnalisé « consentement » à « oui », comme
+ * pour `/course` et Genesis. Au téléphone, `completerCourseModele` ajoute le
+ * numéro au même contact. Les deux passent par l'`upsert` de ClickFunnels,
+ * qui retrouve le contact par son adresse : l'ordre où ils aboutissent ne
+ * change rien.
  *
  * **L'inscription part après la réponse** (`after`), et la page passe aussitôt
  * à la vidéo. Mesuré le 24 novembre 2026 : 9,7 s pour un contact neuf (la
@@ -37,12 +42,14 @@ const TUNNEL = "Course modèle";
 async function inscrire(
   api: ApiClickFunnels,
   prenom: string,
+  nom: string,
   email: string,
 ): Promise<Resultat> {
   try {
     const id = await upsertContact(api, {
       email_address: email,
       first_name: prenom,
+      ...(nom ? { last_name: nom } : {}),
       custom_attributes: { consentement: "oui" },
     });
     if (typeof id !== "number") return id;
@@ -55,9 +62,11 @@ async function inscrire(
 
 export async function inscrireCourseModele(
   prenom: string,
+  nom: string,
   email: string,
 ): Promise<Resultat> {
   const prenomPropre = prenom.trim().slice(0, 100);
+  const nomPropre = nom.trim().slice(0, 100);
   const emailPropre = email.trim().toLowerCase().slice(0, 200);
   if (!prenomPropre || !EMAIL.test(emailPropre))
     return { ok: false, raison: "champs" };
@@ -66,15 +75,51 @@ export async function inscrireCourseModele(
   if (!api) return { ok: false, raison: "configuration" };
 
   after(async () => {
-    let resultat = await inscrire(api, prenomPropre, emailPropre);
+    let resultat = await inscrire(api, prenomPropre, nomPropre, emailPropre);
     /* Une adresse que ClickFunnels refuse (422) ne passera pas mieux la
        seconde fois ; une panne passagère, si. */
     if (!resultat.ok && resultat.raison !== "champs") {
       await new Promise((attente) => setTimeout(attente, 2000));
-      resultat = await inscrire(api, prenomPropre, emailPropre);
+      resultat = await inscrire(api, prenomPropre, nomPropre, emailPropre);
     }
     if (!resultat.ok)
       console.error(`${TUNNEL} : inscription perdue (${resultat.raison})`);
+  });
+  return { ok: true };
+}
+
+/**
+ * Le téléphone, au dernier temps de la fenêtre : il s'ajoute au contact
+ * retrouvé par son adresse. **Après la réponse, lui aussi** (`after`) : la
+ * page passe à la vidéo sans attendre ClickFunnels.
+ */
+export async function completerCourseModele(
+  email: string,
+  telephone: string,
+): Promise<Resultat> {
+  const emailPropre = email.trim().toLowerCase().slice(0, 200);
+  if (!EMAIL.test(emailPropre) || !NUMERO_INTERNATIONAL.test(telephone))
+    return { ok: false, raison: "champs" };
+
+  const api = apiClickFunnels(TUNNEL);
+  if (!api) return { ok: false, raison: "configuration" };
+
+  after(async () => {
+    const poser = async () => {
+      try {
+        const id = await upsertContact(api, {
+          email_address: emailPropre,
+          phone_number: telephone,
+        });
+        return typeof id === "number";
+      } catch (erreur) {
+        console.error(`${TUNNEL} : réseau`, erreur);
+        return false;
+      }
+    };
+    if (await poser()) return;
+    await new Promise((attente) => setTimeout(attente, 2000));
+    if (!(await poser())) console.error(`${TUNNEL} : téléphone perdu`);
   });
   return { ok: true };
 }
