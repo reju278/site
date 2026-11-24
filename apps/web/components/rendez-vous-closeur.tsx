@@ -1,9 +1,15 @@
 "use client";
 
-import { cleNom, nomPropre } from "@/components/rendez-vous";
+import { cleNom, hoteConnu, nomPropre } from "@/components/rendez-vous";
 import { confirmationCourseModele } from "@/contenu/course-modele";
 import { equipeImmersion } from "@/contenu/immersion";
-import { dateLisible, useReservation } from "@/lib/reservation";
+import { usePrenomVsl } from "@/lib/prenom-vsl";
+import {
+  dateLisible,
+  heureLisible,
+  jourLisible,
+  useReservation,
+} from "@/lib/reservation";
 import { insecables } from "@/lib/typographie";
 
 /**
@@ -11,13 +17,18 @@ import { insecables } from "@/lib/typographie";
  * suivi, sur demande de Rémy : avec qui l'on a rendez-vous (sa photo, puis
  * son nom, le jour et l'heure surlignés en bleu), le message qu'il enverra sur
  * WhatsApp et par e-mail, et la réponse attendue (surlignés en vert), et
- * qu'il est une vraie personne. Il remplace, sur cette page seulement, les consignes en cartes
- * de `/thanks` (`ConsignesRendezVous`), jugées trop chargées.
+ * qu'il est une vraie personne. Pour finir, « cliquant ici » ouvre WhatsApp
+ * vers lui (son numéro est dans `whatsappHotes`, Calendly ne le transmet
+ * pas), le message de confirmation prêt. Il remplace, sur cette page
+ * seulement, les consignes en cartes de `/thanks` (`ConsignesRendezVous`),
+ * jugées trop chargées.
  *
  * Le closeur est l'hôte que Calendly transmet (`assigned_to`, relevé par
  * `useReservation`), sa photo celle de la rangée de l'équipe
  * (`equipeImmersion`) : un closeur ajouté à l'équipe a sa photo ici sans
- * rien de plus. Sans prénom de la personne à la fin, sur demande de Rémy.
+ * rien de plus ; **son numéro, lui, s'ajoute à `whatsappHotes`**, sans quoi
+ * la dernière phrase ne paraît pas. Pas de prénom de la personne à la fin
+ * du texte, sur demande de Rémy (le message WhatsApp, lui, le porte).
  * Au rendu serveur, et sans réservation lue, la version sans nom.
  *
  * Les surlignages sont ceux des tirets de l'opt-in : un fond plein qui suit
@@ -33,6 +44,20 @@ export function RendezVousCloseur() {
   const nomHote = membre?.nom ?? (r?.hote ? nomPropre(r.hote) : undefined);
   const prenomHote = nomHote?.split(/\s+/)[0];
   const quand = dateLisible(r?.debut);
+  const prenomOptin = usePrenomVsl();
+
+  // Le lien « cliquant ici » : WhatsApp vers le closeur, le message prêt.
+  const numero = hoteConnu(r?.hote)?.numero;
+  const whatsapp = numero
+    ? `https://wa.me/${numero}?text=${encodeURIComponent(
+        textes.messageWhatsapp({
+          hote: prenomHote,
+          prenom: r?.prenom ?? (prenomOptin || undefined),
+          jour: jourLisible(r?.debut),
+          heure: heureLisible(r?.debut),
+        }),
+      )}`
+    : null;
 
   return (
     <div className="mt-6 flex flex-col gap-4 border-t border-black/10 pt-6 text-left text-[17px] leading-[1.6] text-[var(--genesis-encre)] sm:mt-8 sm:gap-5 sm:pt-8 sm:text-xl">
@@ -85,6 +110,21 @@ export function RendezVousCloseur() {
         {textes.personne.qui(prenomHote)}{" "}
         <strong>{textes.personne.vraie}</strong> {textes.personne.suite}.
       </p>
+
+      {whatsapp ? (
+        <p className="text-pretty">
+          {textes.devants.avant}{" "}
+          <a
+            href={whatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-[var(--genesis-bleu)] underline underline-offset-[3px] hover:no-underline"
+          >
+            {textes.devants.lien}
+          </a>{" "}
+          {textes.devants.apres}
+        </p>
+      ) : null}
     </div>
   );
 }

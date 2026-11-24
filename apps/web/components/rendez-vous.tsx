@@ -57,7 +57,7 @@ export function cleNom(nom: string) {
 }
 
 /** L'hôte connu sous ce nom, s'il est dans `whatsappHotes`. */
-function hoteConnu(hote: string | undefined) {
+export function hoteConnu(hote: string | undefined) {
   return hote
     ? whatsappHotes.hotes.find((h) => cleNom(h.nom) === cleNom(hote))
     : undefined;

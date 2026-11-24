@@ -279,6 +279,12 @@ export const whatsappHotes: {
       numero: "33681385589",
       photo: "/immersion/equipe-geoffrey-bonniot.jpg",
     },
+    {
+      nom: "Sébastien Bader",
+      /* Donné par Rémy le 24 novembre 2026 : +33 6 71 73 61 58. */
+      numero: "33671736158",
+      photo: "/immersion/equipe-sebastien-bader.jpg",
+    },
   ],
   parDefaut: null,
 };

@@ -260,6 +260,31 @@ export const confirmationCourseModele = {
       suite:
         "personne (pas un robot ou une IA), il va prendre de son temps personnel pour ce rendez-vous avec toi et répondre à toutes tes questions",
     },
+    /* La dernière phrase, dictée par Rémy : « cliquant ici » ouvre WhatsApp
+       vers le closeur (`whatsappHotes` de `contenu/thanks.ts`, Calendly ne
+       transmet pas son numéro), le message préparé. Sans numéro connu, la
+       phrase ne paraît pas. */
+    devants: {
+      avant:
+        "Si tu souhaites prendre les devants, tu peux lui envoyer un message par toi\u2011même en",
+      lien: "cliquant ici",
+      apres: "pour confirmer.",
+    },
+    /* « Bonjour Sébastien, c'est Rémy, je confirme simplement mon
+       rendez-vous le jeudi 26 novembre à 15 h, merci », dicté par Rémy.
+       Chaque morceau tombe s'il manque. */
+    messageWhatsapp: (r: {
+      hote?: string;
+      prenom?: string;
+      jour?: string;
+      heure?: string;
+    }) => {
+      const qui = r.prenom ? `, c'est ${r.prenom}` : "";
+      const quand = [r.jour && ` le ${r.jour}`, r.heure && ` à ${r.heure}`]
+        .filter(Boolean)
+        .join("");
+      return `Bonjour${r.hote ? ` ${r.hote}` : ""}${qui}, je confirme simplement mon rendez-vous${quand}, merci`;
+    },
   },
   /* La seconde vidéo, de Rémy : la VSL elle-même, reprise là où la
      personne s'est arrêtée (`ReprendreVsl`). `{temps}` devient « 2 min 30 ». */

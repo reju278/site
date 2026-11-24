@@ -2627,9 +2627,15 @@ sans titre), et la confirmation garde sa bannière sans pied de page :
   avec Sébastien Bader le jeudi 26 novembre à 15 h » (photo de l'équipe,
   nom et date en bleu), « Il va t'envoyer un message sur WhatsApp et par e-mail
   pour confirmer. Réponds simplement à son message pour valider » (WhatsApp
-  et la réponse en vert), puis « Sébastien est une VRAIE personne… ». Le
-  closeur est l'hôte de Calendly (`assigned_to`) ; sa photo, celle de
-  `equipeImmersion` à son nom. Sans réservation lue, « Un conseiller de
+  et la réponse en vert), puis « Sébastien est une VRAIE personne… », et pour finir « Si tu
+  souhaites prendre les devants, tu peux lui envoyer un message par
+  toi-même en cliquant ici pour confirmer », « cliquant ici » en lien bleu
+  souligné vers WhatsApp (`wa.me`, nouvel onglet) : « Bonjour Sébastien,
+  c'est Rémy, je confirme simplement mon rendez-vous le jeudi 26 novembre à
+  15 h, merci ». Le closeur est l'hôte de Calendly (`assigned_to`) ; sa
+  photo, celle de `equipeImmersion` à son nom ; **son numéro, celui de
+  `whatsappHotes`** (`contenu/thanks.ts`, Geoffrey et Sébastien), puisque
+  Calendly ne le transmet pas : sans numéro, la phrase ne paraît pas. Sans réservation lue, « Un conseiller de
   l'équipe… ». **Les témoignages ont la largeur de la VSL**
   (`classeLargeur` de `PreuvesTunnel` et `VideoDepartZero`), et non celle
   de la vidéo dans sa carte comme sur `/thanks`.
