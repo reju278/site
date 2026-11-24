@@ -132,9 +132,10 @@ export default async function VideoCourseModele() {
           <BoutonGenesis
             href={CHEMINS_COURSE_MODELE.appel}
             nouvelOnglet
-            // À la largeur de son texte en grand, centré ; pleine largeur sur
-            // téléphone, où le pouce le trouve.
-            className="w-full sm:w-fit sm:px-10"
+            // Plus grand sur ordinateur, et plus large que la pastille en
+            // dessous, sur demande de Rémy ; pleine largeur sur téléphone, où
+            // le pouce le trouve.
+            className="w-full sm:min-h-16 sm:w-fit sm:min-w-[35rem] sm:px-14 sm:text-[21px]"
           >
             {bouton}
           </BoutonGenesis>
