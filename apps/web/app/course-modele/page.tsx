@@ -79,9 +79,14 @@ export default function CourseModele() {
           ClickFunnels, **et un premier bouton juste sous elle** : sur
           téléphone, la page en a deux, l'un sous la photo, l'autre au
           bout de la liste. */}
+      {/* Les mesures de la référence, relevées à 1 395 px : deux colonnes
+          de 523 px à 32 px l'une de l'autre, la colonne de texte centrée
+          sur la photo, son bouton au ras du bas de l'image. À 1 065 px de
+          large, les colonnes ne faisaient que 485 px : le dernier point
+          passait sur deux lignes et le bouton tombait 68 px sous la photo. */}
       <section
         aria-label="Inscription"
-        className="mx-auto grid max-w-[1065px] grid-cols-1 items-start gap-6 px-5 pt-6 sm:px-8 md:grid-cols-2 md:gap-8 md:pt-8"
+        className="mx-auto grid max-w-[1142px] grid-cols-1 items-start gap-6 px-5 pt-6 sm:px-8 md:grid-cols-2 md:items-center md:gap-8 md:pt-8"
       >
         <img
           src={photo.src}
