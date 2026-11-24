@@ -232,6 +232,35 @@ export const confirmationCourseModele = {
     titre: "La vidéo de confirmation de ton appel",
     secondes: 452,
   },
+  /* **Le mot sous la vidéo de l'étape 1**, en texte suivi, dicté par Rémy le
+     24 novembre 2026 à la place des consignes de `/thanks`
+     (`RendezVousCloseur`). Le closeur est l'hôte que Calendly transmet
+     (`assigned_to`), sa photo celle de l'équipe ; pas de prénom de la
+     personne à la fin, retiré par Rémy. Sans réservation lue, la version
+     sans nom. */
+  rendezVous: {
+    avec: "Tu as rendez-vous avec",
+    le: "le",
+    message: {
+      avant: "Il va t'envoyer un message sur",
+      whatsapp: "WhatsApp",
+      /* « et » en minuscule et sans gras, sur demande de Rémy. */
+      apres: "et par e-mail pour confirmer.",
+      /* Surligné en vert comme « WhatsApp », sur demande de Rémy. */
+      reponds: "Réponds simplement à son message",
+      valider: "pour valider.",
+    },
+    sansHote:
+      "Un conseiller de l'équipe va t'envoyer un message sur",
+    personne: {
+      /* « Sébastien est une VRAIE personne », « ton conseiller » sans nom. */
+      qui: (prenomHote?: string) =>
+        `Pour information, ${prenomHote ?? "ton conseiller"} est une`,
+      vraie: "VRAIE",
+      suite:
+        "personne (pas un robot ou une IA), il va prendre de son temps personnel pour ce rendez-vous avec toi et répondre à toutes tes questions",
+    },
+  },
   /* La seconde vidéo, de Rémy : la VSL elle-même, reprise là où la
      personne s'est arrêtée (`ReprendreVsl`). `{temps}` devient « 2 min 30 ». */
   vsl: {

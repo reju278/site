@@ -2,7 +2,7 @@ import { CompteurVue } from "@/components/compteur-vue";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { ReprendreVsl } from "@/components/reprendre-vsl";
 import { PreuvesTunnel } from "@/components/preuves-tunnel";
-import { ConsignesRendezVous } from "@/components/rendez-vous";
+import { RendezVousCloseur } from "@/components/rendez-vous-closeur";
 import { TitreConfirmationForm } from "@/components/titre-confirmation-form";
 import { VideoDepartZero } from "@/components/video-depart-zero";
 import {
@@ -24,8 +24,9 @@ import type { Metadata } from "next";
  * le relevé de la réservation que Calendly met dans l'adresse (prénom, date,
  * téléphone, hôte, réponses), fait avant Google Tag Manager par
  * `scriptCapture` ; « Félicitations Rémy, ton appel est réservé pour le… »
- * et l'alerte rouge (`TitreConfirmationForm`) ; les consignes personnelles
- * de l'étape 1 (`ConsignesRendezVous`). **À défaut du prénom de Calendly,
+ * et l'alerte rouge (`TitreConfirmationForm`). Sous la vidéo de l'étape 1,
+ * le mot de Rémy en texte suivi, à la place des consignes en cartes
+ * (`RendezVousCloseur`). **À défaut du prénom de Calendly,
  * celui de l'opt-in** (`prenomOptin`), gardé dans le navigateur depuis la
  * fenêtre d'inscription.
  *
@@ -41,6 +42,16 @@ export const metadata: Metadata = {
   description: identiteThanks.description,
   alternates: { canonical: `https://go.funnels.club${CHEMINS_COURSE_MODELE.thanks}` },
 };
+
+/**
+ * **La largeur des témoignages, celle de la VSL** (`ReprendreVsl`), sur
+ * demande de Rémy : Roland et les suivants s'alignent sur la vidéo de
+ * formation, et non sur celle de la carte comme sur `/thanks`. La section de
+ * la VSL a 20 px de marge sur téléphone, 32 au-delà, et 56 rem au plus ;
+ * celle des témoignages, 20 px partout.
+ */
+const LARGEUR_VSL =
+  "mx-auto w-full max-w-[min(100vw-2.5rem,56rem)] sm:max-w-[min(100vw-4rem,56rem)]";
 
 /** La carte blanche à ombre douce du tunnel, celle de la fenêtre d'inscription. */
 const CARTE = "bg-white p-4 shadow-[0_0_39px_-8px_rgba(0,0,0,0.15)] sm:p-7";
@@ -82,7 +93,7 @@ export default function MerciCourseModele() {
         />
       </header>
 
-      {/* L'étape 1 : la vidéo de confirmation et les consignes. */}
+      {/* L'étape 1 : la vidéo de confirmation et le mot sur le rendez-vous. */}
       <section className="mx-auto max-w-[960px] px-5 pt-8 sm:px-8 sm:pt-10">
         <div className={CARTE}>
           {/* Sans « Vidéo 1/2 », sur demande de Rémy : le titre seul. */}
@@ -101,7 +112,7 @@ export default function MerciCourseModele() {
               carre
             />
           </div>
-          <ConsignesRendezVous />
+          <RendezVousCloseur />
         </div>
       </section>
 
@@ -112,8 +123,8 @@ export default function MerciCourseModele() {
       {/* Tout ce qui suit sur `/thanks` : la vidéo de qui démarre de zéro
           (si le quiz le dit), puis les entretiens, le mur et l'équipe, aux
           boutons du tunnel. */}
-      <VideoDepartZero />
-      <PreuvesTunnel boutonsGenesis />
+      <VideoDepartZero classeLargeur={LARGEUR_VSL} />
+      <PreuvesTunnel boutonsGenesis classeLargeur={LARGEUR_VSL} />
     </main>
   );
 }

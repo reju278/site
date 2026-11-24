@@ -1406,6 +1406,11 @@ body:has([role="dialog"][data-state="open"])
   /* Le point vert qui palpite de la pastille des réservations, sous le
      bouton d'appel de la VSL de Course modèle. */
   --genesis-vert: #22c55e;
+  /* Les surlignages du mot sous la vidéo de confirmation de Course modèle :
+     la date en bleu, « WhatsApp » en vert. Plus soutenus que
+     `--genesis-surligne`, trop pâle sur la carte blanche pour un mot seul. */
+  --genesis-surligne-bleu: #d4e5fd;
+  --genesis-surligne-vert: #c8f0d6;
 }
 
 /* Sur le `body` et non sur le gabarit : la fenêtre d'inscription vit dans un

@@ -5,12 +5,21 @@ import { videoDepartZero } from "@/contenu/thanks";
 import { useReservation } from "@/lib/reservation";
 import type { CSSProperties } from "react";
 
+/** La largeur des vidéos de `/thanks` : celle de la vidéo dans sa carte. */
+const LARGEUR_PREUVES =
+  "mx-auto w-full max-w-[calc(var(--largeur-video)-2rem)] sm:max-w-[calc(var(--largeur-video)-3rem)]";
+
 /**
  * La vidéo réservée à qui démarre de zéro, sur demande de Rémy : elle ne paraît
  * que si le quiz porte cette réponse. Sans quiz, ni réponse, rien ne s'affiche.
  * Dessinée comme la vidéo de Roland, juste en dessous : sans carte.
  */
-export function VideoDepartZero() {
+export function VideoDepartZero({
+  classeLargeur = LARGEUR_PREUVES,
+}: {
+  /** La largeur de la vidéo : voir `PreuvesTunnel`. */
+  classeLargeur?: string;
+} = {}) {
   const r = useReservation();
   const concerne = r?.reponsesQuiz.some((ligne) =>
     ligne.reponse.includes(videoDepartZero.reponse),
@@ -21,7 +30,7 @@ export function VideoDepartZero() {
   const titre = `${debut} ${videoDepartZero.surligne}`;
   return (
     <section className="px-5 pt-20 sm:pt-24">
-      <div className="mx-auto w-full max-w-[calc(var(--largeur-video)-2rem)] sm:max-w-[calc(var(--largeur-video)-3rem)]">
+      <div className={classeLargeur}>
         <h2 className="titre mx-auto max-w-3xl text-center text-2xl text-balance text-foreground sm:text-3xl">
           {debut}{" "}
           <span

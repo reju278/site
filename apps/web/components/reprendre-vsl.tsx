@@ -16,12 +16,18 @@ const PRESQUE_FINIE = 30;
 /**
  * La VSL sur la confirmation de Course modèle, sur demande de Rémy, à la
  * place de la seconde vidéo de `/thanks` : « Tu as arrêté la vidéo de
- * formation à 2 min 30. Finis-la avant ton rendez-vous », et le lecteur
- * reprend à cet endroit. Où elle s'est arrêtée vient du navigateur, noté
- * par la VSL (`SuiviArretVideo`, voir `arret-video.tsx`). Sans trace (un
- * autre appareil), la phrase invite simplement à la regarder.
+ * formation à 2 min 30. Finis-la avant ton rendez-vous ». Où elle s'est
+ * arrêtée vient du navigateur, noté par la VSL (`SuiviArretVideo`, voir
+ * `arret-video.tsx`). Sans trace (un autre appareil), la phrase invite
+ * simplement à la regarder.
  *
- * Le lecteur et son cadre sont ceux de la VSL : le bleu des boutons.
+ * **Le lecteur est celui de la VSL, brut**, sur demande de Rémy : même
+ * cadre, même bleu, et la miniature vidéo réglée dans Wistia. **C'est
+ * Wistia qui reprend à 2 min 30**, par sa reprise à lui (la barre montre
+ * l'endroit, le bouton lecture y repart), comme sur la VSL. Lui imposer
+ * l'instant (`debut`, l'option `time`) faisait sauter cette miniature au
+ * profit de l'image fixe de l'instant, sans bouton lecture. Une boucle
+ * posée par-dessus a aussi été essayée, et retirée : une surcouche.
  */
 export function ReprendreVsl() {
   const { video } = videoCourseModele;
@@ -59,7 +65,6 @@ export function ReprendreVsl() {
           affiche={video.affiche}
           afficheAlt={video.titre}
           couleur={video.couleur}
-          debut={arretee ? arret.temps : undefined}
           natif
           carre
           pilotable

@@ -13,9 +13,16 @@ import { confirmationThanks } from "@/contenu/thanks";
  */
 export function PreuvesTunnel({
   boutonsGenesis = false,
+  classeLargeur = "mx-auto w-full max-w-[calc(var(--largeur-video)-2rem)] sm:max-w-[calc(var(--largeur-video)-3rem)]",
 }: {
   /** Les boutons de la pile au dessin Genesis : voir `PileEntretiens`. */
   boutonsGenesis?: boolean;
+  /**
+   * La largeur des vidéos de la pile. Par défaut celle de la vidéo posée
+   * dans la carte de `/thanks`, au-dessus ; Course modèle donne celle de la
+   * VSL, sans carte, sur demande de Rémy.
+   */
+  classeLargeur?: string;
 } = {}) {
   return (
     <>
@@ -34,7 +41,7 @@ export function PreuvesTunnel({
              `/video-vsl` et `/appel`, sur demande de Rémy. */
           rayonBoutons="var(--radius-md)"
           boutonsGenesis={boutonsGenesis}
-          className="mx-auto w-full max-w-[calc(var(--largeur-video)-2rem)] sm:max-w-[calc(var(--largeur-video)-3rem)]"
+          className={classeLargeur}
         />
       </section>
 

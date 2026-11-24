@@ -47,7 +47,7 @@ function prenomHote(hote: string | undefined) {
 }
 
 /** Un nom comparable : sans casse, sans accents, espaces resserrés. */
-function cleNom(nom: string) {
+export function cleNom(nom: string) {
   return nom
     .normalize("NFD")
     .replace(/\p{Diacritic}/gu, "")
@@ -111,7 +111,7 @@ function initiales(prenom?: string, nom?: string) {
 }
 
 /** « Geoffrey Bonniot » pour « Geoffrey BONNIOT », comme Calendly l'écrit. */
-function nomPropre(nom: string) {
+export function nomPropre(nom: string) {
   return nom
     .toLowerCase()
     .replace(/(^|[\s-])\p{L}/gu, (lettre) => lettre.toUpperCase());

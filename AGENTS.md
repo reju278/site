@@ -2607,16 +2607,32 @@ sans titre), et la confirmation garde sa bannière sans pied de page :
   « Vidéo 1/2 » (« Informations à propos de ton rendez-vous ») ; **à la
   place de la vidéo 2/2, la VSL elle-même** (`ReprendreVsl`), sans carte,
   dans son cadre bleu : « Tu as arrêté la vidéo de formation à 2 min 30.
-  Finis-la avant ton rendez-vous », et le lecteur y reprend (`debut` de
-  `LecteurVideo`, option `time` de Wistia). **Où elle s'est arrêtée vient
-  du navigateur** : la VSL le note (`SuiviArretVideo`, `arret-video.tsx`,
+  Finis-la avant ton rendez-vous ». **Le lecteur est brut, sans rien
+  imposer**, sur demande de Rémy : c'est la reprise de Wistia qui le remet à
+  2 min 30 (barre et bouton lecture), avec la miniature vidéo réglée chez
+  Wistia. Lui imposer l'instant (`debut`, option `time`) faisait sauter
+  cette miniature pour une image fixe sans bouton lecture ; une boucle de
+  la vidéo posée par-dessus a été essayée puis retirée (« une surcouche »).
+  **Où elle s'est arrêtée, pour le titre, vient du navigateur** : la VSL le note (`SuiviArretVideo`, `arret-video.tsx`,
   par la poignée Wistia de `lib/wistia-poignee.ts`, partagée avec
   `VitesseVideo`), pas l'adresse e-mail, que le CRM ne relit que toutes les
   demi-heures et qu'une adresse publique ne doit pas exposer. Sans trace,
   « Finis la vidéo de formation avant ton rendez-vous ». **Le prénom du
   titre est une variable** : celui de Calendly (redirection avec les
   détails), sinon celui de l'opt-in gardé dans ce navigateur, sinon
-  « Félicitations, ton appel est réservé ! ».
+  « Félicitations, ton appel est réservé ! ». **Sous la vidéo 1, le mot
+  de Rémy en texte suivi** (`RendezVousCloseur`, textes dans
+  `confirmationCourseModele.rendezVous`), à la place des consignes en
+  cartes et du « Détail de l'événement » de `/thanks` : « Tu as rendez-vous
+  avec Sébastien Bader le jeudi 26 novembre à 15 h » (photo de l'équipe,
+  nom et date en bleu), « Il va t'envoyer un message sur WhatsApp et par e-mail
+  pour confirmer. Réponds simplement à son message pour valider » (WhatsApp
+  et la réponse en vert), puis « Sébastien est une VRAIE personne… ». Le
+  closeur est l'hôte de Calendly (`assigned_to`) ; sa photo, celle de
+  `equipeImmersion` à son nom. Sans réservation lue, « Un conseiller de
+  l'équipe… ». **Les témoignages ont la largeur de la VSL**
+  (`classeLargeur` de `PreuvesTunnel` et `VideoDepartZero`), et non celle
+  de la vidéo dans sa carte comme sur `/thanks`.
 - **`/course-modele/thanks`**, `/thanks` sous une autre adresse, au dessin du
   tunnel. **« thanks » doit rester dans l'adresse**, sur demande expresse de
   Rémy (elle s'appelait d'abord `/merci`). L'étape du CRM garde sa clé
