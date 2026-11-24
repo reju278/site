@@ -65,7 +65,7 @@ const DUREE_CHARGEMENT = 5500;
  *    tâche de fond et sans jamais retenir personne. `keepalive` le laisse
  *    finir pendant que la page change.
  * 3. **ClickFunnels**, par la server action : le contact et le tag
- *    « course-2025 », qui lance l'automatisation. Elle vérifie le prénom,
+ *    « Inscription (N) », qui lance la séquence e-mail. Elle vérifie le prénom,
  *    l'adresse et sa configuration, puis répond aussitôt et inscrit après
  *    sa réponse (voir `actions.ts`) : **on passe à la vidéo sans attendre**,
  *    un contact neuf demandant près de dix secondes à ClickFunnels.
@@ -77,6 +77,13 @@ const DUREE_CHARGEMENT = 5500;
  */
 /** Ce qui ouvre la fenêtre, partagé par tous ses déclencheurs. */
 const OuvrirFenetre = createContext<(() => void) | null>(null);
+
+/**
+ * La version de la page d'opt-in (test A/B, sur demande de Rémy) : elle part
+ * au CRM avec l'inscription, qui compte les inscrits de chaque version.
+ */
+export type VersionOptin = "a" | "b";
+const VersionFenetre = createContext<VersionOptin | undefined>(undefined);
 
 const useOuvrir = () => {
   const ouvrir = useContext(OuvrirFenetre);
@@ -91,12 +98,20 @@ const useOuvrir = () => {
  * boutons « Apprendre » (un de plus sur téléphone), la photo et le logo
  * l'ouvrent tous, sur demande de Rémy.
  */
-export function FenetreCourseModele({ children }: { children: ReactNode }) {
+export function FenetreCourseModele({
+  version,
+  children,
+}: {
+  /** La version de la page (test A/B), pour le CRM. */
+  version?: VersionOptin;
+  children: ReactNode;
+}) {
   const { fenetre } = optinCourseModele;
   const [ouvert, setOuvert] = useState(false);
   const ouvrir = useCallback(() => setOuvert(true), []);
 
   return (
+    <VersionFenetre.Provider value={version}>
     <OuvrirFenetre.Provider value={ouvrir}>
       {children}
       <Dialog open={ouvert} onOpenChange={setOuvert}>
@@ -125,14 +140,23 @@ export function FenetreCourseModele({ children }: { children: ReactNode }) {
         </DialogContent>
       </Dialog>
     </OuvrirFenetre.Provider>
+    </VersionFenetre.Provider>
   );
 }
 
-/** Le bouton « Apprendre ». */
-export function InscriptionCourseModele() {
+/** Le bouton « Apprendre » (ou le libellé de la version B). */
+export function InscriptionCourseModele({
+  libelle = optinCourseModele.bouton,
+  className,
+}: {
+  libelle?: string;
+  className?: string;
+} = {}) {
   const ouvrir = useOuvrir();
   return (
-    <BoutonGenesis onClick={ouvrir}>{optinCourseModele.bouton}</BoutonGenesis>
+    <BoutonGenesis onClick={ouvrir} className={className}>
+      {libelle}
+    </BoutonGenesis>
   );
 }
 
@@ -230,6 +254,7 @@ type Etape = "nom" | "email" | "situation" | "ca" | "chargement";
  */
 function Formulaire() {
   const { fenetre } = optinCourseModele;
+  const version = useContext(VersionFenetre);
   const [etape, setEtape] = useState<Etape>("nom");
   const [prenom, setPrenom] = useState("");
   const [nom, setNom] = useState("");
@@ -294,6 +319,7 @@ function Formulaire() {
         consentement: consenti,
         ...(choix ? { situation: choix } : {}),
         ...(ca ? { ca } : {}),
+        ...(version ? { version } : {}),
       }),
     }).catch(() => {});
   };

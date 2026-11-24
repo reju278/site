@@ -12,6 +12,9 @@ import { optinGenesis } from "@/contenu/formation-genesis";
  * pour nous (erreurs, envoi) sont de l'agent, marqués PROVISOIRES.
  */
 
+/** Le cookie qui garde à un visiteur sa version de l'opt-in (test A/B). */
+export const COOKIE_VERSION_OPTIN = "cm-version";
+
 /** La racine du tunnel, écrite une fois. */
 export const RACINE_COURSE_MODELE = "/course-modele";
 
@@ -43,7 +46,14 @@ export const TAG_HYROS_COURSE_MODELE = "!course-2025";
  * interdit d'index et forcé au clair.
  */
 export const CHEMINS_COURSE_MODELE = {
+  /* **L'adresse qui répartit 50 / 50** entre les deux versions de l'opt-in
+     (test A/B, sur demande de Rémy le 24 novembre 2026) : c'est elle que
+     portent les publicités et les liens. Voir `course-modele/route.ts`. */
   optin: RACINE_COURSE_MODELE,
+  /* Les deux versions, qui ne diffèrent que par un code court tiré au
+     hasard : on ne devine pas l'autre depuis l'une. */
+  optinA: `${RACINE_COURSE_MODELE}/o5dfv`,
+  optinB: `${RACINE_COURSE_MODELE}/zvb5y`,
   /* **« vsl » doit être dans l'adresse de la vidéo**, sur demande de Rémy
      (24 novembre 2026). L'ancienne, `/video`, y redirige. La clé reste
      `video`, comme l'étape du CRM. */
@@ -318,4 +328,32 @@ export const confirmationCourseModele = {
       texte: "Elle répond déjà à beaucoup de questions que tu te poses.",
     },
   },
+};
+
+/**
+ * **La version B de l'opt-in** (test A/B), sur demande de Rémy le 24 novembre
+ * 2026 : la structure d'une page qu'il a montrée (le titre centré en haut,
+ * l'astérisque dessous, puis une carte : la photo à gauche, la promesse, la
+ * liste et le bouton à droite), avec les couleurs, les polices et la photo
+ * du tunnel. Le titre s'arrête à « produits digitaux », sur sa demande. La
+ * fenêtre d'inscription est la même.
+ *
+ * La durée : la formation fait 33 minutes (`videoCourseModele.secondes`),
+ * d'où « 30 min » et non les « 40 min » de la page d'origine.
+ */
+export const optinCourseModeleB = {
+  titre: [
+    "Comment créer un ",
+    { gras: "tunnel de vente" },
+    " pour vendre des ",
+    { gras: "produits digitaux*" },
+  ] as Segment[],
+  note: "*formation en ligne, service digital ou coaching",
+  promesse: "30 min de formation gratuite pour apprendre :",
+  points: [
+    "Créer une offre digitale irrésistible qui vous ressemble sans avoir besoin d'être un expert.",
+    "La méthode simple pour créer le meilleur tunnel de vente pour vous, adapté à votre offre, vos clients et votre marché.",
+    "Vendre avec de gros profits en fixant des prix justes afin de vivre confortablement de votre activité en ligne.",
+  ],
+  bouton: "Voir la formation GRATUITE",
 };

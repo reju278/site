@@ -2652,6 +2652,19 @@ sans titre), et la confirmation garde sa bannière sans pied de page :
   l'équipe… ». **Les témoignages ont la largeur de la VSL**
   (`classeLargeur` de `PreuvesTunnel` et `VideoDepartZero`), et non celle
   de la vidéo dans sa carte comme sur `/thanks`.
+- **Le test A/B de l'opt-in** (24 novembre 2026, sur demande de Rémy) :
+  `/course-modele` n'est plus une page mais **l'adresse qui répartit 50 /
+  50** (`app/course-modele/route.ts`, redirection 307 sans cache, cookie
+  `cm-version` de trente jours pour garder sa version, paramètres
+  conservés). **Version A** : `/course-modele/o5dfv`, la page d'avant.
+  **Version B** : `/course-modele/zvb5y`, la structure d'une page montrée
+  par Rémy (titre centré, astérisque en grand, carte photo + promesse +
+  liste + bouton), aux couleurs, polices et photo du tunnel, avec la
+  pastille « Cliquez pour activer le son » ; textes `optinCourseModeleB`.
+  Les codes sont tirés au hasard : seule la redirection les révèle.
+  Chaque version compte sa visite deux fois (`optin` et `optin-a` /
+  `optin-b`) et la fenêtre dit sa version au CRM (`version` de
+  `FenetreCourseModele`), qui compte les inscrits de chacune.
 - **`/course-modele/thanks`**, `/thanks` sous une autre adresse, au dessin du
   tunnel. **« thanks » doit rester dans l'adresse**, sur demande expresse de
   Rémy (elle s'appelait d'abord `/merci`). L'étape du CRM garde sa clé

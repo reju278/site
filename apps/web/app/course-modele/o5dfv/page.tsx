@@ -12,8 +12,11 @@ import type { Metadata } from "next";
 import { Fragment } from "react";
 
 /**
- * « Course modèle », `go.funnels.club/course-modele` : la copie de
- * `funnels.club/course-2025-fb`, sur demande de Rémy.
+ * **La version A de l'opt-in** de « Course modèle » (« Direct Webinar (N) »
+ * dans le CRM), `go.funnels.club/course-modele/o5dfv` : la copie de
+ * `funnels.club/course-2025-fb`, sur demande de Rémy. Depuis le test A/B
+ * (24 novembre 2026), on n'y arrive plus que par `/course-modele`, qui
+ * répartit 50 / 50 avec la version B (`zvb5y`), ou directement.
  *
  * **Le contenu est celui de la page ClickFunnels** (titre, sous-titre,
  * accroche, quatre points, photo, fenêtre d'inscription) ; **la structure est
@@ -62,9 +65,10 @@ export default function CourseModele() {
     <main className="bg-[var(--genesis-fond)] text-[var(--genesis-encre)]">
       {/* Une seule fenêtre d'inscription pour toute la page : les boutons,
           la photo et la tuile du logo l'ouvrent, sur demande de Rémy. */}
-      <FenetreCourseModele>
-      {/* La visite compte dans le tunnel « Course modèle » du CRM. */}
+      <FenetreCourseModele version="a">
+      {/* La visite compte dans l'opt-in du CRM, et dans sa version A. */}
       <CompteurVue tunnel="course-modele" etape="optin" />
+      <CompteurVue tunnel="course-modele" etape="optin-a" />
       <BanniereGenesis
         autourDuLogo={(tuile) => (
           <OuvreInscription libelle="Voir la vidéo gratuite">
