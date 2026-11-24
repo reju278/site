@@ -342,14 +342,18 @@ export const confirmationCourseModele = {
  * d'où « 30 min » et non les « 40 min » de la page d'origine.
  */
 export const optinCourseModeleB = {
+  /* Le titre de Rémy, le 24 novembre 2026 ; l'astérisque renvoie à la
+     note. */
   titre: [
     "Comment créer un ",
-    { gras: "tunnel de vente" },
-    " pour vendre des ",
+    { gras: "tunnel" },
+    " pour attirer des ",
+    { gras: "clients qualifiés" },
+    " et vendre des ",
     { gras: "produits digitaux*" },
   ] as Segment[],
   note: "*formation en ligne, service digital ou coaching",
-  promesse: "30 min de formation gratuite pour apprendre :",
+  promesse: "30 min de formation gratuite pour apprendre à :",
   points: [
     "Créer une offre digitale irrésistible qui vous ressemble sans avoir besoin d'être un expert.",
     "La méthode simple pour créer le meilleur tunnel de vente pour vous, adapté à votre offre, vos clients et votre marché.",
