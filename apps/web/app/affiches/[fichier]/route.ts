@@ -13,7 +13,7 @@ import { join } from "node:path";
  * d'`/immersion`), et celle de `/lancement` a changé pendant qu'on mesurait.
  * Une copie qui doit être tenue à jour à la main finit fausse.
  *
- * **Servie par nous et mise en cache**, revalidée toutes les dix minutes :
+ * **Servie par nous et mise en cache**, revalidée toutes les deux minutes :
  * le CDN de Vercel garde le fichier, donc aucune requête ne part chez Wistia à
  * l'ouverture d'une page, et un changement de miniature arrive tout seul.
  *
@@ -27,9 +27,12 @@ import { join } from "node:path";
  *
  * **Si Wistia ne répond pas**, on renvoie à la copie locale : une affiche un
  * peu ancienne vaut mieux qu'une image cassée. Le cache garde cette réponse
- * dix minutes, puis réessaie.
+ * deux minutes, puis réessaie.
  */
-export const revalidate = 600;
+/* Deux minutes, et non dix : Rémy change ses miniatures dans Wistia, et dix
+   minutes durant la page montrait l'ancienne avant que le lecteur ne peigne
+   la nouvelle par-dessus (VSL de Course modèle, 24 novembre 2026). */
+export const revalidate = 120;
 export const dynamicParams = false;
 
 /** Les largeurs servies. 1 280 est celle d'origine, les deux autres pour les écrans étroits. */

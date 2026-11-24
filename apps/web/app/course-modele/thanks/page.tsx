@@ -1,7 +1,6 @@
-import { BanniereGenesis } from "@/components/banniere-genesis";
 import { CompteurVue } from "@/components/compteur-vue";
 import { LecteurVideo } from "@/components/lecteur-video";
-import { NumeroVideo } from "@/components/numero-video";
+import { ReprendreVsl } from "@/components/reprendre-vsl";
 import { PreuvesTunnel } from "@/components/preuves-tunnel";
 import { ConsignesRendezVous } from "@/components/rendez-vous";
 import { TitreConfirmationForm } from "@/components/titre-confirmation-form";
@@ -47,7 +46,7 @@ export const metadata: Metadata = {
 const CARTE = "bg-white p-4 shadow-[0_0_39px_-8px_rgba(0,0,0,0.15)] sm:p-7";
 
 export default function MerciCourseModele() {
-  const { etape1, video2 } = confirmationThanks;
+  const { etape1 } = confirmationThanks;
   const { video1 } = confirmationCourseModele;
 
   return (
@@ -73,11 +72,11 @@ export default function MerciCourseModele() {
         dangerouslySetInnerHTML={{ __html: `<script>${scriptCapture}</script>` }}
       />
 
-      <BanniereGenesis libelle={confirmationCourseModele.barre} />
-
-      <header className="mx-auto max-w-[960px] px-5 pt-5 sm:px-8 sm:pt-6">
+      {/* Sans bannière ni logo, et centrée, comme la vidéo et la prise
+          d'appel, sur demande de Rémy. */}
+      <header className="mx-auto max-w-[960px] px-5 pt-8 text-center sm:px-8 sm:pt-12">
         <TitreConfirmationForm
-          classeTitre="text-[clamp(1.75rem,7.5vw,2.75rem)] leading-[1.1]"
+          classeTitre="text-center text-[clamp(1.75rem,7.5vw,2.75rem)] leading-[1.1]"
           alerte={confirmationThanks.alerte}
           prenomOptin
         />
@@ -86,9 +85,9 @@ export default function MerciCourseModele() {
       {/* L'étape 1 : la vidéo de confirmation et les consignes. */}
       <section className="mx-auto max-w-[960px] px-5 pt-8 sm:px-8 sm:pt-10">
         <div className={CARTE}>
-          <h2 className="titre text-[1.375rem] leading-tight text-pretty sm:text-3xl">
-            <NumeroVideo>{etape1.numero}</NumeroVideo>
-            {insecables(`: ${etape1.titre}`)}
+          {/* Sans « Vidéo 1/2 », sur demande de Rémy : le titre seul. */}
+          <h2 className="titre text-center text-[1.375rem] leading-tight text-balance sm:text-3xl">
+            {insecables(etape1.titre)}
           </h2>
           <div className="mt-4 w-full sm:mt-6">
             {/* La vidéo de Course modèle, à la place de celle de `/thanks`. */}
@@ -106,26 +105,9 @@ export default function MerciCourseModele() {
         </div>
       </section>
 
-      {/* La vidéo 2/2, dans une carte comme la première. */}
-      <section className="mx-auto max-w-[960px] px-5 pt-8 sm:px-8 sm:pt-10">
-        <div className={CARTE}>
-          <h2 className="titre text-[1.375rem] leading-tight text-pretty sm:text-3xl">
-            <NumeroVideo>{video2.numero}</NumeroVideo>
-            {insecables(`: ${video2.titre}`)}
-          </h2>
-          <div className="mt-4 w-full sm:mt-6">
-            <LecteurVideo
-              id={video2.id}
-              titre={video2.titre}
-              secondes={video2.secondes}
-              affiche={`/temoignages/${video2.id}.jpg`}
-              afficheAlt={video2.titre}
-              natif
-              carre
-            />
-          </div>
-        </div>
-      </section>
+      {/* À la place de la vidéo 2/2 de `/thanks`, sans carte ni ombre, sur
+          demande de Rémy : la VSL, reprise là où la personne s'est arrêtée. */}
+      <ReprendreVsl />
 
       {/* Tout ce qui suit sur `/thanks` : la vidéo de qui démarre de zéro
           (si le quiz le dit), puis les entretiens, le mur et l'équipe, aux

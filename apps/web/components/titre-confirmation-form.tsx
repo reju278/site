@@ -77,7 +77,7 @@ export function TitreConfirmationForm({
       <div
         role="note"
         style={{ "--teinte": "#ffffff" } as React.CSSProperties}
-        className="relative mt-6 inline-flex max-w-full items-center gap-3 overflow-hidden rounded-[1.25rem] bg-[#dc2626] px-5 py-3 text-left text-base leading-snug font-medium text-white shadow-[0_14px_34px_-14px_rgba(220,38,38,0.65)] sm:mt-7 sm:rounded-full sm:px-6 sm:py-3 sm:text-lg"
+        className="relative mt-6 inline-flex max-w-full items-center gap-3 overflow-hidden rounded-[1.25rem] bg-[#dc2626] px-5 py-3 text-left text-base leading-snug font-medium text-white max-sm:mt-5 max-sm:gap-2.5 max-sm:px-4 max-sm:py-2.5 max-sm:text-sm shadow-[0_14px_34px_-14px_rgba(220,38,38,0.65)] sm:mt-7 sm:rounded-full sm:px-6 sm:py-3 sm:text-lg"
       >
         {/* Le liseré en rouges clairs, et non dans les rouges presque noirs
             de /thanks : sur ce fond crème, ils se lisaient comme une ombre

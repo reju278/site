@@ -2602,6 +2602,21 @@ sans titre), et la confirmation garde sa bannière sans pied de page :
   reconnaît pour poser « Appel réservé » dans ClickFunnels
   (`EVENEMENTS_APPEL_RESERVE`) : changer d'événement oblige à changer les
   deux ;
+- **La confirmation (`/course-modele/thanks`)**, sur demande de Rémy le 24
+  novembre 2026 : sans bannière ni pied, titres centrés ; la vidéo 1 sans
+  « Vidéo 1/2 » (« Informations à propos de ton rendez-vous ») ; **à la
+  place de la vidéo 2/2, la VSL elle-même** (`ReprendreVsl`), sans carte,
+  dans son cadre bleu : « Tu as arrêté la vidéo de formation à 2 min 30.
+  Finis-la avant ton rendez-vous », et le lecteur y reprend (`debut` de
+  `LecteurVideo`, option `time` de Wistia). **Où elle s'est arrêtée vient
+  du navigateur** : la VSL le note (`SuiviArretVideo`, `arret-video.tsx`,
+  par la poignée Wistia de `lib/wistia-poignee.ts`, partagée avec
+  `VitesseVideo`), pas l'adresse e-mail, que le CRM ne relit que toutes les
+  demi-heures et qu'une adresse publique ne doit pas exposer. Sans trace,
+  « Finis la vidéo de formation avant ton rendez-vous ». **Le prénom du
+  titre est une variable** : celui de Calendly (redirection avec les
+  détails), sinon celui de l'opt-in gardé dans ce navigateur, sinon
+  « Félicitations, ton appel est réservé ! ».
 - **`/course-modele/thanks`**, `/thanks` sous une autre adresse, au dessin du
   tunnel. **« thanks » doit rester dans l'adresse**, sur demande expresse de
   Rémy (elle s'appelait d'abord `/merci`). L'étape du CRM garde sa clé

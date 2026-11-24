@@ -322,6 +322,14 @@ export const equipeImmersion: {
       role: "Responsable coaching",
       photo: "/immersion/equipe-geoffrey-bonniot.jpg",
     },
+    /* Ajouté le 24 novembre 2026, sur demande de Rémy. Sa photo vient de
+       son compte Calendly (200 px, la taille que Calendly garde : assez pour
+       un rond de 96 px). Le rôle est PROVISOIRE, à confirmer par Rémy. */
+    {
+      nom: "Sébastien Bader",
+      role: "Conseiller",
+      photo: "/immersion/equipe-sebastien-bader.jpg",
+    },
     {
       nom: "Ludivine Ludovic",
       role: "Responsable client",

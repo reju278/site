@@ -1,4 +1,5 @@
 import { BoutonGenesis } from "@/components/bouton-genesis";
+import { SuiviArretVideo } from "@/components/arret-video";
 import { CompteurVue } from "@/components/compteur-vue";
 import {
   PastilleReservations,
@@ -90,6 +91,9 @@ export default async function VideoCourseModele() {
       <link rel="preconnect" href="https://embed-cloudfront.wistia.com" />
       {/* La visite compte dans le tunnel « Course modèle » du CRM. */}
       <CompteurVue tunnel="course-modele" etape="video" />
+      {/* Où la vidéo s'arrête, gardé dans le navigateur : la confirmation
+          le dit et y reprend la vidéo (`arret-video.tsx`). */}
+      <SuiviArretVideo id={video.id} />
 
       {/* Sans bannière ni logo, et tout au centre, sur demande de Rémy : le
           titre, la vidéo, la phrase et le bouton. */}

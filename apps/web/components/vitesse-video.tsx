@@ -1,6 +1,7 @@
 "use client";
 
 import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
+import { poigneeWistia, type Poignee } from "@/lib/wistia-poignee";
 import { useId, useState } from "react";
 
 /**
@@ -12,9 +13,8 @@ import { useId, useState } from "react";
  * toucher. Le chemin, relevé et mesuré le 24 novembre 2026 :
  *
  * 1. l'iframe porte `wistia_embed` dès sa création (`LecteurVideo pilotable`) ;
- * 2. au premier choix seulement, la page charge `E-v1.js`, le script de
- *    Wistia, qui reconnaît l'iframe et rend sa poignée (`_wq`, `onReady`).
- *    Rien n'est chargé tant que personne n'y touche ;
+ * 2. la page charge `E-v1.js`, le script de Wistia, qui reconnaît l'iframe
+ *    et rend sa poignée (`poigneeWistia`, `lib/wistia-poignee.ts`) ;
  * 3. **la poignée d'une iframe n'a pas de `playbackRate()`**, seulement
  *    `play`, `time`, `volume`… Mais toutes passent par le même canal,
  *    `postMessage(méthode, arguments)`, que le lecteur relaie à sa vidéo :
@@ -31,35 +31,9 @@ import { useId, useState } from "react";
 
 const VITESSES = [1, 1.25, 1.5, 2] as const;
 
-type Poignee = {
-  playbackRate?: (vitesse: number) => void;
-  postMessage?: (methode: string, ...args: unknown[]) => void;
-  bind?: (evenement: string, rappel: () => void) => void;
-};
-
-type FenetreWistia = Window & {
-  _wq?: { id: string; onReady: (video: Poignee) => void }[];
-};
-
-/** Le script de Wistia, chargé une fois pour toute la page. */
-let script: Promise<void> | null = null;
-const chargerWistia = () =>
-  (script ??= new Promise<void>((fin) => {
-    const balise = document.createElement("script");
-    balise.src = "https://fast.wistia.net/assets/external/E-v1.js";
-    balise.async = true;
-    balise.onload = () => fin();
-    balise.onerror = () => {
-      /* Wistia injoignable : on retentera au prochain choix. */
-      script = null;
-      fin();
-    };
-    document.head.appendChild(balise);
-  }));
-
-/** Les poignées déjà rendues, et la vitesse choisie, par vidéo. */
-const poignees = new Map<string, Poignee>();
+/** La vitesse choisie, par vidéo, et les vidéos dont le départ est écouté. */
 const choisies = new Map<string, number>();
+const ecoutees = new Set<string>();
 
 const regler = (video: Poignee, vitesse: number) => {
   if (typeof video.playbackRate === "function") video.playbackRate(vitesse);
@@ -68,25 +42,14 @@ const regler = (video: Poignee, vitesse: number) => {
 
 async function appliquer(id: string, vitesse: number) {
   choisies.set(id, vitesse);
-  const connue = poignees.get(id);
-  if (connue) {
-    regler(connue, vitesse);
-    return;
-  }
-  await chargerWistia();
-  const fenetre = window as FenetreWistia;
-  fenetre._wq = fenetre._wq || [];
-  fenetre._wq.push({
-    id,
-    onReady: (video) => {
-      poignees.set(id, video);
-      regler(video, choisies.get(id) ?? vitesse);
-      /* **Wistia repart à 1x au lancement** : une vitesse choisie avant de
-         lancer la vidéo était perdue, mesuré. Elle est donc reposée à
-         chaque départ de la lecture. */
-      video.bind?.("play", () => regler(video, choisies.get(id) ?? 1));
-    },
-  });
+  const video = await poigneeWistia(id);
+  regler(video, choisies.get(id) ?? vitesse);
+  if (ecoutees.has(id)) return;
+  ecoutees.add(id);
+  /* **Wistia repart à 1x au lancement** : une vitesse choisie avant de
+     lancer la vidéo était perdue, mesuré. Elle est donc reposée à chaque
+     départ de la lecture. */
+  video.bind?.("play", () => regler(video, choisies.get(id) ?? 1));
 }
 
 /** « 1,25x » : la virgule française. */

@@ -217,6 +217,7 @@ export function LecteurVideo({
   format,
   reglagesWistia = false,
   couleur,
+  debut,
   carre = false,
   pilotable = false,
   emailContact = false,
@@ -319,6 +320,12 @@ export function LecteurVideo({
    * qui est aussi réglé sur la vidéo chez Wistia.
    */
   couleur?: string;
+  /**
+   * La seconde où la vidéo démarre (option `time` de Wistia) : la
+   * confirmation de Course modèle reprend la VSL là où la personne s'était
+   * arrêtée (`useArretVideo`).
+   */
+  debut?: number;
   className?: string;
 }) {
   const [lance, setLance] = useState(false);
@@ -444,13 +451,15 @@ export function LecteurVideo({
       : reglagesWistia
         ? OPTIONS_WISTIA
         : OPTIONS;
-  const options = couleur
-    ? (() => {
-        const o = new URLSearchParams(optionsDeBase);
-        o.set("playerColor", couleur);
-        return o;
-      })()
-    : optionsDeBase;
+  const options =
+    couleur || debut
+      ? (() => {
+          const o = new URLSearchParams(optionsDeBase);
+          if (couleur) o.set("playerColor", couleur);
+          if (debut && debut > 0) o.set("time", String(Math.floor(debut)));
+          return o;
+        })()
+      : optionsDeBase;
   const relais = sourcesAffiche(id, affiche);
 
   /* **La préconnexion aux serveurs de Wistia**, en mode natif seulement, là où

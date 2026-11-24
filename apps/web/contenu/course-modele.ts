@@ -232,4 +232,22 @@ export const confirmationCourseModele = {
     titre: "La vidéo de confirmation de ton appel",
     secondes: 452,
   },
+  /* La seconde vidéo, de Rémy : la VSL elle-même, reprise là où la
+     personne s'est arrêtée (`ReprendreVsl`). `{temps}` devient « 2 min 30 ». */
+  vsl: {
+    arretee: {
+      titre: "Tu as arrêté la vidéo de formation à {temps}",
+      texte: "Finis-la avant ton rendez-vous : elle reprend là où tu t'es arrêté.",
+    },
+    finie: {
+      titre: "Tu as regardé la vidéo de formation jusqu'au bout",
+      texte: "Revois-la si besoin avant ton rendez-vous.",
+    },
+    aVoir: {
+      /* « Finis » et non « Regarde », sur demande de Rémy : on l'a déjà
+         commencée, Wistia la reprend même tout seul là où on l'a laissée. */
+      titre: "Finis la vidéo de formation avant ton rendez-vous",
+      texte: "Elle répond déjà à beaucoup de questions que tu te poses.",
+    },
+  },
 };
