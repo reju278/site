@@ -1,5 +1,6 @@
 import { CompteurVue } from "@/components/compteur-vue";
 import { FormulaireCalendly } from "@/components/formulaire-calendly";
+import { VisiteAppelCrm } from "@/components/visite-appel-crm";
 import { reservationAppel } from "@/contenu/appel";
 import {
   appelCourseModele,
@@ -47,6 +48,9 @@ export default function AppelCourseModele() {
       />
       {/* La visite compte dans le tunnel « Course modèle » du CRM. */}
       <CompteurVue tunnel="course-modele" etape="appel" />
+      {/* Et, sous l'adresse de l'opt-in, qui y est passé : la colonne
+          « Page d'appel » de l'onglet Inscription du CRM. */}
+      <VisiteAppelCrm />
       {/* Le formulaire d'abord, sans bannière ni logo ni titre, sur demande
           de Rémy. */}
       <div className="mx-auto max-w-[72rem] px-5 pt-6 sm:px-8 sm:pt-10">
