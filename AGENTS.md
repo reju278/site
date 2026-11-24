@@ -2570,7 +2570,15 @@ sans titre), et la confirmation garde sa bannière sans pied de page :
   lecteur prend le bleu des boutons** (`couleur` de `LecteurVideo`, #438bf7,
   la couleur réglée sur la vidéo chez Wistia, au lieu du #045ee6 que le site
   impose ailleurs) et la vidéo a un cadre fin de ce bleu, sur demande de
-  Rémy. **Le lecteur reçoit l'adresse de
+  Rémy. **Sous le bouton, une pastille au point vert qui palpite** :
+  « N personnes ont réservé leur appel au cours des dernières 24 heures »
+  (`PastilleReservations`). **N est le vrai nombre**, compté par le CRM
+  (`/course-modele/reservations-recentes` : rendez-vous de candidature pris
+  dans les 24 heures, non annulés) et relu par la page toutes les dix minutes
+  (`revalidate`). Rémy demandait un chiffre au hasard entre 24 et 35 : un
+  chiffre inventé présenté comme réel est une pratique commerciale trompeuse,
+  et le vrai tombe dans cette fourchette. La pastille se tait sous
+  `SEUIL_PASTILLE` (10) et quand le CRM ne répond pas. **Le lecteur reçoit l'adresse de
   l'opt-in** (`LecteurVideo emailContact` : un petit script posé après
   l'iframe ajoute `email=` à son adresse, lu dans `vsl-contact`) : Wistia
   nomme ainsi le visiteur, et le CRM sait qui a vu la vidéo et jusqu'où

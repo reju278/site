@@ -1,5 +1,9 @@
 import { BoutonGenesis } from "@/components/bouton-genesis";
 import { CompteurVue } from "@/components/compteur-vue";
+import {
+  PastilleReservations,
+  SEUIL_PASTILLE,
+} from "@/components/pastille-reservations";
 import { LecteurVideo } from "@/components/lecteur-video";
 import { TitreReservationGenesis } from "@/components/titre-reservation-genesis";
 import { VitesseVideo } from "@/components/vitesse-video";
@@ -8,6 +12,7 @@ import {
   videoCourseModele,
   type Segment,
 } from "@/contenu/course-modele";
+import { API_FUNNELS } from "@/contenu/vsl";
 import { insecables } from "@/lib/typographie";
 import type { Metadata } from "next";
 import { Fragment } from "react";
@@ -43,7 +48,28 @@ function Phrase({ segments }: { segments: Segment[] }) {
   );
 }
 
-export default function VideoCourseModele() {
+/**
+ * Le nombre réel de réservations des dernières 24 heures, compté par le CRM,
+ * pour la pastille sous le bouton. Lu côté serveur et gardé dix minutes :
+ * il reste le même pendant qu'on regarde, et la page ne fait pas une
+ * lecture par visiteur. `null` si le CRM ne répond pas : pas de pastille.
+ */
+async function reservationsRecentes(): Promise<number | null> {
+  try {
+    const reponse = await fetch(
+      `${API_FUNNELS}/course-modele/reservations-recentes`,
+      { next: { revalidate: 600 }, signal: AbortSignal.timeout(2500) },
+    );
+    if (!reponse.ok) return null;
+    const { nombre } = (await reponse.json()) as { nombre?: unknown };
+    return typeof nombre === "number" ? nombre : null;
+  } catch {
+    return null;
+  }
+}
+
+export default async function VideoCourseModele() {
+  const reservations = await reservationsRecentes();
   const { video, titre, appel, bouton } = videoCourseModele;
   // L'affiche relayée depuis Wistia (`app/affiches`), celle que le lecteur
   // demande pour une copie de `public/temoignages`.
@@ -113,6 +139,13 @@ export default function VideoCourseModele() {
             {bouton}
           </BoutonGenesis>
         </div>
+        {/* Sous le bouton, le nombre réel de réservations des dernières
+            24 heures, sur demande de Rémy (voir `PastilleReservations`). */}
+        {reservations !== null && reservations >= SEUIL_PASTILLE ? (
+          <div className="mt-4 flex justify-center">
+            <PastilleReservations nombre={reservations} />
+          </div>
+        ) : null}
       </div>
     </main>
   );

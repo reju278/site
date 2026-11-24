@@ -1403,6 +1403,9 @@ body:has([role="dialog"][data-state="open"])
   --genesis-jaune: #f9f3e2;
   --genesis-gris: #767680;
   --genesis-encre: #000;
+  /* Le point vert qui palpite de la pastille des réservations, sous le
+     bouton d'appel de la VSL de Course modèle. */
+  --genesis-vert: #22c55e;
 }
 
 /* Sur le `body` et non sur le gabarit : la fenêtre d'inscription vit dans un
