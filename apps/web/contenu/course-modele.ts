@@ -347,12 +347,12 @@ export const optinCourseModeleB = {
   titre: [
     "Comment créer un ",
     { gras: "tunnel de vente" },
-    " pour attirer des ",
+    " qui attire des ",
     { gras: "clients qualifiés" },
-    " et vendre des ",
+    " pour vendre des ",
     { gras: "produits digitaux*" },
   ] as Segment[],
-  note: "*formation en ligne, service digital ou coaching",
+  note: "*Produits digitaux : formation en ligne, coaching, consulting, prestation de service digital, etc.",
   /* De Rémy, mot pour mot, puis la liste. */
   promesse: "30 minutes de formation pour apprendre :",
   points: [
