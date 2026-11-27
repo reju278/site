@@ -9,6 +9,7 @@ import {
   type Resultat,
   upsertContact,
 } from "@/lib/clickfunnels";
+import { refusEmail } from "@/lib/filtre-email-serveur";
 import { after } from "next/server";
 
 /**
@@ -70,6 +71,8 @@ export async function inscrireCourseModele(
   const emailPropre = email.trim().toLowerCase().slice(0, 200);
   if (!prenomPropre || !EMAIL.test(emailPropre))
     return { ok: false, raison: "champs" };
+  // Le filtre des faux e-mails, avant ClickFunnels (`filtre-email.ts`).
+  if (await refusEmail(emailPropre, TUNNEL)) return { ok: false, raison: "email" };
 
   const api = apiClickFunnels(TUNNEL);
   if (!api) return { ok: false, raison: "configuration" };

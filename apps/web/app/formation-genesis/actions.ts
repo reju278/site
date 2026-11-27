@@ -8,6 +8,7 @@ import {
   type Resultat,
   upsertContact,
 } from "@/lib/clickfunnels";
+import { refusEmail } from "@/lib/filtre-email-serveur";
 import { NUMERO_INTERNATIONAL } from "@/lib/telephone";
 import { after } from "next/server";
 
@@ -48,6 +49,8 @@ export async function inscrireGenesis(
   const emailPropre = email.trim().toLowerCase().slice(0, 200);
   if (!prenomPropre || !nomPropre || !EMAIL.test(emailPropre))
     return { ok: false, raison: "champs" };
+  // Le filtre des faux e-mails, avant ClickFunnels (`filtre-email.ts`).
+  if (await refusEmail(emailPropre, TUNNEL)) return { ok: false, raison: "email" };
 
   const api = apiClickFunnels(TUNNEL);
   if (!api) return { ok: false, raison: "configuration" };

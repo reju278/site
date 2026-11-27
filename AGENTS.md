@@ -2576,6 +2576,57 @@ avant d'être posé, `contacts_applied_tag` au pluriel). Un troisième tunnel
 s'y branche au lieu de les recopier. Les champs aussi sont partagés,
 `ChampGenesis` dans `components/champ-genesis.tsx`.
 
+**Le filtre des faux e-mails** (Rémy, 27 novembre 2026) garde les opt-ins
+de Genesis et de Course modèle : des adresses bidon faussaient les chiffres
+et abîmaient la délivrabilité. **La règle qui passe avant tout : on ne
+refuse que ce qui est faux à coup sûr ; dans le doute, l'adresse passe.**
+Une vraie personne refusée est pire qu'un faux de plus. Trois fichiers,
+partagés par les deux tunnels :
+
+- `lib/filtre-email.ts`, les règles, sans le réseau (navigateur et
+  serveur) : une **faute de frappe** sur un grand fournisseur se propose
+  (« Vouliez-vous dire jean@gmail.com ? », `gmial.com`, `gmail.fr`,
+  `hotmail.con`, `laposte.fr` → `.net`), jamais imposée ; une **boîte
+  jetable** (yopmail et ses domaines de rechange, mailinator…), un **domaine
+  d'exemple** (`example.com`, `test.fr`, `.test`) et une **adresse d'essai
+  sur un grand fournisseur** (`test@gmail.com`, `azerty@hotmail.fr`,
+  `aaaaaa@gmail.com`) se refusent. Les services qui **transfèrent** vers une
+  vraie boîte (Apple « Masquer mon adresse », Firefox Relay, SimpleLogin,
+  DuckDuckGo) passent : ils sont dans les fournisseurs. Une correction ne
+  vise que les noms longs, à une lettre près : à deux, `mozmail.com`
+  devenait `hotmail.com`.
+- `lib/filtre-email-serveur.ts`, **le domaine reçoit-il des e-mails ?**
+  Seulement pour un domaine qui n'est pas un grand fournisseur, ou une
+  correction refusée. Trois sources en parallèle : le DNS du serveur, et
+  Google et Cloudflare en HTTPS. **Un « oui » laisse passer aussitôt, il faut
+  deux « non » pour refuser**, et tout s'arrête à 1,2 s (au-delà, l'adresse
+  passe). Le DNS du serveur ne suffit pas seul : le serveur de l'aperçu
+  perdait ses paquets UDP quand l'HTTPS passait. Mesuré : 10 à 150 ms.
+  `refusEmail` y pose les mêmes règles **dans `inscrireGenesis` et
+  `inscrireCourseModele`, avant ClickFunnels**, pour qui contournerait la
+  page ; il rend `raison: "email"`.
+- `components/controle-email.tsx`, la page : `useControleEmail` à l'étape
+  de l'e-mail (instantané pour un grand fournisseur, une seconde et demie au
+  plus sinon), la correction proposée (`SuggestionEmail`, « Oui, corriger »
+  ou « Non, garder la mienne », et l'envoi repart seul par `useRelance`),
+  **chaque refus noté dans le CRM** (`/email/refus`, table `emailsRefuses`
+  du dépôt `Funnels-Club`, le domaine et deux lettres, jamais l'adresse), et
+  **le piège à robots** (`PiegeRobots`) : un champ invisible qui ne compte
+  que s'il est rempli **et** que l'e-mail arrive moins de trois secondes
+  après l'ouverture du formulaire. Un robot n'est pas prévenu : le
+  formulaire avance, plus rien ne part.
+
+**L'interrupteur** : `NEXT_PUBLIC_FILTRE_EMAIL=off` sur Vercel, puis
+redéployer, coupe tout le filtre. Les phrases de refus sont dans
+`optinGenesis.formulaire.erreurs` (vouvoiement), que Course modèle reprend.
+**Tester sans rien écrire** : une copie locale du site lancée avec des
+variables ClickFunnels fausses et `NEXT_PUBLIC_API_FUNNELS` vers un petit
+enregistreur local, comme le 27 novembre 2026 ; aucun contact, aucun
+opt-in, et la table `emailsRefuses` du développement se vide ensuite
+(`convex import --table emailsRefuses --replace` d'un fichier vide). Un
+dossier de construction neuf (`NEXT_DIST_DIR`) hors du `.gitignore` est lu
+par Tailwind comme du code et casse la feuille de style : garder `.next`.
+
 **Le tunnel a quatre pages, toutes sous `/course-modele`** (donc dans son
 gabarit, `CHEMINS_COURSE_MODELE`), copies de celles de ClickFunnels sur le
 dessin de Genesis, sur demande de Rémy. **Seul l'opt-in porte la bannière

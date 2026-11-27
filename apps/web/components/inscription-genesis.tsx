@@ -10,6 +10,12 @@ import {
   ChampGenesis as Champ,
   ChampTelephoneGenesis,
 } from "@/components/champ-genesis";
+import {
+  PiegeRobots,
+  SuggestionEmail,
+  useControleEmail,
+  useRelance,
+} from "@/components/controle-email";
 import { ID_FORMULAIRE_GENESIS } from "@/components/maquette-lecteur-genesis";
 import {
   CLE_BIENVENUE_GENESIS,
@@ -18,6 +24,7 @@ import {
   RACINE_GENESIS,
 } from "@/contenu/formation-genesis";
 import { API_FUNNELS, CLE_CONTACT_VSL, legalesVsl } from "@/contenu/vsl";
+import type { Resultat } from "@/lib/clickfunnels";
 import { numeroInternational, PAYS } from "@/lib/telephone";
 import { ArrowLeft, ArrowRight, LoaderCircle } from "lucide-react";
 import { Fragment, useEffect, useRef, useState } from "react";
@@ -88,6 +95,20 @@ export function InscriptionGenesis() {
   /** La première réponse d'une question à choix, qui prend le curseur. */
   const premierBouton = useRef<HTMLButtonElement>(null);
   const aChange = useRef(false);
+  const formulaireRef = useRef<HTMLFormElement>(null);
+  /** Le filtre des faux e-mails (`controle-email.tsx`), et l'envoi relancé
+   *  après une correction acceptée ou refusée. */
+  const controle = useControleEmail("formation-genesis", formulaire.erreurs);
+  const relancer = useRelance(formulaireRef);
+  /** Un robot pris au piège : le formulaire avance, plus rien ne part. */
+  const robot = useRef(false);
+  const erreursEmail: (string | null)[] = [
+    formulaire.erreurs.email,
+    formulaire.erreurs.jetable,
+    formulaire.erreurs.exemple,
+    formulaire.erreurs.essai,
+    formulaire.erreurs.domaine,
+  ];
 
   useEffect(() => {
     if (!aChange.current) return;
@@ -104,11 +125,13 @@ export function InscriptionGenesis() {
 
   /** L'inscription en cours ou faite, lancée à la validation de l'e-mail.
    *  Le signal « lead » ne part qu'une fois, le contact créé. */
-  const inscription = useRef<Promise<{ ok: boolean }> | null>(null);
+  const inscription = useRef<Promise<Resultat> | null>(null);
   const leadEnvoye = useRef(false);
-  const inscrire = () =>
-    inscrireGenesis(prenom, nom, email)
-      .catch(() => ({ ok: false as const }))
+  const inscrire = (): Promise<Resultat> =>
+    robot.current
+      ? Promise.resolve({ ok: true })
+      : inscrireGenesis(prenom, nom, email)
+      .catch((): Resultat => ({ ok: false, raison: "reseau" }))
       .then((resultat) => {
         if (resultat.ok && !leadEnvoye.current) {
           leadEnvoye.current = true;
@@ -129,6 +152,7 @@ export function InscriptionGenesis() {
     etapeCrm: "email" | "telephone" | "situation",
     ajouts: { telephone?: string; situation?: string; ca?: string } = {},
   ) => {
+    if (robot.current) return;
     void fetch(`${API_FUNNELS}/genesis/optin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -190,9 +214,35 @@ export function InscriptionGenesis() {
         setErreur(formulaire.erreurs.champs);
         return;
       }
-      if (!EMAIL.test(email.trim())) {
-        setErreur(formulaire.erreurs.email);
+      const adresse = email.trim();
+      if (!EMAIL.test(adresse)) {
+        // `jean@gmail` : la correction se propose avant l'erreur.
+        const examen = controle.examiner(adresse);
+        if (examen.suite !== "arreter" || examen.erreur) {
+          setErreur(formulaire.erreurs.email);
+        }
         return;
+      }
+      /* **Le filtre des faux e-mails**, avant toute inscription : instantané
+         pour un grand fournisseur, une seconde et demie au plus pour un
+         autre domaine (`controle-email.tsx`). Un robot pris au piège passe
+         sans rien envoyer. */
+      robot.current = controle.estRobot(adresse);
+      if (!robot.current) {
+        const examen = controle.examiner(adresse);
+        if (examen.suite === "arreter") {
+          if (examen.erreur) setErreur(examen.erreur);
+          return;
+        }
+        if (examen.suite === "verifier") {
+          setEnvoi(true);
+          const refus = await controle.verifier(adresse);
+          setEnvoi(false);
+          if (refus) {
+            setErreur(refus);
+            return;
+          }
+        }
       }
       /* **Instantané**, sur demande de Rémy : l'inscription part en
          arrière-plan et l'étape du téléphone s'affiche tout de suite. Le
@@ -223,12 +273,21 @@ export function InscriptionGenesis() {
        refusée), elle est retentée une fois ici ; si elle échoue encore,
        l'erreur s'affiche et le bouton « Retour » mène à l'e-mail. */
     let inscrit = await (inscription.current ?? inscrire());
-    if (!inscrit.ok) inscrit = await inscrire();
-    const resultat = inscrit.ok
-      ? await completerGenesis(email, numero).catch(() => ({
-          ok: false as const,
-        }))
-      : inscrit;
+    // Une adresse refusée par le filtre du serveur ne passera pas mieux.
+    if (!inscrit.ok && inscrit.raison !== "email") inscrit = await inscrire();
+    if (!inscrit.ok && inscrit.raison === "email") {
+      setEnvoi(false);
+      aller("email");
+      setErreur(formulaire.erreurs.domaine);
+      return;
+    }
+    const resultat: Resultat = robot.current
+      ? { ok: true }
+      : inscrit.ok
+        ? await completerGenesis(email, numero).catch(
+            (): Resultat => ({ ok: false, raison: "reseau" }),
+          )
+        : inscrit;
     setEnvoi(false);
     if (!resultat.ok) {
       setErreur(formulaire.erreurs.envoi);
@@ -262,7 +321,7 @@ export function InscriptionGenesis() {
     if (envoi) return;
     setEnvoi(true);
     signaler("situation", { situation: valeur, ...(ca ? { ca } : {}) });
-    void situerGenesis(email, valeur, ca).catch(() => {});
+    if (!robot.current) void situerGenesis(email, valeur, ca).catch(() => {});
     /* La marque de l'arrivée qui suit l'inscription : l'espace l'efface en
        la lisant et affiche une fois la notification de l'e-mail envoyé
        (`BienvenueGenesis`). Un onglet, une fois : `sessionStorage`. */
@@ -304,10 +363,16 @@ export function InscriptionGenesis() {
       className="scroll-mt-6 bg-white p-5 shadow-[0_0_39px_-8px_rgba(0,0,0,0.15)] sm:p-7"
     >
       <form
+        ref={formulaireRef}
         noValidate
         onSubmit={valider}
         aria-describedby={erreur ? "erreur-genesis" : undefined}
       >
+        {/* Le champ que seuls les robots remplissent (`PiegeRobots`). */}
+        <PiegeRobots
+          valeur={controle.piege.valeur}
+          changer={controle.piege.changer}
+        />
         <fieldset className="flex flex-col gap-4" disabled={envoi}>
           {/* La question est la légende du groupe : un lecteur d'écran la
               lit avec le champ, et elle n'entre pas dans le plan des
@@ -359,11 +424,27 @@ export function InscriptionGenesis() {
                 inputMode="email"
                 aria-required
                 aria-invalid={
-                  (tente && manque.email) || erreur === formulaire.erreurs.email
+                  (tente && manque.email) || erreursEmail.includes(erreur)
                 }
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
+              {/* La faute de frappe d'un grand fournisseur, proposée et non
+                  imposée : on corrige ou l'on garde, et l'envoi repart. */}
+              {controle.correctionPour(email) ? (
+                <SuggestionEmail
+                  adresse={controle.correctionPour(email)!}
+                  textes={formulaire.suggestion}
+                  onAccepter={() => {
+                    setEmail(controle.correctionPour(email)!);
+                    relancer();
+                  }}
+                  onGarder={() => {
+                    controle.garder(email.trim());
+                    relancer();
+                  }}
+                />
+              ) : null}
               {/* 12 px, sur demande de Rémy, pour tenir en deux lignes dans la
                   colonne du formulaire en large : mesuré, la phrase fait 701 px
                   à ce corps et 760 à 13, pour deux lignes de 402. */}

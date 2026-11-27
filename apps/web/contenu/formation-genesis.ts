@@ -174,6 +174,23 @@ export const optinGenesis = {
       email: "Veuillez indiquer une adresse email valide.",
       telephone: "Veuillez indiquer un numéro de téléphone complet.",
       envoi: "L'envoi n'est pas passé. Vérifiez votre email et réessayez.",
+      /* Le filtre des faux e-mails (`lib/filtre-email.ts`), PROVISOIRES, de
+         l'agent : ils disent quoi faire, sans accuser personne. Course
+         modèle les reprend (`fenetre` de `contenu/course-modele.ts`). */
+      jetable:
+        "Les adresses jetables ne sont pas acceptées. Indiquez l'email où vous recevrez la formation.",
+      exemple:
+        "Cette adresse est un exemple. Indiquez votre propre email pour recevoir la formation.",
+      essai:
+        "Cette adresse ressemble à une adresse d'essai. Indiquez votre vrai email pour recevoir la formation.",
+      domaine:
+        "Cette adresse ne peut pas recevoir d'emails. Vérifiez ce qui suit le @.",
+    },
+    /** La correction proposée d'une faute de frappe, sous le champ. */
+    suggestion: {
+      question: "Vouliez-vous dire",
+      accepter: "Oui, corriger",
+      garder: "Non, garder la mienne",
     },
   },
 };

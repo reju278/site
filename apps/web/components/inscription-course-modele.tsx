@@ -6,6 +6,13 @@ import {
 } from "@/app/course-modele/actions";
 import { BoutonGenesis } from "@/components/bouton-genesis";
 import { ChampGenesis, Obligatoire } from "@/components/champ-genesis";
+import {
+  PiegeRobots,
+  SuggestionEmail,
+  useControleEmail,
+  useRelance,
+} from "@/components/controle-email";
+import type { Resultat } from "@/lib/clickfunnels";
 import { adresseLecteurWistia } from "@/components/lecteur-video";
 import {
   APRES_INSCRIPTION,
@@ -272,8 +279,22 @@ function Formulaire() {
   const premierChamp = useRef<HTMLInputElement>(null);
   const premierBouton = useRef<HTMLButtonElement>(null);
   const aChange = useRef(false);
+  const formulaireRef = useRef<HTMLFormElement>(null);
+  /** Le filtre des faux e-mails (`controle-email.tsx`), le même que Genesis,
+   *  et l'envoi relancé après une correction acceptée ou refusée. */
+  const controle = useControleEmail("course-modele", fenetre.erreurs);
+  const relancer = useRelance(formulaireRef);
+  /** Un robot pris au piège : la fenêtre avance, plus rien ne part. */
+  const robot = useRef(false);
+  const erreursEmail: (string | null)[] = [
+    fenetre.erreurs.email,
+    fenetre.erreurs.jetable,
+    fenetre.erreurs.exemple,
+    fenetre.erreurs.essai,
+    fenetre.erreurs.domaine,
+  ];
   /** L'inscription de l'e-mail, en cours ou faite : le choix l'attend. */
-  const inscription = useRef<Promise<{ ok: boolean }> | null>(null);
+  const inscription = useRef<Promise<Resultat> | null>(null);
   /** Le signal « lead » et Hyros ne partent qu'une fois par adresse. */
   const signale = useRef<string | null>(null);
 
@@ -307,6 +328,7 @@ function Formulaire() {
     choix?: string,
     ca?: string,
   ) => {
+    if (robot.current) return;
     void fetch(`${API_FUNNELS}/course-modele/optin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -343,13 +365,15 @@ function Formulaire() {
 
   /** ClickFunnels : la réponse arrive dès la vérification faite, et
    *  l'inscription suit côté serveur. Un serveur injoignable est retenté. */
-  const inscrire = async () => {
+  const inscrire = async (): Promise<Resultat> => {
+    if (robot.current) return { ok: true };
     const essai = () =>
-      inscrireCourseModele(prenom, nom, email.trim()).catch(() => ({
-        ok: false as const,
-      }));
+      inscrireCourseModele(prenom, nom, email.trim()).catch(
+        (): Resultat => ({ ok: false, raison: "reseau" }),
+      );
     let resultat = await essai();
-    if (!resultat.ok) resultat = await essai();
+    // Une adresse refusée par le filtre du serveur ne passera pas mieux.
+    if (!resultat.ok && resultat.raison !== "email") resultat = await essai();
     if (resultat.ok && signale.current !== email.trim()) {
       signale.current = email.trim();
       const fenetreGtm = window as unknown as { dataLayer?: unknown[] };
@@ -387,17 +411,44 @@ function Formulaire() {
       }
       const adresse = email.trim();
       if (!EMAIL.test(adresse)) {
-        setErreur(fenetre.erreurs.email);
+        // `jean@gmail` : la correction se propose avant l'erreur.
+        const examen = controle.examiner(adresse);
+        if (examen.suite !== "arreter" || examen.erreur) {
+          setErreur(fenetre.erreurs.email);
+        }
         return;
+      }
+      /* **Le filtre des faux e-mails**, avant Hyros et toute inscription :
+         instantané pour un grand fournisseur, une seconde et demie au plus
+         pour un autre domaine (`controle-email.tsx`). Un robot pris au
+         piège passe sans rien envoyer. */
+      robot.current = controle.estRobot(adresse);
+      if (!robot.current) {
+        const examen = controle.examiner(adresse);
+        if (examen.suite === "arreter") {
+          if (examen.erreur) setErreur(examen.erreur);
+          return;
+        }
+        if (examen.suite === "verifier") {
+          setEnvoi(true);
+          const refus = await controle.verifier(adresse);
+          setEnvoi(false);
+          if (refus) {
+            setErreur(refus);
+            return;
+          }
+        }
       }
       /* Hyros d'abord : le tag, puis l'adresse. Rien ne doit retenir
          l'inscription si son script n'est pas là (bloqueur). Son envoi a
          tout le temps du choix pour partir. */
       try {
-        (window as unknown as Hyros).hrs?.addLeadTag?.(TAG_HYROS_COURSE_MODELE);
-        window.dispatchEvent(
-          new CustomEvent("hyros_email", { detail: { email: adresse } }),
-        );
+        if (!robot.current) {
+          (window as unknown as Hyros).hrs?.addLeadTag?.(TAG_HYROS_COURSE_MODELE);
+          window.dispatchEvent(
+            new CustomEvent("hyros_email", { detail: { email: adresse } }),
+          );
+        }
       } catch {
         /* Hyros absent : il apprendra le contact par ClickFunnels. */
       }
@@ -436,16 +487,21 @@ function Formulaire() {
     aller("chargement");
     const plein = new Promise((fin) => setTimeout(fin, DUREE_CHARGEMENT));
     let inscrit = await (inscription.current ?? inscrire());
-    if (!inscrit.ok) inscrit = await inscrire();
+    if (!inscrit.ok && inscrit.raison !== "email") inscrit = await inscrire();
     if (!inscrit.ok) {
       setEnvoi(false);
       setCharge(false);
       aller("email");
-      setErreur(fenetre.erreurs.envoi);
+      // Refusée par le filtre du serveur : son domaine ne reçoit rien.
+      setErreur(
+        inscrit.raison === "email" ? fenetre.erreurs.domaine : fenetre.erreurs.envoi,
+      );
       return;
     }
     signalerCrm("situation", valeur, ca);
-    void situerCourseModele(email.trim(), valeur, ca).catch(() => {});
+    if (!robot.current) {
+      void situerCourseModele(email.trim(), valeur, ca).catch(() => {});
+    }
     ranger();
     await plein;
     window.location.assign(APRES_INSCRIPTION);
@@ -483,10 +539,16 @@ function Formulaire() {
         </DialogTitle>
       </div>
       <form
+        ref={formulaireRef}
         noValidate
         onSubmit={valider}
         aria-describedby={erreur ? "erreur-course-modele" : undefined}
       >
+        {/* Le champ que seuls les robots remplissent (`PiegeRobots`). */}
+        <PiegeRobots
+          valeur={controle.piege.valeur}
+          changer={controle.piege.changer}
+        />
         <fieldset
           disabled={envoi}
           className="flex flex-col gap-4 px-5 pt-5 pb-6 sm:px-6"
@@ -535,11 +597,27 @@ function Formulaire() {
                 inputMode="email"
                 aria-required
                 aria-invalid={
-                  (tente && manque.email) || erreur === fenetre.erreurs.email
+                  (tente && manque.email) || erreursEmail.includes(erreur)
                 }
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
+              {/* La faute de frappe d'un grand fournisseur, proposée et non
+                  imposée : on corrige ou l'on garde, et l'envoi repart. */}
+              {controle.correctionPour(email) ? (
+                <SuggestionEmail
+                  adresse={controle.correctionPour(email)!}
+                  textes={fenetre.suggestion}
+                  onAccepter={() => {
+                    setEmail(controle.correctionPour(email)!);
+                    relancer();
+                  }}
+                  onGarder={() => {
+                    controle.garder(email.trim());
+                    relancer();
+                  }}
+                />
+              ) : null}
               <label className="flex cursor-pointer items-start gap-2.5 text-xs leading-relaxed text-[#60606b]">
                 <input
                   type="checkbox"
