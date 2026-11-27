@@ -2,6 +2,7 @@ import { CompteurVue } from "@/components/compteur-vue";
 import { BanniereGenesis } from "@/components/banniere-genesis";
 import { FormulaireCalendly } from "@/components/formulaire-calendly";
 import { TitreReservationGenesis } from "@/components/titre-reservation-genesis";
+import { VisiteAppelCrm } from "@/components/visite-appel-crm";
 import { reservationGenesis } from "@/contenu/formation-genesis";
 import { reservationAppel } from "@/contenu/appel";
 import { scriptContactEspace } from "@/lib/contact-lien";
@@ -52,6 +53,9 @@ export default function Reservation() {
       />
       {/* La visite compte dans le tunnel « Formation Genesis » du CRM. */}
       <CompteurVue tunnel="formation-genesis" etape="reservation" />
+      {/* Et qui y arrive, sous l'adresse de l'opt-in : la colonne « Page
+          d'appel » de l'onglet Inscription, comme pour Course modèle. */}
+      <VisiteAppelCrm tunnel="genesis" />
       <BanniereGenesis libelle={reservationGenesis.barre} />
       <header className="mx-auto max-w-[960px] px-5 pt-5 sm:px-8 sm:pt-6">
         <TitreReservationGenesis className="text-[clamp(1.75rem,7.5vw,2.75rem)] leading-[1.1] font-bold tracking-[0.02em] text-balance" />

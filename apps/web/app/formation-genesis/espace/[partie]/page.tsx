@@ -162,6 +162,14 @@ export default async function PartieGenesis({ params }: Props) {
               /* La couleur du lecteur et l'appel à l'action de fin sont
                  réglés par Rémy dans Wistia, vidéo par vidéo. */
               reglagesWistia
+              /* L'adresse de l'opt-in (ou du lien d'e-mail, relevée plus
+                 haut par `scriptContactEspace`) au lecteur, comme sur la
+                 VSL de Direct Webinar (N) : le CRM sait qui a vu chaque
+                 module, et jusqu'où (colonnes « Vidéo 1 » à « Vidéo 4 » de
+                 l'onglet Inscription). Le CRM suit ces vidéos par l'étape
+                 `espace` de son tunnel (`videos` dans `funnels.ts`) :
+                 changer une vidéo de module, c'est changer les deux. */
+              emailContact
             />
           ) : (
             <Emplacement

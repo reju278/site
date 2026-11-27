@@ -3,6 +3,7 @@
 import {
   completerGenesis,
   inscrireGenesis,
+  situerGenesis,
 } from "@/app/formation-genesis/actions";
 import { BoutonGenesis } from "@/components/bouton-genesis";
 import {
@@ -18,10 +19,10 @@ import {
 } from "@/contenu/formation-genesis";
 import { API_FUNNELS, CLE_CONTACT_VSL, legalesVsl } from "@/contenu/vsl";
 import { numeroInternational, PAYS } from "@/lib/telephone";
-import { ArrowLeft, LoaderCircle } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { ArrowLeft, ArrowRight, LoaderCircle } from "lucide-react";
+import { Fragment, useEffect, useRef, useState } from "react";
 
-type Etape = "nom" | "email" | "telephone";
+type Etape = "nom" | "email" | "telephone" | "situation" | "ca";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -36,11 +37,21 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
  *    l'envoi part en arrière-plan et le téléphone s'affiche aussitôt ; la
  *    troisième étape attend sa réponse avant d'ajouter le numéro ;
  * 3. le téléphone, bouton « Continuer » : il s'ajoute au même contact
- *    (`completerGenesis`), puis on entre dans l'espace membre.
+ *    (`completerGenesis`) ;
+ * 4. **les questions de Direct Webinar (N)**, sur demande de Rémy le 27
+ *    novembre 2026 : « Dernière étape, qu'est-ce qui vous décrit le mieux,
+ *    {prénom} ? », deux réponses qu'on touche, sans bouton ; et pour qui a
+ *    déjà une activité, « À quel niveau de chiffre d'affaires êtes-vous
+ *    actuellement ? », quatre réponses. La réponse part au CRM (colonne
+ *    « Situation ») et à ClickFunnels (`situerGenesis`, après la réponse),
+ *    puis on entre dans l'espace membre. La situation de qui a une activité
+ *    part au CRM dès le choix, pour qui s'arrêterait là. Pas d'écran de
+ *    chargement comme sur N : il y préchargeait la vidéo de la page
+ *    suivante, et l'espace s'ouvre aussitôt.
  *
  * Inscrire à la deuxième étape et non à la fin, c'est garder le contact de
  * qui s'arrête devant le téléphone : il reçoit quand même la formation par
- * e-mail. **L'espace, lui, ne s'ouvre qu'après la troisième.**
+ * e-mail. **L'espace, lui, ne s'ouvre qu'après la dernière.**
  *
  * Une seule `form` dont le contenu change, et non trois : l'état vit ici, et
  * revenir en arrière retrouve ce qu'on avait tapé. Le changement d'étape
@@ -66,16 +77,22 @@ export function InscriptionGenesis() {
   const [consenti, setConsenti] = useState(false);
   const [pays, setPays] = useState<string>(PAYS[0].code);
   const [telephone, setTelephone] = useState("");
+  /** La réponse de la situation, gardée pour la question qui suit. */
+  const [situation, setSituation] = useState<string | null>(null);
   const [envoi, setEnvoi] = useState(false);
   /** Vrai après un essai de l'étape en cours : les champs vides passent au
    *  rouge. Remis à zéro à chaque changement d'étape. */
   const [tente, setTente] = useState(false);
   const [erreur, setErreur] = useState<string | null>(null);
   const premierChamp = useRef<HTMLInputElement>(null);
+  /** La première réponse d'une question à choix, qui prend le curseur. */
+  const premierBouton = useRef<HTMLButtonElement>(null);
   const aChange = useRef(false);
 
   useEffect(() => {
-    if (aChange.current) premierChamp.current?.focus();
+    if (!aChange.current) return;
+    if (etape === "situation" || etape === "ca") premierBouton.current?.focus();
+    else premierChamp.current?.focus();
   }, [etape]);
 
   const aller = (suivante: Etape) => {
@@ -103,12 +120,15 @@ export function InscriptionGenesis() {
 
   /**
    * Le CRM Funnels Club (onglet Funnels, tunnel « Formation Genesis ») :
-   * l'opt-in à l'e-mail, puis le téléphone. **En tâche de fond et sans
-   * jamais retenir personne** : un CRM injoignable ne bloque pas
-   * l'inscription, qui part chez ClickFunnels par ailleurs. `keepalive`
+   * l'opt-in à l'e-mail, le téléphone, puis la situation. **En tâche de
+   * fond et sans jamais retenir personne** : un CRM injoignable ne bloque
+   * pas l'inscription, qui part chez ClickFunnels par ailleurs. `keepalive`
    * laisse le dernier envoi finir pendant que la page change.
    */
-  const signaler = (etapeCrm: "email" | "telephone", numero?: string) => {
+  const signaler = (
+    etapeCrm: "email" | "telephone" | "situation",
+    ajouts: { telephone?: string; situation?: string; ca?: string } = {},
+  ) => {
     void fetch(`${API_FUNNELS}/genesis/optin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -119,7 +139,7 @@ export function InscriptionGenesis() {
         nom: nom.trim(),
         email: email.trim(),
         consentement: consenti,
-        ...(numero ? { telephone: numero } : {}),
+        ...ajouts,
       }),
     }).catch(() => {});
   };
@@ -184,6 +204,9 @@ export function InscriptionGenesis() {
       return;
     }
 
+    // Les questions à choix n'ont rien à envoyer : on touche une réponse.
+    if (etape !== "telephone") return;
+
     if (manque.telephone) {
       setErreur(formulaire.erreurs.champs);
       return;
@@ -206,13 +229,40 @@ export function InscriptionGenesis() {
           ok: false as const,
         }))
       : inscrit;
+    setEnvoi(false);
     if (!resultat.ok) {
-      setEnvoi(false);
       setErreur(formulaire.erreurs.envoi);
       return;
     }
-    signaler("telephone", numero);
+    signaler("telephone", { telephone: numero });
     ranger(numero);
+    aller("situation");
+  };
+
+  /**
+   * La situation : une réponse qu'on touche. Qui a déjà une activité dit
+   * encore son chiffre d'affaires ; sa situation part au CRM sans attendre,
+   * pour qui s'arrêterait là. Les autres entrent dans l'espace.
+   */
+  const choisir = (valeur: string) => {
+    if (envoi) return;
+    setSituation(valeur);
+    if (valeur === "activite") {
+      signaler("situation", { situation: valeur });
+      aller("ca");
+      return;
+    }
+    terminer(valeur);
+  };
+
+  /** La réponse part au CRM et à ClickFunnels, puis l'espace s'ouvre. Le
+   *  contact existe déjà (posé à l'e-mail, complété au téléphone) : rien
+   *  n'est attendu. */
+  const terminer = (valeur: string, ca?: string) => {
+    if (envoi) return;
+    setEnvoi(true);
+    signaler("situation", { situation: valeur, ...(ca ? { ca } : {}) });
+    void situerGenesis(email, valeur, ca).catch(() => {});
     /* La marque de l'arrivée qui suit l'inscription : l'espace l'efface en
        la lisant et affiche une fois la notification de l'e-mail envoyé
        (`BienvenueGenesis`). Un onglet, une fois : `sessionStorage`. */
@@ -226,9 +276,25 @@ export function InscriptionGenesis() {
     );
   };
 
-  const { question, bouton } = formulaire.etapes[etape];
+  const { bouton } = formulaire.etapes[etape];
+  const question = formulaire.etapes[etape].question.replace(
+    "{prenom}",
+    prenom.trim(),
+  );
   const precedente: Etape | null =
-    etape === "telephone" ? "email" : etape === "email" ? "nom" : null;
+    etape === "ca"
+      ? "situation"
+      : etape === "situation"
+        ? "telephone"
+        : etape === "telephone"
+          ? "email"
+          : etape === "email"
+            ? "nom"
+            : null;
+  /** Le dessin d'une réponse à toucher, celui de Direct Webinar (N) : le
+   *  cadre des champs, angles droits, le surligné bleu pâle au survol. */
+  const classeReponse =
+    "flex w-full cursor-pointer items-center gap-3 rounded-none border border-black/45 bg-white px-4 py-3 text-left text-[17px] leading-snug text-pretty text-[var(--genesis-encre)] transition-[border-color,box-shadow,background-color] hover:border-[var(--genesis-encre)] hover:bg-[var(--genesis-surligne)] focus-visible:border-[var(--genesis-encre)] focus-visible:shadow-[0_0_0_1px_var(--genesis-encre)] focus-visible:outline-none";
   const telephoneFaux =
     (tente && manque.telephone) || erreur === formulaire.erreurs.telephone;
 
@@ -340,16 +406,79 @@ export function InscriptionGenesis() {
             />
           ) : null}
 
-          <BoutonGenesis soumettre disabled={envoi} className="mt-1">
-            {envoi ? (
-              <span className="inline-flex items-center gap-2">
-                <LoaderCircle aria-hidden className="size-5 animate-spin" />
-                {formulaire.envoi}
-              </span>
-            ) : (
-              bouton
-            )}
-          </BoutonGenesis>
+          {etape === "situation" ? (
+            // Deux grandes réponses, au dessin des champs : on touche celle
+            // qui nous décrit, et c'est parti, sans bouton à valider.
+            <div role="group" className="flex flex-col gap-3">
+              {formulaire.situations.map((reponse, rang) => (
+                <button
+                  key={reponse.valeur}
+                  ref={rang === 0 ? premierBouton : undefined}
+                  type="button"
+                  onClick={() => choisir(reponse.valeur)}
+                  className={`${classeReponse} min-h-[64px]`}
+                >
+                  <span className="min-w-0 flex-1">
+                    {reponse.texte.map((morceau, i) =>
+                      typeof morceau === "string" ? (
+                        <Fragment key={i}>{morceau}</Fragment>
+                      ) : "gras" in morceau ? (
+                        <strong key={i}>{morceau.gras}</strong>
+                      ) : (
+                        <u key={i}>{morceau.souligne}</u>
+                      ),
+                    )}
+                  </span>
+                  <ArrowRight aria-hidden className="size-5 shrink-0" />
+                </button>
+              ))}
+            </div>
+          ) : null}
+
+          {etape === "ca" ? (
+            // Le chiffre d'affaires : quatre réponses, au même dessin. On
+            // touche, et l'espace s'ouvre.
+            <div role="group" className="flex flex-col gap-3">
+              {formulaire.chiffresAffaires.map((reponse, rang) => (
+                <button
+                  key={reponse.valeur}
+                  ref={rang === 0 ? premierBouton : undefined}
+                  type="button"
+                  onClick={() =>
+                    situation && terminer(situation, reponse.valeur)
+                  }
+                  className={`${classeReponse} min-h-[56px]`}
+                >
+                  <span className="min-w-0 flex-1">{reponse.libelle}</span>
+                  <ArrowRight aria-hidden className="size-5 shrink-0" />
+                </button>
+              ))}
+            </div>
+          ) : null}
+
+          {/* Pendant l'ouverture de l'espace, après un choix. */}
+          {envoi && (etape === "situation" || etape === "ca") ? (
+            <p
+              role="status"
+              className="inline-flex items-center justify-center gap-2 text-sm text-[#60606b]"
+            >
+              <LoaderCircle aria-hidden className="size-4 animate-spin" />
+              {formulaire.envoi}
+            </p>
+          ) : null}
+
+          {etape === "situation" || etape === "ca" ? null : (
+            <BoutonGenesis soumettre disabled={envoi} className="mt-1">
+              {envoi ? (
+                <span className="inline-flex items-center gap-2">
+                  <LoaderCircle aria-hidden className="size-5 animate-spin" />
+                  {formulaire.envoi}
+                </span>
+              ) : (
+                bouton
+              )}
+            </BoutonGenesis>
+          )}
 
           {/* La phrase rouge sous le bouton, sur la référence de Rémy. */}
           {erreur ? (

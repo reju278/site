@@ -106,7 +106,46 @@ export const optinGenesis = {
         question: "Quel est votre numéro de téléphone ?",
         bouton: "Continuer",
       },
+      /* Les questions de Direct Webinar (N) après le téléphone, sur demande
+         de Rémy le 27 novembre 2026, au vouvoiement de ce tunnel (N
+         tutoie). Pas de bouton : on choisit, et c'est parti. */
+      situation: {
+        question: "Dernière étape, qu'est-ce qui vous décrit le mieux, {prenom} ?",
+        bouton: "",
+      },
+      /* Pour qui a déjà une activité seulement. */
+      ca: {
+        question: "À quel niveau de chiffre d'affaires êtes-vous actuellement ?",
+        bouton: "",
+      },
     },
+    /** Les deux réponses de la situation, celles de Direct Webinar (N) au mot
+     *  près (« PAS » et « DÉJÀ » en gras). `valeur` part au CRM, qui garde
+     *  le libellé de N (colonne « Situation ») ; `libelle` part à
+     *  ClickFunnels, champ personnalisé `genesis_situation`. Ne pas changer
+     *  une `valeur` sans changer `SITUATIONS` (dépôt `Funnels-Club`,
+     *  `courseModele.ts`). */
+    situations: [
+      {
+        valeur: "zero",
+        texte: ["Je n'ai ", { gras: "PAS" }, " encore d'offre à vendre, je démarre de zéro"] as SegmentGenesis[],
+        libelle: "Démarre de zéro",
+      },
+      {
+        valeur: "activite",
+        texte: ["J'ai ", { gras: "DÉJÀ" }, " une activité, et je veux la développer"] as SegmentGenesis[],
+        libelle: "Activité à développer",
+      },
+    ],
+    /** Les réponses du chiffre d'affaires, celles de Direct Webinar (N).
+     *  `valeur` part au CRM (`CHIFFRES`), `libelle` à ClickFunnels
+     *  (`genesis_ca`). */
+    chiffresAffaires: [
+      { valeur: "moins-5k", libelle: "Moins de 5 000 € / mois" },
+      { valeur: "5k-10k", libelle: "Entre 5 000 € et 10 000 € / mois" },
+      { valeur: "10k-50k", libelle: "Entre 10 000 € et 50 000 € / mois" },
+      { valeur: "plus-50k", libelle: "Plus de 50 000 € / mois" },
+    ],
     /* PROVISOIRES. */
     /* Les textes grisés dans les champs, demandés par Rémy : PROVISOIRES.
        Le téléphone prend l'exemple de numéro du pays choisi. */

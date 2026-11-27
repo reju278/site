@@ -1,6 +1,6 @@
 "use server";
 
-import { TAG_GENESIS } from "@/contenu/formation-genesis";
+import { optinGenesis, TAG_GENESIS } from "@/contenu/formation-genesis";
 import {
   apiClickFunnels,
   EMAIL,
@@ -9,6 +9,7 @@ import {
   upsertContact,
 } from "@/lib/clickfunnels";
 import { NUMERO_INTERNATIONAL } from "@/lib/telephone";
+import { after } from "next/server";
 
 /**
  * L'inscription à la Formation Genesis, dans ClickFunnels, par son API
@@ -24,6 +25,8 @@ import { NUMERO_INTERNATIONAL } from "@/lib/telephone";
  *    formation par e-mail, ce qui est le but.
  * 2. `completerGenesis`, à l'étape du téléphone : le numéro s'ajoute au même
  *    contact, retrouvé par son e-mail. Rien d'autre n'est touché.
+ * 3. `situerGenesis`, au dernier temps : la situation (et le chiffre
+ *    d'affaires) en champs personnalisés, après la réponse.
  *
  * Le tag est posé à part et seulement s'il manque (voir `poserTag`) : c'est
  * lui qui déclenche la séquence e-mail.
@@ -85,4 +88,54 @@ export async function completerGenesis(
     console.error(`${TUNNEL} : réseau`, erreur);
     return { ok: false, raison: "reseau" };
   }
+}
+
+/**
+ * Ce qui décrit le mieux la personne, après le téléphone (les questions de
+ * Direct Webinar (N), sur demande de Rémy le 27 novembre 2026) : le champ
+ * personnalisé `genesis_situation`, et pour qui a déjà une activité son
+ * chiffre d'affaires, `genesis_ca`, que ClickFunnels crée au premier envoi
+ * comme ceux de N (`course_modele_situation`, `course_modele_ca`). Des
+ * champs à ce tunnel : une personne passée par les deux garde ses deux
+ * réponses. Retrouvé par son adresse, **après la réponse** (`after`) :
+ * l'espace s'ouvre sans attendre ClickFunnels. Le contact existe déjà, posé
+ * à l'e-mail.
+ */
+export async function situerGenesis(
+  email: string,
+  situation: string,
+  /** Le chiffre d'affaires, pour qui a déjà une activité. */
+  ca?: string,
+): Promise<Resultat> {
+  const emailPropre = email.trim().toLowerCase().slice(0, 200);
+  const { situations, chiffresAffaires } = optinGenesis.formulaire;
+  const choix = situations.find((s) => s.valeur === situation);
+  const niveau = chiffresAffaires.find((c) => c.valeur === ca);
+  if (!EMAIL.test(emailPropre) || !choix)
+    return { ok: false, raison: "champs" };
+
+  const api = apiClickFunnels(TUNNEL);
+  if (!api) return { ok: false, raison: "configuration" };
+
+  after(async () => {
+    const poser = async () => {
+      try {
+        const id = await upsertContact(api, {
+          email_address: emailPropre,
+          custom_attributes: {
+            genesis_situation: choix.libelle,
+            ...(niveau ? { genesis_ca: niveau.libelle } : {}),
+          },
+        });
+        return typeof id === "number";
+      } catch (erreur) {
+        console.error(`${TUNNEL} : réseau`, erreur);
+        return false;
+      }
+    };
+    if (await poser()) return;
+    await new Promise((attente) => setTimeout(attente, 2000));
+    if (!(await poser())) console.error(`${TUNNEL} : situation perdue`);
+  });
+  return { ok: true };
 }

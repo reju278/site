@@ -2336,7 +2336,17 @@ cheval.
 
 **L'optin n'a plus de fenêtre** : sur demande de Rémy, le mockup de la vidéo
 est à gauche et le formulaire directement à droite, en trois étapes (prénom
-et nom, e-mail et consentement, téléphone), dans `InscriptionGenesis`.
+et nom, e-mail et consentement, téléphone), dans `InscriptionGenesis`, **puis
+les questions de Direct Webinar (N)**, sur demande de Rémy le 27 novembre
+2026 : « Dernière étape, qu'est-ce qui vous décrit le mieux, {prénom} ? »
+(démarre de zéro, ou déjà une activité), et pour qui a une activité « À quel
+niveau de chiffre d'affaires êtes-vous actuellement ? ». Au vouvoiement de
+Genesis (N tutoie), réponses de N au mot près (`optinGenesis.formulaire`,
+`situations` et `chiffresAffaires`), au dessin des réponses de N, sans
+bouton à valider ni écran de chargement : on touche, et l'espace s'ouvre.
+Le choix part au CRM (`etape: "situation"`) et à ClickFunnels
+(`situerGenesis`, champs `genesis_situation` et `genesis_ca`, après la
+réponse).
 **L'inscription part à l'étape de l'e-mail, en arrière-plan** : Rémy veut
 qu'on passe au téléphone « instantanément », et le contact est gardé même si
 la personne s'arrête là. L'étape du téléphone attend la réponse, la retente
@@ -2467,9 +2477,18 @@ réservés et la liste des opt-ins. Le site envoie :
 - **une vue par page**, `CompteurVue tunnel="formation-genesis"`, étapes
   `optin`, `espace` (tous les modules et le bonus), `reservation` et
   `merci` (`/reservation-thanks` : un visiteur y est un appel réservé) ;
-- **l'opt-in deux fois**, depuis `InscriptionGenesis`, en tâche de fond et
-  sans retenir personne : à l'e-mail puis au téléphone, vers
-  `API_FUNNELS/genesis/optin`. Le CRM ne compte qu'un opt-in par adresse.
+- **l'opt-in à chaque temps**, depuis `InscriptionGenesis`, en tâche de fond
+  et sans retenir personne : à l'e-mail, au téléphone, puis à la situation,
+  vers `API_FUNNELS/genesis/optin`. Le CRM ne compte qu'un opt-in par
+  adresse ;
+- **qui arrive sur la réservation** (`VisiteAppelCrm tunnel="genesis"`,
+  `etape: "appel"`), sous l'adresse de l'opt-in : la colonne « Page
+  d'appel » ;
+- **l'adresse au lecteur de chaque module** (`LecteurVideo emailContact`),
+  comme sur la VSL de Course modèle : le CRM suit le visionnage des quatre
+  vidéos par personne (colonnes « Vidéo 1 » à « Vidéo 4 »). Il les connaît
+  par `videos` de l'étape `espace` (`funnels.ts`) : **changer la vidéo d'un
+  module, c'est changer les deux**.
 
 L'inscription chez ClickFunnels ne change pas : elle reste dans
 `actions.ts`. **Une étape de plus dans le tunnel se déclare des deux côtés** :
